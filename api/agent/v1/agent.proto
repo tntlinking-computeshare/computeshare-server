@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package api.agent.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "computeshare-server/api/agent/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.agent.v1";
+
+service Agent {
+	rpc CreateAgent (CreateAgentRequest) returns (CreateAgentReply){
+		option (google.api.http) = {
+			post: "/agent",
+			body: "*"
+		};
+	};
+	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply);
+	rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentReply);
+	rpc GetAgent (GetAgentRequest) returns (GetAgentReply);
+	rpc ListAgent (ListAgentRequest) returns (ListAgentReply);
+}
+
+message CreateAgentRequest {
+	optional string id = 1;
+}
+message CreateAgentReply {}
+
+message UpdateAgentRequest {}
+message UpdateAgentReply {}
+
+message DeleteAgentRequest {}
+message DeleteAgentReply {}
+
+message GetAgentRequest {}
+message GetAgentReply {}
+
+message ListAgentRequest {}
+message ListAgentReply {}
