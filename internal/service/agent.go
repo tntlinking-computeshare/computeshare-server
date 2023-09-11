@@ -4,23 +4,30 @@ import (
 	"computeshare-server/internal/biz"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/google/uuid"
+	"github.com/ipfs/kubo/core"
 
 	pb "computeshare-server/api/agent/v1"
 )
 
-func NewAgentService(uc *biz.AgentUsecase, logger log.Logger) *AgentService {
+func NewAgentService(uc *biz.AgentUsecase, node *core.IpfsNode, logger log.Logger) *AgentService {
 	return &AgentService{
-		uc:  uc,
-		log: log.NewHelper(logger),
+		uc:   uc,
+		log:  log.NewHelper(logger),
+		node: node,
 	}
 }
 
 func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentRequest) (*pb.CreateAgentReply, error) {
 	s.log.Infof("input data %v", req)
-	err := s.uc.Create(ctx, &biz.Agent{
-		Name: *req.Id,
-	})
-	return &pb.CreateAgentReply{}, err
+
+	agent := &biz.Agent{
+		Name: req.GetName(),
+	}
+	err := s.uc.Create(ctx, agent)
+	return &pb.CreateAgentReply{
+		Id: agent.ID.String(),
+	}, err
 }
 func (s *AgentService) UpdateAgent(ctx context.Context, req *pb.UpdateAgentRequest) (*pb.UpdateAgentReply, error) {
 	s.log.Infof("input data %v", req)
@@ -31,7 +38,16 @@ func (s *AgentService) DeleteAgent(ctx context.Context, req *pb.DeleteAgentReque
 	return &pb.DeleteAgentReply{}, nil
 }
 func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*pb.GetAgentReply, error) {
-	return &pb.GetAgentReply{}, nil
+	s.log.Infof("input data %v", req)
+	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	agent, err := s.uc.Get(ctx, id)
+	return &pb.GetAgentReply{
+		Id:   agent.ID.String(),
+		Name: agent.Name,
+	}, err
 }
 func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) (*pb.ListAgentReply, error) {
 	return &pb.ListAgentReply{}, nil

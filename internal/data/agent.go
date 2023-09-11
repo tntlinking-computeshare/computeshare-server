@@ -46,10 +46,12 @@ func (ar *agentRepo) GetAgent(ctx context.Context, id uuid.UUID) (*biz.Agent, er
 }
 
 func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
-	_, err := ar.data.db.Agent.
+	result, err := ar.data.db.Agent.
 		Create().
 		SetName(agent.Name).
 		Save(ctx)
+
+	agent.ID = result.ID
 	return err
 }
 

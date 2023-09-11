@@ -1,0 +1,17 @@
+### POST
+POST http://127.0.0.1:8000/v1/storage/upload
+x-md-globa-owner: mo
+owner: mo
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="parentId"
+Content-Type: text/plain
+
+73640b0d-ce18-45c1-beff-e06faa4a05f9
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="0x72c0360c595389b733872ab8136a77fbf7ab20fb.txt"
+Content-Type: application/json
+
+< /Users/mohaijiang/Downloads/0x72c0360c595389b733872ab8136a77fbf7ab20fb.txt
+--WebAppBoundary--

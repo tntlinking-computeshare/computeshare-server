@@ -15,8 +15,8 @@ type AgentRepo interface {
 	//db
 	ListAgent(ctx context.Context) ([]*Agent, error)
 	GetAgent(ctx context.Context, id uuid.UUID) (*Agent, error)
-	CreateAgent(ctx context.Context, article *Agent) error
-	UpdateAgent(ctx context.Context, id uuid.UUID, article *Agent) error
+	CreateAgent(ctx context.Context, agent *Agent) error
+	UpdateAgent(ctx context.Context, id uuid.UUID, agent *Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 }
 
@@ -53,12 +53,12 @@ func (uc *AgentUsecase) Get(ctx context.Context, id uuid.UUID) (p *Agent, err er
 	return
 }
 
-func (uc *AgentUsecase) Create(ctx context.Context, article *Agent) error {
-	return uc.repo.CreateAgent(ctx, article)
+func (uc *AgentUsecase) Create(ctx context.Context, agent *Agent) error {
+	return uc.repo.CreateAgent(ctx, agent)
 }
 
-func (uc *AgentUsecase) Update(ctx context.Context, id uuid.UUID, article *Agent) error {
-	return uc.repo.UpdateAgent(ctx, id, article)
+func (uc *AgentUsecase) Update(ctx context.Context, id uuid.UUID, agent *Agent) error {
+	return uc.repo.UpdateAgent(ctx, id, agent)
 }
 
 func (uc *AgentUsecase) Delete(ctx context.Context, id uuid.UUID) error {

@@ -5,10 +5,11 @@ import (
 	"computeshare-server/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/ipfs/kubo/core"
 )
 
 // ProviderSet is service providers.
-var ProviderSet = wire.NewSet(NewGreeterService, NewAgentService)
+var ProviderSet = wire.NewSet(NewGreeterService, NewAgentService, NewStorageService)
 
 type AgentService struct {
 	pb.UnimplementedAgentServer
@@ -16,4 +17,6 @@ type AgentService struct {
 	log *log.Helper
 
 	uc *biz.AgentUsecase
+
+	node *core.IpfsNode
 }

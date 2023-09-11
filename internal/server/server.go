@@ -6,3 +6,5 @@ import (
 
 // ProviderSet is server providers.
 var ProviderSet = wire.NewSet(NewGRPCServer, NewHTTPServer)
+
+const testKey = "testKey"

@@ -3,37 +3,103 @@ syntax = "proto3";
 package api.agent.v1;
 
 import "google/api/annotations.proto";
+//import "openapi/v3/annotations.proto";
 
 option go_package = "computeshare-server/api/agent/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.agent.v1";
 
+//option (openapi.v3.document) = {
+//	info: {
+//		title: "Title from annotation";
+//		version: "Version from annotation";
+//		description: "Description from annotation";
+//		contact: {
+//			name: "Contact Name";
+//			url: "https://github.com/google/gnostic";
+//			email: "gnostic@google.com";
+//		}
+//		license: {
+//			name: "Apache License";
+//			url: "https://github.com/google/gnostic/blob/master/LICENSE";
+//		}
+//	}
+//	components: {
+//		security_schemes: {
+//			additional_properties: [
+//				{
+//					name: "BasicAuth";
+//					value: {
+//						security_scheme: {
+//							type: "http";
+//							scheme: "basic";
+//						}
+//					}
+//				}
+//			]
+//		}
+//	}
+//};
+
 service Agent {
 	rpc CreateAgent (CreateAgentRequest) returns (CreateAgentReply){
 		option (google.api.http) = {
-			post: "/agent",
+			post: "/v1/agent",
 			body: "*"
 		};
 	};
-	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply);
-	rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentReply);
-	rpc GetAgent (GetAgentRequest) returns (GetAgentReply);
-	rpc ListAgent (ListAgentRequest) returns (ListAgentReply);
+	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply) {
+		option (google.api.http) = {
+			put: "/v1/agent/{id}",
+			body: "*"
+		};
+	};
+	rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentReply) {
+		option (google.api.http) = {
+			delete: "/v1/agent/{id}"
+		};
+	};
+	rpc GetAgent (GetAgentRequest) returns (GetAgentReply) {
+		option (google.api.http) = {
+			get: "/v1/agent/{id}"
+		};
+	};
+	rpc ListAgent (ListAgentRequest) returns (ListAgentReply) {
+		option (google.api.http) = {
+			get: "/v1/agent"
+		};
+	};
 }
 
 message CreateAgentRequest {
-	optional string id = 1;
+	string name = 1;
 }
-message CreateAgentReply {}
+message CreateAgentReply {
+	string id = 1;
+}
 
-message UpdateAgentRequest {}
+message UpdateAgentRequest {
+	string id = 1;
+	string name = 2;
+}
 message UpdateAgentReply {}
 
-message DeleteAgentRequest {}
+message DeleteAgentRequest {
+	string id = 1;
+}
 message DeleteAgentReply {}
 
-message GetAgentRequest {}
-message GetAgentReply {}
+message GetAgentRequest {
+	string id = 1;
+}
+message GetAgentReply {
+	string id = 1;
+	string name = 2;
+}
 
-message ListAgentRequest {}
-message ListAgentReply {}
+message ListAgentRequest {
+	optional string nameLike = 1;
+}
+message ListAgentReply {
+	repeated GetAgentReply results = 1;
+}

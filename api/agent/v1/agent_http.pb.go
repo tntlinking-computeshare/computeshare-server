@@ -20,14 +20,26 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
+const OperationAgentDeleteAgent = "/api.agent.v1.Agent/DeleteAgent"
+const OperationAgentGetAgent = "/api.agent.v1.Agent/GetAgent"
+const OperationAgentListAgent = "/api.agent.v1.Agent/ListAgent"
+const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
 	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)
+	DeleteAgent(context.Context, *DeleteAgentRequest) (*DeleteAgentReply, error)
+	GetAgent(context.Context, *GetAgentRequest) (*GetAgentReply, error)
+	ListAgent(context.Context, *ListAgentRequest) (*ListAgentReply, error)
+	UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error)
 }
 
 func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r := s.Route("/")
-	r.POST("/agent", _Agent_CreateAgent0_HTTP_Handler(srv))
+	r.POST("/v1/agent", _Agent_CreateAgent0_HTTP_Handler(srv))
+	r.PUT("/v1/agent/{id}", _Agent_UpdateAgent0_HTTP_Handler(srv))
+	r.DELETE("/v1/agent/{id}", _Agent_DeleteAgent0_HTTP_Handler(srv))
+	r.GET("/v1/agent/{id}", _Agent_GetAgent0_HTTP_Handler(srv))
+	r.GET("/v1/agent", _Agent_ListAgent0_HTTP_Handler(srv))
 }
 
 func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
@@ -52,8 +64,100 @@ func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context
 	}
 }
 
+func _Agent_UpdateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateAgentRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentUpdateAgent)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateAgent(ctx, req.(*UpdateAgentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateAgentReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Agent_DeleteAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAgentRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentDeleteAgent)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteAgent(ctx, req.(*DeleteAgentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteAgentReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Agent_GetAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetAgentRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentGetAgent)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetAgent(ctx, req.(*GetAgentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetAgentReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Agent_ListAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListAgentRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentListAgent)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListAgent(ctx, req.(*ListAgentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListAgentReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AgentHTTPClient interface {
 	CreateAgent(ctx context.Context, req *CreateAgentRequest, opts ...http.CallOption) (rsp *CreateAgentReply, err error)
+	DeleteAgent(ctx context.Context, req *DeleteAgentRequest, opts ...http.CallOption) (rsp *DeleteAgentReply, err error)
+	GetAgent(ctx context.Context, req *GetAgentRequest, opts ...http.CallOption) (rsp *GetAgentReply, err error)
+	ListAgent(ctx context.Context, req *ListAgentRequest, opts ...http.CallOption) (rsp *ListAgentReply, err error)
+	UpdateAgent(ctx context.Context, req *UpdateAgentRequest, opts ...http.CallOption) (rsp *UpdateAgentReply, err error)
 }
 
 type AgentHTTPClientImpl struct {
@@ -66,11 +170,63 @@ func NewAgentHTTPClient(client *http.Client) AgentHTTPClient {
 
 func (c *AgentHTTPClientImpl) CreateAgent(ctx context.Context, in *CreateAgentRequest, opts ...http.CallOption) (*CreateAgentReply, error) {
 	var out CreateAgentReply
-	pattern := "/agent"
+	pattern := "/v1/agent"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAgentCreateAgent))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) DeleteAgent(ctx context.Context, in *DeleteAgentRequest, opts ...http.CallOption) (*DeleteAgentReply, error) {
+	var out DeleteAgentReply
+	pattern := "/v1/agent/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAgentDeleteAgent))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) GetAgent(ctx context.Context, in *GetAgentRequest, opts ...http.CallOption) (*GetAgentReply, error) {
+	var out GetAgentReply
+	pattern := "/v1/agent/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAgentGetAgent))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) ListAgent(ctx context.Context, in *ListAgentRequest, opts ...http.CallOption) (*ListAgentReply, error) {
+	var out ListAgentReply
+	pattern := "/v1/agent"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAgentListAgent))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) UpdateAgent(ctx context.Context, in *UpdateAgentRequest, opts ...http.CallOption) (*UpdateAgentReply, error) {
+	var out UpdateAgentReply
+	pattern := "/v1/agent/{id}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAgentUpdateAgent))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
