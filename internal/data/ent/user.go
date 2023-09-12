@@ -27,7 +27,7 @@ type User struct {
 	// CreateDate holds the value of the "create_date" field.
 	CreateDate time.Time `json:"create_date,omitempty"`
 	// LastLoginDate holds the value of the "last_login_date" field.
-	LastLoginDate *time.Time `json:"last_login_date,omitempty"`
+	LastLoginDate time.Time `json:"last_login_date,omitempty"`
 	selectValues  sql.SelectValues
 }
 
@@ -91,8 +91,7 @@ func (u *User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_date", values[i])
 			} else if value.Valid {
-				u.LastLoginDate = new(time.Time)
-				*u.LastLoginDate = value.Time
+				u.LastLoginDate = value.Time
 			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
@@ -142,10 +141,8 @@ func (u *User) String() string {
 	builder.WriteString("create_date=")
 	builder.WriteString(u.CreateDate.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := u.LastLoginDate; v != nil {
-		builder.WriteString("last_login_date=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("last_login_date=")
+	builder.WriteString(u.LastLoginDate.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

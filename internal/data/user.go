@@ -114,7 +114,7 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 		return err
 	}
 	_, err = p.Update().
-		SetLastLoginDate(*user.LastLoginDate).
+		SetLastLoginDate(user.LastLoginDate).
 		Save(ctx)
 	return err
 }

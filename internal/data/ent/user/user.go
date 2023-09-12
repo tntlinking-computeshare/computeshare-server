@@ -57,6 +57,8 @@ var (
 	PasswordValidator func(string) error
 	// DefaultCreateDate holds the default value on creation for the "create_date" field.
 	DefaultCreateDate func() time.Time
+	// DefaultLastLoginDate holds the default value on creation for the "last_login_date" field.
+	DefaultLastLoginDate func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

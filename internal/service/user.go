@@ -44,7 +44,7 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, req *pb.UpdateUser
 	id, _ := uuid.Parse(req.Id)
 	lastLoginDate := time.Now()
 	err := s.uc.Update(ctx, id, &biz.User{
-		LastLoginDate: &lastLoginDate,
+		LastLoginDate: lastLoginDate,
 	})
 	return &pb.UpdateUserPasswordReply{}, err
 }
@@ -70,19 +70,13 @@ func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*p
 }
 
 func toUserReply(user *biz.User, _ int) *pb.GetUserReply {
-	var lastLoginDate *int64
-
-	if user.LastLoginDate != nil {
-		loginTime := user.LastLoginDate.Unix()
-		lastLoginDate = &loginTime
-	}
 
 	return &pb.GetUserReply{
 		Id:                user.ID.String(),
 		CountryCallCoding: user.CountryCallCoding,
 		TelephoneNumber:   user.TelephoneNumber,
 		CreateDate:        user.CreateDate.Unix(),
-		LastLoginDate:     lastLoginDate,
+		LastLoginDate:     user.LastLoginDate.Unix(),
 	}
 }
 

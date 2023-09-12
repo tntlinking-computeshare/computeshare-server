@@ -130,6 +130,10 @@ func init() {
 	userDescCreateDate := userFields[4].Descriptor()
 	// user.DefaultCreateDate holds the default value on creation for the create_date field.
 	user.DefaultCreateDate = userDescCreateDate.Default.(func() time.Time)
+	// userDescLastLoginDate is the schema descriptor for last_login_date field.
+	userDescLastLoginDate := userFields[5].Descriptor()
+	// user.DefaultLastLoginDate holds the default value on creation for the last_login_date field.
+	user.DefaultLastLoginDate = userDescLastLoginDate.Default.(func() time.Time)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.

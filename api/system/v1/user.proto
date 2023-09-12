@@ -109,7 +109,7 @@ message GetUserReply {
 	string country_call_coding = 2;
 	string telephone_number = 3;
 	int64 create_date = 4;
-	optional int64 last_login_date = 5;
+	int64 last_login_date = 5;
 }
 
 message ListUserRequest {

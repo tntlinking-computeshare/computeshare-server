@@ -5,6 +5,848 @@ openapi: 3.0.3
 info:
     title: ""
     version: 0.0.1
-paths: {}
+paths:
+    /helloworld/{name}:
+        get:
+            tags:
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /v1/agent:
+        get:
+            tags:
+                - Agent
+            operationId: Agent_ListAgent
+            parameters:
+                - name: nameLike
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.ListAgentReply'
+        post:
+            tags:
+                - Agent
+            operationId: Agent_CreateAgent
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.agent.v1.CreateAgentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.CreateAgentReply'
+    /v1/agent/{id}:
+        get:
+            tags:
+                - Agent
+            operationId: Agent_GetAgent
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.GetAgentReply'
+        put:
+            tags:
+                - Agent
+            operationId: Agent_UpdateAgent
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.agent.v1.UpdateAgentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.UpdateAgentReply'
+        delete:
+            tags:
+                - Agent
+            operationId: Agent_DeleteAgent
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.DeleteAgentReply'
+    /v1/computepower/benchmark:
+        post:
+            tags:
+                - Computepower
+            operationId: Computepower_RunBenchmarks
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.compute.v1.RunBenchmarksRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.RunBenchmarksReply'
+    /v1/computepower/python:
+        post:
+            tags:
+                - Computepower
+            operationId: Computepower_RunPythonPackage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.compute.v1.RunPythonPackageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.RunPythonPackageReply'
+    /v1/p2p/close:
+        post:
+            tags:
+                - P2P
+            operationId: P2P_CloseListen
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.network.v1.CloseListenRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.network.v1.CloseListenReply'
+    /v1/p2p/forward:
+        post:
+            tags:
+                - P2P
+            operationId: P2P_CreateForward
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.network.v1.CreateForwardRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.network.v1.CreateForwardReply'
+    /v1/p2p/listen:
+        post:
+            tags:
+                - P2P
+            operationId: P2P_CreateListen
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.network.v1.CreateListenRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.network.v1.CreateListenReply'
+    /v1/p2p/ls:
+        get:
+            tags:
+                - P2P
+            operationId: P2P_ListListen
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.network.v1.ListListenReply'
+    /v1/sms/send:
+        post:
+            tags:
+                - User
+            operationId: User_SendValidateCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.system.v1.SendValidateCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.SendValidateCodeReply'
+    /v1/storage:
+        get:
+            tags:
+                - Storage
+            operationId: Storage_List
+            parameters:
+                - name: parentId
+                  in: query
+                  schema:
+                    type: string
+                - name: owner
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.ListReply'
+        post:
+            tags:
+                - Storage
+            operationId: Storage_UploadFile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.compute.v1.UploadFileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.File'
+        delete:
+            tags:
+                - Storage
+            operationId: Storage_Delete
+            parameters:
+                - name: ids
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.DeleteReply'
+    /v1/storage/dir:
+        post:
+            tags:
+                - Storage
+            operationId: Storage_CreateDir
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.compute.v1.CreateDirRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.CreateDirReply'
+    /v1/storage/{id}:
+        get:
+            tags:
+                - Storage
+            operationId: Storage_Download
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.DownloadReply'
+    /v1/user:
+        get:
+            tags:
+                - User
+            operationId: User_ListUser
+            parameters:
+                - name: countryCallCoding
+                  in: query
+                  schema:
+                    type: string
+                - name: telephoneNumber
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.ListUserReply'
+        post:
+            tags:
+                - User
+            operationId: User_CreateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.system.v1.CreateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.CreateUserReply'
+    /v1/user/login:
+        post:
+            tags:
+                - User
+            description: |-
+                Login
+
+                 {{.MethodDescriptorProto.Name}} is a call with the method(s) {{$first := true}}{{range .Bindings}}{{if $first}}{{$first = false}}{{else}}, {{end}}{{.HTTPMethod}}{{end}} within the "{{.Service.Name}}" service.
+                 It takes in "{{.RequestType.Name}}" and returns a "{{.ResponseType.Name}}".
+
+                 {{import "tables.md"}}
+            operationId: User_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.system.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.LoginReply'
+    /v1/user/login_by_vc:
+        post:
+            tags:
+                - User
+            operationId: User_LoginWithValidateCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.system.v1.LoginWithValidateCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.LoginReply'
+    /v1/user/{id}:
+        get:
+            tags:
+                - User
+            operationId: User_GetUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.GetUserReply'
+        put:
+            tags:
+                - User
+            operationId: User_UpdateUserPassword
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.system.v1.UpdateUserPasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.UpdateUserPasswordReply'
+        delete:
+            tags:
+                - User
+            operationId: User_DeleteUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.system.v1.DeleteUserReply'
+    /v1/vm:
+        get:
+            tags:
+                - Vm
+            operationId: Vm_ListVm
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.ListVmReply'
+        post:
+            tags:
+                - Vm
+            operationId: Vm_CreateVm
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.compute.v1.CreateVmRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.CreateVmReply'
+    /v1/vm/{id}:
+        get:
+            tags:
+                - Vm
+            operationId: Vm_GetVm
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.GetVmReply'
+        delete:
+            tags:
+                - Vm
+            operationId: Vm_DeleteVm
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.compute.v1.DeleteVmReply'
 components:
-    schemas: {}
+    schemas:
+        api.agent.v1.CreateAgentReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.agent.v1.CreateAgentRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+        api.agent.v1.DeleteAgentReply:
+            type: object
+            properties: {}
+        api.agent.v1.GetAgentReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+        api.agent.v1.ListAgentReply:
+            type: object
+            properties:
+                results:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.agent.v1.GetAgentReply'
+        api.agent.v1.UpdateAgentReply:
+            type: object
+            properties: {}
+        api.agent.v1.UpdateAgentRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+        api.compute.v1.CreateDirReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.compute.v1.CreateDirRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                owner:
+                    type: string
+                parentId:
+                    type: string
+        api.compute.v1.CreateVmReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                ports:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.compute.v1.PortBinding'
+        api.compute.v1.CreateVmRequest:
+            type: object
+            properties:
+                image:
+                    type: string
+                port:
+                    type: string
+        api.compute.v1.DeleteReply:
+            type: object
+            properties: {}
+        api.compute.v1.DeleteVmReply:
+            type: object
+            properties: {}
+        api.compute.v1.DownloadReply:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+        api.compute.v1.File:
+            type: object
+            properties:
+                id:
+                    type: string
+                type:
+                    type: integer
+                    format: enum
+                name:
+                    type: string
+                size:
+                    type: integer
+                    format: int32
+                lastModify:
+                    type: integer
+                    format: int64
+                cid:
+                    type: string
+        api.compute.v1.GetVmReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                ports:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.compute.v1.PortBinding'
+        api.compute.v1.ListReply:
+            type: object
+            properties:
+                result:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.compute.v1.File'
+        api.compute.v1.ListVmReply:
+            type: object
+            properties:
+                result:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.compute.v1.GetVmReply'
+        api.compute.v1.PortBinding:
+            type: object
+            properties:
+                listenPort:
+                    type: string
+                targetPort:
+                    type: string
+        api.compute.v1.RunBenchmarksReply:
+            type: object
+            properties:
+                output:
+                    type: string
+        api.compute.v1.RunBenchmarksRequest:
+            type: object
+            properties: {}
+        api.compute.v1.RunPythonPackageReply:
+            type: object
+            properties:
+                output:
+                    type: string
+        api.compute.v1.RunPythonPackageRequest:
+            type: object
+            properties:
+                cid:
+                    type: string
+                command:
+                    type: string
+        api.compute.v1.UploadFileRequest:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+                owner:
+                    type: string
+                parentId:
+                    type: string
+        api.network.v1.CloseListenReply:
+            type: object
+            properties: {}
+        api.network.v1.CloseListenRequest:
+            type: object
+            properties:
+                protocol:
+                    type: string
+                listenAddress:
+                    type: string
+                targetAddress:
+                    type: string
+        api.network.v1.CreateForwardReply:
+            type: object
+            properties: {}
+        api.network.v1.CreateForwardRequest:
+            type: object
+            properties:
+                portal:
+                    type: string
+                listenAddress:
+                    type: string
+                targetAddress:
+                    type: string
+        api.network.v1.CreateListenReply:
+            type: object
+            properties: {}
+        api.network.v1.CreateListenRequest:
+            type: object
+            properties:
+                protocol:
+                    type: string
+                listenAddress:
+                    type: string
+        api.network.v1.ListListenReply:
+            type: object
+            properties:
+                result:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.network.v1.ListenReply'
+        api.network.v1.ListenReply:
+            type: object
+            properties:
+                protocol:
+                    type: string
+                listenAddress:
+                    type: string
+                targetAddress:
+                    type: string
+        api.system.v1.CreateUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.system.v1.CreateUserRequest:
+            type: object
+            properties:
+                countryCallCoding:
+                    type: string
+                telephoneNumber:
+                    type: string
+                password:
+                    type: string
+                validateCode:
+                    type: string
+        api.system.v1.DeleteUserReply:
+            type: object
+            properties: {}
+        api.system.v1.GetUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                countryCallCoding:
+                    type: string
+                telephoneNumber:
+                    type: string
+                createDate:
+                    type: integer
+                    format: int64
+                lastLoginDate:
+                    type: integer
+                    format: int64
+        api.system.v1.ListUserReply:
+            type: object
+            properties:
+                result:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.system.v1.GetUserReply'
+        api.system.v1.LoginReply:
+            type: object
+            properties:
+                token:
+                    type: string
+        api.system.v1.LoginRequest:
+            type: object
+            properties:
+                countryCallCoding:
+                    type: string
+                telephoneNumber:
+                    type: string
+                password:
+                    type: string
+        api.system.v1.LoginWithValidateCodeRequest:
+            type: object
+            properties:
+                countryCallCoding:
+                    type: string
+                telephoneNumber:
+                    type: string
+                validateCode:
+                    type: string
+        api.system.v1.SendValidateCodeReply:
+            type: object
+            properties: {}
+        api.system.v1.SendValidateCodeRequest:
+            type: object
+            properties:
+                countryCallCoding:
+                    type: string
+                telephoneNumber:
+                    type: string
+        api.system.v1.UpdateUserPasswordReply:
+            type: object
+            properties: {}
+        api.system.v1.UpdateUserPasswordRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                oldPassword:
+                    type: string
+                newPassword:
+                    type: string
+        helloworld.v1.HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+tags:
+    - name: Agent
+    - name: Computepower
+    - name: Greeter
+      description: The greeting service definition.
+    - name: P2P
+    - name: Storage
+    - name: User
+    - name: Vm

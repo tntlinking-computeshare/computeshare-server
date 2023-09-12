@@ -26,8 +26,8 @@ type User struct {
 	// CreateDate holds the value of the "create_date" field.
 	CreateDate time.Time `json:"create_date,omitempty"`
 	// LastLoginDate holds the value of the "last_login_date" field.
-	LastLoginDate *time.Time `json:"last_login_date,omitempty"`
-	ValidateCode  string     `json:"validate_code"`
+	LastLoginDate time.Time `json:"last_login_date,omitempty"`
+	ValidateCode  string    `json:"validate_code"`
 }
 
 func (u *User) GetFullTelephone() string {

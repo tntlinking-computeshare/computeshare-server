@@ -66,6 +66,14 @@ func (uu *UserUpdate) SetLastLoginDate(t time.Time) *UserUpdate {
 	return uu
 }
 
+// SetNillableLastLoginDate sets the "last_login_date" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableLastLoginDate(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetLastLoginDate(*t)
+	}
+	return uu
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -200,6 +208,14 @@ func (uuo *UserUpdateOne) SetNillableCreateDate(t *time.Time) *UserUpdateOne {
 // SetLastLoginDate sets the "last_login_date" field.
 func (uuo *UserUpdateOne) SetLastLoginDate(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetLastLoginDate(t)
+	return uuo
+}
+
+// SetNillableLastLoginDate sets the "last_login_date" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableLastLoginDate(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetLastLoginDate(*t)
+	}
 	return uuo
 }
 

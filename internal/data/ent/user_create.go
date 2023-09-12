@@ -59,6 +59,14 @@ func (uc *UserCreate) SetLastLoginDate(t time.Time) *UserCreate {
 	return uc
 }
 
+// SetNillableLastLoginDate sets the "last_login_date" field if the given value is not nil.
+func (uc *UserCreate) SetNillableLastLoginDate(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetLastLoginDate(*t)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
 	uc.mutation.SetID(u)
@@ -111,6 +119,10 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.CreateDate(); !ok {
 		v := user.DefaultCreateDate()
 		uc.mutation.SetCreateDate(v)
+	}
+	if _, ok := uc.mutation.LastLoginDate(); !ok {
+		v := user.DefaultLastLoginDate()
+		uc.mutation.SetLastLoginDate(v)
 	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
@@ -203,7 +215,7 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := uc.mutation.LastLoginDate(); ok {
 		_spec.SetField(user.FieldLastLoginDate, field.TypeTime, value)
-		_node.LastLoginDate = &value
+		_node.LastLoginDate = value
 	}
 	return _node, _spec
 }

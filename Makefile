@@ -63,6 +63,12 @@ all:
 	make config;
 	make generate;
 
+.PHONY: docker
+# docker build image and push
+docker: generate
+	docker build -t "hamstershare/computeshare-server:$(VERSION)" .
+	docker push "hamstershare/computeshare-server:$(VERSION)"
+
 # show help
 help:
 	@echo ''

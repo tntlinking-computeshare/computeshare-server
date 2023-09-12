@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/compute/v1/storage.proto
+// source: compute/v1/storage.proto
 
 package v1
 
