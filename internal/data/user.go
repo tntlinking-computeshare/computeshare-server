@@ -2,10 +2,20 @@ package data
 
 import (
 	"computeshare-server/internal/biz"
+	"computeshare-server/internal/data/ent/user"
 	"context"
+	"crypto/md5"
+	"encoding/hex"
+	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"time"
 )
+
+func likeKey(telephone string) string {
+	return fmt.Sprintf("telephone:%s", telephone)
+}
 
 type userRepo struct {
 	data *Data
@@ -19,18 +29,21 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-func (ur *userRepo) ListUser(ctx context.Context) ([]*biz.User, error) {
-	ps, err := ur.data.db.User.Query().All(ctx)
+func (ur *userRepo) ListUser(ctx context.Context, entity biz.User) ([]*biz.User, error) {
+	ps, err := ur.data.db.User.Query().
+		Where(user.CountryCallCodingContains(entity.CountryCallCoding), user.TelephoneNumberContains(entity.TelephoneNumber)).
+		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rv := make([]*biz.User, 0)
 	for _, p := range ps {
 		rv = append(rv, &biz.User{
-			ID:            p.ID,
-			Name:          p.Name,
-			CreateDate:    p.CreateDate,
-			LastLoginDate: p.LastLoginDate,
+			ID:                p.ID,
+			CountryCallCoding: p.CountryCallCoding,
+			TelephoneNumber:   p.TelephoneNumber,
+			CreateDate:        p.CreateDate,
+			LastLoginDate:     p.LastLoginDate,
 		})
 	}
 	return rv, nil
@@ -42,10 +55,11 @@ func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error
 	}
 
 	return &biz.User{
-		ID:            p.ID,
-		Name:          p.Name,
-		CreateDate:    p.CreateDate,
-		LastLoginDate: p.LastLoginDate,
+		ID:                p.ID,
+		CountryCallCoding: p.CountryCallCoding,
+		TelephoneNumber:   p.TelephoneNumber,
+		CreateDate:        p.CreateDate,
+		LastLoginDate:     p.LastLoginDate,
 	}, nil
 }
 
@@ -56,23 +70,43 @@ func (ur *userRepo) GetUserPassword(ctx context.Context, id uuid.UUID) (*biz.Use
 	}
 
 	return &biz.User{
-		ID:            p.ID,
-		Name:          p.Name,
-		Password:      p.Password,
-		CreateDate:    p.CreateDate,
-		LastLoginDate: p.LastLoginDate,
+		ID:                p.ID,
+		CountryCallCoding: p.CountryCallCoding,
+		TelephoneNumber:   p.TelephoneNumber,
+		Password:          p.Password,
+		CreateDate:        p.CreateDate,
+		LastLoginDate:     p.LastLoginDate,
 	}, nil
 }
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
-	result, err := ur.data.db.User.
-		Create().
-		SetName(user.Name).
-		SetPassword(user.Password).
-		Save(ctx)
 
-	user.ID = result.ID
-	return err
+	code, err := ur.GetValidateCode(ctx, *user)
+
+	if err == nil && code == user.ValidateCode {
+		encodePassword := md5.Sum([]byte(user.Password))
+		result, err := ur.data.db.User.
+			Create().
+			SetCountryCallCoding(user.CountryCallCoding).
+			SetTelephoneNumber(user.TelephoneNumber).
+			SetPassword(hex.EncodeToString(encodePassword[:])).
+			SetLastLoginDate(time.Now()).
+			Save(ctx)
+
+		if err != nil {
+			return err
+		}
+
+		user.ID = result.ID
+
+		// 删除使用过的验证码
+		_, _ = ur.data.rdb.Del(ctx, likeKey(user.GetFullTelephone())).Result()
+
+		return err
+	} else {
+		return errors.New("validate code is not match")
+	}
+
 }
 func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User) error {
 	p, err := ur.data.db.User.Get(ctx, id)
@@ -80,11 +114,41 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 		return err
 	}
 	_, err = p.Update().
-		SetName(user.Name).
-		SetLastLoginDate(*p.LastLoginDate).
+		SetLastLoginDate(*user.LastLoginDate).
 		Save(ctx)
 	return err
 }
 func (ur *userRepo) DeleteUser(ctx context.Context, id uuid.UUID) error {
 	return ur.data.db.User.DeleteOneID(id).Exec(ctx)
+}
+
+func (ur *userRepo) SendValidateCode(ctx context.Context, entity biz.User) error {
+	_, err := ur.data.rdb.Set(ctx, likeKey(entity.GetFullTelephone()), "000000", time.Minute*10).Result()
+	return err
+}
+
+func (ur *userRepo) GetValidateCode(ctx context.Context, user biz.User) (string, error) {
+	get := ur.data.rdb.Get(ctx, likeKey(user.GetFullTelephone()))
+	return get.Result()
+}
+
+func (ur *userRepo) FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*biz.User, error) {
+
+	p, err := ur.data.db.User.Query().Where(user.CountryCallCodingEQ(countryCallCoding), user.TelephoneNumberEQ(telephone)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &biz.User{
+		ID:                p.ID,
+		CountryCallCoding: p.CountryCallCoding,
+		TelephoneNumber:   p.TelephoneNumber,
+		Password:          p.Password,
+		CreateDate:        p.CreateDate,
+		LastLoginDate:     p.LastLoginDate,
+	}, err
+}
+
+func (ur *userRepo) DeleteValidateCode(ctx context.Context, user biz.User) {
+	// 删除使用过的验证码
+	_, _ = ur.data.rdb.Del(ctx, likeKey(user.GetFullTelephone())).Result()
 }

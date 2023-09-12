@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package api.system.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "computeshare-server/api/system/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.system.v1";
+
+service User {
+	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
+		option (google.api.http) = {
+			post: "/v1/user",
+			body: "*"
+		};
+	};
+	rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (UpdateUserPasswordReply){
+		option (google.api.http) = {
+			put: "/v1/user/{id}",
+			body: "*"
+		};
+	};
+	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
+		option (google.api.http) = {
+			delete: "/v1/user/{id}"
+		};
+	};
+	rpc GetUser (GetUserRequest) returns (GetUserReply) {
+		option (google.api.http) = {
+			get: "/v1/user/{id}"
+		};
+	};
+	rpc ListUser (ListUserRequest) returns (ListUserReply) {
+		option (google.api.http) = {
+			get: "/v1/user"
+		};
+	};
+	// Login
+	//
+	// {{.MethodDescriptorProto.Name}} is a call with the method(s) {{$first := true}}{{range .Bindings}}{{if $first}}{{$first = false}}{{else}}, {{end}}{{.HTTPMethod}}{{end}} within the "{{.Service.Name}}" service.
+	// It takes in "{{.RequestType.Name}}" and returns a "{{.ResponseType.Name}}".
+	//
+	// {{import "tables.md"}}
+	rpc Login(LoginRequest) returns (LoginReply){
+		option (google.api.http) = {
+			post: "/v1/user/login"
+			body: "*"
+		};
+	}
+
+	rpc LoginWithValidateCode(LoginWithValidateCodeRequest) returns (LoginReply) {
+		option (google.api.http) = {
+			post: "/v1/user/login_by_vc"
+			body: "*"
+		};
+	}
+	rpc SendValidateCode(SendValidateCodeRequest) returns (SendValidateCodeReply){
+		option (google.api.http) = {
+			post: "/v1/sms/send"
+			body: "*"
+		};
+	}
+}
+
+message LoginRequest {
+	string country_call_coding = 1;
+	string telephone_number = 2;
+	string password = 3;
+}
+
+message LoginWithValidateCodeRequest {
+	string country_call_coding = 1;
+	string telephone_number = 2;
+	string validate_code = 3;
+}
+
+message LoginReply {
+	string token = 1;
+}
+
+message CreateUserRequest {
+	string country_call_coding = 1;
+	string telephone_number = 2;
+	string password = 3;
+	string validate_code = 4;
+}
+message CreateUserReply {
+	string id = 1;
+}
+
+message UpdateUserPasswordRequest {
+	string id = 1;
+	string old_password = 2;
+	string new_password = 3;
+}
+message UpdateUserPasswordReply {}
+
+message DeleteUserRequest {
+	string id = 1;
+}
+message DeleteUserReply {}
+
+message GetUserRequest {
+	string id = 1;
+}
+message GetUserReply {
+	string id = 1;
+	string country_call_coding = 2;
+	string telephone_number = 3;
+	int64 create_date = 4;
+	optional int64 last_login_date = 5;
+}
+
+message ListUserRequest {
+	optional string country_call_coding = 1;
+	optional string telephone_number = 2;
+}
+message ListUserReply {
+	repeated GetUserReply result = 1;
+}
+
+message SendValidateCodeRequest {
+	string country_call_coding = 1;
+	string telephone_number = 2;
+}
+
+message SendValidateCodeReply {
+
+}

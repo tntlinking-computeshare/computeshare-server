@@ -8,9 +8,12 @@ server:
 data:
   database:
     driver: mysql
-    source: root:123456@tcp(127.0.0.1:3306)/computeshare
+    source: root:123456@tcp(127.0.0.1:3306)/computeshare?charset=utf8&parseTime=true
   redis:
     addr: 127.0.0.1:6379
     dial_timeout: 1s
     read_timeout: 0.4s
     write_timeout: 0.6s
+auth:
+  service_key: some-secret-key
+  api_key: some-secret-key-for-forntend

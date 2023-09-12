@@ -15,3 +15,16 @@ Content-Type: application/json
 
 < /Users/mohaijiang/Downloads/0x72c0360c595389b733872ab8136a77fbf7ab20fb.txt
 --WebAppBoundary--
+
+
+###
+
+# curl -X 'DELETE'
+#  'HTTP://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118'
+#  -H 'accept: application/json'
+GET http://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118
+accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImEzNTQ2ZTUxLTg5NzYtNDRlYS05NGEzLTFjNzRlYmRhMDExOCIsImV4cCI6MTY5NDU3NjY1N30.PMUmQZcv0u71X4XKQ6lqLx2ok_kUmL3Ydf_lX1fZblI
+
+###
+

@@ -10,6 +10,16 @@ import (
 	pb "computeshare-server/api/agent/v1"
 )
 
+type AgentService struct {
+	pb.UnimplementedAgentServer
+
+	log *log.Helper
+
+	uc *biz.AgentUsecase
+
+	node *core.IpfsNode
+}
+
 func NewAgentService(uc *biz.AgentUsecase, node *core.IpfsNode, logger log.Logger) *AgentService {
 	return &AgentService{
 		uc:   uc,
