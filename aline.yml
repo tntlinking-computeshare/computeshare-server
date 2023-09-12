@@ -6,18 +6,16 @@ stages:
       - name: git clone
         uses: git-checkout
         with:
-          url: https://github.com/hamster-shared/hamster-frontend.git
-          branch: develop
+          url: https://github.com/mohaijiang/computeshare-server.git
+          branch: main
   build:
     needs:
       - init
     steps:
       - name: build
         run: |
-          yarn install
-          yarn run build:staging 
-          docker buildx build -t hamstershare/hamster-frontend:${PIPELINE_ID} --platform=linux/amd64 --push .
-  #          docker push hamstershare/hamster-frontend:${PIPELINE_ID}
+          make generate
+          docker buildx build -t hamstershare/computeshare-server:${PIPELINE_ID} --platform=linux/amd64 --push .
 
   deploy:
     needs:
@@ -25,5 +23,5 @@ stages:
     steps:
       - name: deploy
         run: |
-          envsubst < deploy.yml | kubectl -n hamster apply -f -
+          envsubst < k8s.yml | kubectl -n computeshare apply -f -
 
