@@ -3,7 +3,7 @@
 package computeimage
 
 import (
-	"computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 )

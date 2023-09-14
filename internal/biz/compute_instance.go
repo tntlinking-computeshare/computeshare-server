@@ -1,12 +1,12 @@
 package biz
 
 import (
-	"computeshare-server/internal/global"
 	"context"
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"time"
 )
 

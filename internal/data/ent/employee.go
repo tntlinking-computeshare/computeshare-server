@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/employee"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"strings"
 
 	"entgo.io/ent"

@@ -1,8 +1,6 @@
 package biz
 
 import (
-	"computeshare-server/internal/conf"
-	"computeshare-server/internal/global"
 	"context"
 	"crypto/md5"
 	"encoding/hex"
@@ -11,6 +9,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"strings"
 	"time"
 )

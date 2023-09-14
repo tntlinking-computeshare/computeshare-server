@@ -1,12 +1,6 @@
 package server
 
 import (
-	agentV1 "computeshare-server/api/agent/v1"
-	computeV1 "computeshare-server/api/compute/v1"
-	v1 "computeshare-server/api/helloworld/v1"
-	systemv1 "computeshare-server/api/system/v1"
-	"computeshare-server/internal/conf"
-	"computeshare-server/internal/service"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
@@ -14,6 +8,12 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-kratos/swagger-api/openapiv2"
+	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
+	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	v1 "github.com/mohaijiang/computeshare-server/api/helloworld/v1"
+	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/service"
 )
 
 func NewWhiteListMatcher() selector.MatchFunc {
@@ -23,6 +23,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.system.v1.User/Login"] = struct{}{}
 	whiteList["/api.system.v1.User/LoginWithValidateCode"] = struct{}{}
 	whiteList["/api.system.v1.User/SendValidateCode"] = struct{}{}
+	whiteList["/api.agent.v1.Agent/CreateAgent"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false

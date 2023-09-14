@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/employee"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

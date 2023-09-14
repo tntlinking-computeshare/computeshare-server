@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/computespec"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"strings"
 
 	"entgo.io/ent"

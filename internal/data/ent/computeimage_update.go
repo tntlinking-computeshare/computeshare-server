@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/computeimage"
-	"computeshare-server/internal/data/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

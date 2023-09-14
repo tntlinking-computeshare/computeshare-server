@@ -3,7 +3,7 @@
 package storage
 
 import (
-	"computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

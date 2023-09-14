@@ -1,13 +1,13 @@
 package service
 
 import (
-	"computeshare-server/internal/biz"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/ipfs/kubo/core"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
 
-	pb "computeshare-server/api/agent/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/agent/v1"
 )
 
 type AgentService struct {

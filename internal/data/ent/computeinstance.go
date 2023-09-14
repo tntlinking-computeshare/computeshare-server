@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/computeinstance"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"strings"
 	"time"
 

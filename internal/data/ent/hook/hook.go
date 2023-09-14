@@ -3,9 +3,9 @@
 package hook
 
 import (
-	"computeshare-server/internal/data/ent"
 	"context"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 )
 
 // The AgentFunc type is an adapter to allow the use of ordinary

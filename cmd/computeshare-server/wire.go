@@ -6,12 +6,12 @@
 package main
 
 import (
-	"computeshare-server/internal/biz"
-	"computeshare-server/internal/conf"
-	"computeshare-server/internal/data"
-	"computeshare-server/internal/server"
-	"computeshare-server/internal/service"
-	"computeshare-server/third_party/p2p"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/data"
+	"github.com/mohaijiang/computeshare-server/internal/server"
+	"github.com/mohaijiang/computeshare-server/internal/service"
+	"github.com/mohaijiang/computeshare-server/third_party/p2p"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"

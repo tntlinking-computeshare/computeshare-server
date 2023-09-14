@@ -1,14 +1,14 @@
 package service
 
 import (
-	"computeshare-server/internal/biz"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/samber/lo"
 	"time"
 
-	pb "computeshare-server/api/system/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/system/v1"
 )
 
 type UserService struct {

@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/user"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

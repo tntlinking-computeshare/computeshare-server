@@ -1,10 +1,10 @@
 package data
 
 import (
-	"computeshare-server/internal/conf"
-	"computeshare-server/internal/data/ent"
 	"context"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

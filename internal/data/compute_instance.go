@@ -1,12 +1,12 @@
 package data
 
 import (
-	"computeshare-server/internal/biz"
-	"computeshare-server/internal/data/ent"
-	"computeshare-server/internal/data/ent/computeinstance"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/samber/lo"
 )
 

@@ -1,9 +1,6 @@
 package service
 
 import (
-	pb "computeshare-server/api/compute/v1"
-	"computeshare-server/internal/biz"
-	"computeshare-server/internal/global"
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
@@ -14,6 +11,9 @@ import (
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/kubo/core"
 	"github.com/ipfs/kubo/core/coreapi"
+	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
 	"io"
 	"time"

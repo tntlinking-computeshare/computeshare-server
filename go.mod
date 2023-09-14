@@ -1,4 +1,4 @@
-module computeshare-server
+module github.com/mohaijiang/computeshare-server
 
 go 1.19
 

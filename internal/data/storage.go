@@ -1,13 +1,13 @@
 package data
 
 import (
-	pb "computeshare-server/api/compute/v1"
-	"computeshare-server/internal/biz"
-	"computeshare-server/internal/data/ent/storage"
 	"context"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"path/filepath"
 	"regexp"
 	"strconv"

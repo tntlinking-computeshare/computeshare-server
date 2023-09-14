@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/predicate"
-	"computeshare-server/internal/data/ent/user"
 	"context"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 	"math"
 
 	"entgo.io/ent/dialect/sql"

@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/computespec"
-	"computeshare-server/internal/data/ent/predicate"
 	"context"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

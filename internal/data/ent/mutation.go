@@ -3,17 +3,17 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/agent"
-	"computeshare-server/internal/data/ent/computeimage"
-	"computeshare-server/internal/data/ent/computeinstance"
-	"computeshare-server/internal/data/ent/computespec"
-	"computeshare-server/internal/data/ent/employee"
-	"computeshare-server/internal/data/ent/predicate"
-	"computeshare-server/internal/data/ent/storage"
-	"computeshare-server/internal/data/ent/user"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 	"sync"
 	"time"
 

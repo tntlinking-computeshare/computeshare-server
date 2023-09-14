@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/computeinstance"
-	"computeshare-server/internal/data/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

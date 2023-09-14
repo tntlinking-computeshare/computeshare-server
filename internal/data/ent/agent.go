@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"computeshare-server/internal/data/ent/agent"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"strings"
 
 	"entgo.io/ent"
