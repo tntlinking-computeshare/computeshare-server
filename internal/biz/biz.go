@@ -8,4 +8,5 @@ var ProviderSet = wire.NewSet(
 	NewAgentUsecase,
 	NewStorageUsecase,
 	NewUserUsecase,
+	NewComputeInstanceUsercase,
 )

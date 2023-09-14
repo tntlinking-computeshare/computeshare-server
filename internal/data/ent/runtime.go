@@ -4,6 +4,9 @@ package ent
 
 import (
 	"computeshare-server/internal/data/ent/agent"
+	"computeshare-server/internal/data/ent/computeimage"
+	"computeshare-server/internal/data/ent/computeinstance"
+	"computeshare-server/internal/data/ent/computespec"
 	"computeshare-server/internal/data/ent/schema"
 	"computeshare-server/internal/data/ent/storage"
 	"computeshare-server/internal/data/ent/user"
@@ -26,6 +29,56 @@ func init() {
 	agentDescID := agentFields[0].Descriptor()
 	// agent.DefaultID holds the default value on creation for the id field.
 	agent.DefaultID = agentDescID.Default.(func() uuid.UUID)
+	computeimageFields := schema.ComputeImage{}.Fields()
+	_ = computeimageFields
+	// computeimageDescName is the schema descriptor for name field.
+	computeimageDescName := computeimageFields[1].Descriptor()
+	// computeimage.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	computeimage.NameValidator = computeimageDescName.Validators[0].(func(string) error)
+	// computeimageDescImage is the schema descriptor for image field.
+	computeimageDescImage := computeimageFields[2].Descriptor()
+	// computeimage.ImageValidator is a validator for the "image" field. It is called by the builders before save.
+	computeimage.ImageValidator = computeimageDescImage.Validators[0].(func(string) error)
+	// computeimageDescTag is the schema descriptor for tag field.
+	computeimageDescTag := computeimageFields[3].Descriptor()
+	// computeimage.TagValidator is a validator for the "tag" field. It is called by the builders before save.
+	computeimage.TagValidator = computeimageDescTag.Validators[0].(func(string) error)
+	computeinstanceFields := schema.ComputeInstance{}.Fields()
+	_ = computeinstanceFields
+	// computeinstanceDescOwner is the schema descriptor for owner field.
+	computeinstanceDescOwner := computeinstanceFields[1].Descriptor()
+	// computeinstance.OwnerValidator is a validator for the "owner" field. It is called by the builders before save.
+	computeinstance.OwnerValidator = computeinstanceDescOwner.Validators[0].(func(string) error)
+	// computeinstanceDescName is the schema descriptor for name field.
+	computeinstanceDescName := computeinstanceFields[2].Descriptor()
+	// computeinstance.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	computeinstance.NameValidator = computeinstanceDescName.Validators[0].(func(string) error)
+	// computeinstanceDescCore is the schema descriptor for core field.
+	computeinstanceDescCore := computeinstanceFields[3].Descriptor()
+	// computeinstance.CoreValidator is a validator for the "core" field. It is called by the builders before save.
+	computeinstance.CoreValidator = computeinstanceDescCore.Validators[0].(func(string) error)
+	// computeinstanceDescMemory is the schema descriptor for memory field.
+	computeinstanceDescMemory := computeinstanceFields[4].Descriptor()
+	// computeinstance.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
+	computeinstance.MemoryValidator = computeinstanceDescMemory.Validators[0].(func(string) error)
+	// computeinstanceDescImage is the schema descriptor for image field.
+	computeinstanceDescImage := computeinstanceFields[5].Descriptor()
+	// computeinstance.ImageValidator is a validator for the "image" field. It is called by the builders before save.
+	computeinstance.ImageValidator = computeinstanceDescImage.Validators[0].(func(string) error)
+	// computeinstanceDescID is the schema descriptor for id field.
+	computeinstanceDescID := computeinstanceFields[0].Descriptor()
+	// computeinstance.DefaultID holds the default value on creation for the id field.
+	computeinstance.DefaultID = computeinstanceDescID.Default.(func() uuid.UUID)
+	computespecFields := schema.ComputeSpec{}.Fields()
+	_ = computespecFields
+	// computespecDescCore is the schema descriptor for core field.
+	computespecDescCore := computespecFields[1].Descriptor()
+	// computespec.CoreValidator is a validator for the "core" field. It is called by the builders before save.
+	computespec.CoreValidator = computespecDescCore.Validators[0].(func(string) error)
+	// computespecDescMemory is the schema descriptor for memory field.
+	computespecDescMemory := computespecFields[2].Descriptor()
+	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
+	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
 	storageFields := schema.Storage{}.Fields()
 	_ = storageFields
 	// storageDescOwner is the schema descriptor for owner field.
@@ -134,6 +187,10 @@ func init() {
 	userDescLastLoginDate := userFields[5].Descriptor()
 	// user.DefaultLastLoginDate holds the default value on creation for the last_login_date field.
 	user.DefaultLastLoginDate = userDescLastLoginDate.Default.(func() time.Time)
+	// userDescName is the schema descriptor for name field.
+	userDescName := userFields[6].Descriptor()
+	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	user.NameValidator = userDescName.Validators[0].(func(string) error)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.

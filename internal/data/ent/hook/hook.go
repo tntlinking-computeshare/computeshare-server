@@ -20,6 +20,54 @@ func (f AgentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AgentMutation", m)
 }
 
+// The ComputeImageFunc type is an adapter to allow the use of ordinary
+// function as ComputeImage mutator.
+type ComputeImageFunc func(context.Context, *ent.ComputeImageMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ComputeImageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ComputeImageMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeImageMutation", m)
+}
+
+// The ComputeInstanceFunc type is an adapter to allow the use of ordinary
+// function as ComputeInstance mutator.
+type ComputeInstanceFunc func(context.Context, *ent.ComputeInstanceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ComputeInstanceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ComputeInstanceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeInstanceMutation", m)
+}
+
+// The ComputeSpecFunc type is an adapter to allow the use of ordinary
+// function as ComputeSpec mutator.
+type ComputeSpecFunc func(context.Context, *ent.ComputeSpecMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ComputeSpecFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ComputeSpecMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeSpecMutation", m)
+}
+
+// The EmployeeFunc type is an adapter to allow the use of ordinary
+// function as Employee mutator.
+type EmployeeFunc func(context.Context, *ent.EmployeeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EmployeeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EmployeeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmployeeMutation", m)
+}
+
 // The StorageFunc type is an adapter to allow the use of ordinary
 // function as Storage mutator.
 type StorageFunc func(context.Context, *ent.StorageMutation) (ent.Value, error)

@@ -40,6 +40,9 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		Id: user.ID.String(),
 	}, nil
 }
+func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
+	return &pb.UpdateUserReply{}, nil
+}
 func (s *UserService) UpdateUserPassword(ctx context.Context, req *pb.UpdateUserPasswordRequest) (*pb.UpdateUserPasswordReply, error) {
 	id, _ := uuid.Parse(req.Id)
 	lastLoginDate := time.Now()
@@ -47,6 +50,9 @@ func (s *UserService) UpdateUserPassword(ctx context.Context, req *pb.UpdateUser
 		LastLoginDate: lastLoginDate,
 	})
 	return &pb.UpdateUserPasswordReply{}, err
+}
+func (s *UserService) UpdateUserTelephone(ctx context.Context, req *pb.UpdateUserTelephoneRequest) (*pb.UpdateUserTelephoneReply, error) {
+	return &pb.UpdateUserTelephoneReply{}, nil
 }
 func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserReply, error) {
 	id, _ := uuid.Parse(req.Id)

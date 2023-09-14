@@ -14,6 +14,14 @@ type Tx struct {
 	config
 	// Agent is the client for interacting with the Agent builders.
 	Agent *AgentClient
+	// ComputeImage is the client for interacting with the ComputeImage builders.
+	ComputeImage *ComputeImageClient
+	// ComputeInstance is the client for interacting with the ComputeInstance builders.
+	ComputeInstance *ComputeInstanceClient
+	// ComputeSpec is the client for interacting with the ComputeSpec builders.
+	ComputeSpec *ComputeSpecClient
+	// Employee is the client for interacting with the Employee builders.
+	Employee *EmployeeClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
 	// User is the client for interacting with the User builders.
@@ -150,6 +158,10 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Agent = NewAgentClient(tx.config)
+	tx.ComputeImage = NewComputeImageClient(tx.config)
+	tx.ComputeInstance = NewComputeInstanceClient(tx.config)
+	tx.ComputeSpec = NewComputeSpecClient(tx.config)
+	tx.Employee = NewEmployeeClient(tx.config)
 	tx.Storage = NewStorageClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }

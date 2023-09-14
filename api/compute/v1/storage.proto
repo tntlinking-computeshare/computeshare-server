@@ -41,8 +41,7 @@ service Storage {
 message UploadFileRequest {
 	bytes body = 1;
 	string name = 2;
-	string owner = 3;
-	optional string parent_id = 4;
+	optional string parent_id = 3;
 }
 
 message DownloadRequest {
@@ -75,7 +74,6 @@ message File {
 
 message ListRequest {
 	string parent_id = 1;
-	string owner = 2;
 }
 message ListReply {
 	repeated File result = 1;
@@ -83,8 +81,7 @@ message ListReply {
 
 message CreateDirRequest {
 	string name = 1;
-	string owner = 2;
-	string parent_id = 3;
+	string parent_id = 2;
 }
 
 message CreateDirReply {

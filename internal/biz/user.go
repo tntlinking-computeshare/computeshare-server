@@ -28,6 +28,10 @@ type User struct {
 	// LastLoginDate holds the value of the "last_login_date" field.
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
 	ValidateCode  string    `json:"validate_code"`
+	// 用户名
+	Name string `json:"name,omitempty"`
+	// 头像地址
+	Icon string `json:"icon,omitempty"`
 }
 
 func (u *User) GetFullTelephone() string {
@@ -113,7 +117,7 @@ func (uc *UserUsercase) Login(ctx context.Context, user *User) (string, error) {
 	}
 
 	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{
-		ID: u.ID.String(),
+		UserID: u.ID.String(),
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(global.ExpiresTime)),
 		},
@@ -146,7 +150,7 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	uc.repo.DeleteValidateCode(ctx, *user)
 
 	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{
-		ID: u.ID.String(),
+		UserID: u.ID.String(),
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(global.ExpiresTime)),
 		},

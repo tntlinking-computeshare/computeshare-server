@@ -67,6 +67,18 @@ func (uc *UserCreate) SetNillableLastLoginDate(t *time.Time) *UserCreate {
 	return uc
 }
 
+// SetName sets the "name" field.
+func (uc *UserCreate) SetName(s string) *UserCreate {
+	uc.mutation.SetName(s)
+	return uc
+}
+
+// SetIcon sets the "icon" field.
+func (uc *UserCreate) SetIcon(s string) *UserCreate {
+	uc.mutation.SetIcon(s)
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
 	uc.mutation.SetID(u)
@@ -162,6 +174,17 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.LastLoginDate(); !ok {
 		return &ValidationError{Name: "last_login_date", err: errors.New(`ent: missing required field "User.last_login_date"`)}
 	}
+	if _, ok := uc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}
+	}
+	if v, ok := uc.mutation.Name(); ok {
+		if err := user.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "User.name": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.Icon(); !ok {
+		return &ValidationError{Name: "icon", err: errors.New(`ent: missing required field "User.icon"`)}
+	}
 	return nil
 }
 
@@ -216,6 +239,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.LastLoginDate(); ok {
 		_spec.SetField(user.FieldLastLoginDate, field.TypeTime, value)
 		_node.LastLoginDate = value
+	}
+	if value, ok := uc.mutation.Name(); ok {
+		_spec.SetField(user.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := uc.mutation.Icon(); ok {
+		_spec.SetField(user.FieldIcon, field.TypeString, value)
+		_node.Icon = value
 	}
 	return _node, _spec
 }

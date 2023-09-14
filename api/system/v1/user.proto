@@ -15,12 +15,24 @@ service User {
 			body: "*"
 		};
 	};
-	rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (UpdateUserPasswordReply){
+	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
 		option (google.api.http) = {
 			put: "/v1/user/{id}",
 			body: "*"
 		};
+	}
+	rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (UpdateUserPasswordReply){
+		option (google.api.http) = {
+			put: "/v1/user/{id}/password",
+			body: "*"
+		};
 	};
+	rpc UpdateUserTelephone(UpdateUserTelephoneRequest) returns (UpdateUserTelephoneReply){
+		option (google.api.http) = {
+			put: "/v1/user/{id}/telephone",
+			body: "*"
+		};
+	}
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
 		option (google.api.http) = {
 			delete: "/v1/user/{id}"
@@ -88,7 +100,13 @@ message CreateUserRequest {
 message CreateUserReply {
 	string id = 1;
 }
-
+message UpdateUserRequest {
+	string id = 1;
+	string name = 2;
+	string icon = 3;
+}
+message UpdateUserReply {
+}
 message UpdateUserPasswordRequest {
 	string id = 1;
 	string old_password = 2;
@@ -96,6 +114,15 @@ message UpdateUserPasswordRequest {
 }
 message UpdateUserPasswordReply {}
 
+message UpdateUserTelephoneRequest {
+	string id = 1;
+	string country_call_coding = 2;
+	string telephone_number = 3;
+	string validate_code = 4;
+}
+message UpdateUserTelephoneReply{
+
+}
 message DeleteUserRequest {
 	string id = 1;
 }
@@ -110,6 +137,8 @@ message GetUserReply {
 	string telephone_number = 3;
 	int64 create_date = 4;
 	int64 last_login_date = 5;
+	string name = 6;
+	string icon = 7;
 }
 
 message ListUserRequest {

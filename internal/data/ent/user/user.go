@@ -24,6 +24,10 @@ const (
 	FieldCreateDate = "create_date"
 	// FieldLastLoginDate holds the string denoting the last_login_date field in the database.
 	FieldLastLoginDate = "last_login_date"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldIcon holds the string denoting the icon field in the database.
+	FieldIcon = "icon"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -36,6 +40,8 @@ var Columns = []string{
 	FieldPassword,
 	FieldCreateDate,
 	FieldLastLoginDate,
+	FieldName,
+	FieldIcon,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -59,6 +65,8 @@ var (
 	DefaultCreateDate func() time.Time
 	// DefaultLastLoginDate holds the default value on creation for the "last_login_date" field.
 	DefaultLastLoginDate func() time.Time
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -94,4 +102,14 @@ func ByCreateDate(opts ...sql.OrderTermOption) OrderOption {
 // ByLastLoginDate orders the results by the last_login_date field.
 func ByLastLoginDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastLoginDate, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByIcon orders the results by the icon field.
+func ByIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIcon, opts...).ToFunc()
 }

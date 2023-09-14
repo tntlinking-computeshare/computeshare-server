@@ -28,7 +28,11 @@ type User struct {
 	CreateDate time.Time `json:"create_date,omitempty"`
 	// LastLoginDate holds the value of the "last_login_date" field.
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
-	selectValues  sql.SelectValues
+	// 用户名
+	Name string `json:"name,omitempty"`
+	// 头像地址
+	Icon         string `json:"icon,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -36,7 +40,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldCountryCallCoding, user.FieldTelephoneNumber, user.FieldPassword:
+		case user.FieldCountryCallCoding, user.FieldTelephoneNumber, user.FieldPassword, user.FieldName, user.FieldIcon:
 			values[i] = new(sql.NullString)
 		case user.FieldCreateDate, user.FieldLastLoginDate:
 			values[i] = new(sql.NullTime)
@@ -93,6 +97,18 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.LastLoginDate = value.Time
 			}
+		case user.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				u.Name = value.String
+			}
+		case user.FieldIcon:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field icon", values[i])
+			} else if value.Valid {
+				u.Icon = value.String
+			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
 		}
@@ -143,6 +159,12 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("last_login_date=")
 	builder.WriteString(u.LastLoginDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(u.Name)
+	builder.WriteString(", ")
+	builder.WriteString("icon=")
+	builder.WriteString(u.Icon)
 	builder.WriteByte(')')
 	return builder.String()
 }

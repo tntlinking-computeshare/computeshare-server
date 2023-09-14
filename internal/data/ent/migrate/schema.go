@@ -26,6 +26,89 @@ var (
 			},
 		},
 	}
+	// ComputeImagesColumns holds the columns for the "compute_images" table.
+	ComputeImagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "image", Type: field.TypeString},
+		{Name: "tag", Type: field.TypeString},
+		{Name: "port", Type: field.TypeInt32},
+	}
+	// ComputeImagesTable holds the schema information for the "compute_images" table.
+	ComputeImagesTable = &schema.Table{
+		Name:       "compute_images",
+		Columns:    ComputeImagesColumns,
+		PrimaryKey: []*schema.Column{ComputeImagesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "computeimage_id",
+				Unique:  true,
+				Columns: []*schema.Column{ComputeImagesColumns[0]},
+			},
+		},
+	}
+	// ComputeInstancesColumns holds the columns for the "compute_instances" table.
+	ComputeInstancesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "owner", Type: field.TypeString},
+		{Name: "name", Type: field.TypeString},
+		{Name: "core", Type: field.TypeString},
+		{Name: "memory", Type: field.TypeString},
+		{Name: "image", Type: field.TypeString},
+		{Name: "expiration_time", Type: field.TypeTime},
+		{Name: "status", Type: field.TypeInt8},
+		{Name: "container_id", Type: field.TypeString, Nullable: true},
+		{Name: "peer_id", Type: field.TypeString, Nullable: true},
+	}
+	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
+	ComputeInstancesTable = &schema.Table{
+		Name:       "compute_instances",
+		Columns:    ComputeInstancesColumns,
+		PrimaryKey: []*schema.Column{ComputeInstancesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "computeinstance_id",
+				Unique:  true,
+				Columns: []*schema.Column{ComputeInstancesColumns[0]},
+			},
+			{
+				Name:    "computeinstance_owner",
+				Unique:  false,
+				Columns: []*schema.Column{ComputeInstancesColumns[1]},
+			},
+		},
+	}
+	// ComputeSpecsColumns holds the columns for the "compute_specs" table.
+	ComputeSpecsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "core", Type: field.TypeString},
+		{Name: "memory", Type: field.TypeString},
+	}
+	// ComputeSpecsTable holds the schema information for the "compute_specs" table.
+	ComputeSpecsTable = &schema.Table{
+		Name:       "compute_specs",
+		Columns:    ComputeSpecsColumns,
+		PrimaryKey: []*schema.Column{ComputeSpecsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "computespec_id",
+				Unique:  true,
+				Columns: []*schema.Column{ComputeSpecsColumns[0]},
+			},
+		},
+	}
+	// EmployeesColumns holds the columns for the "employees" table.
+	EmployeesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "age", Type: field.TypeInt32, Nullable: true},
+	}
+	// EmployeesTable holds the schema information for the "employees" table.
+	EmployeesTable = &schema.Table{
+		Name:       "employees",
+		Columns:    EmployeesColumns,
+		PrimaryKey: []*schema.Column{EmployeesColumns[0]},
+	}
 	// StoragesColumns holds the columns for the "storages" table.
 	StoragesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -58,6 +141,8 @@ var (
 		{Name: "password", Type: field.TypeString},
 		{Name: "create_date", Type: field.TypeTime},
 		{Name: "last_login_date", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString},
+		{Name: "icon", Type: field.TypeString},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
@@ -80,6 +165,10 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
+		ComputeImagesTable,
+		ComputeInstancesTable,
+		ComputeSpecsTable,
+		EmployeesTable,
 		StoragesTable,
 		UsersTable,
 	}

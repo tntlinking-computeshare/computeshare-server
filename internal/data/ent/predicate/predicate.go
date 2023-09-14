@@ -9,6 +9,18 @@ import (
 // Agent is the predicate function for agent builders.
 type Agent func(*sql.Selector)
 
+// ComputeImage is the predicate function for computeimage builders.
+type ComputeImage func(*sql.Selector)
+
+// ComputeInstance is the predicate function for computeinstance builders.
+type ComputeInstance func(*sql.Selector)
+
+// ComputeSpec is the predicate function for computespec builders.
+type ComputeSpec func(*sql.Selector)
+
+// Employee is the predicate function for employee builders.
+type Employee func(*sql.Selector)
+
 // Storage is the predicate function for storage builders.
 type Storage func(*sql.Selector)
 

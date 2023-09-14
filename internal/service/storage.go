@@ -3,15 +3,19 @@ package service
 import (
 	pb "computeshare-server/api/compute/v1"
 	"computeshare-server/internal/biz"
+	"computeshare-server/internal/global"
 	"context"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	iface "github.com/ipfs/boxo/coreiface"
 	"github.com/ipfs/boxo/coreiface/options"
+	"github.com/ipfs/boxo/coreiface/path"
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/kubo/core"
 	"github.com/ipfs/kubo/core/coreapi"
 	"github.com/samber/lo"
+	"io"
 	"time"
 )
 
@@ -37,11 +41,15 @@ func NewStorageService(uc *biz.Storagecase, ipfsNode *core.IpfsNode, logger log.
 }
 
 func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.ListReply, error) {
-	result, err := s.uc.List(ctx, req.GetOwner(), req.GetParentId())
+	token, ok := global.FromContext(ctx)
+	if ok == false {
+		return nil, errors.New("cannot get user ID")
+	}
+	result, err := s.uc.List(ctx, token.UserID, req.GetParentId())
 	if err != nil {
 		return nil, err
 	}
-	files := lo.Map(result, func(item *biz.Storage, index int) *pb.File {
+	list := lo.Map(result, func(item *biz.Storage, index int) *pb.File {
 		return &pb.File{
 			Id:         item.ID.String(),
 			Type:       pb.FileType(item.Type),
@@ -52,10 +60,14 @@ func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.Lis
 		}
 	})
 	return &pb.ListReply{
-		Result: files,
+		Result: list,
 	}, err
 }
 func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileRequest) (*pb.File, error) {
+	token, ok := global.FromContext(ctx)
+	if ok == false {
+		return nil, errors.New("cannot get user ID")
+	}
 
 	opts := []options.UnixfsAddOption{
 		options.Unixfs.Hash(18),
@@ -87,7 +99,7 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 	}
 
 	storage := &biz.Storage{
-		Owner:      req.GetOwner(),
+		Owner:      token.UserID,
 		Type:       int32(pb.FileType_FILE),
 		Size:       int32(size),
 		Name:       req.GetName(),
@@ -105,7 +117,37 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 	}, err
 }
 func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) (*pb.DownloadReply, error) {
-	return &pb.DownloadReply{}, nil
+	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	storage, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	cid := storage.Cid
+	if cid == "" {
+		return nil, errors.New("download file error")
+	}
+	f, err := s.ipfsapi.Unixfs().Get(ctx, path.New(cid))
+	var file files.File
+	switch f := f.(type) {
+	case files.File:
+		file = f
+	case files.Directory:
+		return nil, iface.ErrIsDir
+	default:
+		return nil, iface.ErrNotSupported
+	}
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.DownloadReply{
+		Name: storage.Name,
+		Body: data,
+	}, err
 }
 func (s *StorageService) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteReply, error) {
 	for _, id := range req.GetIds() {
@@ -124,9 +166,12 @@ func (s *StorageService) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb
 
 func (s *StorageService) CreateDir(ctx context.Context, req *pb.CreateDirRequest) (*pb.CreateDirReply, error) {
 	// 	判断该目录有无重复名字的文件夹
-
+	token, ok := global.FromContext(ctx)
+	if ok == false {
+		return nil, errors.New("cannot get user ID")
+	}
 	storage := &biz.Storage{
-		Owner:      req.GetOwner(),
+		Owner:      token.UserID,
 		Type:       int32(pb.FileType_DIR),
 		Name:       req.GetName(),
 		ParentID:   req.GetParentId(),

@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package api.compute.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "computeshare-server/api/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service ComputeInstance {
+	// 查询规格
+	rpc ListComputeSpec(ListComputeSpecRequest) returns (ListComputeSpecReply) {
+		option (google.api.http) = {
+			get: "/v1/compute/spec",
+		};
+	}
+
+	// 查询镜像
+	rpc ListComputeImage(ListComputeImageRequest) returns (ListComputeImageReply) {
+		option (google.api.http) = {
+			get: "/v1/compute/image",
+		};
+	}
+
+	// 查询到期时间
+	rpc ListComputeInstanceDuration(ListComputeDurationRequest) returns (ListComputeDurationReply){
+		option (google.api.http) = {
+			get: "/v1/compute/duration",
+		};
+	}
+
+	// 创建实例
+	rpc Create (CreateInstanceRequest) returns (CreateInstanceReply){
+		option (google.api.http) = {
+			post: "/v1/instance",
+			body: "*",
+		};
+	};
+
+	//删除实例
+	rpc Delete (DeleteInstanceRequest) returns (DeleteInstanceReply){
+		option (google.api.http) = {
+			delete: "/v1/instance/{id}",
+		};
+	};
+
+	//获取实例详情
+	rpc Get (GetInstanceRequest) returns (GetInstanceReply) {
+		option (google.api.http) = {
+			get: "/v1/instance/{id}",
+		};
+	};
+
+	//实例列表
+	rpc List (ListInstanceRequest) returns (ListInstanceReply){
+		option (google.api.http) = {
+			get: "/v1/instance",
+		};
+	};
+
+	//停止实例
+	rpc StopInstance(GetInstanceRequest) returns (StopInstanceReply) {
+		option (google.api.http) = {
+			put: "/v1/instance/{id}/stop",
+			body: "*",
+		};
+	}
+
+	//启动实例
+	rpc StartInstance(GetInstanceRequest) returns (StartInstanceReply) {
+		option (google.api.http) = {
+			put: "/v1/instance/{id}/stop",
+			body: "*",
+		};
+	}
+
+	// 连接ssh
+	rpc SSHInstance(GetInstanceRequest) returns (SSHInstanceReply) {
+		option (google.api.http) = {
+			get: "/v1/instance/{id}/ssh",
+		};
+	}
+}
+
+message ListComputeSpecRequest {
+
+}
+
+message ListComputeSpecReply {
+	repeated ComputeSpecReply result = 1;
+}
+
+message ListComputeImageRequest {
+
+}
+
+message ListComputeImageReply {
+	repeated ComputeImageReply result = 1;
+}
+
+message ComputeImageReply {
+	int32 id = 1;
+	string name = 2;
+	string image = 3;
+	string tag = 4;
+	int32 port = 5;
+}
+
+message ComputeSpecReply {
+	int32 id = 1;
+	string core = 2;
+	string memory = 3;
+}
+
+message ListComputeDurationRequest {
+
+}
+
+message ListComputeDurationReply {
+	repeated ComputeDurationReply result = 1;
+}
+
+message ComputeDurationReply {
+	string name = 1;
+	int32 duration = 2;
+}
+
+message CreateInstanceRequest {
+	int32 spec_id = 1;
+	int32 image_id = 2;
+	int32 duration = 3;
+	string name = 4;
+}
+
+message PortBinding {
+	string listen_port = 1;
+	string target_port = 2;
+}
+
+message CreateInstanceReply {
+	string id = 1;
+	string name = 2;
+	repeated PortBinding ports = 3;
+}
+
+message DeleteInstanceRequest {
+	string id = 1;
+}
+message DeleteInstanceReply {}
+
+message GetInstanceRequest {
+	string id = 1;
+}
+message GetInstanceReply {
+	string id = 1;
+	string name = 2;
+	repeated PortBinding ports = 3;
+}
+
+message ListInstanceRequest {}
+message ListInstanceReply {
+	repeated GetInstanceReply result = 1;
+}
+
+message StopInstanceReply {
+
+}
+
+message StartInstanceReply {
+
+}
+
+message SSHInstanceReply {
+
+}

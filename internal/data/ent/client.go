@@ -11,6 +11,10 @@ import (
 	"computeshare-server/internal/data/ent/migrate"
 
 	"computeshare-server/internal/data/ent/agent"
+	"computeshare-server/internal/data/ent/computeimage"
+	"computeshare-server/internal/data/ent/computeinstance"
+	"computeshare-server/internal/data/ent/computespec"
+	"computeshare-server/internal/data/ent/employee"
 	"computeshare-server/internal/data/ent/storage"
 	"computeshare-server/internal/data/ent/user"
 
@@ -27,6 +31,14 @@ type Client struct {
 	Schema *migrate.Schema
 	// Agent is the client for interacting with the Agent builders.
 	Agent *AgentClient
+	// ComputeImage is the client for interacting with the ComputeImage builders.
+	ComputeImage *ComputeImageClient
+	// ComputeInstance is the client for interacting with the ComputeInstance builders.
+	ComputeInstance *ComputeInstanceClient
+	// ComputeSpec is the client for interacting with the ComputeSpec builders.
+	ComputeSpec *ComputeSpecClient
+	// Employee is the client for interacting with the Employee builders.
+	Employee *EmployeeClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
 	// User is the client for interacting with the User builders.
@@ -45,6 +57,10 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Agent = NewAgentClient(c.config)
+	c.ComputeImage = NewComputeImageClient(c.config)
+	c.ComputeInstance = NewComputeInstanceClient(c.config)
+	c.ComputeSpec = NewComputeSpecClient(c.config)
+	c.Employee = NewEmployeeClient(c.config)
 	c.Storage = NewStorageClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -127,11 +143,15 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:     ctx,
-		config:  cfg,
-		Agent:   NewAgentClient(cfg),
-		Storage: NewStorageClient(cfg),
-		User:    NewUserClient(cfg),
+		ctx:             ctx,
+		config:          cfg,
+		Agent:           NewAgentClient(cfg),
+		ComputeImage:    NewComputeImageClient(cfg),
+		ComputeInstance: NewComputeInstanceClient(cfg),
+		ComputeSpec:     NewComputeSpecClient(cfg),
+		Employee:        NewEmployeeClient(cfg),
+		Storage:         NewStorageClient(cfg),
+		User:            NewUserClient(cfg),
 	}, nil
 }
 
@@ -149,11 +169,15 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:     ctx,
-		config:  cfg,
-		Agent:   NewAgentClient(cfg),
-		Storage: NewStorageClient(cfg),
-		User:    NewUserClient(cfg),
+		ctx:             ctx,
+		config:          cfg,
+		Agent:           NewAgentClient(cfg),
+		ComputeImage:    NewComputeImageClient(cfg),
+		ComputeInstance: NewComputeInstanceClient(cfg),
+		ComputeSpec:     NewComputeSpecClient(cfg),
+		Employee:        NewEmployeeClient(cfg),
+		Storage:         NewStorageClient(cfg),
+		User:            NewUserClient(cfg),
 	}, nil
 }
 
@@ -182,17 +206,23 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Agent.Use(hooks...)
-	c.Storage.Use(hooks...)
-	c.User.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
+		c.Storage, c.User,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Agent.Intercept(interceptors...)
-	c.Storage.Intercept(interceptors...)
-	c.User.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
+		c.Storage, c.User,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -200,6 +230,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *AgentMutation:
 		return c.Agent.mutate(ctx, m)
+	case *ComputeImageMutation:
+		return c.ComputeImage.mutate(ctx, m)
+	case *ComputeInstanceMutation:
+		return c.ComputeInstance.mutate(ctx, m)
+	case *ComputeSpecMutation:
+		return c.ComputeSpec.mutate(ctx, m)
+	case *EmployeeMutation:
+		return c.Employee.mutate(ctx, m)
 	case *StorageMutation:
 		return c.Storage.mutate(ctx, m)
 	case *UserMutation:
@@ -324,6 +362,478 @@ func (c *AgentClient) mutate(ctx context.Context, m *AgentMutation) (Value, erro
 		return (&AgentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Agent mutation op: %q", m.Op())
+	}
+}
+
+// ComputeImageClient is a client for the ComputeImage schema.
+type ComputeImageClient struct {
+	config
+}
+
+// NewComputeImageClient returns a client for the ComputeImage from the given config.
+func NewComputeImageClient(c config) *ComputeImageClient {
+	return &ComputeImageClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `computeimage.Hooks(f(g(h())))`.
+func (c *ComputeImageClient) Use(hooks ...Hook) {
+	c.hooks.ComputeImage = append(c.hooks.ComputeImage, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `computeimage.Intercept(f(g(h())))`.
+func (c *ComputeImageClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ComputeImage = append(c.inters.ComputeImage, interceptors...)
+}
+
+// Create returns a builder for creating a ComputeImage entity.
+func (c *ComputeImageClient) Create() *ComputeImageCreate {
+	mutation := newComputeImageMutation(c.config, OpCreate)
+	return &ComputeImageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ComputeImage entities.
+func (c *ComputeImageClient) CreateBulk(builders ...*ComputeImageCreate) *ComputeImageCreateBulk {
+	return &ComputeImageCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ComputeImage.
+func (c *ComputeImageClient) Update() *ComputeImageUpdate {
+	mutation := newComputeImageMutation(c.config, OpUpdate)
+	return &ComputeImageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ComputeImageClient) UpdateOne(ci *ComputeImage) *ComputeImageUpdateOne {
+	mutation := newComputeImageMutation(c.config, OpUpdateOne, withComputeImage(ci))
+	return &ComputeImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ComputeImageClient) UpdateOneID(id int32) *ComputeImageUpdateOne {
+	mutation := newComputeImageMutation(c.config, OpUpdateOne, withComputeImageID(id))
+	return &ComputeImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ComputeImage.
+func (c *ComputeImageClient) Delete() *ComputeImageDelete {
+	mutation := newComputeImageMutation(c.config, OpDelete)
+	return &ComputeImageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ComputeImageClient) DeleteOne(ci *ComputeImage) *ComputeImageDeleteOne {
+	return c.DeleteOneID(ci.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ComputeImageClient) DeleteOneID(id int32) *ComputeImageDeleteOne {
+	builder := c.Delete().Where(computeimage.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ComputeImageDeleteOne{builder}
+}
+
+// Query returns a query builder for ComputeImage.
+func (c *ComputeImageClient) Query() *ComputeImageQuery {
+	return &ComputeImageQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeComputeImage},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ComputeImage entity by its id.
+func (c *ComputeImageClient) Get(ctx context.Context, id int32) (*ComputeImage, error) {
+	return c.Query().Where(computeimage.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ComputeImageClient) GetX(ctx context.Context, id int32) *ComputeImage {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ComputeImageClient) Hooks() []Hook {
+	return c.hooks.ComputeImage
+}
+
+// Interceptors returns the client interceptors.
+func (c *ComputeImageClient) Interceptors() []Interceptor {
+	return c.inters.ComputeImage
+}
+
+func (c *ComputeImageClient) mutate(ctx context.Context, m *ComputeImageMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ComputeImageCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ComputeImageUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ComputeImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ComputeImageDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ComputeImage mutation op: %q", m.Op())
+	}
+}
+
+// ComputeInstanceClient is a client for the ComputeInstance schema.
+type ComputeInstanceClient struct {
+	config
+}
+
+// NewComputeInstanceClient returns a client for the ComputeInstance from the given config.
+func NewComputeInstanceClient(c config) *ComputeInstanceClient {
+	return &ComputeInstanceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `computeinstance.Hooks(f(g(h())))`.
+func (c *ComputeInstanceClient) Use(hooks ...Hook) {
+	c.hooks.ComputeInstance = append(c.hooks.ComputeInstance, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `computeinstance.Intercept(f(g(h())))`.
+func (c *ComputeInstanceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ComputeInstance = append(c.inters.ComputeInstance, interceptors...)
+}
+
+// Create returns a builder for creating a ComputeInstance entity.
+func (c *ComputeInstanceClient) Create() *ComputeInstanceCreate {
+	mutation := newComputeInstanceMutation(c.config, OpCreate)
+	return &ComputeInstanceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ComputeInstance entities.
+func (c *ComputeInstanceClient) CreateBulk(builders ...*ComputeInstanceCreate) *ComputeInstanceCreateBulk {
+	return &ComputeInstanceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ComputeInstance.
+func (c *ComputeInstanceClient) Update() *ComputeInstanceUpdate {
+	mutation := newComputeInstanceMutation(c.config, OpUpdate)
+	return &ComputeInstanceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ComputeInstanceClient) UpdateOne(ci *ComputeInstance) *ComputeInstanceUpdateOne {
+	mutation := newComputeInstanceMutation(c.config, OpUpdateOne, withComputeInstance(ci))
+	return &ComputeInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ComputeInstanceClient) UpdateOneID(id uuid.UUID) *ComputeInstanceUpdateOne {
+	mutation := newComputeInstanceMutation(c.config, OpUpdateOne, withComputeInstanceID(id))
+	return &ComputeInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ComputeInstance.
+func (c *ComputeInstanceClient) Delete() *ComputeInstanceDelete {
+	mutation := newComputeInstanceMutation(c.config, OpDelete)
+	return &ComputeInstanceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ComputeInstanceClient) DeleteOne(ci *ComputeInstance) *ComputeInstanceDeleteOne {
+	return c.DeleteOneID(ci.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ComputeInstanceClient) DeleteOneID(id uuid.UUID) *ComputeInstanceDeleteOne {
+	builder := c.Delete().Where(computeinstance.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ComputeInstanceDeleteOne{builder}
+}
+
+// Query returns a query builder for ComputeInstance.
+func (c *ComputeInstanceClient) Query() *ComputeInstanceQuery {
+	return &ComputeInstanceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeComputeInstance},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ComputeInstance entity by its id.
+func (c *ComputeInstanceClient) Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error) {
+	return c.Query().Where(computeinstance.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ComputeInstanceClient) GetX(ctx context.Context, id uuid.UUID) *ComputeInstance {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ComputeInstanceClient) Hooks() []Hook {
+	return c.hooks.ComputeInstance
+}
+
+// Interceptors returns the client interceptors.
+func (c *ComputeInstanceClient) Interceptors() []Interceptor {
+	return c.inters.ComputeInstance
+}
+
+func (c *ComputeInstanceClient) mutate(ctx context.Context, m *ComputeInstanceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ComputeInstanceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ComputeInstanceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ComputeInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ComputeInstanceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ComputeInstance mutation op: %q", m.Op())
+	}
+}
+
+// ComputeSpecClient is a client for the ComputeSpec schema.
+type ComputeSpecClient struct {
+	config
+}
+
+// NewComputeSpecClient returns a client for the ComputeSpec from the given config.
+func NewComputeSpecClient(c config) *ComputeSpecClient {
+	return &ComputeSpecClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `computespec.Hooks(f(g(h())))`.
+func (c *ComputeSpecClient) Use(hooks ...Hook) {
+	c.hooks.ComputeSpec = append(c.hooks.ComputeSpec, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `computespec.Intercept(f(g(h())))`.
+func (c *ComputeSpecClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ComputeSpec = append(c.inters.ComputeSpec, interceptors...)
+}
+
+// Create returns a builder for creating a ComputeSpec entity.
+func (c *ComputeSpecClient) Create() *ComputeSpecCreate {
+	mutation := newComputeSpecMutation(c.config, OpCreate)
+	return &ComputeSpecCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ComputeSpec entities.
+func (c *ComputeSpecClient) CreateBulk(builders ...*ComputeSpecCreate) *ComputeSpecCreateBulk {
+	return &ComputeSpecCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ComputeSpec.
+func (c *ComputeSpecClient) Update() *ComputeSpecUpdate {
+	mutation := newComputeSpecMutation(c.config, OpUpdate)
+	return &ComputeSpecUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ComputeSpecClient) UpdateOne(cs *ComputeSpec) *ComputeSpecUpdateOne {
+	mutation := newComputeSpecMutation(c.config, OpUpdateOne, withComputeSpec(cs))
+	return &ComputeSpecUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ComputeSpecClient) UpdateOneID(id int32) *ComputeSpecUpdateOne {
+	mutation := newComputeSpecMutation(c.config, OpUpdateOne, withComputeSpecID(id))
+	return &ComputeSpecUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ComputeSpec.
+func (c *ComputeSpecClient) Delete() *ComputeSpecDelete {
+	mutation := newComputeSpecMutation(c.config, OpDelete)
+	return &ComputeSpecDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ComputeSpecClient) DeleteOne(cs *ComputeSpec) *ComputeSpecDeleteOne {
+	return c.DeleteOneID(cs.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ComputeSpecClient) DeleteOneID(id int32) *ComputeSpecDeleteOne {
+	builder := c.Delete().Where(computespec.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ComputeSpecDeleteOne{builder}
+}
+
+// Query returns a query builder for ComputeSpec.
+func (c *ComputeSpecClient) Query() *ComputeSpecQuery {
+	return &ComputeSpecQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeComputeSpec},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ComputeSpec entity by its id.
+func (c *ComputeSpecClient) Get(ctx context.Context, id int32) (*ComputeSpec, error) {
+	return c.Query().Where(computespec.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ComputeSpecClient) GetX(ctx context.Context, id int32) *ComputeSpec {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ComputeSpecClient) Hooks() []Hook {
+	return c.hooks.ComputeSpec
+}
+
+// Interceptors returns the client interceptors.
+func (c *ComputeSpecClient) Interceptors() []Interceptor {
+	return c.inters.ComputeSpec
+}
+
+func (c *ComputeSpecClient) mutate(ctx context.Context, m *ComputeSpecMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ComputeSpecCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ComputeSpecUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ComputeSpecUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ComputeSpecDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ComputeSpec mutation op: %q", m.Op())
+	}
+}
+
+// EmployeeClient is a client for the Employee schema.
+type EmployeeClient struct {
+	config
+}
+
+// NewEmployeeClient returns a client for the Employee from the given config.
+func NewEmployeeClient(c config) *EmployeeClient {
+	return &EmployeeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `employee.Hooks(f(g(h())))`.
+func (c *EmployeeClient) Use(hooks ...Hook) {
+	c.hooks.Employee = append(c.hooks.Employee, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `employee.Intercept(f(g(h())))`.
+func (c *EmployeeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Employee = append(c.inters.Employee, interceptors...)
+}
+
+// Create returns a builder for creating a Employee entity.
+func (c *EmployeeClient) Create() *EmployeeCreate {
+	mutation := newEmployeeMutation(c.config, OpCreate)
+	return &EmployeeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Employee entities.
+func (c *EmployeeClient) CreateBulk(builders ...*EmployeeCreate) *EmployeeCreateBulk {
+	return &EmployeeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Employee.
+func (c *EmployeeClient) Update() *EmployeeUpdate {
+	mutation := newEmployeeMutation(c.config, OpUpdate)
+	return &EmployeeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmployeeClient) UpdateOne(e *Employee) *EmployeeUpdateOne {
+	mutation := newEmployeeMutation(c.config, OpUpdateOne, withEmployee(e))
+	return &EmployeeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmployeeClient) UpdateOneID(id int) *EmployeeUpdateOne {
+	mutation := newEmployeeMutation(c.config, OpUpdateOne, withEmployeeID(id))
+	return &EmployeeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Employee.
+func (c *EmployeeClient) Delete() *EmployeeDelete {
+	mutation := newEmployeeMutation(c.config, OpDelete)
+	return &EmployeeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmployeeClient) DeleteOne(e *Employee) *EmployeeDeleteOne {
+	return c.DeleteOneID(e.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmployeeClient) DeleteOneID(id int) *EmployeeDeleteOne {
+	builder := c.Delete().Where(employee.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmployeeDeleteOne{builder}
+}
+
+// Query returns a query builder for Employee.
+func (c *EmployeeClient) Query() *EmployeeQuery {
+	return &EmployeeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmployee},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Employee entity by its id.
+func (c *EmployeeClient) Get(ctx context.Context, id int) (*Employee, error) {
+	return c.Query().Where(employee.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmployeeClient) GetX(ctx context.Context, id int) *Employee {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *EmployeeClient) Hooks() []Hook {
+	return c.hooks.Employee
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmployeeClient) Interceptors() []Interceptor {
+	return c.inters.Employee
+}
+
+func (c *EmployeeClient) mutate(ctx context.Context, m *EmployeeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmployeeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmployeeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmployeeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmployeeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Employee mutation op: %q", m.Op())
 	}
 }
 
@@ -566,9 +1076,11 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, Storage, User []ent.Hook
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Storage,
+		User []ent.Hook
 	}
 	inters struct {
-		Agent, Storage, User []ent.Interceptor
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Storage,
+		User []ent.Interceptor
 	}
 )

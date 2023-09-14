@@ -4,6 +4,10 @@ package ent
 
 import (
 	"computeshare-server/internal/data/ent/agent"
+	"computeshare-server/internal/data/ent/computeimage"
+	"computeshare-server/internal/data/ent/computeinstance"
+	"computeshare-server/internal/data/ent/computespec"
+	"computeshare-server/internal/data/ent/employee"
 	"computeshare-server/internal/data/ent/predicate"
 	"computeshare-server/internal/data/ent/storage"
 	"computeshare-server/internal/data/ent/user"
@@ -27,9 +31,13 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAgent   = "Agent"
-	TypeStorage = "Storage"
-	TypeUser    = "User"
+	TypeAgent           = "Agent"
+	TypeComputeImage    = "ComputeImage"
+	TypeComputeInstance = "ComputeInstance"
+	TypeComputeSpec     = "ComputeSpec"
+	TypeEmployee        = "Employee"
+	TypeStorage         = "Storage"
+	TypeUser            = "User"
 )
 
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
@@ -362,6 +370,2202 @@ func (m *AgentMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *AgentMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Agent edge %s", name)
+}
+
+// ComputeImageMutation represents an operation that mutates the ComputeImage nodes in the graph.
+type ComputeImageMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int32
+	name          *string
+	image         *string
+	tag           *string
+	port          *int32
+	addport       *int32
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ComputeImage, error)
+	predicates    []predicate.ComputeImage
+}
+
+var _ ent.Mutation = (*ComputeImageMutation)(nil)
+
+// computeimageOption allows management of the mutation configuration using functional options.
+type computeimageOption func(*ComputeImageMutation)
+
+// newComputeImageMutation creates new mutation for the ComputeImage entity.
+func newComputeImageMutation(c config, op Op, opts ...computeimageOption) *ComputeImageMutation {
+	m := &ComputeImageMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComputeImage,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withComputeImageID sets the ID field of the mutation.
+func withComputeImageID(id int32) computeimageOption {
+	return func(m *ComputeImageMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ComputeImage
+		)
+		m.oldValue = func(ctx context.Context) (*ComputeImage, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ComputeImage.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComputeImage sets the old ComputeImage of the mutation.
+func withComputeImage(node *ComputeImage) computeimageOption {
+	return func(m *ComputeImageMutation) {
+		m.oldValue = func(context.Context) (*ComputeImage, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ComputeImageMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ComputeImageMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ComputeImage entities.
+func (m *ComputeImageMutation) SetID(id int32) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ComputeImageMutation) ID() (id int32, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ComputeImageMutation) IDs(ctx context.Context) ([]int32, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int32{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ComputeImage.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *ComputeImageMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ComputeImageMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ComputeImageMutation) ResetName() {
+	m.name = nil
+}
+
+// SetImage sets the "image" field.
+func (m *ComputeImageMutation) SetImage(s string) {
+	m.image = &s
+}
+
+// Image returns the value of the "image" field in the mutation.
+func (m *ComputeImageMutation) Image() (r string, exists bool) {
+	v := m.image
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImage returns the old "image" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldImage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImage: %w", err)
+	}
+	return oldValue.Image, nil
+}
+
+// ResetImage resets all changes to the "image" field.
+func (m *ComputeImageMutation) ResetImage() {
+	m.image = nil
+}
+
+// SetTag sets the "tag" field.
+func (m *ComputeImageMutation) SetTag(s string) {
+	m.tag = &s
+}
+
+// Tag returns the value of the "tag" field in the mutation.
+func (m *ComputeImageMutation) Tag() (r string, exists bool) {
+	v := m.tag
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTag returns the old "tag" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldTag(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTag is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTag requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTag: %w", err)
+	}
+	return oldValue.Tag, nil
+}
+
+// ResetTag resets all changes to the "tag" field.
+func (m *ComputeImageMutation) ResetTag() {
+	m.tag = nil
+}
+
+// SetPort sets the "port" field.
+func (m *ComputeImageMutation) SetPort(i int32) {
+	m.port = &i
+	m.addport = nil
+}
+
+// Port returns the value of the "port" field in the mutation.
+func (m *ComputeImageMutation) Port() (r int32, exists bool) {
+	v := m.port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPort returns the old "port" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldPort(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPort: %w", err)
+	}
+	return oldValue.Port, nil
+}
+
+// AddPort adds i to the "port" field.
+func (m *ComputeImageMutation) AddPort(i int32) {
+	if m.addport != nil {
+		*m.addport += i
+	} else {
+		m.addport = &i
+	}
+}
+
+// AddedPort returns the value that was added to the "port" field in this mutation.
+func (m *ComputeImageMutation) AddedPort() (r int32, exists bool) {
+	v := m.addport
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPort resets all changes to the "port" field.
+func (m *ComputeImageMutation) ResetPort() {
+	m.port = nil
+	m.addport = nil
+}
+
+// Where appends a list predicates to the ComputeImageMutation builder.
+func (m *ComputeImageMutation) Where(ps ...predicate.ComputeImage) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ComputeImageMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ComputeImageMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ComputeImage, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ComputeImageMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ComputeImageMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ComputeImage).
+func (m *ComputeImageMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ComputeImageMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.name != nil {
+		fields = append(fields, computeimage.FieldName)
+	}
+	if m.image != nil {
+		fields = append(fields, computeimage.FieldImage)
+	}
+	if m.tag != nil {
+		fields = append(fields, computeimage.FieldTag)
+	}
+	if m.port != nil {
+		fields = append(fields, computeimage.FieldPort)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case computeimage.FieldName:
+		return m.Name()
+	case computeimage.FieldImage:
+		return m.Image()
+	case computeimage.FieldTag:
+		return m.Tag()
+	case computeimage.FieldPort:
+		return m.Port()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case computeimage.FieldName:
+		return m.OldName(ctx)
+	case computeimage.FieldImage:
+		return m.OldImage(ctx)
+	case computeimage.FieldTag:
+		return m.OldTag(ctx)
+	case computeimage.FieldPort:
+		return m.OldPort(ctx)
+	}
+	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case computeimage.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case computeimage.FieldImage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImage(v)
+		return nil
+	case computeimage.FieldTag:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTag(v)
+		return nil
+	case computeimage.FieldPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPort(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeImage field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ComputeImageMutation) AddedFields() []string {
+	var fields []string
+	if m.addport != nil {
+		fields = append(fields, computeimage.FieldPort)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ComputeImageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case computeimage.FieldPort:
+		return m.AddedPort()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeImageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case computeimage.FieldPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPort(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeImage numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ComputeImageMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ComputeImageMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ComputeImageMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ComputeImage nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ComputeImageMutation) ResetField(name string) error {
+	switch name {
+	case computeimage.FieldName:
+		m.ResetName()
+		return nil
+	case computeimage.FieldImage:
+		m.ResetImage()
+		return nil
+	case computeimage.FieldTag:
+		m.ResetTag()
+		return nil
+	case computeimage.FieldPort:
+		m.ResetPort()
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeImage field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ComputeImageMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ComputeImageMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ComputeImageMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ComputeImageMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ComputeImageMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ComputeImageMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ComputeImageMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ComputeImage unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ComputeImageMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ComputeImage edge %s", name)
+}
+
+// ComputeInstanceMutation represents an operation that mutates the ComputeInstance nodes in the graph.
+type ComputeInstanceMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *uuid.UUID
+	owner           *string
+	name            *string
+	core            *string
+	memory          *string
+	image           *string
+	expiration_time *time.Time
+	status          *int8
+	addstatus       *int8
+	container_id    *string
+	peer_id         *string
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*ComputeInstance, error)
+	predicates      []predicate.ComputeInstance
+}
+
+var _ ent.Mutation = (*ComputeInstanceMutation)(nil)
+
+// computeinstanceOption allows management of the mutation configuration using functional options.
+type computeinstanceOption func(*ComputeInstanceMutation)
+
+// newComputeInstanceMutation creates new mutation for the ComputeInstance entity.
+func newComputeInstanceMutation(c config, op Op, opts ...computeinstanceOption) *ComputeInstanceMutation {
+	m := &ComputeInstanceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComputeInstance,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withComputeInstanceID sets the ID field of the mutation.
+func withComputeInstanceID(id uuid.UUID) computeinstanceOption {
+	return func(m *ComputeInstanceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ComputeInstance
+		)
+		m.oldValue = func(ctx context.Context) (*ComputeInstance, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ComputeInstance.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComputeInstance sets the old ComputeInstance of the mutation.
+func withComputeInstance(node *ComputeInstance) computeinstanceOption {
+	return func(m *ComputeInstanceMutation) {
+		m.oldValue = func(context.Context) (*ComputeInstance, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ComputeInstanceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ComputeInstanceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ComputeInstance entities.
+func (m *ComputeInstanceMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ComputeInstanceMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ComputeInstanceMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ComputeInstance.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetOwner sets the "owner" field.
+func (m *ComputeInstanceMutation) SetOwner(s string) {
+	m.owner = &s
+}
+
+// Owner returns the value of the "owner" field in the mutation.
+func (m *ComputeInstanceMutation) Owner() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwner returns the old "owner" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldOwner(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
+	}
+	return oldValue.Owner, nil
+}
+
+// ResetOwner resets all changes to the "owner" field.
+func (m *ComputeInstanceMutation) ResetOwner() {
+	m.owner = nil
+}
+
+// SetName sets the "name" field.
+func (m *ComputeInstanceMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ComputeInstanceMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ComputeInstanceMutation) ResetName() {
+	m.name = nil
+}
+
+// SetCore sets the "core" field.
+func (m *ComputeInstanceMutation) SetCore(s string) {
+	m.core = &s
+}
+
+// Core returns the value of the "core" field in the mutation.
+func (m *ComputeInstanceMutation) Core() (r string, exists bool) {
+	v := m.core
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCore returns the old "core" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldCore(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCore is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCore requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCore: %w", err)
+	}
+	return oldValue.Core, nil
+}
+
+// ResetCore resets all changes to the "core" field.
+func (m *ComputeInstanceMutation) ResetCore() {
+	m.core = nil
+}
+
+// SetMemory sets the "memory" field.
+func (m *ComputeInstanceMutation) SetMemory(s string) {
+	m.memory = &s
+}
+
+// Memory returns the value of the "memory" field in the mutation.
+func (m *ComputeInstanceMutation) Memory() (r string, exists bool) {
+	v := m.memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemory returns the old "memory" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldMemory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemory: %w", err)
+	}
+	return oldValue.Memory, nil
+}
+
+// ResetMemory resets all changes to the "memory" field.
+func (m *ComputeInstanceMutation) ResetMemory() {
+	m.memory = nil
+}
+
+// SetImage sets the "image" field.
+func (m *ComputeInstanceMutation) SetImage(s string) {
+	m.image = &s
+}
+
+// Image returns the value of the "image" field in the mutation.
+func (m *ComputeInstanceMutation) Image() (r string, exists bool) {
+	v := m.image
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImage returns the old "image" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldImage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImage: %w", err)
+	}
+	return oldValue.Image, nil
+}
+
+// ResetImage resets all changes to the "image" field.
+func (m *ComputeInstanceMutation) ResetImage() {
+	m.image = nil
+}
+
+// SetExpirationTime sets the "expiration_time" field.
+func (m *ComputeInstanceMutation) SetExpirationTime(t time.Time) {
+	m.expiration_time = &t
+}
+
+// ExpirationTime returns the value of the "expiration_time" field in the mutation.
+func (m *ComputeInstanceMutation) ExpirationTime() (r time.Time, exists bool) {
+	v := m.expiration_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpirationTime returns the old "expiration_time" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldExpirationTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpirationTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpirationTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpirationTime: %w", err)
+	}
+	return oldValue.ExpirationTime, nil
+}
+
+// ResetExpirationTime resets all changes to the "expiration_time" field.
+func (m *ComputeInstanceMutation) ResetExpirationTime() {
+	m.expiration_time = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *ComputeInstanceMutation) SetStatus(i int8) {
+	m.status = &i
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ComputeInstanceMutation) Status() (r int8, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v int8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds i to the "status" field.
+func (m *ComputeInstanceMutation) AddStatus(i int8) {
+	if m.addstatus != nil {
+		*m.addstatus += i
+	} else {
+		m.addstatus = &i
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *ComputeInstanceMutation) AddedStatus() (r int8, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ComputeInstanceMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+}
+
+// SetContainerID sets the "container_id" field.
+func (m *ComputeInstanceMutation) SetContainerID(s string) {
+	m.container_id = &s
+}
+
+// ContainerID returns the value of the "container_id" field in the mutation.
+func (m *ComputeInstanceMutation) ContainerID() (r string, exists bool) {
+	v := m.container_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContainerID returns the old "container_id" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldContainerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContainerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContainerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContainerID: %w", err)
+	}
+	return oldValue.ContainerID, nil
+}
+
+// ClearContainerID clears the value of the "container_id" field.
+func (m *ComputeInstanceMutation) ClearContainerID() {
+	m.container_id = nil
+	m.clearedFields[computeinstance.FieldContainerID] = struct{}{}
+}
+
+// ContainerIDCleared returns if the "container_id" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) ContainerIDCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldContainerID]
+	return ok
+}
+
+// ResetContainerID resets all changes to the "container_id" field.
+func (m *ComputeInstanceMutation) ResetContainerID() {
+	m.container_id = nil
+	delete(m.clearedFields, computeinstance.FieldContainerID)
+}
+
+// SetPeerID sets the "peer_id" field.
+func (m *ComputeInstanceMutation) SetPeerID(s string) {
+	m.peer_id = &s
+}
+
+// PeerID returns the value of the "peer_id" field in the mutation.
+func (m *ComputeInstanceMutation) PeerID() (r string, exists bool) {
+	v := m.peer_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPeerID returns the old "peer_id" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldPeerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPeerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPeerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPeerID: %w", err)
+	}
+	return oldValue.PeerID, nil
+}
+
+// ClearPeerID clears the value of the "peer_id" field.
+func (m *ComputeInstanceMutation) ClearPeerID() {
+	m.peer_id = nil
+	m.clearedFields[computeinstance.FieldPeerID] = struct{}{}
+}
+
+// PeerIDCleared returns if the "peer_id" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) PeerIDCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldPeerID]
+	return ok
+}
+
+// ResetPeerID resets all changes to the "peer_id" field.
+func (m *ComputeInstanceMutation) ResetPeerID() {
+	m.peer_id = nil
+	delete(m.clearedFields, computeinstance.FieldPeerID)
+}
+
+// Where appends a list predicates to the ComputeInstanceMutation builder.
+func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ComputeInstanceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ComputeInstanceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ComputeInstance, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ComputeInstanceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ComputeInstanceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ComputeInstance).
+func (m *ComputeInstanceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ComputeInstanceMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.owner != nil {
+		fields = append(fields, computeinstance.FieldOwner)
+	}
+	if m.name != nil {
+		fields = append(fields, computeinstance.FieldName)
+	}
+	if m.core != nil {
+		fields = append(fields, computeinstance.FieldCore)
+	}
+	if m.memory != nil {
+		fields = append(fields, computeinstance.FieldMemory)
+	}
+	if m.image != nil {
+		fields = append(fields, computeinstance.FieldImage)
+	}
+	if m.expiration_time != nil {
+		fields = append(fields, computeinstance.FieldExpirationTime)
+	}
+	if m.status != nil {
+		fields = append(fields, computeinstance.FieldStatus)
+	}
+	if m.container_id != nil {
+		fields = append(fields, computeinstance.FieldContainerID)
+	}
+	if m.peer_id != nil {
+		fields = append(fields, computeinstance.FieldPeerID)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case computeinstance.FieldOwner:
+		return m.Owner()
+	case computeinstance.FieldName:
+		return m.Name()
+	case computeinstance.FieldCore:
+		return m.Core()
+	case computeinstance.FieldMemory:
+		return m.Memory()
+	case computeinstance.FieldImage:
+		return m.Image()
+	case computeinstance.FieldExpirationTime:
+		return m.ExpirationTime()
+	case computeinstance.FieldStatus:
+		return m.Status()
+	case computeinstance.FieldContainerID:
+		return m.ContainerID()
+	case computeinstance.FieldPeerID:
+		return m.PeerID()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case computeinstance.FieldOwner:
+		return m.OldOwner(ctx)
+	case computeinstance.FieldName:
+		return m.OldName(ctx)
+	case computeinstance.FieldCore:
+		return m.OldCore(ctx)
+	case computeinstance.FieldMemory:
+		return m.OldMemory(ctx)
+	case computeinstance.FieldImage:
+		return m.OldImage(ctx)
+	case computeinstance.FieldExpirationTime:
+		return m.OldExpirationTime(ctx)
+	case computeinstance.FieldStatus:
+		return m.OldStatus(ctx)
+	case computeinstance.FieldContainerID:
+		return m.OldContainerID(ctx)
+	case computeinstance.FieldPeerID:
+		return m.OldPeerID(ctx)
+	}
+	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case computeinstance.FieldOwner:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwner(v)
+		return nil
+	case computeinstance.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case computeinstance.FieldCore:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCore(v)
+		return nil
+	case computeinstance.FieldMemory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemory(v)
+		return nil
+	case computeinstance.FieldImage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImage(v)
+		return nil
+	case computeinstance.FieldExpirationTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpirationTime(v)
+		return nil
+	case computeinstance.FieldStatus:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case computeinstance.FieldContainerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContainerID(v)
+		return nil
+	case computeinstance.FieldPeerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPeerID(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeInstance field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ComputeInstanceMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, computeinstance.FieldStatus)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case computeinstance.FieldStatus:
+		return m.AddedStatus()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case computeinstance.FieldStatus:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeInstance numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ComputeInstanceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(computeinstance.FieldContainerID) {
+		fields = append(fields, computeinstance.FieldContainerID)
+	}
+	if m.FieldCleared(computeinstance.FieldPeerID) {
+		fields = append(fields, computeinstance.FieldPeerID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ComputeInstanceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ComputeInstanceMutation) ClearField(name string) error {
+	switch name {
+	case computeinstance.FieldContainerID:
+		m.ClearContainerID()
+		return nil
+	case computeinstance.FieldPeerID:
+		m.ClearPeerID()
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeInstance nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ComputeInstanceMutation) ResetField(name string) error {
+	switch name {
+	case computeinstance.FieldOwner:
+		m.ResetOwner()
+		return nil
+	case computeinstance.FieldName:
+		m.ResetName()
+		return nil
+	case computeinstance.FieldCore:
+		m.ResetCore()
+		return nil
+	case computeinstance.FieldMemory:
+		m.ResetMemory()
+		return nil
+	case computeinstance.FieldImage:
+		m.ResetImage()
+		return nil
+	case computeinstance.FieldExpirationTime:
+		m.ResetExpirationTime()
+		return nil
+	case computeinstance.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case computeinstance.FieldContainerID:
+		m.ResetContainerID()
+		return nil
+	case computeinstance.FieldPeerID:
+		m.ResetPeerID()
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeInstance field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ComputeInstanceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ComputeInstanceMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ComputeInstanceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ComputeInstanceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ComputeInstanceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ComputeInstanceMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ComputeInstanceMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ComputeInstance unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ComputeInstanceMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ComputeInstance edge %s", name)
+}
+
+// ComputeSpecMutation represents an operation that mutates the ComputeSpec nodes in the graph.
+type ComputeSpecMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int32
+	core          *string
+	memory        *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ComputeSpec, error)
+	predicates    []predicate.ComputeSpec
+}
+
+var _ ent.Mutation = (*ComputeSpecMutation)(nil)
+
+// computespecOption allows management of the mutation configuration using functional options.
+type computespecOption func(*ComputeSpecMutation)
+
+// newComputeSpecMutation creates new mutation for the ComputeSpec entity.
+func newComputeSpecMutation(c config, op Op, opts ...computespecOption) *ComputeSpecMutation {
+	m := &ComputeSpecMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComputeSpec,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withComputeSpecID sets the ID field of the mutation.
+func withComputeSpecID(id int32) computespecOption {
+	return func(m *ComputeSpecMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ComputeSpec
+		)
+		m.oldValue = func(ctx context.Context) (*ComputeSpec, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ComputeSpec.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComputeSpec sets the old ComputeSpec of the mutation.
+func withComputeSpec(node *ComputeSpec) computespecOption {
+	return func(m *ComputeSpecMutation) {
+		m.oldValue = func(context.Context) (*ComputeSpec, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ComputeSpecMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ComputeSpecMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ComputeSpec entities.
+func (m *ComputeSpecMutation) SetID(id int32) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ComputeSpecMutation) ID() (id int32, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ComputeSpecMutation) IDs(ctx context.Context) ([]int32, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int32{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ComputeSpec.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCore sets the "core" field.
+func (m *ComputeSpecMutation) SetCore(s string) {
+	m.core = &s
+}
+
+// Core returns the value of the "core" field in the mutation.
+func (m *ComputeSpecMutation) Core() (r string, exists bool) {
+	v := m.core
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCore returns the old "core" field's value of the ComputeSpec entity.
+// If the ComputeSpec object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeSpecMutation) OldCore(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCore is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCore requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCore: %w", err)
+	}
+	return oldValue.Core, nil
+}
+
+// ResetCore resets all changes to the "core" field.
+func (m *ComputeSpecMutation) ResetCore() {
+	m.core = nil
+}
+
+// SetMemory sets the "memory" field.
+func (m *ComputeSpecMutation) SetMemory(s string) {
+	m.memory = &s
+}
+
+// Memory returns the value of the "memory" field in the mutation.
+func (m *ComputeSpecMutation) Memory() (r string, exists bool) {
+	v := m.memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMemory returns the old "memory" field's value of the ComputeSpec entity.
+// If the ComputeSpec object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeSpecMutation) OldMemory(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMemory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMemory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMemory: %w", err)
+	}
+	return oldValue.Memory, nil
+}
+
+// ResetMemory resets all changes to the "memory" field.
+func (m *ComputeSpecMutation) ResetMemory() {
+	m.memory = nil
+}
+
+// Where appends a list predicates to the ComputeSpecMutation builder.
+func (m *ComputeSpecMutation) Where(ps ...predicate.ComputeSpec) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ComputeSpecMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ComputeSpecMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ComputeSpec, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ComputeSpecMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ComputeSpecMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ComputeSpec).
+func (m *ComputeSpecMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ComputeSpecMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.core != nil {
+		fields = append(fields, computespec.FieldCore)
+	}
+	if m.memory != nil {
+		fields = append(fields, computespec.FieldMemory)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ComputeSpecMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case computespec.FieldCore:
+		return m.Core()
+	case computespec.FieldMemory:
+		return m.Memory()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ComputeSpecMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case computespec.FieldCore:
+		return m.OldCore(ctx)
+	case computespec.FieldMemory:
+		return m.OldMemory(ctx)
+	}
+	return nil, fmt.Errorf("unknown ComputeSpec field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeSpecMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case computespec.FieldCore:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCore(v)
+		return nil
+	case computespec.FieldMemory:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMemory(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeSpec field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ComputeSpecMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ComputeSpecMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeSpecMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ComputeSpec numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ComputeSpecMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ComputeSpecMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ComputeSpecMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ComputeSpec nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ComputeSpecMutation) ResetField(name string) error {
+	switch name {
+	case computespec.FieldCore:
+		m.ResetCore()
+		return nil
+	case computespec.FieldMemory:
+		m.ResetMemory()
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeSpec field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ComputeSpecMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ComputeSpecMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ComputeSpecMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ComputeSpecMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ComputeSpecMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ComputeSpecMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ComputeSpecMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ComputeSpec unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ComputeSpecMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ComputeSpec edge %s", name)
+}
+
+// EmployeeMutation represents an operation that mutates the Employee nodes in the graph.
+type EmployeeMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	name          *string
+	age           *int32
+	addage        *int32
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Employee, error)
+	predicates    []predicate.Employee
+}
+
+var _ ent.Mutation = (*EmployeeMutation)(nil)
+
+// employeeOption allows management of the mutation configuration using functional options.
+type employeeOption func(*EmployeeMutation)
+
+// newEmployeeMutation creates new mutation for the Employee entity.
+func newEmployeeMutation(c config, op Op, opts ...employeeOption) *EmployeeMutation {
+	m := &EmployeeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeEmployee,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withEmployeeID sets the ID field of the mutation.
+func withEmployeeID(id int) employeeOption {
+	return func(m *EmployeeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Employee
+		)
+		m.oldValue = func(ctx context.Context) (*Employee, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Employee.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withEmployee sets the old Employee of the mutation.
+func withEmployee(node *Employee) employeeOption {
+	return func(m *EmployeeMutation) {
+		m.oldValue = func(context.Context) (*Employee, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m EmployeeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m EmployeeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *EmployeeMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *EmployeeMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Employee.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *EmployeeMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *EmployeeMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Employee entity.
+// If the Employee object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmployeeMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *EmployeeMutation) ResetName() {
+	m.name = nil
+}
+
+// SetAge sets the "age" field.
+func (m *EmployeeMutation) SetAge(i int32) {
+	m.age = &i
+	m.addage = nil
+}
+
+// Age returns the value of the "age" field in the mutation.
+func (m *EmployeeMutation) Age() (r int32, exists bool) {
+	v := m.age
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAge returns the old "age" field's value of the Employee entity.
+// If the Employee object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmployeeMutation) OldAge(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAge is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAge requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAge: %w", err)
+	}
+	return oldValue.Age, nil
+}
+
+// AddAge adds i to the "age" field.
+func (m *EmployeeMutation) AddAge(i int32) {
+	if m.addage != nil {
+		*m.addage += i
+	} else {
+		m.addage = &i
+	}
+}
+
+// AddedAge returns the value that was added to the "age" field in this mutation.
+func (m *EmployeeMutation) AddedAge() (r int32, exists bool) {
+	v := m.addage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearAge clears the value of the "age" field.
+func (m *EmployeeMutation) ClearAge() {
+	m.age = nil
+	m.addage = nil
+	m.clearedFields[employee.FieldAge] = struct{}{}
+}
+
+// AgeCleared returns if the "age" field was cleared in this mutation.
+func (m *EmployeeMutation) AgeCleared() bool {
+	_, ok := m.clearedFields[employee.FieldAge]
+	return ok
+}
+
+// ResetAge resets all changes to the "age" field.
+func (m *EmployeeMutation) ResetAge() {
+	m.age = nil
+	m.addage = nil
+	delete(m.clearedFields, employee.FieldAge)
+}
+
+// Where appends a list predicates to the EmployeeMutation builder.
+func (m *EmployeeMutation) Where(ps ...predicate.Employee) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the EmployeeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *EmployeeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Employee, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *EmployeeMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *EmployeeMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Employee).
+func (m *EmployeeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *EmployeeMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.name != nil {
+		fields = append(fields, employee.FieldName)
+	}
+	if m.age != nil {
+		fields = append(fields, employee.FieldAge)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *EmployeeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case employee.FieldName:
+		return m.Name()
+	case employee.FieldAge:
+		return m.Age()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *EmployeeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case employee.FieldName:
+		return m.OldName(ctx)
+	case employee.FieldAge:
+		return m.OldAge(ctx)
+	}
+	return nil, fmt.Errorf("unknown Employee field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EmployeeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case employee.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case employee.FieldAge:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAge(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Employee field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *EmployeeMutation) AddedFields() []string {
+	var fields []string
+	if m.addage != nil {
+		fields = append(fields, employee.FieldAge)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *EmployeeMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case employee.FieldAge:
+		return m.AddedAge()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EmployeeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case employee.FieldAge:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAge(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Employee numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *EmployeeMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(employee.FieldAge) {
+		fields = append(fields, employee.FieldAge)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *EmployeeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *EmployeeMutation) ClearField(name string) error {
+	switch name {
+	case employee.FieldAge:
+		m.ClearAge()
+		return nil
+	}
+	return fmt.Errorf("unknown Employee nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *EmployeeMutation) ResetField(name string) error {
+	switch name {
+	case employee.FieldName:
+		m.ResetName()
+		return nil
+	case employee.FieldAge:
+		m.ResetAge()
+		return nil
+	}
+	return fmt.Errorf("unknown Employee field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *EmployeeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *EmployeeMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *EmployeeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *EmployeeMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *EmployeeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *EmployeeMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *EmployeeMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Employee unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *EmployeeMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Employee edge %s", name)
 }
 
 // StorageMutation represents an operation that mutates the Storage nodes in the graph.
@@ -1100,6 +3304,8 @@ type UserMutation struct {
 	password            *string
 	create_date         *time.Time
 	last_login_date     *time.Time
+	name                *string
+	icon                *string
 	clearedFields       map[string]struct{}
 	done                bool
 	oldValue            func(context.Context) (*User, error)
@@ -1390,6 +3596,78 @@ func (m *UserMutation) ResetLastLoginDate() {
 	m.last_login_date = nil
 }
 
+// SetName sets the "name" field.
+func (m *UserMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *UserMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *UserMutation) ResetName() {
+	m.name = nil
+}
+
+// SetIcon sets the "icon" field.
+func (m *UserMutation) SetIcon(s string) {
+	m.icon = &s
+}
+
+// Icon returns the value of the "icon" field in the mutation.
+func (m *UserMutation) Icon() (r string, exists bool) {
+	v := m.icon
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIcon returns the old "icon" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldIcon(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIcon is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIcon requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIcon: %w", err)
+	}
+	return oldValue.Icon, nil
+}
+
+// ResetIcon resets all changes to the "icon" field.
+func (m *UserMutation) ResetIcon() {
+	m.icon = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -1424,7 +3702,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 7)
 	if m.country_call_coding != nil {
 		fields = append(fields, user.FieldCountryCallCoding)
 	}
@@ -1439,6 +3717,12 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.last_login_date != nil {
 		fields = append(fields, user.FieldLastLoginDate)
+	}
+	if m.name != nil {
+		fields = append(fields, user.FieldName)
+	}
+	if m.icon != nil {
+		fields = append(fields, user.FieldIcon)
 	}
 	return fields
 }
@@ -1458,6 +3742,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.CreateDate()
 	case user.FieldLastLoginDate:
 		return m.LastLoginDate()
+	case user.FieldName:
+		return m.Name()
+	case user.FieldIcon:
+		return m.Icon()
 	}
 	return nil, false
 }
@@ -1477,6 +3765,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldCreateDate(ctx)
 	case user.FieldLastLoginDate:
 		return m.OldLastLoginDate(ctx)
+	case user.FieldName:
+		return m.OldName(ctx)
+	case user.FieldIcon:
+		return m.OldIcon(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -1520,6 +3812,20 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetLastLoginDate(v)
+		return nil
+	case user.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case user.FieldIcon:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIcon(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -1584,6 +3890,12 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldLastLoginDate:
 		m.ResetLastLoginDate()
+		return nil
+	case user.FieldName:
+		m.ResetName()
+		return nil
+	case user.FieldIcon:
+		m.ResetIcon()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

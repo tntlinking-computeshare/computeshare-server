@@ -22,6 +22,8 @@ func (User) Fields() []ent.Field {
 		field.String("password").NotEmpty(),
 		field.Time("create_date").Default(time.Now),
 		field.Time("last_login_date").Default(time.Now),
+		field.String("name").NotEmpty().Comment("用户名"),
+		field.String("icon").Comment("头像地址"),
 	}
 }
 
