@@ -19,16 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ComputeInstance_ListComputeSpec_FullMethodName             = "/api.compute.v1.ComputeInstance/ListComputeSpec"
-	ComputeInstance_ListComputeImage_FullMethodName            = "/api.compute.v1.ComputeInstance/ListComputeImage"
-	ComputeInstance_ListComputeInstanceDuration_FullMethodName = "/api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
-	ComputeInstance_Create_FullMethodName                      = "/api.compute.v1.ComputeInstance/Create"
-	ComputeInstance_Delete_FullMethodName                      = "/api.compute.v1.ComputeInstance/Delete"
-	ComputeInstance_Get_FullMethodName                         = "/api.compute.v1.ComputeInstance/Get"
-	ComputeInstance_List_FullMethodName                        = "/api.compute.v1.ComputeInstance/List"
-	ComputeInstance_StopInstance_FullMethodName                = "/api.compute.v1.ComputeInstance/StopInstance"
-	ComputeInstance_StartInstance_FullMethodName               = "/api.compute.v1.ComputeInstance/StartInstance"
-	ComputeInstance_SSHInstance_FullMethodName                 = "/api.compute.v1.ComputeInstance/SSHInstance"
+	ComputeInstance_ListComputeSpec_FullMethodName             = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeSpec"
+	ComputeInstance_ListComputeImage_FullMethodName            = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeImage"
+	ComputeInstance_ListComputeInstanceDuration_FullMethodName = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
+	ComputeInstance_Create_FullMethodName                      = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Create"
+	ComputeInstance_Delete_FullMethodName                      = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Delete"
+	ComputeInstance_Get_FullMethodName                         = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Get"
+	ComputeInstance_List_FullMethodName                        = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/List"
+	ComputeInstance_StopInstance_FullMethodName                = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StopInstance"
+	ComputeInstance_StartInstance_FullMethodName               = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StartInstance"
+	ComputeInstance_SSHInstance_FullMethodName                 = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/SSHInstance"
 )
 
 // ComputeInstanceClient is the client API for ComputeInstance service.
@@ -413,7 +413,7 @@ func _ComputeInstance_SSHInstance_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ComputeInstance_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.compute.v1.ComputeInstance",
+	ServiceName: "github.com.mohaijiang.api.compute.v1.ComputeInstance",
 	HandlerType: (*ComputeInstanceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -6,11 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 )
 
 // AgentCreate is the builder for creating a Agent entity.
@@ -20,9 +21,37 @@ type AgentCreate struct {
 	hooks    []Hook
 }
 
-// SetName sets the "name" field.
-func (ac *AgentCreate) SetName(s string) *AgentCreate {
-	ac.mutation.SetName(s)
+// SetPeerID sets the "peer_id" field.
+func (ac *AgentCreate) SetPeerID(s string) *AgentCreate {
+	ac.mutation.SetPeerID(s)
+	return ac
+}
+
+// SetActive sets the "active" field.
+func (ac *AgentCreate) SetActive(b bool) *AgentCreate {
+	ac.mutation.SetActive(b)
+	return ac
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableActive(b *bool) *AgentCreate {
+	if b != nil {
+		ac.SetActive(*b)
+	}
+	return ac
+}
+
+// SetLastUpdateTime sets the "last_update_time" field.
+func (ac *AgentCreate) SetLastUpdateTime(t time.Time) *AgentCreate {
+	ac.mutation.SetLastUpdateTime(t)
+	return ac
+}
+
+// SetNillableLastUpdateTime sets the "last_update_time" field if the given value is not nil.
+func (ac *AgentCreate) SetNillableLastUpdateTime(t *time.Time) *AgentCreate {
+	if t != nil {
+		ac.SetLastUpdateTime(*t)
+	}
 	return ac
 }
 
@@ -75,6 +104,14 @@ func (ac *AgentCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ac *AgentCreate) defaults() {
+	if _, ok := ac.mutation.Active(); !ok {
+		v := agent.DefaultActive
+		ac.mutation.SetActive(v)
+	}
+	if _, ok := ac.mutation.LastUpdateTime(); !ok {
+		v := agent.DefaultLastUpdateTime()
+		ac.mutation.SetLastUpdateTime(v)
+	}
 	if _, ok := ac.mutation.ID(); !ok {
 		v := agent.DefaultID()
 		ac.mutation.SetID(v)
@@ -83,13 +120,19 @@ func (ac *AgentCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *AgentCreate) check() error {
-	if _, ok := ac.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Agent.name"`)}
+	if _, ok := ac.mutation.PeerID(); !ok {
+		return &ValidationError{Name: "peer_id", err: errors.New(`ent: missing required field "Agent.peer_id"`)}
 	}
-	if v, ok := ac.mutation.Name(); ok {
-		if err := agent.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Agent.name": %w`, err)}
+	if v, ok := ac.mutation.PeerID(); ok {
+		if err := agent.PeerIDValidator(v); err != nil {
+			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
 		}
+	}
+	if _, ok := ac.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Agent.active"`)}
+	}
+	if _, ok := ac.mutation.LastUpdateTime(); !ok {
+		return &ValidationError{Name: "last_update_time", err: errors.New(`ent: missing required field "Agent.last_update_time"`)}
 	}
 	return nil
 }
@@ -126,9 +169,17 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := ac.mutation.Name(); ok {
-		_spec.SetField(agent.FieldName, field.TypeString, value)
-		_node.Name = value
+	if value, ok := ac.mutation.PeerID(); ok {
+		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
+		_node.PeerID = value
+	}
+	if value, ok := ac.mutation.Active(); ok {
+		_spec.SetField(agent.FieldActive, field.TypeBool, value)
+		_node.Active = value
+	}
+	if value, ok := ac.mutation.LastUpdateTime(); ok {
+		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
+		_node.LastUpdateTime = value
 	}
 	return _node, _spec
 }

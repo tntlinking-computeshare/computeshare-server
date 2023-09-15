@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.compute.v1;
+package github.com.mohajiang.api.compute.v1;
 
 import "google/api/annotations.proto";
 

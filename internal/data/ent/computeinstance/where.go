@@ -3,11 +3,11 @@
 package computeinstance
 
 import (
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -78,6 +78,11 @@ func Memory(v string) predicate.ComputeInstance {
 // Image applies equality check predicate on the "image" field. It's identical to ImageEQ.
 func Image(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldImage, v))
+}
+
+// Port applies equality check predicate on the "port" field. It's identical to PortEQ.
+func Port(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldPort, v))
 }
 
 // ExpirationTime applies equality check predicate on the "expiration_time" field. It's identical to ExpirationTimeEQ.
@@ -423,6 +428,81 @@ func ImageEqualFold(v string) predicate.ComputeInstance {
 // ImageContainsFold applies the ContainsFold predicate on the "image" field.
 func ImageContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldImage, v))
+}
+
+// PortEQ applies the EQ predicate on the "port" field.
+func PortEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldPort, v))
+}
+
+// PortNEQ applies the NEQ predicate on the "port" field.
+func PortNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldPort, v))
+}
+
+// PortIn applies the In predicate on the "port" field.
+func PortIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldPort, vs...))
+}
+
+// PortNotIn applies the NotIn predicate on the "port" field.
+func PortNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldPort, vs...))
+}
+
+// PortGT applies the GT predicate on the "port" field.
+func PortGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldPort, v))
+}
+
+// PortGTE applies the GTE predicate on the "port" field.
+func PortGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldPort, v))
+}
+
+// PortLT applies the LT predicate on the "port" field.
+func PortLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldPort, v))
+}
+
+// PortLTE applies the LTE predicate on the "port" field.
+func PortLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldPort, v))
+}
+
+// PortContains applies the Contains predicate on the "port" field.
+func PortContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldPort, v))
+}
+
+// PortHasPrefix applies the HasPrefix predicate on the "port" field.
+func PortHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldPort, v))
+}
+
+// PortHasSuffix applies the HasSuffix predicate on the "port" field.
+func PortHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldPort, v))
+}
+
+// PortIsNil applies the IsNil predicate on the "port" field.
+func PortIsNil() predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIsNull(FieldPort))
+}
+
+// PortNotNil applies the NotNil predicate on the "port" field.
+func PortNotNil() predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotNull(FieldPort))
+}
+
+// PortEqualFold applies the EqualFold predicate on the "port" field.
+func PortEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldPort, v))
+}
+
+// PortContainsFold applies the ContainsFold predicate on the "port" field.
+func PortContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldPort, v))
 }
 
 // ExpirationTimeEQ applies the EQ predicate on the "expiration_time" field.

@@ -67,6 +67,10 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 		Name:     req.Name,
 	})
 
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.CreateInstanceReply{
 		Id:   instance.ID.String(),
 		Name: instance.Name,

@@ -4,13 +4,13 @@ package ent
 
 import (
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 )
 
 // ComputeInstance is the model entity for the ComputeInstance schema.
@@ -28,6 +28,8 @@ type ComputeInstance struct {
 	Memory string `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
+	// 容器端口
+	Port string `json:"port,omitempty"`
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
@@ -46,7 +48,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldContainerID, computeinstance.FieldPeerID:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldPeerID:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -102,6 +104,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field image", values[i])
 			} else if value.Valid {
 				ci.Image = value.String
+			}
+		case computeinstance.FieldPort:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field port", values[i])
+			} else if value.Valid {
+				ci.Port = value.String
 			}
 		case computeinstance.FieldExpirationTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -177,6 +185,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("image=")
 	builder.WriteString(ci.Image)
+	builder.WriteString(", ")
+	builder.WriteString("port=")
+	builder.WriteString(ci.Port)
 	builder.WriteString(", ")
 	builder.WriteString("expiration_time=")
 	builder.WriteString(ci.ExpirationTime.Format(time.ANSIC))

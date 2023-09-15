@@ -8,8 +8,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/migrate"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
@@ -17,11 +21,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
-
-	"entgo.io/ent"
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 // Client is the client that holds all ent builders.

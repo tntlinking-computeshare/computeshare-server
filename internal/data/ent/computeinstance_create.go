@@ -6,12 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 )
 
 // ComputeInstanceCreate is the builder for creating a ComputeInstance entity.
@@ -48,6 +48,20 @@ func (cic *ComputeInstanceCreate) SetMemory(s string) *ComputeInstanceCreate {
 // SetImage sets the "image" field.
 func (cic *ComputeInstanceCreate) SetImage(s string) *ComputeInstanceCreate {
 	cic.mutation.SetImage(s)
+	return cic
+}
+
+// SetPort sets the "port" field.
+func (cic *ComputeInstanceCreate) SetPort(s string) *ComputeInstanceCreate {
+	cic.mutation.SetPort(s)
+	return cic
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillablePort(s *string) *ComputeInstanceCreate {
+	if s != nil {
+		cic.SetPort(*s)
+	}
 	return cic
 }
 
@@ -248,6 +262,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 		_node.Image = value
+	}
+	if value, ok := cic.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+		_node.Port = value
 	}
 	if value, ok := cic.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)

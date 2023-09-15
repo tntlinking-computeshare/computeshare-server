@@ -6,13 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeInstanceUpdate is the builder for updating ComputeInstance entities.
@@ -55,6 +55,26 @@ func (ciu *ComputeInstanceUpdate) SetMemory(s string) *ComputeInstanceUpdate {
 // SetImage sets the "image" field.
 func (ciu *ComputeInstanceUpdate) SetImage(s string) *ComputeInstanceUpdate {
 	ciu.mutation.SetImage(s)
+	return ciu
+}
+
+// SetPort sets the "port" field.
+func (ciu *ComputeInstanceUpdate) SetPort(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetPort(s)
+	return ciu
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (ciu *ComputeInstanceUpdate) SetNillablePort(s *string) *ComputeInstanceUpdate {
+	if s != nil {
+		ciu.SetPort(*s)
+	}
+	return ciu
+}
+
+// ClearPort clears the value of the "port" field.
+func (ciu *ComputeInstanceUpdate) ClearPort() *ComputeInstanceUpdate {
+	ciu.mutation.ClearPort()
 	return ciu
 }
 
@@ -206,6 +226,12 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := ciu.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
+	if value, ok := ciu.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+	}
+	if ciu.mutation.PortCleared() {
+		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
+	}
 	if value, ok := ciu.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 	}
@@ -274,6 +300,26 @@ func (ciuo *ComputeInstanceUpdateOne) SetMemory(s string) *ComputeInstanceUpdate
 // SetImage sets the "image" field.
 func (ciuo *ComputeInstanceUpdateOne) SetImage(s string) *ComputeInstanceUpdateOne {
 	ciuo.mutation.SetImage(s)
+	return ciuo
+}
+
+// SetPort sets the "port" field.
+func (ciuo *ComputeInstanceUpdateOne) SetPort(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetPort(s)
+	return ciuo
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (ciuo *ComputeInstanceUpdateOne) SetNillablePort(s *string) *ComputeInstanceUpdateOne {
+	if s != nil {
+		ciuo.SetPort(*s)
+	}
+	return ciuo
+}
+
+// ClearPort clears the value of the "port" field.
+func (ciuo *ComputeInstanceUpdateOne) ClearPort() *ComputeInstanceUpdateOne {
+	ciuo.mutation.ClearPort()
 	return ciuo
 }
 
@@ -454,6 +500,12 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if value, ok := ciuo.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
+	}
+	if value, ok := ciuo.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+	}
+	if ciuo.mutation.PortCleared() {
+		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
 	}
 	if value, ok := ciuo.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.compute.v1;
+package github.com.mohaijiang.api.compute.v1;
 
 import "google/api/annotations.proto";
 
@@ -141,7 +141,6 @@ message PortBinding {
 message CreateInstanceReply {
 	string id = 1;
 	string name = 2;
-	repeated PortBinding ports = 3;
 }
 
 message DeleteInstanceRequest {
@@ -155,7 +154,6 @@ message GetInstanceRequest {
 message GetInstanceReply {
 	string id = 1;
 	string name = 2;
-	repeated PortBinding ports = 3;
 }
 
 message ListInstanceRequest {}

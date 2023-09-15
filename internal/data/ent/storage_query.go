@@ -5,14 +5,14 @@ package ent
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 )
 
 // StorageQuery is the builder for querying Storage entities.

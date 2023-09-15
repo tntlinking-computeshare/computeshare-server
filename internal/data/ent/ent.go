@@ -6,6 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+	"sync"
+
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
@@ -13,12 +19,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
-	"reflect"
-	"sync"
-
-	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 // ent aliases to avoid import conflicts in user's code.

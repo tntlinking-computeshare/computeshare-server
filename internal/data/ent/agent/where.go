@@ -3,10 +3,11 @@
 package agent
 
 import (
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -54,74 +55,134 @@ func IDLTE(id uuid.UUID) predicate.Agent {
 	return predicate.Agent(sql.FieldLTE(FieldID, id))
 }
 
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldEQ(FieldName, v))
+// PeerID applies equality check predicate on the "peer_id" field. It's identical to PeerIDEQ.
+func PeerID(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldPeerID, v))
 }
 
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldEQ(FieldName, v))
+// Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
+func Active(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldActive, v))
 }
 
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldNEQ(FieldName, v))
+// LastUpdateTime applies equality check predicate on the "last_update_time" field. It's identical to LastUpdateTimeEQ.
+func LastUpdateTime(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldLastUpdateTime, v))
 }
 
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.Agent {
-	return predicate.Agent(sql.FieldIn(FieldName, vs...))
+// PeerIDEQ applies the EQ predicate on the "peer_id" field.
+func PeerIDEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldPeerID, v))
 }
 
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.Agent {
-	return predicate.Agent(sql.FieldNotIn(FieldName, vs...))
+// PeerIDNEQ applies the NEQ predicate on the "peer_id" field.
+func PeerIDNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldPeerID, v))
 }
 
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldGT(FieldName, v))
+// PeerIDIn applies the In predicate on the "peer_id" field.
+func PeerIDIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldPeerID, vs...))
 }
 
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldGTE(FieldName, v))
+// PeerIDNotIn applies the NotIn predicate on the "peer_id" field.
+func PeerIDNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldPeerID, vs...))
 }
 
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldLT(FieldName, v))
+// PeerIDGT applies the GT predicate on the "peer_id" field.
+func PeerIDGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldPeerID, v))
 }
 
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldLTE(FieldName, v))
+// PeerIDGTE applies the GTE predicate on the "peer_id" field.
+func PeerIDGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldPeerID, v))
 }
 
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldContains(FieldName, v))
+// PeerIDLT applies the LT predicate on the "peer_id" field.
+func PeerIDLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldPeerID, v))
 }
 
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldHasPrefix(FieldName, v))
+// PeerIDLTE applies the LTE predicate on the "peer_id" field.
+func PeerIDLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldPeerID, v))
 }
 
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldHasSuffix(FieldName, v))
+// PeerIDContains applies the Contains predicate on the "peer_id" field.
+func PeerIDContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldPeerID, v))
 }
 
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldEqualFold(FieldName, v))
+// PeerIDHasPrefix applies the HasPrefix predicate on the "peer_id" field.
+func PeerIDHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldPeerID, v))
 }
 
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.Agent {
-	return predicate.Agent(sql.FieldContainsFold(FieldName, v))
+// PeerIDHasSuffix applies the HasSuffix predicate on the "peer_id" field.
+func PeerIDHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldPeerID, v))
+}
+
+// PeerIDEqualFold applies the EqualFold predicate on the "peer_id" field.
+func PeerIDEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldPeerID, v))
+}
+
+// PeerIDContainsFold applies the ContainsFold predicate on the "peer_id" field.
+func PeerIDContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldPeerID, v))
+}
+
+// ActiveEQ applies the EQ predicate on the "active" field.
+func ActiveEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldActive, v))
+}
+
+// ActiveNEQ applies the NEQ predicate on the "active" field.
+func ActiveNEQ(v bool) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldActive, v))
+}
+
+// LastUpdateTimeEQ applies the EQ predicate on the "last_update_time" field.
+func LastUpdateTimeEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldLastUpdateTime, v))
+}
+
+// LastUpdateTimeNEQ applies the NEQ predicate on the "last_update_time" field.
+func LastUpdateTimeNEQ(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldLastUpdateTime, v))
+}
+
+// LastUpdateTimeIn applies the In predicate on the "last_update_time" field.
+func LastUpdateTimeIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldLastUpdateTime, vs...))
+}
+
+// LastUpdateTimeNotIn applies the NotIn predicate on the "last_update_time" field.
+func LastUpdateTimeNotIn(vs ...time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldLastUpdateTime, vs...))
+}
+
+// LastUpdateTimeGT applies the GT predicate on the "last_update_time" field.
+func LastUpdateTimeGT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldLastUpdateTime, v))
+}
+
+// LastUpdateTimeGTE applies the GTE predicate on the "last_update_time" field.
+func LastUpdateTimeGTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldLastUpdateTime, v))
+}
+
+// LastUpdateTimeLT applies the LT predicate on the "last_update_time" field.
+func LastUpdateTimeLT(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldLastUpdateTime, v))
+}
+
+// LastUpdateTimeLTE applies the LTE predicate on the "last_update_time" field.
+func LastUpdateTimeLTE(v time.Time) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldLastUpdateTime, v))
 }
 
 // And groups predicates with the AND operator between them.

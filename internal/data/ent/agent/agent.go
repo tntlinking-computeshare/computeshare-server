@@ -3,6 +3,8 @@
 package agent
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 )
@@ -12,8 +14,12 @@ const (
 	Label = "agent"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
+	// FieldPeerID holds the string denoting the peer_id field in the database.
+	FieldPeerID = "peer_id"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
+	// FieldLastUpdateTime holds the string denoting the last_update_time field in the database.
+	FieldLastUpdateTime = "last_update_time"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 )
@@ -21,7 +27,9 @@ const (
 // Columns holds all SQL columns for agent fields.
 var Columns = []string{
 	FieldID,
-	FieldName,
+	FieldPeerID,
+	FieldActive,
+	FieldLastUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -35,8 +43,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// NameValidator is a validator for the "name" field. It is called by the builders before save.
-	NameValidator func(string) error
+	// PeerIDValidator is a validator for the "peer_id" field. It is called by the builders before save.
+	PeerIDValidator func(string) error
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
+	// DefaultLastUpdateTime holds the default value on creation for the "last_update_time" field.
+	DefaultLastUpdateTime func() time.Time
+	// UpdateDefaultLastUpdateTime holds the default value on update for the "last_update_time" field.
+	UpdateDefaultLastUpdateTime func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -49,7 +63,17 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
+// ByPeerID orders the results by the peer_id field.
+func ByPeerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPeerID, opts...).ToFunc()
+}
+
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
+}
+
+// ByLastUpdateTime orders the results by the last_update_time field.
+func ByLastUpdateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastUpdateTime, opts...).ToFunc()
 }

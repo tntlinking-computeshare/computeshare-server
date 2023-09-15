@@ -5,14 +5,14 @@ package ent
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // AgentQuery is the builder for querying Agent entities.
@@ -262,12 +262,12 @@ func (aq *AgentQuery) Clone() *AgentQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		PeerID string `json:"peer_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Agent.Query().
-//		GroupBy(agent.FieldName).
+//		GroupBy(agent.FieldPeerID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (aq *AgentQuery) GroupBy(field string, fields ...string) *AgentGroupBy {
@@ -285,11 +285,11 @@ func (aq *AgentQuery) GroupBy(field string, fields ...string) *AgentGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		PeerID string `json:"peer_id,omitempty"`
 //	}
 //
 //	client.Agent.Query().
-//		Select(agent.FieldName).
+//		Select(agent.FieldPeerID).
 //		Scan(ctx, &v)
 func (aq *AgentQuery) Select(fields ...string) *AgentSelect {
 	aq.ctx.Fields = append(aq.ctx.Fields, fields...)

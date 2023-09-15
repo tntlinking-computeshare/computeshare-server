@@ -5,14 +5,14 @@ package ent
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeInstanceQuery is the builder for querying ComputeInstance entities.

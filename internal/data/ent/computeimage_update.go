@@ -6,12 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeImageUpdate is the builder for updating ComputeImage entities.

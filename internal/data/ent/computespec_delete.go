@@ -4,12 +4,12 @@ package ent
 
 import (
 	"context"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeSpecDelete is the builder for deleting a ComputeSpec entity.

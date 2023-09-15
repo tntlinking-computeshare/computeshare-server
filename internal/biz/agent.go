@@ -4,11 +4,14 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"time"
 )
 
 type Agent struct {
-	ID   uuid.UUID
-	Name string
+	ID             uuid.UUID
+	PeerId         string
+	Active         bool
+	LastUpdateTime time.Time
 }
 
 type AgentRepo interface {
@@ -18,6 +21,8 @@ type AgentRepo interface {
 	CreateAgent(ctx context.Context, agent *Agent) error
 	UpdateAgent(ctx context.Context, id uuid.UUID, agent *Agent) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
+	FindByPeerId(ctx context.Context, peerId string) (*Agent, error)
+	FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error)
 }
 
 type AgentUsecase struct {
@@ -42,19 +47,16 @@ func (uc *AgentUsecase) Get(ctx context.Context, id uuid.UUID) (p *Agent, err er
 	if err != nil {
 		return
 	}
-	//err = uc.repo.IncAgentLike(ctx, id)
-	//if err != nil {
-	//	return
-	//}
-	//p.Like, err = uc.repo.GetAgentLike(ctx, id)
-	//if err != nil {
-	//	return
-	//}
 	return
 }
 
 func (uc *AgentUsecase) Create(ctx context.Context, agent *Agent) error {
-	return uc.repo.CreateAgent(ctx, agent)
+	entity, err := uc.repo.FindByPeerId(ctx, agent.PeerId)
+	if err != nil {
+		return uc.repo.CreateAgent(ctx, agent)
+	} else {
+		return uc.repo.UpdateAgent(ctx, entity.ID, agent)
+	}
 }
 
 func (uc *AgentUsecase) Update(ctx context.Context, id uuid.UUID, agent *Agent) error {
@@ -63,4 +65,8 @@ func (uc *AgentUsecase) Update(ctx context.Context, id uuid.UUID, agent *Agent) 
 
 func (uc *AgentUsecase) Delete(ctx context.Context, id uuid.UUID) error {
 	return uc.repo.DeleteAgent(ctx, id)
+}
+
+func (uc *AgentUsecase) FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error) {
+	return uc.repo.FindOneActiveAgent(ctx, cpu, memory)
 }

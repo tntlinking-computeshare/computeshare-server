@@ -4,13 +4,13 @@ package enttest
 
 import (
 	"context"
+
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	// required by schema hooks.
 	_ "github.com/mohaijiang/computeshare-server/internal/data/ent/runtime"
 
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/migrate"
-
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/migrate"
 )
 
 type (

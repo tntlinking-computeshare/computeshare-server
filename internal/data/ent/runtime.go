@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"time"
+
+	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
@@ -10,9 +13,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/schema"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
-	"time"
-
-	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -21,10 +21,20 @@ import (
 func init() {
 	agentFields := schema.Agent{}.Fields()
 	_ = agentFields
-	// agentDescName is the schema descriptor for name field.
-	agentDescName := agentFields[1].Descriptor()
-	// agent.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	agent.NameValidator = agentDescName.Validators[0].(func(string) error)
+	// agentDescPeerID is the schema descriptor for peer_id field.
+	agentDescPeerID := agentFields[1].Descriptor()
+	// agent.PeerIDValidator is a validator for the "peer_id" field. It is called by the builders before save.
+	agent.PeerIDValidator = agentDescPeerID.Validators[0].(func(string) error)
+	// agentDescActive is the schema descriptor for active field.
+	agentDescActive := agentFields[2].Descriptor()
+	// agent.DefaultActive holds the default value on creation for the active field.
+	agent.DefaultActive = agentDescActive.Default.(bool)
+	// agentDescLastUpdateTime is the schema descriptor for last_update_time field.
+	agentDescLastUpdateTime := agentFields[3].Descriptor()
+	// agent.DefaultLastUpdateTime holds the default value on creation for the last_update_time field.
+	agent.DefaultLastUpdateTime = agentDescLastUpdateTime.Default.(func() time.Time)
+	// agent.UpdateDefaultLastUpdateTime holds the default value on update for the last_update_time field.
+	agent.UpdateDefaultLastUpdateTime = agentDescLastUpdateTime.UpdateDefault.(func() time.Time)
 	// agentDescID is the schema descriptor for id field.
 	agentDescID := agentFields[0].Descriptor()
 	// agent.DefaultID holds the default value on creation for the id field.

@@ -6,12 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // AgentUpdate is the builder for updating Agent entities.
@@ -27,9 +28,29 @@ func (au *AgentUpdate) Where(ps ...predicate.Agent) *AgentUpdate {
 	return au
 }
 
-// SetName sets the "name" field.
-func (au *AgentUpdate) SetName(s string) *AgentUpdate {
-	au.mutation.SetName(s)
+// SetPeerID sets the "peer_id" field.
+func (au *AgentUpdate) SetPeerID(s string) *AgentUpdate {
+	au.mutation.SetPeerID(s)
+	return au
+}
+
+// SetActive sets the "active" field.
+func (au *AgentUpdate) SetActive(b bool) *AgentUpdate {
+	au.mutation.SetActive(b)
+	return au
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (au *AgentUpdate) SetNillableActive(b *bool) *AgentUpdate {
+	if b != nil {
+		au.SetActive(*b)
+	}
+	return au
+}
+
+// SetLastUpdateTime sets the "last_update_time" field.
+func (au *AgentUpdate) SetLastUpdateTime(t time.Time) *AgentUpdate {
+	au.mutation.SetLastUpdateTime(t)
 	return au
 }
 
@@ -40,6 +61,7 @@ func (au *AgentUpdate) Mutation() *AgentMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (au *AgentUpdate) Save(ctx context.Context) (int, error) {
+	au.defaults()
 	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
 }
 
@@ -65,11 +87,19 @@ func (au *AgentUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (au *AgentUpdate) defaults() {
+	if _, ok := au.mutation.LastUpdateTime(); !ok {
+		v := agent.UpdateDefaultLastUpdateTime()
+		au.mutation.SetLastUpdateTime(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (au *AgentUpdate) check() error {
-	if v, ok := au.mutation.Name(); ok {
-		if err := agent.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Agent.name": %w`, err)}
+	if v, ok := au.mutation.PeerID(); ok {
+		if err := agent.PeerIDValidator(v); err != nil {
+			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
 		}
 	}
 	return nil
@@ -87,8 +117,14 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := au.mutation.Name(); ok {
-		_spec.SetField(agent.FieldName, field.TypeString, value)
+	if value, ok := au.mutation.PeerID(); ok {
+		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
+	}
+	if value, ok := au.mutation.Active(); ok {
+		_spec.SetField(agent.FieldActive, field.TypeBool, value)
+	}
+	if value, ok := au.mutation.LastUpdateTime(); ok {
+		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -110,9 +146,29 @@ type AgentUpdateOne struct {
 	mutation *AgentMutation
 }
 
-// SetName sets the "name" field.
-func (auo *AgentUpdateOne) SetName(s string) *AgentUpdateOne {
-	auo.mutation.SetName(s)
+// SetPeerID sets the "peer_id" field.
+func (auo *AgentUpdateOne) SetPeerID(s string) *AgentUpdateOne {
+	auo.mutation.SetPeerID(s)
+	return auo
+}
+
+// SetActive sets the "active" field.
+func (auo *AgentUpdateOne) SetActive(b bool) *AgentUpdateOne {
+	auo.mutation.SetActive(b)
+	return auo
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (auo *AgentUpdateOne) SetNillableActive(b *bool) *AgentUpdateOne {
+	if b != nil {
+		auo.SetActive(*b)
+	}
+	return auo
+}
+
+// SetLastUpdateTime sets the "last_update_time" field.
+func (auo *AgentUpdateOne) SetLastUpdateTime(t time.Time) *AgentUpdateOne {
+	auo.mutation.SetLastUpdateTime(t)
 	return auo
 }
 
@@ -136,6 +192,7 @@ func (auo *AgentUpdateOne) Select(field string, fields ...string) *AgentUpdateOn
 
 // Save executes the query and returns the updated Agent entity.
 func (auo *AgentUpdateOne) Save(ctx context.Context) (*Agent, error) {
+	auo.defaults()
 	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
 }
 
@@ -161,11 +218,19 @@ func (auo *AgentUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (auo *AgentUpdateOne) defaults() {
+	if _, ok := auo.mutation.LastUpdateTime(); !ok {
+		v := agent.UpdateDefaultLastUpdateTime()
+		auo.mutation.SetLastUpdateTime(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (auo *AgentUpdateOne) check() error {
-	if v, ok := auo.mutation.Name(); ok {
-		if err := agent.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Agent.name": %w`, err)}
+	if v, ok := auo.mutation.PeerID(); ok {
+		if err := agent.PeerIDValidator(v); err != nil {
+			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
 		}
 	}
 	return nil
@@ -200,8 +265,14 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			}
 		}
 	}
-	if value, ok := auo.mutation.Name(); ok {
-		_spec.SetField(agent.FieldName, field.TypeString, value)
+	if value, ok := auo.mutation.PeerID(); ok {
+		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
+	}
+	if value, ok := auo.mutation.Active(); ok {
+		_spec.SetField(agent.FieldActive, field.TypeBool, value)
+	}
+	if value, ok := auo.mutation.LastUpdateTime(); ok {
+		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 	}
 	_node = &Agent{config: auo.config}
 	_spec.Assign = _node.assignValues

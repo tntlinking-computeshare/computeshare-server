@@ -47,12 +47,22 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetStatus(in.Status).
 		Save(ctx)
 
-	if err == nil {
-		in.ID = entity.ID
+	if err != nil {
+		return err
 	}
+
+	in.ID = entity.ID
 	return err
 }
 
 func (crs *computeInstanceRepo) Delete(ctx context.Context, id uuid.UUID) error {
 	return crs.data.db.ComputeInstance.DeleteOneID(id).Exec(ctx)
+}
+
+func (crs *computeInstanceRepo) Update(ctx context.Context, id uuid.UUID, instance *biz.ComputeInstance) error {
+	return crs.data.db.ComputeInstance.UpdateOneID(id).
+		SetStatus(instance.Status).
+		SetPeerID(instance.PeerID).
+		SetContainerID(instance.ContainerID).
+		Exec(ctx)
 }
