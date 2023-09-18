@@ -491,6 +491,7 @@ type ComputeImageMutation struct {
 	tag           *string
 	port          *int32
 	addport       *int32
+	command       *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeImage, error)
@@ -765,6 +766,42 @@ func (m *ComputeImageMutation) ResetPort() {
 	m.addport = nil
 }
 
+// SetCommand sets the "command" field.
+func (m *ComputeImageMutation) SetCommand(s string) {
+	m.command = &s
+}
+
+// Command returns the value of the "command" field in the mutation.
+func (m *ComputeImageMutation) Command() (r string, exists bool) {
+	v := m.command
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCommand returns the old "command" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldCommand(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCommand requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+	}
+	return oldValue.Command, nil
+}
+
+// ResetCommand resets all changes to the "command" field.
+func (m *ComputeImageMutation) ResetCommand() {
+	m.command = nil
+}
+
 // Where appends a list predicates to the ComputeImageMutation builder.
 func (m *ComputeImageMutation) Where(ps ...predicate.ComputeImage) {
 	m.predicates = append(m.predicates, ps...)
@@ -799,7 +836,7 @@ func (m *ComputeImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeImageMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, computeimage.FieldName)
 	}
@@ -811,6 +848,9 @@ func (m *ComputeImageMutation) Fields() []string {
 	}
 	if m.port != nil {
 		fields = append(fields, computeimage.FieldPort)
+	}
+	if m.command != nil {
+		fields = append(fields, computeimage.FieldCommand)
 	}
 	return fields
 }
@@ -828,6 +868,8 @@ func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
 		return m.Tag()
 	case computeimage.FieldPort:
 		return m.Port()
+	case computeimage.FieldCommand:
+		return m.Command()
 	}
 	return nil, false
 }
@@ -845,6 +887,8 @@ func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldTag(ctx)
 	case computeimage.FieldPort:
 		return m.OldPort(ctx)
+	case computeimage.FieldCommand:
+		return m.OldCommand(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -881,6 +925,13 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPort(v)
+		return nil
+	case computeimage.FieldCommand:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCommand(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
@@ -958,6 +1009,9 @@ func (m *ComputeImageMutation) ResetField(name string) error {
 	case computeimage.FieldPort:
 		m.ResetPort()
 		return nil
+	case computeimage.FieldCommand:
+		m.ResetCommand()
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -1027,6 +1081,7 @@ type ComputeInstanceMutation struct {
 	addstatus       *int8
 	container_id    *string
 	peer_id         *string
+	command         *string
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -1556,6 +1611,55 @@ func (m *ComputeInstanceMutation) ResetPeerID() {
 	delete(m.clearedFields, computeinstance.FieldPeerID)
 }
 
+// SetCommand sets the "command" field.
+func (m *ComputeInstanceMutation) SetCommand(s string) {
+	m.command = &s
+}
+
+// Command returns the value of the "command" field in the mutation.
+func (m *ComputeInstanceMutation) Command() (r string, exists bool) {
+	v := m.command
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCommand returns the old "command" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldCommand(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCommand requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+	}
+	return oldValue.Command, nil
+}
+
+// ClearCommand clears the value of the "command" field.
+func (m *ComputeInstanceMutation) ClearCommand() {
+	m.command = nil
+	m.clearedFields[computeinstance.FieldCommand] = struct{}{}
+}
+
+// CommandCleared returns if the "command" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) CommandCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldCommand]
+	return ok
+}
+
+// ResetCommand resets all changes to the "command" field.
+func (m *ComputeInstanceMutation) ResetCommand() {
+	m.command = nil
+	delete(m.clearedFields, computeinstance.FieldCommand)
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -1590,7 +1694,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -1621,6 +1725,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.peer_id != nil {
 		fields = append(fields, computeinstance.FieldPeerID)
 	}
+	if m.command != nil {
+		fields = append(fields, computeinstance.FieldCommand)
+	}
 	return fields
 }
 
@@ -1649,6 +1756,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.ContainerID()
 	case computeinstance.FieldPeerID:
 		return m.PeerID()
+	case computeinstance.FieldCommand:
+		return m.Command()
 	}
 	return nil, false
 }
@@ -1678,6 +1787,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldContainerID(ctx)
 	case computeinstance.FieldPeerID:
 		return m.OldPeerID(ctx)
+	case computeinstance.FieldCommand:
+		return m.OldCommand(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -1757,6 +1868,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPeerID(v)
 		return nil
+	case computeinstance.FieldCommand:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCommand(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -1811,6 +1929,9 @@ func (m *ComputeInstanceMutation) ClearedFields() []string {
 	if m.FieldCleared(computeinstance.FieldPeerID) {
 		fields = append(fields, computeinstance.FieldPeerID)
 	}
+	if m.FieldCleared(computeinstance.FieldCommand) {
+		fields = append(fields, computeinstance.FieldCommand)
+	}
 	return fields
 }
 
@@ -1833,6 +1954,9 @@ func (m *ComputeInstanceMutation) ClearField(name string) error {
 		return nil
 	case computeinstance.FieldPeerID:
 		m.ClearPeerID()
+		return nil
+	case computeinstance.FieldCommand:
+		m.ClearCommand()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance nullable field %s", name)
@@ -1871,6 +1995,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldPeerID:
 		m.ResetPeerID()
+		return nil
+	case computeinstance.FieldCommand:
+		m.ResetCommand()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)

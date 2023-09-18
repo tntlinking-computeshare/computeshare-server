@@ -23,7 +23,9 @@ type ComputeImage struct {
 	// 版本名
 	Tag string `json:"tag,omitempty"`
 	// 端口号
-	Port         int32 `json:"port,omitempty"`
+	Port int32 `json:"port,omitempty"`
+	// 容器命令
+	Command      string `json:"command,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -34,7 +36,7 @@ func (*ComputeImage) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeimage.FieldID, computeimage.FieldPort:
 			values[i] = new(sql.NullInt64)
-		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag:
+		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldCommand:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -80,6 +82,12 @@ func (ci *ComputeImage) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
 				ci.Port = int32(value.Int64)
+			}
+		case computeimage.FieldCommand:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field command", values[i])
+			} else if value.Valid {
+				ci.Command = value.String
 			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
@@ -128,6 +136,9 @@ func (ci *ComputeImage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("port=")
 	builder.WriteString(fmt.Sprintf("%v", ci.Port))
+	builder.WriteString(", ")
+	builder.WriteString("command=")
+	builder.WriteString(ci.Command)
 	builder.WriteByte(')')
 	return builder.String()
 }

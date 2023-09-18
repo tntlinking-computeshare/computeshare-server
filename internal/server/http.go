@@ -81,5 +81,6 @@ func NewHTTPServer(c *conf.Server,
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))
+	srv.HandleFunc("/v1/vm/terminal", instanceService.Terminal)
 	return srv
 }

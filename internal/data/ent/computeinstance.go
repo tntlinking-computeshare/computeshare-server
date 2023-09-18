@@ -37,7 +37,9 @@ type ComputeInstance struct {
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	PeerID       string `json:"peer_id,omitempty"`
+	PeerID string `json:"peer_id,omitempty"`
+	// 容器启动命令
+	Command      string `json:"command,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -48,7 +50,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldPeerID:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldPeerID, computeinstance.FieldCommand:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -135,6 +137,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.PeerID = value.String
 			}
+		case computeinstance.FieldCommand:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field command", values[i])
+			} else if value.Valid {
+				ci.Command = value.String
+			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
 		}
@@ -200,6 +208,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("peer_id=")
 	builder.WriteString(ci.PeerID)
+	builder.WriteString(", ")
+	builder.WriteString("command=")
+	builder.WriteString(ci.Command)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -43,6 +43,12 @@ func (cic *ComputeImageCreate) SetPort(i int32) *ComputeImageCreate {
 	return cic
 }
 
+// SetCommand sets the "command" field.
+func (cic *ComputeImageCreate) SetCommand(s string) *ComputeImageCreate {
+	cic.mutation.SetCommand(s)
+	return cic
+}
+
 // SetID sets the "id" field.
 func (cic *ComputeImageCreate) SetID(i int32) *ComputeImageCreate {
 	cic.mutation.SetID(i)
@@ -110,6 +116,9 @@ func (cic *ComputeImageCreate) check() error {
 	if _, ok := cic.mutation.Port(); !ok {
 		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "ComputeImage.port"`)}
 	}
+	if _, ok := cic.mutation.Command(); !ok {
+		return &ValidationError{Name: "command", err: errors.New(`ent: missing required field "ComputeImage.command"`)}
+	}
 	return nil
 }
 
@@ -157,6 +166,10 @@ func (cic *ComputeImageCreate) createSpec() (*ComputeImage, *sqlgraph.CreateSpec
 	if value, ok := cic.mutation.Port(); ok {
 		_spec.SetField(computeimage.FieldPort, field.TypeInt32, value)
 		_node.Port = value
+	}
+	if value, ok := cic.mutation.Command(); ok {
+		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
+		_node.Command = value
 	}
 	return _node, _spec
 }

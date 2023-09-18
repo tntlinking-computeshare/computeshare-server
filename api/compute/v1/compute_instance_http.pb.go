@@ -63,7 +63,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.GET("/v1/instance/{id}", _ComputeInstance_Get0_HTTP_Handler(srv))
 	r.GET("/v1/instance", _ComputeInstance_List0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StopInstance0_HTTP_Handler(srv))
-	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
+	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
 	r.GET("/v1/instance/{id}/ssh", _ComputeInstance_SSHInstance0_HTTP_Handler(srv))
 }
 
@@ -408,7 +408,7 @@ func (c *ComputeInstanceHTTPClientImpl) SSHInstance(ctx context.Context, in *Get
 
 func (c *ComputeInstanceHTTPClientImpl) StartInstance(ctx context.Context, in *GetInstanceRequest, opts ...http.CallOption) (*StartInstanceReply, error) {
 	var out StartInstanceReply
-	pattern := "/v1/instance/{id}/stop"
+	pattern := "/v1/instance/{id}/start"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputeInstanceStartInstance))
 	opts = append(opts, http.PathTemplate(pattern))

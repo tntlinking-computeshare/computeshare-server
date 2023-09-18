@@ -14,6 +14,7 @@ import (
 	pstore "github.com/libp2p/go-libp2p/core/peerstore"
 	protocol "github.com/libp2p/go-libp2p/core/protocol"
 	"github.com/libp2p/go-libp2p/p2p/protocol/ping"
+	pb "github.com/mohaijiang/computeshare-client/api/network/v1"
 	ma "github.com/multiformats/go-multiaddr"
 	madns "github.com/multiformats/go-multiaddr-dns"
 	"os"
@@ -330,4 +331,29 @@ func forwardLocal(ctx context.Context, p *p2p.P2P, ps pstore.Peerstore, proto pr
 	// TODO: return some info
 	_, err := p.ForwardLocal(ctx, addr.ID, proto, bindAddr)
 	return err
+}
+
+func (s *P2pService) ListListen(ctx context.Context, req *pb.ListListenRequest) (*pb.ListListenReply, error) {
+	output := &pb.ListListenReply{}
+
+	s.node.P2P.ListenersLocal.Lock()
+	for _, listener := range s.node.P2P.ListenersLocal.Listeners {
+		output.Result = append(output.Result, &pb.ListenReply{
+			Protocol:      string(listener.Protocol()),
+			ListenAddress: listener.ListenAddress().String(),
+			TargetAddress: listener.TargetAddress().String(),
+		})
+	}
+	s.node.P2P.ListenersLocal.Unlock()
+
+	s.node.P2P.ListenersP2P.Lock()
+	for _, listener := range s.node.P2P.ListenersP2P.Listeners {
+		output.Result = append(output.Result, &pb.ListenReply{
+			Protocol:      string(listener.Protocol()),
+			ListenAddress: listener.ListenAddress().String(),
+			TargetAddress: listener.TargetAddress().String(),
+		})
+	}
+	s.node.P2P.ListenersP2P.Unlock()
+	return output, nil
 }

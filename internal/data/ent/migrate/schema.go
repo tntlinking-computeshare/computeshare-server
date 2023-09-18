@@ -35,6 +35,7 @@ var (
 		{Name: "image", Type: field.TypeString},
 		{Name: "tag", Type: field.TypeString},
 		{Name: "port", Type: field.TypeInt32},
+		{Name: "command", Type: field.TypeString},
 	}
 	// ComputeImagesTable holds the schema information for the "compute_images" table.
 	ComputeImagesTable = &schema.Table{
@@ -62,6 +63,7 @@ var (
 		{Name: "status", Type: field.TypeInt8},
 		{Name: "container_id", Type: field.TypeString, Nullable: true},
 		{Name: "peer_id", Type: field.TypeString, Nullable: true},
+		{Name: "command", Type: field.TypeString, Nullable: true},
 	}
 	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
 	ComputeInstancesTable = &schema.Table{

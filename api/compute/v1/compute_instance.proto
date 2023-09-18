@@ -70,7 +70,7 @@ service ComputeInstance {
 	//启动实例
 	rpc StartInstance(GetInstanceRequest) returns (StartInstanceReply) {
 		option (google.api.http) = {
-			put: "/v1/instance/{id}/stop",
+			put: "/v1/instance/{id}/start",
 			body: "*",
 		};
 	}
@@ -154,6 +154,8 @@ message GetInstanceRequest {
 message GetInstanceReply {
 	string id = 1;
 	string name = 2;
+	int32 status = 3;
+	int64 expiration_time = 4;
 }
 
 message ListInstanceRequest {}

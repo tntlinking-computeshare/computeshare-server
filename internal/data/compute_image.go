@@ -30,11 +30,12 @@ func (csr *computeImageRepo) List(ctx context.Context) ([]*biz.ComputeImage, err
 
 func (csr *computeImageRepo) toBiz(item *ent.ComputeImage, _ int) *biz.ComputeImage {
 	return &biz.ComputeImage{
-		ID:    int32(item.ID),
-		Name:  item.Name,
-		Image: item.Image,
-		Tag:   item.Tag,
-		Port:  item.Port,
+		ID:      int32(item.ID),
+		Name:    item.Name,
+		Image:   item.Image,
+		Tag:     item.Tag,
+		Port:    item.Port,
+		Command: item.Command,
 	}
 }
 

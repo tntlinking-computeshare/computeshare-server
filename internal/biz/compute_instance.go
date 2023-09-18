@@ -8,12 +8,19 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	transhttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 	"github.com/ipfs/kubo/core"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-client/api/network/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/third_party/p2p"
 	ma "github.com/multiformats/go-multiaddr"
+	"github.com/samber/lo"
 	"golang.org/x/exp/rand"
+	"net/http"
+	"regexp"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -47,7 +54,8 @@ type ComputeInstance struct {
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	PeerID string `json:"peer_id,omitempty"`
+	PeerID  string `json:"peer_id,omitempty"`
+	Command string `json:"command,omitempty"`
 }
 
 const (
@@ -74,7 +82,8 @@ type ComputeImage struct {
 	// 版本名
 	Tag string `json:"tag,omitempty"`
 	// 端口号
-	Port int32 `json:"port,omitempty"`
+	Port    int32 `json:"port,omitempty"`
+	Command string
 }
 
 type ComputeSpecRepo interface {
@@ -87,6 +96,7 @@ type ComputeInstanceRepo interface {
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	Update(ctx context.Context, id uuid.UUID, instance *ComputeInstance) error
+	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
 }
 
 type ComputeImageRepo interface {
@@ -149,8 +159,9 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Name:           cic.Name,
 		Core:           computeSpec.Core,
 		Memory:         computeSpec.Memory,
-		Port:           string(computeImage.Port),
+		Port:           fmt.Sprintf("%d", computeImage.Port),
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
+		Command:        computeImage.Command,
 		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
 		Status:         InstanceStatusStarting,
 	}
@@ -174,63 +185,19 @@ func (uc *ComputeInstanceUsercase) Delete(ctx context.Context, id uuid.UUID) err
 
 func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance *ComputeInstance) {
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
-	p2pService := p2p.NewP2pService(uc.ipfsNode)
-	pingOk := p2pService.Ping(ctx, peerId)
 
-	fmt.Println("pingOk: ", pingOk)
-	if !pingOk {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Errorf("无法与%s完成ping", peerId)
-		return
-	}
-
-	listenIp := "127.0.0.1"
-	listenPort := rand.Intn(9999) + 30000
-
-	listenOpt := fmt.Sprintf("/ip4/%s/tcp/%d", listenIp, listenPort)
-	listen, err := ma.NewMultiaddr(listenOpt)
+	vmClient, cleanup, err := uc.getVmClient(peerId)
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error(err)
 		return
 	}
-	targetOpt := fmt.Sprintf("/p2p/%s", peerId)
-	proto := "/x/ssh"
-
-	err = p2pService.CheckPort(listen)
-	if err != nil {
-		_ = p2pService.CloseListen(ctx, proto, listenOpt, targetOpt)
-	}
-	err = p2pService.CreateForward(ctx, proto, listenOpt, targetOpt)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return
-	}
-
-	defer p2pService.CloseListen(ctx, proto, listenOpt, targetOpt)
-
-	client, err := transhttp.NewClient(
-		context.Background(),
-		transhttp.WithMiddleware(
-			recovery.Recovery(),
-		),
-		transhttp.WithEndpoint(fmt.Sprintf("%s:%d", listenIp, listenPort)),
-	)
-
-	defer client.Close()
-
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return
-	}
-
-	vmClient := clientcomputev1.NewVmHTTPClient(client)
+	defer cleanup()
 
 	reply, err := vmClient.CreateVm(ctx, &clientcomputev1.CreateVmRequest{
-		Image: instance.Image,
-		Port:  instance.Port,
+		Image:   instance.Image,
+		Port:    instance.Port,
+		Command: strings.Fields(instance.Command),
 	})
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
@@ -249,5 +216,230 @@ func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error(err)
 		return
+	}
+}
+
+func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
+	ip, port, err := uc.createP2pForward(peerId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	time.Sleep(time.Second * 2)
+
+	client, err := transhttp.NewClient(
+		context.Background(),
+		transhttp.WithMiddleware(
+			recovery.Recovery(),
+		),
+		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
+		transhttp.WithTimeout(time.Second*10),
+	)
+
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error(err)
+		return nil, nil, err
+	}
+
+	vmClient := clientcomputev1.NewVmHTTPClient(client)
+	return vmClient, func() {
+		_ = client.Close()
+	}, nil
+}
+
+func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, string, error) {
+	ctx := context.Background()
+	p2pService := p2p.NewP2pService(uc.ipfsNode)
+	pingOk := p2pService.Ping(ctx, peerId)
+
+	fmt.Println("pingOk: ", pingOk)
+	if !pingOk {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Errorf("无法与%s完成ping", peerId)
+		return "", "", nil
+	}
+
+	list, err := p2pService.ListListen(ctx, nil)
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error("查询p2p 列表失败")
+		return "", "", nil
+	}
+
+	t, bool := lo.Find(list.Result, func(item *pb.ListenReply) bool {
+		if item == nil {
+			return false
+		}
+		return item.TargetAddress == fmt.Sprintf("/p2p/%s", peerId)
+	})
+
+	if bool {
+		listenAddress := t.ListenAddress
+		// 定义正则表达式模式，用于匹配IP地址和端口号
+		pattern := `\/ip4\/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\/tcp\/([0-9]+)`
+
+		// 编译正则表达式
+		regex := regexp.MustCompile(pattern)
+
+		// 使用正则表达式来提取IP地址和端口号
+		matches := regex.FindStringSubmatch(listenAddress)
+		if len(matches) >= 3 {
+			ip := matches[1]   // 第一个匹配组为IP地址
+			port := matches[2] // 第二个匹配组为端口号
+
+			fmt.Printf("IP地址: %s\n", ip)
+			fmt.Printf("端口号: %s\n", port)
+			return ip, port, nil
+		} else {
+			fmt.Println("无法提取IP地址和端口号")
+		}
+	}
+
+	listenIp := "127.0.0.1"
+	listenPort := rand.Intn(9999) + 30000
+
+	listenOpt := fmt.Sprintf("/ip4/%s/tcp/%d", listenIp, listenPort)
+	listen, err := ma.NewMultiaddr(listenOpt)
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error(err)
+		return "", "", nil
+	}
+	targetOpt := fmt.Sprintf("/p2p/%s", peerId)
+	proto := "/x/ssh"
+
+	err = p2pService.CheckPort(listen)
+	if err != nil {
+		_ = p2pService.CloseListen(ctx, proto, listenOpt, targetOpt)
+	}
+	err = p2pService.CreateForward(ctx, proto, listenOpt, targetOpt)
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error(err)
+		return "", "", nil
+	}
+	return listenIp, strconv.Itoa(listenPort), nil
+}
+
+func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owner string) ([]*ComputeInstance, error) {
+	return uc.instanceRepo.List(ctx, owner)
+}
+
+func (uc *ComputeInstanceUsercase) Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error) {
+	return uc.instanceRepo.Get(ctx, id)
+}
+
+func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) error {
+	instance, err := uc.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if instance.ContainerID == "" || instance.PeerID == "" {
+		return fmt.Errorf("instance is not avaliable")
+	}
+
+	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
+	_, err = vmClient.StartVm(ctx, &clientcomputev1.GetVmRequest{
+		Id: instance.ContainerID,
+	})
+
+	return err
+
+}
+
+func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error {
+	instance, err := uc.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if instance.ContainerID == "" || instance.PeerID == "" {
+		return fmt.Errorf("instance is not avaliable")
+	}
+
+	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
+	_, err = vmClient.StopVm(ctx, &clientcomputev1.GetVmRequest{
+		Id: instance.ContainerID,
+	})
+	return err
+}
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Request) {
+
+	r.ParseForm()
+	instanceId, err := uuid.Parse(r.Form.Get("instanceId"))
+	if err != nil {
+		return
+	}
+	instance, err := uc.Get(context.Background(), instanceId)
+	if err != nil {
+		return
+	}
+
+	if instance.PeerID == "" {
+		return
+	}
+
+	ip, port, err := uc.createP2pForward(instance.PeerID)
+	if err != nil {
+		return
+	}
+
+	// websocket握手
+	// 建立与目标WebSocket服务器的连接
+	targetConn, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://%s:%s/v1/vm/%s/terminal?container=%s&workdir=/bin", ip, port, instanceId, instance.ContainerID), nil)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	defer targetConn.Close()
+
+	// 升级客户端连接为WebSocket
+	clientConn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	defer clientConn.Close()
+
+	// 开始在两个WebSocket连接之间传递消息
+	go func() {
+		for {
+			msgType, msg, err := clientConn.ReadMessage()
+			if err != nil {
+				return
+			}
+			if err := targetConn.WriteMessage(msgType, msg); err != nil {
+				return
+			}
+		}
+	}()
+
+	for {
+		msgType, msg, err := targetConn.ReadMessage()
+		if err != nil {
+			return
+		}
+		if err := clientConn.WriteMessage(msgType, msg); err != nil {
+			return
+		}
 	}
 }

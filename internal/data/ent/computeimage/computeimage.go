@@ -19,6 +19,8 @@ const (
 	FieldTag = "tag"
 	// FieldPort holds the string denoting the port field in the database.
 	FieldPort = "port"
+	// FieldCommand holds the string denoting the command field in the database.
+	FieldCommand = "command"
 	// Table holds the table name of the computeimage in the database.
 	Table = "compute_images"
 )
@@ -30,6 +32,7 @@ var Columns = []string{
 	FieldImage,
 	FieldTag,
 	FieldPort,
+	FieldCommand,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -77,4 +80,9 @@ func ByTag(opts ...sql.OrderTermOption) OrderOption {
 // ByPort orders the results by the port field.
 func ByPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPort, opts...).ToFunc()
+}
+
+// ByCommand orders the results by the command field.
+func ByCommand(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCommand, opts...).ToFunc()
 }

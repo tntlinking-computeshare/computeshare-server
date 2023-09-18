@@ -32,6 +32,8 @@ const (
 	FieldContainerID = "container_id"
 	// FieldPeerID holds the string denoting the peer_id field in the database.
 	FieldPeerID = "peer_id"
+	// FieldCommand holds the string denoting the command field in the database.
+	FieldCommand = "command"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
 )
@@ -49,6 +51,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldContainerID,
 	FieldPeerID,
+	FieldCommand,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -132,4 +135,9 @@ func ByContainerID(opts ...sql.OrderTermOption) OrderOption {
 // ByPeerID orders the results by the peer_id field.
 func ByPeerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPeerID, opts...).ToFunc()
+}
+
+// ByCommand orders the results by the command field.
+func ByCommand(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCommand, opts...).ToFunc()
 }

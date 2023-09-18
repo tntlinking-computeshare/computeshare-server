@@ -33,6 +33,7 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 
 	agent := &biz.Agent{
 		PeerId: req.GetName(),
+		Active: true,
 	}
 	err := s.uc.Create(ctx, agent)
 	return &pb.CreateAgentReply{

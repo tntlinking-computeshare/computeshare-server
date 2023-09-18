@@ -105,6 +105,20 @@ func (cic *ComputeInstanceCreate) SetNillablePeerID(s *string) *ComputeInstanceC
 	return cic
 }
 
+// SetCommand sets the "command" field.
+func (cic *ComputeInstanceCreate) SetCommand(s string) *ComputeInstanceCreate {
+	cic.mutation.SetCommand(s)
+	return cic
+}
+
+// SetNillableCommand sets the "command" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillableCommand(s *string) *ComputeInstanceCreate {
+	if s != nil {
+		cic.SetCommand(*s)
+	}
+	return cic
+}
+
 // SetID sets the "id" field.
 func (cic *ComputeInstanceCreate) SetID(u uuid.UUID) *ComputeInstanceCreate {
 	cic.mutation.SetID(u)
@@ -282,6 +296,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.PeerID(); ok {
 		_spec.SetField(computeinstance.FieldPeerID, field.TypeString, value)
 		_node.PeerID = value
+	}
+	if value, ok := cic.mutation.Command(); ok {
+		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+		_node.Command = value
 	}
 	return _node, _spec
 }
