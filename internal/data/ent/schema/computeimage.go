@@ -19,6 +19,7 @@ func (ComputeImage) Fields() []ent.Field {
 		field.String("image").NotEmpty().Comment("镜像名"),
 		field.String("tag").NotEmpty().Comment("版本名"),
 		field.Int32("port").Comment("端口号"),
+		field.String("command").Comment("容器命令"),
 	}
 }
 

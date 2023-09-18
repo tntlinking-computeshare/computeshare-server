@@ -55,7 +55,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, ipfsNode, agentRepo, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)

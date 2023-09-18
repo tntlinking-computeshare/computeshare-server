@@ -28,6 +28,8 @@ type ComputeInstance struct {
 	Memory string `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
+	// 容器端口
+	Port string `json:"port,omitempty"`
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
@@ -35,7 +37,9 @@ type ComputeInstance struct {
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	PeerID       string `json:"peer_id,omitempty"`
+	PeerID string `json:"peer_id,omitempty"`
+	// 容器启动命令
+	Command      string `json:"command,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -46,7 +50,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldContainerID, computeinstance.FieldPeerID:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldPeerID, computeinstance.FieldCommand:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -103,6 +107,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.Image = value.String
 			}
+		case computeinstance.FieldPort:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field port", values[i])
+			} else if value.Valid {
+				ci.Port = value.String
+			}
 		case computeinstance.FieldExpirationTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expiration_time", values[i])
@@ -126,6 +136,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field peer_id", values[i])
 			} else if value.Valid {
 				ci.PeerID = value.String
+			}
+		case computeinstance.FieldCommand:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field command", values[i])
+			} else if value.Valid {
+				ci.Command = value.String
 			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
@@ -178,6 +194,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString("image=")
 	builder.WriteString(ci.Image)
 	builder.WriteString(", ")
+	builder.WriteString("port=")
+	builder.WriteString(ci.Port)
+	builder.WriteString(", ")
 	builder.WriteString("expiration_time=")
 	builder.WriteString(ci.ExpirationTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -189,6 +208,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("peer_id=")
 	builder.WriteString(ci.PeerID)
+	builder.WriteString(", ")
+	builder.WriteString("command=")
+	builder.WriteString(ci.Command)
 	builder.WriteByte(')')
 	return builder.String()
 }

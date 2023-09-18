@@ -19,16 +19,16 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationComputeInstanceCreate = "/api.compute.v1.ComputeInstance/Create"
-const OperationComputeInstanceDelete = "/api.compute.v1.ComputeInstance/Delete"
-const OperationComputeInstanceGet = "/api.compute.v1.ComputeInstance/Get"
-const OperationComputeInstanceList = "/api.compute.v1.ComputeInstance/List"
-const OperationComputeInstanceListComputeImage = "/api.compute.v1.ComputeInstance/ListComputeImage"
-const OperationComputeInstanceListComputeInstanceDuration = "/api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
-const OperationComputeInstanceListComputeSpec = "/api.compute.v1.ComputeInstance/ListComputeSpec"
-const OperationComputeInstanceSSHInstance = "/api.compute.v1.ComputeInstance/SSHInstance"
-const OperationComputeInstanceStartInstance = "/api.compute.v1.ComputeInstance/StartInstance"
-const OperationComputeInstanceStopInstance = "/api.compute.v1.ComputeInstance/StopInstance"
+const OperationComputeInstanceCreate = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Create"
+const OperationComputeInstanceDelete = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Delete"
+const OperationComputeInstanceGet = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Get"
+const OperationComputeInstanceList = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/List"
+const OperationComputeInstanceListComputeImage = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeImage"
+const OperationComputeInstanceListComputeInstanceDuration = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
+const OperationComputeInstanceListComputeSpec = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeSpec"
+const OperationComputeInstanceSSHInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/SSHInstance"
+const OperationComputeInstanceStartInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StartInstance"
+const OperationComputeInstanceStopInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StopInstance"
 
 type ComputeInstanceHTTPServer interface {
 	// Create 创建实例
@@ -63,7 +63,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.GET("/v1/instance/{id}", _ComputeInstance_Get0_HTTP_Handler(srv))
 	r.GET("/v1/instance", _ComputeInstance_List0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StopInstance0_HTTP_Handler(srv))
-	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
+	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
 	r.GET("/v1/instance/{id}/ssh", _ComputeInstance_SSHInstance0_HTTP_Handler(srv))
 }
 
@@ -408,7 +408,7 @@ func (c *ComputeInstanceHTTPClientImpl) SSHInstance(ctx context.Context, in *Get
 
 func (c *ComputeInstanceHTTPClientImpl) StartInstance(ctx context.Context, in *GetInstanceRequest, opts ...http.CallOption) (*StartInstanceReply, error) {
 	var out StartInstanceReply
-	pattern := "/v1/instance/{id}/stop"
+	pattern := "/v1/instance/{id}/start"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputeInstanceStartInstance))
 	opts = append(opts, http.PathTemplate(pattern))

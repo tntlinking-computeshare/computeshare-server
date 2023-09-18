@@ -72,6 +72,11 @@ func Port(v int32) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldPort, v))
 }
 
+// Command applies equality check predicate on the "command" field. It's identical to CommandEQ.
+func Command(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldCommand, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldName, v))
@@ -305,6 +310,71 @@ func PortLT(v int32) predicate.ComputeImage {
 // PortLTE applies the LTE predicate on the "port" field.
 func PortLTE(v int32) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldLTE(FieldPort, v))
+}
+
+// CommandEQ applies the EQ predicate on the "command" field.
+func CommandEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldCommand, v))
+}
+
+// CommandNEQ applies the NEQ predicate on the "command" field.
+func CommandNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldCommand, v))
+}
+
+// CommandIn applies the In predicate on the "command" field.
+func CommandIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldCommand, vs...))
+}
+
+// CommandNotIn applies the NotIn predicate on the "command" field.
+func CommandNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldCommand, vs...))
+}
+
+// CommandGT applies the GT predicate on the "command" field.
+func CommandGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldCommand, v))
+}
+
+// CommandGTE applies the GTE predicate on the "command" field.
+func CommandGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldCommand, v))
+}
+
+// CommandLT applies the LT predicate on the "command" field.
+func CommandLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldCommand, v))
+}
+
+// CommandLTE applies the LTE predicate on the "command" field.
+func CommandLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldCommand, v))
+}
+
+// CommandContains applies the Contains predicate on the "command" field.
+func CommandContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldCommand, v))
+}
+
+// CommandHasPrefix applies the HasPrefix predicate on the "command" field.
+func CommandHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldCommand, v))
+}
+
+// CommandHasSuffix applies the HasSuffix predicate on the "command" field.
+func CommandHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldCommand, v))
+}
+
+// CommandEqualFold applies the EqualFold predicate on the "command" field.
+func CommandEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldCommand, v))
+}
+
+// CommandContainsFold applies the ContainsFold predicate on the "command" field.
+func CommandContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldCommand, v))
 }
 
 // And groups predicates with the AND operator between them.

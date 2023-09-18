@@ -51,6 +51,20 @@ func (cic *ComputeInstanceCreate) SetImage(s string) *ComputeInstanceCreate {
 	return cic
 }
 
+// SetPort sets the "port" field.
+func (cic *ComputeInstanceCreate) SetPort(s string) *ComputeInstanceCreate {
+	cic.mutation.SetPort(s)
+	return cic
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillablePort(s *string) *ComputeInstanceCreate {
+	if s != nil {
+		cic.SetPort(*s)
+	}
+	return cic
+}
+
 // SetExpirationTime sets the "expiration_time" field.
 func (cic *ComputeInstanceCreate) SetExpirationTime(t time.Time) *ComputeInstanceCreate {
 	cic.mutation.SetExpirationTime(t)
@@ -87,6 +101,20 @@ func (cic *ComputeInstanceCreate) SetPeerID(s string) *ComputeInstanceCreate {
 func (cic *ComputeInstanceCreate) SetNillablePeerID(s *string) *ComputeInstanceCreate {
 	if s != nil {
 		cic.SetPeerID(*s)
+	}
+	return cic
+}
+
+// SetCommand sets the "command" field.
+func (cic *ComputeInstanceCreate) SetCommand(s string) *ComputeInstanceCreate {
+	cic.mutation.SetCommand(s)
+	return cic
+}
+
+// SetNillableCommand sets the "command" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillableCommand(s *string) *ComputeInstanceCreate {
+	if s != nil {
+		cic.SetCommand(*s)
 	}
 	return cic
 }
@@ -249,6 +277,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 		_node.Image = value
 	}
+	if value, ok := cic.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+		_node.Port = value
+	}
 	if value, ok := cic.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 		_node.ExpirationTime = value
@@ -264,6 +296,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.PeerID(); ok {
 		_spec.SetField(computeinstance.FieldPeerID, field.TypeString, value)
 		_node.PeerID = value
+	}
+	if value, ok := cic.mutation.Command(); ok {
+		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+		_node.Command = value
 	}
 	return _node, _spec
 }

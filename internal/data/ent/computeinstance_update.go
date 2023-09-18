@@ -58,6 +58,26 @@ func (ciu *ComputeInstanceUpdate) SetImage(s string) *ComputeInstanceUpdate {
 	return ciu
 }
 
+// SetPort sets the "port" field.
+func (ciu *ComputeInstanceUpdate) SetPort(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetPort(s)
+	return ciu
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (ciu *ComputeInstanceUpdate) SetNillablePort(s *string) *ComputeInstanceUpdate {
+	if s != nil {
+		ciu.SetPort(*s)
+	}
+	return ciu
+}
+
+// ClearPort clears the value of the "port" field.
+func (ciu *ComputeInstanceUpdate) ClearPort() *ComputeInstanceUpdate {
+	ciu.mutation.ClearPort()
+	return ciu
+}
+
 // SetExpirationTime sets the "expiration_time" field.
 func (ciu *ComputeInstanceUpdate) SetExpirationTime(t time.Time) *ComputeInstanceUpdate {
 	ciu.mutation.SetExpirationTime(t)
@@ -114,6 +134,26 @@ func (ciu *ComputeInstanceUpdate) SetNillablePeerID(s *string) *ComputeInstanceU
 // ClearPeerID clears the value of the "peer_id" field.
 func (ciu *ComputeInstanceUpdate) ClearPeerID() *ComputeInstanceUpdate {
 	ciu.mutation.ClearPeerID()
+	return ciu
+}
+
+// SetCommand sets the "command" field.
+func (ciu *ComputeInstanceUpdate) SetCommand(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetCommand(s)
+	return ciu
+}
+
+// SetNillableCommand sets the "command" field if the given value is not nil.
+func (ciu *ComputeInstanceUpdate) SetNillableCommand(s *string) *ComputeInstanceUpdate {
+	if s != nil {
+		ciu.SetCommand(*s)
+	}
+	return ciu
+}
+
+// ClearCommand clears the value of the "command" field.
+func (ciu *ComputeInstanceUpdate) ClearCommand() *ComputeInstanceUpdate {
+	ciu.mutation.ClearCommand()
 	return ciu
 }
 
@@ -206,6 +246,12 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := ciu.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
+	if value, ok := ciu.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+	}
+	if ciu.mutation.PortCleared() {
+		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
+	}
 	if value, ok := ciu.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 	}
@@ -226,6 +272,12 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ciu.mutation.PeerIDCleared() {
 		_spec.ClearField(computeinstance.FieldPeerID, field.TypeString)
+	}
+	if value, ok := ciu.mutation.Command(); ok {
+		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+	}
+	if ciu.mutation.CommandCleared() {
+		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -274,6 +326,26 @@ func (ciuo *ComputeInstanceUpdateOne) SetMemory(s string) *ComputeInstanceUpdate
 // SetImage sets the "image" field.
 func (ciuo *ComputeInstanceUpdateOne) SetImage(s string) *ComputeInstanceUpdateOne {
 	ciuo.mutation.SetImage(s)
+	return ciuo
+}
+
+// SetPort sets the "port" field.
+func (ciuo *ComputeInstanceUpdateOne) SetPort(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetPort(s)
+	return ciuo
+}
+
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (ciuo *ComputeInstanceUpdateOne) SetNillablePort(s *string) *ComputeInstanceUpdateOne {
+	if s != nil {
+		ciuo.SetPort(*s)
+	}
+	return ciuo
+}
+
+// ClearPort clears the value of the "port" field.
+func (ciuo *ComputeInstanceUpdateOne) ClearPort() *ComputeInstanceUpdateOne {
+	ciuo.mutation.ClearPort()
 	return ciuo
 }
 
@@ -333,6 +405,26 @@ func (ciuo *ComputeInstanceUpdateOne) SetNillablePeerID(s *string) *ComputeInsta
 // ClearPeerID clears the value of the "peer_id" field.
 func (ciuo *ComputeInstanceUpdateOne) ClearPeerID() *ComputeInstanceUpdateOne {
 	ciuo.mutation.ClearPeerID()
+	return ciuo
+}
+
+// SetCommand sets the "command" field.
+func (ciuo *ComputeInstanceUpdateOne) SetCommand(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetCommand(s)
+	return ciuo
+}
+
+// SetNillableCommand sets the "command" field if the given value is not nil.
+func (ciuo *ComputeInstanceUpdateOne) SetNillableCommand(s *string) *ComputeInstanceUpdateOne {
+	if s != nil {
+		ciuo.SetCommand(*s)
+	}
+	return ciuo
+}
+
+// ClearCommand clears the value of the "command" field.
+func (ciuo *ComputeInstanceUpdateOne) ClearCommand() *ComputeInstanceUpdateOne {
+	ciuo.mutation.ClearCommand()
 	return ciuo
 }
 
@@ -455,6 +547,12 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	if value, ok := ciuo.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
+	if value, ok := ciuo.mutation.Port(); ok {
+		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
+	}
+	if ciuo.mutation.PortCleared() {
+		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
+	}
 	if value, ok := ciuo.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 	}
@@ -475,6 +573,12 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if ciuo.mutation.PeerIDCleared() {
 		_spec.ClearField(computeinstance.FieldPeerID, field.TypeString)
+	}
+	if value, ok := ciuo.mutation.Command(); ok {
+		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+	}
+	if ciuo.mutation.CommandCleared() {
+		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
 	}
 	_node = &ComputeInstance{config: ciuo.config}
 	_spec.Assign = _node.assignValues

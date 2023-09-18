@@ -47,14 +47,16 @@ const (
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
 type AgentMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *uuid.UUID
-	name          *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Agent, error)
-	predicates    []predicate.Agent
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	peer_id          *string
+	active           *bool
+	last_update_time *time.Time
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*Agent, error)
+	predicates       []predicate.Agent
 }
 
 var _ ent.Mutation = (*AgentMutation)(nil)
@@ -161,40 +163,112 @@ func (m *AgentMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	}
 }
 
-// SetName sets the "name" field.
-func (m *AgentMutation) SetName(s string) {
-	m.name = &s
+// SetPeerID sets the "peer_id" field.
+func (m *AgentMutation) SetPeerID(s string) {
+	m.peer_id = &s
 }
 
-// Name returns the value of the "name" field in the mutation.
-func (m *AgentMutation) Name() (r string, exists bool) {
-	v := m.name
+// PeerID returns the value of the "peer_id" field in the mutation.
+func (m *AgentMutation) PeerID() (r string, exists bool) {
+	v := m.peer_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldName returns the old "name" field's value of the Agent entity.
+// OldPeerID returns the old "peer_id" field's value of the Agent entity.
 // If the Agent object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AgentMutation) OldName(ctx context.Context) (v string, err error) {
+func (m *AgentMutation) OldPeerID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldName is only allowed on UpdateOne operations")
+		return v, errors.New("OldPeerID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldName requires an ID field in the mutation")
+		return v, errors.New("OldPeerID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldName: %w", err)
+		return v, fmt.Errorf("querying old value for OldPeerID: %w", err)
 	}
-	return oldValue.Name, nil
+	return oldValue.PeerID, nil
 }
 
-// ResetName resets all changes to the "name" field.
-func (m *AgentMutation) ResetName() {
-	m.name = nil
+// ResetPeerID resets all changes to the "peer_id" field.
+func (m *AgentMutation) ResetPeerID() {
+	m.peer_id = nil
+}
+
+// SetActive sets the "active" field.
+func (m *AgentMutation) SetActive(b bool) {
+	m.active = &b
+}
+
+// Active returns the value of the "active" field in the mutation.
+func (m *AgentMutation) Active() (r bool, exists bool) {
+	v := m.active
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldActive returns the old "active" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldActive(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldActive is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldActive requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldActive: %w", err)
+	}
+	return oldValue.Active, nil
+}
+
+// ResetActive resets all changes to the "active" field.
+func (m *AgentMutation) ResetActive() {
+	m.active = nil
+}
+
+// SetLastUpdateTime sets the "last_update_time" field.
+func (m *AgentMutation) SetLastUpdateTime(t time.Time) {
+	m.last_update_time = &t
+}
+
+// LastUpdateTime returns the value of the "last_update_time" field in the mutation.
+func (m *AgentMutation) LastUpdateTime() (r time.Time, exists bool) {
+	v := m.last_update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLastUpdateTime returns the old "last_update_time" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldLastUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLastUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLastUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLastUpdateTime: %w", err)
+	}
+	return oldValue.LastUpdateTime, nil
+}
+
+// ResetLastUpdateTime resets all changes to the "last_update_time" field.
+func (m *AgentMutation) ResetLastUpdateTime() {
+	m.last_update_time = nil
 }
 
 // Where appends a list predicates to the AgentMutation builder.
@@ -231,9 +305,15 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 1)
-	if m.name != nil {
-		fields = append(fields, agent.FieldName)
+	fields := make([]string, 0, 3)
+	if m.peer_id != nil {
+		fields = append(fields, agent.FieldPeerID)
+	}
+	if m.active != nil {
+		fields = append(fields, agent.FieldActive)
+	}
+	if m.last_update_time != nil {
+		fields = append(fields, agent.FieldLastUpdateTime)
 	}
 	return fields
 }
@@ -243,8 +323,12 @@ func (m *AgentMutation) Fields() []string {
 // schema.
 func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case agent.FieldName:
-		return m.Name()
+	case agent.FieldPeerID:
+		return m.PeerID()
+	case agent.FieldActive:
+		return m.Active()
+	case agent.FieldLastUpdateTime:
+		return m.LastUpdateTime()
 	}
 	return nil, false
 }
@@ -254,8 +338,12 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case agent.FieldName:
-		return m.OldName(ctx)
+	case agent.FieldPeerID:
+		return m.OldPeerID(ctx)
+	case agent.FieldActive:
+		return m.OldActive(ctx)
+	case agent.FieldLastUpdateTime:
+		return m.OldLastUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -265,12 +353,26 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *AgentMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case agent.FieldName:
+	case agent.FieldPeerID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetName(v)
+		m.SetPeerID(v)
+		return nil
+	case agent.FieldActive:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetActive(v)
+		return nil
+	case agent.FieldLastUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLastUpdateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
@@ -321,8 +423,14 @@ func (m *AgentMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *AgentMutation) ResetField(name string) error {
 	switch name {
-	case agent.FieldName:
-		m.ResetName()
+	case agent.FieldPeerID:
+		m.ResetPeerID()
+		return nil
+	case agent.FieldActive:
+		m.ResetActive()
+		return nil
+	case agent.FieldLastUpdateTime:
+		m.ResetLastUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
@@ -387,6 +495,7 @@ type ComputeImageMutation struct {
 	tag           *string
 	port          *int32
 	addport       *int32
+	command       *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeImage, error)
@@ -661,6 +770,42 @@ func (m *ComputeImageMutation) ResetPort() {
 	m.addport = nil
 }
 
+// SetCommand sets the "command" field.
+func (m *ComputeImageMutation) SetCommand(s string) {
+	m.command = &s
+}
+
+// Command returns the value of the "command" field in the mutation.
+func (m *ComputeImageMutation) Command() (r string, exists bool) {
+	v := m.command
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCommand returns the old "command" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldCommand(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCommand requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+	}
+	return oldValue.Command, nil
+}
+
+// ResetCommand resets all changes to the "command" field.
+func (m *ComputeImageMutation) ResetCommand() {
+	m.command = nil
+}
+
 // Where appends a list predicates to the ComputeImageMutation builder.
 func (m *ComputeImageMutation) Where(ps ...predicate.ComputeImage) {
 	m.predicates = append(m.predicates, ps...)
@@ -695,7 +840,7 @@ func (m *ComputeImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeImageMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, computeimage.FieldName)
 	}
@@ -707,6 +852,9 @@ func (m *ComputeImageMutation) Fields() []string {
 	}
 	if m.port != nil {
 		fields = append(fields, computeimage.FieldPort)
+	}
+	if m.command != nil {
+		fields = append(fields, computeimage.FieldCommand)
 	}
 	return fields
 }
@@ -724,6 +872,8 @@ func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
 		return m.Tag()
 	case computeimage.FieldPort:
 		return m.Port()
+	case computeimage.FieldCommand:
+		return m.Command()
 	}
 	return nil, false
 }
@@ -741,6 +891,8 @@ func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldTag(ctx)
 	case computeimage.FieldPort:
 		return m.OldPort(ctx)
+	case computeimage.FieldCommand:
+		return m.OldCommand(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -777,6 +929,13 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPort(v)
+		return nil
+	case computeimage.FieldCommand:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCommand(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
@@ -854,6 +1013,9 @@ func (m *ComputeImageMutation) ResetField(name string) error {
 	case computeimage.FieldPort:
 		m.ResetPort()
 		return nil
+	case computeimage.FieldCommand:
+		m.ResetCommand()
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -917,11 +1079,13 @@ type ComputeInstanceMutation struct {
 	core            *string
 	memory          *string
 	image           *string
+	port            *string
 	expiration_time *time.Time
 	status          *int8
 	addstatus       *int8
 	container_id    *string
 	peer_id         *string
+	command         *string
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -1212,6 +1376,55 @@ func (m *ComputeInstanceMutation) ResetImage() {
 	m.image = nil
 }
 
+// SetPort sets the "port" field.
+func (m *ComputeInstanceMutation) SetPort(s string) {
+	m.port = &s
+}
+
+// Port returns the value of the "port" field in the mutation.
+func (m *ComputeInstanceMutation) Port() (r string, exists bool) {
+	v := m.port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPort returns the old "port" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldPort(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPort: %w", err)
+	}
+	return oldValue.Port, nil
+}
+
+// ClearPort clears the value of the "port" field.
+func (m *ComputeInstanceMutation) ClearPort() {
+	m.port = nil
+	m.clearedFields[computeinstance.FieldPort] = struct{}{}
+}
+
+// PortCleared returns if the "port" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) PortCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldPort]
+	return ok
+}
+
+// ResetPort resets all changes to the "port" field.
+func (m *ComputeInstanceMutation) ResetPort() {
+	m.port = nil
+	delete(m.clearedFields, computeinstance.FieldPort)
+}
+
 // SetExpirationTime sets the "expiration_time" field.
 func (m *ComputeInstanceMutation) SetExpirationTime(t time.Time) {
 	m.expiration_time = &t
@@ -1402,6 +1615,55 @@ func (m *ComputeInstanceMutation) ResetPeerID() {
 	delete(m.clearedFields, computeinstance.FieldPeerID)
 }
 
+// SetCommand sets the "command" field.
+func (m *ComputeInstanceMutation) SetCommand(s string) {
+	m.command = &s
+}
+
+// Command returns the value of the "command" field in the mutation.
+func (m *ComputeInstanceMutation) Command() (r string, exists bool) {
+	v := m.command
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCommand returns the old "command" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldCommand(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCommand requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+	}
+	return oldValue.Command, nil
+}
+
+// ClearCommand clears the value of the "command" field.
+func (m *ComputeInstanceMutation) ClearCommand() {
+	m.command = nil
+	m.clearedFields[computeinstance.FieldCommand] = struct{}{}
+}
+
+// CommandCleared returns if the "command" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) CommandCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldCommand]
+	return ok
+}
+
+// ResetCommand resets all changes to the "command" field.
+func (m *ComputeInstanceMutation) ResetCommand() {
+	m.command = nil
+	delete(m.clearedFields, computeinstance.FieldCommand)
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -1436,7 +1698,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 11)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -1452,6 +1714,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.image != nil {
 		fields = append(fields, computeinstance.FieldImage)
 	}
+	if m.port != nil {
+		fields = append(fields, computeinstance.FieldPort)
+	}
 	if m.expiration_time != nil {
 		fields = append(fields, computeinstance.FieldExpirationTime)
 	}
@@ -1463,6 +1728,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	}
 	if m.peer_id != nil {
 		fields = append(fields, computeinstance.FieldPeerID)
+	}
+	if m.command != nil {
+		fields = append(fields, computeinstance.FieldCommand)
 	}
 	return fields
 }
@@ -1482,6 +1750,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.Memory()
 	case computeinstance.FieldImage:
 		return m.Image()
+	case computeinstance.FieldPort:
+		return m.Port()
 	case computeinstance.FieldExpirationTime:
 		return m.ExpirationTime()
 	case computeinstance.FieldStatus:
@@ -1490,6 +1760,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.ContainerID()
 	case computeinstance.FieldPeerID:
 		return m.PeerID()
+	case computeinstance.FieldCommand:
+		return m.Command()
 	}
 	return nil, false
 }
@@ -1509,6 +1781,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldMemory(ctx)
 	case computeinstance.FieldImage:
 		return m.OldImage(ctx)
+	case computeinstance.FieldPort:
+		return m.OldPort(ctx)
 	case computeinstance.FieldExpirationTime:
 		return m.OldExpirationTime(ctx)
 	case computeinstance.FieldStatus:
@@ -1517,6 +1791,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldContainerID(ctx)
 	case computeinstance.FieldPeerID:
 		return m.OldPeerID(ctx)
+	case computeinstance.FieldCommand:
+		return m.OldCommand(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -1561,6 +1837,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetImage(v)
 		return nil
+	case computeinstance.FieldPort:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPort(v)
+		return nil
 	case computeinstance.FieldExpirationTime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -1588,6 +1871,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPeerID(v)
+		return nil
+	case computeinstance.FieldCommand:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCommand(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -1634,11 +1924,17 @@ func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *ComputeInstanceMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(computeinstance.FieldPort) {
+		fields = append(fields, computeinstance.FieldPort)
+	}
 	if m.FieldCleared(computeinstance.FieldContainerID) {
 		fields = append(fields, computeinstance.FieldContainerID)
 	}
 	if m.FieldCleared(computeinstance.FieldPeerID) {
 		fields = append(fields, computeinstance.FieldPeerID)
+	}
+	if m.FieldCleared(computeinstance.FieldCommand) {
+		fields = append(fields, computeinstance.FieldCommand)
 	}
 	return fields
 }
@@ -1654,11 +1950,17 @@ func (m *ComputeInstanceMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ComputeInstanceMutation) ClearField(name string) error {
 	switch name {
+	case computeinstance.FieldPort:
+		m.ClearPort()
+		return nil
 	case computeinstance.FieldContainerID:
 		m.ClearContainerID()
 		return nil
 	case computeinstance.FieldPeerID:
 		m.ClearPeerID()
+		return nil
+	case computeinstance.FieldCommand:
+		m.ClearCommand()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance nullable field %s", name)
@@ -1683,6 +1985,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 	case computeinstance.FieldImage:
 		m.ResetImage()
 		return nil
+	case computeinstance.FieldPort:
+		m.ResetPort()
+		return nil
 	case computeinstance.FieldExpirationTime:
 		m.ResetExpirationTime()
 		return nil
@@ -1694,6 +1999,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldPeerID:
 		m.ResetPeerID()
+		return nil
+	case computeinstance.FieldCommand:
+		m.ResetCommand()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)

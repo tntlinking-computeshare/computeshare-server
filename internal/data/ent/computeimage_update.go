@@ -58,6 +58,12 @@ func (ciu *ComputeImageUpdate) AddPort(i int32) *ComputeImageUpdate {
 	return ciu
 }
 
+// SetCommand sets the "command" field.
+func (ciu *ComputeImageUpdate) SetCommand(s string) *ComputeImageUpdate {
+	ciu.mutation.SetCommand(s)
+	return ciu
+}
+
 // Mutation returns the ComputeImageMutation object of the builder.
 func (ciu *ComputeImageUpdate) Mutation() *ComputeImageMutation {
 	return ciu.mutation
@@ -137,6 +143,9 @@ func (ciu *ComputeImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ciu.mutation.AddedPort(); ok {
 		_spec.AddField(computeimage.FieldPort, field.TypeInt32, value)
 	}
+	if value, ok := ciu.mutation.Command(); ok {
+		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computeimage.Label}
@@ -185,6 +194,12 @@ func (ciuo *ComputeImageUpdateOne) SetPort(i int32) *ComputeImageUpdateOne {
 // AddPort adds i to the "port" field.
 func (ciuo *ComputeImageUpdateOne) AddPort(i int32) *ComputeImageUpdateOne {
 	ciuo.mutation.AddPort(i)
+	return ciuo
+}
+
+// SetCommand sets the "command" field.
+func (ciuo *ComputeImageUpdateOne) SetCommand(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetCommand(s)
 	return ciuo
 }
 
@@ -296,6 +311,9 @@ func (ciuo *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeI
 	}
 	if value, ok := ciuo.mutation.AddedPort(); ok {
 		_spec.AddField(computeimage.FieldPort, field.TypeInt32, value)
+	}
+	if value, ok := ciuo.mutation.Command(); ok {
+		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
 	}
 	_node = &ComputeImage{config: ciuo.config}
 	_spec.Assign = _node.assignValues

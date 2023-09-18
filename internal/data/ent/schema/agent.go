@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
+	"time"
 )
 
 // Agent holds the schema definition for the Agent entity.
@@ -16,7 +17,9 @@ type Agent struct {
 func (Agent) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New),
-		field.String("name").NotEmpty(),
+		field.String("peer_id").Unique().NotEmpty(),
+		field.Bool("active").Default(true).Comment("是否活动"),
+		field.Time("last_update_time").Default(time.Now).UpdateDefault(time.Now).Comment("最后更新时间"),
 	}
 }
 

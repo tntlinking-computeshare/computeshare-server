@@ -32,7 +32,8 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 	s.log.Infof("input data %v", req)
 
 	agent := &biz.Agent{
-		Name: req.GetName(),
+		PeerId: req.GetName(),
+		Active: true,
 	}
 	err := s.uc.Create(ctx, agent)
 	return &pb.CreateAgentReply{
@@ -56,7 +57,7 @@ func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*
 	agent, err := s.uc.Get(ctx, id)
 	return &pb.GetAgentReply{
 		Id:   agent.ID.String(),
-		Name: agent.Name,
+		Name: agent.PeerId,
 	}, err
 }
 func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) (*pb.ListAgentReply, error) {
