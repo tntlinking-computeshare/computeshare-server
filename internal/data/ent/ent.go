@@ -6,19 +6,21 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 	"reflect"
 	"sync"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -79,13 +81,15 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			agent.Table:           agent.ValidColumn,
-			computeimage.Table:    computeimage.ValidColumn,
-			computeinstance.Table: computeinstance.ValidColumn,
-			computespec.Table:     computespec.ValidColumn,
-			employee.Table:        employee.ValidColumn,
-			storage.Table:         storage.ValidColumn,
-			user.Table:            user.ValidColumn,
+			agent.Table:                 agent.ValidColumn,
+			computeimage.Table:          computeimage.ValidColumn,
+			computeinstance.Table:       computeinstance.ValidColumn,
+			computespec.Table:           computespec.ValidColumn,
+			employee.Table:              employee.ValidColumn,
+			script.Table:                script.ValidColumn,
+			scriptexecutionrecord.Table: scriptexecutionrecord.ValidColumn,
+			storage.Table:               storage.ValidColumn,
+			user.Table:                  user.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

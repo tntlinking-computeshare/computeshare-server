@@ -5,13 +5,13 @@ package ent
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeSpecQuery is the builder for querying ComputeSpec entities.

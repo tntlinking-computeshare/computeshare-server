@@ -4,13 +4,13 @@ package ent
 
 import (
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 )
 
 // Storage is the model entity for the Storage schema.

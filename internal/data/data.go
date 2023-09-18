@@ -30,6 +30,8 @@ var ProviderSet = wire.NewSet(
 	NewComputeSpecRepo,
 	NewComputeInstanceRepo,
 	NewComputeImageRepo,
+	NewScriptRepo,
+	NewScriptExecutionRecordRepo,
 )
 
 // Data .

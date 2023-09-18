@@ -5,13 +5,13 @@ package ent
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeImageQuery is the builder for querying ComputeImage entities.

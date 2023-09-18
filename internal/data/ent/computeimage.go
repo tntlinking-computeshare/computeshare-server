@@ -4,11 +4,11 @@ package ent
 
 import (
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 )
 
 // ComputeImage is the model entity for the ComputeImage schema.

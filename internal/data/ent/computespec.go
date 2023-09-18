@@ -4,11 +4,11 @@ package ent
 
 import (
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 )
 
 // ComputeSpec is the model entity for the ComputeSpec schema.
