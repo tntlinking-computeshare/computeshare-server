@@ -23,7 +23,7 @@ service ComputePower {
 		};
 	};
 	//执行脚本
-	rpc RunPythonPackage (RunPythonPackageRequest) returns (RunPythonPackageReply){
+	rpc RunPythonPackage (RunPythonPackageServerRequest) returns (RunPythonPackageServerReply){
 		option (google.api.http) = {
 			post: "/v1/compute-power/python",
 			body: "*",
@@ -77,10 +77,10 @@ message GetScriptListReply {
 	int32 size = 4;
 }
 
-message RunPythonPackageRequest {
+message RunPythonPackageServerRequest {
 	int32 id = 2;
 }
-message RunPythonPackageReply {
+message RunPythonPackageServerReply {
 	int32 id = 1;
 	int32 taskNumber = 2;
 	string scriptName = 3;

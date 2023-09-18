@@ -63,12 +63,12 @@ func (s *ComputePowerService) GetScriptList(ctx context.Context, req *pb.GetScri
 	}
 	return &pb.GetScriptListReply{List: pointerList, Total: total, Page: req.GetPage(), Size: req.GetSize()}, nil
 }
-func (s *ComputePowerService) RunPythonPackage(ctx context.Context, req *pb.RunPythonPackageRequest) (*pb.RunPythonPackageReply, error) {
+func (s *ComputePowerService) RunPythonPackage(ctx context.Context, req *pb.RunPythonPackageServerRequest) (*pb.RunPythonPackageServerReply, error) {
 	script, err := s.uc.RunPythonPackage(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	return &pb.RunPythonPackageReply{
+	return &pb.RunPythonPackageServerReply{
 		Id:            script.ID,
 		TaskNumber:    script.TaskNumber,
 		ScriptName:    script.ScriptName,

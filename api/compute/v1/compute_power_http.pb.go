@@ -36,7 +36,7 @@ type ComputePowerHTTPServer interface {
 	// GetScriptList查询脚本列表
 	GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error)
 	// RunPythonPackage执行脚本
-	RunPythonPackage(context.Context, *RunPythonPackageRequest) (*RunPythonPackageReply, error)
+	RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error)
 	// UploadScriptFile上传脚本（http接口另外写）
 	UploadScriptFile(context.Context, *UploadScriptFileRequest) (*UploadScriptFileReply, error)
 }
@@ -94,7 +94,7 @@ func _ComputePower_GetScriptList0_HTTP_Handler(srv ComputePowerHTTPServer) func(
 
 func _ComputePower_RunPythonPackage0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in RunPythonPackageRequest
+		var in RunPythonPackageServerRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
@@ -103,13 +103,13 @@ func _ComputePower_RunPythonPackage0_HTTP_Handler(srv ComputePowerHTTPServer) fu
 		}
 		http.SetOperation(ctx, OperationComputePowerRunPythonPackage)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.RunPythonPackage(ctx, req.(*RunPythonPackageRequest))
+			return srv.RunPythonPackage(ctx, req.(*RunPythonPackageServerRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*RunPythonPackageReply)
+		reply := out.(*RunPythonPackageServerReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -188,7 +188,7 @@ type ComputePowerHTTPClient interface {
 	DownloadScriptExecuteResult(ctx context.Context, req *DownloadScriptExecuteResultRequest, opts ...http.CallOption) (rsp *DownloadScriptExecuteResultReply, err error)
 	GetScriptInfo(ctx context.Context, req *GetScriptInfoRequest, opts ...http.CallOption) (rsp *GetScriptInfoReply, err error)
 	GetScriptList(ctx context.Context, req *GetScriptListRequest, opts ...http.CallOption) (rsp *GetScriptListReply, err error)
-	RunPythonPackage(ctx context.Context, req *RunPythonPackageRequest, opts ...http.CallOption) (rsp *RunPythonPackageReply, err error)
+	RunPythonPackage(ctx context.Context, req *RunPythonPackageServerRequest, opts ...http.CallOption) (rsp *RunPythonPackageServerReply, err error)
 	UploadScriptFile(ctx context.Context, req *UploadScriptFileRequest, opts ...http.CallOption) (rsp *UploadScriptFileReply, err error)
 }
 
@@ -252,8 +252,8 @@ func (c *ComputePowerHTTPClientImpl) GetScriptList(ctx context.Context, in *GetS
 	return &out, err
 }
 
-func (c *ComputePowerHTTPClientImpl) RunPythonPackage(ctx context.Context, in *RunPythonPackageRequest, opts ...http.CallOption) (*RunPythonPackageReply, error) {
-	var out RunPythonPackageReply
+func (c *ComputePowerHTTPClientImpl) RunPythonPackage(ctx context.Context, in *RunPythonPackageServerRequest, opts ...http.CallOption) (*RunPythonPackageServerReply, error) {
+	var out RunPythonPackageServerReply
 	pattern := "/v1/compute-power/python"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputePowerRunPythonPackage))

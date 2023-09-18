@@ -36,7 +36,7 @@ type ComputePowerClient interface {
 	// 查询脚本列表
 	GetScriptList(ctx context.Context, in *GetScriptListRequest, opts ...grpc.CallOption) (*GetScriptListReply, error)
 	// 执行脚本
-	RunPythonPackage(ctx context.Context, in *RunPythonPackageRequest, opts ...grpc.CallOption) (*RunPythonPackageReply, error)
+	RunPythonPackage(ctx context.Context, in *RunPythonPackageServerRequest, opts ...grpc.CallOption) (*RunPythonPackageServerReply, error)
 	// 取消执行
 	CancelExecPythonPackage(ctx context.Context, in *CancelExecPythonPackageRequest, opts ...grpc.CallOption) (*CancelExecPythonPackageReply, error)
 	// 通过id
@@ -71,8 +71,8 @@ func (c *computePowerClient) GetScriptList(ctx context.Context, in *GetScriptLis
 	return out, nil
 }
 
-func (c *computePowerClient) RunPythonPackage(ctx context.Context, in *RunPythonPackageRequest, opts ...grpc.CallOption) (*RunPythonPackageReply, error) {
-	out := new(RunPythonPackageReply)
+func (c *computePowerClient) RunPythonPackage(ctx context.Context, in *RunPythonPackageServerRequest, opts ...grpc.CallOption) (*RunPythonPackageServerReply, error) {
+	out := new(RunPythonPackageServerReply)
 	err := c.cc.Invoke(ctx, ComputePower_RunPythonPackage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ type ComputePowerServer interface {
 	// 查询脚本列表
 	GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error)
 	// 执行脚本
-	RunPythonPackage(context.Context, *RunPythonPackageRequest) (*RunPythonPackageReply, error)
+	RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error)
 	// 取消执行
 	CancelExecPythonPackage(context.Context, *CancelExecPythonPackageRequest) (*CancelExecPythonPackageReply, error)
 	// 通过id
@@ -136,7 +136,7 @@ func (UnimplementedComputePowerServer) UploadScriptFile(context.Context, *Upload
 func (UnimplementedComputePowerServer) GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetScriptList not implemented")
 }
-func (UnimplementedComputePowerServer) RunPythonPackage(context.Context, *RunPythonPackageRequest) (*RunPythonPackageReply, error) {
+func (UnimplementedComputePowerServer) RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunPythonPackage not implemented")
 }
 func (UnimplementedComputePowerServer) CancelExecPythonPackage(context.Context, *CancelExecPythonPackageRequest) (*CancelExecPythonPackageReply, error) {
@@ -198,7 +198,7 @@ func _ComputePower_GetScriptList_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _ComputePower_RunPythonPackage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RunPythonPackageRequest)
+	in := new(RunPythonPackageServerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -210,7 +210,7 @@ func _ComputePower_RunPythonPackage_Handler(srv interface{}, ctx context.Context
 		FullMethod: ComputePower_RunPythonPackage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputePowerServer).RunPythonPackage(ctx, req.(*RunPythonPackageRequest))
+		return srv.(ComputePowerServer).RunPythonPackage(ctx, req.(*RunPythonPackageServerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
