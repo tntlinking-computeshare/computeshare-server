@@ -114,6 +114,51 @@ var (
 		Columns:    EmployeesColumns,
 		PrimaryKey: []*schema.Column{EmployeesColumns[0]},
 	}
+	// ScriptsColumns holds the columns for the "scripts" table.
+	ScriptsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "task_number", Type: field.TypeInt32},
+		{Name: "script_name", Type: field.TypeString},
+		{Name: "file_address", Type: field.TypeString},
+		{Name: "script_content", Type: field.TypeString, Size: 2147483647},
+		{Name: "execute_state", Type: field.TypeInt32, Default: 0},
+		{Name: "execute_result", Type: field.TypeString, Size: 2147483647},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+	}
+	// ScriptsTable holds the schema information for the "scripts" table.
+	ScriptsTable = &schema.Table{
+		Name:       "scripts",
+		Columns:    ScriptsColumns,
+		PrimaryKey: []*schema.Column{ScriptsColumns[0]},
+	}
+	// ScriptExecutionRecordsColumns holds the columns for the "script_execution_records" table.
+	ScriptExecutionRecordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "fk_script_id", Type: field.TypeInt32},
+		{Name: "script_content", Type: field.TypeString, Size: 2147483647},
+		{Name: "execute_state", Type: field.TypeInt32},
+		{Name: "execute_result", Type: field.TypeString, Size: 2147483647},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+		{Name: "script_script_execution_records", Type: field.TypeInt32, Nullable: true},
+	}
+	// ScriptExecutionRecordsTable holds the schema information for the "script_execution_records" table.
+	ScriptExecutionRecordsTable = &schema.Table{
+		Name:       "script_execution_records",
+		Columns:    ScriptExecutionRecordsColumns,
+		PrimaryKey: []*schema.Column{ScriptExecutionRecordsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "script_execution_records_scripts_scriptExecutionRecords",
+				Columns:    []*schema.Column{ScriptExecutionRecordsColumns[8]},
+				RefColumns: []*schema.Column{ScriptsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// StoragesColumns holds the columns for the "storages" table.
 	StoragesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -174,10 +219,13 @@ var (
 		ComputeInstancesTable,
 		ComputeSpecsTable,
 		EmployeesTable,
+		ScriptsTable,
+		ScriptExecutionRecordsTable,
 		StoragesTable,
 		UsersTable,
 	}
 )
 
 func init() {
+	ScriptExecutionRecordsTable.ForeignKeys[0].RefTable = ScriptsTable
 }

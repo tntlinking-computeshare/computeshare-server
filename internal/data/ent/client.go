@@ -14,11 +14,14 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
@@ -38,6 +41,10 @@ type Client struct {
 	ComputeSpec *ComputeSpecClient
 	// Employee is the client for interacting with the Employee builders.
 	Employee *EmployeeClient
+	// Script is the client for interacting with the Script builders.
+	Script *ScriptClient
+	// ScriptExecutionRecord is the client for interacting with the ScriptExecutionRecord builders.
+	ScriptExecutionRecord *ScriptExecutionRecordClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
 	// User is the client for interacting with the User builders.
@@ -60,6 +67,8 @@ func (c *Client) init() {
 	c.ComputeInstance = NewComputeInstanceClient(c.config)
 	c.ComputeSpec = NewComputeSpecClient(c.config)
 	c.Employee = NewEmployeeClient(c.config)
+	c.Script = NewScriptClient(c.config)
+	c.ScriptExecutionRecord = NewScriptExecutionRecordClient(c.config)
 	c.Storage = NewStorageClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -142,15 +151,17 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		ComputeImage:    NewComputeImageClient(cfg),
-		ComputeInstance: NewComputeInstanceClient(cfg),
-		ComputeSpec:     NewComputeSpecClient(cfg),
-		Employee:        NewEmployeeClient(cfg),
-		Storage:         NewStorageClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		ComputeImage:          NewComputeImageClient(cfg),
+		ComputeInstance:       NewComputeInstanceClient(cfg),
+		ComputeSpec:           NewComputeSpecClient(cfg),
+		Employee:              NewEmployeeClient(cfg),
+		Script:                NewScriptClient(cfg),
+		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
+		Storage:               NewStorageClient(cfg),
+		User:                  NewUserClient(cfg),
 	}, nil
 }
 
@@ -168,15 +179,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:             ctx,
-		config:          cfg,
-		Agent:           NewAgentClient(cfg),
-		ComputeImage:    NewComputeImageClient(cfg),
-		ComputeInstance: NewComputeInstanceClient(cfg),
-		ComputeSpec:     NewComputeSpecClient(cfg),
-		Employee:        NewEmployeeClient(cfg),
-		Storage:         NewStorageClient(cfg),
-		User:            NewUserClient(cfg),
+		ctx:                   ctx,
+		config:                cfg,
+		Agent:                 NewAgentClient(cfg),
+		ComputeImage:          NewComputeImageClient(cfg),
+		ComputeInstance:       NewComputeInstanceClient(cfg),
+		ComputeSpec:           NewComputeSpecClient(cfg),
+		Employee:              NewEmployeeClient(cfg),
+		Script:                NewScriptClient(cfg),
+		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
+		Storage:               NewStorageClient(cfg),
+		User:                  NewUserClient(cfg),
 	}, nil
 }
 
@@ -206,8 +219,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Storage, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee, c.Script,
+		c.ScriptExecutionRecord, c.Storage, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -217,8 +230,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Storage, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee, c.Script,
+		c.ScriptExecutionRecord, c.Storage, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -237,6 +250,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ComputeSpec.mutate(ctx, m)
 	case *EmployeeMutation:
 		return c.Employee.mutate(ctx, m)
+	case *ScriptMutation:
+		return c.Script.mutate(ctx, m)
+	case *ScriptExecutionRecordMutation:
+		return c.ScriptExecutionRecord.mutate(ctx, m)
 	case *StorageMutation:
 		return c.Storage.mutate(ctx, m)
 	case *UserMutation:
@@ -836,6 +853,274 @@ func (c *EmployeeClient) mutate(ctx context.Context, m *EmployeeMutation) (Value
 	}
 }
 
+// ScriptClient is a client for the Script schema.
+type ScriptClient struct {
+	config
+}
+
+// NewScriptClient returns a client for the Script from the given config.
+func NewScriptClient(c config) *ScriptClient {
+	return &ScriptClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `script.Hooks(f(g(h())))`.
+func (c *ScriptClient) Use(hooks ...Hook) {
+	c.hooks.Script = append(c.hooks.Script, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `script.Intercept(f(g(h())))`.
+func (c *ScriptClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Script = append(c.inters.Script, interceptors...)
+}
+
+// Create returns a builder for creating a Script entity.
+func (c *ScriptClient) Create() *ScriptCreate {
+	mutation := newScriptMutation(c.config, OpCreate)
+	return &ScriptCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Script entities.
+func (c *ScriptClient) CreateBulk(builders ...*ScriptCreate) *ScriptCreateBulk {
+	return &ScriptCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Script.
+func (c *ScriptClient) Update() *ScriptUpdate {
+	mutation := newScriptMutation(c.config, OpUpdate)
+	return &ScriptUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScriptClient) UpdateOne(s *Script) *ScriptUpdateOne {
+	mutation := newScriptMutation(c.config, OpUpdateOne, withScript(s))
+	return &ScriptUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScriptClient) UpdateOneID(id int32) *ScriptUpdateOne {
+	mutation := newScriptMutation(c.config, OpUpdateOne, withScriptID(id))
+	return &ScriptUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Script.
+func (c *ScriptClient) Delete() *ScriptDelete {
+	mutation := newScriptMutation(c.config, OpDelete)
+	return &ScriptDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScriptClient) DeleteOne(s *Script) *ScriptDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScriptClient) DeleteOneID(id int32) *ScriptDeleteOne {
+	builder := c.Delete().Where(script.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScriptDeleteOne{builder}
+}
+
+// Query returns a query builder for Script.
+func (c *ScriptClient) Query() *ScriptQuery {
+	return &ScriptQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScript},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Script entity by its id.
+func (c *ScriptClient) Get(ctx context.Context, id int32) (*Script, error) {
+	return c.Query().Where(script.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScriptClient) GetX(ctx context.Context, id int32) *Script {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryScriptExecutionRecords queries the scriptExecutionRecords edge of a Script.
+func (c *ScriptClient) QueryScriptExecutionRecords(s *Script) *ScriptExecutionRecordQuery {
+	query := (&ScriptExecutionRecordClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(script.Table, script.FieldID, id),
+			sqlgraph.To(scriptexecutionrecord.Table, scriptexecutionrecord.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, script.ScriptExecutionRecordsTable, script.ScriptExecutionRecordsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScriptClient) Hooks() []Hook {
+	return c.hooks.Script
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScriptClient) Interceptors() []Interceptor {
+	return c.inters.Script
+}
+
+func (c *ScriptClient) mutate(ctx context.Context, m *ScriptMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScriptCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScriptUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScriptUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScriptDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Script mutation op: %q", m.Op())
+	}
+}
+
+// ScriptExecutionRecordClient is a client for the ScriptExecutionRecord schema.
+type ScriptExecutionRecordClient struct {
+	config
+}
+
+// NewScriptExecutionRecordClient returns a client for the ScriptExecutionRecord from the given config.
+func NewScriptExecutionRecordClient(c config) *ScriptExecutionRecordClient {
+	return &ScriptExecutionRecordClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scriptexecutionrecord.Hooks(f(g(h())))`.
+func (c *ScriptExecutionRecordClient) Use(hooks ...Hook) {
+	c.hooks.ScriptExecutionRecord = append(c.hooks.ScriptExecutionRecord, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scriptexecutionrecord.Intercept(f(g(h())))`.
+func (c *ScriptExecutionRecordClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScriptExecutionRecord = append(c.inters.ScriptExecutionRecord, interceptors...)
+}
+
+// Create returns a builder for creating a ScriptExecutionRecord entity.
+func (c *ScriptExecutionRecordClient) Create() *ScriptExecutionRecordCreate {
+	mutation := newScriptExecutionRecordMutation(c.config, OpCreate)
+	return &ScriptExecutionRecordCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScriptExecutionRecord entities.
+func (c *ScriptExecutionRecordClient) CreateBulk(builders ...*ScriptExecutionRecordCreate) *ScriptExecutionRecordCreateBulk {
+	return &ScriptExecutionRecordCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScriptExecutionRecord.
+func (c *ScriptExecutionRecordClient) Update() *ScriptExecutionRecordUpdate {
+	mutation := newScriptExecutionRecordMutation(c.config, OpUpdate)
+	return &ScriptExecutionRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScriptExecutionRecordClient) UpdateOne(ser *ScriptExecutionRecord) *ScriptExecutionRecordUpdateOne {
+	mutation := newScriptExecutionRecordMutation(c.config, OpUpdateOne, withScriptExecutionRecord(ser))
+	return &ScriptExecutionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScriptExecutionRecordClient) UpdateOneID(id int32) *ScriptExecutionRecordUpdateOne {
+	mutation := newScriptExecutionRecordMutation(c.config, OpUpdateOne, withScriptExecutionRecordID(id))
+	return &ScriptExecutionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScriptExecutionRecord.
+func (c *ScriptExecutionRecordClient) Delete() *ScriptExecutionRecordDelete {
+	mutation := newScriptExecutionRecordMutation(c.config, OpDelete)
+	return &ScriptExecutionRecordDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScriptExecutionRecordClient) DeleteOne(ser *ScriptExecutionRecord) *ScriptExecutionRecordDeleteOne {
+	return c.DeleteOneID(ser.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScriptExecutionRecordClient) DeleteOneID(id int32) *ScriptExecutionRecordDeleteOne {
+	builder := c.Delete().Where(scriptexecutionrecord.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScriptExecutionRecordDeleteOne{builder}
+}
+
+// Query returns a query builder for ScriptExecutionRecord.
+func (c *ScriptExecutionRecordClient) Query() *ScriptExecutionRecordQuery {
+	return &ScriptExecutionRecordQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScriptExecutionRecord},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScriptExecutionRecord entity by its id.
+func (c *ScriptExecutionRecordClient) Get(ctx context.Context, id int32) (*ScriptExecutionRecord, error) {
+	return c.Query().Where(scriptexecutionrecord.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScriptExecutionRecordClient) GetX(ctx context.Context, id int32) *ScriptExecutionRecord {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryScript queries the script edge of a ScriptExecutionRecord.
+func (c *ScriptExecutionRecordClient) QueryScript(ser *ScriptExecutionRecord) *ScriptQuery {
+	query := (&ScriptClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ser.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scriptexecutionrecord.Table, scriptexecutionrecord.FieldID, id),
+			sqlgraph.To(script.Table, script.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scriptexecutionrecord.ScriptTable, scriptexecutionrecord.ScriptColumn),
+		)
+		fromV = sqlgraph.Neighbors(ser.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScriptExecutionRecordClient) Hooks() []Hook {
+	return c.hooks.ScriptExecutionRecord
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScriptExecutionRecordClient) Interceptors() []Interceptor {
+	return c.inters.ScriptExecutionRecord
+}
+
+func (c *ScriptExecutionRecordClient) mutate(ctx context.Context, m *ScriptExecutionRecordMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScriptExecutionRecordCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScriptExecutionRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScriptExecutionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScriptExecutionRecordDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ScriptExecutionRecord mutation op: %q", m.Op())
+	}
+}
+
 // StorageClient is a client for the Storage schema.
 type StorageClient struct {
 	config
@@ -1075,11 +1360,11 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Storage,
-		User []ent.Hook
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Script,
+		ScriptExecutionRecord, Storage, User []ent.Hook
 	}
 	inters struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Storage,
-		User []ent.Interceptor
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Script,
+		ScriptExecutionRecord, Storage, User []ent.Interceptor
 	}
 )

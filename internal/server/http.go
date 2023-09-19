@@ -40,6 +40,7 @@ func NewHTTPServer(c *conf.Server,
 	storageService *service.StorageService,
 	userService *service.UserService,
 	instanceService *service.ComputeInstanceService,
+	powerService *service.ComputePowerService,
 	logger log.Logger) *http.Server {
 
 	//jwtMiddlewire := selector.Server(
@@ -77,10 +78,13 @@ func NewHTTPServer(c *conf.Server,
 	agentV1.RegisterAgentHTTPServer(srv, agenter)
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
+	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))
+	srv.Route("/").POST("/v1/compute-power/upload", computeV1.Compute_Power_UploadSceipt_Extend_HTTP_Handler(powerService))
+	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.HandleFunc("/v1/vm/terminal", instanceService.Terminal)
 	return srv
 }

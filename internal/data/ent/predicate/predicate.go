@@ -21,6 +21,12 @@ type ComputeSpec func(*sql.Selector)
 // Employee is the predicate function for employee builders.
 type Employee func(*sql.Selector)
 
+// Script is the predicate function for script builders.
+type Script func(*sql.Selector)
+
+// ScriptExecutionRecord is the predicate function for scriptexecutionrecord builders.
+type ScriptExecutionRecord func(*sql.Selector)
+
 // Storage is the predicate function for storage builders.
 type Storage func(*sql.Selector)
 

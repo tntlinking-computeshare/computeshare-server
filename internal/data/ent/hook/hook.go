@@ -69,6 +69,30 @@ func (f EmployeeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmployeeMutation", m)
 }
 
+// The ScriptFunc type is an adapter to allow the use of ordinary
+// function as Script mutator.
+type ScriptFunc func(context.Context, *ent.ScriptMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScriptFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ScriptMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScriptMutation", m)
+}
+
+// The ScriptExecutionRecordFunc type is an adapter to allow the use of ordinary
+// function as ScriptExecutionRecord mutator.
+type ScriptExecutionRecordFunc func(context.Context, *ent.ScriptExecutionRecordMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScriptExecutionRecordFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ScriptExecutionRecordMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ScriptExecutionRecordMutation", m)
+}
+
 // The StorageFunc type is an adapter to allow the use of ordinary
 // function as Storage mutator.
 type StorageFunc func(context.Context, *ent.StorageMutation) (ent.Value, error)

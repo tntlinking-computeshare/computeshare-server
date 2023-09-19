@@ -12,8 +12,10 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
+	github.com/gorilla/websocket v1.5.0
 	github.com/ipfs/boxo v0.11.0
 	github.com/ipfs/kubo v0.22.0
+	github.com/jinzhu/copier v0.4.0
 	github.com/libp2p/go-libp2p v0.29.2
 	github.com/mohaijiang/computeshare-client v0.0.1
 	github.com/multiformats/go-multiaddr v0.10.1
@@ -84,7 +86,6 @@ require (
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/pprof v0.0.0-20230705174524-200ffdc848b8 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0 // indirect
 	github.com/hannahhoward/go-pubsub v0.0.0-20200423002714-8d62886cc36e // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
