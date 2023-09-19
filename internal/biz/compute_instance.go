@@ -13,7 +13,6 @@ import (
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	pb "github.com/mohaijiang/computeshare-client/api/network/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
-	"github.com/mohaijiang/computeshare-server/third_party/p2p"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/samber/lo"
 	"golang.org/x/exp/rand"
@@ -109,7 +108,7 @@ type ComputeInstanceUsercase struct {
 	instanceRepo ComputeInstanceRepo
 	imageRepo    ComputeImageRepo
 	agentRepo    AgentRepo
-	ipfsNode     *core.IpfsNode
+	p2pUsecase   *P2PUsecase
 	log          *log.Helper
 }
 
@@ -119,12 +118,13 @@ func NewComputeInstanceUsercase(
 	imageRepo ComputeImageRepo,
 	ipfsNode *core.IpfsNode,
 	agentRepo AgentRepo,
+	p2pUsecase *P2PUsecase,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:     specRepo,
 		instanceRepo: instanceRepo,
 		imageRepo:    imageRepo,
-		ipfsNode:     ipfsNode,
+		p2pUsecase:   p2pUsecase,
 		agentRepo:    agentRepo,
 		log:          log.NewHelper(logger),
 	}
@@ -169,7 +169,6 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	err = uc.instanceRepo.Create(ctx, instance)
 
 	// 选择一个agent节点进行通信
-
 	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, instance.Core, instance.Memory)
 	if err != nil {
 		return nil, err
@@ -250,8 +249,7 @@ func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.V
 
 func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, string, error) {
 	ctx := context.Background()
-	p2pService := p2p.NewP2pService(uc.ipfsNode)
-	pingOk := p2pService.Ping(ctx, peerId)
+	pingOk := uc.p2pUsecase.Ping(ctx, peerId)
 
 	fmt.Println("pingOk: ", pingOk)
 	if !pingOk {
@@ -260,21 +258,21 @@ func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, stri
 		return "", "", nil
 	}
 
-	list, err := p2pService.ListListen(ctx, nil)
+	list, err := uc.p2pUsecase.ListListen(ctx, nil)
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error("查询p2p 列表失败")
 		return "", "", nil
 	}
 
-	t, bool := lo.Find(list.Result, func(item *pb.ListenReply) bool {
+	t, find := lo.Find(list.Result, func(item *pb.ListenReply) bool {
 		if item == nil {
 			return false
 		}
 		return item.TargetAddress == fmt.Sprintf("/p2p/%s", peerId)
 	})
 
-	if bool {
+	if find {
 		listenAddress := t.ListenAddress
 		// 定义正则表达式模式，用于匹配IP地址和端口号
 		pattern := `\/ip4\/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\/tcp\/([0-9]+)`
@@ -309,11 +307,11 @@ func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, stri
 	targetOpt := fmt.Sprintf("/p2p/%s", peerId)
 	proto := "/x/ssh"
 
-	err = p2pService.CheckPort(listen)
+	err = uc.p2pUsecase.CheckPort(listen)
 	if err != nil {
-		_ = p2pService.CloseListen(ctx, proto, listenOpt, targetOpt)
+		_ = uc.p2pUsecase.CloseListen(ctx, proto, listenOpt, targetOpt)
 	}
-	err = p2pService.CreateForward(ctx, proto, listenOpt, targetOpt)
+	err = uc.p2pUsecase.CreateForward(ctx, proto, listenOpt, targetOpt)
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error(err)
