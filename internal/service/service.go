@@ -11,4 +11,5 @@ var ProviderSet = wire.NewSet(
 	NewStorageService,
 	NewUserService,
 	NewComputeInstanceService,
+	NewComputePowerService,
 )

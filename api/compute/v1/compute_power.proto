@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package github.com.mohajiang.api.compute.v1;
+package api.compute.v1;
 
 import "google/api/annotations.proto";
 
@@ -8,31 +8,116 @@ option go_package = "github.com/mohaijiang/computeshare-server/api/compute/v1;v1
 option java_multiple_files = true;
 option java_package = "api.compute.v1";
 
-service Computepower {
-	rpc RunPythonPackage (RunPythonPackageRequest) returns (RunPythonPackageReply){
+service ComputePower {
+	//上传脚本（http接口另外写）
+	rpc UploadScriptFile (UploadScriptFileRequest) returns (UploadScriptFileReply){
 		option (google.api.http) = {
-			post: "/v1/computepower/python",
+			post: "/v1/compute-power",
 			body: "*",
 		};
 	};
-	rpc RunBenchmarks (RunBenchmarksRequest) returns (RunBenchmarksReply){
+	//查询脚本列表
+	rpc GetScriptList (GetScriptListRequest) returns (GetScriptListReply){
 		option (google.api.http) = {
-			post: "/v1/computepower/benchmark",
+			get: "/v1/compute-power/script/list"
+		};
+	};
+	//执行脚本
+	rpc RunPythonPackage (RunPythonPackageServerRequest) returns (RunPythonPackageServerReply){
+		option (google.api.http) = {
+			post: "/v1/compute-power/python",
+			body: "*",
+		};
+	};
+	//取消执行
+	rpc CancelExecPythonPackage (CancelExecPythonPackageRequest) returns (CancelExecPythonPackageReply){
+		option (google.api.http) = {
+			post: "/v1/compute-power/python",
+			body: "*",
+		};
+	};
+	//通过id
+	rpc GetScriptInfo (GetScriptInfoRequest) returns (GetScriptInfoReply){
+		option (google.api.http) = {
+			get: "/v1/compute-power/script/info/{id}",
+		};
+	};
+	//下载执行结果（http接口另外写）
+	rpc DownloadScriptExecuteResult (DownloadScriptExecuteResultRequest) returns (DownloadScriptExecuteResultReply){
+		option (google.api.http) = {
+			post: "/v1/compute-power/{id}",
 			body: "*",
 		};
 	};
 
 }
 
-message RunPythonPackageRequest {
-	string cid = 1;
-	string command = 2;
-}
-message RunPythonPackageReply {
-	string output = 1;
+message UploadScriptFileRequest {
+	bytes body = 1;
+	string name = 2;
 }
 
-message RunBenchmarksRequest {}
-message RunBenchmarksReply {
-	string output = 1;
+message UploadScriptFileReply {
+	int32 id = 1;
+	int32 taskNumber = 2;
+	string scriptName = 3;
+	string scriptContent = 4;
+	int32 executeState = 5;
+}
+
+message GetScriptListRequest {
+	int32 page = 3;
+	int32 size = 4;
+}
+
+message GetScriptListReply {
+	repeated UploadScriptFileReply list = 1;
+	int32 total = 2;
+	int32 page = 3;
+	int32 size = 4;
+}
+
+message RunPythonPackageServerRequest {
+	int32 id = 2;
+}
+message RunPythonPackageServerReply {
+	int32 id = 1;
+	int32 taskNumber = 2;
+	string scriptName = 3;
+	string scriptContent = 4;
+	int32 executeState = 5;
+	string executeResult = 6;
+}
+
+message CancelExecPythonPackageRequest {
+	int32 id = 1;
+}
+
+message CancelExecPythonPackageReply {
+	int32 id = 1;
+	int32 taskNumber = 2;
+	string scriptName = 3;
+	string scriptContent = 4;
+	int32 executeState = 5;
+	string executeResult = 6;
+}
+
+message GetScriptInfoRequest {
+	int32 id = 1;
+}
+
+message GetScriptInfoReply {
+	int32 id = 1;
+	int32 taskNumber = 2;
+	string scriptName = 3;
+	string scriptContent = 4;
+	int32 executeState = 5;
+	string executeResult = 6;
+}
+message DownloadScriptExecuteResultRequest {
+	int32 id = 1;
+}
+message DownloadScriptExecuteResultReply {
+	bytes body = 1;
+	string name = 2;
 }

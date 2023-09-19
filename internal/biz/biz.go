@@ -10,4 +10,5 @@ var ProviderSet = wire.NewSet(
 	NewUserUsecase,
 	NewComputeInstanceUsercase,
 	NewP2PUsecase,
+	NewScriptUseCase,
 )
