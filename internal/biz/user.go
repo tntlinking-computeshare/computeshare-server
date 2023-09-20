@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"errors"
 	"fmt"
+	errors "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
@@ -111,12 +111,12 @@ func (uc *UserUsercase) GetValidateCode(ctx context.Context, user User) (string,
 func (uc *UserUsercase) Login(ctx context.Context, user *User) (string, error) {
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
 	if err != nil {
-		return "", errors.New("telephone or password does not match")
+		return "", errors.New(400, "USER_NOT_FOUND", "telephone or password does not match")
 	}
 
 	encodedPassword := md5.Sum([]byte(user.Password))
 	if hex.EncodeToString(encodedPassword[:]) != u.Password {
-		return "", errors.New("telephone or password does not match")
+		return "", errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
 	}
 
 	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{
@@ -133,7 +133,7 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	code, err := uc.repo.GetValidateCode(ctx, *user)
 
 	if err != nil || code != user.ValidateCode {
-		return "", errors.New("telephone or password does not match")
+		return "", errors.New(400, "USER_NOT_FOUND", "telephone or password does not match")
 	}
 
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
@@ -165,13 +165,13 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 
 func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, oldPassword, newPassword string) error {
 	u, err := uc.Get(ctx, id)
+	if err != nil {
+		return err
+	}
 	if u.PwdConfig == true {
-		if err != nil {
-			return err
-		}
 		encodedPassword := md5.Sum([]byte(oldPassword))
 		if hex.EncodeToString(encodedPassword[:]) != u.Password {
-			return errors.New("telephone or password does not match")
+			return errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
 		}
 	}
 
@@ -188,11 +188,7 @@ func (uc *UserUsercase) UpdateUserTelephone(ctx context.Context, id uuid.UUID, u
 	code, err := uc.repo.GetValidateCode(ctx, *user)
 
 	if err != nil || code != user.ValidateCode {
-		return errors.New("telephone or password does not match")
-	}
-
-	if code != user.ValidateCode {
-		return errors.New("validate code does no match")
+		return errors.New(400, "VALIDATE_CODE_ERROR", "telephone or password does not match")
 	}
 
 	return uc.repo.UpdateUserTelephone(ctx, id, user)
