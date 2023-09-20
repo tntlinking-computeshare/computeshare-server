@@ -90,6 +90,11 @@ func Icon(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldIcon, v))
 }
 
+// PwdConfig applies equality check predicate on the "pwd_config" field. It's identical to PwdConfigEQ.
+func PwdConfig(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPwdConfig, v))
+}
+
 // CountryCallCodingEQ applies the EQ predicate on the "country_call_coding" field.
 func CountryCallCodingEQ(v string) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldCountryCallCoding, v))
@@ -493,6 +498,16 @@ func IconEqualFold(v string) predicate.User {
 // IconContainsFold applies the ContainsFold predicate on the "icon" field.
 func IconContainsFold(v string) predicate.User {
 	return predicate.User(sql.FieldContainsFold(FieldIcon, v))
+}
+
+// PwdConfigEQ applies the EQ predicate on the "pwd_config" field.
+func PwdConfigEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldPwdConfig, v))
+}
+
+// PwdConfigNEQ applies the NEQ predicate on the "pwd_config" field.
+func PwdConfigNEQ(v bool) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldPwdConfig, v))
 }
 
 // And groups predicates with the AND operator between them.

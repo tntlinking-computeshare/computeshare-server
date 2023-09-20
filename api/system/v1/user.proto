@@ -151,6 +151,7 @@ message UserReply {
 	int64 last_login_date = 5;
 	string name = 6;
 	string icon = 7;
+	bool pwd_config = 8;
 }
 message GetUserReply {
 	int32 code = 1;

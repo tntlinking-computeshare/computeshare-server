@@ -193,6 +193,7 @@ var (
 		{Name: "last_login_date", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "icon", Type: field.TypeString},
+		{Name: "pwd_config", Type: field.TypeBool, Default: false},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{

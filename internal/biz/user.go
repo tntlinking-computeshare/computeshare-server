@@ -32,6 +32,8 @@ type User struct {
 	Name string `json:"name,omitempty"`
 	// 头像地址
 	Icon string `json:"icon,omitempty"`
+	//是否配置过密码
+	PwdConfig bool
 }
 
 func (u *User) GetFullTelephone() string {
@@ -137,6 +139,7 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
 	if err != nil {
 		user.Password = "Not ALLOW PASSWORD LOGIN"
+		user.PwdConfig = false
 		err = uc.Create(ctx, user)
 		if err != nil {
 			return "", err
@@ -162,16 +165,21 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 
 func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, oldPassword, newPassword string) error {
 	u, err := uc.Get(ctx, id)
-	if err != nil {
-		return err
-	}
-	encodedPassword := md5.Sum([]byte(oldPassword))
-	if hex.EncodeToString(encodedPassword[:]) != u.Password {
-		return errors.New("telephone or password does not match")
+	if u.PwdConfig == true {
+		if err != nil {
+			return err
+		}
+		encodedPassword := md5.Sum([]byte(oldPassword))
+		if hex.EncodeToString(encodedPassword[:]) != u.Password {
+			return errors.New("telephone or password does not match")
+		}
 	}
 
+	encodedPassword := md5.Sum([]byte(newPassword))
+
 	return uc.repo.UpdateUserPassword(ctx, id, &User{
-		Password: newPassword,
+		Password:  hex.EncodeToString(encodedPassword[:]),
+		PwdConfig: true,
 	})
 
 }

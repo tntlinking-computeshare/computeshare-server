@@ -86,6 +86,20 @@ func (uu *UserUpdate) SetIcon(s string) *UserUpdate {
 	return uu
 }
 
+// SetPwdConfig sets the "pwd_config" field.
+func (uu *UserUpdate) SetPwdConfig(b bool) *UserUpdate {
+	uu.mutation.SetPwdConfig(b)
+	return uu
+}
+
+// SetNillablePwdConfig sets the "pwd_config" field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePwdConfig(b *bool) *UserUpdate {
+	if b != nil {
+		uu.SetPwdConfig(*b)
+	}
+	return uu
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -176,6 +190,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Icon(); ok {
 		_spec.SetField(user.FieldIcon, field.TypeString, value)
 	}
+	if value, ok := uu.mutation.PwdConfig(); ok {
+		_spec.SetField(user.FieldPwdConfig, field.TypeBool, value)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -251,6 +268,20 @@ func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
 // SetIcon sets the "icon" field.
 func (uuo *UserUpdateOne) SetIcon(s string) *UserUpdateOne {
 	uuo.mutation.SetIcon(s)
+	return uuo
+}
+
+// SetPwdConfig sets the "pwd_config" field.
+func (uuo *UserUpdateOne) SetPwdConfig(b bool) *UserUpdateOne {
+	uuo.mutation.SetPwdConfig(b)
+	return uuo
+}
+
+// SetNillablePwdConfig sets the "pwd_config" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePwdConfig(b *bool) *UserUpdateOne {
+	if b != nil {
+		uuo.SetPwdConfig(*b)
+	}
 	return uuo
 }
 
@@ -373,6 +404,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Icon(); ok {
 		_spec.SetField(user.FieldIcon, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.PwdConfig(); ok {
+		_spec.SetField(user.FieldPwdConfig, field.TypeBool, value)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

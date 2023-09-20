@@ -79,6 +79,20 @@ func (uc *UserCreate) SetIcon(s string) *UserCreate {
 	return uc
 }
 
+// SetPwdConfig sets the "pwd_config" field.
+func (uc *UserCreate) SetPwdConfig(b bool) *UserCreate {
+	uc.mutation.SetPwdConfig(b)
+	return uc
+}
+
+// SetNillablePwdConfig sets the "pwd_config" field if the given value is not nil.
+func (uc *UserCreate) SetNillablePwdConfig(b *bool) *UserCreate {
+	if b != nil {
+		uc.SetPwdConfig(*b)
+	}
+	return uc
+}
+
 // SetID sets the "id" field.
 func (uc *UserCreate) SetID(u uuid.UUID) *UserCreate {
 	uc.mutation.SetID(u)
@@ -136,6 +150,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultLastLoginDate()
 		uc.mutation.SetLastLoginDate(v)
 	}
+	if _, ok := uc.mutation.PwdConfig(); !ok {
+		v := user.DefaultPwdConfig
+		uc.mutation.SetPwdConfig(v)
+	}
 	if _, ok := uc.mutation.ID(); !ok {
 		v := user.DefaultID()
 		uc.mutation.SetID(v)
@@ -184,6 +202,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.Icon(); !ok {
 		return &ValidationError{Name: "icon", err: errors.New(`ent: missing required field "User.icon"`)}
+	}
+	if _, ok := uc.mutation.PwdConfig(); !ok {
+		return &ValidationError{Name: "pwd_config", err: errors.New(`ent: missing required field "User.pwd_config"`)}
 	}
 	return nil
 }
@@ -247,6 +268,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Icon(); ok {
 		_spec.SetField(user.FieldIcon, field.TypeString, value)
 		_node.Icon = value
+	}
+	if value, ok := uc.mutation.PwdConfig(); ok {
+		_spec.SetField(user.FieldPwdConfig, field.TypeBool, value)
+		_node.PwdConfig = value
 	}
 	return _node, _spec
 }

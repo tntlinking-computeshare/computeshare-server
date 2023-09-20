@@ -28,6 +28,8 @@ const (
 	FieldName = "name"
 	// FieldIcon holds the string denoting the icon field in the database.
 	FieldIcon = "icon"
+	// FieldPwdConfig holds the string denoting the pwd_config field in the database.
+	FieldPwdConfig = "pwd_config"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 )
@@ -42,6 +44,7 @@ var Columns = []string{
 	FieldLastLoginDate,
 	FieldName,
 	FieldIcon,
+	FieldPwdConfig,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -67,6 +70,8 @@ var (
 	DefaultLastLoginDate func() time.Time
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultPwdConfig holds the default value on creation for the "pwd_config" field.
+	DefaultPwdConfig bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -112,4 +117,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByIcon orders the results by the icon field.
 func ByIcon(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIcon, opts...).ToFunc()
+}
+
+// ByPwdConfig orders the results by the pwd_config field.
+func ByPwdConfig(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPwdConfig, opts...).ToFunc()
 }

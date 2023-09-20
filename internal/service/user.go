@@ -33,6 +33,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		CountryCallCoding: req.CountryCallCoding,
 		TelephoneNumber:   req.TelephoneNumber,
 		Password:          req.Password,
+		PwdConfig:         req.Password != "",
 		CreateDate:        time.Now(),
 		ValidateCode:      req.ValidateCode,
 	}
@@ -129,6 +130,7 @@ func toUserReply(user *biz.User, _ int) *pb.UserReply {
 		TelephoneNumber:   user.TelephoneNumber,
 		CreateDate:        user.CreateDate.Unix(),
 		LastLoginDate:     user.LastLoginDate.Unix(),
+		PwdConfig:         user.PwdConfig,
 	}
 }
 

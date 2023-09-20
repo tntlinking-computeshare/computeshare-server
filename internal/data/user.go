@@ -65,6 +65,7 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 			SetCountryCallCoding(user.CountryCallCoding).
 			SetTelephoneNumber(user.TelephoneNumber).
 			SetPassword(hex.EncodeToString(encodePassword[:])).
+			SetPwdConfig(user.PwdConfig).
 			SetLastLoginDate(time.Now()).
 			SetName(user.Name).
 			SetIcon(user.Icon).
@@ -116,6 +117,7 @@ func (ur *userRepo) UpdateUserPassword(ctx context.Context, id uuid.UUID, user *
 	}
 	_, err = p.Update().
 		SetPassword(user.Password).
+		SetPwdConfig(user.PwdConfig).
 		Save(ctx)
 	return err
 }
@@ -158,5 +160,6 @@ func (ur *userRepo) toBiz(p *ent.User, _ int) *biz.User {
 		LastLoginDate:     p.LastLoginDate,
 		Name:              p.Name,
 		Icon:              p.Icon,
+		PwdConfig:         p.PwdConfig,
 	}
 }

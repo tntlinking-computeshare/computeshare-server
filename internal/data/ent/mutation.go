@@ -5336,6 +5336,7 @@ type UserMutation struct {
 	last_login_date     *time.Time
 	name                *string
 	icon                *string
+	pwd_config          *bool
 	clearedFields       map[string]struct{}
 	done                bool
 	oldValue            func(context.Context) (*User, error)
@@ -5698,6 +5699,42 @@ func (m *UserMutation) ResetIcon() {
 	m.icon = nil
 }
 
+// SetPwdConfig sets the "pwd_config" field.
+func (m *UserMutation) SetPwdConfig(b bool) {
+	m.pwd_config = &b
+}
+
+// PwdConfig returns the value of the "pwd_config" field in the mutation.
+func (m *UserMutation) PwdConfig() (r bool, exists bool) {
+	v := m.pwd_config
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPwdConfig returns the old "pwd_config" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldPwdConfig(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPwdConfig is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPwdConfig requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPwdConfig: %w", err)
+	}
+	return oldValue.PwdConfig, nil
+}
+
+// ResetPwdConfig resets all changes to the "pwd_config" field.
+func (m *UserMutation) ResetPwdConfig() {
+	m.pwd_config = nil
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -5732,7 +5769,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.country_call_coding != nil {
 		fields = append(fields, user.FieldCountryCallCoding)
 	}
@@ -5753,6 +5790,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.icon != nil {
 		fields = append(fields, user.FieldIcon)
+	}
+	if m.pwd_config != nil {
+		fields = append(fields, user.FieldPwdConfig)
 	}
 	return fields
 }
@@ -5776,6 +5816,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case user.FieldIcon:
 		return m.Icon()
+	case user.FieldPwdConfig:
+		return m.PwdConfig()
 	}
 	return nil, false
 }
@@ -5799,6 +5841,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldName(ctx)
 	case user.FieldIcon:
 		return m.OldIcon(ctx)
+	case user.FieldPwdConfig:
+		return m.OldPwdConfig(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -5856,6 +5900,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIcon(v)
+		return nil
+	case user.FieldPwdConfig:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPwdConfig(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -5926,6 +5977,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldIcon:
 		m.ResetIcon()
+		return nil
+	case user.FieldPwdConfig:
+		m.ResetPwdConfig()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
