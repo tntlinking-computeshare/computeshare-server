@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: compute/v1/compute_instance.proto
+// source: api/compute/v1/compute_instance.proto
 
 package v1
 
@@ -28,7 +28,6 @@ const (
 	ComputeInstance_List_FullMethodName                        = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/List"
 	ComputeInstance_StopInstance_FullMethodName                = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StopInstance"
 	ComputeInstance_StartInstance_FullMethodName               = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StartInstance"
-	ComputeInstance_SSHInstance_FullMethodName                 = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/SSHInstance"
 )
 
 // ComputeInstanceClient is the client API for ComputeInstance service.
@@ -53,8 +52,6 @@ type ComputeInstanceClient interface {
 	StopInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*StopInstanceReply, error)
 	// 启动实例
 	StartInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*StartInstanceReply, error)
-	// 连接ssh
-	SSHInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*SSHInstanceReply, error)
 }
 
 type computeInstanceClient struct {
@@ -146,15 +143,6 @@ func (c *computeInstanceClient) StartInstance(ctx context.Context, in *GetInstan
 	return out, nil
 }
 
-func (c *computeInstanceClient) SSHInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*SSHInstanceReply, error) {
-	out := new(SSHInstanceReply)
-	err := c.cc.Invoke(ctx, ComputeInstance_SSHInstance_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ComputeInstanceServer is the server API for ComputeInstance service.
 // All implementations must embed UnimplementedComputeInstanceServer
 // for forward compatibility
@@ -177,8 +165,6 @@ type ComputeInstanceServer interface {
 	StopInstance(context.Context, *GetInstanceRequest) (*StopInstanceReply, error)
 	// 启动实例
 	StartInstance(context.Context, *GetInstanceRequest) (*StartInstanceReply, error)
-	// 连接ssh
-	SSHInstance(context.Context, *GetInstanceRequest) (*SSHInstanceReply, error)
 	mustEmbedUnimplementedComputeInstanceServer()
 }
 
@@ -212,9 +198,6 @@ func (UnimplementedComputeInstanceServer) StopInstance(context.Context, *GetInst
 }
 func (UnimplementedComputeInstanceServer) StartInstance(context.Context, *GetInstanceRequest) (*StartInstanceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartInstance not implemented")
-}
-func (UnimplementedComputeInstanceServer) SSHInstance(context.Context, *GetInstanceRequest) (*SSHInstanceReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SSHInstance not implemented")
 }
 func (UnimplementedComputeInstanceServer) mustEmbedUnimplementedComputeInstanceServer() {}
 
@@ -391,24 +374,6 @@ func _ComputeInstance_StartInstance_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ComputeInstance_SSHInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetInstanceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ComputeInstanceServer).SSHInstance(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ComputeInstance_SSHInstance_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputeInstanceServer).SSHInstance(ctx, req.(*GetInstanceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // ComputeInstance_ServiceDesc is the grpc.ServiceDesc for ComputeInstance service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -452,11 +417,7 @@ var ComputeInstance_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "StartInstance",
 			Handler:    _ComputeInstance_StartInstance_Handler,
 		},
-		{
-			MethodName: "SSHInstance",
-			Handler:    _ComputeInstance_SSHInstance_Handler,
-		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "compute/v1/compute_instance.proto",
+	Metadata: "api/compute/v1/compute_instance.proto",
 }

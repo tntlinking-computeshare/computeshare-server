@@ -28,8 +28,10 @@ func NewComputeInstanceService(uc *biz.ComputeInstanceUsercase, logger log.Logge
 func (s *ComputeInstanceService) ListComputeSpec(ctx context.Context, req *pb.ListComputeSpecRequest) (*pb.ListComputeSpecReply, error) {
 	list, err := s.uc.ListComputeSpec(ctx)
 	return &pb.ListComputeSpecReply{
-		Result: lo.Map(list, func(item *biz.ComputeSpec, _ int) *pb.ComputeSpecReply {
-			return &pb.ComputeSpecReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: lo.Map(list, func(item *biz.ComputeSpec, _ int) *pb.ComputeSpec {
+			return &pb.ComputeSpec{
 				Id:     item.ID,
 				Core:   item.Core,
 				Memory: item.Memory,
@@ -40,8 +42,10 @@ func (s *ComputeInstanceService) ListComputeSpec(ctx context.Context, req *pb.Li
 func (s *ComputeInstanceService) ListComputeImage(ctx context.Context, req *pb.ListComputeImageRequest) (*pb.ListComputeImageReply, error) {
 	list, err := s.uc.ListComputeImage(ctx)
 	return &pb.ListComputeImageReply{
-		Result: lo.Map(list, func(item *biz.ComputeImage, _ int) *pb.ComputeImageReply {
-			return &pb.ComputeImageReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: lo.Map(list, func(item *biz.ComputeImage, _ int) *pb.ComputeImage {
+			return &pb.ComputeImage{
 				Id:    item.ID,
 				Name:  item.Name,
 				Image: item.Image,
@@ -53,7 +57,9 @@ func (s *ComputeInstanceService) ListComputeImage(ctx context.Context, req *pb.L
 }
 func (s *ComputeInstanceService) ListComputeInstanceDuration(ctx context.Context, req *pb.ListComputeDurationRequest) (*pb.ListComputeDurationReply, error) {
 	return &pb.ListComputeDurationReply{
-		Result: []*pb.ComputeDurationReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: []*pb.ComputeDuration{
 			{
 				Name:     "一个月",
 				Duration: 1,
@@ -74,8 +80,12 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 	}
 
 	return &pb.CreateInstanceReply{
-		Id:   instance.ID.String(),
-		Name: instance.Name,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.CreateInstanceReply_Data{
+			Id:   instance.ID.String(),
+			Name: instance.Name,
+		},
 	}, err
 }
 func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInstanceRequest) (*pb.DeleteInstanceReply, error) {
@@ -84,7 +94,10 @@ func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInsta
 		return nil, err
 	}
 	err = s.uc.Delete(ctx, id)
-	return &pb.DeleteInstanceReply{}, err
+	return &pb.DeleteInstanceReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *ComputeInstanceService) Get(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceReply, error) {
 	id, err := uuid.Parse(req.GetId())
@@ -92,7 +105,11 @@ func (s *ComputeInstanceService) Get(ctx context.Context, req *pb.GetInstanceReq
 		return nil, err
 	}
 	instance, err := s.uc.Get(ctx, id)
-	return s.toReply(instance, 0), err
+	return &pb.GetInstanceReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    s.toReply(instance, 0),
+	}, err
 }
 func (s *ComputeInstanceService) List(ctx context.Context, req *pb.ListInstanceRequest) (*pb.ListInstanceReply, error) {
 	claim, ok := global.FromContext(ctx)
@@ -101,7 +118,9 @@ func (s *ComputeInstanceService) List(ctx context.Context, req *pb.ListInstanceR
 	}
 	list, err := s.uc.ListComputeInstance(ctx, claim.UserID)
 	return &pb.ListInstanceReply{
-		Result: lo.Map(list, s.toReply),
+		Code:    200,
+		Message: SUCCESS,
+		Data:    lo.Map(list, s.toReply),
 	}, err
 }
 func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.StopInstanceReply, error) {
@@ -110,7 +129,10 @@ func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetIn
 		return nil, err
 	}
 	err = s.uc.Stop(ctx, id)
-	return &pb.StopInstanceReply{}, err
+	return &pb.StopInstanceReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *ComputeInstanceService) StartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.StartInstanceReply, error) {
 	id, err := uuid.Parse(req.GetId())
@@ -118,17 +140,17 @@ func (s *ComputeInstanceService) StartInstance(ctx context.Context, req *pb.GetI
 		return nil, err
 	}
 	err = s.uc.Start(ctx, id)
-	return &pb.StartInstanceReply{}, err
-}
-func (s *ComputeInstanceService) SSHInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.SSHInstanceReply, error) {
-	return &pb.SSHInstanceReply{}, nil
+	return &pb.StartInstanceReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 
-func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.GetInstanceReply {
+func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Instance {
 	if p == nil {
 		return nil
 	}
-	return &pb.GetInstanceReply{
+	return &pb.Instance{
 		Id:             p.ID.String(),
 		Name:           p.Name,
 		Status:         int32(p.Status),
@@ -137,7 +159,5 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.GetI
 }
 
 func (s *ComputeInstanceService) Terminal(w http.ResponseWriter, r *http.Request) {
-
 	s.uc.Terminal(w, r)
-
 }

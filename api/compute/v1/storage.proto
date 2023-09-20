@@ -14,7 +14,7 @@ service Storage {
 			get: "/v1/storage",
 		};
 	};
-	rpc UploadFile (UploadFileRequest) returns (File){
+	rpc UploadFile (UploadFileRequest) returns (UploadFileReply){
 		option (google.api.http) = {
 			post: "/v1/storage",
 			body: "*"
@@ -44,18 +44,32 @@ message UploadFileRequest {
 	optional string parent_id = 3;
 }
 
+message UploadFileReply{
+	int32 code = 1;
+	string message = 2;
+	File data = 3;
+}
+
 message DownloadRequest {
 	string id = 1;
 }
 message DownloadReply {
-	bytes body = 1;
-	string name = 2;
+	message Data {
+		bytes body = 1;
+		string name = 2;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 
 message DeleteRequest {
 	repeated string ids = 1;
 }
-message DeleteReply {}
+message DeleteReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 enum FileType {
 	DIR = 0;
@@ -76,7 +90,9 @@ message ListRequest {
 	string parent_id = 1;
 }
 message ListReply {
-	repeated File result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated File data = 3;
 }
 
 message CreateDirRequest {
@@ -85,5 +101,10 @@ message CreateDirRequest {
 }
 
 message CreateDirReply {
-	string id = 1;
+	message Data {
+		string id = 1;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }

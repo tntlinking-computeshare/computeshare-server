@@ -3,228 +3,9 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: ComputeInstance API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
-            tags:
-                - Greeter
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
-    /v1/agent:
-        get:
-            tags:
-                - Agent
-            operationId: Agent_ListAgent
-            parameters:
-                - name: nameLike
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.agent.v1.ListAgentReply'
-        post:
-            tags:
-                - Agent
-            operationId: Agent_CreateAgent
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.agent.v1.CreateAgentRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.agent.v1.CreateAgentReply'
-    /v1/agent/{id}:
-        get:
-            tags:
-                - Agent
-            operationId: Agent_GetAgent
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.agent.v1.GetAgentReply'
-        put:
-            tags:
-                - Agent
-            operationId: Agent_UpdateAgent
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.agent.v1.UpdateAgentRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.agent.v1.UpdateAgentReply'
-        delete:
-            tags:
-                - Agent
-            operationId: Agent_DeleteAgent
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.agent.v1.DeleteAgentReply'
-    /v1/compute-power:
-        post:
-            tags:
-                - ComputePower
-            description: 上传脚本（http接口另外写）
-            operationId: ComputePower_UploadScriptFile
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.compute.v1.UploadScriptFileRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.UploadScriptFileReply'
-    /v1/compute-power/python:
-        post:
-            tags:
-                - ComputePower
-            description: 取消执行
-            operationId: ComputePower_CancelExecPythonPackage
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.compute.v1.CancelExecPythonPackageRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.CancelExecPythonPackageReply'
-    /v1/compute-power/script/info/{id}:
-        get:
-            tags:
-                - ComputePower
-            description: 通过id
-            operationId: ComputePower_GetScriptInfo
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.GetScriptInfoReply'
-    /v1/compute-power/script/list:
-        get:
-            tags:
-                - ComputePower
-            description: 查询脚本列表
-            operationId: ComputePower_GetScriptList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.GetScriptListReply'
-    /v1/compute-power/{id}:
-        post:
-            tags:
-                - ComputePower
-            description: 下载执行结果（http接口另外写）
-            operationId: ComputePower_DownloadScriptExecuteResult
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: int32
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.compute.v1.DownloadScriptExecuteResultRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.DownloadScriptExecuteResultReply'
     /v1/compute/duration:
         get:
             tags:
@@ -237,7 +18,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ListComputeDurationReply'
+                                $ref: '#/components/schemas/ListComputeDurationReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/compute/image:
         get:
             tags:
@@ -250,7 +37,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ListComputeImageReply'
+                                $ref: '#/components/schemas/ListComputeImageReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/compute/spec:
         get:
             tags:
@@ -263,7 +56,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ListComputeSpecReply'
+                                $ref: '#/components/schemas/ListComputeSpecReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/instance:
         get:
             tags:
@@ -276,7 +75,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ListInstanceReply'
+                                $ref: '#/components/schemas/ListInstanceReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
                 - ComputeInstance
@@ -286,7 +91,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.CreateInstanceRequest'
+                            $ref: '#/components/schemas/CreateInstanceRequest'
                 required: true
             responses:
                 "200":
@@ -294,7 +99,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.CreateInstanceReply'
+                                $ref: '#/components/schemas/CreateInstanceReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/instance/{id}:
         get:
             tags:
@@ -313,7 +124,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.GetInstanceReply'
+                                $ref: '#/components/schemas/GetInstanceReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         delete:
             tags:
                 - ComputeInstance
@@ -331,26 +148,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.DeleteInstanceReply'
-    /v1/instance/{id}/ssh:
-        get:
-            tags:
-                - ComputeInstance
-            description: 连接ssh
-            operationId: ComputeInstance_SSHInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
+                                $ref: '#/components/schemas/DeleteInstanceReply'
+                default:
+                    description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.SSHInstanceReply'
+                                $ref: '#/components/schemas/Status'
     /v1/instance/{id}/start:
         put:
             tags:
@@ -367,7 +171,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.GetInstanceRequest'
+                            $ref: '#/components/schemas/GetInstanceRequest'
                 required: true
             responses:
                 "200":
@@ -375,7 +179,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.StartInstanceReply'
+                                $ref: '#/components/schemas/StartInstanceReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/instance/{id}/stop:
         put:
             tags:
@@ -392,7 +202,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.GetInstanceRequest'
+                            $ref: '#/components/schemas/GetInstanceRequest'
                 required: true
             responses:
                 "200":
@@ -400,639 +210,16 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.StopInstanceReply'
-    /v1/sms/send:
-        post:
-            tags:
-                - User
-            operationId: User_SendValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.SendValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
+                                $ref: '#/components/schemas/StopInstanceReply'
+                default:
+                    description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.system.v1.SendValidateCodeReply'
-    /v1/storage:
-        get:
-            tags:
-                - Storage
-            operationId: Storage_List
-            parameters:
-                - name: parentId
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.ListReply'
-        post:
-            tags:
-                - Storage
-            operationId: Storage_UploadFile
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.compute.v1.UploadFileRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.File'
-        delete:
-            tags:
-                - Storage
-            operationId: Storage_Delete
-            parameters:
-                - name: ids
-                  in: query
-                  schema:
-                    type: array
-                    items:
-                        type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.DeleteReply'
-    /v1/storage/dir:
-        post:
-            tags:
-                - Storage
-            operationId: Storage_CreateDir
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.compute.v1.CreateDirRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.CreateDirReply'
-    /v1/storage/{id}:
-        get:
-            tags:
-                - Storage
-            operationId: Storage_Download
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.compute.v1.DownloadReply'
-    /v1/system/user:
-        get:
-            tags:
-                - User
-            operationId: User_ListUser
-            parameters:
-                - name: countryCallCoding
-                  in: query
-                  schema:
-                    type: string
-                - name: telephoneNumber
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.ListUserReply'
-    /v1/user:
-        get:
-            tags:
-                - User
-            operationId: User_GetUser
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.GetUserReply'
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.UpdateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.UpdateUserReply'
-        post:
-            tags:
-                - User
-            operationId: User_CreateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.CreateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.CreateUserReply'
-    /v1/user/login:
-        post:
-            tags:
-                - User
-            description: |-
-                Login
-
-                 {{.MethodDescriptorProto.Name}} is a call with the method(s) {{$first := true}}{{range .Bindings}}{{if $first}}{{$first = false}}{{else}}, {{end}}{{.HTTPMethod}}{{end}} within the "{{.Service.Name}}" service.
-                 It takes in "{{.RequestType.Name}}" and returns a "{{.ResponseType.Name}}".
-
-                 {{import "tables.md"}}
-            operationId: User_Login
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.LoginRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.LoginReply'
-    /v1/user/login_by_vc:
-        post:
-            tags:
-                - User
-            operationId: User_LoginWithValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.LoginWithValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.LoginReply'
-    /v1/user/password:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserPassword
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.UpdateUserPasswordRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.UpdateUserPasswordReply'
-    /v1/user/telephone:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserTelephone
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.system.v1.UpdateUserTelephoneRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.system.v1.UpdateUserTelephoneReply'
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        api.agent.v1.CreateAgentReply:
-            type: object
-            properties:
-                id:
-                    type: string
-        api.agent.v1.CreateAgentRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-        api.agent.v1.DeleteAgentReply:
-            type: object
-            properties: {}
-        api.agent.v1.GetAgentReply:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-        api.agent.v1.ListAgentReply:
-            type: object
-            properties:
-                results:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.agent.v1.GetAgentReply'
-        api.agent.v1.UpdateAgentReply:
-            type: object
-            properties: {}
-        api.agent.v1.UpdateAgentRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-        api.compute.v1.CancelExecPythonPackageReply:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                taskNumber:
-                    type: integer
-                    format: int32
-                scriptName:
-                    type: string
-                scriptContent:
-                    type: string
-                executeState:
-                    type: integer
-                    format: int32
-                executeResult:
-                    type: string
-        api.compute.v1.CancelExecPythonPackageRequest:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-        api.compute.v1.CreateDirReply:
-            type: object
-            properties:
-                id:
-                    type: string
-        api.compute.v1.CreateDirRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                parentId:
-                    type: string
-        api.compute.v1.DeleteReply:
-            type: object
-            properties: {}
-        api.compute.v1.DownloadReply:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                name:
-                    type: string
-        api.compute.v1.DownloadScriptExecuteResultReply:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                name:
-                    type: string
-        api.compute.v1.DownloadScriptExecuteResultRequest:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-        api.compute.v1.File:
-            type: object
-            properties:
-                id:
-                    type: string
-                type:
-                    type: integer
-                    format: enum
-                name:
-                    type: string
-                size:
-                    type: integer
-                    format: int32
-                lastModify:
-                    type: integer
-                    format: int64
-                cid:
-                    type: string
-        api.compute.v1.GetScriptInfoReply:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                taskNumber:
-                    type: integer
-                    format: int32
-                scriptName:
-                    type: string
-                scriptContent:
-                    type: string
-                executeState:
-                    type: integer
-                    format: int32
-                executeResult:
-                    type: string
-        api.compute.v1.GetScriptListReply:
-            type: object
-            properties:
-                list:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.compute.v1.UploadScriptFileReply'
-                total:
-                    type: integer
-                    format: int32
-                page:
-                    type: integer
-                    format: int32
-                size:
-                    type: integer
-                    format: int32
-        api.compute.v1.ListReply:
-            type: object
-            properties:
-                result:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.compute.v1.File'
-        api.compute.v1.RunPythonPackageServerReply:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                taskNumber:
-                    type: integer
-                    format: int32
-                scriptName:
-                    type: string
-                scriptContent:
-                    type: string
-                executeState:
-                    type: integer
-                    format: int32
-                executeResult:
-                    type: string
-        api.compute.v1.RunPythonPackageServerRequest:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-        api.compute.v1.UploadFileRequest:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                name:
-                    type: string
-                parentId:
-                    type: string
-        api.compute.v1.UploadScriptFileReply:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                taskNumber:
-                    type: integer
-                    format: int32
-                scriptName:
-                    type: string
-                scriptContent:
-                    type: string
-                executeState:
-                    type: integer
-                    format: int32
-        api.compute.v1.UploadScriptFileRequest:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                name:
-                    type: string
-        api.system.v1.CreateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/api.system.v1.CreateUserReply_Data'
-        api.system.v1.CreateUserReply_Data:
-            type: object
-            properties:
-                id:
-                    type: string
-        api.system.v1.CreateUserRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                password:
-                    type: string
-                validateCode:
-                    type: string
-        api.system.v1.GetUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/api.system.v1.UserReply'
-        api.system.v1.ListUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.system.v1.UserReply'
-        api.system.v1.LoginReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/api.system.v1.LoginReply_Data'
-        api.system.v1.LoginReply_Data:
-            type: object
-            properties:
-                token:
-                    type: string
-        api.system.v1.LoginRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                password:
-                    type: string
-        api.system.v1.LoginWithValidateCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        api.system.v1.SendValidateCodeReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        api.system.v1.SendValidateCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-        api.system.v1.UpdateUserPasswordReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        api.system.v1.UpdateUserPasswordRequest:
-            type: object
-            properties:
-                oldPassword:
-                    type: string
-                newPassword:
-                    type: string
-        api.system.v1.UpdateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        api.system.v1.UpdateUserRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                icon:
-                    type: string
-        api.system.v1.UpdateUserTelephoneReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        api.system.v1.UpdateUserTelephoneRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        api.system.v1.UserReply:
-            type: object
-            properties:
-                id:
-                    type: string
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                createDate:
-                    type: integer
-                    format: int64
-                lastLoginDate:
-                    type: integer
-                    format: int64
-                name:
-                    type: string
-                icon:
-                    type: string
-        github.com.mohaijiang.api.compute.v1.ComputeDurationReply:
+        ComputeDuration:
             type: object
             properties:
                 name:
@@ -1040,7 +227,7 @@ components:
                 duration:
                     type: integer
                     format: int32
-        github.com.mohaijiang.api.compute.v1.ComputeImageReply:
+        ComputeImage:
             type: object
             properties:
                 id:
@@ -1055,7 +242,7 @@ components:
                 port:
                     type: integer
                     format: int32
-        github.com.mohaijiang.api.compute.v1.ComputeSpecReply:
+        ComputeSpec:
             type: object
             properties:
                 id:
@@ -1065,14 +252,24 @@ components:
                     type: string
                 memory:
                     type: string
-        github.com.mohaijiang.api.compute.v1.CreateInstanceReply:
+        CreateInstanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/CreateInstanceReply_Data'
+        CreateInstanceReply_Data:
             type: object
             properties:
                 id:
                     type: string
                 name:
                     type: string
-        github.com.mohaijiang.api.compute.v1.CreateInstanceRequest:
+        CreateInstanceRequest:
             type: object
             properties:
                 specId:
@@ -1086,10 +283,38 @@ components:
                     format: int32
                 name:
                     type: string
-        github.com.mohaijiang.api.compute.v1.DeleteInstanceReply:
+        DeleteInstanceReply:
             type: object
-            properties: {}
-        github.com.mohaijiang.api.compute.v1.GetInstanceReply:
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        GetInstanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/Instance'
+        GetInstanceRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        Instance:
             type: object
             properties:
                 id:
@@ -1102,59 +327,85 @@ components:
                 expirationTime:
                     type: integer
                     format: int64
-        github.com.mohaijiang.api.compute.v1.GetInstanceRequest:
+        ListComputeDurationReply:
             type: object
             properties:
-                id:
-                    type: string
-        github.com.mohaijiang.api.compute.v1.ListComputeDurationReply:
-            type: object
-            properties:
-                result:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ComputeDurationReply'
-        github.com.mohaijiang.api.compute.v1.ListComputeImageReply:
-            type: object
-            properties:
-                result:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ComputeImageReply'
-        github.com.mohaijiang.api.compute.v1.ListComputeSpecReply:
-            type: object
-            properties:
-                result:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.ComputeSpecReply'
-        github.com.mohaijiang.api.compute.v1.ListInstanceReply:
-            type: object
-            properties:
-                result:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/github.com.mohaijiang.api.compute.v1.GetInstanceReply'
-        github.com.mohaijiang.api.compute.v1.SSHInstanceReply:
-            type: object
-            properties: {}
-        github.com.mohaijiang.api.compute.v1.StartInstanceReply:
-            type: object
-            properties: {}
-        github.com.mohaijiang.api.compute.v1.StopInstanceReply:
-            type: object
-            properties: {}
-        helloworld.v1.HelloReply:
-            type: object
-            properties:
+                code:
+                    type: integer
+                    format: int32
                 message:
                     type: string
-            description: The response message containing the greetings
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ComputeDuration'
+        ListComputeImageReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ComputeImage'
+        ListComputeSpecReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ComputeSpec'
+        ListInstanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Instance'
+        StartInstanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        StopInstanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
 tags:
-    - name: Agent
     - name: ComputeInstance
-    - name: ComputePower
-    - name: Greeter
-      description: The greeting service definition.
-    - name: Storage
-    - name: User

@@ -22,9 +22,9 @@ Content-Type: application/json
 # curl -X 'DELETE'
 #  'HTTP://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118'
 #  -H 'accept: application/json'
-GET http://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118
+GET http://127.0.0.1:8000/v1/user
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImEzNTQ2ZTUxLTg5NzYtNDRlYS05NGEzLTFjNzRlYmRhMDExOCIsImV4cCI6MTY5NDU3NjY1N30.PMUmQZcv0u71X4XKQ6lqLx2ok_kUmL3Ydf_lX1fZblI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhMzU0NmU1MS04OTc2LTQ0ZWEtOTRhMy0xYzc0ZWJkYTAxMTgiLCJleHAiOjE2OTUyNzc5NDZ9._zEkK1_lDHz4R5PtxV7b_xi6k9JARq8PpnMX31cFkvw
 
 ###
 

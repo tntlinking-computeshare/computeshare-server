@@ -49,31 +49,50 @@ message CreateAgentRequest {
 	string name = 1;
 }
 message CreateAgentReply {
-	string id = 1;
+	message Data {
+		string id = 1;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 
 message UpdateAgentRequest {
 	string id = 1;
 	string name = 2;
 }
-message UpdateAgentReply {}
+message UpdateAgentReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 message DeleteAgentRequest {
 	string id = 1;
 }
-message DeleteAgentReply {}
+message DeleteAgentReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 message GetAgentRequest {
 	string id = 1;
 }
-message GetAgentReply {
+message AgentReply {
 	string id = 1;
 	string name = 2;
+}
+
+message GetAgentReply {
+	int32 code = 1;
+	string message = 2;
+	AgentReply data = 3;
 }
 
 message ListAgentRequest {
 	optional string nameLike = 1;
 }
 message ListAgentReply {
-	repeated GetAgentReply results = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated GetAgentReply data = 3;
 }

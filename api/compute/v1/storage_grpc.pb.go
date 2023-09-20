@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: compute/v1/storage.proto
+// source: api/compute/v1/storage.proto
 
 package v1
 
@@ -31,7 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StorageClient interface {
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListReply, error)
-	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*File, error)
+	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileReply, error)
 	CreateDir(ctx context.Context, in *CreateDirRequest, opts ...grpc.CallOption) (*CreateDirReply, error)
 	Download(ctx context.Context, in *DownloadRequest, opts ...grpc.CallOption) (*DownloadReply, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteReply, error)
@@ -54,8 +54,8 @@ func (c *storageClient) List(ctx context.Context, in *ListRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *storageClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*File, error) {
-	out := new(File)
+func (c *storageClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileReply, error) {
+	out := new(UploadFileReply)
 	err := c.cc.Invoke(ctx, Storage_UploadFile_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func (c *storageClient) Delete(ctx context.Context, in *DeleteRequest, opts ...g
 // for forward compatibility
 type StorageServer interface {
 	List(context.Context, *ListRequest) (*ListReply, error)
-	UploadFile(context.Context, *UploadFileRequest) (*File, error)
+	UploadFile(context.Context, *UploadFileRequest) (*UploadFileReply, error)
 	CreateDir(context.Context, *CreateDirRequest) (*CreateDirReply, error)
 	Download(context.Context, *DownloadRequest) (*DownloadReply, error)
 	Delete(context.Context, *DeleteRequest) (*DeleteReply, error)
@@ -109,7 +109,7 @@ type UnimplementedStorageServer struct {
 func (UnimplementedStorageServer) List(context.Context, *ListRequest) (*ListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedStorageServer) UploadFile(context.Context, *UploadFileRequest) (*File, error) {
+func (UnimplementedStorageServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedStorageServer) CreateDir(context.Context, *CreateDirRequest) (*CreateDirReply, error) {
@@ -253,5 +253,5 @@ var Storage_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "compute/v1/storage.proto",
+	Metadata: "api/compute/v1/storage.proto",
 }

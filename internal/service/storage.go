@@ -60,10 +60,12 @@ func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.Lis
 		}
 	})
 	return &pb.ListReply{
-		Result: list,
+		Code:    200,
+		Message: SUCCESS,
+		Data:    list,
 	}, err
 }
-func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileRequest) (*pb.File, error) {
+func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileRequest) (*pb.UploadFileReply, error) {
 	token, ok := global.FromContext(ctx)
 	if ok == false {
 		return nil, errors.New("cannot get user ID")
@@ -108,12 +110,16 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 		Cid:        pathAdded.Cid().String(),
 	}
 	err = s.uc.Create(ctx, storage)
-	return &pb.File{
-		Id:         storage.ID.String(),
-		Name:       storage.Name,
-		Cid:        &storage.Cid,
-		LastModify: storage.LastModify.Unix(),
-		Type:       pb.FileType(storage.Type),
+	return &pb.UploadFileReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.File{
+			Id:         storage.ID.String(),
+			Name:       storage.Name,
+			Cid:        &storage.Cid,
+			LastModify: storage.LastModify.Unix(),
+			Type:       pb.FileType(storage.Type),
+		},
 	}, err
 }
 func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) (*pb.DownloadReply, error) {
@@ -145,8 +151,12 @@ func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) 
 		return nil, err
 	}
 	return &pb.DownloadReply{
-		Name: storage.Name,
-		Body: data,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.DownloadReply_Data{
+			Name: storage.Name,
+			Body: data,
+		},
 	}, err
 }
 func (s *StorageService) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb.DeleteReply, error) {
@@ -161,7 +171,10 @@ func (s *StorageService) Delete(ctx context.Context, req *pb.DeleteRequest) (*pb
 		}
 	}
 
-	return &pb.DeleteReply{}, nil
+	return &pb.DeleteReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
 }
 
 func (s *StorageService) CreateDir(ctx context.Context, req *pb.CreateDirRequest) (*pb.CreateDirReply, error) {
@@ -180,6 +193,10 @@ func (s *StorageService) CreateDir(ctx context.Context, req *pb.CreateDirRequest
 	}
 	err := s.uc.Create(ctx, storage)
 	return &pb.CreateDirReply{
-		Id: storage.ID.String(),
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.CreateDirReply_Data{
+			Id: storage.ID.String(),
+		},
 	}, err
 }
