@@ -50,15 +50,6 @@ func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error
 	return ur.toBiz(p, 0), nil
 }
 
-func (ur *userRepo) GetUserPassword(ctx context.Context, id uuid.UUID) (*biz.User, error) {
-	p, err := ur.data.db.User.Get(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-
-	return ur.toBiz(p, 0), nil
-}
-
 func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
 	code, err := ur.GetValidateCode(ctx, *user)
@@ -100,12 +91,35 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 		return err
 	}
 	_, err = p.Update().
-		SetLastLoginDate(user.LastLoginDate).
 		SetIcon(user.Icon).
 		SetName(user.Name).
 		Save(ctx)
 	return err
 }
+
+func (ur *userRepo) UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *biz.User) error {
+	p, err := ur.data.db.User.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	_, err = p.Update().
+		SetCountryCallCoding(user.CountryCallCoding).
+		SetTelephoneNumber(user.TelephoneNumber).
+		Save(ctx)
+	return err
+}
+
+func (ur *userRepo) UpdateUserPassword(ctx context.Context, id uuid.UUID, user *biz.User) error {
+	p, err := ur.data.db.User.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	_, err = p.Update().
+		SetPassword(user.Password).
+		Save(ctx)
+	return err
+}
+
 func (ur *userRepo) DeleteUser(ctx context.Context, id uuid.UUID) error {
 	return ur.data.db.User.DeleteOneID(id).Exec(ctx)
 }

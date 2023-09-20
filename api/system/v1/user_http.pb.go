@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/system/v1/user.proto
+// source: system/v1/user.proto
 
 package v1
 
@@ -20,7 +20,6 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationUserCreateUser = "/api.system.v1.User/CreateUser"
-const OperationUserDeleteUser = "/api.system.v1.User/DeleteUser"
 const OperationUserGetUser = "/api.system.v1.User/GetUser"
 const OperationUserListUser = "/api.system.v1.User/ListUser"
 const OperationUserLogin = "/api.system.v1.User/Login"
@@ -32,7 +31,6 @@ const OperationUserUpdateUserTelephone = "/api.system.v1.User/UpdateUserTelephon
 
 type UserHTTPServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
-	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	// Login Login
@@ -52,12 +50,11 @@ type UserHTTPServer interface {
 func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/user", _User_CreateUser0_HTTP_Handler(srv))
-	r.PUT("/v1/user/{id}", _User_UpdateUser0_HTTP_Handler(srv))
-	r.PUT("/v1/user/{id}/password", _User_UpdateUserPassword0_HTTP_Handler(srv))
-	r.PUT("/v1/user/{id}/telephone", _User_UpdateUserTelephone0_HTTP_Handler(srv))
-	r.DELETE("/v1/user/{id}", _User_DeleteUser0_HTTP_Handler(srv))
-	r.GET("/v1/user/{id}", _User_GetUser0_HTTP_Handler(srv))
-	r.GET("/v1/user", _User_ListUser0_HTTP_Handler(srv))
+	r.PUT("/v1/user", _User_UpdateUser0_HTTP_Handler(srv))
+	r.PUT("/v1/user/password", _User_UpdateUserPassword0_HTTP_Handler(srv))
+	r.PUT("/v1/user/telephone", _User_UpdateUserTelephone0_HTTP_Handler(srv))
+	r.GET("/v1/user", _User_GetUser0_HTTP_Handler(srv))
+	r.GET("/v1/system/user", _User_ListUser0_HTTP_Handler(srv))
 	r.POST("/v1/user/login", _User_Login0_HTTP_Handler(srv))
 	r.POST("/v1/user/login_by_vc", _User_LoginWithValidateCode0_HTTP_Handler(srv))
 	r.POST("/v1/sms/send", _User_SendValidateCode0_HTTP_Handler(srv))
@@ -94,9 +91,6 @@ func _User_UpdateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
 		http.SetOperation(ctx, OperationUserUpdateUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateUser(ctx, req.(*UpdateUserRequest))
@@ -117,9 +111,6 @@ func _User_UpdateUserPassword0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Co
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationUserUpdateUserPassword)
@@ -144,9 +135,6 @@ func _User_UpdateUserTelephone0_HTTP_Handler(srv UserHTTPServer) func(ctx http.C
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
 		http.SetOperation(ctx, OperationUserUpdateUserTelephone)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateUserTelephone(ctx, req.(*UpdateUserTelephoneRequest))
@@ -160,35 +148,10 @@ func _User_UpdateUserTelephone0_HTTP_Handler(srv UserHTTPServer) func(ctx http.C
 	}
 }
 
-func _User_DeleteUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in DeleteUserRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationUserDeleteUser)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.DeleteUser(ctx, req.(*DeleteUserRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*DeleteUserReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 func _User_GetUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetUserRequest
 		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationUserGetUser)
@@ -291,7 +254,6 @@ func _User_SendValidateCode0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Cont
 
 type UserHTTPClient interface {
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
-	DeleteUser(ctx context.Context, req *DeleteUserRequest, opts ...http.CallOption) (rsp *DeleteUserReply, err error)
 	GetUser(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
 	ListUser(ctx context.Context, req *ListUserRequest, opts ...http.CallOption) (rsp *ListUserReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
@@ -323,22 +285,9 @@ func (c *UserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserReque
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...http.CallOption) (*DeleteUserReply, error) {
-	var out DeleteUserReply
-	pattern := "/v1/user/{id}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserDeleteUser))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
 func (c *UserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserReply, error) {
 	var out GetUserReply
-	pattern := "/v1/user/{id}"
+	pattern := "/v1/user"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationUserGetUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -351,7 +300,7 @@ func (c *UserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, op
 
 func (c *UserHTTPClientImpl) ListUser(ctx context.Context, in *ListUserRequest, opts ...http.CallOption) (*ListUserReply, error) {
 	var out ListUserReply
-	pattern := "/v1/user"
+	pattern := "/v1/system/user"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationUserListUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -403,7 +352,7 @@ func (c *UserHTTPClientImpl) SendValidateCode(ctx context.Context, in *SendValid
 
 func (c *UserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...http.CallOption) (*UpdateUserReply, error) {
 	var out UpdateUserReply
-	pattern := "/v1/user/{id}"
+	pattern := "/v1/user"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUpdateUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -416,7 +365,7 @@ func (c *UserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserReque
 
 func (c *UserHTTPClientImpl) UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...http.CallOption) (*UpdateUserPasswordReply, error) {
 	var out UpdateUserPasswordReply
-	pattern := "/v1/user/{id}/password"
+	pattern := "/v1/user/password"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUpdateUserPassword))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -429,7 +378,7 @@ func (c *UserHTTPClientImpl) UpdateUserPassword(ctx context.Context, in *UpdateU
 
 func (c *UserHTTPClientImpl) UpdateUserTelephone(ctx context.Context, in *UpdateUserTelephoneRequest, opts ...http.CallOption) (*UpdateUserTelephoneReply, error) {
 	var out UpdateUserTelephoneReply
-	pattern := "/v1/user/{id}/telephone"
+	pattern := "/v1/user/telephone"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUpdateUserTelephone))
 	opts = append(opts, http.PathTemplate(pattern))

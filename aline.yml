@@ -3,11 +3,15 @@ name: computeshare-server
 stages:
   init:
     steps:
-      - name: git clone
-        uses: git-checkout
-        with:
-          url: https://github.com/mohaijiang/computeshare-server.git
-          branch: main
+#      - name: git clone
+#        uses: git-checkout
+#        with:
+#          url: https://github.com/mohaijiang/computeshare-server.git
+#          branch: main
+        - name: wokdir
+          uses: workdir
+          with:
+            workdir: /Users/mohaijiang/IdeaProjects/blockchain/computeshare-server
   build:
     needs:
       - init

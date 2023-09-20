@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: api/compute/v1/compute_power.proto
+// source: compute/v1/compute_power.proto
 
 package v1
 
@@ -302,5 +302,5 @@ var ComputePower_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/compute/v1/compute_power.proto",
+	Metadata: "compute/v1/compute_power.proto",
 }
