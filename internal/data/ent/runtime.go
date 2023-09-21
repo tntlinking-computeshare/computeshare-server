@@ -128,15 +128,15 @@ func init() {
 	// scriptexecutionrecord.ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	scriptexecutionrecord.ScriptContentValidator = scriptexecutionrecordDescScriptContent.Validators[0].(func(string) error)
 	// scriptexecutionrecordDescExecuteResult is the schema descriptor for execute_result field.
-	scriptexecutionrecordDescExecuteResult := scriptexecutionrecordFields[5].Descriptor()
+	scriptexecutionrecordDescExecuteResult := scriptexecutionrecordFields[6].Descriptor()
 	// scriptexecutionrecord.ExecuteResultValidator is a validator for the "execute_result" field. It is called by the builders before save.
 	scriptexecutionrecord.ExecuteResultValidator = scriptexecutionrecordDescExecuteResult.Validators[0].(func(string) error)
 	// scriptexecutionrecordDescCreateTime is the schema descriptor for create_time field.
-	scriptexecutionrecordDescCreateTime := scriptexecutionrecordFields[6].Descriptor()
+	scriptexecutionrecordDescCreateTime := scriptexecutionrecordFields[7].Descriptor()
 	// scriptexecutionrecord.DefaultCreateTime holds the default value on creation for the create_time field.
 	scriptexecutionrecord.DefaultCreateTime = scriptexecutionrecordDescCreateTime.Default.(time.Time)
 	// scriptexecutionrecordDescUpdateTime is the schema descriptor for update_time field.
-	scriptexecutionrecordDescUpdateTime := scriptexecutionrecordFields[7].Descriptor()
+	scriptexecutionrecordDescUpdateTime := scriptexecutionrecordFields[8].Descriptor()
 	// scriptexecutionrecord.DefaultUpdateTime holds the default value on creation for the update_time field.
 	scriptexecutionrecord.DefaultUpdateTime = scriptexecutionrecordDescUpdateTime.Default.(time.Time)
 	storageFields := schema.Storage{}.Fields()

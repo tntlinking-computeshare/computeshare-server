@@ -2,6 +2,10 @@ package biz
 
 import (
 	"context"
+	"fmt"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	transhttp "github.com/go-kratos/kratos/v2/transport/http"
+	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"time"
 
@@ -36,6 +40,7 @@ type ScriptExecutionRecord struct {
 	UserID        string    `json:"user_id,omitempty"`
 	FkScriptID    int32     `json:"fk_script_id,omitempty"`
 	ScriptContent string    `json:"fk_script_content,omitempty"`
+	FileAddress   string    `json:"fileAddress,omitempty"`
 	ExecuteState  int32     `json:"execute_state,omitempty"`
 	ExecuteResult string    `json:"execute_result,omitempty"`
 	CreateTime    time.Time `json:"create_time,omitempty"`
@@ -54,12 +59,14 @@ type ScriptExecutionRecordRepo interface {
 type ScriptUseCase struct {
 	repo                      ScriptRepo
 	scriptExecutionRecordRepo ScriptExecutionRecordRepo
+	agentRepo                 AgentRepo
+	p2pUsecase                *P2PUsecase
 	log                       *log.Helper
 }
 
 // NewScriptUseCase new a Script UseCase.
-func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, logger log.Logger) *ScriptUseCase {
-	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, log: log.NewHelper(logger)}
+func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, agentRepo AgentRepo, p2pUsecase *P2PUsecase, logger log.Logger) *ScriptUseCase {
+	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, agentRepo: agentRepo, p2pUsecase: p2pUsecase, log: log.NewHelper(logger)}
 }
 
 // CreateScript creates a Script, and returns the new Script.
@@ -87,6 +94,7 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Scrip
 		UserID:        script.UserId,
 		FkScriptID:    script.ID,
 		ScriptContent: script.ScriptContent,
+		FileAddress:   script.FileAddress,
 		ExecuteState:  consts.Executing,
 		CreateTime:    time.Now(),
 		UpdateTime:    time.Now(),
@@ -97,7 +105,78 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Scrip
 		return nil, err
 	}
 	uc.log.WithContext(ctx).Infof("GetScriptInfo is %d", id)
+
+	// 选择一个agent节点进行通信
+	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, "", "")
+	if err != nil {
+		return nil, err
+	}
+	go uc.RunPythonPackageOnAgent(agent.PeerId, script, &record)
+
 	return uc.repo.Update(ctx, script)
+}
+
+func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, record *ScriptExecutionRecord) {
+	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
+
+	computePowerclient, cleanup, err := uc.getComputePowerHTTPClient(peerId)
+	if err != nil {
+		uc.log.Error("创建ComputePowerHTTPClient链接失败")
+		uc.log.Error(err)
+		return
+	}
+	defer cleanup()
+
+	rsp, err := computePowerclient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
+	executeState := consts.Completed
+	if err != nil {
+		executeState = consts.ExecutionFailed
+	}
+	script.ExecuteState = int32(executeState)
+	script.ExecuteResult = rsp.ExecuteResult
+	_, err = uc.repo.Update(ctx, script)
+	if err != nil {
+		uc.log.Error("客户端执行py完成，向db保存script失败")
+		uc.log.Error(err)
+		return
+	}
+	record.ExecuteState = int32(executeState)
+	record.ExecuteResult = rsp.ExecuteResult
+	_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
+	if err != nil {
+		uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
+		uc.log.Error(err)
+		return
+	}
+}
+
+func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerHTTPClient, func(), error) {
+	ip, port, err := uc.p2pUsecase.createP2pForward(peerId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	time.Sleep(time.Second * 2)
+
+	client, err := transhttp.NewClient(
+		context.Background(),
+		transhttp.WithMiddleware(
+			recovery.Recovery(),
+		),
+		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
+		transhttp.WithTimeout(time.Second*10),
+	)
+
+	if err != nil {
+		uc.log.Error("创建ComputePowerClient链接失败")
+		uc.log.Error(err)
+		return nil, nil, err
+	}
+
+	vmClient := clientcomputev1.NewComputePowerHTTPClient(client)
+	return vmClient, func() {
+		_ = client.Close()
+	}, nil
 }
 
 func (uc *ScriptUseCase) CancelExecPythonPackage(ctx context.Context, id int32) (*Script, error) {

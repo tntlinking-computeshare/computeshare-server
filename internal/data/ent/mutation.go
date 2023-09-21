@@ -3816,6 +3816,7 @@ type ScriptExecutionRecordMutation struct {
 	fk_script_id     *int32
 	addfk_script_id  *int32
 	script_content   *string
+	file_address     *string
 	execute_state    *int32
 	addexecute_state *int32
 	execute_result   *string
@@ -4061,6 +4062,42 @@ func (m *ScriptExecutionRecordMutation) ResetScriptContent() {
 	m.script_content = nil
 }
 
+// SetFileAddress sets the "file_address" field.
+func (m *ScriptExecutionRecordMutation) SetFileAddress(s string) {
+	m.file_address = &s
+}
+
+// FileAddress returns the value of the "file_address" field in the mutation.
+func (m *ScriptExecutionRecordMutation) FileAddress() (r string, exists bool) {
+	v := m.file_address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileAddress returns the old "file_address" field's value of the ScriptExecutionRecord entity.
+// If the ScriptExecutionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScriptExecutionRecordMutation) OldFileAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileAddress: %w", err)
+	}
+	return oldValue.FileAddress, nil
+}
+
+// ResetFileAddress resets all changes to the "file_address" field.
+func (m *ScriptExecutionRecordMutation) ResetFileAddress() {
+	m.file_address = nil
+}
+
 // SetExecuteState sets the "execute_state" field.
 func (m *ScriptExecutionRecordMutation) SetExecuteState(i int32) {
 	m.execute_state = &i
@@ -4298,7 +4335,7 @@ func (m *ScriptExecutionRecordMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScriptExecutionRecordMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.user_id != nil {
 		fields = append(fields, scriptexecutionrecord.FieldUserID)
 	}
@@ -4307,6 +4344,9 @@ func (m *ScriptExecutionRecordMutation) Fields() []string {
 	}
 	if m.script_content != nil {
 		fields = append(fields, scriptexecutionrecord.FieldScriptContent)
+	}
+	if m.file_address != nil {
+		fields = append(fields, scriptexecutionrecord.FieldFileAddress)
 	}
 	if m.execute_state != nil {
 		fields = append(fields, scriptexecutionrecord.FieldExecuteState)
@@ -4334,6 +4374,8 @@ func (m *ScriptExecutionRecordMutation) Field(name string) (ent.Value, bool) {
 		return m.FkScriptID()
 	case scriptexecutionrecord.FieldScriptContent:
 		return m.ScriptContent()
+	case scriptexecutionrecord.FieldFileAddress:
+		return m.FileAddress()
 	case scriptexecutionrecord.FieldExecuteState:
 		return m.ExecuteState()
 	case scriptexecutionrecord.FieldExecuteResult:
@@ -4357,6 +4399,8 @@ func (m *ScriptExecutionRecordMutation) OldField(ctx context.Context, name strin
 		return m.OldFkScriptID(ctx)
 	case scriptexecutionrecord.FieldScriptContent:
 		return m.OldScriptContent(ctx)
+	case scriptexecutionrecord.FieldFileAddress:
+		return m.OldFileAddress(ctx)
 	case scriptexecutionrecord.FieldExecuteState:
 		return m.OldExecuteState(ctx)
 	case scriptexecutionrecord.FieldExecuteResult:
@@ -4394,6 +4438,13 @@ func (m *ScriptExecutionRecordMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScriptContent(v)
+		return nil
+	case scriptexecutionrecord.FieldFileAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileAddress(v)
 		return nil
 	case scriptexecutionrecord.FieldExecuteState:
 		v, ok := value.(int32)
@@ -4507,6 +4558,9 @@ func (m *ScriptExecutionRecordMutation) ResetField(name string) error {
 		return nil
 	case scriptexecutionrecord.FieldScriptContent:
 		m.ResetScriptContent()
+		return nil
+	case scriptexecutionrecord.FieldFileAddress:
+		m.ResetFileAddress()
 		return nil
 	case scriptexecutionrecord.FieldExecuteState:
 		m.ResetExecuteState()

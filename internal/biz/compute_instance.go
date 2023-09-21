@@ -11,14 +11,8 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/ipfs/kubo/core"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
-	pb "github.com/mohaijiang/computeshare-client/api/network/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
-	ma "github.com/multiformats/go-multiaddr"
-	"github.com/samber/lo"
-	"golang.org/x/exp/rand"
 	"net/http"
-	"regexp"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -219,7 +213,7 @@ func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance
 }
 
 func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
-	ip, port, err := uc.createP2pForward(peerId)
+	ip, port, err := uc.p2pUsecase.createP2pForward(peerId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -245,79 +239,6 @@ func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.V
 	return vmClient, func() {
 		_ = client.Close()
 	}, nil
-}
-
-func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, string, error) {
-	ctx := context.Background()
-	pingOk := uc.p2pUsecase.Ping(ctx, peerId)
-
-	fmt.Println("pingOk: ", pingOk)
-	if !pingOk {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Errorf("无法与%s完成ping", peerId)
-		return "", "", nil
-	}
-
-	list, err := uc.p2pUsecase.ListListen(ctx, nil)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error("查询p2p 列表失败")
-		return "", "", nil
-	}
-
-	t, find := lo.Find(list.Result, func(item *pb.ListenReply) bool {
-		if item == nil {
-			return false
-		}
-		return item.TargetAddress == fmt.Sprintf("/p2p/%s", peerId)
-	})
-
-	if find {
-		listenAddress := t.ListenAddress
-		// 定义正则表达式模式，用于匹配IP地址和端口号
-		pattern := `\/ip4\/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\/tcp\/([0-9]+)`
-
-		// 编译正则表达式
-		regex := regexp.MustCompile(pattern)
-
-		// 使用正则表达式来提取IP地址和端口号
-		matches := regex.FindStringSubmatch(listenAddress)
-		if len(matches) >= 3 {
-			ip := matches[1]   // 第一个匹配组为IP地址
-			port := matches[2] // 第二个匹配组为端口号
-
-			fmt.Printf("IP地址: %s\n", ip)
-			fmt.Printf("端口号: %s\n", port)
-			return ip, port, nil
-		} else {
-			fmt.Println("无法提取IP地址和端口号")
-		}
-	}
-
-	listenIp := "127.0.0.1"
-	listenPort := rand.Intn(9999) + 30000
-
-	listenOpt := fmt.Sprintf("/ip4/%s/tcp/%d", listenIp, listenPort)
-	listen, err := ma.NewMultiaddr(listenOpt)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return "", "", nil
-	}
-	targetOpt := fmt.Sprintf("/p2p/%s", peerId)
-	proto := "/x/ssh"
-
-	err = uc.p2pUsecase.CheckPort(listen)
-	if err != nil {
-		_ = uc.p2pUsecase.CloseListen(ctx, proto, listenOpt, targetOpt)
-	}
-	err = uc.p2pUsecase.CreateForward(ctx, proto, listenOpt, targetOpt)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return "", "", nil
-	}
-	return listenIp, strconv.Itoa(listenPort), nil
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owner string) ([]*ComputeInstance, error) {
@@ -396,7 +317,7 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	ip, port, err := uc.createP2pForward(instance.PeerID)
+	ip, port, err := uc.p2pUsecase.createP2pForward(instance.PeerID)
 	if err != nil {
 		return
 	}

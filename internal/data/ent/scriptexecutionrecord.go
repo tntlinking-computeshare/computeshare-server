@@ -24,6 +24,8 @@ type ScriptExecutionRecord struct {
 	FkScriptID int32 `json:"fk_script_id,omitempty"`
 	// ScriptContent holds the value of the "script_content" field.
 	ScriptContent string `json:"script_content,omitempty"`
+	// FileAddress holds the value of the "file_address" field.
+	FileAddress string `json:"file_address,omitempty"`
 	// ExecuteState holds the value of the "execute_state" field.
 	ExecuteState int32 `json:"execute_state,omitempty"`
 	// ExecuteResult holds the value of the "execute_result" field.
@@ -68,7 +70,7 @@ func (*ScriptExecutionRecord) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scriptexecutionrecord.FieldID, scriptexecutionrecord.FieldFkScriptID, scriptexecutionrecord.FieldExecuteState:
 			values[i] = new(sql.NullInt64)
-		case scriptexecutionrecord.FieldUserID, scriptexecutionrecord.FieldScriptContent, scriptexecutionrecord.FieldExecuteResult:
+		case scriptexecutionrecord.FieldUserID, scriptexecutionrecord.FieldScriptContent, scriptexecutionrecord.FieldFileAddress, scriptexecutionrecord.FieldExecuteResult:
 			values[i] = new(sql.NullString)
 		case scriptexecutionrecord.FieldCreateTime, scriptexecutionrecord.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -112,6 +114,12 @@ func (ser *ScriptExecutionRecord) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field script_content", values[i])
 			} else if value.Valid {
 				ser.ScriptContent = value.String
+			}
+		case scriptexecutionrecord.FieldFileAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_address", values[i])
+			} else if value.Valid {
+				ser.FileAddress = value.String
 			}
 		case scriptexecutionrecord.FieldExecuteState:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -193,6 +201,9 @@ func (ser *ScriptExecutionRecord) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script_content=")
 	builder.WriteString(ser.ScriptContent)
+	builder.WriteString(", ")
+	builder.WriteString("file_address=")
+	builder.WriteString(ser.FileAddress)
 	builder.WriteString(", ")
 	builder.WriteString("execute_state=")
 	builder.WriteString(fmt.Sprintf("%v", ser.ExecuteState))

@@ -6,5 +6,6 @@ const (
 	UnExecuted = iota + 1
 	Executing
 	Completed
+	ExecutionFailed
 	Canceled
 )

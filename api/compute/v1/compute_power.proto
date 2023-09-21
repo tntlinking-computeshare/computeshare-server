@@ -32,7 +32,7 @@ service ComputePower {
 	//取消执行
 	rpc CancelExecPythonPackage (CancelExecPythonPackageRequest) returns (CancelExecPythonPackageReply){
 		option (google.api.http) = {
-			post: "/v1/compute-power/python",
+			post: "/v1/compute-power/python/cancel",
 			body: "*",
 		};
 	};

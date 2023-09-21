@@ -39,6 +39,12 @@ func (serc *ScriptExecutionRecordCreate) SetScriptContent(s string) *ScriptExecu
 	return serc
 }
 
+// SetFileAddress sets the "file_address" field.
+func (serc *ScriptExecutionRecordCreate) SetFileAddress(s string) *ScriptExecutionRecordCreate {
+	serc.mutation.SetFileAddress(s)
+	return serc
+}
+
 // SetExecuteState sets the "execute_state" field.
 func (serc *ScriptExecutionRecordCreate) SetExecuteState(i int32) *ScriptExecutionRecordCreate {
 	serc.mutation.SetExecuteState(i)
@@ -170,6 +176,9 @@ func (serc *ScriptExecutionRecordCreate) check() error {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
+	if _, ok := serc.mutation.FileAddress(); !ok {
+		return &ValidationError{Name: "file_address", err: errors.New(`ent: missing required field "ScriptExecutionRecord.file_address"`)}
+	}
 	if _, ok := serc.mutation.ExecuteState(); !ok {
 		return &ValidationError{Name: "execute_state", err: errors.New(`ent: missing required field "ScriptExecutionRecord.execute_state"`)}
 	}
@@ -230,6 +239,10 @@ func (serc *ScriptExecutionRecordCreate) createSpec() (*ScriptExecutionRecord, *
 	if value, ok := serc.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 		_node.ScriptContent = value
+	}
+	if value, ok := serc.mutation.FileAddress(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
+		_node.FileAddress = value
 	}
 	if value, ok := serc.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)

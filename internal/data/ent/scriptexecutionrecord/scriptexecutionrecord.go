@@ -20,6 +20,8 @@ const (
 	FieldFkScriptID = "fk_script_id"
 	// FieldScriptContent holds the string denoting the script_content field in the database.
 	FieldScriptContent = "script_content"
+	// FieldFileAddress holds the string denoting the file_address field in the database.
+	FieldFileAddress = "file_address"
 	// FieldExecuteState holds the string denoting the execute_state field in the database.
 	FieldExecuteState = "execute_state"
 	// FieldExecuteResult holds the string denoting the execute_result field in the database.
@@ -47,6 +49,7 @@ var Columns = []string{
 	FieldUserID,
 	FieldFkScriptID,
 	FieldScriptContent,
+	FieldFileAddress,
 	FieldExecuteState,
 	FieldExecuteResult,
 	FieldCreateTime,
@@ -108,6 +111,11 @@ func ByFkScriptID(opts ...sql.OrderTermOption) OrderOption {
 // ByScriptContent orders the results by the script_content field.
 func ByScriptContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScriptContent, opts...).ToFunc()
+}
+
+// ByFileAddress orders the results by the file_address field.
+func ByFileAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileAddress, opts...).ToFunc()
 }
 
 // ByExecuteState orders the results by the execute_state field.

@@ -4,6 +4,11 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	iface "github.com/ipfs/boxo/coreiface"
+	"github.com/ipfs/boxo/coreiface/options"
+	"github.com/ipfs/boxo/files"
+	"github.com/ipfs/kubo/core"
+	"github.com/ipfs/kubo/core/coreapi"
 	"github.com/jinzhu/copier"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -13,15 +18,23 @@ import (
 type ComputePowerService struct {
 	pb.UnimplementedComputePowerServer
 
-	uc  *biz.ScriptUseCase
-	log *log.Helper
+	uc       *biz.ScriptUseCase
+	ipfsNode *core.IpfsNode
+	ipfsApi  iface.CoreAPI
+	log      *log.Helper
 }
 
-func NewComputePowerService(uc *biz.ScriptUseCase, logger log.Logger) *ComputePowerService {
-	return &ComputePowerService{
-		uc:  uc,
-		log: log.NewHelper(logger),
+func NewComputePowerService(uc *biz.ScriptUseCase, ipfsNode *core.IpfsNode, logger log.Logger) (*ComputePowerService, error) {
+	api, err := coreapi.NewCoreAPI(ipfsNode, options.Api.FetchBlocks(true))
+	if err != nil {
+		return nil, err
 	}
+	return &ComputePowerService{
+		uc:       uc,
+		ipfsNode: ipfsNode,
+		ipfsApi:  api,
+		log:      log.NewHelper(logger),
+	}, nil
 }
 
 func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.UploadScriptFileRequest) (*pb.UploadScriptFileReply, error) {
@@ -29,10 +42,32 @@ func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.Uplo
 	if ok == false {
 		return nil, errors.New("cannot get user ID")
 	}
+
+	opts := []options.UnixfsAddOption{
+		options.Unixfs.Hash(18),
+
+		options.Unixfs.Inline(false),
+		options.Unixfs.InlineLimit(32),
+
+		options.Unixfs.Chunker("size-262144"),
+
+		options.Unixfs.Pin(true),
+		options.Unixfs.HashOnly(false),
+		options.Unixfs.FsCache(false),
+		options.Unixfs.Nocopy(false),
+
+		options.Unixfs.Progress(true),
+		options.Unixfs.Silent(false),
+	}
+
+	fileNode := files.NewBytesFile(req.Body)
+	pathAdded, err := s.ipfsApi.Unixfs().Add(ctx, fileNode, opts...)
+
 	script := biz.Script{
 		UserId:        token.UserID,
 		ScriptName:    req.Name,
 		ScriptContent: string(req.Body),
+		FileAddress:   pathAdded.Cid().String(),
 	}
 	createScript, err := s.uc.CreateScript(ctx, &script)
 	if err != nil {

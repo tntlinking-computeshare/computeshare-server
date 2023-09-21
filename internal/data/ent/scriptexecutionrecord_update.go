@@ -54,6 +54,12 @@ func (seru *ScriptExecutionRecordUpdate) SetScriptContent(s string) *ScriptExecu
 	return seru
 }
 
+// SetFileAddress sets the "file_address" field.
+func (seru *ScriptExecutionRecordUpdate) SetFileAddress(s string) *ScriptExecutionRecordUpdate {
+	seru.mutation.SetFileAddress(s)
+	return seru
+}
+
 // SetExecuteState sets the "execute_state" field.
 func (seru *ScriptExecutionRecordUpdate) SetExecuteState(i int32) *ScriptExecutionRecordUpdate {
 	seru.mutation.ResetExecuteState()
@@ -202,6 +208,9 @@ func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, er
 	if value, ok := seru.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 	}
+	if value, ok := seru.mutation.FileAddress(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
+	}
 	if value, ok := seru.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 	}
@@ -288,6 +297,12 @@ func (seruo *ScriptExecutionRecordUpdateOne) AddFkScriptID(i int32) *ScriptExecu
 // SetScriptContent sets the "script_content" field.
 func (seruo *ScriptExecutionRecordUpdateOne) SetScriptContent(s string) *ScriptExecutionRecordUpdateOne {
 	seruo.mutation.SetScriptContent(s)
+	return seruo
+}
+
+// SetFileAddress sets the "file_address" field.
+func (seruo *ScriptExecutionRecordUpdateOne) SetFileAddress(s string) *ScriptExecutionRecordUpdateOne {
+	seruo.mutation.SetFileAddress(s)
 	return seruo
 }
 
@@ -468,6 +483,9 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if value, ok := seruo.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
+	}
+	if value, ok := seruo.mutation.FileAddress(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 	}
 	if value, ok := seruo.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)

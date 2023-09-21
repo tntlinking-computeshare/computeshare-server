@@ -70,6 +70,11 @@ func ScriptContent(v string) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldScriptContent, v))
 }
 
+// FileAddress applies equality check predicate on the "file_address" field. It's identical to FileAddressEQ.
+func FileAddress(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldFileAddress, v))
+}
+
 // ExecuteState applies equality check predicate on the "execute_state" field. It's identical to ExecuteStateEQ.
 func ExecuteState(v int32) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldExecuteState, v))
@@ -258,6 +263,71 @@ func ScriptContentEqualFold(v string) predicate.ScriptExecutionRecord {
 // ScriptContentContainsFold applies the ContainsFold predicate on the "script_content" field.
 func ScriptContentContainsFold(v string) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldContainsFold(FieldScriptContent, v))
+}
+
+// FileAddressEQ applies the EQ predicate on the "file_address" field.
+func FileAddressEQ(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldFileAddress, v))
+}
+
+// FileAddressNEQ applies the NEQ predicate on the "file_address" field.
+func FileAddressNEQ(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNEQ(FieldFileAddress, v))
+}
+
+// FileAddressIn applies the In predicate on the "file_address" field.
+func FileAddressIn(vs ...string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldIn(FieldFileAddress, vs...))
+}
+
+// FileAddressNotIn applies the NotIn predicate on the "file_address" field.
+func FileAddressNotIn(vs ...string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNotIn(FieldFileAddress, vs...))
+}
+
+// FileAddressGT applies the GT predicate on the "file_address" field.
+func FileAddressGT(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGT(FieldFileAddress, v))
+}
+
+// FileAddressGTE applies the GTE predicate on the "file_address" field.
+func FileAddressGTE(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGTE(FieldFileAddress, v))
+}
+
+// FileAddressLT applies the LT predicate on the "file_address" field.
+func FileAddressLT(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLT(FieldFileAddress, v))
+}
+
+// FileAddressLTE applies the LTE predicate on the "file_address" field.
+func FileAddressLTE(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLTE(FieldFileAddress, v))
+}
+
+// FileAddressContains applies the Contains predicate on the "file_address" field.
+func FileAddressContains(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldContains(FieldFileAddress, v))
+}
+
+// FileAddressHasPrefix applies the HasPrefix predicate on the "file_address" field.
+func FileAddressHasPrefix(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldHasPrefix(FieldFileAddress, v))
+}
+
+// FileAddressHasSuffix applies the HasSuffix predicate on the "file_address" field.
+func FileAddressHasSuffix(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldHasSuffix(FieldFileAddress, v))
+}
+
+// FileAddressEqualFold applies the EqualFold predicate on the "file_address" field.
+func FileAddressEqualFold(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEqualFold(FieldFileAddress, v))
+}
+
+// FileAddressContainsFold applies the ContainsFold predicate on the "file_address" field.
+func FileAddressContainsFold(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldContainsFold(FieldFileAddress, v))
 }
 
 // ExecuteStateEQ applies the EQ predicate on the "execute_state" field.
