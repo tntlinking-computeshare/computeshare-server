@@ -55,11 +55,11 @@ func Storage_DownloadFile_Extend_HTTP_Handler(srv StorageHTTPServer) func(ctx ht
 			return err
 		}
 		reply := out.(*DownloadReply)
-		disposition := fmt.Sprintf("attachment; filename=%s", reply.Name)
+		disposition := fmt.Sprintf("attachment; filename=%s", reply.Data.Name)
 		ctx.Response().Header().Set("Content-Type", "application/octet-stream")
 		ctx.Response().Header().Set("Content-Disposition", disposition)
 		ctx.Response().Header().Set("Access-Control-Expose-Headers", "Content-Disposition")
-		_, err = ctx.Response().Write(reply.Body)
+		_, err = ctx.Response().Write(reply.Data.Body)
 		return err
 	}
 }

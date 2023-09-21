@@ -37,16 +37,26 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 	}
 	err := s.uc.Create(ctx, agent)
 	return &pb.CreateAgentReply{
-		Id: agent.ID.String(),
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.CreateAgentReply_Data{
+			Id: agent.ID.String(),
+		},
 	}, err
 }
 func (s *AgentService) UpdateAgent(ctx context.Context, req *pb.UpdateAgentRequest) (*pb.UpdateAgentReply, error) {
 	s.log.Infof("input data %v", req)
-	return &pb.UpdateAgentReply{}, nil
+	return &pb.UpdateAgentReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
 }
 func (s *AgentService) DeleteAgent(ctx context.Context, req *pb.DeleteAgentRequest) (*pb.DeleteAgentReply, error) {
 	s.log.Infof("input data %v", req)
-	return &pb.DeleteAgentReply{}, nil
+	return &pb.DeleteAgentReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
 }
 func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*pb.GetAgentReply, error) {
 	s.log.Infof("input data %v", req)
@@ -56,10 +66,17 @@ func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*
 	}
 	agent, err := s.uc.Get(ctx, id)
 	return &pb.GetAgentReply{
-		Id:   agent.ID.String(),
-		Name: agent.PeerId,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.AgentReply{
+			Id:   agent.ID.String(),
+			Name: agent.PeerId,
+		},
 	}, err
 }
 func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) (*pb.ListAgentReply, error) {
-	return &pb.ListAgentReply{}, nil
+	return &pb.ListAgentReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
 }

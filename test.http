@@ -22,9 +22,9 @@ Content-Type: application/json
 # curl -X 'DELETE'
 #  'HTTP://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118'
 #  -H 'accept: application/json'
-GET http://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118
+GET https://computeshare.hamster.newtouch.com/v1/user
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImEzNTQ2ZTUxLTg5NzYtNDRlYS05NGEzLTFjNzRlYmRhMDExOCIsImV4cCI6MTY5NDU3NjY1N30.PMUmQZcv0u71X4XKQ6lqLx2ok_kUmL3Ydf_lX1fZblI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJkMmIyYzE1Yy1hM2RmLTQ1OGItYmVjMC1jNTU2YWYxNDMxOTMiLCJleHAiOjE2OTUyNzY5ODR9.GU4Va3rQSzT2YKsZUxJIJQdf4TpwCdIANVyJkdjKoPY
 
 ###
 
@@ -54,3 +54,31 @@ accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImEzNTQ2ZTUxLTg5NzYtNDRlYS05NGEzLTFjNzRlYmRhMDExOCIsImV4cCI6MTY5NDU3NjY1N30.PMUmQZcv0u71X4XKQ6lqLx2ok_kUmL3Ydf_lX1fZblI
 
 
+
+
+###
+GET http://127.0.0.1:8000/v1/user
+accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTUyODMxMjF9.gh8uLnrTGERkN8k-bkiAYvMyqs1O8vrNJIeMCoPsSO4
+
+
+### 修改密码
+PUT http://127.0.0.1:8000/v1/user/password
+Content-Type: application/json
+accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTUyODMxMjF9.gh8uLnrTGERkN8k-bkiAYvMyqs1O8vrNJIeMCoPsSO4
+
+{
+  "oldPassword": "",
+  "newPassword": "Abcd1234"
+}
+
+### 登录
+POST http://127.0.0.1:8000/v1/user/login
+Content-Type: application/json
+
+{
+  "countryCallCoding": "+86",
+  "telephoneNumber": "15001747213",
+  "password": "Abcd1234"
+}

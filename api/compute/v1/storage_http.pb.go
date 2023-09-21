@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/compute/v1/storage.proto
+// source: compute/v1/storage.proto
 
 package v1
 
@@ -30,19 +30,19 @@ type StorageHTTPServer interface {
 	Delete(context.Context, *DeleteRequest) (*DeleteReply, error)
 	Download(context.Context, *DownloadRequest) (*DownloadReply, error)
 	List(context.Context, *ListRequest) (*ListReply, error)
-	UploadFile(context.Context, *UploadFileRequest) (*File, error)
+	UploadFile(context.Context, *UploadFileRequest) (*UploadFileReply, error)
 }
 
 func RegisterStorageHTTPServer(s *http.Server, srv StorageHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/storage", _Storage_List0_HTTP_Handler(srv))
+	r.GET("/v1/storage", _Storage_List1_HTTP_Handler(srv))
 	r.POST("/v1/storage", _Storage_UploadFile0_HTTP_Handler(srv))
 	r.POST("/v1/storage/dir", _Storage_CreateDir0_HTTP_Handler(srv))
 	r.GET("/v1/storage/{id}", _Storage_Download0_HTTP_Handler(srv))
-	r.DELETE("/v1/storage", _Storage_Delete0_HTTP_Handler(srv))
+	r.DELETE("/v1/storage", _Storage_Delete1_HTTP_Handler(srv))
 }
 
-func _Storage_List0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
+func _Storage_List1_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -78,7 +78,7 @@ func _Storage_UploadFile0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Cont
 		if err != nil {
 			return err
 		}
-		reply := out.(*File)
+		reply := out.(*UploadFileReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -127,7 +127,7 @@ func _Storage_Download0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Storage_Delete0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
+func _Storage_Delete1_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -151,7 +151,7 @@ type StorageHTTPClient interface {
 	Delete(ctx context.Context, req *DeleteRequest, opts ...http.CallOption) (rsp *DeleteReply, err error)
 	Download(ctx context.Context, req *DownloadRequest, opts ...http.CallOption) (rsp *DownloadReply, err error)
 	List(ctx context.Context, req *ListRequest, opts ...http.CallOption) (rsp *ListReply, err error)
-	UploadFile(ctx context.Context, req *UploadFileRequest, opts ...http.CallOption) (rsp *File, err error)
+	UploadFile(ctx context.Context, req *UploadFileRequest, opts ...http.CallOption) (rsp *UploadFileReply, err error)
 }
 
 type StorageHTTPClientImpl struct {
@@ -214,8 +214,8 @@ func (c *StorageHTTPClientImpl) List(ctx context.Context, in *ListRequest, opts 
 	return &out, err
 }
 
-func (c *StorageHTTPClientImpl) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...http.CallOption) (*File, error) {
-	var out File
+func (c *StorageHTTPClientImpl) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...http.CallOption) (*UploadFileReply, error) {
+	var out UploadFileReply
 	pattern := "/v1/storage"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationStorageUploadFile))

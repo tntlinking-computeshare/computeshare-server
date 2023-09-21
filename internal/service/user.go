@@ -2,14 +2,18 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
 	"time"
 
 	pb "github.com/mohaijiang/computeshare-server/api/system/v1"
 )
+
+const SUCCESS = "success"
 
 type UserService struct {
 	pb.UnimplementedUserServer
@@ -29,6 +33,7 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		CountryCallCoding: req.CountryCallCoding,
 		TelephoneNumber:   req.TelephoneNumber,
 		Password:          req.Password,
+		PwdConfig:         req.Password != "",
 		CreateDate:        time.Now(),
 		ValidateCode:      req.ValidateCode,
 	}
@@ -37,32 +42,72 @@ func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		return nil, err
 	}
 	return &pb.CreateUserReply{
-		Id: user.ID.String(),
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.CreateUserReply_Data{
+			Id: user.ID.String(),
+		},
 	}, nil
 }
 func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
-	return &pb.UpdateUserReply{}, nil
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	err := s.uc.Update(ctx, claim.GetUserId(), &biz.User{
+		Name: req.GetName(),
+		Icon: req.GetIcon(),
+	})
+	return &pb.UpdateUserReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *UserService) UpdateUserPassword(ctx context.Context, req *pb.UpdateUserPasswordRequest) (*pb.UpdateUserPasswordReply, error) {
-	id, _ := uuid.Parse(req.Id)
-	lastLoginDate := time.Now()
-	err := s.uc.Update(ctx, id, &biz.User{
-		LastLoginDate: lastLoginDate,
-	})
-	return &pb.UpdateUserPasswordReply{}, err
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	err := s.uc.UpdateUserPassword(ctx, claim.GetUserId(), req.GetOldPassword(), req.GetNewPassword())
+	return &pb.UpdateUserPasswordReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *UserService) UpdateUserTelephone(ctx context.Context, req *pb.UpdateUserTelephoneRequest) (*pb.UpdateUserTelephoneReply, error) {
-	return &pb.UpdateUserTelephoneReply{}, nil
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	err := s.uc.UpdateUserTelephone(ctx, claim.GetUserId(), &biz.User{
+		CountryCallCoding: req.GetCountryCallCoding(),
+		TelephoneNumber:   req.GetTelephoneNumber(),
+		ValidateCode:      req.GetValidateCode(),
+	})
+	return &pb.UpdateUserTelephoneReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserReply, error) {
 	id, _ := uuid.Parse(req.Id)
 	err := s.uc.Delete(ctx, id)
-	return &pb.DeleteUserReply{}, err
+	return &pb.DeleteUserReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserReply, error) {
-	id, _ := uuid.Parse(req.Id)
-	u, err := s.uc.Get(ctx, id)
-	return toUserReply(u, 0), err
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("Unauthorized")
+	}
+	u, err := s.uc.Get(ctx, claim.GetUserId())
+	return &pb.GetUserReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    toUserReply(u, 0),
+	}, err
 }
 func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserReply, error) {
 	list, err := s.uc.List(ctx, biz.User{
@@ -71,18 +116,21 @@ func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*p
 	})
 
 	return &pb.ListUserReply{
-		Result: lo.Map(list, toUserReply),
+		Code:    200,
+		Message: SUCCESS,
+		Data:    lo.Map(list, toUserReply),
 	}, err
 }
 
-func toUserReply(user *biz.User, _ int) *pb.GetUserReply {
+func toUserReply(user *biz.User, _ int) *pb.UserReply {
 
-	return &pb.GetUserReply{
+	return &pb.UserReply{
 		Id:                user.ID.String(),
 		CountryCallCoding: user.CountryCallCoding,
 		TelephoneNumber:   user.TelephoneNumber,
 		CreateDate:        user.CreateDate.Unix(),
 		LastLoginDate:     user.LastLoginDate.Unix(),
+		PwdConfig:         user.PwdConfig,
 	}
 }
 
@@ -93,7 +141,11 @@ func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 		Password:          req.GetPassword(),
 	})
 	return &pb.LoginReply{
-		Token: token,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.LoginReply_Data{
+			Token: token,
+		},
 	}, err
 }
 func (s *UserService) LoginWithValidateCode(ctx context.Context, req *pb.LoginWithValidateCodeRequest) (*pb.LoginReply, error) {
@@ -103,7 +155,11 @@ func (s *UserService) LoginWithValidateCode(ctx context.Context, req *pb.LoginWi
 		ValidateCode:      req.GetValidateCode(),
 	})
 	return &pb.LoginReply{
-		Token: token,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.LoginReply_Data{
+			Token: token,
+		},
 	}, err
 }
 func (s *UserService) SendValidateCode(ctx context.Context, req *pb.SendValidateCodeRequest) (*pb.SendValidateCodeReply, error) {
@@ -111,5 +167,8 @@ func (s *UserService) SendValidateCode(ctx context.Context, req *pb.SendValidate
 		CountryCallCoding: req.CountryCallCoding,
 		TelephoneNumber:   req.TelephoneNumber,
 	})
-	return &pb.SendValidateCodeReply{}, err
+	return &pb.SendValidateCodeReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }

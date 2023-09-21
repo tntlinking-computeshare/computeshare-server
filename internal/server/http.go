@@ -3,17 +3,21 @@ package server
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-kratos/swagger-api/openapiv2"
+	jwt2 "github.com/golang-jwt/jwt/v4"
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	v1 "github.com/mohaijiang/computeshare-server/api/helloworld/v1"
 	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/service"
+	"github.com/mvrilo/go-redoc"
 )
 
 func NewWhiteListMatcher() selector.MatchFunc {
@@ -43,19 +47,19 @@ func NewHTTPServer(c *conf.Server,
 	powerService *service.ComputePowerService,
 	logger log.Logger) *http.Server {
 
-	//jwtMiddlewire := selector.Server(
-	//	jwt.Server(func(token *jwt2.Token) (interface{}, error) {
-	//		return []byte(ac.ApiKey), nil
-	//	}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
-	//		return &global.ComputeServerClaim{}
-	//	})),
-	//).Match(NewWhiteListMatcher()).Build()
+	jetMiddleware := selector.Server(
+		jwt.Server(func(token *jwt2.Token) (interface{}, error) {
+			return []byte(ac.ApiKey), nil
+		}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
+			return &global.ComputeServerClaim{}
+		})),
+	).Match(NewWhiteListMatcher()).Build()
 
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
 			logging.Server(logger),
-			//jwtMiddlewire,
+			jetMiddleware,
 		),
 	}
 	if c.Http.Network != "" {
@@ -67,10 +71,6 @@ func NewHTTPServer(c *conf.Server,
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
-	//opts = append(opts, http.Middleware(metadata.Server()))
-	//opts = append(opts, http.Middleware(jwt.Server(func(token *jwtv4.Token) (interface{}, error) {
-	//	return []byte(testKey), nil
-	//})))
 	srv := http.NewServer(opts...)
 	openAPIhandler := openapiv2.NewHandler()
 	srv.HandlePrefix("/q/", openAPIhandler)
@@ -86,5 +86,15 @@ func NewHTTPServer(c *conf.Server,
 	srv.Route("/").POST("/v1/compute-power/upload", computeV1.Compute_Power_UploadSceipt_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.HandleFunc("/v1/vm/terminal", instanceService.Terminal)
+	doc := redoc.Redoc{
+		Title:       "Example API",
+		Description: "Example API Description",
+		SpecFile:    "./openapi.yaml", // "./openapi.yaml"
+		SpecPath:    "/openapi.yaml",  // "/openapi.yaml"
+		DocsPath:    "/docs",
+	}
+	srv.HandleFunc("/docs", doc.Handler())
+	srv.HandleFunc("/openapi.yaml", doc.Handler())
+
 	return srv
 }

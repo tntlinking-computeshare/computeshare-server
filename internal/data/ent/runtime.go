@@ -251,6 +251,10 @@ func init() {
 	userDescName := userFields[6].Descriptor()
 	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	user.NameValidator = userDescName.Validators[0].(func(string) error)
+	// userDescPwdConfig is the schema descriptor for pwd_config field.
+	userDescPwdConfig := userFields[8].Descriptor()
+	// user.DefaultPwdConfig holds the default value on creation for the pwd_config field.
+	user.DefaultPwdConfig = userDescPwdConfig.Default.(bool)
 	// userDescID is the schema descriptor for id field.
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.

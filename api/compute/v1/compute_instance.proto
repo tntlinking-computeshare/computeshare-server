@@ -74,13 +74,6 @@ service ComputeInstance {
 			body: "*",
 		};
 	}
-
-	// 连接ssh
-	rpc SSHInstance(GetInstanceRequest) returns (SSHInstanceReply) {
-		option (google.api.http) = {
-			get: "/v1/instance/{id}/ssh",
-		};
-	}
 }
 
 message ListComputeSpecRequest {
@@ -88,7 +81,9 @@ message ListComputeSpecRequest {
 }
 
 message ListComputeSpecReply {
-	repeated ComputeSpecReply result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated ComputeSpec data = 3;
 }
 
 message ListComputeImageRequest {
@@ -96,10 +91,12 @@ message ListComputeImageRequest {
 }
 
 message ListComputeImageReply {
-	repeated ComputeImageReply result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated ComputeImage data = 3;
 }
 
-message ComputeImageReply {
+message ComputeImage {
 	int32 id = 1;
 	string name = 2;
 	string image = 3;
@@ -107,7 +104,7 @@ message ComputeImageReply {
 	int32 port = 5;
 }
 
-message ComputeSpecReply {
+message ComputeSpec {
 	int32 id = 1;
 	string core = 2;
 	string memory = 3;
@@ -118,10 +115,12 @@ message ListComputeDurationRequest {
 }
 
 message ListComputeDurationReply {
-	repeated ComputeDurationReply result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated ComputeDuration data = 3;
 }
 
-message ComputeDurationReply {
+message ComputeDuration {
 	string name = 1;
 	int32 duration = 2;
 }
@@ -139,38 +138,51 @@ message PortBinding {
 }
 
 message CreateInstanceReply {
-	string id = 1;
-	string name = 2;
+	message Data {
+		string id = 1;
+		string name = 2;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 
 message DeleteInstanceRequest {
 	string id = 1;
 }
-message DeleteInstanceReply {}
+message DeleteInstanceReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 message GetInstanceRequest {
 	string id = 1;
 }
-message GetInstanceReply {
+message Instance {
 	string id = 1;
 	string name = 2;
 	int32 status = 3;
 	int64 expiration_time = 4;
 }
+message GetInstanceReply {
+	int32 code = 1;
+	string message = 2;
+	Instance data = 3;
+}
 
 message ListInstanceRequest {}
 message ListInstanceReply {
-	repeated GetInstanceReply result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated Instance data = 3;
 }
 
 message StopInstanceReply {
-
+	int32 code = 1;
+	string message = 2;
 }
 
 message StartInstanceReply {
-
-}
-
-message SSHInstanceReply {
-
+	int32 code = 1;
+	string message = 2;
 }

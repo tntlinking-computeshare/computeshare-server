@@ -32,6 +32,8 @@ type User struct {
 	Name string `json:"name,omitempty"`
 	// 头像地址
 	Icon string `json:"icon,omitempty"`
+	//是否配置过密码
+	PwdConfig bool
 }
 
 func (u *User) GetFullTelephone() string {
@@ -41,9 +43,10 @@ func (u *User) GetFullTelephone() string {
 type UserRepo interface {
 	ListUser(ctx context.Context, entity User) ([]*User, error)
 	GetUser(ctx context.Context, id uuid.UUID) (*User, error)
-	GetUserPassword(ctx context.Context, id uuid.UUID) (*User, error)
 	CreateUser(ctx context.Context, user *User) error
 	UpdateUser(ctx context.Context, id uuid.UUID, user *User) error
+	UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *User) error
+	UpdateUserPassword(ctx context.Context, id uuid.UUID, user *User) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	SendValidateCode(ctx context.Context, entity User) error
 	GetValidateCode(ctx context.Context, user User) (string, error)
@@ -136,6 +139,7 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
 	if err != nil {
 		user.Password = "Not ALLOW PASSWORD LOGIN"
+		user.PwdConfig = false
 		err = uc.Create(ctx, user)
 		if err != nil {
 			return "", err
@@ -157,4 +161,39 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	})
 
 	return tokenHeader.SignedString(uc.key)
+}
+
+func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, oldPassword, newPassword string) error {
+	u, err := uc.Get(ctx, id)
+	if u.PwdConfig == true {
+		if err != nil {
+			return err
+		}
+		encodedPassword := md5.Sum([]byte(oldPassword))
+		if hex.EncodeToString(encodedPassword[:]) != u.Password {
+			return errors.New("telephone or password does not match")
+		}
+	}
+
+	encodedPassword := md5.Sum([]byte(newPassword))
+
+	return uc.repo.UpdateUserPassword(ctx, id, &User{
+		Password:  hex.EncodeToString(encodedPassword[:]),
+		PwdConfig: true,
+	})
+
+}
+
+func (uc *UserUsercase) UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *User) error {
+	code, err := uc.repo.GetValidateCode(ctx, *user)
+
+	if err != nil || code != user.ValidateCode {
+		return errors.New("telephone or password does not match")
+	}
+
+	if code != user.ValidateCode {
+		return errors.New("validate code does no match")
+	}
+
+	return uc.repo.UpdateUserTelephone(ctx, id, user)
 }

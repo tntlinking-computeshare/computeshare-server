@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/compute/v1/compute_instance.proto
+// source: compute/v1/compute_instance.proto
 
 package v1
 
@@ -26,7 +26,6 @@ const OperationComputeInstanceList = "/github.com.mohaijiang.api.compute.v1.Comp
 const OperationComputeInstanceListComputeImage = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeImage"
 const OperationComputeInstanceListComputeInstanceDuration = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
 const OperationComputeInstanceListComputeSpec = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeSpec"
-const OperationComputeInstanceSSHInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/SSHInstance"
 const OperationComputeInstanceStartInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StartInstance"
 const OperationComputeInstanceStopInstance = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StopInstance"
 
@@ -45,8 +44,6 @@ type ComputeInstanceHTTPServer interface {
 	ListComputeInstanceDuration(context.Context, *ListComputeDurationRequest) (*ListComputeDurationReply, error)
 	// ListComputeSpec 查询规格
 	ListComputeSpec(context.Context, *ListComputeSpecRequest) (*ListComputeSpecReply, error)
-	// SSHInstance 连接ssh
-	SSHInstance(context.Context, *GetInstanceRequest) (*SSHInstanceReply, error)
 	// StartInstance启动实例
 	StartInstance(context.Context, *GetInstanceRequest) (*StartInstanceReply, error)
 	// StopInstance停止实例
@@ -64,7 +61,6 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.GET("/v1/instance", _ComputeInstance_List0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StopInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
-	r.GET("/v1/instance/{id}/ssh", _ComputeInstance_SSHInstance0_HTTP_Handler(srv))
 }
 
 func _ComputeInstance_ListComputeSpec0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
@@ -259,28 +255,6 @@ func _ComputeInstance_StartInstance0_HTTP_Handler(srv ComputeInstanceHTTPServer)
 	}
 }
 
-func _ComputeInstance_SSHInstance0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetInstanceRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationComputeInstanceSSHInstance)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SSHInstance(ctx, req.(*GetInstanceRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SSHInstanceReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 type ComputeInstanceHTTPClient interface {
 	Create(ctx context.Context, req *CreateInstanceRequest, opts ...http.CallOption) (rsp *CreateInstanceReply, err error)
 	Delete(ctx context.Context, req *DeleteInstanceRequest, opts ...http.CallOption) (rsp *DeleteInstanceReply, err error)
@@ -289,7 +263,6 @@ type ComputeInstanceHTTPClient interface {
 	ListComputeImage(ctx context.Context, req *ListComputeImageRequest, opts ...http.CallOption) (rsp *ListComputeImageReply, err error)
 	ListComputeInstanceDuration(ctx context.Context, req *ListComputeDurationRequest, opts ...http.CallOption) (rsp *ListComputeDurationReply, err error)
 	ListComputeSpec(ctx context.Context, req *ListComputeSpecRequest, opts ...http.CallOption) (rsp *ListComputeSpecReply, err error)
-	SSHInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *SSHInstanceReply, err error)
 	StartInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *StartInstanceReply, err error)
 	StopInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *StopInstanceReply, err error)
 }
@@ -385,19 +358,6 @@ func (c *ComputeInstanceHTTPClientImpl) ListComputeSpec(ctx context.Context, in 
 	pattern := "/v1/compute/spec"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationComputeInstanceListComputeSpec))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *ComputeInstanceHTTPClientImpl) SSHInstance(ctx context.Context, in *GetInstanceRequest, opts ...http.CallOption) (*SSHInstanceReply, error) {
-	var out SSHInstanceReply
-	pattern := "/v1/instance/{id}/ssh"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationComputeInstanceSSHInstance))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

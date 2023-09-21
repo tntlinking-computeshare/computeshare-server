@@ -31,7 +31,9 @@ type User struct {
 	// 用户名
 	Name string `json:"name,omitempty"`
 	// 头像地址
-	Icon         string `json:"icon,omitempty"`
+	Icon string `json:"icon,omitempty"`
+	// 是否配置过密码
+	PwdConfig    bool `json:"pwd_config,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -40,6 +42,8 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldPwdConfig:
+			values[i] = new(sql.NullBool)
 		case user.FieldCountryCallCoding, user.FieldTelephoneNumber, user.FieldPassword, user.FieldName, user.FieldIcon:
 			values[i] = new(sql.NullString)
 		case user.FieldCreateDate, user.FieldLastLoginDate:
@@ -109,6 +113,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.Icon = value.String
 			}
+		case user.FieldPwdConfig:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field pwd_config", values[i])
+			} else if value.Valid {
+				u.PwdConfig = value.Bool
+			}
 		default:
 			u.selectValues.Set(columns[i], values[i])
 		}
@@ -165,6 +175,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("icon=")
 	builder.WriteString(u.Icon)
+	builder.WriteString(", ")
+	builder.WriteString("pwd_config=")
+	builder.WriteString(fmt.Sprintf("%v", u.PwdConfig))
 	builder.WriteByte(')')
 	return builder.String()
 }

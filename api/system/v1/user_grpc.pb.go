@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: api/system/v1/user.proto
+// source: system/v1/user.proto
 
 package v1
 
@@ -23,7 +23,6 @@ const (
 	User_UpdateUser_FullMethodName            = "/api.system.v1.User/UpdateUser"
 	User_UpdateUserPassword_FullMethodName    = "/api.system.v1.User/UpdateUserPassword"
 	User_UpdateUserTelephone_FullMethodName   = "/api.system.v1.User/UpdateUserTelephone"
-	User_DeleteUser_FullMethodName            = "/api.system.v1.User/DeleteUser"
 	User_GetUser_FullMethodName               = "/api.system.v1.User/GetUser"
 	User_ListUser_FullMethodName              = "/api.system.v1.User/ListUser"
 	User_Login_FullMethodName                 = "/api.system.v1.User/Login"
@@ -39,7 +38,6 @@ type UserClient interface {
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserReply, error)
 	UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...grpc.CallOption) (*UpdateUserPasswordReply, error)
 	UpdateUserTelephone(ctx context.Context, in *UpdateUserTelephoneRequest, opts ...grpc.CallOption) (*UpdateUserTelephoneReply, error)
-	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error)
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
 	// Login
@@ -91,15 +89,6 @@ func (c *userClient) UpdateUserPassword(ctx context.Context, in *UpdateUserPassw
 func (c *userClient) UpdateUserTelephone(ctx context.Context, in *UpdateUserTelephoneRequest, opts ...grpc.CallOption) (*UpdateUserTelephoneReply, error) {
 	out := new(UpdateUserTelephoneReply)
 	err := c.cc.Invoke(ctx, User_UpdateUserTelephone_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error) {
-	out := new(DeleteUserReply)
-	err := c.cc.Invoke(ctx, User_DeleteUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +148,6 @@ type UserServer interface {
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
 	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
 	UpdateUserTelephone(context.Context, *UpdateUserTelephoneRequest) (*UpdateUserTelephoneReply, error)
-	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	// Login
@@ -189,9 +177,6 @@ func (UnimplementedUserServer) UpdateUserPassword(context.Context, *UpdateUserPa
 }
 func (UnimplementedUserServer) UpdateUserTelephone(context.Context, *UpdateUserTelephoneRequest) (*UpdateUserTelephoneReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserTelephone not implemented")
-}
-func (UnimplementedUserServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
 func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
@@ -289,24 +274,6 @@ func _User_UpdateUserTelephone_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).UpdateUserTelephone(ctx, req.(*UpdateUserTelephoneRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).DeleteUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: User_DeleteUser_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).DeleteUser(ctx, req.(*DeleteUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -425,10 +392,6 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_UpdateUserTelephone_Handler,
 		},
 		{
-			MethodName: "DeleteUser",
-			Handler:    _User_DeleteUser_Handler,
-		},
-		{
 			MethodName: "GetUser",
 			Handler:    _User_GetUser_Handler,
 		},
@@ -450,5 +413,5 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/system/v1/user.proto",
+	Metadata: "system/v1/user.proto",
 }

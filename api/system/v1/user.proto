@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.system.v1;
 
 import "google/api/annotations.proto";
+//import "api/global/v1/response.proto";
 
 option go_package = "github.com/mohaijiang/computeshare-server/api/system/v1;v1";
 option java_multiple_files = true;
@@ -17,35 +18,30 @@ service User {
 	};
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
 		option (google.api.http) = {
-			put: "/v1/user/{id}",
+			put: "/v1/user",
 			body: "*"
 		};
 	}
 	rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (UpdateUserPasswordReply){
 		option (google.api.http) = {
-			put: "/v1/user/{id}/password",
+			put: "/v1/user/password",
 			body: "*"
 		};
 	};
 	rpc UpdateUserTelephone(UpdateUserTelephoneRequest) returns (UpdateUserTelephoneReply){
 		option (google.api.http) = {
-			put: "/v1/user/{id}/telephone",
+			put: "/v1/user/telephone",
 			body: "*"
 		};
 	}
-	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
-		option (google.api.http) = {
-			delete: "/v1/user/{id}"
-		};
-	};
 	rpc GetUser (GetUserRequest) returns (GetUserReply) {
 		option (google.api.http) = {
-			get: "/v1/user/{id}"
+			get: "/v1/user"
 		};
 	};
 	rpc ListUser (ListUserRequest) returns (ListUserReply) {
 		option (google.api.http) = {
-			get: "/v1/user"
+			get: "/v1/system/user"
 		};
 	};
 	// Login
@@ -88,7 +84,12 @@ message LoginWithValidateCodeRequest {
 }
 
 message LoginReply {
-	string token = 1;
+	message Data {
+		string token = 1;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 
 message CreateUserRequest {
@@ -98,40 +99,51 @@ message CreateUserRequest {
 	string validate_code = 4;
 }
 message CreateUserReply {
-	string id = 1;
+	message Data {
+		string id = 1;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 message UpdateUserRequest {
-	string id = 1;
-	string name = 2;
-	string icon = 3;
+	string name = 1;
+	string icon = 2;
 }
 message UpdateUserReply {
+	int32 code = 1;
+	string message = 2;
 }
 message UpdateUserPasswordRequest {
-	string id = 1;
-	string old_password = 2;
-	string new_password = 3;
+	string old_password = 1;
+	string new_password = 2;
 }
-message UpdateUserPasswordReply {}
+message UpdateUserPasswordReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 message UpdateUserTelephoneRequest {
-	string id = 1;
-	string country_call_coding = 2;
-	string telephone_number = 3;
-	string validate_code = 4;
+	string country_call_coding = 1;
+	string telephone_number = 2;
+	string validate_code = 3;
 }
 message UpdateUserTelephoneReply{
-
+	int32 code = 1;
+	string message = 2;
 }
 message DeleteUserRequest {
 	string id = 1;
 }
-message DeleteUserReply {}
+message DeleteUserReply {
+	int32 code = 1;
+	string message = 2;
+}
 
 message GetUserRequest {
-	string id = 1;
 }
-message GetUserReply {
+
+message UserReply {
 	string id = 1;
 	string country_call_coding = 2;
 	string telephone_number = 3;
@@ -139,6 +151,12 @@ message GetUserReply {
 	int64 last_login_date = 5;
 	string name = 6;
 	string icon = 7;
+	bool pwd_config = 8;
+}
+message GetUserReply {
+	int32 code = 1;
+	string message = 2;
+	UserReply data = 3;
 }
 
 message ListUserRequest {
@@ -146,7 +164,9 @@ message ListUserRequest {
 	optional string telephone_number = 2;
 }
 message ListUserReply {
-	repeated GetUserReply result = 1;
+	int32 code = 1;
+	string message = 2;
+	repeated UserReply data = 3;
 }
 
 message SendValidateCodeRequest {
@@ -155,5 +175,6 @@ message SendValidateCodeRequest {
 }
 
 message SendValidateCodeReply {
-
+	int32 code = 1;
+	string message = 2;
 }
