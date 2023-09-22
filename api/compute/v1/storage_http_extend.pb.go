@@ -32,7 +32,7 @@ func Storage_UploadFile_Extend_HTTP_Handler(srv StorageHTTPServer) func(ctx http
 		if err != nil {
 			return err
 		}
-		reply := out.(*File)
+		reply := out.(*UploadFileReply)
 		return ctx.Result(200, reply)
 	}
 }

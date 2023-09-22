@@ -179,6 +179,30 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 }
 
 func (uc *ComputeInstanceUsercase) Delete(ctx context.Context, id uuid.UUID) error {
+	go func() {
+		instance, err := uc.Get(ctx, id)
+		if err != nil {
+			return
+		}
+
+		if instance.ContainerID == "" || instance.PeerID == "" {
+			return
+		}
+
+		vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
+		if err != nil {
+			return
+		}
+		defer cleanup()
+
+		_, err = vmClient.DeleteVm(ctx, &clientcomputev1.DeleteVmRequest{
+			Id: instance.ContainerID,
+		})
+
+		if err != nil {
+			return
+		}
+	}()
 	return uc.instanceRepo.Delete(ctx, id)
 }
 
@@ -348,7 +372,21 @@ func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) erro
 		Id: instance.ContainerID,
 	})
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	instance.Status = InstanceStatusRunning
+
+	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
+
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	return nil
 
 }
 
@@ -371,7 +409,22 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 	_, err = vmClient.StopVm(ctx, &clientcomputev1.GetVmRequest{
 		Id: instance.ContainerID,
 	})
-	return err
+
+	if err != nil {
+		return err
+	}
+
+	instance.Status = InstanceStatusTerminal
+
+	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
+
+	if err != nil {
+		uc.log.Error("创建容器部署指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	return nil
 }
 
 var upgrader = websocket.Upgrader{

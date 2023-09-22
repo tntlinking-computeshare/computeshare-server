@@ -227,3 +227,21 @@ func (s *P2PUsecase) ListListen(ctx context.Context, req *pb.ListListenRequest) 
 	s.node.P2P.ListenersP2P.Unlock()
 	return output, nil
 }
+
+// CheckForwardHealth check if the remote node is connected
+func (c *P2PUsecase) CheckForwardHealth(protoOpt, target string) error {
+	targets, err := parseIpfsAddr(target)
+	proto := protocol.ID(protoOpt)
+	if err != nil {
+		return err
+	}
+	cctx, cancel := context.WithTimeout(context.Background(), time.Second*3) //TODO: configurable?
+	defer cancel()
+	stream, err := c.node.PeerHost.NewStream(cctx, targets.ID, proto)
+	if err != nil {
+		return err
+	} else {
+		_ = stream.Close()
+		return nil
+	}
+}
