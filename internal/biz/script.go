@@ -100,7 +100,7 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Scrip
 		UpdateTime:    time.Now(),
 	}
 	script.ExecuteState = consts.Executing
-	_, err = uc.scriptExecutionRecordRepo.Save(ctx, &record)
+	save, err := uc.scriptExecutionRecordRepo.Save(ctx, &record)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +111,7 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Scrip
 	if err != nil {
 		return nil, err
 	}
-	go uc.RunPythonPackageOnAgent(agent.PeerId, script, &record)
+	go uc.RunPythonPackageOnAgent(agent.PeerId, script, save)
 
 	return uc.repo.Update(ctx, script)
 }
@@ -119,7 +119,7 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Scrip
 func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, record *ScriptExecutionRecord) {
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
 
-	computePowerclient, cleanup, err := uc.getComputePowerHTTPClient(peerId)
+	computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(peerId)
 	if err != nil {
 		uc.log.Error("创建ComputePowerHTTPClient链接失败")
 		uc.log.Error(err)
@@ -127,13 +127,21 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, 
 	}
 	defer cleanup()
 
-	rsp, err := computePowerclient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
+	rsp, err := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
 	executeState := consts.Completed
 	if err != nil {
+		uc.log.Error("computePowerClient RunPythonPackage fail")
+		uc.log.Error(err)
 		executeState = consts.ExecutionFailed
 	}
 	script.ExecuteState = int32(executeState)
-	script.ExecuteResult = rsp.ExecuteResult
+	if rsp == nil {
+		record.ExecuteResult = ""
+		script.ExecuteResult = ""
+	} else {
+		record.ExecuteResult = rsp.ExecuteResult
+		script.ExecuteResult = rsp.ExecuteResult
+	}
 	_, err = uc.repo.Update(ctx, script)
 	if err != nil {
 		uc.log.Error("客户端执行py完成，向db保存script失败")
@@ -141,7 +149,6 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, 
 		return
 	}
 	record.ExecuteState = int32(executeState)
-	record.ExecuteResult = rsp.ExecuteResult
 	_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
 	if err != nil {
 		uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
@@ -150,7 +157,7 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, 
 	}
 }
 
-func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerHTTPClient, func(), error) {
+func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerClientHTTPClient, func(), error) {
 	ip, port, err := uc.p2pUsecase.createP2pForward(peerId)
 	if err != nil {
 		return nil, nil, err
@@ -173,7 +180,7 @@ func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcompute
 		return nil, nil, err
 	}
 
-	vmClient := clientcomputev1.NewComputePowerHTTPClient(client)
+	vmClient := clientcomputev1.NewComputePowerClientHTTPClient(client)
 	return vmClient, func() {
 		_ = client.Close()
 	}, nil

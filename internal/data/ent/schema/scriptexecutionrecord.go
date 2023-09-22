@@ -21,7 +21,7 @@ func (ScriptExecutionRecord) Fields() []ent.Field {
 		field.Text("script_content").NotEmpty(),
 		field.String("file_address"),
 		field.Int32("execute_state"),
-		field.Text("execute_result").NotEmpty(),
+		field.Text("execute_result"),
 		field.Time("create_time").Default(time.Now()),
 		field.Time("update_time").Default(time.Now()),
 	}

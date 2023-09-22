@@ -185,11 +185,6 @@ func (serc *ScriptExecutionRecordCreate) check() error {
 	if _, ok := serc.mutation.ExecuteResult(); !ok {
 		return &ValidationError{Name: "execute_result", err: errors.New(`ent: missing required field "ScriptExecutionRecord.execute_result"`)}
 	}
-	if v, ok := serc.mutation.ExecuteResult(); ok {
-		if err := scriptexecutionrecord.ExecuteResultValidator(v); err != nil {
-			return &ValidationError{Name: "execute_result", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.execute_result": %w`, err)}
-		}
-	}
 	if _, ok := serc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "ScriptExecutionRecord.create_time"`)}
 	}

@@ -27,7 +27,8 @@ func NewScriptExecutionRecordRepo(data *Data, logger log.Logger) biz.ScriptExecu
 
 func (s *scriptExecutionRecordRepo) Save(ctx context.Context, scriptExecutionRecord *biz.ScriptExecutionRecord) (*biz.ScriptExecutionRecord, error) {
 	save, err := s.data.db.ScriptExecutionRecord.Create().SetFkScriptID(scriptExecutionRecord.FkScriptID).SetScriptContent(scriptExecutionRecord.ScriptContent).
-		SetFileAddress(scriptExecutionRecord.FileAddress).SetExecuteState(consts.Executing).SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
+		SetUserID(scriptExecutionRecord.UserID).SetFileAddress(scriptExecutionRecord.FileAddress).SetExecuteState(consts.Executing).
+		SetExecuteResult(scriptExecutionRecord.ExecuteResult).SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -176,11 +176,6 @@ func (seru *ScriptExecutionRecordUpdate) check() error {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if v, ok := seru.mutation.ExecuteResult(); ok {
-		if err := scriptexecutionrecord.ExecuteResultValidator(v); err != nil {
-			return &ValidationError{Name: "execute_result", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.execute_result": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -433,11 +428,6 @@ func (seruo *ScriptExecutionRecordUpdateOne) check() error {
 	if v, ok := seruo.mutation.ScriptContent(); ok {
 		if err := scriptexecutionrecord.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
-		}
-	}
-	if v, ok := seruo.mutation.ExecuteResult(); ok {
-		if err := scriptexecutionrecord.ExecuteResultValidator(v); err != nil {
-			return &ValidationError{Name: "execute_result", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.execute_result": %w`, err)}
 		}
 	}
 	return nil

@@ -82,8 +82,6 @@ var (
 	FkScriptIDValidator func(int32) error
 	// ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	ScriptContentValidator func(string) error
-	// ExecuteResultValidator is a validator for the "execute_result" field. It is called by the builders before save.
-	ExecuteResultValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.

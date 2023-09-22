@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: compute/v1/compute_power.proto
+// source: api/compute/v1/compute_power.proto
 
 package v1
 
@@ -46,9 +46,9 @@ func RegisterComputePowerHTTPServer(s *http.Server, srv ComputePowerHTTPServer) 
 	r.POST("/v1/compute-power", _ComputePower_UploadScriptFile0_HTTP_Handler(srv))
 	r.GET("/v1/compute-power/script/list", _ComputePower_GetScriptList0_HTTP_Handler(srv))
 	r.POST("/v1/compute-power/python", _ComputePower_RunPythonPackage0_HTTP_Handler(srv))
-	r.POST("/v1/compute-power/python", _ComputePower_CancelExecPythonPackage0_HTTP_Handler(srv))
+	r.POST("/v1/compute-power/python/cancel", _ComputePower_CancelExecPythonPackage0_HTTP_Handler(srv))
 	r.GET("/v1/compute-power/script/info/{id}", _ComputePower_GetScriptInfo0_HTTP_Handler(srv))
-	r.POST("/v1/compute-power/{id}", _ComputePower_DownloadScriptExecuteResult0_HTTP_Handler(srv))
+	r.POST("/v1/compute-power/result", _ComputePower_DownloadScriptExecuteResult0_HTTP_Handler(srv))
 }
 
 func _ComputePower_UploadScriptFile0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
@@ -167,9 +167,6 @@ func _ComputePower_DownloadScriptExecuteResult0_HTTP_Handler(srv ComputePowerHTT
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
 		http.SetOperation(ctx, OperationComputePowerDownloadScriptExecuteResult)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.DownloadScriptExecuteResult(ctx, req.(*DownloadScriptExecuteResultRequest))
@@ -202,7 +199,7 @@ func NewComputePowerHTTPClient(client *http.Client) ComputePowerHTTPClient {
 
 func (c *ComputePowerHTTPClientImpl) CancelExecPythonPackage(ctx context.Context, in *CancelExecPythonPackageRequest, opts ...http.CallOption) (*CancelExecPythonPackageReply, error) {
 	var out CancelExecPythonPackageReply
-	pattern := "/v1/compute-power/python"
+	pattern := "/v1/compute-power/python/cancel"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputePowerCancelExecPythonPackage))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -215,7 +212,7 @@ func (c *ComputePowerHTTPClientImpl) CancelExecPythonPackage(ctx context.Context
 
 func (c *ComputePowerHTTPClientImpl) DownloadScriptExecuteResult(ctx context.Context, in *DownloadScriptExecuteResultRequest, opts ...http.CallOption) (*DownloadScriptExecuteResultReply, error) {
 	var out DownloadScriptExecuteResultReply
-	pattern := "/v1/compute-power/{id}"
+	pattern := "/v1/compute-power/result"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputePowerDownloadScriptExecuteResult))
 	opts = append(opts, http.PathTemplate(pattern))

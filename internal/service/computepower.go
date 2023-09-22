@@ -9,7 +9,6 @@ import (
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/kubo/core"
 	"github.com/ipfs/kubo/core/coreapi"
-	"github.com/jinzhu/copier"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
@@ -74,11 +73,16 @@ func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.Uplo
 		return nil, err
 	}
 	return &pb.UploadScriptFileReply{
-		Id:            createScript.ID,
-		TaskNumber:    createScript.TaskNumber,
-		ScriptName:    createScript.ScriptName,
-		ScriptContent: createScript.ScriptContent,
-		ExecuteState:  createScript.ExecuteState,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.ScriptReply{
+			Id:            createScript.ID,
+			TaskNumber:    createScript.TaskNumber,
+			ScriptName:    createScript.ScriptName,
+			ScriptContent: createScript.ScriptContent,
+			ExecuteState:  createScript.ExecuteState,
+			ExecuteResult: createScript.ExecuteResult,
+		},
 	}, nil
 }
 func (s *ComputePowerService) GetScriptList(ctx context.Context, req *pb.GetScriptListRequest) (*pb.GetScriptListReply, error) {
@@ -90,13 +94,27 @@ func (s *ComputePowerService) GetScriptList(ctx context.Context, req *pb.GetScri
 	if err != nil {
 		return nil, err
 	}
-	var pointerList []*pb.UploadScriptFileReply
+	var pointerList []*pb.ScriptReply
 	for _, script := range data {
-		var uploadScriptFileReply pb.UploadScriptFileReply
-		copier.Copy(uploadScriptFileReply, *script)
-		pointerList = append(pointerList, &uploadScriptFileReply)
+		var scriptReply pb.ScriptReply
+		scriptReply.Id = script.ID
+		scriptReply.TaskNumber = script.TaskNumber
+		scriptReply.ScriptName = script.ScriptName
+		scriptReply.ScriptContent = script.ScriptContent
+		scriptReply.ExecuteState = script.ExecuteState
+		scriptReply.ExecuteResult = script.ExecuteResult
+		pointerList = append(pointerList, &scriptReply)
 	}
-	return &pb.GetScriptListReply{List: pointerList, Total: total, Page: req.GetPage(), Size: req.GetSize()}, nil
+	return &pb.GetScriptListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.GetScriptListReply_Data{
+			List:  pointerList,
+			Total: total,
+			Page:  req.GetPage(),
+			Size:  req.GetSize(),
+		},
+	}, nil
 }
 func (s *ComputePowerService) RunPythonPackage(ctx context.Context, req *pb.RunPythonPackageServerRequest) (*pb.RunPythonPackageServerReply, error) {
 	script, err := s.uc.RunPythonPackage(ctx, req.GetId())
@@ -104,12 +122,16 @@ func (s *ComputePowerService) RunPythonPackage(ctx context.Context, req *pb.RunP
 		return nil, err
 	}
 	return &pb.RunPythonPackageServerReply{
-		Id:            script.ID,
-		TaskNumber:    script.TaskNumber,
-		ScriptName:    script.ScriptName,
-		ScriptContent: script.ScriptContent,
-		ExecuteState:  script.ExecuteState,
-		ExecuteResult: script.ExecuteResult,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.ScriptReply{
+			Id:            script.ID,
+			TaskNumber:    script.TaskNumber,
+			ScriptName:    script.ScriptName,
+			ScriptContent: script.ScriptContent,
+			ExecuteState:  script.ExecuteState,
+			ExecuteResult: script.ExecuteResult,
+		},
 	}, nil
 }
 
@@ -119,12 +141,16 @@ func (s *ComputePowerService) CancelExecPythonPackage(ctx context.Context, req *
 		return nil, err
 	}
 	return &pb.CancelExecPythonPackageReply{
-		Id:            script.ID,
-		TaskNumber:    script.TaskNumber,
-		ScriptName:    script.ScriptName,
-		ScriptContent: script.ScriptContent,
-		ExecuteState:  script.ExecuteState,
-		ExecuteResult: script.ExecuteResult,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.ScriptReply{
+			Id:            script.ID,
+			TaskNumber:    script.TaskNumber,
+			ScriptName:    script.ScriptName,
+			ScriptContent: script.ScriptContent,
+			ExecuteState:  script.ExecuteState,
+			ExecuteResult: script.ExecuteResult,
+		},
 	}, nil
 }
 func (s *ComputePowerService) GetScriptInfo(ctx context.Context, req *pb.GetScriptInfoRequest) (*pb.GetScriptInfoReply, error) {
@@ -133,12 +159,16 @@ func (s *ComputePowerService) GetScriptInfo(ctx context.Context, req *pb.GetScri
 		return nil, err
 	}
 	return &pb.GetScriptInfoReply{
-		Id:            script.ID,
-		TaskNumber:    script.TaskNumber,
-		ScriptName:    script.ScriptName,
-		ScriptContent: script.ScriptContent,
-		ExecuteState:  script.ExecuteState,
-		ExecuteResult: script.ExecuteResult,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.ScriptReply{
+			Id:            script.ID,
+			TaskNumber:    script.TaskNumber,
+			ScriptName:    script.ScriptName,
+			ScriptContent: script.ScriptContent,
+			ExecuteState:  script.ExecuteState,
+			ExecuteResult: script.ExecuteResult,
+		},
 	}, nil
 }
 func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, req *pb.DownloadScriptExecuteResultRequest) (*pb.DownloadScriptExecuteResultReply, error) {
@@ -147,7 +177,11 @@ func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, r
 		return nil, err
 	}
 	return &pb.DownloadScriptExecuteResultReply{
-		Body: []byte(script.ScriptContent),
-		Name: script.ScriptName,
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.DownloadScriptExecuteResultReply_Data{
+			Body: []byte(script.ExecuteResult),
+			Name: script.ScriptName,
+		},
 	}, nil
 }
