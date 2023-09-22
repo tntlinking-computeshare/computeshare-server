@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"github.com/tj/assert"
 	"testing"
+	"time"
 )
 
 func TestIpfsDaemon(t *testing.T) {
-	node, err := RunDaemon()
+	node, _, err := RunDaemon()
 	if err != nil {
 		assert.NoError(t, err)
 	}
@@ -20,4 +21,8 @@ func TestIpfsDaemon(t *testing.T) {
 	fmt.Println(localAddress)
 
 	select {}
+}
+
+func TestTime(t *testing.T) {
+	fmt.Print(time.Now().Unix())
 }
