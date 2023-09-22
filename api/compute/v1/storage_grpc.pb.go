@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: compute/v1/storage.proto
+// source: api/compute/v1/storage.proto
 
 package v1
 
@@ -253,5 +253,5 @@ var Storage_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "compute/v1/storage.proto",
+	Metadata: "api/compute/v1/storage.proto",
 }
