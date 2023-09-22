@@ -57,6 +57,8 @@ func RunDaemon() (*core.IpfsNode, func(), error) {
 		conf.Bootstrap = []string{}
 		conf.Swarm.RelayClient.Enabled = config.True
 		conf.Swarm.RelayService.Enabled = config.True
+		conf.Experimental.Libp2pStreamMounting = true
+
 		err = fsrepo.Init(
 			ipfsPath,
 			conf,

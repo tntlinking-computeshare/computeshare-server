@@ -17,7 +17,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/service"
-	"github.com/mvrilo/go-redoc"
 )
 
 func NewWhiteListMatcher() selector.MatchFunc {
@@ -86,15 +85,6 @@ func NewHTTPServer(c *conf.Server,
 	srv.Route("/").POST("/v1/compute-power/upload", computeV1.Compute_Power_UploadSceipt_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.HandleFunc("/v1/vm/terminal", instanceService.Terminal)
-	doc := redoc.Redoc{
-		Title:       "Example API",
-		Description: "Example API Description",
-		SpecFile:    "./openapi.yaml", // "./openapi.yaml"
-		SpecPath:    "/openapi.yaml",  // "/openapi.yaml"
-		DocsPath:    "/docs",
-	}
-	srv.HandleFunc("/docs", doc.Handler())
-	srv.HandleFunc("/openapi.yaml", doc.Handler())
 
 	return srv
 }

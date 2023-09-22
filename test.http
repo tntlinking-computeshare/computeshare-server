@@ -16,6 +16,10 @@ Content-Type: application/json
 --WebAppBoundary--
 
 
+### 下载
+POST http://127.0.0.1:8000/v1/storage/download?id=386f199e-1704-4a40-bd8c-10f2969a9e54
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+
 ###
 
 # curl -X 'DELETE'
@@ -111,6 +115,9 @@ PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a91
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
 
+{
+
+}
 
 ### 启动虚拟机
 PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
