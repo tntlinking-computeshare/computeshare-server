@@ -155,6 +155,9 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 		Name:           p.Name,
 		Status:         int32(p.Status),
 		ExpirationTime: p.ExpirationTime.Unix(),
+		ImageName:      p.Image,
+		Core:           p.Core,
+		Memory:         p.Memory,
 	}
 }
 

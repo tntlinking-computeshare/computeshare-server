@@ -2,13 +2,15 @@ package p2p
 
 import (
 	"fmt"
+	"github.com/tj/assert"
 	"testing"
+	"time"
 )
 
 func TestIpfsDaemon(t *testing.T) {
-	node, err, _ := RunDaemon()
+	node, _, err := RunDaemon()
 	if err != nil {
-		panic(t)
+		assert.NoError(t, err)
 	}
 
 	PeerId := node.Identity.String()
@@ -19,4 +21,8 @@ func TestIpfsDaemon(t *testing.T) {
 	fmt.Println(localAddress)
 
 	select {}
+}
+
+func TestTime(t *testing.T) {
+	fmt.Print(time.Now().Unix())
 }
