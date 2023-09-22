@@ -17,7 +17,7 @@ require (
 	github.com/ipfs/kubo v0.22.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/libp2p/go-libp2p v0.29.2
-	//github.com/mohaijiang/computeshare-client v0.0.2
+	//github.com/mohaijiang/computeshare-client v0.0.3-0.20230922081112-671c9fa99708
 	github.com/multiformats/go-multiaddr v0.10.1
 	github.com/multiformats/go-multiaddr-dns v0.3.1
 	github.com/mvrilo/go-redoc v0.1.4
@@ -31,7 +31,7 @@ require (
 	google.golang.org/protobuf v1.31.0
 )
 
-require github.com/mohaijiang/computeshare-client v0.0.1
+require github.com/mohaijiang/computeshare-client v0.0.3-0.20230922081112-671c9fa99708
 
 require (
 	ariga.io/atlas v0.10.2-0.20230427182402-87a07dfb83bf // indirect
@@ -244,5 +244,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/blake3 v1.2.1 // indirect
 )
-
-replace github.com/mohaijiang/computeshare-client v0.0.1 => ../computeshare-client
