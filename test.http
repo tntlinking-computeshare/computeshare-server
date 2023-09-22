@@ -1,7 +1,6 @@
 ### POST
 POST http://127.0.0.1:8000/v1/storage/upload
-x-md-globa-owner: mo
-owner: mo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -10,10 +9,10 @@ Content-Type: text/plain
 
 73640b0d-ce18-45c1-beff-e06faa4a05f9
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="0x72c0360c595389b733872ab8136a77fbf7ab20fb.txt"
+Content-Disposition: form-data; name="file"; filename="abc.txt"
 Content-Type: application/json
 
-< /Users/mohaijiang/Downloads/0x72c0360c595389b733872ab8136a77fbf7ab20fb.txt
+< /tmp/abc.txt
 --WebAppBoundary--
 
 
@@ -30,9 +29,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJkMmIyY
 
 ### POST /v1/compute-power/upload
 POST http://127.0.0.1:8000/v1/compute-power/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJkMmIyYzE1Yy1hM2RmLTQ1OGItYmVjMC1jNTU2YWYxNDMxOTMiLCJleHAiOjE2OTUyNzY5ODR9.GU4Va3rQSzT2YKsZUxJIJQdf4TpwCdIANVyJkdjKoPY
+x-md-globa-owner: mo
+owner: mo
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
+--WebAppBoundary
+Content-Disposition: form-data;
+Content-Type: text/plain
+
+73640b0d-ce18-45c1-beff-e06faa4a05f9
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="substrate学习文档.md"
 Content-Type: application/json
@@ -67,30 +72,53 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1O
   "newPassword": "Abcd1234"
 }
 
+### 验证码
+POST http://127.0.0.1:8000/v1/sms
+#POST https://computeshare.hamster.newtouch.com/v1/sms/send
+Content-Type: application/json
+
+{
+  "countryCallCoding": "+86",
+  "telephoneNumber": "15001747213"
+}
+
+
 ### 登录
-POST http://127.0.0.1:8000/v1/user/login
+POST https://computeshare.hamster.newtouch.com/v1/user/login_by_vc
 Content-Type: application/json
 
 {
   "countryCallCoding": "+86",
   "telephoneNumber": "15001747213",
-  "password": "Abcd1234"
+  "validateCode": "000000"
 }
 
 
-### POST
-POST http://127.0.0.1:8000/v1/compute-power/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJmMjE4YzJhOS1mNDI1LTQ4OGItYjdkMS1jYTA1MTMzZjIxMDYiLCJleHAiOjE2OTU0MzkxODd9.AkW2fIq2zPLw0AOMUrV52cGDQQd9_AcHeGdKWKYWixY
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="parentId"
-Content-Type: text/plain
-
-73640b0d-ce18-45c1-beff-e06faa4a05f9
---WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="hello.py"
+### 创建虚拟机
+POST https://computeshare.hamster.newtouch.com/v1/instance
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
 
-< /Users/abing/hello.py
---WebAppBoundary--
+{
+  "specId": 1,
+  "imageId": 1,
+  "duration": 1,
+  "name": "my-vm"
+}
+
+### 关闭虚拟机
+PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/stop
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+
+
+### 启动虚拟机
+PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+
+
+### 删除虚拟机
+DELETE https://computeshare.hamster.newtouch.com/v1/instance/59029fbc-54ee-4e51-b86b-570edafc4fc7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg

@@ -45,6 +45,8 @@ spec:
           volumeMounts:
             - mountPath: /data/conf
               name: config
+            - mountPath: /root/.ipfs
+              name: computeshare-server-data
       volumes:
         - name: config
           configMap:
@@ -54,3 +56,6 @@ spec:
             items:
               - key: "config.yaml"
                 path: "config.yaml"
+        - name: computeshare-server-data
+          persistentVolumeClaim:
+            claimName: computeshare-server-data
