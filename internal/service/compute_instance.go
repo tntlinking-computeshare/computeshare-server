@@ -154,10 +154,21 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 		Id:             p.ID.String(),
 		Name:           p.Name,
 		Status:         int32(p.Status),
-		ExpirationTime: p.ExpirationTime.Unix(),
+		ExpirationTime: p.ExpirationTime.UnixMilli(),
 		ImageName:      p.Image,
 		Core:           p.Core,
 		Memory:         p.Memory,
+		Stats: lo.Map(p.Stats, func(item *biz.ComputeInstanceRds, _ int) *pb.InstanceStats {
+			if item == nil {
+				return nil
+			}
+			return &pb.InstanceStats{
+				Id:          item.ID,
+				CpuUsage:    item.CpuUsage,
+				MemoryUsage: item.MemoryUsage,
+				StatsTime:   item.StatsTime.UnixMilli(),
+			}
+		}),
 	}
 }
 

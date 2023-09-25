@@ -128,8 +128,8 @@ func toUserReply(user *biz.User, _ int) *pb.UserReply {
 		Id:                user.ID.String(),
 		CountryCallCoding: user.CountryCallCoding,
 		TelephoneNumber:   user.TelephoneNumber,
-		CreateDate:        user.CreateDate.Unix(),
-		LastLoginDate:     user.LastLoginDate.Unix(),
+		CreateDate:        user.CreateDate.UnixMilli(),
+		LastLoginDate:     user.LastLoginDate.UnixMilli(),
 		PwdConfig:         user.PwdConfig,
 	}
 }

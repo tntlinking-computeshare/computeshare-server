@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -86,4 +87,43 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 func (crs *computeInstanceRepo) Get(ctx context.Context, id uuid.UUID) (*biz.ComputeInstance, error) {
 	instance, err := crs.data.db.ComputeInstance.Get(ctx, id)
 	return crs.toBiz(instance, 0), err
+}
+
+func (crs *computeInstanceRepo) ListAll(ctx context.Context) ([]*biz.ComputeInstance, error) {
+	result, err := crs.data.db.ComputeInstance.Query().Where(computeinstance.StatusEQ(biz.InstanceStatusRunning)).All(ctx)
+	if err != nil {
+		return []*biz.ComputeInstance{}, err
+	}
+
+	return lo.Map(result, crs.toBiz), err
+}
+
+func stateKey(id uuid.UUID) string {
+	return fmt.Sprintf("compute_instance:stats:%s", id.String())
+}
+
+func (crs *computeInstanceRepo) SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *biz.ComputeInstanceRds) error {
+	key := stateKey(id)
+	err := crs.data.rdb.RPush(ctx, key, rdbInstance).Err()
+	if err != nil {
+		return err
+	}
+	length, err := crs.data.rdb.LLen(ctx, key).Result()
+	if err != nil {
+		return err
+	}
+
+	extraSize := length - 10
+
+	if extraSize > 0 {
+		crs.data.rdb.LPop(ctx, key)
+	}
+
+	return nil
+
+}
+func (crs *computeInstanceRepo) GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*biz.ComputeInstanceRds, error) {
+	var result []*biz.ComputeInstanceRds
+	err := crs.data.rdb.LRange(ctx, stateKey(id), 0, 10).ScanSlice(&result)
+	return result, err
 }

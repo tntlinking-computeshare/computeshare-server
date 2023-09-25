@@ -25,7 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwM
 # curl -X 'DELETE'
 #  'HTTP://127.0.0.1:8000/v1/user/a3546e51-8976-44ea-94a3-1c74ebda0118'
 #  -H 'accept: application/json'
-GET https://computeshare.hamster.newtouch.com/v1/user
+GET  http://127.0.0.1:8000/v1/user
 accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJkMmIyYzE1Yy1hM2RmLTQ1OGItYmVjMC1jNTU2YWYxNDMxOTMiLCJleHAiOjE2OTUyNzY5ODR9.GU4Va3rQSzT2YKsZUxJIJQdf4TpwCdIANVyJkdjKoPY
 
@@ -77,8 +77,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1O
 }
 
 ### 验证码
-POST http://127.0.0.1:8000/v1/sms
-#POST https://computeshare.hamster.newtouch.com/v1/sms/send
+POST http://127.0.0.1:8000/v1/sms/send
+#POST  http://127.0.0.1:8000/v1/sms/send
 Content-Type: application/json
 
 {
@@ -88,7 +88,7 @@ Content-Type: application/json
 
 
 ### 登录
-POST https://computeshare.hamster.newtouch.com/v1/user/login_by_vc
+POST http://127.0.0.1:8000/v1/user/login_by_vc
 Content-Type: application/json
 
 {
@@ -99,9 +99,9 @@ Content-Type: application/json
 
 
 ### 创建虚拟机
-POST https://computeshare.hamster.newtouch.com/v1/instance
+POST  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY
 
 {
   "specId": 1,
@@ -111,7 +111,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwM
 }
 
 ### 关闭虚拟机
-PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/stop
+PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/stop
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
 
@@ -120,12 +120,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwM
 }
 
 ### 启动虚拟机
-PUT https://computeshare.hamster.newtouch.com/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
+PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
 
 
 ### 删除虚拟机
-DELETE https://computeshare.hamster.newtouch.com/v1/instance/59029fbc-54ee-4e51-b86b-570edafc4fc7
+DELETE  http://127.0.0.1:8000/v1/instance/59029fbc-54ee-4e51-b86b-570edafc4fc7
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+
+
+### 查询虚拟机
+GET  http://127.0.0.1:8000/v1/instance
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY

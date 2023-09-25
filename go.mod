@@ -246,4 +246,4 @@ require (
 	lukechampine.com/blake3 v1.2.1 // indirect
 )
 
-replace github.com/mohaijiang/computeshare-client v0.0.3-0.20230925034225-438eb5bea678 => ../computeshare-client
+//replace github.com/mohaijiang/computeshare-client v0.0.3-0.20230925034225-438eb5bea678 => ../computeshare-client

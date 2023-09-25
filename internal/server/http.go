@@ -44,6 +44,7 @@ func NewHTTPServer(c *conf.Server,
 	userService *service.UserService,
 	instanceService *service.ComputeInstanceService,
 	powerService *service.ComputePowerService,
+	job *service.CronJob,
 	logger log.Logger) *http.Server {
 
 	jetMiddleware := selector.Server(
@@ -85,6 +86,8 @@ func NewHTTPServer(c *conf.Server,
 	srv.Route("/").POST("/v1/compute-power/upload/script", computeV1.Compute_Power_UploadSceipt_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.HandleFunc("/v1/vm/terminal", instanceService.Terminal)
+
+	job.StartJob()
 
 	return srv
 }

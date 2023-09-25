@@ -12,4 +12,5 @@ var ProviderSet = wire.NewSet(
 	NewUserService,
 	NewComputeInstanceService,
 	NewComputePowerService,
+	NewCronJob,
 )

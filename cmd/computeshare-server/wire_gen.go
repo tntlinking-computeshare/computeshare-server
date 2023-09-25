@@ -56,7 +56,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
 	p2PUsecase := biz.NewP2PUsecase(ipfsNode, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, ipfsNode, agentRepo, p2PUsecase, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2PUsecase, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
@@ -67,7 +67,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		cleanup()
 		return nil, nil, err
 	}
-	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, logger)
+	cronJob := service.NewCronJob(computeInstanceUsercase, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup2()
