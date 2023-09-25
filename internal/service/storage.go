@@ -109,6 +109,9 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 		LastModify: time.Now(),
 		Cid:        pathAdded.Cid().String(),
 	}
+
+	s.log.Info("uploaded: ", req.GetName())
+
 	err = s.uc.Create(ctx, storage)
 	return &pb.UploadFileReply{
 		Code:    200,
@@ -119,6 +122,7 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 			Cid:        &storage.Cid,
 			LastModify: storage.LastModify.UnixMilli(),
 			Type:       pb.FileType(storage.Type),
+			Size:       int32(size),
 		},
 	}, err
 }
