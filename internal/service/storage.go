@@ -55,7 +55,7 @@ func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.Lis
 			Type:       pb.FileType(item.Type),
 			Name:       item.Name,
 			Size:       item.Size,
-			LastModify: item.LastModify.Unix(),
+			LastModify: item.LastModify.UnixMilli(),
 			Cid:        &item.Cid,
 		}
 	})
@@ -117,7 +117,7 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 			Id:         storage.ID.String(),
 			Name:       storage.Name,
 			Cid:        &storage.Cid,
-			LastModify: storage.LastModify.Unix(),
+			LastModify: storage.LastModify.UnixMilli(),
 			Type:       pb.FileType(storage.Type),
 		},
 	}, err
