@@ -128,33 +128,43 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, script *Script, 
 	defer cleanup()
 
 	rsp, err := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
-	executeState := consts.Completed
-	if err != nil {
-		uc.log.Error("computePowerClient RunPythonPackage fail")
-		uc.log.Error(err)
-		executeState = consts.ExecutionFailed
-	}
-	script.ExecuteState = int32(executeState)
-	if rsp == nil {
-		record.ExecuteResult = ""
-		script.ExecuteResult = ""
+	scriptExecutionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, record.ID)
+	if scriptExecutionRecord.ExecuteState == consts.Executing {
+		executeState := consts.Completed
+		if err != nil {
+			uc.log.Error("computePowerClient RunPythonPackage fail")
+			uc.log.Error(err)
+			executeState = consts.ExecutionFailed
+		}
+		script.ExecuteState = int32(executeState)
+		if rsp == nil {
+			record.ExecuteResult = ""
+			script.ExecuteResult = ""
+		} else {
+			record.ExecuteResult = rsp.ExecuteResult
+			script.ExecuteResult = rsp.ExecuteResult
+		}
+		_, err = uc.repo.Update(ctx, script)
+		if err != nil {
+			uc.log.Error("客户端执行py完成，向db保存script失败")
+			uc.log.Error(err)
+			return
+		}
+		record.ExecuteState = int32(executeState)
+		_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
+		if err != nil {
+			uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
+			uc.log.Error(err)
+			return
+		}
+	} else if scriptExecutionRecord.ExecuteState == consts.Canceled {
+		uc.log.Info("本次执行任务已经取消，不能写入执行结果")
+		return
 	} else {
-		record.ExecuteResult = rsp.ExecuteResult
-		script.ExecuteResult = rsp.ExecuteResult
-	}
-	_, err = uc.repo.Update(ctx, script)
-	if err != nil {
-		uc.log.Error("客户端执行py完成，向db保存script失败")
-		uc.log.Error(err)
+		uc.log.Info("本次执行任务状态不符合写入执行结果的条件")
 		return
 	}
-	record.ExecuteState = int32(executeState)
-	_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
-	if err != nil {
-		uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
-		uc.log.Error(err)
-		return
-	}
+
 }
 
 func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerClientHTTPClient, func(), error) {

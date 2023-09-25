@@ -70,6 +70,7 @@ func (s *scriptExecutionRecordRepo) toBiz(p *ent.ScriptExecutionRecord, _ int) *
 		UserID:        p.UserID,
 		FkScriptID:    p.FkScriptID,
 		ScriptContent: p.ScriptContent,
+		FileAddress:   p.FileAddress,
 		ExecuteState:  p.ExecuteState,
 		ExecuteResult: p.ExecuteResult,
 		CreateTime:    p.CreateTime,
