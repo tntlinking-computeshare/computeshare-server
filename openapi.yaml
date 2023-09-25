@@ -333,6 +333,24 @@ components:
                     type: string
                 memory:
                     type: string
+                stats:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/InstanceStats'
+        InstanceStats:
+            type: object
+            properties:
+                id:
+                    type: string
+                cpuUsage:
+                    type: integer
+                    format: uint64
+                memoryUsage:
+                    type: integer
+                    format: uint64
+                StatsTime:
+                    type: integer
+                    format: int64
         ListComputeDurationReply:
             type: object
             properties:

@@ -9,81 +9,12 @@ import (
 	transhttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"github.com/ipfs/kubo/core"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
-	pb "github.com/mohaijiang/computeshare-client/api/network/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
-	ma "github.com/multiformats/go-multiaddr"
-	"github.com/samber/lo"
-	"golang.org/x/exp/rand"
 	"net/http"
-	"regexp"
-	"strconv"
 	"strings"
 	"time"
 )
-
-type ComputeSpec struct {
-	// ID of the ent.
-	ID int32 `json:"id,omitempty"`
-	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
-	// Memory holds the value of the "memory" field.
-	Memory string `json:"memory,omitempty"`
-}
-
-type ComputeInstance struct {
-	// ID of the ent.
-	ID uuid.UUID `json:"id,omitempty"`
-	// Owner holds the value of the "owner" field.
-	Owner string `json:"owner,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
-	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
-	// Memory holds the value of the "memory" field.
-	Memory string `json:"memory,omitempty"`
-	// Image holds the value of the "image" field.
-	Image string `json:"image,omitempty"`
-	Port  string `json:"port,omitempty"`
-	// ExpirationTime holds the value of the "expiration_time" field.
-	ExpirationTime time.Time `json:"expiration_time,omitempty"`
-	// 0: 启动中,1:运行中,2:连接中断, 3:过期
-	Status int8 `json:"status,omitempty"`
-	// 容器id
-	ContainerID string `json:"container_id,omitempty"`
-	// p2p agent Id
-	PeerID  string `json:"peer_id,omitempty"`
-	Command string `json:"command,omitempty"`
-}
-
-const (
-	InstanceStatusStarting int8 = iota
-	InstanceStatusRunning
-	InstanceStatusTerminal
-	InstanceStatusExpire
-)
-
-type ComputeInstanceCreate struct {
-	SpecId   int32
-	ImageId  int32
-	Duration int32
-	Name     string
-}
-
-type ComputeImage struct {
-	// ID of the ent.
-	ID int32 `json:"id,omitempty"`
-	// 显示名
-	Name string `json:"name,omitempty"`
-	// 镜像名
-	Image string `json:"image,omitempty"`
-	// 版本名
-	Tag string `json:"tag,omitempty"`
-	// 端口号
-	Port    int32 `json:"port,omitempty"`
-	Command string
-}
 
 type ComputeSpecRepo interface {
 	List(ctx context.Context) ([]*ComputeSpec, error)
@@ -92,10 +23,13 @@ type ComputeSpecRepo interface {
 
 type ComputeInstanceRepo interface {
 	List(ctx context.Context, owner string) ([]*ComputeInstance, error)
+	ListAll(ctx context.Context) ([]*ComputeInstance, error)
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	Update(ctx context.Context, id uuid.UUID, instance *ComputeInstance) error
 	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
+	SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *ComputeInstanceRds) error
+	GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*ComputeInstanceRds, error)
 }
 
 type ComputeImageRepo interface {
@@ -116,7 +50,6 @@ func NewComputeInstanceUsercase(
 	specRepo ComputeSpecRepo,
 	instanceRepo ComputeInstanceRepo,
 	imageRepo ComputeImageRepo,
-	ipfsNode *core.IpfsNode,
 	agentRepo AgentRepo,
 	p2pUsecase *P2PUsecase,
 	logger log.Logger) *ComputeInstanceUsercase {
@@ -243,7 +176,7 @@ func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance
 }
 
 func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
-	ip, port, err := uc.createP2pForward(peerId)
+	ip, port, err := uc.p2pUsecase.CreateP2pForward(peerId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -271,81 +204,12 @@ func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.V
 	}, nil
 }
 
-func (uc *ComputeInstanceUsercase) createP2pForward(peerId string) (string, string, error) {
-	ctx := context.Background()
-	pingOk := uc.p2pUsecase.Ping(ctx, peerId)
-
-	fmt.Println("pingOk: ", pingOk)
-	if !pingOk {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Errorf("无法与%s完成ping", peerId)
-		return "", "", nil
-	}
-
-	list, err := uc.p2pUsecase.ListListen(ctx, nil)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error("查询p2p 列表失败")
-		return "", "", nil
-	}
-
-	t, find := lo.Find(list.Result, func(item *pb.ListenReply) bool {
-		if item == nil {
-			return false
-		}
-		return item.TargetAddress == fmt.Sprintf("/p2p/%s", peerId)
-	})
-
-	if find {
-		listenAddress := t.ListenAddress
-		// 定义正则表达式模式，用于匹配IP地址和端口号
-		pattern := `\/ip4\/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\/tcp\/([0-9]+)`
-
-		// 编译正则表达式
-		regex := regexp.MustCompile(pattern)
-
-		// 使用正则表达式来提取IP地址和端口号
-		matches := regex.FindStringSubmatch(listenAddress)
-		if len(matches) >= 3 {
-			ip := matches[1]   // 第一个匹配组为IP地址
-			port := matches[2] // 第二个匹配组为端口号
-
-			fmt.Printf("IP地址: %s\n", ip)
-			fmt.Printf("端口号: %s\n", port)
-			return ip, port, nil
-		} else {
-			fmt.Println("无法提取IP地址和端口号")
-		}
-	}
-
-	listenIp := "127.0.0.1"
-	listenPort := rand.Intn(9999) + 30000
-
-	listenOpt := fmt.Sprintf("/ip4/%s/tcp/%d", listenIp, listenPort)
-	listen, err := ma.NewMultiaddr(listenOpt)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return "", "", nil
-	}
-	targetOpt := fmt.Sprintf("/p2p/%s", peerId)
-	proto := "/x/ssh"
-
-	err = uc.p2pUsecase.CheckPort(listen)
-	if err != nil {
-		_ = uc.p2pUsecase.CloseListen(ctx, proto, listenOpt, targetOpt)
-	}
-	err = uc.p2pUsecase.CreateForward(ctx, proto, listenOpt, targetOpt)
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return "", "", nil
-	}
-	return listenIp, strconv.Itoa(listenPort), nil
-}
-
 func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owner string) ([]*ComputeInstance, error) {
-	return uc.instanceRepo.List(ctx, owner)
+	list, err := uc.instanceRepo.List(ctx, owner)
+	for _, ins := range list {
+		ins.Stats, _ = uc.instanceRepo.GetInstanceStats(ctx, ins.ID)
+	}
+	return list, err
 }
 
 func (uc *ComputeInstanceUsercase) Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error) {
@@ -449,7 +313,7 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	ip, port, err := uc.createP2pForward(instance.PeerID)
+	ip, port, err := uc.p2pUsecase.CreateP2pForward(instance.PeerID)
 	if err != nil {
 		return
 	}
@@ -493,4 +357,47 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 			return
 		}
 	}
+}
+
+func (uc *ComputeInstanceUsercase) SyncContainerStats() {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	list, err := uc.instanceRepo.ListAll(ctx)
+	if err != nil {
+		return
+	}
+
+	for _, instance := range list {
+		ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
+		uc.syncInstanceStats(ctx, instance)
+	}
+}
+
+func (uc *ComputeInstanceUsercase) syncInstanceStats(ctx context.Context, instance *ComputeInstance) {
+	if instance.ContainerID == "" || instance.PeerID == "" {
+		return
+	}
+
+	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
+	if err != nil {
+		return
+	}
+	defer cleanup()
+
+	vm, err := vmClient.GetVm(ctx, &clientcomputev1.GetVmRequest{
+		Id: instance.ContainerID,
+	})
+	if err != nil {
+		return
+	}
+
+	instanceRdb := &ComputeInstanceRds{
+		ID:          instance.ID.String(),
+		CpuUsage:    vm.CpuUsage,
+		MemoryUsage: vm.MemoryUsage,
+		StatsTime:   time.Now(),
+	}
+
+	_ = uc.instanceRepo.SaveInstanceStats(ctx, instance.ID, instanceRdb)
+
 }

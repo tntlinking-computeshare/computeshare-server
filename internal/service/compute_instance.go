@@ -158,6 +158,17 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 		ImageName:      p.Image,
 		Core:           p.Core,
 		Memory:         p.Memory,
+		Stats: lo.Map(p.Stats, func(item *biz.ComputeInstanceRds, _ int) *pb.InstanceStats {
+			if item == nil {
+				return nil
+			}
+			return &pb.InstanceStats{
+				Id:          item.ID,
+				CpuUsage:    item.CpuUsage,
+				MemoryUsage: item.MemoryUsage,
+				StatsTime:   item.StatsTime.Unix(),
+			}
+		}),
 	}
 }
 

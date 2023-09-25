@@ -166,7 +166,16 @@ message Instance {
 	string image_name = 5;
 	string core = 6;
 	string memory = 7;
+	repeated InstanceStats stats = 8;
 }
+
+message InstanceStats {
+	string id = 1;
+	uint64 cpu_usage = 2;
+	uint64 memory_usage = 3;
+	int64 StatsTime = 4;
+}
+
 message GetInstanceReply {
 	int32 code = 1;
 	string message = 2;
