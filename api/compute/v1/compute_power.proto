@@ -17,7 +17,7 @@ service ComputePower {
 		};
 	};
 	//查询脚本列表
-	rpc GetScriptList (GetScriptListRequest) returns (GetScriptListReply){
+	rpc GetScriptExecutionRecordList (GetScriptExecutionRecordListRequest) returns (GetScriptListReply){
 		option (google.api.http) = {
 			get: "/v1/compute-power/script/list"
 		};
@@ -32,12 +32,12 @@ service ComputePower {
 	//取消执行
 	rpc CancelExecPythonPackage (CancelExecPythonPackageRequest) returns (CancelExecPythonPackageReply){
 		option (google.api.http) = {
-			post: "/v1/compute-power/python",
+			post: "/v1/compute-power/python/cancel",
 			body: "*",
 		};
 	};
 	//通过id
-	rpc GetScriptInfo (GetScriptInfoRequest) returns (GetScriptInfoReply){
+	rpc GetScriptExecutionRecordInfo (GetScriptExecutionRecordInfoRequest) returns (GetScriptInfoReply){
 		option (google.api.http) = {
 			get: "/v1/compute-power/script/info/{id}",
 		};
@@ -45,7 +45,7 @@ service ComputePower {
 	//下载执行结果（http接口另外写）
 	rpc DownloadScriptExecuteResult (DownloadScriptExecuteResultRequest) returns (DownloadScriptExecuteResultReply){
 		option (google.api.http) = {
-			post: "/v1/compute-power/{id}",
+			post: "/v1/compute-power/result",
 			body: "*",
 		};
 	};
@@ -58,35 +58,35 @@ message UploadScriptFileRequest {
 }
 
 message UploadScriptFileReply {
-	int32 id = 1;
-	int32 taskNumber = 2;
-	string scriptName = 3;
-	string scriptContent = 4;
-	int32 executeState = 5;
+	int32 code = 1;
+	string message = 2;
+	ScriptReply data = 3;
 }
 
-message GetScriptListRequest {
-	int32 page = 3;
-	int32 size = 4;
+message GetScriptExecutionRecordListRequest {
+	int32 page = 1;
+	int32 size = 2;
 }
 
 message GetScriptListReply {
-	repeated UploadScriptFileReply list = 1;
-	int32 total = 2;
-	int32 page = 3;
-	int32 size = 4;
+	message Data {
+		repeated ScriptReply list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
 }
 
 message RunPythonPackageServerRequest {
 	int32 id = 2;
 }
 message RunPythonPackageServerReply {
-	int32 id = 1;
-	int32 taskNumber = 2;
-	string scriptName = 3;
-	string scriptContent = 4;
-	int32 executeState = 5;
-	string executeResult = 6;
+	int32 code = 1;
+	string message = 2;
+	ScriptReply data = 3;
 }
 
 message CancelExecPythonPackageRequest {
@@ -94,30 +94,38 @@ message CancelExecPythonPackageRequest {
 }
 
 message CancelExecPythonPackageReply {
-	int32 id = 1;
-	int32 taskNumber = 2;
-	string scriptName = 3;
-	string scriptContent = 4;
-	int32 executeState = 5;
-	string executeResult = 6;
+	int32 code = 1;
+	string message = 2;
+	ScriptReply data = 3;
 }
 
-message GetScriptInfoRequest {
+message GetScriptExecutionRecordInfoRequest {
 	int32 id = 1;
 }
 
 message GetScriptInfoReply {
-	int32 id = 1;
-	int32 taskNumber = 2;
-	string scriptName = 3;
-	string scriptContent = 4;
-	int32 executeState = 5;
-	string executeResult = 6;
+	int32 code = 1;
+	string message = 2;
+	ScriptReply data = 3;
 }
 message DownloadScriptExecuteResultRequest {
 	int32 id = 1;
 }
 message DownloadScriptExecuteResultReply {
-	bytes body = 1;
-	string name = 2;
+	message Data {
+		bytes body = 1;
+		string name = 2;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message ScriptReply {
+	int32 id = 1;
+	int32 taskNumber = 2;
+	string scriptName = 3;
+	string scriptContent = 4;
+	int32 executeState = 5;
+	string executeResult = 6;
 }

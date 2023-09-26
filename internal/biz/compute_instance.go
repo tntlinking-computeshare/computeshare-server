@@ -176,7 +176,7 @@ func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance
 }
 
 func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
-	ip, port, err := uc.p2pUsecase.CreateP2pForward(peerId)
+	ip, port, err := uc.p2pUsecase.createP2pForward(peerId)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -60,8 +60,13 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
-	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, logger)
-	computePowerService := service.NewComputePowerService(scriptUseCase, logger)
+	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, p2PUsecase, logger)
+	computePowerService, err := service.NewComputePowerService(scriptUseCase, ipfsNode, logger)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
 	cronJob := service.NewCronJob(computeInstanceUsercase, logger)
 	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)

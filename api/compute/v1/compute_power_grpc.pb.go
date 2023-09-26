@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: compute/v1/compute_power.proto
+// source: api/compute/v1/compute_power.proto
 
 package v1
 
@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ComputePower_UploadScriptFile_FullMethodName            = "/api.compute.v1.ComputePower/UploadScriptFile"
-	ComputePower_GetScriptList_FullMethodName               = "/api.compute.v1.ComputePower/GetScriptList"
-	ComputePower_RunPythonPackage_FullMethodName            = "/api.compute.v1.ComputePower/RunPythonPackage"
-	ComputePower_CancelExecPythonPackage_FullMethodName     = "/api.compute.v1.ComputePower/CancelExecPythonPackage"
-	ComputePower_GetScriptInfo_FullMethodName               = "/api.compute.v1.ComputePower/GetScriptInfo"
-	ComputePower_DownloadScriptExecuteResult_FullMethodName = "/api.compute.v1.ComputePower/DownloadScriptExecuteResult"
+	ComputePower_UploadScriptFile_FullMethodName             = "/api.compute.v1.ComputePower/UploadScriptFile"
+	ComputePower_GetScriptExecutionRecordList_FullMethodName = "/api.compute.v1.ComputePower/GetScriptExecutionRecordList"
+	ComputePower_RunPythonPackage_FullMethodName             = "/api.compute.v1.ComputePower/RunPythonPackage"
+	ComputePower_CancelExecPythonPackage_FullMethodName      = "/api.compute.v1.ComputePower/CancelExecPythonPackage"
+	ComputePower_GetScriptExecutionRecordInfo_FullMethodName = "/api.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
+	ComputePower_DownloadScriptExecuteResult_FullMethodName  = "/api.compute.v1.ComputePower/DownloadScriptExecuteResult"
 )
 
 // ComputePowerClient is the client API for ComputePower service.
@@ -34,13 +34,13 @@ type ComputePowerClient interface {
 	// 上传脚本（http接口另外写）
 	UploadScriptFile(ctx context.Context, in *UploadScriptFileRequest, opts ...grpc.CallOption) (*UploadScriptFileReply, error)
 	// 查询脚本列表
-	GetScriptList(ctx context.Context, in *GetScriptListRequest, opts ...grpc.CallOption) (*GetScriptListReply, error)
+	GetScriptExecutionRecordList(ctx context.Context, in *GetScriptExecutionRecordListRequest, opts ...grpc.CallOption) (*GetScriptListReply, error)
 	// 执行脚本
 	RunPythonPackage(ctx context.Context, in *RunPythonPackageServerRequest, opts ...grpc.CallOption) (*RunPythonPackageServerReply, error)
 	// 取消执行
 	CancelExecPythonPackage(ctx context.Context, in *CancelExecPythonPackageRequest, opts ...grpc.CallOption) (*CancelExecPythonPackageReply, error)
 	// 通过id
-	GetScriptInfo(ctx context.Context, in *GetScriptInfoRequest, opts ...grpc.CallOption) (*GetScriptInfoReply, error)
+	GetScriptExecutionRecordInfo(ctx context.Context, in *GetScriptExecutionRecordInfoRequest, opts ...grpc.CallOption) (*GetScriptInfoReply, error)
 	// 下载执行结果（http接口另外写）
 	DownloadScriptExecuteResult(ctx context.Context, in *DownloadScriptExecuteResultRequest, opts ...grpc.CallOption) (*DownloadScriptExecuteResultReply, error)
 }
@@ -62,9 +62,9 @@ func (c *computePowerClient) UploadScriptFile(ctx context.Context, in *UploadScr
 	return out, nil
 }
 
-func (c *computePowerClient) GetScriptList(ctx context.Context, in *GetScriptListRequest, opts ...grpc.CallOption) (*GetScriptListReply, error) {
+func (c *computePowerClient) GetScriptExecutionRecordList(ctx context.Context, in *GetScriptExecutionRecordListRequest, opts ...grpc.CallOption) (*GetScriptListReply, error) {
 	out := new(GetScriptListReply)
-	err := c.cc.Invoke(ctx, ComputePower_GetScriptList_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ComputePower_GetScriptExecutionRecordList_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,9 +89,9 @@ func (c *computePowerClient) CancelExecPythonPackage(ctx context.Context, in *Ca
 	return out, nil
 }
 
-func (c *computePowerClient) GetScriptInfo(ctx context.Context, in *GetScriptInfoRequest, opts ...grpc.CallOption) (*GetScriptInfoReply, error) {
+func (c *computePowerClient) GetScriptExecutionRecordInfo(ctx context.Context, in *GetScriptExecutionRecordInfoRequest, opts ...grpc.CallOption) (*GetScriptInfoReply, error) {
 	out := new(GetScriptInfoReply)
-	err := c.cc.Invoke(ctx, ComputePower_GetScriptInfo_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, ComputePower_GetScriptExecutionRecordInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -114,13 +114,13 @@ type ComputePowerServer interface {
 	// 上传脚本（http接口另外写）
 	UploadScriptFile(context.Context, *UploadScriptFileRequest) (*UploadScriptFileReply, error)
 	// 查询脚本列表
-	GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error)
+	GetScriptExecutionRecordList(context.Context, *GetScriptExecutionRecordListRequest) (*GetScriptListReply, error)
 	// 执行脚本
 	RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error)
 	// 取消执行
 	CancelExecPythonPackage(context.Context, *CancelExecPythonPackageRequest) (*CancelExecPythonPackageReply, error)
 	// 通过id
-	GetScriptInfo(context.Context, *GetScriptInfoRequest) (*GetScriptInfoReply, error)
+	GetScriptExecutionRecordInfo(context.Context, *GetScriptExecutionRecordInfoRequest) (*GetScriptInfoReply, error)
 	// 下载执行结果（http接口另外写）
 	DownloadScriptExecuteResult(context.Context, *DownloadScriptExecuteResultRequest) (*DownloadScriptExecuteResultReply, error)
 	mustEmbedUnimplementedComputePowerServer()
@@ -133,8 +133,8 @@ type UnimplementedComputePowerServer struct {
 func (UnimplementedComputePowerServer) UploadScriptFile(context.Context, *UploadScriptFileRequest) (*UploadScriptFileReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadScriptFile not implemented")
 }
-func (UnimplementedComputePowerServer) GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetScriptList not implemented")
+func (UnimplementedComputePowerServer) GetScriptExecutionRecordList(context.Context, *GetScriptExecutionRecordListRequest) (*GetScriptListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetScriptExecutionRecordList not implemented")
 }
 func (UnimplementedComputePowerServer) RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunPythonPackage not implemented")
@@ -142,8 +142,8 @@ func (UnimplementedComputePowerServer) RunPythonPackage(context.Context, *RunPyt
 func (UnimplementedComputePowerServer) CancelExecPythonPackage(context.Context, *CancelExecPythonPackageRequest) (*CancelExecPythonPackageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelExecPythonPackage not implemented")
 }
-func (UnimplementedComputePowerServer) GetScriptInfo(context.Context, *GetScriptInfoRequest) (*GetScriptInfoReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetScriptInfo not implemented")
+func (UnimplementedComputePowerServer) GetScriptExecutionRecordInfo(context.Context, *GetScriptExecutionRecordInfoRequest) (*GetScriptInfoReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetScriptExecutionRecordInfo not implemented")
 }
 func (UnimplementedComputePowerServer) DownloadScriptExecuteResult(context.Context, *DownloadScriptExecuteResultRequest) (*DownloadScriptExecuteResultReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DownloadScriptExecuteResult not implemented")
@@ -179,20 +179,20 @@ func _ComputePower_UploadScriptFile_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ComputePower_GetScriptList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetScriptListRequest)
+func _ComputePower_GetScriptExecutionRecordList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetScriptExecutionRecordListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ComputePowerServer).GetScriptList(ctx, in)
+		return srv.(ComputePowerServer).GetScriptExecutionRecordList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ComputePower_GetScriptList_FullMethodName,
+		FullMethod: ComputePower_GetScriptExecutionRecordList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputePowerServer).GetScriptList(ctx, req.(*GetScriptListRequest))
+		return srv.(ComputePowerServer).GetScriptExecutionRecordList(ctx, req.(*GetScriptExecutionRecordListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -233,20 +233,20 @@ func _ComputePower_CancelExecPythonPackage_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ComputePower_GetScriptInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetScriptInfoRequest)
+func _ComputePower_GetScriptExecutionRecordInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetScriptExecutionRecordInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ComputePowerServer).GetScriptInfo(ctx, in)
+		return srv.(ComputePowerServer).GetScriptExecutionRecordInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ComputePower_GetScriptInfo_FullMethodName,
+		FullMethod: ComputePower_GetScriptExecutionRecordInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputePowerServer).GetScriptInfo(ctx, req.(*GetScriptInfoRequest))
+		return srv.(ComputePowerServer).GetScriptExecutionRecordInfo(ctx, req.(*GetScriptExecutionRecordInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -281,8 +281,8 @@ var ComputePower_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ComputePower_UploadScriptFile_Handler,
 		},
 		{
-			MethodName: "GetScriptList",
-			Handler:    _ComputePower_GetScriptList_Handler,
+			MethodName: "GetScriptExecutionRecordList",
+			Handler:    _ComputePower_GetScriptExecutionRecordList_Handler,
 		},
 		{
 			MethodName: "RunPythonPackage",
@@ -293,8 +293,8 @@ var ComputePower_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ComputePower_CancelExecPythonPackage_Handler,
 		},
 		{
-			MethodName: "GetScriptInfo",
-			Handler:    _ComputePower_GetScriptInfo_Handler,
+			MethodName: "GetScriptExecutionRecordInfo",
+			Handler:    _ComputePower_GetScriptExecutionRecordInfo_Handler,
 		},
 		{
 			MethodName: "DownloadScriptExecuteResult",
@@ -302,5 +302,5 @@ var ComputePower_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "compute/v1/compute_power.proto",
+	Metadata: "api/compute/v1/compute_power.proto",
 }

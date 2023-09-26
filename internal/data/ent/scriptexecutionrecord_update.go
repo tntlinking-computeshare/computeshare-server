@@ -54,6 +54,31 @@ func (seru *ScriptExecutionRecordUpdate) SetScriptContent(s string) *ScriptExecu
 	return seru
 }
 
+// SetTaskNumber sets the "task_number" field.
+func (seru *ScriptExecutionRecordUpdate) SetTaskNumber(i int32) *ScriptExecutionRecordUpdate {
+	seru.mutation.ResetTaskNumber()
+	seru.mutation.SetTaskNumber(i)
+	return seru
+}
+
+// AddTaskNumber adds i to the "task_number" field.
+func (seru *ScriptExecutionRecordUpdate) AddTaskNumber(i int32) *ScriptExecutionRecordUpdate {
+	seru.mutation.AddTaskNumber(i)
+	return seru
+}
+
+// SetScriptName sets the "script_name" field.
+func (seru *ScriptExecutionRecordUpdate) SetScriptName(s string) *ScriptExecutionRecordUpdate {
+	seru.mutation.SetScriptName(s)
+	return seru
+}
+
+// SetFileAddress sets the "file_address" field.
+func (seru *ScriptExecutionRecordUpdate) SetFileAddress(s string) *ScriptExecutionRecordUpdate {
+	seru.mutation.SetFileAddress(s)
+	return seru
+}
+
 // SetExecuteState sets the "execute_state" field.
 func (seru *ScriptExecutionRecordUpdate) SetExecuteState(i int32) *ScriptExecutionRecordUpdate {
 	seru.mutation.ResetExecuteState()
@@ -170,9 +195,14 @@ func (seru *ScriptExecutionRecordUpdate) check() error {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if v, ok := seru.mutation.ExecuteResult(); ok {
-		if err := scriptexecutionrecord.ExecuteResultValidator(v); err != nil {
-			return &ValidationError{Name: "execute_result", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.execute_result": %w`, err)}
+	if v, ok := seru.mutation.TaskNumber(); ok {
+		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
+			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
+		}
+	}
+	if v, ok := seru.mutation.ScriptName(); ok {
+		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
+			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
 		}
 	}
 	return nil
@@ -201,6 +231,18 @@ func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if value, ok := seru.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
+	}
+	if value, ok := seru.mutation.TaskNumber(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
+	}
+	if value, ok := seru.mutation.AddedTaskNumber(); ok {
+		_spec.AddField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
+	}
+	if value, ok := seru.mutation.ScriptName(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
+	}
+	if value, ok := seru.mutation.FileAddress(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 	}
 	if value, ok := seru.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
@@ -288,6 +330,31 @@ func (seruo *ScriptExecutionRecordUpdateOne) AddFkScriptID(i int32) *ScriptExecu
 // SetScriptContent sets the "script_content" field.
 func (seruo *ScriptExecutionRecordUpdateOne) SetScriptContent(s string) *ScriptExecutionRecordUpdateOne {
 	seruo.mutation.SetScriptContent(s)
+	return seruo
+}
+
+// SetTaskNumber sets the "task_number" field.
+func (seruo *ScriptExecutionRecordUpdateOne) SetTaskNumber(i int32) *ScriptExecutionRecordUpdateOne {
+	seruo.mutation.ResetTaskNumber()
+	seruo.mutation.SetTaskNumber(i)
+	return seruo
+}
+
+// AddTaskNumber adds i to the "task_number" field.
+func (seruo *ScriptExecutionRecordUpdateOne) AddTaskNumber(i int32) *ScriptExecutionRecordUpdateOne {
+	seruo.mutation.AddTaskNumber(i)
+	return seruo
+}
+
+// SetScriptName sets the "script_name" field.
+func (seruo *ScriptExecutionRecordUpdateOne) SetScriptName(s string) *ScriptExecutionRecordUpdateOne {
+	seruo.mutation.SetScriptName(s)
+	return seruo
+}
+
+// SetFileAddress sets the "file_address" field.
+func (seruo *ScriptExecutionRecordUpdateOne) SetFileAddress(s string) *ScriptExecutionRecordUpdateOne {
+	seruo.mutation.SetFileAddress(s)
 	return seruo
 }
 
@@ -420,9 +487,14 @@ func (seruo *ScriptExecutionRecordUpdateOne) check() error {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if v, ok := seruo.mutation.ExecuteResult(); ok {
-		if err := scriptexecutionrecord.ExecuteResultValidator(v); err != nil {
-			return &ValidationError{Name: "execute_result", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.execute_result": %w`, err)}
+	if v, ok := seruo.mutation.TaskNumber(); ok {
+		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
+			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
+		}
+	}
+	if v, ok := seruo.mutation.ScriptName(); ok {
+		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
+			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
 		}
 	}
 	return nil
@@ -468,6 +540,18 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if value, ok := seruo.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
+	}
+	if value, ok := seruo.mutation.TaskNumber(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
+	}
+	if value, ok := seruo.mutation.AddedTaskNumber(); ok {
+		_spec.AddField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
+	}
+	if value, ok := seruo.mutation.ScriptName(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
+	}
+	if value, ok := seruo.mutation.FileAddress(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 	}
 	if value, ok := seruo.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)

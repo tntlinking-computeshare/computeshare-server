@@ -38,7 +38,7 @@ func Compute_Power_UploadSceipt_Extend_HTTP_Handler(srv ComputePowerHTTPServer) 
 func Compute_Powere_DownloadResult_Extend_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DownloadScriptExecuteResultRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
@@ -53,11 +53,11 @@ func Compute_Powere_DownloadResult_Extend_HTTP_Handler(srv ComputePowerHTTPServe
 			return err
 		}
 		reply := out.(*DownloadScriptExecuteResultReply)
-		disposition := fmt.Sprintf("attachment; filename=%s", reply.Name)
+		disposition := fmt.Sprintf("attachment; filename=%s", reply.Data.Name)
 		ctx.Response().Header().Set("Content-Type", "application/octet-stream")
 		ctx.Response().Header().Set("Content-Disposition", disposition)
 		ctx.Response().Header().Set("Access-Control-Expose-Headers", "Content-Disposition")
-		_, err = ctx.Response().Write(reply.Body)
+		_, err = ctx.Response().Write(reply.Data.Body)
 		return err
 	}
 }

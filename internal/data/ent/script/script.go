@@ -24,10 +24,6 @@ const (
 	FieldFileAddress = "file_address"
 	// FieldScriptContent holds the string denoting the script_content field in the database.
 	FieldScriptContent = "script_content"
-	// FieldExecuteState holds the string denoting the execute_state field in the database.
-	FieldExecuteState = "execute_state"
-	// FieldExecuteResult holds the string denoting the execute_result field in the database.
-	FieldExecuteResult = "execute_result"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
 	// FieldUpdateTime holds the string denoting the update_time field in the database.
@@ -53,8 +49,6 @@ var Columns = []string{
 	FieldScriptName,
 	FieldFileAddress,
 	FieldScriptContent,
-	FieldExecuteState,
-	FieldExecuteResult,
 	FieldCreateTime,
 	FieldUpdateTime,
 }
@@ -76,8 +70,6 @@ var (
 	ScriptNameValidator func(string) error
 	// ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	ScriptContentValidator func(string) error
-	// DefaultExecuteState holds the default value on creation for the "execute_state" field.
-	DefaultExecuteState int32
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
@@ -115,16 +107,6 @@ func ByFileAddress(opts ...sql.OrderTermOption) OrderOption {
 // ByScriptContent orders the results by the script_content field.
 func ByScriptContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScriptContent, opts...).ToFunc()
-}
-
-// ByExecuteState orders the results by the execute_state field.
-func ByExecuteState(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExecuteState, opts...).ToFunc()
-}
-
-// ByExecuteResult orders the results by the execute_result field.
-func ByExecuteResult(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExecuteResult, opts...).ToFunc()
 }
 
 // ByCreateTime orders the results by the create_time field.

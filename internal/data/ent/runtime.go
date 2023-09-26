@@ -105,16 +105,12 @@ func init() {
 	scriptDescScriptContent := scriptFields[5].Descriptor()
 	// script.ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	script.ScriptContentValidator = scriptDescScriptContent.Validators[0].(func(string) error)
-	// scriptDescExecuteState is the schema descriptor for execute_state field.
-	scriptDescExecuteState := scriptFields[6].Descriptor()
-	// script.DefaultExecuteState holds the default value on creation for the execute_state field.
-	script.DefaultExecuteState = scriptDescExecuteState.Default.(int32)
 	// scriptDescCreateTime is the schema descriptor for create_time field.
-	scriptDescCreateTime := scriptFields[8].Descriptor()
+	scriptDescCreateTime := scriptFields[6].Descriptor()
 	// script.DefaultCreateTime holds the default value on creation for the create_time field.
 	script.DefaultCreateTime = scriptDescCreateTime.Default.(time.Time)
 	// scriptDescUpdateTime is the schema descriptor for update_time field.
-	scriptDescUpdateTime := scriptFields[9].Descriptor()
+	scriptDescUpdateTime := scriptFields[7].Descriptor()
 	// script.DefaultUpdateTime holds the default value on creation for the update_time field.
 	script.DefaultUpdateTime = scriptDescUpdateTime.Default.(time.Time)
 	scriptexecutionrecordFields := schema.ScriptExecutionRecord{}.Fields()
@@ -127,16 +123,20 @@ func init() {
 	scriptexecutionrecordDescScriptContent := scriptexecutionrecordFields[3].Descriptor()
 	// scriptexecutionrecord.ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	scriptexecutionrecord.ScriptContentValidator = scriptexecutionrecordDescScriptContent.Validators[0].(func(string) error)
-	// scriptexecutionrecordDescExecuteResult is the schema descriptor for execute_result field.
-	scriptexecutionrecordDescExecuteResult := scriptexecutionrecordFields[5].Descriptor()
-	// scriptexecutionrecord.ExecuteResultValidator is a validator for the "execute_result" field. It is called by the builders before save.
-	scriptexecutionrecord.ExecuteResultValidator = scriptexecutionrecordDescExecuteResult.Validators[0].(func(string) error)
+	// scriptexecutionrecordDescTaskNumber is the schema descriptor for task_number field.
+	scriptexecutionrecordDescTaskNumber := scriptexecutionrecordFields[4].Descriptor()
+	// scriptexecutionrecord.TaskNumberValidator is a validator for the "task_number" field. It is called by the builders before save.
+	scriptexecutionrecord.TaskNumberValidator = scriptexecutionrecordDescTaskNumber.Validators[0].(func(int32) error)
+	// scriptexecutionrecordDescScriptName is the schema descriptor for script_name field.
+	scriptexecutionrecordDescScriptName := scriptexecutionrecordFields[5].Descriptor()
+	// scriptexecutionrecord.ScriptNameValidator is a validator for the "script_name" field. It is called by the builders before save.
+	scriptexecutionrecord.ScriptNameValidator = scriptexecutionrecordDescScriptName.Validators[0].(func(string) error)
 	// scriptexecutionrecordDescCreateTime is the schema descriptor for create_time field.
-	scriptexecutionrecordDescCreateTime := scriptexecutionrecordFields[6].Descriptor()
+	scriptexecutionrecordDescCreateTime := scriptexecutionrecordFields[9].Descriptor()
 	// scriptexecutionrecord.DefaultCreateTime holds the default value on creation for the create_time field.
 	scriptexecutionrecord.DefaultCreateTime = scriptexecutionrecordDescCreateTime.Default.(time.Time)
 	// scriptexecutionrecordDescUpdateTime is the schema descriptor for update_time field.
-	scriptexecutionrecordDescUpdateTime := scriptexecutionrecordFields[7].Descriptor()
+	scriptexecutionrecordDescUpdateTime := scriptexecutionrecordFields[10].Descriptor()
 	// scriptexecutionrecord.DefaultUpdateTime holds the default value on creation for the update_time field.
 	scriptexecutionrecord.DefaultUpdateTime = scriptexecutionrecordDescUpdateTime.Default.(time.Time)
 	storageFields := schema.Storage{}.Fields()

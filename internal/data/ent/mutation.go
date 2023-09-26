@@ -2892,9 +2892,6 @@ type ScriptMutation struct {
 	script_name                   *string
 	file_address                  *string
 	script_content                *string
-	execute_state                 *int32
-	addexecute_state              *int32
-	execute_result                *string
 	create_time                   *time.Time
 	update_time                   *time.Time
 	clearedFields                 map[string]struct{}
@@ -3210,98 +3207,6 @@ func (m *ScriptMutation) ResetScriptContent() {
 	m.script_content = nil
 }
 
-// SetExecuteState sets the "execute_state" field.
-func (m *ScriptMutation) SetExecuteState(i int32) {
-	m.execute_state = &i
-	m.addexecute_state = nil
-}
-
-// ExecuteState returns the value of the "execute_state" field in the mutation.
-func (m *ScriptMutation) ExecuteState() (r int32, exists bool) {
-	v := m.execute_state
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExecuteState returns the old "execute_state" field's value of the Script entity.
-// If the Script object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScriptMutation) OldExecuteState(ctx context.Context) (v int32, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExecuteState is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExecuteState requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExecuteState: %w", err)
-	}
-	return oldValue.ExecuteState, nil
-}
-
-// AddExecuteState adds i to the "execute_state" field.
-func (m *ScriptMutation) AddExecuteState(i int32) {
-	if m.addexecute_state != nil {
-		*m.addexecute_state += i
-	} else {
-		m.addexecute_state = &i
-	}
-}
-
-// AddedExecuteState returns the value that was added to the "execute_state" field in this mutation.
-func (m *ScriptMutation) AddedExecuteState() (r int32, exists bool) {
-	v := m.addexecute_state
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetExecuteState resets all changes to the "execute_state" field.
-func (m *ScriptMutation) ResetExecuteState() {
-	m.execute_state = nil
-	m.addexecute_state = nil
-}
-
-// SetExecuteResult sets the "execute_result" field.
-func (m *ScriptMutation) SetExecuteResult(s string) {
-	m.execute_result = &s
-}
-
-// ExecuteResult returns the value of the "execute_result" field in the mutation.
-func (m *ScriptMutation) ExecuteResult() (r string, exists bool) {
-	v := m.execute_result
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExecuteResult returns the old "execute_result" field's value of the Script entity.
-// If the Script object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ScriptMutation) OldExecuteResult(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExecuteResult is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExecuteResult requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExecuteResult: %w", err)
-	}
-	return oldValue.ExecuteResult, nil
-}
-
-// ResetExecuteResult resets all changes to the "execute_result" field.
-func (m *ScriptMutation) ResetExecuteResult() {
-	m.execute_result = nil
-}
-
 // SetCreateTime sets the "create_time" field.
 func (m *ScriptMutation) SetCreateTime(t time.Time) {
 	m.create_time = &t
@@ -3462,7 +3367,7 @@ func (m *ScriptMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScriptMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 7)
 	if m.user_id != nil {
 		fields = append(fields, script.FieldUserID)
 	}
@@ -3477,12 +3382,6 @@ func (m *ScriptMutation) Fields() []string {
 	}
 	if m.script_content != nil {
 		fields = append(fields, script.FieldScriptContent)
-	}
-	if m.execute_state != nil {
-		fields = append(fields, script.FieldExecuteState)
-	}
-	if m.execute_result != nil {
-		fields = append(fields, script.FieldExecuteResult)
 	}
 	if m.create_time != nil {
 		fields = append(fields, script.FieldCreateTime)
@@ -3508,10 +3407,6 @@ func (m *ScriptMutation) Field(name string) (ent.Value, bool) {
 		return m.FileAddress()
 	case script.FieldScriptContent:
 		return m.ScriptContent()
-	case script.FieldExecuteState:
-		return m.ExecuteState()
-	case script.FieldExecuteResult:
-		return m.ExecuteResult()
 	case script.FieldCreateTime:
 		return m.CreateTime()
 	case script.FieldUpdateTime:
@@ -3535,10 +3430,6 @@ func (m *ScriptMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldFileAddress(ctx)
 	case script.FieldScriptContent:
 		return m.OldScriptContent(ctx)
-	case script.FieldExecuteState:
-		return m.OldExecuteState(ctx)
-	case script.FieldExecuteResult:
-		return m.OldExecuteResult(ctx)
 	case script.FieldCreateTime:
 		return m.OldCreateTime(ctx)
 	case script.FieldUpdateTime:
@@ -3587,20 +3478,6 @@ func (m *ScriptMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScriptContent(v)
 		return nil
-	case script.FieldExecuteState:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExecuteState(v)
-		return nil
-	case script.FieldExecuteResult:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExecuteResult(v)
-		return nil
 	case script.FieldCreateTime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -3626,9 +3503,6 @@ func (m *ScriptMutation) AddedFields() []string {
 	if m.addtask_number != nil {
 		fields = append(fields, script.FieldTaskNumber)
 	}
-	if m.addexecute_state != nil {
-		fields = append(fields, script.FieldExecuteState)
-	}
 	return fields
 }
 
@@ -3639,8 +3513,6 @@ func (m *ScriptMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case script.FieldTaskNumber:
 		return m.AddedTaskNumber()
-	case script.FieldExecuteState:
-		return m.AddedExecuteState()
 	}
 	return nil, false
 }
@@ -3656,13 +3528,6 @@ func (m *ScriptMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddTaskNumber(v)
-		return nil
-	case script.FieldExecuteState:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddExecuteState(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Script numeric field %s", name)
@@ -3705,12 +3570,6 @@ func (m *ScriptMutation) ResetField(name string) error {
 		return nil
 	case script.FieldScriptContent:
 		m.ResetScriptContent()
-		return nil
-	case script.FieldExecuteState:
-		m.ResetExecuteState()
-		return nil
-	case script.FieldExecuteResult:
-		m.ResetExecuteResult()
 		return nil
 	case script.FieldCreateTime:
 		m.ResetCreateTime()
@@ -3816,6 +3675,10 @@ type ScriptExecutionRecordMutation struct {
 	fk_script_id     *int32
 	addfk_script_id  *int32
 	script_content   *string
+	task_number      *int32
+	addtask_number   *int32
+	script_name      *string
+	file_address     *string
 	execute_state    *int32
 	addexecute_state *int32
 	execute_result   *string
@@ -4061,6 +3924,134 @@ func (m *ScriptExecutionRecordMutation) ResetScriptContent() {
 	m.script_content = nil
 }
 
+// SetTaskNumber sets the "task_number" field.
+func (m *ScriptExecutionRecordMutation) SetTaskNumber(i int32) {
+	m.task_number = &i
+	m.addtask_number = nil
+}
+
+// TaskNumber returns the value of the "task_number" field in the mutation.
+func (m *ScriptExecutionRecordMutation) TaskNumber() (r int32, exists bool) {
+	v := m.task_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTaskNumber returns the old "task_number" field's value of the ScriptExecutionRecord entity.
+// If the ScriptExecutionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScriptExecutionRecordMutation) OldTaskNumber(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTaskNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTaskNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTaskNumber: %w", err)
+	}
+	return oldValue.TaskNumber, nil
+}
+
+// AddTaskNumber adds i to the "task_number" field.
+func (m *ScriptExecutionRecordMutation) AddTaskNumber(i int32) {
+	if m.addtask_number != nil {
+		*m.addtask_number += i
+	} else {
+		m.addtask_number = &i
+	}
+}
+
+// AddedTaskNumber returns the value that was added to the "task_number" field in this mutation.
+func (m *ScriptExecutionRecordMutation) AddedTaskNumber() (r int32, exists bool) {
+	v := m.addtask_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTaskNumber resets all changes to the "task_number" field.
+func (m *ScriptExecutionRecordMutation) ResetTaskNumber() {
+	m.task_number = nil
+	m.addtask_number = nil
+}
+
+// SetScriptName sets the "script_name" field.
+func (m *ScriptExecutionRecordMutation) SetScriptName(s string) {
+	m.script_name = &s
+}
+
+// ScriptName returns the value of the "script_name" field in the mutation.
+func (m *ScriptExecutionRecordMutation) ScriptName() (r string, exists bool) {
+	v := m.script_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldScriptName returns the old "script_name" field's value of the ScriptExecutionRecord entity.
+// If the ScriptExecutionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScriptExecutionRecordMutation) OldScriptName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldScriptName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldScriptName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldScriptName: %w", err)
+	}
+	return oldValue.ScriptName, nil
+}
+
+// ResetScriptName resets all changes to the "script_name" field.
+func (m *ScriptExecutionRecordMutation) ResetScriptName() {
+	m.script_name = nil
+}
+
+// SetFileAddress sets the "file_address" field.
+func (m *ScriptExecutionRecordMutation) SetFileAddress(s string) {
+	m.file_address = &s
+}
+
+// FileAddress returns the value of the "file_address" field in the mutation.
+func (m *ScriptExecutionRecordMutation) FileAddress() (r string, exists bool) {
+	v := m.file_address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFileAddress returns the old "file_address" field's value of the ScriptExecutionRecord entity.
+// If the ScriptExecutionRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScriptExecutionRecordMutation) OldFileAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFileAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFileAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFileAddress: %w", err)
+	}
+	return oldValue.FileAddress, nil
+}
+
+// ResetFileAddress resets all changes to the "file_address" field.
+func (m *ScriptExecutionRecordMutation) ResetFileAddress() {
+	m.file_address = nil
+}
+
 // SetExecuteState sets the "execute_state" field.
 func (m *ScriptExecutionRecordMutation) SetExecuteState(i int32) {
 	m.execute_state = &i
@@ -4298,7 +4289,7 @@ func (m *ScriptExecutionRecordMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScriptExecutionRecordMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 10)
 	if m.user_id != nil {
 		fields = append(fields, scriptexecutionrecord.FieldUserID)
 	}
@@ -4307,6 +4298,15 @@ func (m *ScriptExecutionRecordMutation) Fields() []string {
 	}
 	if m.script_content != nil {
 		fields = append(fields, scriptexecutionrecord.FieldScriptContent)
+	}
+	if m.task_number != nil {
+		fields = append(fields, scriptexecutionrecord.FieldTaskNumber)
+	}
+	if m.script_name != nil {
+		fields = append(fields, scriptexecutionrecord.FieldScriptName)
+	}
+	if m.file_address != nil {
+		fields = append(fields, scriptexecutionrecord.FieldFileAddress)
 	}
 	if m.execute_state != nil {
 		fields = append(fields, scriptexecutionrecord.FieldExecuteState)
@@ -4334,6 +4334,12 @@ func (m *ScriptExecutionRecordMutation) Field(name string) (ent.Value, bool) {
 		return m.FkScriptID()
 	case scriptexecutionrecord.FieldScriptContent:
 		return m.ScriptContent()
+	case scriptexecutionrecord.FieldTaskNumber:
+		return m.TaskNumber()
+	case scriptexecutionrecord.FieldScriptName:
+		return m.ScriptName()
+	case scriptexecutionrecord.FieldFileAddress:
+		return m.FileAddress()
 	case scriptexecutionrecord.FieldExecuteState:
 		return m.ExecuteState()
 	case scriptexecutionrecord.FieldExecuteResult:
@@ -4357,6 +4363,12 @@ func (m *ScriptExecutionRecordMutation) OldField(ctx context.Context, name strin
 		return m.OldFkScriptID(ctx)
 	case scriptexecutionrecord.FieldScriptContent:
 		return m.OldScriptContent(ctx)
+	case scriptexecutionrecord.FieldTaskNumber:
+		return m.OldTaskNumber(ctx)
+	case scriptexecutionrecord.FieldScriptName:
+		return m.OldScriptName(ctx)
+	case scriptexecutionrecord.FieldFileAddress:
+		return m.OldFileAddress(ctx)
 	case scriptexecutionrecord.FieldExecuteState:
 		return m.OldExecuteState(ctx)
 	case scriptexecutionrecord.FieldExecuteResult:
@@ -4394,6 +4406,27 @@ func (m *ScriptExecutionRecordMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScriptContent(v)
+		return nil
+	case scriptexecutionrecord.FieldTaskNumber:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTaskNumber(v)
+		return nil
+	case scriptexecutionrecord.FieldScriptName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetScriptName(v)
+		return nil
+	case scriptexecutionrecord.FieldFileAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFileAddress(v)
 		return nil
 	case scriptexecutionrecord.FieldExecuteState:
 		v, ok := value.(int32)
@@ -4434,6 +4467,9 @@ func (m *ScriptExecutionRecordMutation) AddedFields() []string {
 	if m.addfk_script_id != nil {
 		fields = append(fields, scriptexecutionrecord.FieldFkScriptID)
 	}
+	if m.addtask_number != nil {
+		fields = append(fields, scriptexecutionrecord.FieldTaskNumber)
+	}
 	if m.addexecute_state != nil {
 		fields = append(fields, scriptexecutionrecord.FieldExecuteState)
 	}
@@ -4447,6 +4483,8 @@ func (m *ScriptExecutionRecordMutation) AddedField(name string) (ent.Value, bool
 	switch name {
 	case scriptexecutionrecord.FieldFkScriptID:
 		return m.AddedFkScriptID()
+	case scriptexecutionrecord.FieldTaskNumber:
+		return m.AddedTaskNumber()
 	case scriptexecutionrecord.FieldExecuteState:
 		return m.AddedExecuteState()
 	}
@@ -4464,6 +4502,13 @@ func (m *ScriptExecutionRecordMutation) AddField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFkScriptID(v)
+		return nil
+	case scriptexecutionrecord.FieldTaskNumber:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTaskNumber(v)
 		return nil
 	case scriptexecutionrecord.FieldExecuteState:
 		v, ok := value.(int32)
@@ -4507,6 +4552,15 @@ func (m *ScriptExecutionRecordMutation) ResetField(name string) error {
 		return nil
 	case scriptexecutionrecord.FieldScriptContent:
 		m.ResetScriptContent()
+		return nil
+	case scriptexecutionrecord.FieldTaskNumber:
+		m.ResetTaskNumber()
+		return nil
+	case scriptexecutionrecord.FieldScriptName:
+		m.ResetScriptName()
+		return nil
+	case scriptexecutionrecord.FieldFileAddress:
+		m.ResetFileAddress()
 		return nil
 	case scriptexecutionrecord.FieldExecuteState:
 		m.ResetExecuteState()

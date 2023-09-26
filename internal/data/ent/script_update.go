@@ -66,33 +66,6 @@ func (su *ScriptUpdate) SetScriptContent(s string) *ScriptUpdate {
 	return su
 }
 
-// SetExecuteState sets the "execute_state" field.
-func (su *ScriptUpdate) SetExecuteState(i int32) *ScriptUpdate {
-	su.mutation.ResetExecuteState()
-	su.mutation.SetExecuteState(i)
-	return su
-}
-
-// SetNillableExecuteState sets the "execute_state" field if the given value is not nil.
-func (su *ScriptUpdate) SetNillableExecuteState(i *int32) *ScriptUpdate {
-	if i != nil {
-		su.SetExecuteState(*i)
-	}
-	return su
-}
-
-// AddExecuteState adds i to the "execute_state" field.
-func (su *ScriptUpdate) AddExecuteState(i int32) *ScriptUpdate {
-	su.mutation.AddExecuteState(i)
-	return su
-}
-
-// SetExecuteResult sets the "execute_result" field.
-func (su *ScriptUpdate) SetExecuteResult(s string) *ScriptUpdate {
-	su.mutation.SetExecuteResult(s)
-	return su
-}
-
 // SetCreateTime sets the "create_time" field.
 func (su *ScriptUpdate) SetCreateTime(t time.Time) *ScriptUpdate {
 	su.mutation.SetCreateTime(t)
@@ -239,15 +212,6 @@ func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
 	}
-	if value, ok := su.mutation.ExecuteState(); ok {
-		_spec.SetField(script.FieldExecuteState, field.TypeInt32, value)
-	}
-	if value, ok := su.mutation.AddedExecuteState(); ok {
-		_spec.AddField(script.FieldExecuteState, field.TypeInt32, value)
-	}
-	if value, ok := su.mutation.ExecuteResult(); ok {
-		_spec.SetField(script.FieldExecuteResult, field.TypeString, value)
-	}
 	if value, ok := su.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)
 	}
@@ -353,33 +317,6 @@ func (suo *ScriptUpdateOne) SetFileAddress(s string) *ScriptUpdateOne {
 // SetScriptContent sets the "script_content" field.
 func (suo *ScriptUpdateOne) SetScriptContent(s string) *ScriptUpdateOne {
 	suo.mutation.SetScriptContent(s)
-	return suo
-}
-
-// SetExecuteState sets the "execute_state" field.
-func (suo *ScriptUpdateOne) SetExecuteState(i int32) *ScriptUpdateOne {
-	suo.mutation.ResetExecuteState()
-	suo.mutation.SetExecuteState(i)
-	return suo
-}
-
-// SetNillableExecuteState sets the "execute_state" field if the given value is not nil.
-func (suo *ScriptUpdateOne) SetNillableExecuteState(i *int32) *ScriptUpdateOne {
-	if i != nil {
-		suo.SetExecuteState(*i)
-	}
-	return suo
-}
-
-// AddExecuteState adds i to the "execute_state" field.
-func (suo *ScriptUpdateOne) AddExecuteState(i int32) *ScriptUpdateOne {
-	suo.mutation.AddExecuteState(i)
-	return suo
-}
-
-// SetExecuteResult sets the "execute_result" field.
-func (suo *ScriptUpdateOne) SetExecuteResult(s string) *ScriptUpdateOne {
-	suo.mutation.SetExecuteResult(s)
 	return suo
 }
 
@@ -558,15 +495,6 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 	}
 	if value, ok := suo.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
-	}
-	if value, ok := suo.mutation.ExecuteState(); ok {
-		_spec.SetField(script.FieldExecuteState, field.TypeInt32, value)
-	}
-	if value, ok := suo.mutation.AddedExecuteState(); ok {
-		_spec.AddField(script.FieldExecuteState, field.TypeInt32, value)
-	}
-	if value, ok := suo.mutation.ExecuteResult(); ok {
-		_spec.SetField(script.FieldExecuteResult, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)

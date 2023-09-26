@@ -15,9 +15,8 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/ipfs/boxo v0.11.0
 	github.com/ipfs/kubo v0.22.0
-	github.com/jinzhu/copier v0.4.0
 	github.com/libp2p/go-libp2p v0.29.2
-	github.com/mohaijiang/computeshare-client v0.0.3
+	github.com/mohaijiang/computeshare-client v0.0.4-0.20230925075648-c96270e7c256
 	github.com/multiformats/go-multiaddr v0.10.1
 	github.com/multiformats/go-multiaddr-dns v0.3.1
 	github.com/samber/lo v1.38.1
@@ -86,7 +85,6 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/pprof v0.0.0-20230705174524-200ffdc848b8 // indirect
-	github.com/google/subcommands v1.0.1 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0 // indirect
 	github.com/hannahhoward/go-pubsub v0.0.0-20200423002714-8d62886cc36e // indirect
@@ -248,4 +246,4 @@ require (
 	lukechampine.com/blake3 v1.2.1 // indirect
 )
 
-replace github.com/mohaijiang/computeshare-client v0.0.2 => ../computeshare-client
+//replace github.com/mohaijiang/computeshare-client v0.0.3-0.20230925034225-438eb5bea678 => ../computeshare-client

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: helloworld/v1/greeter.proto
+// source: api/helloworld/v1/greeter.proto
 
 package v1
 

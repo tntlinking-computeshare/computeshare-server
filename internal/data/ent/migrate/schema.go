@@ -122,8 +122,6 @@ var (
 		{Name: "script_name", Type: field.TypeString},
 		{Name: "file_address", Type: field.TypeString},
 		{Name: "script_content", Type: field.TypeString, Size: 2147483647},
-		{Name: "execute_state", Type: field.TypeInt32, Default: 0},
-		{Name: "execute_result", Type: field.TypeString, Size: 2147483647},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
 	}
@@ -139,6 +137,9 @@ var (
 		{Name: "user_id", Type: field.TypeString},
 		{Name: "fk_script_id", Type: field.TypeInt32},
 		{Name: "script_content", Type: field.TypeString, Size: 2147483647},
+		{Name: "task_number", Type: field.TypeInt32},
+		{Name: "script_name", Type: field.TypeString},
+		{Name: "file_address", Type: field.TypeString},
 		{Name: "execute_state", Type: field.TypeInt32},
 		{Name: "execute_result", Type: field.TypeString, Size: 2147483647},
 		{Name: "create_time", Type: field.TypeTime},
@@ -153,7 +154,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "script_execution_records_scripts_scriptExecutionRecords",
-				Columns:    []*schema.Column{ScriptExecutionRecordsColumns[8]},
+				Columns:    []*schema.Column{ScriptExecutionRecordsColumns[11]},
 				RefColumns: []*schema.Column{ScriptsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
