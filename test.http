@@ -135,3 +135,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwM
 GET  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY
+
+
+### 查询文件列表
+GET  https://computeshare.hamster.newtouch.com/v1/storage
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY

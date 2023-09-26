@@ -41,6 +41,7 @@ func (ur *storageRepo) ListStorage(ctx context.Context, owner string, parentId s
 			Owner:      p.Owner,
 			Cid:        *p.Cid,
 			LastModify: p.LastModify,
+			Size:       p.Size,
 			ParentID:   parentId,
 		})
 	}
@@ -56,6 +57,7 @@ func (ur *storageRepo) GetStorage(ctx context.Context, id uuid.UUID) (*biz.Stora
 		ID:         p.ID,
 		Name:       p.Name,
 		Type:       p.Type,
+		Size:       p.Size,
 		Owner:      p.Owner,
 		Cid:        *p.Cid,
 		LastModify: p.LastModify,

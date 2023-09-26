@@ -17,6 +17,7 @@ require (
 	github.com/ipfs/kubo v0.22.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/libp2p/go-libp2p v0.29.2
+	github.com/libp2p/go-libp2p-kad-dht v0.24.2
 	github.com/mohaijiang/computeshare-client v0.0.3
 	github.com/multiformats/go-multiaddr v0.10.1
 	github.com/multiformats/go-multiaddr-dns v0.3.1
@@ -144,7 +145,6 @@ require (
 	github.com/libp2p/go-doh-resolver v0.4.0 // indirect
 	github.com/libp2p/go-flow-metrics v0.1.0 // indirect
 	github.com/libp2p/go-libp2p-asn-util v0.3.0 // indirect
-	github.com/libp2p/go-libp2p-kad-dht v0.24.2 // indirect
 	github.com/libp2p/go-libp2p-kbucket v0.6.3 // indirect
 	github.com/libp2p/go-libp2p-pubsub v0.9.3 // indirect
 	github.com/libp2p/go-libp2p-pubsub-router v0.6.0 // indirect
