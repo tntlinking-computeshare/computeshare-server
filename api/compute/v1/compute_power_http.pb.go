@@ -21,8 +21,8 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationComputePowerCancelExecPythonPackage = "/api.compute.v1.ComputePower/CancelExecPythonPackage"
 const OperationComputePowerDownloadScriptExecuteResult = "/api.compute.v1.ComputePower/DownloadScriptExecuteResult"
-const OperationComputePowerGetScriptInfo = "/api.compute.v1.ComputePower/GetScriptInfo"
-const OperationComputePowerGetScriptList = "/api.compute.v1.ComputePower/GetScriptList"
+const OperationComputePowerGetScriptExecutionRecordInfo = "/api.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
+const OperationComputePowerGetScriptExecutionRecordList = "/api.compute.v1.ComputePower/GetScriptExecutionRecordList"
 const OperationComputePowerRunPythonPackage = "/api.compute.v1.ComputePower/RunPythonPackage"
 const OperationComputePowerUploadScriptFile = "/api.compute.v1.ComputePower/UploadScriptFile"
 
@@ -31,10 +31,10 @@ type ComputePowerHTTPServer interface {
 	CancelExecPythonPackage(context.Context, *CancelExecPythonPackageRequest) (*CancelExecPythonPackageReply, error)
 	// DownloadScriptExecuteResult下载执行结果（http接口另外写）
 	DownloadScriptExecuteResult(context.Context, *DownloadScriptExecuteResultRequest) (*DownloadScriptExecuteResultReply, error)
-	// GetScriptInfo通过id
-	GetScriptInfo(context.Context, *GetScriptInfoRequest) (*GetScriptInfoReply, error)
-	// GetScriptList查询脚本列表
-	GetScriptList(context.Context, *GetScriptListRequest) (*GetScriptListReply, error)
+	// GetScriptExecutionRecordInfo通过id
+	GetScriptExecutionRecordInfo(context.Context, *GetScriptExecutionRecordInfoRequest) (*GetScriptInfoReply, error)
+	// GetScriptExecutionRecordList查询脚本列表
+	GetScriptExecutionRecordList(context.Context, *GetScriptExecutionRecordListRequest) (*GetScriptListReply, error)
 	// RunPythonPackage执行脚本
 	RunPythonPackage(context.Context, *RunPythonPackageServerRequest) (*RunPythonPackageServerReply, error)
 	// UploadScriptFile上传脚本（http接口另外写）
@@ -44,10 +44,10 @@ type ComputePowerHTTPServer interface {
 func RegisterComputePowerHTTPServer(s *http.Server, srv ComputePowerHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/compute-power", _ComputePower_UploadScriptFile0_HTTP_Handler(srv))
-	r.GET("/v1/compute-power/script/list", _ComputePower_GetScriptList0_HTTP_Handler(srv))
+	r.GET("/v1/compute-power/script/list", _ComputePower_GetScriptExecutionRecordList0_HTTP_Handler(srv))
 	r.POST("/v1/compute-power/python", _ComputePower_RunPythonPackage0_HTTP_Handler(srv))
 	r.POST("/v1/compute-power/python/cancel", _ComputePower_CancelExecPythonPackage0_HTTP_Handler(srv))
-	r.GET("/v1/compute-power/script/info/{id}", _ComputePower_GetScriptInfo0_HTTP_Handler(srv))
+	r.GET("/v1/compute-power/script/info/{id}", _ComputePower_GetScriptExecutionRecordInfo0_HTTP_Handler(srv))
 	r.POST("/v1/compute-power/result", _ComputePower_DownloadScriptExecuteResult0_HTTP_Handler(srv))
 }
 
@@ -73,15 +73,15 @@ func _ComputePower_UploadScriptFile0_HTTP_Handler(srv ComputePowerHTTPServer) fu
 	}
 }
 
-func _ComputePower_GetScriptList0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
+func _ComputePower_GetScriptExecutionRecordList0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetScriptListRequest
+		var in GetScriptExecutionRecordListRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationComputePowerGetScriptList)
+		http.SetOperation(ctx, OperationComputePowerGetScriptExecutionRecordList)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetScriptList(ctx, req.(*GetScriptListRequest))
+			return srv.GetScriptExecutionRecordList(ctx, req.(*GetScriptExecutionRecordListRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -136,18 +136,18 @@ func _ComputePower_CancelExecPythonPackage0_HTTP_Handler(srv ComputePowerHTTPSer
 	}
 }
 
-func _ComputePower_GetScriptInfo0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
+func _ComputePower_GetScriptExecutionRecordInfo0_HTTP_Handler(srv ComputePowerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetScriptInfoRequest
+		var in GetScriptExecutionRecordInfoRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationComputePowerGetScriptInfo)
+		http.SetOperation(ctx, OperationComputePowerGetScriptExecutionRecordInfo)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetScriptInfo(ctx, req.(*GetScriptInfoRequest))
+			return srv.GetScriptExecutionRecordInfo(ctx, req.(*GetScriptExecutionRecordInfoRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -183,8 +183,8 @@ func _ComputePower_DownloadScriptExecuteResult0_HTTP_Handler(srv ComputePowerHTT
 type ComputePowerHTTPClient interface {
 	CancelExecPythonPackage(ctx context.Context, req *CancelExecPythonPackageRequest, opts ...http.CallOption) (rsp *CancelExecPythonPackageReply, err error)
 	DownloadScriptExecuteResult(ctx context.Context, req *DownloadScriptExecuteResultRequest, opts ...http.CallOption) (rsp *DownloadScriptExecuteResultReply, err error)
-	GetScriptInfo(ctx context.Context, req *GetScriptInfoRequest, opts ...http.CallOption) (rsp *GetScriptInfoReply, err error)
-	GetScriptList(ctx context.Context, req *GetScriptListRequest, opts ...http.CallOption) (rsp *GetScriptListReply, err error)
+	GetScriptExecutionRecordInfo(ctx context.Context, req *GetScriptExecutionRecordInfoRequest, opts ...http.CallOption) (rsp *GetScriptInfoReply, err error)
+	GetScriptExecutionRecordList(ctx context.Context, req *GetScriptExecutionRecordListRequest, opts ...http.CallOption) (rsp *GetScriptListReply, err error)
 	RunPythonPackage(ctx context.Context, req *RunPythonPackageServerRequest, opts ...http.CallOption) (rsp *RunPythonPackageServerReply, err error)
 	UploadScriptFile(ctx context.Context, req *UploadScriptFileRequest, opts ...http.CallOption) (rsp *UploadScriptFileReply, err error)
 }
@@ -223,11 +223,11 @@ func (c *ComputePowerHTTPClientImpl) DownloadScriptExecuteResult(ctx context.Con
 	return &out, err
 }
 
-func (c *ComputePowerHTTPClientImpl) GetScriptInfo(ctx context.Context, in *GetScriptInfoRequest, opts ...http.CallOption) (*GetScriptInfoReply, error) {
+func (c *ComputePowerHTTPClientImpl) GetScriptExecutionRecordInfo(ctx context.Context, in *GetScriptExecutionRecordInfoRequest, opts ...http.CallOption) (*GetScriptInfoReply, error) {
 	var out GetScriptInfoReply
 	pattern := "/v1/compute-power/script/info/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationComputePowerGetScriptInfo))
+	opts = append(opts, http.Operation(OperationComputePowerGetScriptExecutionRecordInfo))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -236,11 +236,11 @@ func (c *ComputePowerHTTPClientImpl) GetScriptInfo(ctx context.Context, in *GetS
 	return &out, err
 }
 
-func (c *ComputePowerHTTPClientImpl) GetScriptList(ctx context.Context, in *GetScriptListRequest, opts ...http.CallOption) (*GetScriptListReply, error) {
+func (c *ComputePowerHTTPClientImpl) GetScriptExecutionRecordList(ctx context.Context, in *GetScriptExecutionRecordListRequest, opts ...http.CallOption) (*GetScriptListReply, error) {
 	var out GetScriptListReply
 	pattern := "/v1/compute-power/script/list"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationComputePowerGetScriptList))
+	opts = append(opts, http.Operation(OperationComputePowerGetScriptExecutionRecordList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -39,6 +39,18 @@ func (serc *ScriptExecutionRecordCreate) SetScriptContent(s string) *ScriptExecu
 	return serc
 }
 
+// SetTaskNumber sets the "task_number" field.
+func (serc *ScriptExecutionRecordCreate) SetTaskNumber(i int32) *ScriptExecutionRecordCreate {
+	serc.mutation.SetTaskNumber(i)
+	return serc
+}
+
+// SetScriptName sets the "script_name" field.
+func (serc *ScriptExecutionRecordCreate) SetScriptName(s string) *ScriptExecutionRecordCreate {
+	serc.mutation.SetScriptName(s)
+	return serc
+}
+
 // SetFileAddress sets the "file_address" field.
 func (serc *ScriptExecutionRecordCreate) SetFileAddress(s string) *ScriptExecutionRecordCreate {
 	serc.mutation.SetFileAddress(s)
@@ -176,6 +188,22 @@ func (serc *ScriptExecutionRecordCreate) check() error {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
+	if _, ok := serc.mutation.TaskNumber(); !ok {
+		return &ValidationError{Name: "task_number", err: errors.New(`ent: missing required field "ScriptExecutionRecord.task_number"`)}
+	}
+	if v, ok := serc.mutation.TaskNumber(); ok {
+		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
+			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
+		}
+	}
+	if _, ok := serc.mutation.ScriptName(); !ok {
+		return &ValidationError{Name: "script_name", err: errors.New(`ent: missing required field "ScriptExecutionRecord.script_name"`)}
+	}
+	if v, ok := serc.mutation.ScriptName(); ok {
+		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
+			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
+		}
+	}
 	if _, ok := serc.mutation.FileAddress(); !ok {
 		return &ValidationError{Name: "file_address", err: errors.New(`ent: missing required field "ScriptExecutionRecord.file_address"`)}
 	}
@@ -234,6 +262,14 @@ func (serc *ScriptExecutionRecordCreate) createSpec() (*ScriptExecutionRecord, *
 	if value, ok := serc.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 		_node.ScriptContent = value
+	}
+	if value, ok := serc.mutation.TaskNumber(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
+		_node.TaskNumber = value
+	}
+	if value, ok := serc.mutation.ScriptName(); ok {
+		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
+		_node.ScriptName = value
 	}
 	if value, ok := serc.mutation.FileAddress(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)

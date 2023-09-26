@@ -21,8 +21,6 @@ func (Script) Fields() []ent.Field {
 		field.String("script_name").NotEmpty(),
 		field.String("file_address"),
 		field.Text("script_content").NotEmpty(),
-		field.Int32("execute_state").Default(0).Comment("Latest execution status"),
-		field.Text("execute_result").Comment("Latest execution results"),
 		field.Time("create_time").Default(time.Now()),
 		field.Time("update_time").Default(time.Now()),
 	}

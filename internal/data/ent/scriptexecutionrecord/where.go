@@ -70,6 +70,16 @@ func ScriptContent(v string) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldScriptContent, v))
 }
 
+// TaskNumber applies equality check predicate on the "task_number" field. It's identical to TaskNumberEQ.
+func TaskNumber(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldTaskNumber, v))
+}
+
+// ScriptName applies equality check predicate on the "script_name" field. It's identical to ScriptNameEQ.
+func ScriptName(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldScriptName, v))
+}
+
 // FileAddress applies equality check predicate on the "file_address" field. It's identical to FileAddressEQ.
 func FileAddress(v string) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldFileAddress, v))
@@ -263,6 +273,111 @@ func ScriptContentEqualFold(v string) predicate.ScriptExecutionRecord {
 // ScriptContentContainsFold applies the ContainsFold predicate on the "script_content" field.
 func ScriptContentContainsFold(v string) predicate.ScriptExecutionRecord {
 	return predicate.ScriptExecutionRecord(sql.FieldContainsFold(FieldScriptContent, v))
+}
+
+// TaskNumberEQ applies the EQ predicate on the "task_number" field.
+func TaskNumberEQ(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldTaskNumber, v))
+}
+
+// TaskNumberNEQ applies the NEQ predicate on the "task_number" field.
+func TaskNumberNEQ(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNEQ(FieldTaskNumber, v))
+}
+
+// TaskNumberIn applies the In predicate on the "task_number" field.
+func TaskNumberIn(vs ...int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldIn(FieldTaskNumber, vs...))
+}
+
+// TaskNumberNotIn applies the NotIn predicate on the "task_number" field.
+func TaskNumberNotIn(vs ...int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNotIn(FieldTaskNumber, vs...))
+}
+
+// TaskNumberGT applies the GT predicate on the "task_number" field.
+func TaskNumberGT(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGT(FieldTaskNumber, v))
+}
+
+// TaskNumberGTE applies the GTE predicate on the "task_number" field.
+func TaskNumberGTE(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGTE(FieldTaskNumber, v))
+}
+
+// TaskNumberLT applies the LT predicate on the "task_number" field.
+func TaskNumberLT(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLT(FieldTaskNumber, v))
+}
+
+// TaskNumberLTE applies the LTE predicate on the "task_number" field.
+func TaskNumberLTE(v int32) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLTE(FieldTaskNumber, v))
+}
+
+// ScriptNameEQ applies the EQ predicate on the "script_name" field.
+func ScriptNameEQ(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEQ(FieldScriptName, v))
+}
+
+// ScriptNameNEQ applies the NEQ predicate on the "script_name" field.
+func ScriptNameNEQ(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNEQ(FieldScriptName, v))
+}
+
+// ScriptNameIn applies the In predicate on the "script_name" field.
+func ScriptNameIn(vs ...string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldIn(FieldScriptName, vs...))
+}
+
+// ScriptNameNotIn applies the NotIn predicate on the "script_name" field.
+func ScriptNameNotIn(vs ...string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldNotIn(FieldScriptName, vs...))
+}
+
+// ScriptNameGT applies the GT predicate on the "script_name" field.
+func ScriptNameGT(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGT(FieldScriptName, v))
+}
+
+// ScriptNameGTE applies the GTE predicate on the "script_name" field.
+func ScriptNameGTE(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldGTE(FieldScriptName, v))
+}
+
+// ScriptNameLT applies the LT predicate on the "script_name" field.
+func ScriptNameLT(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLT(FieldScriptName, v))
+}
+
+// ScriptNameLTE applies the LTE predicate on the "script_name" field.
+func ScriptNameLTE(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldLTE(FieldScriptName, v))
+}
+
+// ScriptNameContains applies the Contains predicate on the "script_name" field.
+func ScriptNameContains(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldContains(FieldScriptName, v))
+}
+
+// ScriptNameHasPrefix applies the HasPrefix predicate on the "script_name" field.
+func ScriptNameHasPrefix(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldHasPrefix(FieldScriptName, v))
+}
+
+// ScriptNameHasSuffix applies the HasSuffix predicate on the "script_name" field.
+func ScriptNameHasSuffix(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldHasSuffix(FieldScriptName, v))
+}
+
+// ScriptNameEqualFold applies the EqualFold predicate on the "script_name" field.
+func ScriptNameEqualFold(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldEqualFold(FieldScriptName, v))
+}
+
+// ScriptNameContainsFold applies the ContainsFold predicate on the "script_name" field.
+func ScriptNameContainsFold(v string) predicate.ScriptExecutionRecord {
+	return predicate.ScriptExecutionRecord(sql.FieldContainsFold(FieldScriptName, v))
 }
 
 // FileAddressEQ applies the EQ predicate on the "file_address" field.

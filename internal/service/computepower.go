@@ -80,17 +80,15 @@ func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.Uplo
 			TaskNumber:    createScript.TaskNumber,
 			ScriptName:    createScript.ScriptName,
 			ScriptContent: createScript.ScriptContent,
-			ExecuteState:  createScript.ExecuteState,
-			ExecuteResult: createScript.ExecuteResult,
 		},
 	}, nil
 }
-func (s *ComputePowerService) GetScriptList(ctx context.Context, req *pb.GetScriptListRequest) (*pb.GetScriptListReply, error) {
+func (s *ComputePowerService) GetScriptExecutionRecordList(ctx context.Context, req *pb.GetScriptExecutionRecordListRequest) (*pb.GetScriptListReply, error) {
 	token, ok := global.FromContext(ctx)
 	if ok == false {
 		return nil, errors.New("cannot get user ID")
 	}
-	data, total, err := s.uc.GetScriptPage(ctx, token.UserID, req.Page, req.Size)
+	data, total, err := s.uc.GetScriptExecutionRecordPage(ctx, token.UserID, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +115,11 @@ func (s *ComputePowerService) GetScriptList(ctx context.Context, req *pb.GetScri
 	}, nil
 }
 func (s *ComputePowerService) RunPythonPackage(ctx context.Context, req *pb.RunPythonPackageServerRequest) (*pb.RunPythonPackageServerReply, error) {
-	script, err := s.uc.RunPythonPackage(ctx, req.GetId())
+	token, ok := global.FromContext(ctx)
+	if ok == false {
+		return nil, errors.New("cannot get user ID")
+	}
+	script, err := s.uc.RunPythonPackage(ctx, req.GetId(), token.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -153,8 +155,8 @@ func (s *ComputePowerService) CancelExecPythonPackage(ctx context.Context, req *
 		},
 	}, nil
 }
-func (s *ComputePowerService) GetScriptInfo(ctx context.Context, req *pb.GetScriptInfoRequest) (*pb.GetScriptInfoReply, error) {
-	script, err := s.uc.GetScriptInfo(ctx, req.GetId())
+func (s *ComputePowerService) GetScriptExecutionRecordInfo(ctx context.Context, req *pb.GetScriptExecutionRecordInfoRequest) (*pb.GetScriptInfoReply, error) {
+	script, err := s.uc.GetScriptExecutionRecordInfo(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -171,8 +173,9 @@ func (s *ComputePowerService) GetScriptInfo(ctx context.Context, req *pb.GetScri
 		},
 	}, nil
 }
+
 func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, req *pb.DownloadScriptExecuteResultRequest) (*pb.DownloadScriptExecuteResultReply, error) {
-	script, err := s.uc.GetScriptInfo(ctx, req.GetId())
+	script, err := s.uc.GetScriptExecutionRecordInfo(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}

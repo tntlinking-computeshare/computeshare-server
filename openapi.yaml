@@ -3,95 +3,20 @@
 
 openapi: 3.0.3
 info:
-    title: ComputeInstance API
+    title: ComputePower API
     version: 0.0.1
 paths:
-    /v1/compute/duration:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询到期时间
-            operationId: ComputeInstance_ListComputeInstanceDuration
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeDurationReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/compute/image:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询镜像
-            operationId: ComputeInstance_ListComputeImage
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeImageReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/compute/spec:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询规格
-            operationId: ComputeInstance_ListComputeSpec
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeSpecReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance:
-        get:
-            tags:
-                - ComputeInstance
-            description: 实例列表
-            operationId: ComputeInstance_List
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListInstanceReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+    /v1/compute-power:
         post:
             tags:
-                - ComputeInstance
-            description: 创建实例
-            operationId: ComputeInstance_Create
+                - ComputePower
+            description: 上传脚本（http接口另外写）
+            operationId: ComputePower_UploadScriptFile
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateInstanceRequest'
+                            $ref: '#/components/schemas/UploadScriptFileRequest'
                 required: true
             responses:
                 "200":
@@ -99,118 +24,138 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateInstanceReply'
+                                $ref: '#/components/schemas/UploadScriptFileReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/instance/{id}:
+    /v1/compute-power/python:
+        post:
+            tags:
+                - ComputePower
+            description: 执行脚本
+            operationId: ComputePower_RunPythonPackage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RunPythonPackageServerRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RunPythonPackageServerReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/compute-power/python/cancel:
+        post:
+            tags:
+                - ComputePower
+            description: 取消执行
+            operationId: ComputePower_CancelExecPythonPackage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CancelExecPythonPackageRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CancelExecPythonPackageReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/compute-power/result:
+        post:
+            tags:
+                - ComputePower
+            description: 下载执行结果（http接口另外写）
+            operationId: ComputePower_DownloadScriptExecuteResult
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DownloadScriptExecuteResultRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DownloadScriptExecuteResultReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/compute-power/script/info/{id}:
         get:
             tags:
-                - ComputeInstance
-            description: 获取实例详情
-            operationId: ComputeInstance_Get
+                - ComputePower
+            description: 通过id
+            operationId: ComputePower_GetScriptExecutionRecordInfo
             parameters:
                 - name: id
                   in: path
                   required: true
                   schema:
-                    type: string
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetInstanceReply'
+                                $ref: '#/components/schemas/GetScriptInfoReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        delete:
+    /v1/compute-power/script/list:
+        get:
             tags:
-                - ComputeInstance
-            description: 删除实例
-            operationId: ComputeInstance_Delete
+                - ComputePower
+            description: 查询脚本列表
+            operationId: ComputePower_GetScriptExecutionRecordList
             parameters:
-                - name: id
-                  in: path
-                  required: true
+                - name: page
+                  in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/DeleteInstanceReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/start:
-        put:
-            tags:
-                - ComputeInstance
-            description: 启动实例
-            operationId: ComputeInstance_StartInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/GetInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StartInstanceReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/stop:
-        put:
-            tags:
-                - ComputeInstance
-            description: 停止实例
-            operationId: ComputeInstance_StopInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/GetInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/StopInstanceReply'
+                                $ref: '#/components/schemas/GetScriptListReply'
                 default:
                     description: Default error response
                     content:
@@ -219,40 +164,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        ComputeDuration:
-            type: object
-            properties:
-                name:
-                    type: string
-                duration:
-                    type: integer
-                    format: int32
-        ComputeImage:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                name:
-                    type: string
-                image:
-                    type: string
-                tag:
-                    type: string
-                port:
-                    type: integer
-                    format: int32
-        ComputeSpec:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                core:
-                    type: string
-                memory:
-                    type: string
-        CreateInstanceReply:
+        CancelExecPythonPackageReply:
             type: object
             properties:
                 code:
@@ -261,37 +173,14 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CreateInstanceReply_Data'
-        CreateInstanceReply_Data:
+                    $ref: '#/components/schemas/ScriptReply'
+        CancelExecPythonPackageRequest:
             type: object
             properties:
                 id:
-                    type: string
-                name:
-                    type: string
-        CreateInstanceRequest:
-            type: object
-            properties:
-                specId:
                     type: integer
                     format: int32
-                imageId:
-                    type: integer
-                    format: int32
-                duration:
-                    type: integer
-                    format: int32
-                name:
-                    type: string
-        DeleteInstanceReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        GetInstanceReply:
+        DownloadScriptExecuteResultReply:
             type: object
             properties:
                 code:
@@ -300,12 +189,57 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/Instance'
-        GetInstanceRequest:
+                    $ref: '#/components/schemas/DownloadScriptExecuteResultReply_Data'
+        DownloadScriptExecuteResultReply_Data:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+        DownloadScriptExecuteResultRequest:
             type: object
             properties:
                 id:
+                    type: integer
+                    format: int32
+        GetScriptInfoReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
+                data:
+                    $ref: '#/components/schemas/ScriptReply'
+        GetScriptListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/GetScriptListReply_Data'
+        GetScriptListReply_Data:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ScriptReply'
+                total:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
         GoogleProtobufAny:
             type: object
             properties:
@@ -314,98 +248,39 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        Instance:
+        RunPythonPackageServerReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/ScriptReply'
+        RunPythonPackageServerRequest:
             type: object
             properties:
                 id:
-                    type: string
-                name:
-                    type: string
-                status:
                     type: integer
                     format: int32
-                expirationTime:
-                    type: integer
-                    format: int64
-                imageName:
-                    type: string
-                core:
-                    type: string
-                memory:
-                    type: string
-                stats:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/InstanceStats'
-        InstanceStats:
+        ScriptReply:
             type: object
             properties:
                 id:
-                    type: string
-                cpuUsage:
-                    type: integer
-                    format: uint64
-                memoryUsage:
-                    type: integer
-                    format: uint64
-                StatsTime:
-                    type: integer
-                    format: int64
-        ListComputeDurationReply:
-            type: object
-            properties:
-                code:
                     type: integer
                     format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ComputeDuration'
-        ListComputeImageReply:
-            type: object
-            properties:
-                code:
+                taskNumber:
                     type: integer
                     format: int32
-                message:
+                scriptName:
                     type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ComputeImage'
-        ListComputeSpecReply:
-            type: object
-            properties:
-                code:
+                scriptContent:
+                    type: string
+                executeState:
                     type: integer
                     format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ComputeSpec'
-        ListInstanceReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Instance'
-        StartInstanceReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
+                executeResult:
                     type: string
         Status:
             type: object
@@ -423,7 +298,7 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        StopInstanceReply:
+        UploadScriptFileReply:
             type: object
             properties:
                 code:
@@ -431,5 +306,15 @@ components:
                     format: int32
                 message:
                     type: string
+                data:
+                    $ref: '#/components/schemas/ScriptReply'
+        UploadScriptFileRequest:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
 tags:
-    - name: ComputeInstance
+    - name: ComputePower

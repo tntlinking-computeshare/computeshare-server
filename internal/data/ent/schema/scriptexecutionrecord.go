@@ -19,6 +19,8 @@ func (ScriptExecutionRecord) Fields() []ent.Field {
 		field.String("user_id"),
 		field.Int32("fk_script_id").Positive(),
 		field.Text("script_content").NotEmpty(),
+		field.Int32("task_number").Positive(),
+		field.String("script_name").NotEmpty(),
 		field.String("file_address"),
 		field.Int32("execute_state"),
 		field.Text("execute_result"),

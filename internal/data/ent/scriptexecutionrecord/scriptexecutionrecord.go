@@ -20,6 +20,10 @@ const (
 	FieldFkScriptID = "fk_script_id"
 	// FieldScriptContent holds the string denoting the script_content field in the database.
 	FieldScriptContent = "script_content"
+	// FieldTaskNumber holds the string denoting the task_number field in the database.
+	FieldTaskNumber = "task_number"
+	// FieldScriptName holds the string denoting the script_name field in the database.
+	FieldScriptName = "script_name"
 	// FieldFileAddress holds the string denoting the file_address field in the database.
 	FieldFileAddress = "file_address"
 	// FieldExecuteState holds the string denoting the execute_state field in the database.
@@ -49,6 +53,8 @@ var Columns = []string{
 	FieldUserID,
 	FieldFkScriptID,
 	FieldScriptContent,
+	FieldTaskNumber,
+	FieldScriptName,
 	FieldFileAddress,
 	FieldExecuteState,
 	FieldExecuteResult,
@@ -82,6 +88,10 @@ var (
 	FkScriptIDValidator func(int32) error
 	// ScriptContentValidator is a validator for the "script_content" field. It is called by the builders before save.
 	ScriptContentValidator func(string) error
+	// TaskNumberValidator is a validator for the "task_number" field. It is called by the builders before save.
+	TaskNumberValidator func(int32) error
+	// ScriptNameValidator is a validator for the "script_name" field. It is called by the builders before save.
+	ScriptNameValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime time.Time
 	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
@@ -109,6 +119,16 @@ func ByFkScriptID(opts ...sql.OrderTermOption) OrderOption {
 // ByScriptContent orders the results by the script_content field.
 func ByScriptContent(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScriptContent, opts...).ToFunc()
+}
+
+// ByTaskNumber orders the results by the task_number field.
+func ByTaskNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTaskNumber, opts...).ToFunc()
+}
+
+// ByScriptName orders the results by the script_name field.
+func ByScriptName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScriptName, opts...).ToFunc()
 }
 
 // ByFileAddress orders the results by the file_address field.

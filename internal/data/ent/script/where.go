@@ -80,16 +80,6 @@ func ScriptContent(v string) predicate.Script {
 	return predicate.Script(sql.FieldEQ(FieldScriptContent, v))
 }
 
-// ExecuteState applies equality check predicate on the "execute_state" field. It's identical to ExecuteStateEQ.
-func ExecuteState(v int32) predicate.Script {
-	return predicate.Script(sql.FieldEQ(FieldExecuteState, v))
-}
-
-// ExecuteResult applies equality check predicate on the "execute_result" field. It's identical to ExecuteResultEQ.
-func ExecuteResult(v string) predicate.Script {
-	return predicate.Script(sql.FieldEQ(FieldExecuteResult, v))
-}
-
 // CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
 func CreateTime(v time.Time) predicate.Script {
 	return predicate.Script(sql.FieldEQ(FieldCreateTime, v))
@@ -398,111 +388,6 @@ func ScriptContentEqualFold(v string) predicate.Script {
 // ScriptContentContainsFold applies the ContainsFold predicate on the "script_content" field.
 func ScriptContentContainsFold(v string) predicate.Script {
 	return predicate.Script(sql.FieldContainsFold(FieldScriptContent, v))
-}
-
-// ExecuteStateEQ applies the EQ predicate on the "execute_state" field.
-func ExecuteStateEQ(v int32) predicate.Script {
-	return predicate.Script(sql.FieldEQ(FieldExecuteState, v))
-}
-
-// ExecuteStateNEQ applies the NEQ predicate on the "execute_state" field.
-func ExecuteStateNEQ(v int32) predicate.Script {
-	return predicate.Script(sql.FieldNEQ(FieldExecuteState, v))
-}
-
-// ExecuteStateIn applies the In predicate on the "execute_state" field.
-func ExecuteStateIn(vs ...int32) predicate.Script {
-	return predicate.Script(sql.FieldIn(FieldExecuteState, vs...))
-}
-
-// ExecuteStateNotIn applies the NotIn predicate on the "execute_state" field.
-func ExecuteStateNotIn(vs ...int32) predicate.Script {
-	return predicate.Script(sql.FieldNotIn(FieldExecuteState, vs...))
-}
-
-// ExecuteStateGT applies the GT predicate on the "execute_state" field.
-func ExecuteStateGT(v int32) predicate.Script {
-	return predicate.Script(sql.FieldGT(FieldExecuteState, v))
-}
-
-// ExecuteStateGTE applies the GTE predicate on the "execute_state" field.
-func ExecuteStateGTE(v int32) predicate.Script {
-	return predicate.Script(sql.FieldGTE(FieldExecuteState, v))
-}
-
-// ExecuteStateLT applies the LT predicate on the "execute_state" field.
-func ExecuteStateLT(v int32) predicate.Script {
-	return predicate.Script(sql.FieldLT(FieldExecuteState, v))
-}
-
-// ExecuteStateLTE applies the LTE predicate on the "execute_state" field.
-func ExecuteStateLTE(v int32) predicate.Script {
-	return predicate.Script(sql.FieldLTE(FieldExecuteState, v))
-}
-
-// ExecuteResultEQ applies the EQ predicate on the "execute_result" field.
-func ExecuteResultEQ(v string) predicate.Script {
-	return predicate.Script(sql.FieldEQ(FieldExecuteResult, v))
-}
-
-// ExecuteResultNEQ applies the NEQ predicate on the "execute_result" field.
-func ExecuteResultNEQ(v string) predicate.Script {
-	return predicate.Script(sql.FieldNEQ(FieldExecuteResult, v))
-}
-
-// ExecuteResultIn applies the In predicate on the "execute_result" field.
-func ExecuteResultIn(vs ...string) predicate.Script {
-	return predicate.Script(sql.FieldIn(FieldExecuteResult, vs...))
-}
-
-// ExecuteResultNotIn applies the NotIn predicate on the "execute_result" field.
-func ExecuteResultNotIn(vs ...string) predicate.Script {
-	return predicate.Script(sql.FieldNotIn(FieldExecuteResult, vs...))
-}
-
-// ExecuteResultGT applies the GT predicate on the "execute_result" field.
-func ExecuteResultGT(v string) predicate.Script {
-	return predicate.Script(sql.FieldGT(FieldExecuteResult, v))
-}
-
-// ExecuteResultGTE applies the GTE predicate on the "execute_result" field.
-func ExecuteResultGTE(v string) predicate.Script {
-	return predicate.Script(sql.FieldGTE(FieldExecuteResult, v))
-}
-
-// ExecuteResultLT applies the LT predicate on the "execute_result" field.
-func ExecuteResultLT(v string) predicate.Script {
-	return predicate.Script(sql.FieldLT(FieldExecuteResult, v))
-}
-
-// ExecuteResultLTE applies the LTE predicate on the "execute_result" field.
-func ExecuteResultLTE(v string) predicate.Script {
-	return predicate.Script(sql.FieldLTE(FieldExecuteResult, v))
-}
-
-// ExecuteResultContains applies the Contains predicate on the "execute_result" field.
-func ExecuteResultContains(v string) predicate.Script {
-	return predicate.Script(sql.FieldContains(FieldExecuteResult, v))
-}
-
-// ExecuteResultHasPrefix applies the HasPrefix predicate on the "execute_result" field.
-func ExecuteResultHasPrefix(v string) predicate.Script {
-	return predicate.Script(sql.FieldHasPrefix(FieldExecuteResult, v))
-}
-
-// ExecuteResultHasSuffix applies the HasSuffix predicate on the "execute_result" field.
-func ExecuteResultHasSuffix(v string) predicate.Script {
-	return predicate.Script(sql.FieldHasSuffix(FieldExecuteResult, v))
-}
-
-// ExecuteResultEqualFold applies the EqualFold predicate on the "execute_result" field.
-func ExecuteResultEqualFold(v string) predicate.Script {
-	return predicate.Script(sql.FieldEqualFold(FieldExecuteResult, v))
-}
-
-// ExecuteResultContainsFold applies the ContainsFold predicate on the "execute_result" field.
-func ExecuteResultContainsFold(v string) predicate.Script {
-	return predicate.Script(sql.FieldContainsFold(FieldExecuteResult, v))
 }
 
 // CreateTimeEQ applies the EQ predicate on the "create_time" field.

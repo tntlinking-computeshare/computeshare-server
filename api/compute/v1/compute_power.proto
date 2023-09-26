@@ -17,7 +17,7 @@ service ComputePower {
 		};
 	};
 	//查询脚本列表
-	rpc GetScriptList (GetScriptListRequest) returns (GetScriptListReply){
+	rpc GetScriptExecutionRecordList (GetScriptExecutionRecordListRequest) returns (GetScriptListReply){
 		option (google.api.http) = {
 			get: "/v1/compute-power/script/list"
 		};
@@ -37,7 +37,7 @@ service ComputePower {
 		};
 	};
 	//通过id
-	rpc GetScriptInfo (GetScriptInfoRequest) returns (GetScriptInfoReply){
+	rpc GetScriptExecutionRecordInfo (GetScriptExecutionRecordInfoRequest) returns (GetScriptInfoReply){
 		option (google.api.http) = {
 			get: "/v1/compute-power/script/info/{id}",
 		};
@@ -63,7 +63,7 @@ message UploadScriptFileReply {
 	ScriptReply data = 3;
 }
 
-message GetScriptListRequest {
+message GetScriptExecutionRecordListRequest {
 	int32 page = 1;
 	int32 size = 2;
 }
@@ -99,7 +99,7 @@ message CancelExecPythonPackageReply {
 	ScriptReply data = 3;
 }
 
-message GetScriptInfoRequest {
+message GetScriptExecutionRecordInfoRequest {
 	int32 id = 1;
 }
 

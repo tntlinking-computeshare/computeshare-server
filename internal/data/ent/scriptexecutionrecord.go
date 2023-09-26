@@ -24,6 +24,10 @@ type ScriptExecutionRecord struct {
 	FkScriptID int32 `json:"fk_script_id,omitempty"`
 	// ScriptContent holds the value of the "script_content" field.
 	ScriptContent string `json:"script_content,omitempty"`
+	// TaskNumber holds the value of the "task_number" field.
+	TaskNumber int32 `json:"task_number,omitempty"`
+	// ScriptName holds the value of the "script_name" field.
+	ScriptName string `json:"script_name,omitempty"`
 	// FileAddress holds the value of the "file_address" field.
 	FileAddress string `json:"file_address,omitempty"`
 	// ExecuteState holds the value of the "execute_state" field.
@@ -68,9 +72,9 @@ func (*ScriptExecutionRecord) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scriptexecutionrecord.FieldID, scriptexecutionrecord.FieldFkScriptID, scriptexecutionrecord.FieldExecuteState:
+		case scriptexecutionrecord.FieldID, scriptexecutionrecord.FieldFkScriptID, scriptexecutionrecord.FieldTaskNumber, scriptexecutionrecord.FieldExecuteState:
 			values[i] = new(sql.NullInt64)
-		case scriptexecutionrecord.FieldUserID, scriptexecutionrecord.FieldScriptContent, scriptexecutionrecord.FieldFileAddress, scriptexecutionrecord.FieldExecuteResult:
+		case scriptexecutionrecord.FieldUserID, scriptexecutionrecord.FieldScriptContent, scriptexecutionrecord.FieldScriptName, scriptexecutionrecord.FieldFileAddress, scriptexecutionrecord.FieldExecuteResult:
 			values[i] = new(sql.NullString)
 		case scriptexecutionrecord.FieldCreateTime, scriptexecutionrecord.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -114,6 +118,18 @@ func (ser *ScriptExecutionRecord) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field script_content", values[i])
 			} else if value.Valid {
 				ser.ScriptContent = value.String
+			}
+		case scriptexecutionrecord.FieldTaskNumber:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field task_number", values[i])
+			} else if value.Valid {
+				ser.TaskNumber = int32(value.Int64)
+			}
+		case scriptexecutionrecord.FieldScriptName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field script_name", values[i])
+			} else if value.Valid {
+				ser.ScriptName = value.String
 			}
 		case scriptexecutionrecord.FieldFileAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -201,6 +217,12 @@ func (ser *ScriptExecutionRecord) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script_content=")
 	builder.WriteString(ser.ScriptContent)
+	builder.WriteString(", ")
+	builder.WriteString("task_number=")
+	builder.WriteString(fmt.Sprintf("%v", ser.TaskNumber))
+	builder.WriteString(", ")
+	builder.WriteString("script_name=")
+	builder.WriteString(ser.ScriptName)
 	builder.WriteString(", ")
 	builder.WriteString("file_address=")
 	builder.WriteString(ser.FileAddress)
