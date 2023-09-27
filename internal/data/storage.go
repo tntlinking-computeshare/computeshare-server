@@ -68,12 +68,16 @@ func (ur *storageRepo) GetStorage(ctx context.Context, id uuid.UUID) (*biz.Stora
 func (ur *storageRepo) CreateStorage(ctx context.Context, entity *biz.Storage) error {
 
 	// 判断有该目录有无重复的文件夹
-	exists := ur.data.db.Storage.Query().Where(
+	exists, err := ur.data.db.Storage.Query().Where(
 		storage.OwnerEQ(entity.Owner),
 		storage.ParentIDEQ(entity.ParentID),
 		storage.NameEQ(entity.Name),
 		storage.TypeEQ(entity.Type),
-	).ExistX(ctx)
+	).Exist(ctx)
+	if err != nil {
+		ur.log.Error(err)
+		return err
+	}
 
 	if exists && entity.Type == int32(pb.FileType_DIR) {
 		return fmt.Errorf("%s dir is exists", entity.Name)

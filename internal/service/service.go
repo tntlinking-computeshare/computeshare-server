@@ -15,6 +15,7 @@ var ProviderSet = wire.NewSet(
 	NewComputeInstanceService,
 	NewComputePowerService,
 	NewCronJob,
+	NewIpfShell,
 )
 
 func NewIpfShell(c *conf.Data) *shell.Shell {

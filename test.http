@@ -1,24 +1,19 @@
 ### POST
 POST http://127.0.0.1:8000/v1/storage/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="parentId"
-Content-Type: text/plain
-
-73640b0d-ce18-45c1-beff-e06faa4a05f9
---WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="abc.txt"
+Content-Disposition: form-data; name="file"; filename="some.pdf"
 Content-Type: application/json
 
-< /tmp/abc.txt
+< /tmp/some.pdf
 --WebAppBoundary--
 
 
 ### 下载
-POST http://127.0.0.1:8000/v1/storage/download?id=386f199e-1704-4a40-bd8c-10f2969a9e54
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+POST http://127.0.0.1:8000/v1/storage/download?id=31ea3402-aeb7-4d1c-963e-018799e77cf4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
 
 ###
 
