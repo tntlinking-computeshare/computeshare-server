@@ -1,10 +1,13 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	shell "github.com/ipfs/go-ipfs-api"
+	files "github.com/ipfs/go-ipfs-files"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
@@ -14,22 +17,17 @@ import (
 
 type StorageService struct {
 	pb.UnimplementedStorageServer
-	uc *biz.Storagecase
-	//ipfsNode *core.IpfsNode
-	//ipfsapi  coreiface.CoreAPI
-	log *log.Helper
+
+	ipfsShell *shell.Shell
+	uc        *biz.Storagecase
+	log       *log.Helper
 }
 
-func NewStorageService(uc *biz.Storagecase, logger log.Logger) (*StorageService, error) {
-	//api, err := coreapi.NewCoreAPI(ipfsNode, options.Api.FetchBlocks(true))
-	//if err != nil {
-	//	return nil, err
-	//}
+func NewStorageService(uc *biz.Storagecase, ipfsShell *shell.Shell, logger log.Logger) (*StorageService, error) {
 	return &StorageService{
-		uc: uc,
-		//ipfsNode: ipfsNode,
-		//ipfsapi:  api,
-		log: log.NewHelper(logger),
+		uc:        uc,
+		ipfsShell: ipfsShell,
+		log:       log.NewHelper(logger),
 	}, nil
 }
 
@@ -64,50 +62,30 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 		return nil, errors.New("cannot get user ID")
 	}
 
-	//opts := []options.UnixfsAddOption{
-	//	options.Unixfs.Hash(18),
-	//
-	//	options.Unixfs.Inline(false),
-	//	options.Unixfs.InlineLimit(32),
-	//
-	//	options.Unixfs.Chunker("size-262144"),
-	//
-	//	options.Unixfs.Pin(true),
-	//	options.Unixfs.HashOnly(false),
-	//	options.Unixfs.FsCache(false),
-	//	options.Unixfs.Nocopy(false),
-	//
-	//	options.Unixfs.Progress(true),
-	//	options.Unixfs.Silent(false),
-	//}
-	//
-	//fileNode := files.NewBytesFile(req.Body)
-	//pathAdded, err := s.ipfsapi.Unixfs().Add(ctx, fileNode, opts...)
-	//
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//size, err := fileNode.Size()
-	//if err != nil {
-	//	return nil, err
-	//}
+	file := files.NewBytesFile(req.Body)
+	pathAdded, err := s.ipfsShell.Add(file, shell.OnlyHash(false), shell.Pin(true), shell.Progress(true))
+	if err != nil {
+		s.log.Error("ipfs add failed err is", err)
+		return nil, errors.New("ipfs add failed")
+	}
+	size, err := file.Size()
+	if err != nil {
+		return nil, err
+	}
 
 	storage := &biz.Storage{
-		Owner: token.UserID,
-		Type:  int32(pb.FileType_FILE),
-		//Size:       int32(size),
-		Size:       int32(len(req.Body)),
+		Owner:      token.UserID,
+		Type:       int32(pb.FileType_FILE),
+		Size:       int32(size),
 		Name:       req.GetName(),
 		ParentID:   req.GetParentId(),
 		LastModify: time.Now(),
-		//Cid:        pathAdded.Cid().String(),
-		Cid: "pathAdded.Cid().String()",
+		Cid:        pathAdded,
 	}
 
 	s.log.Info("uploaded: ", req.GetName())
 
-	err := s.uc.Create(ctx, storage)
+	err = s.uc.Create(ctx, storage)
 	return &pb.UploadFileReply{
 		Code:    200,
 		Message: SUCCESS,
@@ -134,19 +112,18 @@ func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) 
 	if cid == "" {
 		return nil, errors.New("download file error")
 	}
-	//f, err := s.ipfsapi.Unixfs().Get(ctx, path.New(cid))
-	//var file files.File
-	//switch f := f.(type) {
-	//case files.File:
-	//	file = f
-	//case files.Directory:
-	//	return nil, coreiface.ErrIsDir
-	//default:
-	//	return nil, coreiface.ErrNotSupported
-	//}
+	ipfsReadCloser, err := s.ipfsShell.Cat(cid)
+	if err != nil {
+		s.log.Error("ipfs get failed err is", err)
+		return nil, err
+	}
+	ipfsDataBuffer := new(bytes.Buffer)
+	_, err = ipfsDataBuffer.ReadFrom(ipfsReadCloser)
+	if err != nil {
+		s.log.Error("ipfsReadCloser to ipfsDataBuffer failed err is", err)
+		return nil, err
+	}
 
-	//data, err := io.ReadAll(file)
-	data := []byte{}
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +132,7 @@ func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) 
 		Message: SUCCESS,
 		Data: &pb.DownloadReply_Data{
 			Name: storage.Name,
-			Body: data,
+			Body: ipfsDataBuffer.Bytes(),
 		},
 	}, err
 }
