@@ -2,7 +2,12 @@ package biz
 
 import (
 	"context"
+	"fmt"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	transhttp "github.com/go-kratos/kratos/v2/transport/http"
+	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	goipfsp2p "github.com/mohaijiang/go-ipfs-p2p"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,8 +21,6 @@ type Script struct {
 	ScriptName    string    `json:"scriptName,omitempty"`
 	FileAddress   string    `json:"fileAddress,omitempty"`
 	ScriptContent string    `json:"scriptContent,omitempty"`
-	ExecuteState  int32     `json:"executeState,omitempty"`
-	ExecuteResult string    `json:"executeResult,omitempty"`
 	CreateTime    time.Time `json:"createTime,omitempty"`
 	UpdateTime    time.Time `json:"updateTime,omitempty"`
 }
@@ -35,7 +38,10 @@ type ScriptExecutionRecord struct {
 	ID            int32     `json:"id,omitempty"`
 	UserID        string    `json:"user_id,omitempty"`
 	FkScriptID    int32     `json:"fk_script_id,omitempty"`
+	TaskNumber    int32     `json:"taskNumber,omitempty"`
 	ScriptContent string    `json:"fk_script_content,omitempty"`
+	ScriptName    string    `json:"scriptName,omitempty"`
+	FileAddress   string    `json:"fileAddress,omitempty"`
 	ExecuteState  int32     `json:"execute_state,omitempty"`
 	ExecuteResult string    `json:"execute_result,omitempty"`
 	CreateTime    time.Time `json:"create_time,omitempty"`
@@ -47,6 +53,7 @@ type ScriptExecutionRecordRepo interface {
 	Save(context.Context, *ScriptExecutionRecord) (*ScriptExecutionRecord, error)
 	Update(context.Context, *ScriptExecutionRecord) (*ScriptExecutionRecord, error)
 	FindByID(context.Context, int32) (*ScriptExecutionRecord, error)
+	PageByScriptId(context.Context, string, int32, int32) ([]*ScriptExecutionRecord, int32, error)
 	FindLatestByUserIdAndScript(context.Context, string, int32) (*ScriptExecutionRecord, error)
 }
 
@@ -54,12 +61,14 @@ type ScriptExecutionRecordRepo interface {
 type ScriptUseCase struct {
 	repo                      ScriptRepo
 	scriptExecutionRecordRepo ScriptExecutionRecordRepo
+	agentRepo                 AgentRepo
+	p2pClient                 *goipfsp2p.P2pClient
 	log                       *log.Helper
 }
 
 // NewScriptUseCase new a Script UseCase.
-func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, logger log.Logger) *ScriptUseCase {
-	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, log: log.NewHelper(logger)}
+func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, agentRepo AgentRepo, p2pClient *goipfsp2p.P2pClient, logger log.Logger) *ScriptUseCase {
+	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, agentRepo: agentRepo, p2pClient: p2pClient, log: log.NewHelper(logger)}
 }
 
 // CreateScript creates a Script, and returns the new Script.
@@ -68,53 +77,121 @@ func (uc *ScriptUseCase) CreateScript(ctx context.Context, s *Script) (*Script, 
 	return uc.repo.Save(ctx, s)
 }
 
-func (uc *ScriptUseCase) GetScriptPage(ctx context.Context, userId string, page, size int32) ([]*Script, int32, error) {
-	uc.log.WithContext(ctx).Infof("GetScriptPage %s %d %d", userId, page, size)
-	return uc.repo.PageByUserID(ctx, userId, page, size)
+func (uc *ScriptUseCase) GetScriptExecutionRecordPage(ctx context.Context, userId string, page, size int32) ([]*ScriptExecutionRecord, int32, error) {
+	uc.log.WithContext(ctx).Infof("GetScriptExecutionRecordPage %s %d %d", userId, page, size)
+	return uc.scriptExecutionRecordRepo.PageByScriptId(ctx, userId, page, size)
 }
 
-func (uc *ScriptUseCase) GetScriptInfo(ctx context.Context, id int32) (*Script, error) {
-	uc.log.WithContext(ctx).Infof("GetScriptInfo is %d", id)
-	return uc.repo.FindByID(ctx, id)
+func (uc *ScriptUseCase) GetScriptExecutionRecordInfo(ctx context.Context, id int32) (*ScriptExecutionRecord, error) {
+	uc.log.WithContext(ctx).Infof("GetScriptExecutionRecordInfo is %d", id)
+	return uc.scriptExecutionRecordRepo.FindByID(ctx, id)
 }
 
-func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32) (*Script, error) {
+func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32, userId string) (*ScriptExecutionRecord, error) {
 	script, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 	record := ScriptExecutionRecord{
-		UserID:        script.UserId,
+		UserID:        userId,
 		FkScriptID:    script.ID,
 		ScriptContent: script.ScriptContent,
+		FileAddress:   script.FileAddress,
+		ScriptName:    script.ScriptName,
 		ExecuteState:  consts.Executing,
 		CreateTime:    time.Now(),
 		UpdateTime:    time.Now(),
 	}
-	script.ExecuteState = consts.Executing
-	_, err = uc.scriptExecutionRecordRepo.Save(ctx, &record)
+	save, err := uc.scriptExecutionRecordRepo.Save(ctx, &record)
 	if err != nil {
 		return nil, err
 	}
-	uc.log.WithContext(ctx).Infof("GetScriptInfo is %d", id)
-	return uc.repo.Update(ctx, script)
+	// 选择一个agent节点进行通信
+	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, "", "")
+	if err != nil {
+		return nil, err
+	}
+	go uc.RunPythonPackageOnAgent(agent.PeerId, save)
+
+	return save, nil
 }
 
-func (uc *ScriptUseCase) CancelExecPythonPackage(ctx context.Context, id int32) (*Script, error) {
-	script, err := uc.repo.FindByID(ctx, id)
+func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, record *ScriptExecutionRecord) {
+	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
+
+	computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(peerId)
 	if err != nil {
-		return nil, err
+		uc.log.Error("创建ComputePowerHTTPClient链接失败")
+		uc.log.Error(err)
+		return
 	}
-	executionRecord, err := uc.scriptExecutionRecordRepo.FindLatestByUserIdAndScript(ctx, script.UserId, script.ID)
+	defer cleanup()
+
+	rsp, err := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
+	scriptExecutionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, record.ID)
+	if scriptExecutionRecord.ExecuteState == consts.Executing {
+		executeState := consts.Completed
+		if err != nil {
+			uc.log.Error("computePowerClient RunPythonPackage fail")
+			uc.log.Error(err)
+			executeState = consts.ExecutionFailed
+		}
+		if rsp == nil {
+			record.ExecuteResult = ""
+		} else {
+			record.ExecuteResult = rsp.ExecuteResult
+		}
+		record.ExecuteState = int32(executeState)
+		_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
+		if err != nil {
+			uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
+			uc.log.Error(err)
+			return
+		}
+	} else if scriptExecutionRecord.ExecuteState == consts.Canceled {
+		uc.log.Info("本次执行任务已经取消，不能写入执行结果")
+		return
+	} else {
+		uc.log.Info("本次执行任务状态不符合写入执行结果的条件")
+		return
+	}
+
+}
+
+func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerClientHTTPClient, func(), error) {
+	ip, port, err := uc.p2pClient.ForwardWithRandomPort(peerId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	time.Sleep(time.Second * 2)
+
+	client, err := transhttp.NewClient(
+		context.Background(),
+		transhttp.WithMiddleware(
+			recovery.Recovery(),
+		),
+		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
+		transhttp.WithTimeout(time.Second*10),
+	)
+
+	if err != nil {
+		uc.log.Error("创建ComputePowerClient链接失败")
+		uc.log.Error(err)
+		return nil, nil, err
+	}
+
+	vmClient := clientcomputev1.NewComputePowerClientHTTPClient(client)
+	return vmClient, func() {
+		_ = client.Close()
+	}, nil
+}
+
+func (uc *ScriptUseCase) CancelExecPythonPackage(ctx context.Context, scriptId int32) (*ScriptExecutionRecord, error) {
+	executionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, scriptId)
 	if err != nil {
 		return nil, err
 	}
 	executionRecord.ExecuteState = consts.Canceled
-	script.ExecuteState = consts.Canceled
-	uc.log.WithContext(ctx).Infof("GetScriptInfo is %d", id)
-	_, err = uc.scriptExecutionRecordRepo.Update(ctx, executionRecord)
-	if err != nil {
-		return nil, err
-	}
-	return uc.repo.Update(ctx, script)
+	return uc.scriptExecutionRecordRepo.Update(ctx, executionRecord)
 }

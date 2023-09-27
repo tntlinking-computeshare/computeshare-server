@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: compute/v1/storage.proto
+// source: api/compute/v1/storage.proto
 
 package v1
 
@@ -35,14 +35,14 @@ type StorageHTTPServer interface {
 
 func RegisterStorageHTTPServer(s *http.Server, srv StorageHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/storage", _Storage_List1_HTTP_Handler(srv))
+	r.GET("/v1/storage", _Storage_List0_HTTP_Handler(srv))
 	r.POST("/v1/storage", _Storage_UploadFile0_HTTP_Handler(srv))
 	r.POST("/v1/storage/dir", _Storage_CreateDir0_HTTP_Handler(srv))
 	r.GET("/v1/storage/{id}", _Storage_Download0_HTTP_Handler(srv))
-	r.DELETE("/v1/storage", _Storage_Delete1_HTTP_Handler(srv))
+	r.DELETE("/v1/storage", _Storage_Delete0_HTTP_Handler(srv))
 }
 
-func _Storage_List1_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
+func _Storage_List0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -127,7 +127,7 @@ func _Storage_Download0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Storage_Delete1_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
+func _Storage_Delete0_HTTP_Handler(srv StorageHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteRequest
 		if err := ctx.BindQuery(&in); err != nil {

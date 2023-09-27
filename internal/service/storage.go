@@ -5,39 +5,32 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	iface "github.com/ipfs/boxo/coreiface"
-	"github.com/ipfs/boxo/coreiface/options"
-	"github.com/ipfs/boxo/coreiface/path"
-	"github.com/ipfs/boxo/files"
-	"github.com/ipfs/kubo/core"
-	"github.com/ipfs/kubo/core/coreapi"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
-	"io"
 	"time"
 )
 
 type StorageService struct {
 	pb.UnimplementedStorageServer
-	uc       *biz.Storagecase
-	ipfsNode *core.IpfsNode
-	ipfsapi  iface.CoreAPI
-	log      *log.Helper
+	uc *biz.Storagecase
+	//ipfsNode *core.IpfsNode
+	//ipfsapi  coreiface.CoreAPI
+	log *log.Helper
 }
 
-func NewStorageService(uc *biz.Storagecase, ipfsNode *core.IpfsNode, logger log.Logger) (*StorageService, error) {
-	api, err := coreapi.NewCoreAPI(ipfsNode, options.Api.FetchBlocks(true))
-	if err != nil {
-		return nil, err
-	}
+func NewStorageService(uc *biz.Storagecase, logger log.Logger) (*StorageService, error) {
+	//api, err := coreapi.NewCoreAPI(ipfsNode, options.Api.FetchBlocks(true))
+	//if err != nil {
+	//	return nil, err
+	//}
 	return &StorageService{
-		uc:       uc,
-		ipfsNode: ipfsNode,
-		ipfsapi:  api,
-		log:      log.NewHelper(logger),
-	}, err
+		uc: uc,
+		//ipfsNode: ipfsNode,
+		//ipfsapi:  api,
+		log: log.NewHelper(logger),
+	}, nil
 }
 
 func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.ListReply, error) {
@@ -71,48 +64,50 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 		return nil, errors.New("cannot get user ID")
 	}
 
-	opts := []options.UnixfsAddOption{
-		options.Unixfs.Hash(18),
-
-		options.Unixfs.Inline(false),
-		options.Unixfs.InlineLimit(32),
-
-		options.Unixfs.Chunker("size-262144"),
-
-		options.Unixfs.Pin(true),
-		options.Unixfs.HashOnly(false),
-		options.Unixfs.FsCache(false),
-		options.Unixfs.Nocopy(false),
-
-		options.Unixfs.Progress(true),
-		options.Unixfs.Silent(false),
-	}
-
-	fileNode := files.NewBytesFile(req.Body)
-	pathAdded, err := s.ipfsapi.Unixfs().Add(ctx, fileNode, opts...)
-
-	if err != nil {
-		return nil, err
-	}
-
-	size, err := fileNode.Size()
-	if err != nil {
-		return nil, err
-	}
+	//opts := []options.UnixfsAddOption{
+	//	options.Unixfs.Hash(18),
+	//
+	//	options.Unixfs.Inline(false),
+	//	options.Unixfs.InlineLimit(32),
+	//
+	//	options.Unixfs.Chunker("size-262144"),
+	//
+	//	options.Unixfs.Pin(true),
+	//	options.Unixfs.HashOnly(false),
+	//	options.Unixfs.FsCache(false),
+	//	options.Unixfs.Nocopy(false),
+	//
+	//	options.Unixfs.Progress(true),
+	//	options.Unixfs.Silent(false),
+	//}
+	//
+	//fileNode := files.NewBytesFile(req.Body)
+	//pathAdded, err := s.ipfsapi.Unixfs().Add(ctx, fileNode, opts...)
+	//
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//size, err := fileNode.Size()
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	storage := &biz.Storage{
-		Owner:      token.UserID,
-		Type:       int32(pb.FileType_FILE),
-		Size:       int32(size),
+		Owner: token.UserID,
+		Type:  int32(pb.FileType_FILE),
+		//Size:       int32(size),
+		Size:       int32(len(req.Body)),
 		Name:       req.GetName(),
 		ParentID:   req.GetParentId(),
 		LastModify: time.Now(),
-		Cid:        pathAdded.Cid().String(),
+		//Cid:        pathAdded.Cid().String(),
+		Cid: "pathAdded.Cid().String()",
 	}
 
 	s.log.Info("uploaded: ", req.GetName())
 
-	err = s.uc.Create(ctx, storage)
+	err := s.uc.Create(ctx, storage)
 	return &pb.UploadFileReply{
 		Code:    200,
 		Message: SUCCESS,
@@ -122,7 +117,7 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 			Cid:        &storage.Cid,
 			LastModify: storage.LastModify.UnixMilli(),
 			Type:       pb.FileType(storage.Type),
-			Size:       int32(size),
+			Size:       storage.Size,
 		},
 	}, err
 }
@@ -139,18 +134,19 @@ func (s *StorageService) Download(ctx context.Context, req *pb.DownloadRequest) 
 	if cid == "" {
 		return nil, errors.New("download file error")
 	}
-	f, err := s.ipfsapi.Unixfs().Get(ctx, path.New(cid))
-	var file files.File
-	switch f := f.(type) {
-	case files.File:
-		file = f
-	case files.Directory:
-		return nil, iface.ErrIsDir
-	default:
-		return nil, iface.ErrNotSupported
-	}
+	//f, err := s.ipfsapi.Unixfs().Get(ctx, path.New(cid))
+	//var file files.File
+	//switch f := f.(type) {
+	//case files.File:
+	//	file = f
+	//case files.Directory:
+	//	return nil, coreiface.ErrIsDir
+	//default:
+	//	return nil, coreiface.ErrNotSupported
+	//}
 
-	data, err := io.ReadAll(file)
+	//data, err := io.ReadAll(file)
+	data := []byte{}
 	if err != nil {
 		return nil, err
 	}

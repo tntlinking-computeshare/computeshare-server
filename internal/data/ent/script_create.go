@@ -51,26 +51,6 @@ func (sc *ScriptCreate) SetScriptContent(s string) *ScriptCreate {
 	return sc
 }
 
-// SetExecuteState sets the "execute_state" field.
-func (sc *ScriptCreate) SetExecuteState(i int32) *ScriptCreate {
-	sc.mutation.SetExecuteState(i)
-	return sc
-}
-
-// SetNillableExecuteState sets the "execute_state" field if the given value is not nil.
-func (sc *ScriptCreate) SetNillableExecuteState(i *int32) *ScriptCreate {
-	if i != nil {
-		sc.SetExecuteState(*i)
-	}
-	return sc
-}
-
-// SetExecuteResult sets the "execute_result" field.
-func (sc *ScriptCreate) SetExecuteResult(s string) *ScriptCreate {
-	sc.mutation.SetExecuteResult(s)
-	return sc
-}
-
 // SetCreateTime sets the "create_time" field.
 func (sc *ScriptCreate) SetCreateTime(t time.Time) *ScriptCreate {
 	sc.mutation.SetCreateTime(t)
@@ -155,10 +135,6 @@ func (sc *ScriptCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *ScriptCreate) defaults() {
-	if _, ok := sc.mutation.ExecuteState(); !ok {
-		v := script.DefaultExecuteState
-		sc.mutation.SetExecuteState(v)
-	}
 	if _, ok := sc.mutation.CreateTime(); !ok {
 		v := script.DefaultCreateTime
 		sc.mutation.SetCreateTime(v)
@@ -200,12 +176,6 @@ func (sc *ScriptCreate) check() error {
 		if err := script.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "Script.script_content": %w`, err)}
 		}
-	}
-	if _, ok := sc.mutation.ExecuteState(); !ok {
-		return &ValidationError{Name: "execute_state", err: errors.New(`ent: missing required field "Script.execute_state"`)}
-	}
-	if _, ok := sc.mutation.ExecuteResult(); !ok {
-		return &ValidationError{Name: "execute_result", err: errors.New(`ent: missing required field "Script.execute_result"`)}
 	}
 	if _, ok := sc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Script.create_time"`)}
@@ -264,14 +234,6 @@ func (sc *ScriptCreate) createSpec() (*Script, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
 		_node.ScriptContent = value
-	}
-	if value, ok := sc.mutation.ExecuteState(); ok {
-		_spec.SetField(script.FieldExecuteState, field.TypeInt32, value)
-		_node.ExecuteState = value
-	}
-	if value, ok := sc.mutation.ExecuteResult(); ok {
-		_spec.SetField(script.FieldExecuteResult, field.TypeString, value)
-		_node.ExecuteResult = value
 	}
 	if value, ok := sc.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)

@@ -11,6 +11,7 @@ import (
 	"github.com/gorilla/websocket"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	goipfsp2p "github.com/mohaijiang/go-ipfs-p2p"
 	"net/http"
 	"strings"
 	"time"
@@ -42,7 +43,7 @@ type ComputeInstanceUsercase struct {
 	instanceRepo ComputeInstanceRepo
 	imageRepo    ComputeImageRepo
 	agentRepo    AgentRepo
-	p2pUsecase   *P2PUsecase
+	p2pClient    *goipfsp2p.P2pClient
 	log          *log.Helper
 }
 
@@ -51,14 +52,14 @@ func NewComputeInstanceUsercase(
 	instanceRepo ComputeInstanceRepo,
 	imageRepo ComputeImageRepo,
 	agentRepo AgentRepo,
-	p2pUsecase *P2PUsecase,
+	p2pClient *goipfsp2p.P2pClient,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:     specRepo,
 		instanceRepo: instanceRepo,
 		imageRepo:    imageRepo,
-		p2pUsecase:   p2pUsecase,
 		agentRepo:    agentRepo,
+		p2pClient:    p2pClient,
 		log:          log.NewHelper(logger),
 	}
 }
@@ -176,7 +177,7 @@ func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance
 }
 
 func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
-	ip, port, err := uc.p2pUsecase.CreateP2pForward(peerId)
+	ip, port, err := uc.p2pClient.ForwardWithRandomPort(peerId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -313,7 +314,7 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	ip, port, err := uc.p2pUsecase.CreateP2pForward(instance.PeerID)
+	ip, port, err := uc.p2pClient.ForwardWithRandomPort(instance.PeerID)
 	if err != nil {
 		return
 	}

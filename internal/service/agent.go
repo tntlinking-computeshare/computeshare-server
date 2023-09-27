@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/ipfs/kubo/core"
+	//"github.com/ipfs/go-ipfs/core"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 
 	pb "github.com/mohaijiang/computeshare-server/api/agent/v1"
@@ -17,14 +17,14 @@ type AgentService struct {
 
 	uc *biz.AgentUsecase
 
-	node *core.IpfsNode
+	//node *core.IpfsNode
 }
 
-func NewAgentService(uc *biz.AgentUsecase, node *core.IpfsNode, logger log.Logger) *AgentService {
+func NewAgentService(uc *biz.AgentUsecase, logger log.Logger) *AgentService {
 	return &AgentService{
-		uc:   uc,
-		log:  log.NewHelper(logger),
-		node: node,
+		uc:  uc,
+		log: log.NewHelper(logger),
+		//node: node,
 	}
 }
 

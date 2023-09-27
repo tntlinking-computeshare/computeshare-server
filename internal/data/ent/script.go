@@ -27,10 +27,6 @@ type Script struct {
 	FileAddress string `json:"file_address,omitempty"`
 	// ScriptContent holds the value of the "script_content" field.
 	ScriptContent string `json:"script_content,omitempty"`
-	// Latest execution status
-	ExecuteState int32 `json:"execute_state,omitempty"`
-	// Latest execution results
-	ExecuteResult string `json:"execute_result,omitempty"`
 	// CreateTime holds the value of the "create_time" field.
 	CreateTime time.Time `json:"create_time,omitempty"`
 	// UpdateTime holds the value of the "update_time" field.
@@ -64,9 +60,9 @@ func (*Script) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case script.FieldID, script.FieldTaskNumber, script.FieldExecuteState:
+		case script.FieldID, script.FieldTaskNumber:
 			values[i] = new(sql.NullInt64)
-		case script.FieldUserID, script.FieldScriptName, script.FieldFileAddress, script.FieldScriptContent, script.FieldExecuteResult:
+		case script.FieldUserID, script.FieldScriptName, script.FieldFileAddress, script.FieldScriptContent:
 			values[i] = new(sql.NullString)
 		case script.FieldCreateTime, script.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -120,18 +116,6 @@ func (s *Script) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field script_content", values[i])
 			} else if value.Valid {
 				s.ScriptContent = value.String
-			}
-		case script.FieldExecuteState:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field execute_state", values[i])
-			} else if value.Valid {
-				s.ExecuteState = int32(value.Int64)
-			}
-		case script.FieldExecuteResult:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field execute_result", values[i])
-			} else if value.Valid {
-				s.ExecuteResult = value.String
 			}
 		case script.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -200,12 +184,6 @@ func (s *Script) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script_content=")
 	builder.WriteString(s.ScriptContent)
-	builder.WriteString(", ")
-	builder.WriteString("execute_state=")
-	builder.WriteString(fmt.Sprintf("%v", s.ExecuteState))
-	builder.WriteString(", ")
-	builder.WriteString("execute_result=")
-	builder.WriteString(s.ExecuteResult)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
 	builder.WriteString(s.CreateTime.Format(time.ANSIC))

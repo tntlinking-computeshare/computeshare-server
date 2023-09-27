@@ -4,7 +4,6 @@ import (
 	"context"
 	"entgo.io/ent/dialect/sql"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 	"time"
 
@@ -30,13 +29,15 @@ func NewScriptRepo(data *Data, logger log.Logger) biz.ScriptRepo {
 func (s *scriptRepo) Save(ctx context.Context, g *biz.Script) (*biz.Script, error) {
 	//先查用户最新的脚本序号
 	taskNumber := 1
-	first, err := s.data.db.Script.Query().Select(script.FieldTaskNumber).Where(script.UserID(g.UserId)).Order(script.ByTaskNumber(sql.OrderDesc())).First(ctx)
+	first, err := s.data.db.Script.Query().Select(script.FieldID).Where(script.UserID(g.UserId)).Order(script.ByTaskNumber(sql.OrderDesc())).First(ctx)
 	if first == nil {
 		taskNumber = 1
+	} else {
+		taskNumber = int(first.TaskNumber + 1)
 	}
 	save, err := s.data.db.Script.Create().SetUserID(g.UserId).SetTaskNumber(int32(taskNumber)).
 		SetScriptName(g.ScriptName).SetFileAddress(g.FileAddress).SetScriptContent(g.ScriptContent).
-		SetExecuteResult(g.ExecuteResult).SetExecuteState(consts.UnExecuted).SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
+		SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,8 +49,7 @@ func (s *scriptRepo) Update(ctx context.Context, g *biz.Script) (*biz.Script, er
 	if err != nil {
 		return nil, err
 	}
-	update, err := s.data.db.Script.UpdateOneID(g.ID).SetExecuteState(g.ExecuteState).SetExecuteResult(g.ExecuteResult).
-		SetUpdateTime(time.Now()).Save(ctx)
+	update, err := s.data.db.Script.UpdateOneID(g.ID).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -93,8 +93,6 @@ func (s *scriptRepo) toBiz(p *ent.Script, _ int) *biz.Script {
 		ScriptName:    p.ScriptName,
 		FileAddress:   p.FileAddress,
 		ScriptContent: p.ScriptContent,
-		ExecuteState:  p.ExecuteState,
-		ExecuteResult: p.ExecuteResult,
 		CreateTime:    p.CreateTime,
 		UpdateTime:    p.UpdateTime,
 	}

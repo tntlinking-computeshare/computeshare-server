@@ -9,6 +9,5 @@ var ProviderSet = wire.NewSet(
 	NewStorageUsecase,
 	NewUserUsecase,
 	NewComputeInstanceUsercase,
-	NewP2PUsecase,
 	NewScriptUseCase,
 )

@@ -35,17 +35,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
 	agentRepo := data.NewAgentRepo(dataData, logger)
 	agentUsecase := biz.NewAgentUsecase(agentRepo, logger)
-	ipfsNode, cleanup2, err := p2p.RunDaemon()
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	agentService := service.NewAgentService(agentUsecase, ipfsNode, logger)
+	agentService := service.NewAgentService(agentUsecase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
-	storageService, err := service.NewStorageService(storagecase, ipfsNode, logger)
+	storageService, err := service.NewStorageService(storagecase, logger)
 	if err != nil {
-		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
@@ -55,18 +49,25 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	p2PUsecase := biz.NewP2PUsecase(ipfsNode, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2PUsecase, logger)
+	p2pClient, err := p2p.NewP2pClient(confServer)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2pClient, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
-	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, logger)
-	computePowerService := service.NewComputePowerService(scriptUseCase, logger)
+	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, p2pClient, logger)
+	computePowerService, err := service.NewComputePowerService(scriptUseCase, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	cronJob := service.NewCronJob(computeInstanceUsercase, logger)
 	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup2()
 		cleanup()
 	}, nil
 }
