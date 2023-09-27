@@ -29,6 +29,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	if err != nil {
 		return nil, nil, err
 	}
+	shell := service.NewIpfShell(confData)
 	greeterRepo := data.NewGreeterRepo(dataData, logger)
 	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
 	greeterService := service.NewGreeterService(greeterUsecase)
@@ -38,7 +39,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	agentService := service.NewAgentService(agentUsecase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
-	storageService, err := service.NewStorageService(storagecase, logger)
+	storageService, err := service.NewStorageService(storagecase, shell, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
@@ -59,7 +60,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
 	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, p2pClient, logger)
-	computePowerService, err := service.NewComputePowerService(scriptUseCase, logger)
+	computePowerService, err := service.NewComputePowerService(scriptUseCase, shell, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

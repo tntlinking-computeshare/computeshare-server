@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	shell "github.com/ipfs/go-ipfs-api"
+	files "github.com/ipfs/go-ipfs-files"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
@@ -12,14 +14,16 @@ import (
 type ComputePowerService struct {
 	pb.UnimplementedComputePowerServer
 
-	uc  *biz.ScriptUseCase
-	log *log.Helper
+	ipfsShell *shell.Shell
+	uc        *biz.ScriptUseCase
+	log       *log.Helper
 }
 
-func NewComputePowerService(uc *biz.ScriptUseCase, logger log.Logger) (*ComputePowerService, error) {
+func NewComputePowerService(uc *biz.ScriptUseCase, ipfsShell *shell.Shell, logger log.Logger) (*ComputePowerService, error) {
 	return &ComputePowerService{
-		uc:  uc,
-		log: log.NewHelper(logger),
+		uc:        uc,
+		ipfsShell: ipfsShell,
+		log:       log.NewHelper(logger),
 	}, nil
 }
 
@@ -29,31 +33,17 @@ func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.Uplo
 		return nil, errors.New("cannot get user ID")
 	}
 
-	//opts := []options.UnixfsAddOption{
-	//	options.Unixfs.Hash(18),
-	//
-	//	options.Unixfs.Inline(false),
-	//	options.Unixfs.InlineLimit(32),
-	//
-	//	options.Unixfs.Chunker("size-262144"),
-	//
-	//	options.Unixfs.Pin(true),
-	//	options.Unixfs.HashOnly(false),
-	//	options.Unixfs.FsCache(false),
-	//	options.Unixfs.Nocopy(false),
-	//
-	//	options.Unixfs.Progress(true),
-	//	options.Unixfs.Silent(false),
-	//}
-	//
-	//fileNode := files.NewBytesFile(req.Body)
-	//pathAdded, err := s.ipfsApi.Unixfs().Add(ctx, fileNode, opts...)
-
+	file := files.NewBytesFile(req.Body)
+	pathAdded, err := s.ipfsShell.Add(file, shell.OnlyHash(false), shell.Pin(true), shell.Progress(true))
+	if err != nil {
+		s.log.Error("ipfs add failed err is", err)
+		return nil, errors.New("ipfs add failed")
+	}
 	script := biz.Script{
 		UserId:        token.UserID,
 		ScriptName:    req.Name,
 		ScriptContent: string(req.Body),
-		FileAddress:   "pathAdded.Cid().String()",
+		FileAddress:   pathAdded,
 	}
 	createScript, err := s.uc.CreateScript(ctx, &script)
 	if err != nil {
