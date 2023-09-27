@@ -176,6 +176,7 @@ func (s *ComputePowerService) GetScriptExecutionRecordInfo(ctx context.Context, 
 
 func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, req *pb.DownloadScriptExecuteResultRequest) (*pb.DownloadScriptExecuteResultReply, error) {
 	script, err := s.uc.GetScriptExecutionRecordInfo(ctx, req.GetId())
+	name := string(script.TaskNumber) + ".log"
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, r
 		Message: SUCCESS,
 		Data: &pb.DownloadScriptExecuteResultReply_Data{
 			Body: []byte(script.ExecuteResult),
-			Name: script.ScriptName,
+			Name: name,
 		},
 	}, nil
 }

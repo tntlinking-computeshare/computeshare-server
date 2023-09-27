@@ -98,14 +98,21 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 	return err
 }
 
-func (ur *userRepo) UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *biz.User) error {
+func (ur *userRepo) UpdateUserTelephone(ctx context.Context, id uuid.UUID, updateUser *biz.User) error {
+	first, err := ur.data.db.User.Query().Where(user.TelephoneNumber(updateUser.TelephoneNumber), user.CountryCallCoding(updateUser.CountryCallCoding)).First(ctx)
+	if err != nil {
+		return err
+	}
+	if first != nil {
+		return errors.New("该手机号已经被注册")
+	}
 	p, err := ur.data.db.User.Get(ctx, id)
 	if err != nil {
 		return err
 	}
 	_, err = p.Update().
-		SetCountryCallCoding(user.CountryCallCoding).
-		SetTelephoneNumber(user.TelephoneNumber).
+		SetCountryCallCoding(updateUser.CountryCallCoding).
+		SetTelephoneNumber(updateUser.TelephoneNumber).
 		Save(ctx)
 	return err
 }

@@ -126,19 +126,26 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, record *ScriptEx
 	}
 	defer cleanup()
 
-	rsp, err := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
+	rsp, runPythonPackageErr := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
 	scriptExecutionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, record.ID)
+	if err != nil {
+		uc.log.Error("computePowerClient RunPythonPackage FindByID fail")
+		uc.log.Error(err)
+		return
+	}
 	if scriptExecutionRecord.ExecuteState == consts.Executing {
 		executeState := consts.Completed
-		if err != nil {
+		if runPythonPackageErr != nil {
 			uc.log.Error("computePowerClient RunPythonPackage fail")
 			uc.log.Error(err)
 			executeState = consts.ExecutionFailed
-		}
-		if rsp == nil {
-			record.ExecuteResult = ""
+			record.ExecuteResult = runPythonPackageErr.Error()
 		} else {
-			record.ExecuteResult = rsp.ExecuteResult
+			if rsp == nil {
+				record.ExecuteResult = ""
+			} else {
+				record.ExecuteResult = rsp.ExecuteResult
+			}
 		}
 		record.ExecuteState = int32(executeState)
 		_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
