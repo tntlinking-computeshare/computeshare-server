@@ -140,11 +140,13 @@ func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, record *ScriptEx
 			uc.log.Error("computePowerClient RunPythonPackage fail")
 			uc.log.Error(err)
 			executeState = consts.ExecutionFailed
-		}
-		if rsp == nil {
-			record.ExecuteResult = ""
+			record.ExecuteResult = runPythonPackageErr.Error()
 		} else {
-			record.ExecuteResult = rsp.ExecuteResult
+			if rsp == nil {
+				record.ExecuteResult = ""
+			} else {
+				record.ExecuteResult = rsp.ExecuteResult
+			}
 		}
 		record.ExecuteState = int32(executeState)
 		_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
