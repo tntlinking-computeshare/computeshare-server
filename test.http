@@ -101,7 +101,7 @@ Content-Type: application/json
 ### 创建虚拟机
 POST  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
 
 {
   "specId": 1,

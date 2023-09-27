@@ -15,7 +15,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/libp2p/go-libp2p-core v0.9.0
 	github.com/mohaijiang/computeshare-client v0.0.5
-	github.com/mohaijiang/go-ipfs-p2p v0.0.3
+	github.com/mohaijiang/go-ipfs-p2p v0.0.4
 	github.com/samber/lo v1.38.1
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
