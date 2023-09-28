@@ -34,7 +34,7 @@ func (s *ComputePowerService) UploadScriptFile(ctx context.Context, req *pb.Uplo
 	}
 
 	file := files.NewBytesFile(req.Body)
-	pathAdded, err := s.ipfsShell.Add(file, shell.OnlyHash(false), shell.Pin(true), shell.Progress(true))
+	pathAdded, err := s.ipfsShell.Add(file, shell.Pin(true))
 	if err != nil {
 		s.log.Error("ipfs add failed err is", err)
 		return nil, errors.New("ipfs add failed")
