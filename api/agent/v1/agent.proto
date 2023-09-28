@@ -3,17 +3,12 @@ syntax = "proto3";
 package api.agent.v1;
 
 import "google/api/annotations.proto";
+import "api/compute/v1/compute_instance.proto";
 //import "openapi/v3/annotations.proto";
 
 option go_package = "github.com/mohaijiang/computeshare-server/api/agent/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.agent.v1";
-
-//option (openapi.v3.document) = {
-//	info: {
-//		title: "Title from annotation";
-//	}
-//};
 
 service Agent {
 	rpc CreateAgent (CreateAgentRequest) returns (CreateAgentReply){
@@ -43,6 +38,18 @@ service Agent {
 			get: "/v1/agent"
 		};
 	};
+	rpc ListAgentInstance(ListAgentInstanceReq) returns(github.com.mohaijiang.api.compute.v1.ListInstanceReply){
+		option (google.api.http) = {
+			get: "/v1/agent/instance/{peerId}"
+		};
+	}
+
+	rpc ReportInstanceStatus(github.com.mohaijiang.api.compute.v1.Instance) returns (ReportInstanceStatusReply){
+		option (google.api.http) = {
+			put: "/v1/agent/instance/report"
+			body: "*"
+		};
+	}
 }
 
 message CreateAgentRequest {
@@ -95,4 +102,13 @@ message ListAgentReply {
 	int32 code = 1;
 	string message = 2;
 	repeated GetAgentReply data = 3;
+}
+
+message ListAgentInstanceReq {
+	string peerId = 1;
+}
+
+message ReportInstanceStatusReply {
+	int32 code = 1;
+	string message = 2;
 }

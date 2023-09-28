@@ -8,6 +8,7 @@ package v1
 
 import (
 	context "context"
+	v1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,11 +20,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Agent_CreateAgent_FullMethodName = "/api.agent.v1.Agent/CreateAgent"
-	Agent_UpdateAgent_FullMethodName = "/api.agent.v1.Agent/UpdateAgent"
-	Agent_DeleteAgent_FullMethodName = "/api.agent.v1.Agent/DeleteAgent"
-	Agent_GetAgent_FullMethodName    = "/api.agent.v1.Agent/GetAgent"
-	Agent_ListAgent_FullMethodName   = "/api.agent.v1.Agent/ListAgent"
+	Agent_CreateAgent_FullMethodName          = "/api.agent.v1.Agent/CreateAgent"
+	Agent_UpdateAgent_FullMethodName          = "/api.agent.v1.Agent/UpdateAgent"
+	Agent_DeleteAgent_FullMethodName          = "/api.agent.v1.Agent/DeleteAgent"
+	Agent_GetAgent_FullMethodName             = "/api.agent.v1.Agent/GetAgent"
+	Agent_ListAgent_FullMethodName            = "/api.agent.v1.Agent/ListAgent"
+	Agent_ListAgentInstance_FullMethodName    = "/api.agent.v1.Agent/ListAgentInstance"
+	Agent_ReportInstanceStatus_FullMethodName = "/api.agent.v1.Agent/ReportInstanceStatus"
 )
 
 // AgentClient is the client API for Agent service.
@@ -35,6 +38,8 @@ type AgentClient interface {
 	DeleteAgent(ctx context.Context, in *DeleteAgentRequest, opts ...grpc.CallOption) (*DeleteAgentReply, error)
 	GetAgent(ctx context.Context, in *GetAgentRequest, opts ...grpc.CallOption) (*GetAgentReply, error)
 	ListAgent(ctx context.Context, in *ListAgentRequest, opts ...grpc.CallOption) (*ListAgentReply, error)
+	ListAgentInstance(ctx context.Context, in *ListAgentInstanceReq, opts ...grpc.CallOption) (*v1.ListInstanceReply, error)
+	ReportInstanceStatus(ctx context.Context, in *v1.Instance, opts ...grpc.CallOption) (*ReportInstanceStatusReply, error)
 }
 
 type agentClient struct {
@@ -90,6 +95,24 @@ func (c *agentClient) ListAgent(ctx context.Context, in *ListAgentRequest, opts 
 	return out, nil
 }
 
+func (c *agentClient) ListAgentInstance(ctx context.Context, in *ListAgentInstanceReq, opts ...grpc.CallOption) (*v1.ListInstanceReply, error) {
+	out := new(v1.ListInstanceReply)
+	err := c.cc.Invoke(ctx, Agent_ListAgentInstance_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *agentClient) ReportInstanceStatus(ctx context.Context, in *v1.Instance, opts ...grpc.CallOption) (*ReportInstanceStatusReply, error) {
+	out := new(ReportInstanceStatusReply)
+	err := c.cc.Invoke(ctx, Agent_ReportInstanceStatus_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AgentServer is the server API for Agent service.
 // All implementations must embed UnimplementedAgentServer
 // for forward compatibility
@@ -99,6 +122,8 @@ type AgentServer interface {
 	DeleteAgent(context.Context, *DeleteAgentRequest) (*DeleteAgentReply, error)
 	GetAgent(context.Context, *GetAgentRequest) (*GetAgentReply, error)
 	ListAgent(context.Context, *ListAgentRequest) (*ListAgentReply, error)
+	ListAgentInstance(context.Context, *ListAgentInstanceReq) (*v1.ListInstanceReply, error)
+	ReportInstanceStatus(context.Context, *v1.Instance) (*ReportInstanceStatusReply, error)
 	mustEmbedUnimplementedAgentServer()
 }
 
@@ -120,6 +145,12 @@ func (UnimplementedAgentServer) GetAgent(context.Context, *GetAgentRequest) (*Ge
 }
 func (UnimplementedAgentServer) ListAgent(context.Context, *ListAgentRequest) (*ListAgentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAgent not implemented")
+}
+func (UnimplementedAgentServer) ListAgentInstance(context.Context, *ListAgentInstanceReq) (*v1.ListInstanceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAgentInstance not implemented")
+}
+func (UnimplementedAgentServer) ReportInstanceStatus(context.Context, *v1.Instance) (*ReportInstanceStatusReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReportInstanceStatus not implemented")
 }
 func (UnimplementedAgentServer) mustEmbedUnimplementedAgentServer() {}
 
@@ -224,6 +255,42 @@ func _Agent_ListAgent_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Agent_ListAgentInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAgentInstanceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AgentServer).ListAgentInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Agent_ListAgentInstance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AgentServer).ListAgentInstance(ctx, req.(*ListAgentInstanceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Agent_ReportInstanceStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.Instance)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AgentServer).ReportInstanceStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Agent_ReportInstanceStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AgentServer).ReportInstanceStatus(ctx, req.(*v1.Instance))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Agent_ServiceDesc is the grpc.ServiceDesc for Agent service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +317,14 @@ var Agent_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAgent",
 			Handler:    _Agent_ListAgent_Handler,
+		},
+		{
+			MethodName: "ListAgentInstance",
+			Handler:    _Agent_ListAgentInstance_Handler,
+		},
+		{
+			MethodName: "ReportInstanceStatus",
+			Handler:    _Agent_ReportInstanceStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

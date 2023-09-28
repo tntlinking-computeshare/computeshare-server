@@ -23,7 +23,7 @@ func NewCronJob(computeInstanceUsercase *biz.ComputeInstanceUsercase, agentUseca
 func (c *CronJob) StartJob() {
 	// 定时同步虚拟机的cpu和内存使用情况
 	go c.syncComputeInstanceStatsTask()
-	go c.syncAgentStatusTask()
+	//go c.syncAgentStatusTask()
 
 }
 

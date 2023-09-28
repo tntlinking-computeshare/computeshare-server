@@ -167,6 +167,9 @@ message Instance {
 	string core = 6;
 	string memory = 7;
 	repeated InstanceStats stats = 8;
+	string containerId = 9;
+	string command = 10;
+	string peerId = 11;
 }
 
 message InstanceStats {

@@ -4,10 +4,14 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/samber/lo"
+
 	//"github.com/ipfs/go-ipfs/core"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 
 	pb "github.com/mohaijiang/computeshare-server/api/agent/v1"
+
+	computepb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 )
 
 type AgentService struct {
@@ -76,4 +80,44 @@ func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) 
 		Code:    200,
 		Message: SUCCESS,
 	}, nil
+}
+
+func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentInstanceReq) (*computepb.ListInstanceReply, error) {
+	result, err := s.uc.ListAgentInstance(ctx, req.PeerId)
+	return &computepb.ListInstanceReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: lo.Map(result, func(item *biz.ComputeInstance, _ int) *computepb.Instance {
+			return &computepb.Instance{
+				Id:             item.ID.String(),
+				Name:           item.Name,
+				Status:         int32(item.Status),
+				ExpirationTime: item.ExpirationTime.UnixMilli(),
+				ImageName:      item.Image,
+				Core:           item.Core,
+				Memory:         item.Memory,
+				ContainerId:    item.ContainerID,
+				Command:        item.Command,
+			}
+		}),
+	}, err
+}
+
+func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.Instance) (rsp *pb.ReportInstanceStatusReply, err error) {
+	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	instance := &biz.ComputeInstance{
+		ID:          id,
+		ContainerID: req.ContainerId,
+		PeerID:      req.PeerId,
+		Command:     req.Command,
+		Status:      int8(req.Status),
+	}
+	err = s.uc.ReportInstanceStatus(ctx, instance)
+	return &pb.ReportInstanceStatusReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }

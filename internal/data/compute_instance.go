@@ -35,6 +35,17 @@ func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.
 	return lo.Map(list, csr.toBiz), err
 }
 
+func (csr *computeInstanceRepo) ListByPeerId(ctx context.Context, peerId string) ([]*biz.ComputeInstance, error) {
+	list, err := csr.data.db.ComputeInstance.Query().
+		Where(computeinstance.PeerIDEQ(peerId)).
+		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return lo.Map(list, csr.toBiz), err
+}
+
 func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInstance) error {
 	entity, err := crs.data.db.ComputeInstance.Create().
 		SetOwner(in.Owner).

@@ -10,6 +10,7 @@ import (
 	context "context"
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
+	v1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,6 +24,8 @@ const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
 const OperationAgentDeleteAgent = "/api.agent.v1.Agent/DeleteAgent"
 const OperationAgentGetAgent = "/api.agent.v1.Agent/GetAgent"
 const OperationAgentListAgent = "/api.agent.v1.Agent/ListAgent"
+const OperationAgentListAgentInstance = "/api.agent.v1.Agent/ListAgentInstance"
+const OperationAgentReportInstanceStatus = "/api.agent.v1.Agent/ReportInstanceStatus"
 const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
@@ -30,6 +33,8 @@ type AgentHTTPServer interface {
 	DeleteAgent(context.Context, *DeleteAgentRequest) (*DeleteAgentReply, error)
 	GetAgent(context.Context, *GetAgentRequest) (*GetAgentReply, error)
 	ListAgent(context.Context, *ListAgentRequest) (*ListAgentReply, error)
+	ListAgentInstance(context.Context, *ListAgentInstanceReq) (*v1.ListInstanceReply, error)
+	ReportInstanceStatus(context.Context, *v1.Instance) (*ReportInstanceStatusReply, error)
 	UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error)
 }
 
@@ -40,6 +45,8 @@ func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r.DELETE("/v1/agent/{id}", _Agent_DeleteAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent/{id}", _Agent_GetAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent", _Agent_ListAgent0_HTTP_Handler(srv))
+	r.GET("/v1/agent/instance/{peerId}", _Agent_ListAgentInstance0_HTTP_Handler(srv))
+	r.PUT("/v1/agent/instance/report", _Agent_ReportInstanceStatus0_HTTP_Handler(srv))
 }
 
 func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
@@ -152,11 +159,57 @@ func _Agent_ListAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) 
 	}
 }
 
+func _Agent_ListAgentInstance0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListAgentInstanceReq
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentListAgentInstance)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListAgentInstance(ctx, req.(*ListAgentInstanceReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*v1.ListInstanceReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Agent_ReportInstanceStatus0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in v1.Instance
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentReportInstanceStatus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ReportInstanceStatus(ctx, req.(*v1.Instance))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ReportInstanceStatusReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AgentHTTPClient interface {
 	CreateAgent(ctx context.Context, req *CreateAgentRequest, opts ...http.CallOption) (rsp *CreateAgentReply, err error)
 	DeleteAgent(ctx context.Context, req *DeleteAgentRequest, opts ...http.CallOption) (rsp *DeleteAgentReply, err error)
 	GetAgent(ctx context.Context, req *GetAgentRequest, opts ...http.CallOption) (rsp *GetAgentReply, err error)
 	ListAgent(ctx context.Context, req *ListAgentRequest, opts ...http.CallOption) (rsp *ListAgentReply, err error)
+	ListAgentInstance(ctx context.Context, req *ListAgentInstanceReq, opts ...http.CallOption) (rsp *v1.ListInstanceReply, err error)
+	ReportInstanceStatus(ctx context.Context, req *v1.Instance, opts ...http.CallOption) (rsp *ReportInstanceStatusReply, err error)
 	UpdateAgent(ctx context.Context, req *UpdateAgentRequest, opts ...http.CallOption) (rsp *UpdateAgentReply, err error)
 }
 
@@ -214,6 +267,32 @@ func (c *AgentHTTPClientImpl) ListAgent(ctx context.Context, in *ListAgentReques
 	opts = append(opts, http.Operation(OperationAgentListAgent))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) ListAgentInstance(ctx context.Context, in *ListAgentInstanceReq, opts ...http.CallOption) (*v1.ListInstanceReply, error) {
+	var out v1.ListInstanceReply
+	pattern := "/v1/agent/instance/{peerId}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAgentListAgentInstance))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) ReportInstanceStatus(ctx context.Context, in *v1.Instance, opts ...http.CallOption) (*ReportInstanceStatusReply, error) {
+	var out ReportInstanceStatusReply
+	pattern := "/v1/agent/instance/report"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAgentReportInstanceStatus))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -11,7 +11,6 @@ import (
 	jwt2 "github.com/golang-jwt/jwt/v4"
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
-	v1 "github.com/mohaijiang/computeshare-server/api/helloworld/v1"
 	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
@@ -26,6 +25,8 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.system.v1.User/LoginWithValidateCode"] = struct{}{}
 	whiteList["/api.system.v1.User/SendValidateCode"] = struct{}{}
 	whiteList["/api.agent.v1.Agent/CreateAgent"] = struct{}{}
+	whiteList["/api.agent.v1.Agent/ListAgentInstance"] = struct{}{}
+	whiteList["/api.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
@@ -37,7 +38,6 @@ func NewWhiteListMatcher() selector.MatchFunc {
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server,
 	ac *conf.Auth,
-	greeter *service.GreeterService,
 	agenter *service.AgentService,
 	storageService *service.StorageService,
 	userService *service.UserService,
@@ -72,7 +72,6 @@ func NewHTTPServer(c *conf.Server,
 	srv := http.NewServer(opts...)
 	openAPIhandler := openapiv2.NewHandler()
 	srv.HandlePrefix("/q/", openAPIhandler)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
 	agentV1.RegisterAgentHTTPServer(srv, agenter)
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
