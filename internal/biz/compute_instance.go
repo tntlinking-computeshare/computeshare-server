@@ -24,6 +24,7 @@ type ComputeSpecRepo interface {
 
 type ComputeInstanceRepo interface {
 	List(ctx context.Context, owner string) ([]*ComputeInstance, error)
+	ListByPeerId(ctx context.Context, peerId string) ([]*ComputeInstance, error)
 	ListAll(ctx context.Context) ([]*ComputeInstance, error)
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error

@@ -12,8 +12,9 @@ Content-Type: application/json
 
 
 ### 下载
-POST http://127.0.0.1:8000/v1/storage/download?id=31ea3402-aeb7-4d1c-963e-018799e77cf4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
+POST https://computeshare-frontend.hamster.newtouch.com/api/v1/storage/download?id=5c82490f-7479-4394-adcc-d69b00a80282
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU5NjgwMTJ9.YYZo1yC6AU96ZQlSgwioV8BcS0dxWxse3xo6Wl_etYE
+
 
 ###
 

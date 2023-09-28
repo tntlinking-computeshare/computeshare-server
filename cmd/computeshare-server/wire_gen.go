@@ -25,21 +25,19 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
+	grpcServer := server.NewGRPCServer(confServer, logger)
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
 	agentRepo := data.NewAgentRepo(dataData, logger)
 	p2pClient, err := p2p.NewP2pClient(confServer)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	agentUsecase := biz.NewAgentUsecase(agentRepo, p2pClient, logger)
+	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
+	agentUsecase := biz.NewAgentUsecase(agentRepo, p2pClient, computeInstanceRepo, logger)
 	agentService := service.NewAgentService(agentUsecase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
@@ -53,7 +51,6 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	userUsercase := biz.NewUserUsecase(auth, userRepo, logger)
 	userService := service.NewUserService(userUsercase, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
-	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
 	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2pClient, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
@@ -66,7 +63,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		return nil, nil, err
 	}
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

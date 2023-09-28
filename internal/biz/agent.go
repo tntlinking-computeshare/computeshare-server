@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/libp2p/go-libp2p-core/peer"
 	go_ipfs_p2p "github.com/mohaijiang/go-ipfs-p2p"
 	"time"
 )
@@ -28,16 +27,18 @@ type AgentRepo interface {
 }
 
 type AgentUsecase struct {
-	repo      AgentRepo
-	log       *log.Helper
-	p2pClient *go_ipfs_p2p.P2pClient
+	repo         AgentRepo
+	log          *log.Helper
+	p2pClient    *go_ipfs_p2p.P2pClient
+	instanceRepo ComputeInstanceRepo
 }
 
-func NewAgentUsecase(repo AgentRepo, p2pClient *go_ipfs_p2p.P2pClient, logger log.Logger) *AgentUsecase {
+func NewAgentUsecase(repo AgentRepo, p2pClient *go_ipfs_p2p.P2pClient, instanceRepo ComputeInstanceRepo, logger log.Logger) *AgentUsecase {
 	return &AgentUsecase{
-		repo:      repo,
-		p2pClient: p2pClient,
-		log:       log.NewHelper(logger),
+		repo:         repo,
+		p2pClient:    p2pClient,
+		instanceRepo: instanceRepo,
+		log:          log.NewHelper(logger),
 	}
 }
 
@@ -87,16 +88,24 @@ func (s *AgentUsecase) SyncAgentStatus() {
 	}
 
 	for _, ag := range list {
-		findPeer, err := s.p2pClient.DHT.FindPeer(ctx, peer.ID(ag.PeerId))
+		err := s.p2pClient.CheckForwardHealth("/x/ssh", ag.PeerId)
 		if err != nil {
 			s.log.Warnf("agent %s cannot connect.", ag.PeerId)
 			ag.Active = false
 			_ = s.Update(ctx, ag.ID, ag)
 		} else {
 			ag.Active = true
-			log.Infof("agent %s check connect success.", findPeer.String())
+			log.Infof("agent %s check connect success.", ag.PeerId)
 			_ = s.Update(ctx, ag.ID, ag)
 		}
 
 	}
+}
+
+func (uc *AgentUsecase) ListAgentInstance(ctx context.Context, peerId string) ([]*ComputeInstance, error) {
+	return uc.instanceRepo.ListByPeerId(ctx, peerId)
+}
+
+func (uc *AgentUsecase) ReportInstanceStatus(ctx context.Context, instance *ComputeInstance) error {
+	return uc.instanceRepo.Update(ctx, instance.ID, instance)
 }
