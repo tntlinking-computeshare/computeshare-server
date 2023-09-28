@@ -34,7 +34,12 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	greeterService := service.NewGreeterService(greeterUsecase)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
 	agentRepo := data.NewAgentRepo(dataData, logger)
-	agentUsecase := biz.NewAgentUsecase(agentRepo, logger)
+	p2pClient, err := p2p.NewP2pClient(confServer)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	agentUsecase := biz.NewAgentUsecase(agentRepo, p2pClient, logger)
 	agentService := service.NewAgentService(agentUsecase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
@@ -50,11 +55,6 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	p2pClient, err := p2p.NewP2pClient(confServer)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
 	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2pClient, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
@@ -65,7 +65,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		cleanup()
 		return nil, nil, err
 	}
-	cronJob := service.NewCronJob(computeInstanceUsercase, logger)
+	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
 	httpServer := server.NewHTTPServer(confServer, auth, greeterService, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {

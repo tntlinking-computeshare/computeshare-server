@@ -16,15 +16,12 @@ type AgentService struct {
 	log *log.Helper
 
 	uc *biz.AgentUsecase
-
-	//node *core.IpfsNode
 }
 
 func NewAgentService(uc *biz.AgentUsecase, logger log.Logger) *AgentService {
 	return &AgentService{
 		uc:  uc,
 		log: log.NewHelper(logger),
-		//node: node,
 	}
 }
 
