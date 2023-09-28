@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -28,7 +29,7 @@ func NewStorageRepo(data *Data, logger log.Logger) biz.StorageRepo {
 func (ur *storageRepo) ListStorage(ctx context.Context, owner string, parentId string) ([]*biz.Storage, error) {
 	parentIdPredicate := storage.ParentID(parentId)
 	ps, err := ur.data.db.Storage.Query().
-		Where(storage.OwnerEQ(owner), parentIdPredicate).All(ctx)
+		Where(storage.OwnerEQ(owner), parentIdPredicate).Order(storage.ByLastModify(sql.OrderDesc())).All(ctx)
 	if err != nil {
 		return nil, err
 	}

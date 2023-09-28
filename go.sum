@@ -883,8 +883,8 @@ github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lN
 github.com/modern-go/reflect2 v1.0.1/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
 github.com/mohaijiang/computeshare-client v0.0.5 h1:iv0diYDiUhR0xKudtu/AJnkvdjazkq75c5sVhy/hfkI=
 github.com/mohaijiang/computeshare-client v0.0.5/go.mod h1:vV8is0FQ/CGMr81Em1/6aXxS1RTUzNmNuh0wIGJOhv4=
-github.com/mohaijiang/go-ipfs-p2p v0.0.4 h1:ccYXwxbD1m9CtkamBdWaXTRmJ7baJN+BKQhwOfp75WQ=
-github.com/mohaijiang/go-ipfs-p2p v0.0.4/go.mod h1:M3cnLV1WDOE1rYjPPSTtpzOazttBr2O3Vukv32WCq6A=
+github.com/mohaijiang/go-ipfs-p2p v0.0.5 h1:jFfweb/QU1UUiuxqaVeeYBupEn7AUGtPYXmI1yYxZLw=
+github.com/mohaijiang/go-ipfs-p2p v0.0.5/go.mod h1:ioxj2llYB7zBOlDhSltJ5J1O8VRff3dCei2pFyxp7hg=
 github.com/mr-tron/base58 v1.1.0/go.mod h1:xcD2VGqlgYjBdcBLw+TuYLr8afG+Hj8g2eTVqeSzSU8=
 github.com/mr-tron/base58 v1.1.2/go.mod h1:BinMc/sQntlIE1frQmRFPUoPA1Zkr8VRgBdjWI2mNwc=
 github.com/mr-tron/base58 v1.1.3/go.mod h1:BinMc/sQntlIE1frQmRFPUoPA1Zkr8VRgBdjWI2mNwc=

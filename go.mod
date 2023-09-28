@@ -17,7 +17,7 @@ require (
 	github.com/ipfs/go-ipfs-files v0.0.9
 	github.com/libp2p/go-libp2p-core v0.9.0
 	github.com/mohaijiang/computeshare-client v0.0.5
-	github.com/mohaijiang/go-ipfs-p2p v0.0.4
+	github.com/mohaijiang/go-ipfs-p2p v0.0.5
 	github.com/samber/lo v1.38.1
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
@@ -183,6 +183,7 @@ replace (
 	github.com/libp2p/go-libp2p-connmgr => github.com/libp2p/go-libp2p-connmgr v0.2.4
 	github.com/libp2p/go-libp2p-core => github.com/libp2p/go-libp2p-core v0.9.0
 	github.com/libp2p/go-libp2p-kad-dht => github.com/libp2p/go-libp2p-kad-dht v0.13.1
+	//github.com/mohaijiang/computeshare-client => ../computeshare-client
 	github.com/multiformats/go-multiaddr => github.com/multiformats/go-multiaddr v0.4.0
 	github.com/multiformats/go-multiaddr-dns => github.com/multiformats/go-multiaddr-dns v0.3.1
 )

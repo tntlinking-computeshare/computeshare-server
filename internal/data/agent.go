@@ -8,6 +8,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/samber/lo"
+	"time"
 )
 
 type agentRepo struct {
@@ -59,6 +60,7 @@ func (ar *agentRepo) UpdateAgent(ctx context.Context, id uuid.UUID, agent *biz.A
 	}
 	_, err = p.Update().
 		SetActive(agent.Active).
+		SetLastUpdateTime(time.Now()).
 		Save(ctx)
 	return err
 }

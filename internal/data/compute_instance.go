@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -24,7 +25,10 @@ func NewComputeInstanceRepo(data *Data, logger log.Logger) biz.ComputeInstanceRe
 }
 
 func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.ComputeInstance, error) {
-	list, err := csr.data.db.ComputeInstance.Query().Where(computeinstance.OwnerEQ(owner)).All(ctx)
+	list, err := csr.data.db.ComputeInstance.Query().
+		Where(computeinstance.OwnerEQ(owner)).
+		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
+		All(ctx)
 	if err != nil {
 		return nil, err
 	}
