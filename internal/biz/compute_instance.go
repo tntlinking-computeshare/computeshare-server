@@ -89,6 +89,12 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
+	// 选择一个agent节点进行通信
+	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, computeSpec.Core, computeSpec.Memory)
+	if err != nil {
+		return nil, err
+	}
+
 	instance := &ComputeInstance{
 		Owner:          claim.UserID,
 		Name:           cic.Name,
@@ -98,16 +104,12 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
 		Command:        computeImage.Command,
 		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
+		PeerID:         agent.PeerId,
 		Status:         InstanceStatusStarting,
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)
 
-	// 选择一个agent节点进行通信
-	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, instance.Core, instance.Memory)
-	if err != nil {
-		return nil, err
-	}
 	go uc.CreateInstanceOnAgent(agent.PeerId, instance)
 
 	return instance, err
@@ -324,7 +326,7 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 	// 建立与目标WebSocket服务器的连接
 	targetConn, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://%s:%s/v1/vm/%s/terminal?container=%s&workdir=/bin", ip, port, instanceId, instance.ContainerID), nil)
 	if err != nil {
-		log.Fatal(err)
+		uc.log.Error(err)
 		return
 	}
 	defer targetConn.Close()
@@ -332,7 +334,7 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 	// 升级客户端连接为WebSocket
 	clientConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatal(err)
+		uc.log.Error(err)
 		return
 	}
 	defer clientConn.Close()
