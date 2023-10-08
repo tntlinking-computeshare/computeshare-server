@@ -29,6 +29,7 @@ type ComputeInstanceRepo interface {
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	Update(ctx context.Context, id uuid.UUID, instance *ComputeInstance) error
+	SetInstanceExpiration(ctx context.Context) error
 	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
 	SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *ComputeInstanceRds) error
 	GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*ComputeInstanceRds, error)
@@ -404,4 +405,10 @@ func (uc *ComputeInstanceUsercase) syncInstanceStats(ctx context.Context, instan
 
 	_ = uc.instanceRepo.SaveInstanceStats(ctx, instance.ID, instanceRdb)
 
+}
+
+// SyncContainerOverdue 同步资源实例的过期状态
+func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
+	ctx := context.Background()
+	_ = uc.instanceRepo.SetInstanceExpiration(ctx)
 }
