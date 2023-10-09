@@ -10,6 +10,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/samber/lo"
+	"time"
 )
 
 type computeInstanceRepo struct {
@@ -141,4 +142,14 @@ func (crs *computeInstanceRepo) GetInstanceStats(ctx context.Context, id uuid.UU
 	var result []*biz.ComputeInstanceRds
 	err := crs.data.rdb.LRange(ctx, stateKey(id), 0, 10).ScanSlice(&result)
 	return result, err
+}
+
+func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error {
+	return crs.data.db.ComputeInstance.Update().
+		SetStatus(biz.InstanceStatusExpire).
+		Where(
+			computeinstance.ExpirationTimeLT(time.Now()),
+			computeinstance.StatusNEQ(biz.InstanceStatusExpire),
+		).
+		Exec(ctx)
 }
