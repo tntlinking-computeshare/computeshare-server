@@ -9,6 +9,7 @@ import (
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"strconv"
 )
 
 type ComputePowerService struct {
@@ -153,8 +154,7 @@ func (s *ComputePowerService) GetScriptExecutionRecordInfo(ctx context.Context, 
 
 func (s *ComputePowerService) DownloadScriptExecuteResult(ctx context.Context, req *pb.DownloadScriptExecuteResultRequest) (*pb.DownloadScriptExecuteResultReply, error) {
 	script, err := s.uc.GetScriptExecutionRecordInfo(ctx, req.GetId())
-	s.log.Info("要下载的数据是", script)
-	name := string(script.TaskNumber) + ".log"
+	name := strconv.FormatInt(int64(script.TaskNumber), 10) + ".log"
 	if err != nil {
 		return nil, err
 	}
