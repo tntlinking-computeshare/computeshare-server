@@ -53,7 +53,7 @@ type ScriptExecutionRecordRepo interface {
 	Save(context.Context, *ScriptExecutionRecord) (*ScriptExecutionRecord, error)
 	Update(context.Context, *ScriptExecutionRecord) (*ScriptExecutionRecord, error)
 	FindByID(context.Context, int32) (*ScriptExecutionRecord, error)
-	PageByScriptId(context.Context, string, int32, int32) ([]*ScriptExecutionRecord, int32, error)
+	PageByUserId(context.Context, string, int32, int32) ([]*ScriptExecutionRecord, int32, error)
 	FindLatestByUserIdAndScript(context.Context, string, int32) (*ScriptExecutionRecord, error)
 }
 
@@ -79,7 +79,7 @@ func (uc *ScriptUseCase) CreateScript(ctx context.Context, s *Script) (*Script, 
 
 func (uc *ScriptUseCase) GetScriptExecutionRecordPage(ctx context.Context, userId string, page, size int32) ([]*ScriptExecutionRecord, int32, error) {
 	uc.log.WithContext(ctx).Infof("GetScriptExecutionRecordPage %s %d %d", userId, page, size)
-	return uc.scriptExecutionRecordRepo.PageByScriptId(ctx, userId, page, size)
+	return uc.scriptExecutionRecordRepo.PageByUserId(ctx, userId, page, size)
 }
 
 func (uc *ScriptUseCase) GetScriptExecutionRecordInfo(ctx context.Context, id int32) (*ScriptExecutionRecord, error) {
