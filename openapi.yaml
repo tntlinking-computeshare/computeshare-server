@@ -72,7 +72,7 @@ components:
                     format: int32
                 message:
                     type: string
-                task:
+                data:
                     $ref: '#/components/schemas/QueueTaskVo'
         QueueTaskUpdateRequest:
             type: object

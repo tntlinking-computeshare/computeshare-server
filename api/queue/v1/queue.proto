@@ -55,7 +55,7 @@ message QueueTaskGetRequest{
 message QueueTaskGetResponse{
   int32 code = 1;
   string message = 2;
-  QueueTaskVo task = 3;
+  QueueTaskVo data = 3;
 }
 
 message QueueTaskVo {
@@ -75,4 +75,11 @@ message QueueTaskUpdateRequest {
 message QueueTaskUpdateResponse {
   int32 code = 1;
   string message = 2;
+}
+
+message NatProxyCreateVO {
+  string name = 1;
+  string instanceName = 2;
+  int64 instancePort = 3;
+  int64 remotePort = 4;
 }

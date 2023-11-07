@@ -28,6 +28,8 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.agent.v1.Agent/CreateAgent"] = struct{}{}
 	whiteList["/api.agent.v1.Agent/ListAgentInstance"] = struct{}{}
 	whiteList["/api.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
+	whiteList["/github.com.mohaijiang.api.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
+	whiteList["/github.com.mohaijiang.api.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
