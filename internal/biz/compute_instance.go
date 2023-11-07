@@ -11,7 +11,6 @@ import (
 	"github.com/gorilla/websocket"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
-	goipfsp2p "github.com/mohaijiang/go-ipfs-p2p"
 	"net/http"
 	"strings"
 	"time"
@@ -45,7 +44,7 @@ type ComputeInstanceUsercase struct {
 	instanceRepo ComputeInstanceRepo
 	imageRepo    ComputeImageRepo
 	agentRepo    AgentRepo
-	p2pClient    *goipfsp2p.P2pClient
+	p2pClient    *P2pClient
 	log          *log.Helper
 }
 
@@ -54,14 +53,12 @@ func NewComputeInstanceUsercase(
 	instanceRepo ComputeInstanceRepo,
 	imageRepo ComputeImageRepo,
 	agentRepo AgentRepo,
-	p2pClient *goipfsp2p.P2pClient,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:     specRepo,
 		instanceRepo: instanceRepo,
 		imageRepo:    imageRepo,
 		agentRepo:    agentRepo,
-		p2pClient:    p2pClient,
 		log:          log.NewHelper(logger),
 	}
 }

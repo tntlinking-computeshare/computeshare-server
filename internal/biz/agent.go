@@ -2,9 +2,9 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	go_ipfs_p2p "github.com/mohaijiang/go-ipfs-p2p"
 	"time"
 )
 
@@ -29,14 +29,12 @@ type AgentRepo interface {
 type AgentUsecase struct {
 	repo         AgentRepo
 	log          *log.Helper
-	p2pClient    *go_ipfs_p2p.P2pClient
 	instanceRepo ComputeInstanceRepo
 }
 
-func NewAgentUsecase(repo AgentRepo, p2pClient *go_ipfs_p2p.P2pClient, instanceRepo ComputeInstanceRepo, logger log.Logger) *AgentUsecase {
+func NewAgentUsecase(repo AgentRepo, instanceRepo ComputeInstanceRepo, logger log.Logger) *AgentUsecase {
 	return &AgentUsecase{
 		repo:         repo,
-		p2pClient:    p2pClient,
 		instanceRepo: instanceRepo,
 		log:          log.NewHelper(logger),
 	}
@@ -87,19 +85,22 @@ func (s *AgentUsecase) SyncAgentStatus() {
 		return
 	}
 
-	for _, ag := range list {
-		err := s.p2pClient.CheckForwardHealth("/x/ssh", ag.PeerId)
-		if err != nil {
-			s.log.Warnf("agent %s cannot connect.", ag.PeerId)
-			ag.Active = false
-			_ = s.Update(ctx, ag.ID, ag)
-		} else {
-			ag.Active = true
-			log.Infof("agent %s check connect success.", ag.PeerId)
-			_ = s.Update(ctx, ag.ID, ag)
-		}
+	// TODO ...
+	fmt.Println(list)
 
-	}
+	//for _, ag := range list {
+	//	err := s.p2pClient.CheckForwardHealth("/x/ssh", ag.PeerId)
+	//	if err != nil {
+	//		s.log.Warnf("agent %s cannot connect.", ag.PeerId)
+	//		ag.Active = false
+	//		_ = s.Update(ctx, ag.ID, ag)
+	//	} else {
+	//		ag.Active = true
+	//		log.Infof("agent %s check connect success.", ag.PeerId)
+	//		_ = s.Update(ctx, ag.ID, ag)
+	//	}
+	//
+	//}
 }
 
 func (uc *AgentUsecase) ListAgentInstance(ctx context.Context, peerId string) ([]*ComputeInstance, error) {

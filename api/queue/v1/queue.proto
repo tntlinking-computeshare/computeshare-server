@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package github.com.mohaijiang.api.queue.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/queue/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+enum QueueCmd //枚举消息类型
+{
+  VM_CREATE = 0; // 创建虚拟机
+  VM_DELETE = 1;  // 删除虚拟机
+  VM_START = 2; // 启动虚拟机
+  VM_SHUTDOWN = 3;  //关闭虚拟机
+  VM_VNC_CONNECT = 4;  // vnc 连接
+  NAT_PROXY_CREATE = 5; // nat 代理创建
+  NAT_PROXY_DELETE = 6; // nat 代理删除
+  NAT_VISITOR_CREATE = 7; // nat 访问创建
+  NAT_VISITOR_DELETE = 8; // nat 访问删除
+}
+
+enum TaskStatus // 任务状态
+{
+  CREATED = 0; //创建
+  EXECUTING = 1; //执行中
+  EXECUTED = 2 ; // 执行成功
+  FAILED = 3 ; // 执行失败
+}
+
+service QueueTask {
+  // 查询队列任务
+  rpc GetAgentTask(QueueTaskGetRequest) returns (QueueTaskGetResponse) {
+    option (google.api.http) = {
+      get: "/v1/queue/task",
+    };
+  }
+
+  // 更新任务状态
+  rpc UpdateAgentTask(QueueTaskUpdateRequest) returns (QueueTaskUpdateResponse) {
+    option (google.api.http) = {
+      put: "/v1/queue/task",
+      body: "*"
+    };
+  }
+
+}
+
+message QueueTaskGetRequest{
+  string id = 1;
+}
+
+message QueueTaskGetResponse{
+  int32 code = 1;
+  string message = 2;
+  QueueTaskVo task = 3;
+}
+
+message QueueTaskVo {
+  int64 id = 1;
+  string agentId = 2;
+  QueueCmd cmd = 3;
+  string params = 4;
+  TaskStatus status = 5;
+}
+
+message QueueTaskUpdateRequest {
+  int64 id = 1;
+  string agentId = 2;
+  TaskStatus status = 3;
+}
+
+message QueueTaskUpdateResponse {
+  int32 code = 1;
+  string message = 2;
+}

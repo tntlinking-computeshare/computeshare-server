@@ -14,7 +14,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data"
 	"github.com/mohaijiang/computeshare-server/internal/server"
 	"github.com/mohaijiang/computeshare-server/internal/service"
-	"github.com/mohaijiang/computeshare-server/third_party/p2p"
 )
 
 // wireApp init kratos application.

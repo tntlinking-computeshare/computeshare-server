@@ -14,7 +14,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data"
 	"github.com/mohaijiang/computeshare-server/internal/server"
 	"github.com/mohaijiang/computeshare-server/internal/service"
-	"github.com/mohaijiang/computeshare-server/third_party/p2p"
 )
 
 import (
@@ -31,13 +30,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		return nil, nil, err
 	}
 	agentRepo := data.NewAgentRepo(dataData, logger)
-	p2pClient, err := p2p.NewP2pClient(confServer)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
-	agentUsecase := biz.NewAgentUsecase(agentRepo, p2pClient, computeInstanceRepo, logger)
+	agentUsecase := biz.NewAgentUsecase(agentRepo, computeInstanceRepo, logger)
 	agentService := service.NewAgentService(agentUsecase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
@@ -52,11 +46,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	userService := service.NewUserService(userUsercase, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, p2pClient, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
-	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, p2pClient, logger)
+	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, logger)
 	computePowerService, err := service.NewComputePowerService(scriptUseCase, shell, logger)
 	if err != nil {
 		cleanup()

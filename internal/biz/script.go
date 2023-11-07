@@ -7,7 +7,6 @@ import (
 	transhttp "github.com/go-kratos/kratos/v2/transport/http"
 	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
-	goipfsp2p "github.com/mohaijiang/go-ipfs-p2p"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -62,13 +61,13 @@ type ScriptUseCase struct {
 	repo                      ScriptRepo
 	scriptExecutionRecordRepo ScriptExecutionRecordRepo
 	agentRepo                 AgentRepo
-	p2pClient                 *goipfsp2p.P2pClient
+	p2pClient                 *P2pClient
 	log                       *log.Helper
 }
 
 // NewScriptUseCase new a Script UseCase.
-func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, agentRepo AgentRepo, p2pClient *goipfsp2p.P2pClient, logger log.Logger) *ScriptUseCase {
-	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, agentRepo: agentRepo, p2pClient: p2pClient, log: log.NewHelper(logger)}
+func NewScriptUseCase(repo ScriptRepo, scriptExecutionRecordRepo ScriptExecutionRecordRepo, agentRepo AgentRepo, logger log.Logger) *ScriptUseCase {
+	return &ScriptUseCase{repo: repo, scriptExecutionRecordRepo: scriptExecutionRecordRepo, agentRepo: agentRepo, log: log.NewHelper(logger)}
 }
 
 // CreateScript creates a Script, and returns the new Script.
