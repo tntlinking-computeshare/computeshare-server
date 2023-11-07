@@ -14,11 +14,12 @@ enum QueueCmd //枚举消息类型
   VM_DELETE = 1;  // 删除虚拟机
   VM_START = 2; // 启动虚拟机
   VM_SHUTDOWN = 3;  //关闭虚拟机
-  VM_VNC_CONNECT = 4;  // vnc 连接
-  NAT_PROXY_CREATE = 5; // nat 代理创建
-  NAT_PROXY_DELETE = 6; // nat 代理删除
-  NAT_VISITOR_CREATE = 7; // nat 访问创建
-  NAT_VISITOR_DELETE = 8; // nat 访问删除
+  VM_RESTART = 4;  //关闭虚拟机
+  VM_VNC_CONNECT = 5;  // vnc 连接
+  NAT_PROXY_CREATE = 6; // nat 代理创建
+  NAT_PROXY_DELETE = 7; // nat 代理删除
+  NAT_VISITOR_CREATE = 8; // nat 访问创建
+  NAT_VISITOR_DELETE = 9; // nat 访问删除
 }
 
 enum TaskStatus // 任务状态

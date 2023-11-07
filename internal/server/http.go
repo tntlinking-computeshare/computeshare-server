@@ -11,6 +11,7 @@ import (
 	jwt2 "github.com/golang-jwt/jwt/v4"
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
@@ -39,6 +40,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 func NewHTTPServer(c *conf.Server,
 	ac *conf.Auth,
 	agenter *service.AgentService,
+	queueTaskService *service.QueueTaskService,
 	storageService *service.StorageService,
 	userService *service.UserService,
 	instanceService *service.ComputeInstanceService,
@@ -77,6 +79,7 @@ func NewHTTPServer(c *conf.Server,
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
+	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))

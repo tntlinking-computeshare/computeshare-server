@@ -33,6 +33,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	computeInstanceRepo := data.NewComputeInstanceRepo(dataData, logger)
 	agentUsecase := biz.NewAgentUsecase(agentRepo, computeInstanceRepo, logger)
 	agentService := service.NewAgentService(agentUsecase, logger)
+	queueTaskService := service.NewQueueTaskService()
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
 	shell := service.NewIpfShell(confData)
@@ -57,7 +58,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		return nil, nil, err
 	}
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, userService, computeInstanceService, computePowerService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
