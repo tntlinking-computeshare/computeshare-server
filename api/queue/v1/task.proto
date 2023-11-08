@@ -67,7 +67,7 @@ message QueueTaskVo {
 }
 
 message QueueTaskUpdateRequest {
-  int64 id = 1;
+  string id = 1;
   string agentId = 2;
   TaskStatus status = 3;
 }
