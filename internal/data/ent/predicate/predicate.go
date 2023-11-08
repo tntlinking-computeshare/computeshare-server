@@ -21,6 +21,12 @@ type ComputeSpec func(*sql.Selector)
 // Employee is the predicate function for employee builders.
 type Employee func(*sql.Selector)
 
+// Gateway is the predicate function for gateway builders.
+type Gateway func(*sql.Selector)
+
+// NetworkMapping is the predicate function for networkmapping builders.
+type NetworkMapping func(*sql.Selector)
+
 // Script is the predicate function for script builders.
 type Script func(*sql.Selector)
 
@@ -29,6 +35,9 @@ type ScriptExecutionRecord func(*sql.Selector)
 
 // Storage is the predicate function for storage builders.
 type Storage func(*sql.Selector)
+
+// Task is the predicate function for task builders.
+type Task func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

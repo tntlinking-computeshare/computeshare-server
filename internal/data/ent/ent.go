@@ -17,9 +17,12 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
 
@@ -86,9 +89,12 @@ func checkColumn(table, column string) error {
 			computeinstance.Table:       computeinstance.ValidColumn,
 			computespec.Table:           computespec.ValidColumn,
 			employee.Table:              employee.ValidColumn,
+			gateway.Table:               gateway.ValidColumn,
+			networkmapping.Table:        networkmapping.ValidColumn,
 			script.Table:                script.ValidColumn,
 			scriptexecutionrecord.Table: scriptexecutionrecord.ValidColumn,
 			storage.Table:               storage.ValidColumn,
+			task.Table:                  task.ValidColumn,
 			user.Table:                  user.ValidColumn,
 		})
 	})

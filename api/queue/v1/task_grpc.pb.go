@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: api/queue/v1/queue.proto
+// source: api/queue/v1/task.proto
 
 package v1
 
@@ -146,5 +146,5 @@ var QueueTask_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/queue/v1/queue.proto",
+	Metadata: "api/queue/v1/task.proto",
 }

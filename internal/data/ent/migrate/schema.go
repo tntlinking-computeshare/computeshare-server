@@ -114,6 +114,35 @@ var (
 		Columns:    EmployeesColumns,
 		PrimaryKey: []*schema.Column{EmployeesColumns[0]},
 	}
+	// GatewaysColumns holds the columns for the "gateways" table.
+	GatewaysColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Size: 50},
+		{Name: "ip", Type: field.TypeString},
+		{Name: "port", Type: field.TypeInt},
+	}
+	// GatewaysTable holds the schema information for the "gateways" table.
+	GatewaysTable = &schema.Table{
+		Name:       "gateways",
+		Columns:    GatewaysColumns,
+		PrimaryKey: []*schema.Column{GatewaysColumns[0]},
+	}
+	// NetworkMappingsColumns holds the columns for the "network_mappings" table.
+	NetworkMappingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Size: 50},
+		{Name: "fk_gateway_id", Type: field.TypeUUID},
+		{Name: "fk_computer_id", Type: field.TypeUUID},
+		{Name: "gateway_port", Type: field.TypeInt},
+		{Name: "computer_port", Type: field.TypeInt},
+		{Name: "status", Type: field.TypeInt, Default: 0},
+	}
+	// NetworkMappingsTable holds the schema information for the "network_mappings" table.
+	NetworkMappingsTable = &schema.Table{
+		Name:       "network_mappings",
+		Columns:    NetworkMappingsColumns,
+		PrimaryKey: []*schema.Column{NetworkMappingsColumns[0]},
+	}
 	// ScriptsColumns holds the columns for the "scripts" table.
 	ScriptsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt32, Increment: true},
@@ -184,6 +213,33 @@ var (
 			},
 		},
 	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "agent_id", Type: field.TypeString, Size: 50},
+		{Name: "cmd", Type: field.TypeInt32, Default: 0},
+		{Name: "params", Type: field.TypeString, Size: 255},
+		{Name: "status", Type: field.TypeInt},
+		{Name: "create_time", Type: field.TypeTime},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "task_agent_id",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[1]},
+			},
+			{
+				Name:    "task_create_time",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[5]},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -221,9 +277,12 @@ var (
 		ComputeInstancesTable,
 		ComputeSpecsTable,
 		EmployeesTable,
+		GatewaysTable,
+		NetworkMappingsTable,
 		ScriptsTable,
 		ScriptExecutionRecordsTable,
 		StoragesTable,
+		TasksTable,
 		UsersTable,
 	}
 )

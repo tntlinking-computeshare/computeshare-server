@@ -10,10 +10,13 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/schema"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
 
@@ -91,6 +94,58 @@ func init() {
 	computespecDescMemory := computespecFields[2].Descriptor()
 	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
 	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
+	gatewayFields := schema.Gateway{}.Fields()
+	_ = gatewayFields
+	// gatewayDescName is the schema descriptor for name field.
+	gatewayDescName := gatewayFields[1].Descriptor()
+	// gateway.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	gateway.NameValidator = func() func(string) error {
+		validators := gatewayDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// gatewayDescID is the schema descriptor for id field.
+	gatewayDescID := gatewayFields[0].Descriptor()
+	// gateway.DefaultID holds the default value on creation for the id field.
+	gateway.DefaultID = gatewayDescID.Default.(func() uuid.UUID)
+	networkmappingFields := schema.NetworkMapping{}.Fields()
+	_ = networkmappingFields
+	// networkmappingDescName is the schema descriptor for name field.
+	networkmappingDescName := networkmappingFields[1].Descriptor()
+	// networkmapping.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	networkmapping.NameValidator = func() func(string) error {
+		validators := networkmappingDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// networkmappingDescStatus is the schema descriptor for status field.
+	networkmappingDescStatus := networkmappingFields[6].Descriptor()
+	// networkmapping.DefaultStatus holds the default value on creation for the status field.
+	networkmapping.DefaultStatus = networkmappingDescStatus.Default.(int)
+	// networkmappingDescID is the schema descriptor for id field.
+	networkmappingDescID := networkmappingFields[0].Descriptor()
+	// networkmapping.DefaultID holds the default value on creation for the id field.
+	networkmapping.DefaultID = networkmappingDescID.Default.(func() uuid.UUID)
 	scriptFields := schema.Script{}.Fields()
 	_ = scriptFields
 	// scriptDescTaskNumber is the schema descriptor for task_number field.
@@ -197,6 +252,42 @@ func init() {
 	storageDescID := storageFields[0].Descriptor()
 	// storage.DefaultID holds the default value on creation for the id field.
 	storage.DefaultID = storageDescID.Default.(func() uuid.UUID)
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescAgentID is the schema descriptor for agent_id field.
+	taskDescAgentID := taskFields[1].Descriptor()
+	// task.AgentIDValidator is a validator for the "agent_id" field. It is called by the builders before save.
+	task.AgentIDValidator = func() func(string) error {
+		validators := taskDescAgentID.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(agent_id string) error {
+			for _, fn := range fns {
+				if err := fn(agent_id); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// taskDescCmd is the schema descriptor for cmd field.
+	taskDescCmd := taskFields[2].Descriptor()
+	// task.DefaultCmd holds the default value on creation for the cmd field.
+	task.DefaultCmd = taskDescCmd.Default.(int32)
+	// taskDescParams is the schema descriptor for params field.
+	taskDescParams := taskFields[3].Descriptor()
+	// task.ParamsValidator is a validator for the "params" field. It is called by the builders before save.
+	task.ParamsValidator = taskDescParams.Validators[0].(func(string) error)
+	// taskDescCreateTime is the schema descriptor for create_time field.
+	taskDescCreateTime := taskFields[5].Descriptor()
+	// task.DefaultCreateTime holds the default value on creation for the create_time field.
+	task.DefaultCreateTime = taskDescCreateTime.Default.(func() time.Time)
+	// taskDescID is the schema descriptor for id field.
+	taskDescID := taskFields[0].Descriptor()
+	// task.DefaultID holds the default value on creation for the id field.
+	task.DefaultID = taskDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescCountryCallCoding is the schema descriptor for country_call_coding field.

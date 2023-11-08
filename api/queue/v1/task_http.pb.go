@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/queue/v1/queue.proto
+// source: api/queue/v1/task.proto
 
 package v1
 

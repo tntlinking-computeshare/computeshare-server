@@ -69,6 +69,30 @@ func (f EmployeeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmployeeMutation", m)
 }
 
+// The GatewayFunc type is an adapter to allow the use of ordinary
+// function as Gateway mutator.
+type GatewayFunc func(context.Context, *ent.GatewayMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f GatewayFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.GatewayMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GatewayMutation", m)
+}
+
+// The NetworkMappingFunc type is an adapter to allow the use of ordinary
+// function as NetworkMapping mutator.
+type NetworkMappingFunc func(context.Context, *ent.NetworkMappingMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f NetworkMappingFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.NetworkMappingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NetworkMappingMutation", m)
+}
+
 // The ScriptFunc type is an adapter to allow the use of ordinary
 // function as Script mutator.
 type ScriptFunc func(context.Context, *ent.ScriptMutation) (ent.Value, error)
@@ -103,6 +127,18 @@ func (f StorageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.StorageMutation", m)
+}
+
+// The TaskFunc type is an adapter to allow the use of ordinary
+// function as Task mutator.
+type TaskFunc func(context.Context, *ent.TaskMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TaskFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TaskMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TaskMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary

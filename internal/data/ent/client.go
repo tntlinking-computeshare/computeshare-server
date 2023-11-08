@@ -20,9 +20,12 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
 
@@ -41,12 +44,18 @@ type Client struct {
 	ComputeSpec *ComputeSpecClient
 	// Employee is the client for interacting with the Employee builders.
 	Employee *EmployeeClient
+	// Gateway is the client for interacting with the Gateway builders.
+	Gateway *GatewayClient
+	// NetworkMapping is the client for interacting with the NetworkMapping builders.
+	NetworkMapping *NetworkMappingClient
 	// Script is the client for interacting with the Script builders.
 	Script *ScriptClient
 	// ScriptExecutionRecord is the client for interacting with the ScriptExecutionRecord builders.
 	ScriptExecutionRecord *ScriptExecutionRecordClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
+	// Task is the client for interacting with the Task builders.
+	Task *TaskClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 }
@@ -67,9 +76,12 @@ func (c *Client) init() {
 	c.ComputeInstance = NewComputeInstanceClient(c.config)
 	c.ComputeSpec = NewComputeSpecClient(c.config)
 	c.Employee = NewEmployeeClient(c.config)
+	c.Gateway = NewGatewayClient(c.config)
+	c.NetworkMapping = NewNetworkMappingClient(c.config)
 	c.Script = NewScriptClient(c.config)
 	c.ScriptExecutionRecord = NewScriptExecutionRecordClient(c.config)
 	c.Storage = NewStorageClient(c.config)
+	c.Task = NewTaskClient(c.config)
 	c.User = NewUserClient(c.config)
 }
 
@@ -158,9 +170,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
+		Gateway:               NewGatewayClient(cfg),
+		NetworkMapping:        NewNetworkMappingClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
+		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
 	}, nil
 }
@@ -186,9 +201,12 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
+		Gateway:               NewGatewayClient(cfg),
+		NetworkMapping:        NewNetworkMappingClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
+		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
 	}, nil
 }
@@ -219,8 +237,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
+		c.Gateway, c.NetworkMapping, c.Script, c.ScriptExecutionRecord, c.Storage,
+		c.Task, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -230,8 +249,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
+		c.Gateway, c.NetworkMapping, c.Script, c.ScriptExecutionRecord, c.Storage,
+		c.Task, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -250,12 +270,18 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ComputeSpec.mutate(ctx, m)
 	case *EmployeeMutation:
 		return c.Employee.mutate(ctx, m)
+	case *GatewayMutation:
+		return c.Gateway.mutate(ctx, m)
+	case *NetworkMappingMutation:
+		return c.NetworkMapping.mutate(ctx, m)
 	case *ScriptMutation:
 		return c.Script.mutate(ctx, m)
 	case *ScriptExecutionRecordMutation:
 		return c.ScriptExecutionRecord.mutate(ctx, m)
 	case *StorageMutation:
 		return c.Storage.mutate(ctx, m)
+	case *TaskMutation:
+		return c.Task.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	default:
@@ -853,6 +879,242 @@ func (c *EmployeeClient) mutate(ctx context.Context, m *EmployeeMutation) (Value
 	}
 }
 
+// GatewayClient is a client for the Gateway schema.
+type GatewayClient struct {
+	config
+}
+
+// NewGatewayClient returns a client for the Gateway from the given config.
+func NewGatewayClient(c config) *GatewayClient {
+	return &GatewayClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `gateway.Hooks(f(g(h())))`.
+func (c *GatewayClient) Use(hooks ...Hook) {
+	c.hooks.Gateway = append(c.hooks.Gateway, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `gateway.Intercept(f(g(h())))`.
+func (c *GatewayClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Gateway = append(c.inters.Gateway, interceptors...)
+}
+
+// Create returns a builder for creating a Gateway entity.
+func (c *GatewayClient) Create() *GatewayCreate {
+	mutation := newGatewayMutation(c.config, OpCreate)
+	return &GatewayCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Gateway entities.
+func (c *GatewayClient) CreateBulk(builders ...*GatewayCreate) *GatewayCreateBulk {
+	return &GatewayCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Gateway.
+func (c *GatewayClient) Update() *GatewayUpdate {
+	mutation := newGatewayMutation(c.config, OpUpdate)
+	return &GatewayUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *GatewayClient) UpdateOne(ga *Gateway) *GatewayUpdateOne {
+	mutation := newGatewayMutation(c.config, OpUpdateOne, withGateway(ga))
+	return &GatewayUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *GatewayClient) UpdateOneID(id uuid.UUID) *GatewayUpdateOne {
+	mutation := newGatewayMutation(c.config, OpUpdateOne, withGatewayID(id))
+	return &GatewayUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Gateway.
+func (c *GatewayClient) Delete() *GatewayDelete {
+	mutation := newGatewayMutation(c.config, OpDelete)
+	return &GatewayDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *GatewayClient) DeleteOne(ga *Gateway) *GatewayDeleteOne {
+	return c.DeleteOneID(ga.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *GatewayClient) DeleteOneID(id uuid.UUID) *GatewayDeleteOne {
+	builder := c.Delete().Where(gateway.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &GatewayDeleteOne{builder}
+}
+
+// Query returns a query builder for Gateway.
+func (c *GatewayClient) Query() *GatewayQuery {
+	return &GatewayQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeGateway},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Gateway entity by its id.
+func (c *GatewayClient) Get(ctx context.Context, id uuid.UUID) (*Gateway, error) {
+	return c.Query().Where(gateway.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *GatewayClient) GetX(ctx context.Context, id uuid.UUID) *Gateway {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *GatewayClient) Hooks() []Hook {
+	return c.hooks.Gateway
+}
+
+// Interceptors returns the client interceptors.
+func (c *GatewayClient) Interceptors() []Interceptor {
+	return c.inters.Gateway
+}
+
+func (c *GatewayClient) mutate(ctx context.Context, m *GatewayMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&GatewayCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&GatewayUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&GatewayUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&GatewayDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Gateway mutation op: %q", m.Op())
+	}
+}
+
+// NetworkMappingClient is a client for the NetworkMapping schema.
+type NetworkMappingClient struct {
+	config
+}
+
+// NewNetworkMappingClient returns a client for the NetworkMapping from the given config.
+func NewNetworkMappingClient(c config) *NetworkMappingClient {
+	return &NetworkMappingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `networkmapping.Hooks(f(g(h())))`.
+func (c *NetworkMappingClient) Use(hooks ...Hook) {
+	c.hooks.NetworkMapping = append(c.hooks.NetworkMapping, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `networkmapping.Intercept(f(g(h())))`.
+func (c *NetworkMappingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.NetworkMapping = append(c.inters.NetworkMapping, interceptors...)
+}
+
+// Create returns a builder for creating a NetworkMapping entity.
+func (c *NetworkMappingClient) Create() *NetworkMappingCreate {
+	mutation := newNetworkMappingMutation(c.config, OpCreate)
+	return &NetworkMappingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NetworkMapping entities.
+func (c *NetworkMappingClient) CreateBulk(builders ...*NetworkMappingCreate) *NetworkMappingCreateBulk {
+	return &NetworkMappingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NetworkMapping.
+func (c *NetworkMappingClient) Update() *NetworkMappingUpdate {
+	mutation := newNetworkMappingMutation(c.config, OpUpdate)
+	return &NetworkMappingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NetworkMappingClient) UpdateOne(nm *NetworkMapping) *NetworkMappingUpdateOne {
+	mutation := newNetworkMappingMutation(c.config, OpUpdateOne, withNetworkMapping(nm))
+	return &NetworkMappingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NetworkMappingClient) UpdateOneID(id uuid.UUID) *NetworkMappingUpdateOne {
+	mutation := newNetworkMappingMutation(c.config, OpUpdateOne, withNetworkMappingID(id))
+	return &NetworkMappingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NetworkMapping.
+func (c *NetworkMappingClient) Delete() *NetworkMappingDelete {
+	mutation := newNetworkMappingMutation(c.config, OpDelete)
+	return &NetworkMappingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NetworkMappingClient) DeleteOne(nm *NetworkMapping) *NetworkMappingDeleteOne {
+	return c.DeleteOneID(nm.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NetworkMappingClient) DeleteOneID(id uuid.UUID) *NetworkMappingDeleteOne {
+	builder := c.Delete().Where(networkmapping.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NetworkMappingDeleteOne{builder}
+}
+
+// Query returns a query builder for NetworkMapping.
+func (c *NetworkMappingClient) Query() *NetworkMappingQuery {
+	return &NetworkMappingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNetworkMapping},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a NetworkMapping entity by its id.
+func (c *NetworkMappingClient) Get(ctx context.Context, id uuid.UUID) (*NetworkMapping, error) {
+	return c.Query().Where(networkmapping.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NetworkMappingClient) GetX(ctx context.Context, id uuid.UUID) *NetworkMapping {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *NetworkMappingClient) Hooks() []Hook {
+	return c.hooks.NetworkMapping
+}
+
+// Interceptors returns the client interceptors.
+func (c *NetworkMappingClient) Interceptors() []Interceptor {
+	return c.inters.NetworkMapping
+}
+
+func (c *NetworkMappingClient) mutate(ctx context.Context, m *NetworkMappingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NetworkMappingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NetworkMappingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NetworkMappingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NetworkMappingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown NetworkMapping mutation op: %q", m.Op())
+	}
+}
+
 // ScriptClient is a client for the Script schema.
 type ScriptClient struct {
 	config
@@ -1239,6 +1501,124 @@ func (c *StorageClient) mutate(ctx context.Context, m *StorageMutation) (Value, 
 	}
 }
 
+// TaskClient is a client for the Task schema.
+type TaskClient struct {
+	config
+}
+
+// NewTaskClient returns a client for the Task from the given config.
+func NewTaskClient(c config) *TaskClient {
+	return &TaskClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `task.Hooks(f(g(h())))`.
+func (c *TaskClient) Use(hooks ...Hook) {
+	c.hooks.Task = append(c.hooks.Task, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `task.Intercept(f(g(h())))`.
+func (c *TaskClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Task = append(c.inters.Task, interceptors...)
+}
+
+// Create returns a builder for creating a Task entity.
+func (c *TaskClient) Create() *TaskCreate {
+	mutation := newTaskMutation(c.config, OpCreate)
+	return &TaskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Task entities.
+func (c *TaskClient) CreateBulk(builders ...*TaskCreate) *TaskCreateBulk {
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Task.
+func (c *TaskClient) Update() *TaskUpdate {
+	mutation := newTaskMutation(c.config, OpUpdate)
+	return &TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TaskClient) UpdateOne(t *Task) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTask(t))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TaskClient) UpdateOneID(id uuid.UUID) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTaskID(id))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Task.
+func (c *TaskClient) Delete() *TaskDelete {
+	mutation := newTaskMutation(c.config, OpDelete)
+	return &TaskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TaskClient) DeleteOne(t *Task) *TaskDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TaskClient) DeleteOneID(id uuid.UUID) *TaskDeleteOne {
+	builder := c.Delete().Where(task.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TaskDeleteOne{builder}
+}
+
+// Query returns a query builder for Task.
+func (c *TaskClient) Query() *TaskQuery {
+	return &TaskQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTask},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Task entity by its id.
+func (c *TaskClient) Get(ctx context.Context, id uuid.UUID) (*Task, error) {
+	return c.Query().Where(task.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TaskClient) GetX(ctx context.Context, id uuid.UUID) *Task {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TaskClient) Hooks() []Hook {
+	return c.hooks.Task
+}
+
+// Interceptors returns the client interceptors.
+func (c *TaskClient) Interceptors() []Interceptor {
+	return c.inters.Task
+}
+
+func (c *TaskClient) mutate(ctx context.Context, m *TaskMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TaskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TaskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Task mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -1360,11 +1740,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Script,
-		ScriptExecutionRecord, Storage, User []ent.Hook
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
+		NetworkMapping, Script, ScriptExecutionRecord, Storage, Task, User []ent.Hook
 	}
 	inters struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Script,
-		ScriptExecutionRecord, Storage, User []ent.Interceptor
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
+		NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
+		User []ent.Interceptor
 	}
 )

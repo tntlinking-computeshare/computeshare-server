@@ -8,7 +8,7 @@ option go_package = "github.com/mohaijiang/computeshare-server/api/queue/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.compute.v1";
 
-enum QueueCmd //枚举消息类型
+enum TaskCmd //枚举消息类型
 {
   VM_CREATE = 0; // 创建虚拟机
   VM_DELETE = 1;  // 删除虚拟机
@@ -59,11 +59,11 @@ message QueueTaskGetResponse{
 }
 
 message QueueTaskVo {
-  int64 id = 1;
-  string agentId = 2;
-  QueueCmd cmd = 3;
-  string params = 4;
-  TaskStatus status = 5;
+  string id = 1;  // 任务id
+  string agentId = 2; // 客户端节点id
+  TaskCmd cmd = 3;    // 执行任务枚举
+  string params = 4;  // 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+  TaskStatus status = 5;  // 任务状态
 }
 
 message QueueTaskUpdateRequest {
@@ -77,9 +77,16 @@ message QueueTaskUpdateResponse {
   string message = 2;
 }
 
-message NatProxyCreateVO {
-  string name = 1;
-  string instanceName = 2;
-  int64 instancePort = 3;
-  int64 remotePort = 4;
+message NatNetworkMappingTaskParamVO {
+  string id = 1;
+  string name = 2;
+  string instanceName = 3;
+  int64 instancePort = 4;
+  int64 remotePort = 5;
+}
+
+message ComputeInstanceTaskParamVO {
+  string id = 1;
+  string name = 2;
+
 }

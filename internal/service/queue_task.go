@@ -14,6 +14,7 @@ type QueueTaskService struct {
 
 func NewQueueTaskService() *QueueTaskService {
 	vo := pb.NatProxyCreateVO{
+		Id:           "uuid",
 		Name:         "my-nat-1",
 		InstanceName: "name1",
 		InstancePort: 10088,
