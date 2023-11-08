@@ -13,7 +13,7 @@ type QueueTaskService struct {
 }
 
 func NewQueueTaskService() *QueueTaskService {
-	vo := pb.NatProxyCreateVO{
+	vo := pb.NatNetworkMappingTaskParamVO{
 		Id:           "uuid",
 		Name:         "my-nat-1",
 		InstanceName: "name1",
@@ -23,9 +23,9 @@ func NewQueueTaskService() *QueueTaskService {
 	marshal, _ := json.Marshal(vo)
 
 	task := &pb.QueueTaskVo{
-		Id:      1,
+		Id:      "1",
 		AgentId: "1",
-		Cmd:     pb.QueueCmd_NAT_PROXY_CREATE,
+		Cmd:     pb.TaskCmd_NAT_PROXY_CREATE,
 		Params:  string(marshal),
 		Status:  pb.TaskStatus_CREATED,
 	}

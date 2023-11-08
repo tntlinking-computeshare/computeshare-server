@@ -88,5 +88,7 @@ message NatNetworkMappingTaskParamVO {
 message ComputeInstanceTaskParamVO {
   string id = 1;
   string name = 2;
-
+  int64 cpu = 3;
+  int64 memory = 4;
+  string image = 5;
 }
