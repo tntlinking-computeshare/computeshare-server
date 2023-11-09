@@ -91,4 +91,5 @@ message ComputeInstanceTaskParamVO {
   int64 cpu = 3;
   int64 memory = 4;
   string image = 5;
+  string publicKey = 6;
 }

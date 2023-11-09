@@ -26,5 +26,5 @@ func (task *QueueTaskVo) GetTaskParam() (any, error) {
 		err := json.Unmarshal([]byte(task.GetParams()), &vo)
 		return vo, err
 	}
-	return nil, errors.New("")
+	return nil, errors.New("cannot issue command")
 }
