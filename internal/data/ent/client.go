@@ -21,6 +21,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
@@ -46,6 +47,8 @@ type Client struct {
 	Employee *EmployeeClient
 	// Gateway is the client for interacting with the Gateway builders.
 	Gateway *GatewayClient
+	// GatewayPort is the client for interacting with the GatewayPort builders.
+	GatewayPort *GatewayPortClient
 	// NetworkMapping is the client for interacting with the NetworkMapping builders.
 	NetworkMapping *NetworkMappingClient
 	// Script is the client for interacting with the Script builders.
@@ -77,6 +80,7 @@ func (c *Client) init() {
 	c.ComputeSpec = NewComputeSpecClient(c.config)
 	c.Employee = NewEmployeeClient(c.config)
 	c.Gateway = NewGatewayClient(c.config)
+	c.GatewayPort = NewGatewayPortClient(c.config)
 	c.NetworkMapping = NewNetworkMappingClient(c.config)
 	c.Script = NewScriptClient(c.config)
 	c.ScriptExecutionRecord = NewScriptExecutionRecordClient(c.config)
@@ -171,6 +175,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ComputeSpec:           NewComputeSpecClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
+		GatewayPort:           NewGatewayPortClient(cfg),
 		NetworkMapping:        NewNetworkMappingClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
@@ -202,6 +207,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ComputeSpec:           NewComputeSpecClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
+		GatewayPort:           NewGatewayPortClient(cfg),
 		NetworkMapping:        NewNetworkMappingClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
@@ -238,8 +244,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Gateway, c.NetworkMapping, c.Script, c.ScriptExecutionRecord, c.Storage,
-		c.Task, c.User,
+		c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script, c.ScriptExecutionRecord,
+		c.Storage, c.Task, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -250,8 +256,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Gateway, c.NetworkMapping, c.Script, c.ScriptExecutionRecord, c.Storage,
-		c.Task, c.User,
+		c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script, c.ScriptExecutionRecord,
+		c.Storage, c.Task, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -272,6 +278,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Employee.mutate(ctx, m)
 	case *GatewayMutation:
 		return c.Gateway.mutate(ctx, m)
+	case *GatewayPortMutation:
+		return c.GatewayPort.mutate(ctx, m)
 	case *NetworkMappingMutation:
 		return c.NetworkMapping.mutate(ctx, m)
 	case *ScriptMutation:
@@ -994,6 +1002,124 @@ func (c *GatewayClient) mutate(ctx context.Context, m *GatewayMutation) (Value, 
 		return (&GatewayDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Gateway mutation op: %q", m.Op())
+	}
+}
+
+// GatewayPortClient is a client for the GatewayPort schema.
+type GatewayPortClient struct {
+	config
+}
+
+// NewGatewayPortClient returns a client for the GatewayPort from the given config.
+func NewGatewayPortClient(c config) *GatewayPortClient {
+	return &GatewayPortClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `gatewayport.Hooks(f(g(h())))`.
+func (c *GatewayPortClient) Use(hooks ...Hook) {
+	c.hooks.GatewayPort = append(c.hooks.GatewayPort, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `gatewayport.Intercept(f(g(h())))`.
+func (c *GatewayPortClient) Intercept(interceptors ...Interceptor) {
+	c.inters.GatewayPort = append(c.inters.GatewayPort, interceptors...)
+}
+
+// Create returns a builder for creating a GatewayPort entity.
+func (c *GatewayPortClient) Create() *GatewayPortCreate {
+	mutation := newGatewayPortMutation(c.config, OpCreate)
+	return &GatewayPortCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of GatewayPort entities.
+func (c *GatewayPortClient) CreateBulk(builders ...*GatewayPortCreate) *GatewayPortCreateBulk {
+	return &GatewayPortCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for GatewayPort.
+func (c *GatewayPortClient) Update() *GatewayPortUpdate {
+	mutation := newGatewayPortMutation(c.config, OpUpdate)
+	return &GatewayPortUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *GatewayPortClient) UpdateOne(gp *GatewayPort) *GatewayPortUpdateOne {
+	mutation := newGatewayPortMutation(c.config, OpUpdateOne, withGatewayPort(gp))
+	return &GatewayPortUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *GatewayPortClient) UpdateOneID(id uuid.UUID) *GatewayPortUpdateOne {
+	mutation := newGatewayPortMutation(c.config, OpUpdateOne, withGatewayPortID(id))
+	return &GatewayPortUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for GatewayPort.
+func (c *GatewayPortClient) Delete() *GatewayPortDelete {
+	mutation := newGatewayPortMutation(c.config, OpDelete)
+	return &GatewayPortDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *GatewayPortClient) DeleteOne(gp *GatewayPort) *GatewayPortDeleteOne {
+	return c.DeleteOneID(gp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *GatewayPortClient) DeleteOneID(id uuid.UUID) *GatewayPortDeleteOne {
+	builder := c.Delete().Where(gatewayport.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &GatewayPortDeleteOne{builder}
+}
+
+// Query returns a query builder for GatewayPort.
+func (c *GatewayPortClient) Query() *GatewayPortQuery {
+	return &GatewayPortQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeGatewayPort},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a GatewayPort entity by its id.
+func (c *GatewayPortClient) Get(ctx context.Context, id uuid.UUID) (*GatewayPort, error) {
+	return c.Query().Where(gatewayport.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *GatewayPortClient) GetX(ctx context.Context, id uuid.UUID) *GatewayPort {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *GatewayPortClient) Hooks() []Hook {
+	return c.hooks.GatewayPort
+}
+
+// Interceptors returns the client interceptors.
+func (c *GatewayPortClient) Interceptors() []Interceptor {
+	return c.inters.GatewayPort
+}
+
+func (c *GatewayPortClient) mutate(ctx context.Context, m *GatewayPortMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&GatewayPortCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&GatewayPortUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&GatewayPortUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&GatewayPortDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown GatewayPort mutation op: %q", m.Op())
 	}
 }
 
@@ -1741,11 +1867,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
-		NetworkMapping, Script, ScriptExecutionRecord, Storage, Task, User []ent.Hook
+		GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
+		User []ent.Hook
 	}
 	inters struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
-		NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
+		GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
 		User []ent.Interceptor
 	}
 )

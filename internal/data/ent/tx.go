@@ -24,6 +24,8 @@ type Tx struct {
 	Employee *EmployeeClient
 	// Gateway is the client for interacting with the Gateway builders.
 	Gateway *GatewayClient
+	// GatewayPort is the client for interacting with the GatewayPort builders.
+	GatewayPort *GatewayPortClient
 	// NetworkMapping is the client for interacting with the NetworkMapping builders.
 	NetworkMapping *NetworkMappingClient
 	// Script is the client for interacting with the Script builders.
@@ -173,6 +175,7 @@ func (tx *Tx) init() {
 	tx.ComputeSpec = NewComputeSpecClient(tx.config)
 	tx.Employee = NewEmployeeClient(tx.config)
 	tx.Gateway = NewGatewayClient(tx.config)
+	tx.GatewayPort = NewGatewayPortClient(tx.config)
 	tx.NetworkMapping = NewNetworkMappingClient(tx.config)
 	tx.Script = NewScriptClient(tx.config)
 	tx.ScriptExecutionRecord = NewScriptExecutionRecordClient(tx.config)

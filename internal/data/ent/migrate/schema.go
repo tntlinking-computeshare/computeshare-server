@@ -127,6 +127,19 @@ var (
 		Columns:    GatewaysColumns,
 		PrimaryKey: []*schema.Column{GatewaysColumns[0]},
 	}
+	// GatewayPortsColumns holds the columns for the "gateway_ports" table.
+	GatewayPortsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_gateway_id", Type: field.TypeString, Size: 36},
+		{Name: "port", Type: field.TypeInt8},
+		{Name: "is_use", Type: field.TypeBool, Default: false},
+	}
+	// GatewayPortsTable holds the schema information for the "gateway_ports" table.
+	GatewayPortsTable = &schema.Table{
+		Name:       "gateway_ports",
+		Columns:    GatewayPortsColumns,
+		PrimaryKey: []*schema.Column{GatewayPortsColumns[0]},
+	}
 	// NetworkMappingsColumns holds the columns for the "network_mappings" table.
 	NetworkMappingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -278,6 +291,7 @@ var (
 		ComputeSpecsTable,
 		EmployeesTable,
 		GatewaysTable,
+		GatewayPortsTable,
 		NetworkMappingsTable,
 		ScriptsTable,
 		ScriptExecutionRecordsTable,

@@ -11,6 +11,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/schema"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
@@ -118,6 +119,34 @@ func init() {
 	gatewayDescID := gatewayFields[0].Descriptor()
 	// gateway.DefaultID holds the default value on creation for the id field.
 	gateway.DefaultID = gatewayDescID.Default.(func() uuid.UUID)
+	gatewayportFields := schema.GatewayPort{}.Fields()
+	_ = gatewayportFields
+	// gatewayportDescFkGatewayID is the schema descriptor for fk_gateway_id field.
+	gatewayportDescFkGatewayID := gatewayportFields[1].Descriptor()
+	// gatewayport.FkGatewayIDValidator is a validator for the "fk_gateway_id" field. It is called by the builders before save.
+	gatewayport.FkGatewayIDValidator = func() func(string) error {
+		validators := gatewayportDescFkGatewayID.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(fk_gateway_id string) error {
+			for _, fn := range fns {
+				if err := fn(fk_gateway_id); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// gatewayportDescIsUse is the schema descriptor for is_use field.
+	gatewayportDescIsUse := gatewayportFields[3].Descriptor()
+	// gatewayport.DefaultIsUse holds the default value on creation for the is_use field.
+	gatewayport.DefaultIsUse = gatewayportDescIsUse.Default.(bool)
+	// gatewayportDescID is the schema descriptor for id field.
+	gatewayportDescID := gatewayportFields[0].Descriptor()
+	// gatewayport.DefaultID holds the default value on creation for the id field.
+	gatewayport.DefaultID = gatewayportDescID.Default.(func() uuid.UUID)
 	networkmappingFields := schema.NetworkMapping{}.Fields()
 	_ = networkmappingFields
 	// networkmappingDescName is the schema descriptor for name field.

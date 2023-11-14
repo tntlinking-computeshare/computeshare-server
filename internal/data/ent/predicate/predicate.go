@@ -24,6 +24,9 @@ type Employee func(*sql.Selector)
 // Gateway is the predicate function for gateway builders.
 type Gateway func(*sql.Selector)
 
+// GatewayPort is the predicate function for gatewayport builders.
+type GatewayPort func(*sql.Selector)
+
 // NetworkMapping is the predicate function for networkmapping builders.
 type NetworkMapping func(*sql.Selector)
 

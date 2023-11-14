@@ -81,6 +81,18 @@ func (f GatewayFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GatewayMutation", m)
 }
 
+// The GatewayPortFunc type is an adapter to allow the use of ordinary
+// function as GatewayPort mutator.
+type GatewayPortFunc func(context.Context, *ent.GatewayPortMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f GatewayPortFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.GatewayPortMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GatewayPortMutation", m)
+}
+
 // The NetworkMappingFunc type is an adapter to allow the use of ordinary
 // function as NetworkMapping mutator.
 type NetworkMappingFunc func(context.Context, *ent.NetworkMappingMutation) (ent.Value, error)
