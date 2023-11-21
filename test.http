@@ -136,4 +136,48 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1O
 ### 查询文件列表
 GET  https://computeshare.hamster.newtouch.com/v1/storage
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI1NTh9.1GE-cKVFIk6VozVI6QGtZRxuOoM_Fvw8GBZbdGhsAcU
+
+
+### 创建网络映射
+POST  http://127.0.0.1:8000/v1/network-mappings
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDA2MTc3Mjd9.8_txM1SWcoKAGvgBUbBzodoyPDSbFUi--kMFRiclg2I
+
+{
+  "name": "redis-port",
+  "computer_id": "00d460f0-ec1a-4a0f-a452-1afb4b5d1686",
+  "computer_port": 6379
+}
+
+### 查询网络映射
+GET  http://127.0.0.1:8000/v1/network-mappings/page?computer_id=00d460f0-ec1a-4a0f-a452-1afb4b5d1686&page=1&size=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDA2MTc3Mjd9.8_txM1SWcoKAGvgBUbBzodoyPDSbFUi--kMFRiclg2I
+
+### 网络映射详情
+GET  http://127.0.0.1:8000/v1/network-mappings/7f4d03d5-445e-4b1b-9a3c-227123a0f9c6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+
+### 删除网络映射
+DELETE   http://127.0.0.1:8000/v1/network-mappings/7f4d03d5-445e-4b1b-9a3c-227123a0f9c6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+
+
+### 查询任务
+GET  http://127.0.0.1:8000/v1/queue/task?id=00c460f0-ec1a-4a0f-a452-1afb4b5d1686
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+
+### 更新任务状态
+PUT  http://127.0.0.1:8000/v1/queue/task
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+
+{
+  "id":"ac4d35fc-7ec1-4275-bf48-5fcc568736cd",
+  "agentId":"00c460f0-ec1a-4a0f-a452-1afb4b5d1686",
+  "status":1,
+}

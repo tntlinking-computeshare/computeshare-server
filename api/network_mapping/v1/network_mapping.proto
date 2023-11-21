@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package api.network_mapping.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/network_mapping/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.network_mapping.v1";
+
+service NetworkMapping {
+  rpc CreateNetworkMapping (CreateNetworkMappingRequest) returns (CreateNetworkMappingReply){
+		option (google.api.http) = {
+			post: "/v1/network-mappings",
+      body: "*",
+		};
+	};
+  rpc PageNetworkMapping (PageNetworkMappingRequest) returns (PageNetworkMappingReply){
+    option (google.api.http) = {
+      get: "/v1/network-mappings/page",
+    };
+  };
+	rpc GetNetworkMapping (GetNetworkMappingRequest) returns (GetNetworkMappingReply){
+    option (google.api.http) = {
+      get: "/v1/network-mappings/{id}",
+    };
+  };
+	rpc DeleteNetworkMapping (DeleteNetworkMappingRequest) returns (DeleteNetworkMappingReply){
+    option (google.api.http) = {
+      delete: "/v1/network-mappings/{id}",
+    };
+  };
+}
+
+message CreateNetworkMappingRequest {
+  string name = 1;
+  string computer_id = 2;
+  int32 computer_port = 3;
+}
+message CreateNetworkMappingReply {
+  int32 code = 1;
+	string message = 2;
+  NetworkMappingVO network_mapping = 3;
+}
+
+message DeleteNetworkMappingRequest {
+  string id = 1;
+}
+message DeleteNetworkMappingReply {
+  int32 code = 1;
+	string message = 2;
+}
+
+message GetNetworkMappingRequest {
+  string id = 1;
+}
+message GetNetworkMappingReply {
+  int32 code = 1;
+	string message = 2;
+  NetworkMappingVO network_mapping = 3;
+}
+
+message PageNetworkMappingRequest {
+	int32 page = 1;
+	int32 size = 2;
+  string computer_id = 3; 
+}
+
+message PageNetworkMappingReply {
+	message Data {
+		repeated NetworkMappingVO list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message NetworkMappingVO {
+  string id = 1;
+  string name = 2;
+  string gateway_id = 3;
+  string computer_id = 4;
+  int32 gateway_port = 5;
+  int32 computer_port = 6;
+  int32 status = 7;
+}

@@ -83,6 +83,7 @@ message NatNetworkMappingTaskParamVO {
   string instanceName = 3;
   int64 instancePort = 4;
   int64 remotePort = 5;
+  string gatewayId = 6;
 }
 
 message ComputeInstanceTaskParamVO {
