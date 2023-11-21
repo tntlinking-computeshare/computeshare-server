@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 
@@ -33,6 +34,10 @@ var ProviderSet = wire.NewSet(
 	NewComputeImageRepo,
 	NewScriptRepo,
 	NewScriptExecutionRecordRepo,
+	NewNetworkMappingRepo,
+	NewGatewayRepo,
+	NewGatewayPortRepo,
+	NewTaskRepo,
 )
 
 // Data .

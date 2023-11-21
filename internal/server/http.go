@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -11,6 +12,7 @@ import (
 	jwt2 "github.com/golang-jwt/jwt/v4"
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	networkmappingV1 "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
 	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
@@ -47,6 +49,7 @@ func NewHTTPServer(c *conf.Server,
 	userService *service.UserService,
 	instanceService *service.ComputeInstanceService,
 	powerService *service.ComputePowerService,
+	networkMappingService *service.NetworkMappingService,
 	job *service.CronJob,
 	logger log.Logger) *http.Server {
 
@@ -81,6 +84,7 @@ func NewHTTPServer(c *conf.Server,
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
+	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
