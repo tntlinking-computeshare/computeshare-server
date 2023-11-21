@@ -16,7 +16,7 @@ func (GatewayPort) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("fk_gateway_id").NotEmpty().MaxLen(36),
-		field.Int8("port").Comment("端口号"),
+		field.Int64("port").Comment("端口号"),
 		field.Bool("is_use").Comment("是否使用").Default(false),
 	}
 }

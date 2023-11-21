@@ -3371,8 +3371,8 @@ type GatewayPortMutation struct {
 	typ           string
 	id            *uuid.UUID
 	fk_gateway_id *string
-	port          *int8
-	addport       *int8
+	port          *int64
+	addport       *int64
 	is_use        *bool
 	clearedFields map[string]struct{}
 	done          bool
@@ -3521,13 +3521,13 @@ func (m *GatewayPortMutation) ResetFkGatewayID() {
 }
 
 // SetPort sets the "port" field.
-func (m *GatewayPortMutation) SetPort(i int8) {
+func (m *GatewayPortMutation) SetPort(i int64) {
 	m.port = &i
 	m.addport = nil
 }
 
 // Port returns the value of the "port" field in the mutation.
-func (m *GatewayPortMutation) Port() (r int8, exists bool) {
+func (m *GatewayPortMutation) Port() (r int64, exists bool) {
 	v := m.port
 	if v == nil {
 		return
@@ -3538,7 +3538,7 @@ func (m *GatewayPortMutation) Port() (r int8, exists bool) {
 // OldPort returns the old "port" field's value of the GatewayPort entity.
 // If the GatewayPort object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int8, err error) {
+func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPort is only allowed on UpdateOne operations")
 	}
@@ -3553,7 +3553,7 @@ func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int8, err error) {
 }
 
 // AddPort adds i to the "port" field.
-func (m *GatewayPortMutation) AddPort(i int8) {
+func (m *GatewayPortMutation) AddPort(i int64) {
 	if m.addport != nil {
 		*m.addport += i
 	} else {
@@ -3562,7 +3562,7 @@ func (m *GatewayPortMutation) AddPort(i int8) {
 }
 
 // AddedPort returns the value that was added to the "port" field in this mutation.
-func (m *GatewayPortMutation) AddedPort() (r int8, exists bool) {
+func (m *GatewayPortMutation) AddedPort() (r int64, exists bool) {
 	v := m.addport
 	if v == nil {
 		return
@@ -3702,7 +3702,7 @@ func (m *GatewayPortMutation) SetField(name string, value ent.Value) error {
 		m.SetFkGatewayID(v)
 		return nil
 	case gatewayport.FieldPort:
-		v, ok := value.(int8)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3746,7 +3746,7 @@ func (m *GatewayPortMutation) AddedField(name string) (ent.Value, bool) {
 func (m *GatewayPortMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case gatewayport.FieldPort:
-		v, ok := value.(int8)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
