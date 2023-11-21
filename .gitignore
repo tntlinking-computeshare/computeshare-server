@@ -36,3 +36,4 @@ bin/
 .vscode/
 .idea/
 *.swp
+/http-client.private.env.json

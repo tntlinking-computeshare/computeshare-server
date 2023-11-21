@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ComputeInstance is the model entity for the ComputeInstance schema.
@@ -33,11 +34,11 @@ type ComputeInstance struct {
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
-	Status int8 `json:"status,omitempty"`
+	Status consts.InstanceStatus `json:"status,omitempty"`
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	PeerID string `json:"peer_id,omitempty"`
+	AgentID string `json:"agent_id,omitempty"`
 	// 容器启动命令
 	Command      string `json:"command,omitempty"`
 	selectValues sql.SelectValues
@@ -50,7 +51,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldPeerID, computeinstance.FieldCommand:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldCommand:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -123,7 +124,7 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ci.Status = int8(value.Int64)
+				ci.Status = consts.InstanceStatus(value.Int64)
 			}
 		case computeinstance.FieldContainerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -131,11 +132,11 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.ContainerID = value.String
 			}
-		case computeinstance.FieldPeerID:
+		case computeinstance.FieldAgentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field peer_id", values[i])
+				return fmt.Errorf("unexpected type %T for field agent_id", values[i])
 			} else if value.Valid {
-				ci.PeerID = value.String
+				ci.AgentID = value.String
 			}
 		case computeinstance.FieldCommand:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -206,8 +207,8 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString("container_id=")
 	builder.WriteString(ci.ContainerID)
 	builder.WriteString(", ")
-	builder.WriteString("peer_id=")
-	builder.WriteString(ci.PeerID)
+	builder.WriteString("agent_id=")
+	builder.WriteString(ci.AgentID)
 	builder.WriteString(", ")
 	builder.WriteString("command=")
 	builder.WriteString(ci.Command)

@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ID filters vertices based on their ID field.
@@ -91,8 +92,9 @@ func ExpirationTime(v time.Time) predicate.ComputeInstance {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, v))
+func Status(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, vc))
 }
 
 // ContainerID applies equality check predicate on the "container_id" field. It's identical to ContainerIDEQ.
@@ -100,9 +102,9 @@ func ContainerID(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldContainerID, v))
 }
 
-// PeerID applies equality check predicate on the "peer_id" field. It's identical to PeerIDEQ.
-func PeerID(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldPeerID, v))
+// AgentID applies equality check predicate on the "agent_id" field. It's identical to AgentIDEQ.
+func AgentID(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldAgentID, v))
 }
 
 // Command applies equality check predicate on the "command" field. It's identical to CommandEQ.
@@ -551,43 +553,57 @@ func ExpirationTimeLTE(v time.Time) predicate.ComputeInstance {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, v))
+func StatusEQ(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNEQ(FieldStatus, v))
+func StatusNEQ(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldIn(FieldStatus, vs...))
+func StatusIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = int8(vs[i])
+	}
+	return predicate.ComputeInstance(sql.FieldIn(FieldStatus, v...))
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNotIn(FieldStatus, vs...))
+func StatusNotIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = int8(vs[i])
+	}
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldStatus, v...))
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGT(FieldStatus, v))
+func StatusGT(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldGT(FieldStatus, vc))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGTE(FieldStatus, v))
+func StatusGTE(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldGTE(FieldStatus, vc))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLT(FieldStatus, v))
+func StatusLT(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldLT(FieldStatus, vc))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v int8) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLTE(FieldStatus, v))
+func StatusLTE(v consts.InstanceStatus) predicate.ComputeInstance {
+	vc := int8(v)
+	return predicate.ComputeInstance(sql.FieldLTE(FieldStatus, vc))
 }
 
 // ContainerIDEQ applies the EQ predicate on the "container_id" field.
@@ -665,79 +681,79 @@ func ContainerIDContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldContainerID, v))
 }
 
-// PeerIDEQ applies the EQ predicate on the "peer_id" field.
-func PeerIDEQ(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldPeerID, v))
+// AgentIDEQ applies the EQ predicate on the "agent_id" field.
+func AgentIDEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldAgentID, v))
 }
 
-// PeerIDNEQ applies the NEQ predicate on the "peer_id" field.
-func PeerIDNEQ(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNEQ(FieldPeerID, v))
+// AgentIDNEQ applies the NEQ predicate on the "agent_id" field.
+func AgentIDNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldAgentID, v))
 }
 
-// PeerIDIn applies the In predicate on the "peer_id" field.
-func PeerIDIn(vs ...string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldIn(FieldPeerID, vs...))
+// AgentIDIn applies the In predicate on the "agent_id" field.
+func AgentIDIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldAgentID, vs...))
 }
 
-// PeerIDNotIn applies the NotIn predicate on the "peer_id" field.
-func PeerIDNotIn(vs ...string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNotIn(FieldPeerID, vs...))
+// AgentIDNotIn applies the NotIn predicate on the "agent_id" field.
+func AgentIDNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldAgentID, vs...))
 }
 
-// PeerIDGT applies the GT predicate on the "peer_id" field.
-func PeerIDGT(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGT(FieldPeerID, v))
+// AgentIDGT applies the GT predicate on the "agent_id" field.
+func AgentIDGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldAgentID, v))
 }
 
-// PeerIDGTE applies the GTE predicate on the "peer_id" field.
-func PeerIDGTE(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGTE(FieldPeerID, v))
+// AgentIDGTE applies the GTE predicate on the "agent_id" field.
+func AgentIDGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldAgentID, v))
 }
 
-// PeerIDLT applies the LT predicate on the "peer_id" field.
-func PeerIDLT(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLT(FieldPeerID, v))
+// AgentIDLT applies the LT predicate on the "agent_id" field.
+func AgentIDLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldAgentID, v))
 }
 
-// PeerIDLTE applies the LTE predicate on the "peer_id" field.
-func PeerIDLTE(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLTE(FieldPeerID, v))
+// AgentIDLTE applies the LTE predicate on the "agent_id" field.
+func AgentIDLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldAgentID, v))
 }
 
-// PeerIDContains applies the Contains predicate on the "peer_id" field.
-func PeerIDContains(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContains(FieldPeerID, v))
+// AgentIDContains applies the Contains predicate on the "agent_id" field.
+func AgentIDContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldAgentID, v))
 }
 
-// PeerIDHasPrefix applies the HasPrefix predicate on the "peer_id" field.
-func PeerIDHasPrefix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldPeerID, v))
+// AgentIDHasPrefix applies the HasPrefix predicate on the "agent_id" field.
+func AgentIDHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldAgentID, v))
 }
 
-// PeerIDHasSuffix applies the HasSuffix predicate on the "peer_id" field.
-func PeerIDHasSuffix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldPeerID, v))
+// AgentIDHasSuffix applies the HasSuffix predicate on the "agent_id" field.
+func AgentIDHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldAgentID, v))
 }
 
-// PeerIDIsNil applies the IsNil predicate on the "peer_id" field.
-func PeerIDIsNil() predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldIsNull(FieldPeerID))
+// AgentIDIsNil applies the IsNil predicate on the "agent_id" field.
+func AgentIDIsNil() predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIsNull(FieldAgentID))
 }
 
-// PeerIDNotNil applies the NotNil predicate on the "peer_id" field.
-func PeerIDNotNil() predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNotNull(FieldPeerID))
+// AgentIDNotNil applies the NotNil predicate on the "agent_id" field.
+func AgentIDNotNil() predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotNull(FieldAgentID))
 }
 
-// PeerIDEqualFold applies the EqualFold predicate on the "peer_id" field.
-func PeerIDEqualFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEqualFold(FieldPeerID, v))
+// AgentIDEqualFold applies the EqualFold predicate on the "agent_id" field.
+func AgentIDEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldAgentID, v))
 }
 
-// PeerIDContainsFold applies the ContainsFold predicate on the "peer_id" field.
-func PeerIDContainsFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContainsFold(FieldPeerID, v))
+// AgentIDContainsFold applies the ContainsFold predicate on the "agent_id" field.
+func AgentIDContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldAgentID, v))
 }
 
 // CommandEQ applies the EQ predicate on the "command" field.

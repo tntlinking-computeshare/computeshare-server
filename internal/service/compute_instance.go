@@ -69,10 +69,12 @@ func (s *ComputeInstanceService) ListComputeInstanceDuration(ctx context.Context
 }
 func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInstanceRequest) (*pb.CreateInstanceReply, error) {
 	instance, err := s.uc.Create(ctx, &biz.ComputeInstanceCreate{
-		SpecId:   req.GetSpecId(),
-		ImageId:  req.GetImageId(),
-		Duration: req.Duration,
-		Name:     req.Name,
+		SpecId:    req.GetSpecId(),
+		ImageId:   req.GetImageId(),
+		Duration:  req.Duration,
+		Name:      req.Name,
+		PublicKey: req.PublicKey,
+		Password:  req.Password,
 	})
 
 	if err != nil {

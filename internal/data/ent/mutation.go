@@ -26,6 +26,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 const (
@@ -1089,10 +1090,10 @@ type ComputeInstanceMutation struct {
 	image           *string
 	port            *string
 	expiration_time *time.Time
-	status          *int8
-	addstatus       *int8
+	status          *consts.InstanceStatus
+	addstatus       *consts.InstanceStatus
 	container_id    *string
-	peer_id         *string
+	agent_id        *string
 	command         *string
 	clearedFields   map[string]struct{}
 	done            bool
@@ -1470,13 +1471,13 @@ func (m *ComputeInstanceMutation) ResetExpirationTime() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ComputeInstanceMutation) SetStatus(i int8) {
-	m.status = &i
+func (m *ComputeInstanceMutation) SetStatus(cs consts.InstanceStatus) {
+	m.status = &cs
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ComputeInstanceMutation) Status() (r int8, exists bool) {
+func (m *ComputeInstanceMutation) Status() (r consts.InstanceStatus, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -1487,7 +1488,7 @@ func (m *ComputeInstanceMutation) Status() (r int8, exists bool) {
 // OldStatus returns the old "status" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v int8, err error) {
+func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v consts.InstanceStatus, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -1501,17 +1502,17 @@ func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v int8, err er
 	return oldValue.Status, nil
 }
 
-// AddStatus adds i to the "status" field.
-func (m *ComputeInstanceMutation) AddStatus(i int8) {
+// AddStatus adds cs to the "status" field.
+func (m *ComputeInstanceMutation) AddStatus(cs consts.InstanceStatus) {
 	if m.addstatus != nil {
-		*m.addstatus += i
+		*m.addstatus += cs
 	} else {
-		m.addstatus = &i
+		m.addstatus = &cs
 	}
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *ComputeInstanceMutation) AddedStatus() (r int8, exists bool) {
+func (m *ComputeInstanceMutation) AddedStatus() (r consts.InstanceStatus, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -1574,53 +1575,53 @@ func (m *ComputeInstanceMutation) ResetContainerID() {
 	delete(m.clearedFields, computeinstance.FieldContainerID)
 }
 
-// SetPeerID sets the "peer_id" field.
-func (m *ComputeInstanceMutation) SetPeerID(s string) {
-	m.peer_id = &s
+// SetAgentID sets the "agent_id" field.
+func (m *ComputeInstanceMutation) SetAgentID(s string) {
+	m.agent_id = &s
 }
 
-// PeerID returns the value of the "peer_id" field in the mutation.
-func (m *ComputeInstanceMutation) PeerID() (r string, exists bool) {
-	v := m.peer_id
+// AgentID returns the value of the "agent_id" field in the mutation.
+func (m *ComputeInstanceMutation) AgentID() (r string, exists bool) {
+	v := m.agent_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldPeerID returns the old "peer_id" field's value of the ComputeInstance entity.
+// OldAgentID returns the old "agent_id" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldPeerID(ctx context.Context) (v string, err error) {
+func (m *ComputeInstanceMutation) OldAgentID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPeerID is only allowed on UpdateOne operations")
+		return v, errors.New("OldAgentID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPeerID requires an ID field in the mutation")
+		return v, errors.New("OldAgentID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPeerID: %w", err)
+		return v, fmt.Errorf("querying old value for OldAgentID: %w", err)
 	}
-	return oldValue.PeerID, nil
+	return oldValue.AgentID, nil
 }
 
-// ClearPeerID clears the value of the "peer_id" field.
-func (m *ComputeInstanceMutation) ClearPeerID() {
-	m.peer_id = nil
-	m.clearedFields[computeinstance.FieldPeerID] = struct{}{}
+// ClearAgentID clears the value of the "agent_id" field.
+func (m *ComputeInstanceMutation) ClearAgentID() {
+	m.agent_id = nil
+	m.clearedFields[computeinstance.FieldAgentID] = struct{}{}
 }
 
-// PeerIDCleared returns if the "peer_id" field was cleared in this mutation.
-func (m *ComputeInstanceMutation) PeerIDCleared() bool {
-	_, ok := m.clearedFields[computeinstance.FieldPeerID]
+// AgentIDCleared returns if the "agent_id" field was cleared in this mutation.
+func (m *ComputeInstanceMutation) AgentIDCleared() bool {
+	_, ok := m.clearedFields[computeinstance.FieldAgentID]
 	return ok
 }
 
-// ResetPeerID resets all changes to the "peer_id" field.
-func (m *ComputeInstanceMutation) ResetPeerID() {
-	m.peer_id = nil
-	delete(m.clearedFields, computeinstance.FieldPeerID)
+// ResetAgentID resets all changes to the "agent_id" field.
+func (m *ComputeInstanceMutation) ResetAgentID() {
+	m.agent_id = nil
+	delete(m.clearedFields, computeinstance.FieldAgentID)
 }
 
 // SetCommand sets the "command" field.
@@ -1734,8 +1735,8 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.container_id != nil {
 		fields = append(fields, computeinstance.FieldContainerID)
 	}
-	if m.peer_id != nil {
-		fields = append(fields, computeinstance.FieldPeerID)
+	if m.agent_id != nil {
+		fields = append(fields, computeinstance.FieldAgentID)
 	}
 	if m.command != nil {
 		fields = append(fields, computeinstance.FieldCommand)
@@ -1766,8 +1767,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case computeinstance.FieldContainerID:
 		return m.ContainerID()
-	case computeinstance.FieldPeerID:
-		return m.PeerID()
+	case computeinstance.FieldAgentID:
+		return m.AgentID()
 	case computeinstance.FieldCommand:
 		return m.Command()
 	}
@@ -1797,8 +1798,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldStatus(ctx)
 	case computeinstance.FieldContainerID:
 		return m.OldContainerID(ctx)
-	case computeinstance.FieldPeerID:
-		return m.OldPeerID(ctx)
+	case computeinstance.FieldAgentID:
+		return m.OldAgentID(ctx)
 	case computeinstance.FieldCommand:
 		return m.OldCommand(ctx)
 	}
@@ -1860,7 +1861,7 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		m.SetExpirationTime(v)
 		return nil
 	case computeinstance.FieldStatus:
-		v, ok := value.(int8)
+		v, ok := value.(consts.InstanceStatus)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1873,12 +1874,12 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetContainerID(v)
 		return nil
-	case computeinstance.FieldPeerID:
+	case computeinstance.FieldAgentID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetPeerID(v)
+		m.SetAgentID(v)
 		return nil
 	case computeinstance.FieldCommand:
 		v, ok := value.(string)
@@ -1918,7 +1919,7 @@ func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case computeinstance.FieldStatus:
-		v, ok := value.(int8)
+		v, ok := value.(consts.InstanceStatus)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1938,8 +1939,8 @@ func (m *ComputeInstanceMutation) ClearedFields() []string {
 	if m.FieldCleared(computeinstance.FieldContainerID) {
 		fields = append(fields, computeinstance.FieldContainerID)
 	}
-	if m.FieldCleared(computeinstance.FieldPeerID) {
-		fields = append(fields, computeinstance.FieldPeerID)
+	if m.FieldCleared(computeinstance.FieldAgentID) {
+		fields = append(fields, computeinstance.FieldAgentID)
 	}
 	if m.FieldCleared(computeinstance.FieldCommand) {
 		fields = append(fields, computeinstance.FieldCommand)
@@ -1964,8 +1965,8 @@ func (m *ComputeInstanceMutation) ClearField(name string) error {
 	case computeinstance.FieldContainerID:
 		m.ClearContainerID()
 		return nil
-	case computeinstance.FieldPeerID:
-		m.ClearPeerID()
+	case computeinstance.FieldAgentID:
+		m.ClearAgentID()
 		return nil
 	case computeinstance.FieldCommand:
 		m.ClearCommand()
@@ -2005,8 +2006,8 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 	case computeinstance.FieldContainerID:
 		m.ResetContainerID()
 		return nil
-	case computeinstance.FieldPeerID:
-		m.ResetPeerID()
+	case computeinstance.FieldAgentID:
+		m.ResetAgentID()
 		return nil
 	case computeinstance.FieldCommand:
 		m.ResetCommand()

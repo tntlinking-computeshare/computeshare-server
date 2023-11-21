@@ -2,17 +2,16 @@ package biz
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	transhttp "github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
+	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -28,6 +27,7 @@ type ComputeInstanceRepo interface {
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	Update(ctx context.Context, id uuid.UUID, instance *ComputeInstance) error
+	UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error
 	SetInstanceExpiration(ctx context.Context) error
 	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
 	SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *ComputeInstanceRds) error
@@ -44,6 +44,7 @@ type ComputeInstanceUsercase struct {
 	instanceRepo ComputeInstanceRepo
 	imageRepo    ComputeImageRepo
 	agentRepo    AgentRepo
+	taskRepo     TaskRepo
 	p2pClient    *P2pClient
 	log          *log.Helper
 }
@@ -53,12 +54,14 @@ func NewComputeInstanceUsercase(
 	instanceRepo ComputeInstanceRepo,
 	imageRepo ComputeImageRepo,
 	agentRepo AgentRepo,
+	taskRepo TaskRepo,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:     specRepo,
 		instanceRepo: instanceRepo,
 		imageRepo:    imageRepo,
 		agentRepo:    agentRepo,
+		taskRepo:     taskRepo,
 		log:          log.NewHelper(logger),
 	}
 }
@@ -102,108 +105,72 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
 		Command:        computeImage.Command,
 		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
-		PeerID:         agent.PeerId,
-		Status:         InstanceStatusStarting,
+		AgentId:        agent.ID.String(),
+		Status:         consts.InstanceStatusCreating,
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)
+	if err != nil {
+		return nil, err
+	}
 
-	go uc.CreateInstanceOnAgent(agent.PeerId, instance)
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_CREATE, func() (string, string) {
+		return cic.PublicKey, cic.Password
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return instance, err
 }
 
+func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *ComputeInstance, cmd queue.TaskCmd, publicKeyAndPassword func() (string, string)) error {
+
+	publicKey := ""
+	password := ""
+
+	if publicKeyAndPassword != nil {
+		publicKey, password = publicKeyAndPassword()
+	}
+
+	taskParam := queue.ComputeInstanceTaskParamVO{
+		Id:         uuid.NewString(),
+		Name:       instance.Name,
+		Cpu:        instance.GetCore(),
+		Memory:     instance.GetMemory(),
+		Image:      instance.Image,
+		PublicKey:  publicKey,
+		Password:   password,
+		InstanceId: instance.ID.String(),
+	}
+	paramData, err := json.Marshal(taskParam)
+	if err != nil {
+		return err
+	}
+	param := string(paramData)
+	task := Task{
+		AgentID:    instance.AgentId,
+		Cmd:        cmd,
+		Params:     &param,
+		Status:     queue.TaskStatus_CREATED,
+		CreateTime: time.Now(),
+	}
+	err = uc.taskRepo.CreateTask(ctx, &task)
+	return err
+}
+
 func (uc *ComputeInstanceUsercase) Delete(ctx context.Context, id uuid.UUID) error {
-	go func() {
-		instance, err := uc.Get(ctx, id)
-		if err != nil {
-			return
-		}
-
-		if instance.ContainerID == "" || instance.PeerID == "" {
-			return
-		}
-
-		vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
-		if err != nil {
-			return
-		}
-		defer cleanup()
-
-		_, err = vmClient.DeleteVm(ctx, &clientcomputev1.DeleteVmRequest{
-			Id: instance.ContainerID,
-		})
-
-		if err != nil {
-			return
-		}
-	}()
-	return uc.instanceRepo.Delete(ctx, id)
-}
-
-func (uc *ComputeInstanceUsercase) CreateInstanceOnAgent(peerId string, instance *ComputeInstance) {
-	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
-
-	vmClient, cleanup, err := uc.getVmClient(peerId)
+	instance, err := uc.Get(ctx, id)
 	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return
-	}
-	defer cleanup()
-
-	reply, err := vmClient.CreateVm(ctx, &clientcomputev1.CreateVmRequest{
-		Image:   instance.Image,
-		Port:    instance.Port,
-		Command: strings.Fields(instance.Command),
-	})
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return
-	}
-	fmt.Println("containerId:", reply.GetId())
-
-	instance.Status = InstanceStatusRunning
-	instance.PeerID = peerId
-	instance.ContainerID = reply.GetId()
-
-	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
-
-	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return
-	}
-}
-
-func (uc *ComputeInstanceUsercase) getVmClient(peerId string) (clientcomputev1.VmHTTPClient, func(), error) {
-	ip, port, err := uc.p2pClient.ForwardWithRandomPort(peerId)
-	if err != nil {
-		return nil, nil, err
+		return err
 	}
 
-	time.Sleep(time.Second * 2)
-
-	client, err := transhttp.NewClient(
-		context.Background(),
-		transhttp.WithMiddleware(
-			recovery.Recovery(),
-		),
-		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
-		transhttp.WithTimeout(time.Second*10),
-	)
-
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_DELETE, nil)
 	if err != nil {
-		uc.log.Error("创建容器部署指令失败")
-		uc.log.Error(err)
-		return nil, nil, err
+		return err
 	}
 
-	vmClient := clientcomputev1.NewVmHTTPClient(client)
-	return vmClient, func() {
-		_ = client.Close()
-	}, nil
+	return uc.instanceRepo.UpdateStatus(ctx, instance.ID, consts.InstanceStatusDeleting)
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owner string) ([]*ComputeInstance, error) {
@@ -224,31 +191,18 @@ func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) erro
 		return err
 	}
 
-	if instance.ContainerID == "" || instance.PeerID == "" {
-		return fmt.Errorf("instance is not avaliable")
-	}
-
-	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
-	if err != nil {
-		return err
-	}
-	defer cleanup()
-
-	_, err = vmClient.StartVm(ctx, &clientcomputev1.GetVmRequest{
-		Id: instance.ContainerID,
-	})
-
-	if err != nil {
-		return err
-	}
-
-	instance.Status = InstanceStatusRunning
+	instance.Status = consts.InstanceStatusRunning
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error(err)
+		return err
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_START, nil)
+	if err != nil {
 		return err
 	}
 
@@ -262,31 +216,18 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 		return err
 	}
 
-	if instance.ContainerID == "" || instance.PeerID == "" {
-		return fmt.Errorf("instance is not avaliable")
-	}
-
-	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
-	if err != nil {
-		return err
-	}
-	defer cleanup()
-
-	_, err = vmClient.StopVm(ctx, &clientcomputev1.GetVmRequest{
-		Id: instance.ContainerID,
-	})
-
-	if err != nil {
-		return err
-	}
-
-	instance.Status = InstanceStatusTerminal
+	instance.Status = consts.InstanceStatusClosing
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 
 	if err != nil {
 		uc.log.Error("创建容器部署指令失败")
 		uc.log.Error(err)
+		return err
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_SHUTDOWN, nil)
+	if err != nil {
 		return err
 	}
 
@@ -299,6 +240,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+// Terminal Deprecate
 func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
@@ -311,11 +253,11 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if instance.PeerID == "" {
+	if instance.AgentId == "" {
 		return
 	}
 
-	ip, port, err := uc.p2pClient.ForwardWithRandomPort(instance.PeerID)
+	ip, port, err := uc.p2pClient.ForwardWithRandomPort(instance.AgentId)
 	if err != nil {
 		return
 	}
@@ -359,49 +301,6 @@ func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Reque
 			return
 		}
 	}
-}
-
-func (uc *ComputeInstanceUsercase) SyncContainerStats() {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-	defer cancel()
-	list, err := uc.instanceRepo.ListAll(ctx)
-	if err != nil {
-		return
-	}
-
-	for _, instance := range list {
-		ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
-		uc.syncInstanceStats(ctx, instance)
-	}
-}
-
-func (uc *ComputeInstanceUsercase) syncInstanceStats(ctx context.Context, instance *ComputeInstance) {
-	if instance.ContainerID == "" || instance.PeerID == "" {
-		return
-	}
-
-	vmClient, cleanup, err := uc.getVmClient(instance.PeerID)
-	if err != nil {
-		return
-	}
-	defer cleanup()
-
-	vm, err := vmClient.GetVm(ctx, &clientcomputev1.GetVmRequest{
-		Id: instance.ContainerID,
-	})
-	if err != nil {
-		return
-	}
-
-	instanceRdb := &ComputeInstanceRds{
-		ID:          instance.ID.String(),
-		CpuUsage:    vm.CpuUsage,
-		MemoryUsage: vm.MemoryUsage,
-		StatsTime:   time.Now(),
-	}
-
-	_ = uc.instanceRepo.SaveInstanceStats(ctx, instance.ID, instanceRdb)
-
 }
 
 // SyncContainerOverdue 同步资源实例的过期状态

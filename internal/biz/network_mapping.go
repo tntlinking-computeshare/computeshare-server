@@ -157,7 +157,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	}
 	param := nptp.String()
 	task := &Task{
-		AgentID: ci.PeerID,
+		AgentID: ci.AgentId,
 		//   NAT_PROXY_CREATE = 6; // nat 代理创建
 		Cmd: queue.TaskCmd_NAT_PROXY_CREATE,
 		// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO

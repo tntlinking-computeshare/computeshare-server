@@ -130,6 +130,8 @@ message CreateInstanceRequest {
 	int32 image_id = 2;
 	int32 duration = 3;
 	string name = 4;
+	string public_key = 5;
+	string password = 6;
 }
 
 message PortBinding {

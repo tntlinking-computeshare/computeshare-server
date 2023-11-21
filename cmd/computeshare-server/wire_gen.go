@@ -39,7 +39,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	gatewayPortRepo := data.NewGatewayPortRepo(dataData, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, logger)
 	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, computeInstanceUsercase, logger)
 	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingUseCase, logger)
 	queueTaskService := service.NewQueueTaskService(taskUseCase, logger)
