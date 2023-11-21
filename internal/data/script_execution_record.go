@@ -62,7 +62,7 @@ func (s *scriptExecutionRecordRepo) FindByID(ctx context.Context, id int32) (*bi
 	return s.toBiz(first, 0), nil
 }
 
-func (s *scriptExecutionRecordRepo) PageByScriptId(ctx context.Context, userId string, page int32, size int32) ([]*biz.ScriptExecutionRecord, int32, error) {
+func (s *scriptExecutionRecordRepo) PageByUserId(ctx context.Context, userId string, page int32, size int32) ([]*biz.ScriptExecutionRecord, int32, error) {
 	count, err := s.data.db.ScriptExecutionRecord.Query().Select(scriptexecutionrecord.FieldID).Where(scriptexecutionrecord.UserID(userId)).Count(ctx)
 	if err != nil {
 		return nil, 0, err
