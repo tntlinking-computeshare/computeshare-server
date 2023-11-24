@@ -3371,7 +3371,7 @@ type GatewayPortMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	fk_gateway_id *string
+	fk_gateway_id *uuid.UUID
 	port          *int64
 	addport       *int64
 	is_use        *bool
@@ -3486,12 +3486,12 @@ func (m *GatewayPortMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (m *GatewayPortMutation) SetFkGatewayID(s string) {
-	m.fk_gateway_id = &s
+func (m *GatewayPortMutation) SetFkGatewayID(u uuid.UUID) {
+	m.fk_gateway_id = &u
 }
 
 // FkGatewayID returns the value of the "fk_gateway_id" field in the mutation.
-func (m *GatewayPortMutation) FkGatewayID() (r string, exists bool) {
+func (m *GatewayPortMutation) FkGatewayID() (r uuid.UUID, exists bool) {
 	v := m.fk_gateway_id
 	if v == nil {
 		return
@@ -3502,7 +3502,7 @@ func (m *GatewayPortMutation) FkGatewayID() (r string, exists bool) {
 // OldFkGatewayID returns the old "fk_gateway_id" field's value of the GatewayPort entity.
 // If the GatewayPort object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GatewayPortMutation) OldFkGatewayID(ctx context.Context) (v string, err error) {
+func (m *GatewayPortMutation) OldFkGatewayID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFkGatewayID is only allowed on UpdateOne operations")
 	}
@@ -3696,7 +3696,7 @@ func (m *GatewayPortMutation) OldField(ctx context.Context, name string) (ent.Va
 func (m *GatewayPortMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case gatewayport.FieldFkGatewayID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

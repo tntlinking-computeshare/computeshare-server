@@ -121,24 +121,6 @@ func init() {
 	gateway.DefaultID = gatewayDescID.Default.(func() uuid.UUID)
 	gatewayportFields := schema.GatewayPort{}.Fields()
 	_ = gatewayportFields
-	// gatewayportDescFkGatewayID is the schema descriptor for fk_gateway_id field.
-	gatewayportDescFkGatewayID := gatewayportFields[1].Descriptor()
-	// gatewayport.FkGatewayIDValidator is a validator for the "fk_gateway_id" field. It is called by the builders before save.
-	gatewayport.FkGatewayIDValidator = func() func(string) error {
-		validators := gatewayportDescFkGatewayID.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(fk_gateway_id string) error {
-			for _, fn := range fns {
-				if err := fn(fk_gateway_id); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
 	// gatewayportDescIsUse is the schema descriptor for is_use field.
 	gatewayportDescIsUse := gatewayportFields[3].Descriptor()
 	// gatewayport.DefaultIsUse holds the default value on creation for the is_use field.

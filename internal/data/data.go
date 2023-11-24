@@ -21,7 +21,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//go generate ./ent
+//go:generate go generate ./ent
 
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(

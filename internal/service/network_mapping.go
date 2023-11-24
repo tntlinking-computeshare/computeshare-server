@@ -47,7 +47,7 @@ func (s *NetworkMappingService) PageNetworkMapping(ctx context.Context, req *pb.
 	if err != nil {
 		return nil, err
 	}
-	list, total, err := s.nm.PageNetorkMapping(ctx, computerId, req.Page, req.Size)
+	list, total, err := s.nm.PageNetworkMapping(ctx, computerId, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (s *NetworkMappingService) GetNetworkMapping(ctx context.Context, req *pb.G
 	if err != nil {
 		return nil, err
 	}
-	networkmapping, err := s.nm.GetNetorkMapping(ctx, id)
+	networkmapping, err := s.nm.GetNetworkMapping(ctx, id)
 	if err != nil {
 		return &pb.GetNetworkMappingReply{
 			Code:           500,
@@ -86,7 +86,7 @@ func (s *NetworkMappingService) DeleteNetworkMapping(ctx context.Context, req *p
 	if err != nil {
 		return nil, err
 	}
-	err = s.nm.DeleteNetorkMapping(ctx, id)
+	err = s.nm.DeleteNetworkMapping(ctx, id)
 	if err != nil {
 		return &pb.DeleteNetworkMappingReply{
 			Code:    500,

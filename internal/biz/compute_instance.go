@@ -7,11 +7,9 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
-	"net/http"
 	"time"
 )
 
@@ -40,13 +38,15 @@ type ComputeImageRepo interface {
 }
 
 type ComputeInstanceUsercase struct {
-	specRepo     ComputeSpecRepo
-	instanceRepo ComputeInstanceRepo
-	imageRepo    ComputeImageRepo
-	agentRepo    AgentRepo
-	taskRepo     TaskRepo
-	p2pClient    *P2pClient
-	log          *log.Helper
+	specRepo        ComputeSpecRepo
+	instanceRepo    ComputeInstanceRepo
+	imageRepo       ComputeImageRepo
+	agentRepo       AgentRepo
+	taskRepo        TaskRepo
+	gatewayRepo     GatewayRepo
+	gatewayPortRepo GatewayPortRepo
+	p2pClient       *P2pClient
+	log             *log.Helper
 }
 
 func NewComputeInstanceUsercase(
@@ -55,14 +55,18 @@ func NewComputeInstanceUsercase(
 	imageRepo ComputeImageRepo,
 	agentRepo AgentRepo,
 	taskRepo TaskRepo,
+	gatewayRepo GatewayRepo,
+	gatewayPortRepo GatewayPortRepo,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
-		specRepo:     specRepo,
-		instanceRepo: instanceRepo,
-		imageRepo:    imageRepo,
-		agentRepo:    agentRepo,
-		taskRepo:     taskRepo,
-		log:          log.NewHelper(logger),
+		specRepo:        specRepo,
+		instanceRepo:    instanceRepo,
+		imageRepo:       imageRepo,
+		agentRepo:       agentRepo,
+		taskRepo:        taskRepo,
+		gatewayRepo:     gatewayRepo,
+		gatewayPortRepo: gatewayPortRepo,
+		log:             log.NewHelper(logger),
 	}
 }
 
@@ -234,73 +238,54 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 	return nil
 }
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
-
 // Terminal Deprecate
-func (uc *ComputeInstanceUsercase) Terminal(w http.ResponseWriter, r *http.Request) {
-
-	r.ParseForm()
-	instanceId, err := uuid.Parse(r.Form.Get("instanceId"))
+func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId uuid.UUID) (string, error) {
+	instance, err := uc.Get(ctx, instanceId)
 	if err != nil {
-		return
+		return "", err
 	}
-	instance, err := uc.Get(context.Background(), instanceId)
+
+	// 查询实例需要链接到的gateway
+	// 1). 判断此实例有无配置端口映射，如果配置，直接使用此端口映射对应的gatewayId
+	// 2). 如果此实例未进行端口映射， 选择一个gateway进行端口映射
+	gateway, err := uc.gatewayRepo.FindInstanceSuitableGateway(ctx, instanceId)
 	if err != nil {
-		return
+		return "", err
 	}
 
-	if instance.AgentId == "" {
-		return
+	gp, err := uc.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, gateway.ID)
+	taskParam := queue.NatNetworkMappingTaskParamVO{
+		Id:           uuid.NewString(),
+		Name:         instance.Name,
+		InstanceName: instance.Name,
+		InstancePort: 0,
+		RemotePort:   gp.Port,
+		GatewayId:    gateway.ID.String(),
+		GatewayIp:    gateway.IP,
+		GatewayPort:  int64(gateway.Port),
 	}
-
-	ip, port, err := uc.p2pClient.ForwardWithRandomPort(instance.AgentId)
+	paramData, err := json.Marshal(taskParam)
 	if err != nil {
-		return
+		return "", err
 	}
+	param := string(paramData)
+	task := Task{
+		AgentID:    instance.AgentId,
+		Cmd:        queue.TaskCmd_VM_VNC_CONNECT,
+		Params:     &param,
+		Status:     queue.TaskStatus_CREATED,
+		CreateTime: time.Now(),
+	}
+	err = uc.taskRepo.CreateTask(ctx, &task)
 
-	// websocket握手
-	// 建立与目标WebSocket服务器的连接
-	targetConn, _, err := websocket.DefaultDialer.Dial(fmt.Sprintf("ws://%s:%s/v1/vm/%s/terminal?container=%s&workdir=/bin", ip, port, instanceId, instance.ContainerID), nil)
+	gp.IsUse = true
+	err = uc.gatewayPortRepo.Update(ctx, gp)
 	if err != nil {
-		uc.log.Error(err)
-		return
+		return "", err
 	}
-	defer targetConn.Close()
 
-	// 升级客户端连接为WebSocket
-	clientConn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		uc.log.Error(err)
-		return
-	}
-	defer clientConn.Close()
+	return fmt.Sprintf("http://%s:%d/vnc.html", gateway.IP, gp.Port), nil
 
-	// 开始在两个WebSocket连接之间传递消息
-	go func() {
-		for {
-			msgType, msg, err := clientConn.ReadMessage()
-			if err != nil {
-				return
-			}
-			if err := targetConn.WriteMessage(msgType, msg); err != nil {
-				return
-			}
-		}
-	}()
-
-	for {
-		msgType, msg, err := targetConn.ReadMessage()
-		if err != nil {
-			return
-		}
-		if err := clientConn.WriteMessage(msgType, msg); err != nil {
-			return
-		}
-	}
 }
 
 // SyncContainerOverdue 同步资源实例的过期状态

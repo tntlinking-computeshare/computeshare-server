@@ -21,8 +21,8 @@ type GatewayPortCreate struct {
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpc *GatewayPortCreate) SetFkGatewayID(s string) *GatewayPortCreate {
-	gpc.mutation.SetFkGatewayID(s)
+func (gpc *GatewayPortCreate) SetFkGatewayID(u uuid.UUID) *GatewayPortCreate {
+	gpc.mutation.SetFkGatewayID(u)
 	return gpc
 }
 
@@ -110,11 +110,6 @@ func (gpc *GatewayPortCreate) check() error {
 	if _, ok := gpc.mutation.FkGatewayID(); !ok {
 		return &ValidationError{Name: "fk_gateway_id", err: errors.New(`ent: missing required field "GatewayPort.fk_gateway_id"`)}
 	}
-	if v, ok := gpc.mutation.FkGatewayID(); ok {
-		if err := gatewayport.FkGatewayIDValidator(v); err != nil {
-			return &ValidationError{Name: "fk_gateway_id", err: fmt.Errorf(`ent: validator failed for field "GatewayPort.fk_gateway_id": %w`, err)}
-		}
-	}
 	if _, ok := gpc.mutation.Port(); !ok {
 		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "GatewayPort.port"`)}
 	}
@@ -157,7 +152,7 @@ func (gpc *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) 
 		_spec.ID.Value = &id
 	}
 	if value, ok := gpc.mutation.FkGatewayID(); ok {
-		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeString, value)
+		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 		_node.FkGatewayID = value
 	}
 	if value, ok := gpc.mutation.Port(); ok {

@@ -130,7 +130,7 @@ var (
 	// GatewayPortsColumns holds the columns for the "gateway_ports" table.
 	GatewayPortsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "fk_gateway_id", Type: field.TypeString, Size: 36},
+		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "port", Type: field.TypeInt64},
 		{Name: "is_use", Type: field.TypeBool, Default: false},
 	}

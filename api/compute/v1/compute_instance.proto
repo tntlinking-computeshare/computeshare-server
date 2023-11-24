@@ -74,6 +74,12 @@ service ComputeInstance {
 			body: "*",
 		};
 	}
+
+	rpc GetInstanceConsole(GetInstanceRequest) returns (GetInstanceConsoleReply) {
+		option (google.api.http) = {
+			get: "/v1/instance/{id}/console"
+		};
+	}
 }
 
 message ListComputeSpecRequest {
@@ -202,4 +208,10 @@ message StopInstanceReply {
 message StartInstanceReply {
 	int32 code = 1;
 	string message = 2;
+}
+
+message GetInstanceConsoleReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
 }

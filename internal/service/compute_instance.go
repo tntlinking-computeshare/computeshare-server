@@ -9,7 +9,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
-	"net/http"
 )
 
 type ComputeInstanceService struct {
@@ -174,6 +173,19 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 	}
 }
 
-func (s *ComputeInstanceService) Terminal(w http.ResponseWriter, r *http.Request) {
-	s.uc.Terminal(w, r)
+func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceConsoleReply, error) {
+	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	consoleUrl, err := s.uc.GetVncConsole(ctx, instanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.GetInstanceConsoleReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    consoleUrl,
+	}, nil
 }

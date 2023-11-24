@@ -59,6 +59,7 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetStatus(in.Status).
 		SetPort(in.Port).
 		SetCommand(in.Command).
+		SetAgentID(in.AgentId).
 		Save(ctx)
 
 	if err != nil {

@@ -101,13 +101,13 @@ Authorization: Bearer {{ access_token }}
   "specId": 1,
   "imageId": 1,
   "duration": 1,
-  "name": "my-vm2",
+  "name": "my-vm",
   "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
   "password":  "Abcd12345"
 }
 
 ### 关闭虚拟机
-PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/stop
+PUT  http://127.0.0.1:8000/v1/instance/{{instanceId}}/stop
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -116,13 +116,13 @@ Authorization: Bearer {{ access_token }}
 }
 
 ### 启动虚拟机
-PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
+PUT  http://127.0.0.1:8000/v1/instance/{{instanceId}}/start
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  http://127.0.0.1:8000/v1/instance/59029fbc-54ee-4e51-b86b-570edafc4fc7
+DELETE  http://127.0.0.1:8000/v1/instance/{{instanceId}}
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -145,9 +145,9 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {
-  "name": "redis-port",
-  "computer_id": "00d460f0-ec1a-4a0f-a452-1afb4b5d1686",
-  "computer_port": 6379
+  "name": "ssh2-port",
+  "computer_id": "a5992431-dc1c-49b7-a537-f9e40b2355b6",
+  "computer_port": 22
 }
 
 ### 查询网络映射
@@ -161,7 +161,7 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 ### 删除网络映射
-DELETE   http://127.0.0.1:8000/v1/network-mappings/7f4d03d5-445e-4b1b-9a3c-227123a0f9c6
+DELETE   http://127.0.0.1:8000/v1/network-mappings/62470099-64a0-40e3-9469-c2ecbc7b35ce
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -181,3 +181,8 @@ Authorization: Bearer {{ access_token }}
   "agentId":"00c460f0-ec1a-4a0f-a452-1afb4b5d1686",
   "status":1,
 }
+
+### 获取VNC CONSOLE
+GET http://127.0.0.1:8000/v1/instance/{{ instanceId }}/console
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
