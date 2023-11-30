@@ -179,7 +179,7 @@ func init() {
 		}
 	}()
 	// networkmappingDescStatus is the schema descriptor for status field.
-	networkmappingDescStatus := networkmappingFields[6].Descriptor()
+	networkmappingDescStatus := networkmappingFields[5].Descriptor()
 	// networkmapping.DefaultStatus holds the default value on creation for the status field.
 	networkmapping.DefaultStatus = networkmappingDescStatus.Default.(int)
 	// networkmappingDescID is the schema descriptor for id field.

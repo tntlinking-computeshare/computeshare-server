@@ -634,6 +634,22 @@ func (c *ComputeInstanceClient) GetX(ctx context.Context, id uuid.UUID) *Compute
 	return obj
 }
 
+// QueryNetworkMappings queries the networkMappings edge of a ComputeInstance.
+func (c *ComputeInstanceClient) QueryNetworkMappings(ci *ComputeInstance) *NetworkMappingQuery {
+	query := (&NetworkMappingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ci.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(computeinstance.Table, computeinstance.FieldID, id),
+			sqlgraph.To(networkmapping.Table, networkmapping.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, computeinstance.NetworkMappingsTable, computeinstance.NetworkMappingsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ComputeInstanceClient) Hooks() []Hook {
 	return c.hooks.ComputeInstance
@@ -1340,6 +1356,22 @@ func (c *NetworkMappingClient) GetX(ctx context.Context, id uuid.UUID) *NetworkM
 		panic(err)
 	}
 	return obj
+}
+
+// QueryFkComputerID queries the fk_computer_id edge of a NetworkMapping.
+func (c *NetworkMappingClient) QueryFkComputerID(nm *NetworkMapping) *ComputeInstanceQuery {
+	query := (&ComputeInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := nm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(networkmapping.Table, networkmapping.FieldID, id),
+			sqlgraph.To(computeinstance.Table, computeinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, networkmapping.FkComputerIDTable, networkmapping.FkComputerIDColumn),
+		)
+		fromV = sqlgraph.Neighbors(nm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

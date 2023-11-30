@@ -40,8 +40,29 @@ type ComputeInstance struct {
 	// p2p agent Id
 	AgentID string `json:"agent_id,omitempty"`
 	// 容器启动命令
-	Command      string `json:"command,omitempty"`
+	Command string `json:"command,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ComputeInstanceQuery when eager-loading is set.
+	Edges        ComputeInstanceEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ComputeInstanceEdges holds the relations/edges for other nodes in the graph.
+type ComputeInstanceEdges struct {
+	// NetworkMappings holds the value of the networkMappings edge.
+	NetworkMappings []*NetworkMapping `json:"networkMappings,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// NetworkMappingsOrErr returns the NetworkMappings value or an error if the edge
+// was not loaded in eager-loading.
+func (e ComputeInstanceEdges) NetworkMappingsOrErr() ([]*NetworkMapping, error) {
+	if e.loadedTypes[0] {
+		return e.NetworkMappings, nil
+	}
+	return nil, &NotLoadedError{edge: "networkMappings"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -155,6 +176,11 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (ci *ComputeInstance) Value(name string) (ent.Value, error) {
 	return ci.selectValues.Get(name)
+}
+
+// QueryNetworkMappings queries the "networkMappings" edge of the ComputeInstance entity.
+func (ci *ComputeInstance) QueryNetworkMappings() *NetworkMappingQuery {
+	return NewComputeInstanceClient(ci.config).QueryNetworkMappings(ci)
 }
 
 // Update returns a builder for updating this ComputeInstance.

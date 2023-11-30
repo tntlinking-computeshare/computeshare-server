@@ -20,6 +20,8 @@ type NetworkMapping struct {
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// computer_id
 	FkComputerID uuid.UUID `json:"fk_computer_id,omitempty"`
+	// computer name
+	ComputerInstanceName string `json:"computer_instance_name"`
 	// 映射到网关的端口号
 	GatewayPort int `json:"gateway_port,omitempty"`
 	// 需要映射的虚拟机端口号

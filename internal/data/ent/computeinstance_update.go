@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
@@ -158,9 +160,45 @@ func (ciu *ComputeInstanceUpdate) ClearCommand() *ComputeInstanceUpdate {
 	return ciu
 }
 
+// AddNetworkMappingIDs adds the "networkMappings" edge to the NetworkMapping entity by IDs.
+func (ciu *ComputeInstanceUpdate) AddNetworkMappingIDs(ids ...uuid.UUID) *ComputeInstanceUpdate {
+	ciu.mutation.AddNetworkMappingIDs(ids...)
+	return ciu
+}
+
+// AddNetworkMappings adds the "networkMappings" edges to the NetworkMapping entity.
+func (ciu *ComputeInstanceUpdate) AddNetworkMappings(n ...*NetworkMapping) *ComputeInstanceUpdate {
+	ids := make([]uuid.UUID, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ciu.AddNetworkMappingIDs(ids...)
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (ciu *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
 	return ciu.mutation
+}
+
+// ClearNetworkMappings clears all "networkMappings" edges to the NetworkMapping entity.
+func (ciu *ComputeInstanceUpdate) ClearNetworkMappings() *ComputeInstanceUpdate {
+	ciu.mutation.ClearNetworkMappings()
+	return ciu
+}
+
+// RemoveNetworkMappingIDs removes the "networkMappings" edge to NetworkMapping entities by IDs.
+func (ciu *ComputeInstanceUpdate) RemoveNetworkMappingIDs(ids ...uuid.UUID) *ComputeInstanceUpdate {
+	ciu.mutation.RemoveNetworkMappingIDs(ids...)
+	return ciu
+}
+
+// RemoveNetworkMappings removes "networkMappings" edges to NetworkMapping entities.
+func (ciu *ComputeInstanceUpdate) RemoveNetworkMappings(n ...*NetworkMapping) *ComputeInstanceUpdate {
+	ids := make([]uuid.UUID, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ciu.RemoveNetworkMappingIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -279,6 +317,51 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if ciu.mutation.CommandCleared() {
 		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
+	}
+	if ciu.mutation.NetworkMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.RemovedNetworkMappingsIDs(); len(nodes) > 0 && !ciu.mutation.NetworkMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciu.mutation.NetworkMappingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -429,9 +512,45 @@ func (ciuo *ComputeInstanceUpdateOne) ClearCommand() *ComputeInstanceUpdateOne {
 	return ciuo
 }
 
+// AddNetworkMappingIDs adds the "networkMappings" edge to the NetworkMapping entity by IDs.
+func (ciuo *ComputeInstanceUpdateOne) AddNetworkMappingIDs(ids ...uuid.UUID) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddNetworkMappingIDs(ids...)
+	return ciuo
+}
+
+// AddNetworkMappings adds the "networkMappings" edges to the NetworkMapping entity.
+func (ciuo *ComputeInstanceUpdateOne) AddNetworkMappings(n ...*NetworkMapping) *ComputeInstanceUpdateOne {
+	ids := make([]uuid.UUID, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ciuo.AddNetworkMappingIDs(ids...)
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (ciuo *ComputeInstanceUpdateOne) Mutation() *ComputeInstanceMutation {
 	return ciuo.mutation
+}
+
+// ClearNetworkMappings clears all "networkMappings" edges to the NetworkMapping entity.
+func (ciuo *ComputeInstanceUpdateOne) ClearNetworkMappings() *ComputeInstanceUpdateOne {
+	ciuo.mutation.ClearNetworkMappings()
+	return ciuo
+}
+
+// RemoveNetworkMappingIDs removes the "networkMappings" edge to NetworkMapping entities by IDs.
+func (ciuo *ComputeInstanceUpdateOne) RemoveNetworkMappingIDs(ids ...uuid.UUID) *ComputeInstanceUpdateOne {
+	ciuo.mutation.RemoveNetworkMappingIDs(ids...)
+	return ciuo
+}
+
+// RemoveNetworkMappings removes "networkMappings" edges to NetworkMapping entities.
+func (ciuo *ComputeInstanceUpdateOne) RemoveNetworkMappings(n ...*NetworkMapping) *ComputeInstanceUpdateOne {
+	ids := make([]uuid.UUID, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ciuo.RemoveNetworkMappingIDs(ids...)
 }
 
 // Where appends a list predicates to the ComputeInstanceUpdate builder.
@@ -580,6 +699,51 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if ciuo.mutation.CommandCleared() {
 		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
+	}
+	if ciuo.mutation.NetworkMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.RemovedNetworkMappingsIDs(); len(nodes) > 0 && !ciuo.mutation.NetworkMappingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ciuo.mutation.NetworkMappingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ComputeInstance{config: ciuo.config}
 	_spec.Assign = _node.assignValues

@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
@@ -132,6 +133,21 @@ func (cic *ComputeInstanceCreate) SetNillableID(u *uuid.UUID) *ComputeInstanceCr
 		cic.SetID(*u)
 	}
 	return cic
+}
+
+// AddNetworkMappingIDs adds the "networkMappings" edge to the NetworkMapping entity by IDs.
+func (cic *ComputeInstanceCreate) AddNetworkMappingIDs(ids ...uuid.UUID) *ComputeInstanceCreate {
+	cic.mutation.AddNetworkMappingIDs(ids...)
+	return cic
+}
+
+// AddNetworkMappings adds the "networkMappings" edges to the NetworkMapping entity.
+func (cic *ComputeInstanceCreate) AddNetworkMappings(n ...*NetworkMapping) *ComputeInstanceCreate {
+	ids := make([]uuid.UUID, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return cic.AddNetworkMappingIDs(ids...)
 }
 
 // Mutation returns the ComputeInstanceMutation object of the builder.
@@ -301,6 +317,22 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.Command(); ok {
 		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
 		_node.Command = value
+	}
+	if nodes := cic.mutation.NetworkMappingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   computeinstance.NetworkMappingsTable,
+			Columns: []string{computeinstance.NetworkMappingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

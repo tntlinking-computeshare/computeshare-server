@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -37,12 +38,6 @@ func (nmu *NetworkMappingUpdate) SetName(s string) *NetworkMappingUpdate {
 // SetFkGatewayID sets the "fk_gateway_id" field.
 func (nmu *NetworkMappingUpdate) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpdate {
 	nmu.mutation.SetFkGatewayID(u)
-	return nmu
-}
-
-// SetFkComputerID sets the "fk_computer_id" field.
-func (nmu *NetworkMappingUpdate) SetFkComputerID(u uuid.UUID) *NetworkMappingUpdate {
-	nmu.mutation.SetFkComputerID(u)
 	return nmu
 }
 
@@ -93,9 +88,34 @@ func (nmu *NetworkMappingUpdate) AddStatus(i int) *NetworkMappingUpdate {
 	return nmu
 }
 
+// SetFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID.
+func (nmu *NetworkMappingUpdate) SetFkComputerIDID(id uuid.UUID) *NetworkMappingUpdate {
+	nmu.mutation.SetFkComputerIDID(id)
+	return nmu
+}
+
+// SetNillableFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID if the given value is not nil.
+func (nmu *NetworkMappingUpdate) SetNillableFkComputerIDID(id *uuid.UUID) *NetworkMappingUpdate {
+	if id != nil {
+		nmu = nmu.SetFkComputerIDID(*id)
+	}
+	return nmu
+}
+
+// SetFkComputerID sets the "fk_computer_id" edge to the ComputeInstance entity.
+func (nmu *NetworkMappingUpdate) SetFkComputerID(c *ComputeInstance) *NetworkMappingUpdate {
+	return nmu.SetFkComputerIDID(c.ID)
+}
+
 // Mutation returns the NetworkMappingMutation object of the builder.
 func (nmu *NetworkMappingUpdate) Mutation() *NetworkMappingMutation {
 	return nmu.mutation
+}
+
+// ClearFkComputerID clears the "fk_computer_id" edge to the ComputeInstance entity.
+func (nmu *NetworkMappingUpdate) ClearFkComputerID() *NetworkMappingUpdate {
+	nmu.mutation.ClearFkComputerID()
+	return nmu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -153,9 +173,6 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if value, ok := nmu.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := nmu.mutation.FkComputerID(); ok {
-		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
-	}
 	if value, ok := nmu.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
 	}
@@ -173,6 +190,35 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := nmu.mutation.AddedStatus(); ok {
 		_spec.AddField(networkmapping.FieldStatus, field.TypeInt, value)
+	}
+	if nmu.mutation.FkComputerIDCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   networkmapping.FkComputerIDTable,
+			Columns: []string{networkmapping.FkComputerIDColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nmu.mutation.FkComputerIDIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   networkmapping.FkComputerIDTable,
+			Columns: []string{networkmapping.FkComputerIDColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nmu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -203,12 +249,6 @@ func (nmuo *NetworkMappingUpdateOne) SetName(s string) *NetworkMappingUpdateOne 
 // SetFkGatewayID sets the "fk_gateway_id" field.
 func (nmuo *NetworkMappingUpdateOne) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpdateOne {
 	nmuo.mutation.SetFkGatewayID(u)
-	return nmuo
-}
-
-// SetFkComputerID sets the "fk_computer_id" field.
-func (nmuo *NetworkMappingUpdateOne) SetFkComputerID(u uuid.UUID) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetFkComputerID(u)
 	return nmuo
 }
 
@@ -259,9 +299,34 @@ func (nmuo *NetworkMappingUpdateOne) AddStatus(i int) *NetworkMappingUpdateOne {
 	return nmuo
 }
 
+// SetFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID.
+func (nmuo *NetworkMappingUpdateOne) SetFkComputerIDID(id uuid.UUID) *NetworkMappingUpdateOne {
+	nmuo.mutation.SetFkComputerIDID(id)
+	return nmuo
+}
+
+// SetNillableFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID if the given value is not nil.
+func (nmuo *NetworkMappingUpdateOne) SetNillableFkComputerIDID(id *uuid.UUID) *NetworkMappingUpdateOne {
+	if id != nil {
+		nmuo = nmuo.SetFkComputerIDID(*id)
+	}
+	return nmuo
+}
+
+// SetFkComputerID sets the "fk_computer_id" edge to the ComputeInstance entity.
+func (nmuo *NetworkMappingUpdateOne) SetFkComputerID(c *ComputeInstance) *NetworkMappingUpdateOne {
+	return nmuo.SetFkComputerIDID(c.ID)
+}
+
 // Mutation returns the NetworkMappingMutation object of the builder.
 func (nmuo *NetworkMappingUpdateOne) Mutation() *NetworkMappingMutation {
 	return nmuo.mutation
+}
+
+// ClearFkComputerID clears the "fk_computer_id" edge to the ComputeInstance entity.
+func (nmuo *NetworkMappingUpdateOne) ClearFkComputerID() *NetworkMappingUpdateOne {
+	nmuo.mutation.ClearFkComputerID()
+	return nmuo
 }
 
 // Where appends a list predicates to the NetworkMappingUpdate builder.
@@ -349,9 +414,6 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	if value, ok := nmuo.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := nmuo.mutation.FkComputerID(); ok {
-		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
-	}
 	if value, ok := nmuo.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
 	}
@@ -369,6 +431,35 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	}
 	if value, ok := nmuo.mutation.AddedStatus(); ok {
 		_spec.AddField(networkmapping.FieldStatus, field.TypeInt, value)
+	}
+	if nmuo.mutation.FkComputerIDCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   networkmapping.FkComputerIDTable,
+			Columns: []string{networkmapping.FkComputerIDColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nmuo.mutation.FkComputerIDIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   networkmapping.FkComputerIDTable,
+			Columns: []string{networkmapping.FkComputerIDColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &NetworkMapping{config: nmuo.config}
 	_spec.Assign = _node.assignValues

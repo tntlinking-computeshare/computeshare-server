@@ -162,16 +162,24 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString, Size: 50},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
-		{Name: "fk_computer_id", Type: field.TypeUUID},
 		{Name: "gateway_port", Type: field.TypeInt},
 		{Name: "computer_port", Type: field.TypeInt},
 		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "compute_instance_network_mappings", Type: field.TypeUUID, Nullable: true},
 	}
 	// NetworkMappingsTable holds the schema information for the "network_mappings" table.
 	NetworkMappingsTable = &schema.Table{
 		Name:       "network_mappings",
 		Columns:    NetworkMappingsColumns,
 		PrimaryKey: []*schema.Column{NetworkMappingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "network_mappings_compute_instances_networkMappings",
+				Columns:    []*schema.Column{NetworkMappingsColumns[6]},
+				RefColumns: []*schema.Column{ComputeInstancesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ScriptsColumns holds the columns for the "scripts" table.
 	ScriptsColumns = []*schema.Column{
@@ -320,5 +328,6 @@ var (
 )
 
 func init() {
+	NetworkMappingsTable.ForeignKeys[0].RefTable = ComputeInstancesTable
 	ScriptExecutionRecordsTable.ForeignKeys[0].RefTable = ScriptsTable
 }

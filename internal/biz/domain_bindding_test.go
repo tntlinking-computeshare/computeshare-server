@@ -21,7 +21,7 @@ func GetDomainBindingUseCase() *DomainBindingUseCase {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
-	uc, err := NewDomainBindingUseCase(nil, logger)
+	uc, err := NewDomainBindingUseCase(nil, nil, nil, logger)
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func GetDomainBindingUseCase() *DomainBindingUseCase {
 func TestDomainBindingUseCase_CreateDomainBinding(t *testing.T) {
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
 	uc := GetDomainBindingUseCase()
-	err := uc.CreateDomainBinding(ctx)
+	err := uc.CreateDomainBinding(ctx, &DomainBinding{})
 
 	assert.NoError(t, err)
 }

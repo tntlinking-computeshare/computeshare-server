@@ -1082,25 +1082,28 @@ func (m *ComputeImageMutation) ResetEdge(name string) error {
 // ComputeInstanceMutation represents an operation that mutates the ComputeInstance nodes in the graph.
 type ComputeInstanceMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *uuid.UUID
-	owner           *string
-	name            *string
-	core            *string
-	memory          *string
-	image           *string
-	port            *string
-	expiration_time *time.Time
-	status          *consts.InstanceStatus
-	addstatus       *consts.InstanceStatus
-	container_id    *string
-	agent_id        *string
-	command         *string
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*ComputeInstance, error)
-	predicates      []predicate.ComputeInstance
+	op                     Op
+	typ                    string
+	id                     *uuid.UUID
+	owner                  *string
+	name                   *string
+	core                   *string
+	memory                 *string
+	image                  *string
+	port                   *string
+	expiration_time        *time.Time
+	status                 *consts.InstanceStatus
+	addstatus              *consts.InstanceStatus
+	container_id           *string
+	agent_id               *string
+	command                *string
+	clearedFields          map[string]struct{}
+	networkMappings        map[uuid.UUID]struct{}
+	removednetworkMappings map[uuid.UUID]struct{}
+	clearednetworkMappings bool
+	done                   bool
+	oldValue               func(context.Context) (*ComputeInstance, error)
+	predicates             []predicate.ComputeInstance
 }
 
 var _ ent.Mutation = (*ComputeInstanceMutation)(nil)
@@ -1675,6 +1678,60 @@ func (m *ComputeInstanceMutation) ResetCommand() {
 	delete(m.clearedFields, computeinstance.FieldCommand)
 }
 
+// AddNetworkMappingIDs adds the "networkMappings" edge to the NetworkMapping entity by ids.
+func (m *ComputeInstanceMutation) AddNetworkMappingIDs(ids ...uuid.UUID) {
+	if m.networkMappings == nil {
+		m.networkMappings = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.networkMappings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearNetworkMappings clears the "networkMappings" edge to the NetworkMapping entity.
+func (m *ComputeInstanceMutation) ClearNetworkMappings() {
+	m.clearednetworkMappings = true
+}
+
+// NetworkMappingsCleared reports if the "networkMappings" edge to the NetworkMapping entity was cleared.
+func (m *ComputeInstanceMutation) NetworkMappingsCleared() bool {
+	return m.clearednetworkMappings
+}
+
+// RemoveNetworkMappingIDs removes the "networkMappings" edge to the NetworkMapping entity by IDs.
+func (m *ComputeInstanceMutation) RemoveNetworkMappingIDs(ids ...uuid.UUID) {
+	if m.removednetworkMappings == nil {
+		m.removednetworkMappings = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.networkMappings, ids[i])
+		m.removednetworkMappings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedNetworkMappings returns the removed IDs of the "networkMappings" edge to the NetworkMapping entity.
+func (m *ComputeInstanceMutation) RemovedNetworkMappingsIDs() (ids []uuid.UUID) {
+	for id := range m.removednetworkMappings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// NetworkMappingsIDs returns the "networkMappings" edge IDs in the mutation.
+func (m *ComputeInstanceMutation) NetworkMappingsIDs() (ids []uuid.UUID) {
+	for id := range m.networkMappings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetNetworkMappings resets all changes to the "networkMappings" edge.
+func (m *ComputeInstanceMutation) ResetNetworkMappings() {
+	m.networkMappings = nil
+	m.clearednetworkMappings = false
+	m.removednetworkMappings = nil
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -2020,49 +2077,85 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ComputeInstanceMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.networkMappings != nil {
+		edges = append(edges, computeinstance.EdgeNetworkMappings)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ComputeInstanceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case computeinstance.EdgeNetworkMappings:
+		ids := make([]ent.Value, 0, len(m.networkMappings))
+		for id := range m.networkMappings {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ComputeInstanceMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.removednetworkMappings != nil {
+		edges = append(edges, computeinstance.EdgeNetworkMappings)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ComputeInstanceMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case computeinstance.EdgeNetworkMappings:
+		ids := make([]ent.Value, 0, len(m.removednetworkMappings))
+		for id := range m.removednetworkMappings {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ComputeInstanceMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearednetworkMappings {
+		edges = append(edges, computeinstance.EdgeNetworkMappings)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ComputeInstanceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case computeinstance.EdgeNetworkMappings:
+		return m.clearednetworkMappings
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ComputeInstanceMutation) ClearEdge(name string) error {
+	switch name {
+	}
 	return fmt.Errorf("unknown ComputeInstance unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ComputeInstanceMutation) ResetEdge(name string) error {
+	switch name {
+	case computeinstance.EdgeNetworkMappings:
+		m.ResetNetworkMappings()
+		return nil
+	}
 	return fmt.Errorf("unknown ComputeInstance edge %s", name)
 }
 
@@ -4538,22 +4631,23 @@ func (m *GatewayPortMutation) ResetEdge(name string) error {
 // NetworkMappingMutation represents an operation that mutates the NetworkMapping nodes in the graph.
 type NetworkMappingMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	name             *string
-	fk_gateway_id    *uuid.UUID
-	fk_computer_id   *uuid.UUID
-	gateway_port     *int
-	addgateway_port  *int
-	computer_port    *int
-	addcomputer_port *int
-	status           *int
-	addstatus        *int
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*NetworkMapping, error)
-	predicates       []predicate.NetworkMapping
+	op                    Op
+	typ                   string
+	id                    *uuid.UUID
+	name                  *string
+	fk_gateway_id         *uuid.UUID
+	gateway_port          *int
+	addgateway_port       *int
+	computer_port         *int
+	addcomputer_port      *int
+	status                *int
+	addstatus             *int
+	clearedFields         map[string]struct{}
+	fk_computer_id        *uuid.UUID
+	clearedfk_computer_id bool
+	done                  bool
+	oldValue              func(context.Context) (*NetworkMapping, error)
+	predicates            []predicate.NetworkMapping
 }
 
 var _ ent.Mutation = (*NetworkMappingMutation)(nil)
@@ -4732,42 +4826,6 @@ func (m *NetworkMappingMutation) ResetFkGatewayID() {
 	m.fk_gateway_id = nil
 }
 
-// SetFkComputerID sets the "fk_computer_id" field.
-func (m *NetworkMappingMutation) SetFkComputerID(u uuid.UUID) {
-	m.fk_computer_id = &u
-}
-
-// FkComputerID returns the value of the "fk_computer_id" field in the mutation.
-func (m *NetworkMappingMutation) FkComputerID() (r uuid.UUID, exists bool) {
-	v := m.fk_computer_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFkComputerID returns the old "fk_computer_id" field's value of the NetworkMapping entity.
-// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NetworkMappingMutation) OldFkComputerID(ctx context.Context) (v uuid.UUID, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFkComputerID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFkComputerID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFkComputerID: %w", err)
-	}
-	return oldValue.FkComputerID, nil
-}
-
-// ResetFkComputerID resets all changes to the "fk_computer_id" field.
-func (m *NetworkMappingMutation) ResetFkComputerID() {
-	m.fk_computer_id = nil
-}
-
 // SetGatewayPort sets the "gateway_port" field.
 func (m *NetworkMappingMutation) SetGatewayPort(i int) {
 	m.gateway_port = &i
@@ -4936,6 +4994,45 @@ func (m *NetworkMappingMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
+// SetFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by id.
+func (m *NetworkMappingMutation) SetFkComputerIDID(id uuid.UUID) {
+	m.fk_computer_id = &id
+}
+
+// ClearFkComputerID clears the "fk_computer_id" edge to the ComputeInstance entity.
+func (m *NetworkMappingMutation) ClearFkComputerID() {
+	m.clearedfk_computer_id = true
+}
+
+// FkComputerIDCleared reports if the "fk_computer_id" edge to the ComputeInstance entity was cleared.
+func (m *NetworkMappingMutation) FkComputerIDCleared() bool {
+	return m.clearedfk_computer_id
+}
+
+// FkComputerIDID returns the "fk_computer_id" edge ID in the mutation.
+func (m *NetworkMappingMutation) FkComputerIDID() (id uuid.UUID, exists bool) {
+	if m.fk_computer_id != nil {
+		return *m.fk_computer_id, true
+	}
+	return
+}
+
+// FkComputerIDIDs returns the "fk_computer_id" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FkComputerIDID instead. It exists only for internal usage by the builders.
+func (m *NetworkMappingMutation) FkComputerIDIDs() (ids []uuid.UUID) {
+	if id := m.fk_computer_id; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFkComputerID resets all changes to the "fk_computer_id" edge.
+func (m *NetworkMappingMutation) ResetFkComputerID() {
+	m.fk_computer_id = nil
+	m.clearedfk_computer_id = false
+}
+
 // Where appends a list predicates to the NetworkMappingMutation builder.
 func (m *NetworkMappingMutation) Where(ps ...predicate.NetworkMapping) {
 	m.predicates = append(m.predicates, ps...)
@@ -4970,15 +5067,12 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
 	}
 	if m.fk_gateway_id != nil {
 		fields = append(fields, networkmapping.FieldFkGatewayID)
-	}
-	if m.fk_computer_id != nil {
-		fields = append(fields, networkmapping.FieldFkComputerID)
 	}
 	if m.gateway_port != nil {
 		fields = append(fields, networkmapping.FieldGatewayPort)
@@ -5001,8 +5095,6 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case networkmapping.FieldFkGatewayID:
 		return m.FkGatewayID()
-	case networkmapping.FieldFkComputerID:
-		return m.FkComputerID()
 	case networkmapping.FieldGatewayPort:
 		return m.GatewayPort()
 	case networkmapping.FieldComputerPort:
@@ -5022,8 +5114,6 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldName(ctx)
 	case networkmapping.FieldFkGatewayID:
 		return m.OldFkGatewayID(ctx)
-	case networkmapping.FieldFkComputerID:
-		return m.OldFkComputerID(ctx)
 	case networkmapping.FieldGatewayPort:
 		return m.OldGatewayPort(ctx)
 	case networkmapping.FieldComputerPort:
@@ -5052,13 +5142,6 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFkGatewayID(v)
-		return nil
-	case networkmapping.FieldFkComputerID:
-		v, ok := value.(uuid.UUID)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFkComputerID(v)
 		return nil
 	case networkmapping.FieldGatewayPort:
 		v, ok := value.(int)
@@ -5175,9 +5258,6 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 	case networkmapping.FieldFkGatewayID:
 		m.ResetFkGatewayID()
 		return nil
-	case networkmapping.FieldFkComputerID:
-		m.ResetFkComputerID()
-		return nil
 	case networkmapping.FieldGatewayPort:
 		m.ResetGatewayPort()
 		return nil
@@ -5193,19 +5273,28 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NetworkMappingMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.fk_computer_id != nil {
+		edges = append(edges, networkmapping.EdgeFkComputerID)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *NetworkMappingMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case networkmapping.EdgeFkComputerID:
+		if id := m.fk_computer_id; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NetworkMappingMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -5217,25 +5306,42 @@ func (m *NetworkMappingMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NetworkMappingMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedfk_computer_id {
+		edges = append(edges, networkmapping.EdgeFkComputerID)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *NetworkMappingMutation) EdgeCleared(name string) bool {
+	switch name {
+	case networkmapping.EdgeFkComputerID:
+		return m.clearedfk_computer_id
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *NetworkMappingMutation) ClearEdge(name string) error {
+	switch name {
+	case networkmapping.EdgeFkComputerID:
+		m.ClearFkComputerID()
+		return nil
+	}
 	return fmt.Errorf("unknown NetworkMapping unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *NetworkMappingMutation) ResetEdge(name string) error {
+	switch name {
+	case networkmapping.EdgeFkComputerID:
+		m.ResetFkComputerID()
+		return nil
+	}
 	return fmt.Errorf("unknown NetworkMapping edge %s", name)
 }
 

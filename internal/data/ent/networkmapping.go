@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 )
 
@@ -21,15 +22,39 @@ type NetworkMapping struct {
 	Name string `json:"name,omitempty"`
 	// gateway id
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
-	// computer_id
-	FkComputerID uuid.UUID `json:"fk_computer_id,omitempty"`
 	// 映射到网关的端口号
 	GatewayPort int `json:"gateway_port,omitempty"`
 	// 需要映射的虚拟机端口号
 	ComputerPort int `json:"computer_port,omitempty"`
 	//  0 待开始 1 进行中 2 已完成, 3 失败
-	Status       int `json:"status,omitempty"`
-	selectValues sql.SelectValues
+	Status int `json:"status,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the NetworkMappingQuery when eager-loading is set.
+	Edges                             NetworkMappingEdges `json:"edges"`
+	compute_instance_network_mappings *uuid.UUID
+	selectValues                      sql.SelectValues
+}
+
+// NetworkMappingEdges holds the relations/edges for other nodes in the graph.
+type NetworkMappingEdges struct {
+	// FkComputerID holds the value of the fk_computer_id edge.
+	FkComputerID *ComputeInstance `json:"fk_computer_id,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// FkComputerIDOrErr returns the FkComputerID value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NetworkMappingEdges) FkComputerIDOrErr() (*ComputeInstance, error) {
+	if e.loadedTypes[0] {
+		if e.FkComputerID == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: computeinstance.Label}
+		}
+		return e.FkComputerID, nil
+	}
+	return nil, &NotLoadedError{edge: "fk_computer_id"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -41,8 +66,10 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case networkmapping.FieldName:
 			values[i] = new(sql.NullString)
-		case networkmapping.FieldID, networkmapping.FieldFkGatewayID, networkmapping.FieldFkComputerID:
+		case networkmapping.FieldID, networkmapping.FieldFkGatewayID:
 			values[i] = new(uuid.UUID)
+		case networkmapping.ForeignKeys[0]: // compute_instance_network_mappings
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -76,12 +103,6 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				nm.FkGatewayID = *value
 			}
-		case networkmapping.FieldFkComputerID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field fk_computer_id", values[i])
-			} else if value != nil {
-				nm.FkComputerID = *value
-			}
 		case networkmapping.FieldGatewayPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field gateway_port", values[i])
@@ -100,6 +121,13 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nm.Status = int(value.Int64)
 			}
+		case networkmapping.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field compute_instance_network_mappings", values[i])
+			} else if value.Valid {
+				nm.compute_instance_network_mappings = new(uuid.UUID)
+				*nm.compute_instance_network_mappings = *value.S.(*uuid.UUID)
+			}
 		default:
 			nm.selectValues.Set(columns[i], values[i])
 		}
@@ -111,6 +139,11 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (nm *NetworkMapping) Value(name string) (ent.Value, error) {
 	return nm.selectValues.Get(name)
+}
+
+// QueryFkComputerID queries the "fk_computer_id" edge of the NetworkMapping entity.
+func (nm *NetworkMapping) QueryFkComputerID() *ComputeInstanceQuery {
+	return NewNetworkMappingClient(nm.config).QueryFkComputerID(nm)
 }
 
 // Update returns a builder for updating this NetworkMapping.
@@ -141,9 +174,6 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fk_gateway_id=")
 	builder.WriteString(fmt.Sprintf("%v", nm.FkGatewayID))
-	builder.WriteString(", ")
-	builder.WriteString("fk_computer_id=")
-	builder.WriteString(fmt.Sprintf("%v", nm.FkComputerID))
 	builder.WriteString(", ")
 	builder.WriteString("gateway_port=")
 	builder.WriteString(fmt.Sprintf("%v", nm.GatewayPort))

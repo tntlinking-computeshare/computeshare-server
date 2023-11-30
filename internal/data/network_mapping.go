@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
@@ -28,7 +29,7 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 	data, err := repo.data.db.NetworkMapping.Create().
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
-		SetFkComputerID(entity.FkComputerID).
+		SetFkComputerIDID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
@@ -51,7 +52,7 @@ func (repo *NetworkMappingRepo) DeleteNetworkMapping(ctx context.Context, id uui
 }
 
 func (repo *NetworkMappingRepo) PageNetworkMappingByComputerID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
-	count, err := repo.data.db.NetworkMapping.Query().Select(networkmapping.FieldID).Where(networkmapping.FkComputerID(computerId)).Count(ctx)
+	count, err := repo.data.db.NetworkMapping.Query().Select(networkmapping.FieldID).Where(networkmapping.HasFkComputerIDWith(computeinstance.ID(computerId))).Count(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -61,7 +62,7 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByComputerID(ctx context.Conte
 	} else {
 		offset = page * size
 	}
-	list, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkComputerID(computerId)).Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	list, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.HasFkComputerIDWith(computeinstance.ID(computerId))).Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -72,7 +73,7 @@ func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity
 	return repo.data.db.NetworkMapping.UpdateOneID(entity.ID).
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
-		SetFkComputerID(entity.FkComputerID).
+		SetFkComputerIDID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
@@ -84,12 +85,13 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		return nil
 	}
 	return &biz.NetworkMapping{
-		ID:           item.ID,
-		Name:         item.Name,
-		FkComputerID: item.FkComputerID,
-		ComputerPort: item.ComputerPort,
-		FkGatewayID:  item.FkGatewayID,
-		GatewayPort:  item.GatewayPort,
-		Status:       item.Status,
+		ID:                   item.ID,
+		Name:                 item.Name,
+		FkComputerID:         item.Edges.FkComputerID.ID,
+		ComputerPort:         item.ComputerPort,
+		ComputerInstanceName: item.Edges.FkComputerID.Name,
+		FkGatewayID:          item.FkGatewayID,
+		GatewayPort:          item.GatewayPort,
+		Status:               item.Status,
 	}
 }

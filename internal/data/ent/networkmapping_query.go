@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -18,10 +19,12 @@ import (
 // NetworkMappingQuery is the builder for querying NetworkMapping entities.
 type NetworkMappingQuery struct {
 	config
-	ctx        *QueryContext
-	order      []networkmapping.OrderOption
-	inters     []Interceptor
-	predicates []predicate.NetworkMapping
+	ctx              *QueryContext
+	order            []networkmapping.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.NetworkMapping
+	withFkComputerID *ComputeInstanceQuery
+	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +59,28 @@ func (nmq *NetworkMappingQuery) Unique(unique bool) *NetworkMappingQuery {
 func (nmq *NetworkMappingQuery) Order(o ...networkmapping.OrderOption) *NetworkMappingQuery {
 	nmq.order = append(nmq.order, o...)
 	return nmq
+}
+
+// QueryFkComputerID chains the current query on the "fk_computer_id" edge.
+func (nmq *NetworkMappingQuery) QueryFkComputerID() *ComputeInstanceQuery {
+	query := (&ComputeInstanceClient{config: nmq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nmq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nmq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(networkmapping.Table, networkmapping.FieldID, selector),
+			sqlgraph.To(computeinstance.Table, computeinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, networkmapping.FkComputerIDTable, networkmapping.FkComputerIDColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(nmq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first NetworkMapping entity from the query.
@@ -245,15 +270,27 @@ func (nmq *NetworkMappingQuery) Clone() *NetworkMappingQuery {
 		return nil
 	}
 	return &NetworkMappingQuery{
-		config:     nmq.config,
-		ctx:        nmq.ctx.Clone(),
-		order:      append([]networkmapping.OrderOption{}, nmq.order...),
-		inters:     append([]Interceptor{}, nmq.inters...),
-		predicates: append([]predicate.NetworkMapping{}, nmq.predicates...),
+		config:           nmq.config,
+		ctx:              nmq.ctx.Clone(),
+		order:            append([]networkmapping.OrderOption{}, nmq.order...),
+		inters:           append([]Interceptor{}, nmq.inters...),
+		predicates:       append([]predicate.NetworkMapping{}, nmq.predicates...),
+		withFkComputerID: nmq.withFkComputerID.Clone(),
 		// clone intermediate query.
 		sql:  nmq.sql.Clone(),
 		path: nmq.path,
 	}
+}
+
+// WithFkComputerID tells the query-builder to eager-load the nodes that are connected to
+// the "fk_computer_id" edge. The optional arguments are used to configure the query builder of the edge.
+func (nmq *NetworkMappingQuery) WithFkComputerID(opts ...func(*ComputeInstanceQuery)) *NetworkMappingQuery {
+	query := (&ComputeInstanceClient{config: nmq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nmq.withFkComputerID = query
+	return nmq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,15 +369,26 @@ func (nmq *NetworkMappingQuery) prepareQuery(ctx context.Context) error {
 
 func (nmq *NetworkMappingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*NetworkMapping, error) {
 	var (
-		nodes = []*NetworkMapping{}
-		_spec = nmq.querySpec()
+		nodes       = []*NetworkMapping{}
+		withFKs     = nmq.withFKs
+		_spec       = nmq.querySpec()
+		loadedTypes = [1]bool{
+			nmq.withFkComputerID != nil,
+		}
 	)
+	if nmq.withFkComputerID != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, networkmapping.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*NetworkMapping).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &NetworkMapping{config: nmq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +400,46 @@ func (nmq *NetworkMappingQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := nmq.withFkComputerID; query != nil {
+		if err := nmq.loadFkComputerID(ctx, query, nodes, nil,
+			func(n *NetworkMapping, e *ComputeInstance) { n.Edges.FkComputerID = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (nmq *NetworkMappingQuery) loadFkComputerID(ctx context.Context, query *ComputeInstanceQuery, nodes []*NetworkMapping, init func(*NetworkMapping), assign func(*NetworkMapping, *ComputeInstance)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*NetworkMapping)
+	for i := range nodes {
+		if nodes[i].compute_instance_network_mappings == nil {
+			continue
+		}
+		fk := *nodes[i].compute_instance_network_mappings
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(computeinstance.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "compute_instance_network_mappings" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (nmq *NetworkMappingQuery) sqlCount(ctx context.Context) (int, error) {

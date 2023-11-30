@@ -114,9 +114,9 @@ func (s *NetworkMappingService) toReply(ctx context.Context, p *biz.NetworkMappi
 		Name:         p.Name,
 		Status:       int32(p.Status),
 		GatewayId:    p.FkGatewayID.String(),
-		ComputerId:   p.FkComputerID.String(),
+		InstanceId:   p.ComputerInstanceName,
 		GatewayPort:  int32(p.GatewayPort),
-		ComputerPort: int32(p.ComputerPort),
+		InstancePort: int32(p.ComputerPort),
 		Domains:      list,
 	}
 }

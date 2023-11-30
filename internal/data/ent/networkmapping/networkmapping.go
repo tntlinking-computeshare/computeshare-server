@@ -4,6 +4,7 @@ package networkmapping
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -16,16 +17,23 @@ const (
 	FieldName = "name"
 	// FieldFkGatewayID holds the string denoting the fk_gateway_id field in the database.
 	FieldFkGatewayID = "fk_gateway_id"
-	// FieldFkComputerID holds the string denoting the fk_computer_id field in the database.
-	FieldFkComputerID = "fk_computer_id"
 	// FieldGatewayPort holds the string denoting the gateway_port field in the database.
 	FieldGatewayPort = "gateway_port"
 	// FieldComputerPort holds the string denoting the computer_port field in the database.
 	FieldComputerPort = "computer_port"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// EdgeFkComputerID holds the string denoting the fk_computer_id edge name in mutations.
+	EdgeFkComputerID = "fk_computer_id"
 	// Table holds the table name of the networkmapping in the database.
 	Table = "network_mappings"
+	// FkComputerIDTable is the table that holds the fk_computer_id relation/edge.
+	FkComputerIDTable = "network_mappings"
+	// FkComputerIDInverseTable is the table name for the ComputeInstance entity.
+	// It exists in this package in order to avoid circular dependency with the "computeinstance" package.
+	FkComputerIDInverseTable = "compute_instances"
+	// FkComputerIDColumn is the table column denoting the fk_computer_id relation/edge.
+	FkComputerIDColumn = "compute_instance_network_mappings"
 )
 
 // Columns holds all SQL columns for networkmapping fields.
@@ -33,16 +41,26 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldFkGatewayID,
-	FieldFkComputerID,
 	FieldGatewayPort,
 	FieldComputerPort,
 	FieldStatus,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "network_mappings"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"compute_instance_network_mappings",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -76,11 +94,6 @@ func ByFkGatewayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFkGatewayID, opts...).ToFunc()
 }
 
-// ByFkComputerID orders the results by the fk_computer_id field.
-func ByFkComputerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFkComputerID, opts...).ToFunc()
-}
-
 // ByGatewayPort orders the results by the gateway_port field.
 func ByGatewayPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGatewayPort, opts...).ToFunc()
@@ -94,4 +107,18 @@ func ByComputerPort(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByFkComputerIDField orders the results by fk_computer_id field.
+func ByFkComputerIDField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFkComputerIDStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newFkComputerIDStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FkComputerIDInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, FkComputerIDTable, FkComputerIDColumn),
+	)
 }

@@ -4,6 +4,7 @@ package computeinstance
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -34,8 +35,17 @@ const (
 	FieldAgentID = "agent_id"
 	// FieldCommand holds the string denoting the command field in the database.
 	FieldCommand = "command"
+	// EdgeNetworkMappings holds the string denoting the networkmappings edge name in mutations.
+	EdgeNetworkMappings = "networkMappings"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
+	// NetworkMappingsTable is the table that holds the networkMappings relation/edge.
+	NetworkMappingsTable = "network_mappings"
+	// NetworkMappingsInverseTable is the table name for the NetworkMapping entity.
+	// It exists in this package in order to avoid circular dependency with the "networkmapping" package.
+	NetworkMappingsInverseTable = "network_mappings"
+	// NetworkMappingsColumn is the table column denoting the networkMappings relation/edge.
+	NetworkMappingsColumn = "compute_instance_network_mappings"
 )
 
 // Columns holds all SQL columns for computeinstance fields.
@@ -140,4 +150,25 @@ func ByAgentID(opts ...sql.OrderTermOption) OrderOption {
 // ByCommand orders the results by the command field.
 func ByCommand(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCommand, opts...).ToFunc()
+}
+
+// ByNetworkMappingsCount orders the results by networkMappings count.
+func ByNetworkMappingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNetworkMappingsStep(), opts...)
+	}
+}
+
+// ByNetworkMappings orders the results by networkMappings terms.
+func ByNetworkMappings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNetworkMappingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newNetworkMappingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NetworkMappingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NetworkMappingsTable, NetworkMappingsColumn),
+	)
 }

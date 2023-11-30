@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 )
 
@@ -29,12 +30,6 @@ func (nmc *NetworkMappingCreate) SetName(s string) *NetworkMappingCreate {
 // SetFkGatewayID sets the "fk_gateway_id" field.
 func (nmc *NetworkMappingCreate) SetFkGatewayID(u uuid.UUID) *NetworkMappingCreate {
 	nmc.mutation.SetFkGatewayID(u)
-	return nmc
-}
-
-// SetFkComputerID sets the "fk_computer_id" field.
-func (nmc *NetworkMappingCreate) SetFkComputerID(u uuid.UUID) *NetworkMappingCreate {
-	nmc.mutation.SetFkComputerID(u)
 	return nmc
 }
 
@@ -76,6 +71,25 @@ func (nmc *NetworkMappingCreate) SetNillableID(u *uuid.UUID) *NetworkMappingCrea
 		nmc.SetID(*u)
 	}
 	return nmc
+}
+
+// SetFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID.
+func (nmc *NetworkMappingCreate) SetFkComputerIDID(id uuid.UUID) *NetworkMappingCreate {
+	nmc.mutation.SetFkComputerIDID(id)
+	return nmc
+}
+
+// SetNillableFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by ID if the given value is not nil.
+func (nmc *NetworkMappingCreate) SetNillableFkComputerIDID(id *uuid.UUID) *NetworkMappingCreate {
+	if id != nil {
+		nmc = nmc.SetFkComputerIDID(*id)
+	}
+	return nmc
+}
+
+// SetFkComputerID sets the "fk_computer_id" edge to the ComputeInstance entity.
+func (nmc *NetworkMappingCreate) SetFkComputerID(c *ComputeInstance) *NetworkMappingCreate {
+	return nmc.SetFkComputerIDID(c.ID)
 }
 
 // Mutation returns the NetworkMappingMutation object of the builder.
@@ -136,9 +150,6 @@ func (nmc *NetworkMappingCreate) check() error {
 	if _, ok := nmc.mutation.FkGatewayID(); !ok {
 		return &ValidationError{Name: "fk_gateway_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_gateway_id"`)}
 	}
-	if _, ok := nmc.mutation.FkComputerID(); !ok {
-		return &ValidationError{Name: "fk_computer_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_computer_id"`)}
-	}
 	if _, ok := nmc.mutation.GatewayPort(); !ok {
 		return &ValidationError{Name: "gateway_port", err: errors.New(`ent: missing required field "NetworkMapping.gateway_port"`)}
 	}
@@ -191,10 +202,6 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 		_node.FkGatewayID = value
 	}
-	if value, ok := nmc.mutation.FkComputerID(); ok {
-		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
-		_node.FkComputerID = value
-	}
 	if value, ok := nmc.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
 		_node.GatewayPort = value
@@ -206,6 +213,23 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 	if value, ok := nmc.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)
 		_node.Status = value
+	}
+	if nodes := nmc.mutation.FkComputerIDIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   networkmapping.FkComputerIDTable,
+			Columns: []string{networkmapping.FkComputerIDColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.compute_instance_network_mappings = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

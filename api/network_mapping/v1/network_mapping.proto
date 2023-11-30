@@ -83,9 +83,11 @@ message NetworkMappingVO {
   string id = 1;
   string name = 2;
   string gateway_id = 3;
-  string computer_id = 4;
-  int32 gateway_port = 5;
-  int32 computer_port = 6;
-  int32 status = 7;
-  repeated DomainBindingVO domains = 8;
+  string instance_id = 4;
+  string instance_name = 5;
+  int32 gateway_port = 6;
+  int32 instance_port = 7;
+  int32 status = 8;
+  repeated DomainBindingVO domains = 9;
+
 }
