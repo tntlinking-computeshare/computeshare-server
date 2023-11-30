@@ -23,23 +23,17 @@ func NewQueueTaskService(taskUseCase *biz.TaskUseCase, logger log.Logger) *Queue
 }
 
 func (s *QueueTaskService) GetAgentTask(ctx context.Context, req *pb.QueueTaskGetRequest) (*pb.QueueTaskGetResponse, error) {
-	list, err := s.taskUseCase.ListTaskByAgentID(ctx, req.Id)
+	task, err := s.taskUseCase.GetToDoTaskByAgentId(ctx, req.Id)
 	if err != nil {
 		return &pb.QueueTaskGetResponse{
 			Code:    500,
 			Message: "ERROR",
 		}, err
 	}
-	if len(list) == 0 {
-		return &pb.QueueTaskGetResponse{
-			Code:    200,
-			Message: SUCCESS,
-		}, nil
-	}
 	return &pb.QueueTaskGetResponse{
 		Code:    200,
 		Message: SUCCESS,
-		Data:    s.toReply(list[0], 0),
+		Data:    s.toReply(task, 0),
 	}, nil
 }
 func (s *QueueTaskService) UpdateAgentTask(ctx context.Context, req *pb.QueueTaskUpdateRequest) (*pb.QueueTaskUpdateResponse, error) {

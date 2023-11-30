@@ -56,12 +56,14 @@ func (uc *AgentUsecase) Get(ctx context.Context, id uuid.UUID) (p *Agent, err er
 	return
 }
 
-func (uc *AgentUsecase) Create(ctx context.Context, agent *Agent) error {
+func (uc *AgentUsecase) Create(ctx context.Context, agent *Agent) (uuid.UUID, error) {
 	entity, err := uc.repo.FindByPeerId(ctx, agent.PeerId)
 	if err != nil {
-		return uc.repo.CreateAgent(ctx, agent)
+		err := uc.repo.CreateAgent(ctx, agent)
+		return agent.ID, err
 	} else {
-		return uc.repo.UpdateAgent(ctx, entity.ID, agent)
+		err = uc.repo.UpdateAgent(ctx, entity.ID, agent)
+		return entity.ID, err
 	}
 }
 

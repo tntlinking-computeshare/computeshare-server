@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ComputeInstanceUpdate is the builder for updating ComputeInstance entities.
@@ -85,15 +86,15 @@ func (ciu *ComputeInstanceUpdate) SetExpirationTime(t time.Time) *ComputeInstanc
 }
 
 // SetStatus sets the "status" field.
-func (ciu *ComputeInstanceUpdate) SetStatus(i int8) *ComputeInstanceUpdate {
+func (ciu *ComputeInstanceUpdate) SetStatus(cs consts.InstanceStatus) *ComputeInstanceUpdate {
 	ciu.mutation.ResetStatus()
-	ciu.mutation.SetStatus(i)
+	ciu.mutation.SetStatus(cs)
 	return ciu
 }
 
-// AddStatus adds i to the "status" field.
-func (ciu *ComputeInstanceUpdate) AddStatus(i int8) *ComputeInstanceUpdate {
-	ciu.mutation.AddStatus(i)
+// AddStatus adds cs to the "status" field.
+func (ciu *ComputeInstanceUpdate) AddStatus(cs consts.InstanceStatus) *ComputeInstanceUpdate {
+	ciu.mutation.AddStatus(cs)
 	return ciu
 }
 
@@ -117,23 +118,23 @@ func (ciu *ComputeInstanceUpdate) ClearContainerID() *ComputeInstanceUpdate {
 	return ciu
 }
 
-// SetPeerID sets the "peer_id" field.
-func (ciu *ComputeInstanceUpdate) SetPeerID(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetPeerID(s)
+// SetAgentID sets the "agent_id" field.
+func (ciu *ComputeInstanceUpdate) SetAgentID(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetAgentID(s)
 	return ciu
 }
 
-// SetNillablePeerID sets the "peer_id" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillablePeerID(s *string) *ComputeInstanceUpdate {
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (ciu *ComputeInstanceUpdate) SetNillableAgentID(s *string) *ComputeInstanceUpdate {
 	if s != nil {
-		ciu.SetPeerID(*s)
+		ciu.SetAgentID(*s)
 	}
 	return ciu
 }
 
-// ClearPeerID clears the value of the "peer_id" field.
-func (ciu *ComputeInstanceUpdate) ClearPeerID() *ComputeInstanceUpdate {
-	ciu.mutation.ClearPeerID()
+// ClearAgentID clears the value of the "agent_id" field.
+func (ciu *ComputeInstanceUpdate) ClearAgentID() *ComputeInstanceUpdate {
+	ciu.mutation.ClearAgentID()
 	return ciu
 }
 
@@ -267,11 +268,11 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	if ciu.mutation.ContainerIDCleared() {
 		_spec.ClearField(computeinstance.FieldContainerID, field.TypeString)
 	}
-	if value, ok := ciu.mutation.PeerID(); ok {
-		_spec.SetField(computeinstance.FieldPeerID, field.TypeString, value)
+	if value, ok := ciu.mutation.AgentID(); ok {
+		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 	}
-	if ciu.mutation.PeerIDCleared() {
-		_spec.ClearField(computeinstance.FieldPeerID, field.TypeString)
+	if ciu.mutation.AgentIDCleared() {
+		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
 	if value, ok := ciu.mutation.Command(); ok {
 		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
@@ -356,15 +357,15 @@ func (ciuo *ComputeInstanceUpdateOne) SetExpirationTime(t time.Time) *ComputeIns
 }
 
 // SetStatus sets the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) SetStatus(i int8) *ComputeInstanceUpdateOne {
+func (ciuo *ComputeInstanceUpdateOne) SetStatus(cs consts.InstanceStatus) *ComputeInstanceUpdateOne {
 	ciuo.mutation.ResetStatus()
-	ciuo.mutation.SetStatus(i)
+	ciuo.mutation.SetStatus(cs)
 	return ciuo
 }
 
-// AddStatus adds i to the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) AddStatus(i int8) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddStatus(i)
+// AddStatus adds cs to the "status" field.
+func (ciuo *ComputeInstanceUpdateOne) AddStatus(cs consts.InstanceStatus) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddStatus(cs)
 	return ciuo
 }
 
@@ -388,23 +389,23 @@ func (ciuo *ComputeInstanceUpdateOne) ClearContainerID() *ComputeInstanceUpdateO
 	return ciuo
 }
 
-// SetPeerID sets the "peer_id" field.
-func (ciuo *ComputeInstanceUpdateOne) SetPeerID(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetPeerID(s)
+// SetAgentID sets the "agent_id" field.
+func (ciuo *ComputeInstanceUpdateOne) SetAgentID(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetAgentID(s)
 	return ciuo
 }
 
-// SetNillablePeerID sets the "peer_id" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillablePeerID(s *string) *ComputeInstanceUpdateOne {
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (ciuo *ComputeInstanceUpdateOne) SetNillableAgentID(s *string) *ComputeInstanceUpdateOne {
 	if s != nil {
-		ciuo.SetPeerID(*s)
+		ciuo.SetAgentID(*s)
 	}
 	return ciuo
 }
 
-// ClearPeerID clears the value of the "peer_id" field.
-func (ciuo *ComputeInstanceUpdateOne) ClearPeerID() *ComputeInstanceUpdateOne {
-	ciuo.mutation.ClearPeerID()
+// ClearAgentID clears the value of the "agent_id" field.
+func (ciuo *ComputeInstanceUpdateOne) ClearAgentID() *ComputeInstanceUpdateOne {
+	ciuo.mutation.ClearAgentID()
 	return ciuo
 }
 
@@ -568,11 +569,11 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	if ciuo.mutation.ContainerIDCleared() {
 		_spec.ClearField(computeinstance.FieldContainerID, field.TypeString)
 	}
-	if value, ok := ciuo.mutation.PeerID(); ok {
-		_spec.SetField(computeinstance.FieldPeerID, field.TypeString, value)
+	if value, ok := ciuo.mutation.AgentID(); ok {
+		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 	}
-	if ciuo.mutation.PeerIDCleared() {
-		_spec.ClearField(computeinstance.FieldPeerID, field.TypeString)
+	if ciuo.mutation.AgentIDCleared() {
+		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
 	if value, ok := ciuo.mutation.Command(); ok {
 		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)

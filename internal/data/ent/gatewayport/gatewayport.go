@@ -41,8 +41,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// FkGatewayIDValidator is a validator for the "fk_gateway_id" field. It is called by the builders before save.
-	FkGatewayIDValidator func(string) error
 	// DefaultIsUse holds the default value on creation for the "is_use" field.
 	DefaultIsUse bool
 	// DefaultID holds the default value on creation for the "id" field.

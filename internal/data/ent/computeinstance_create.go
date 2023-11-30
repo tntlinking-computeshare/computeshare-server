@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ComputeInstanceCreate is the builder for creating a ComputeInstance entity.
@@ -72,8 +73,8 @@ func (cic *ComputeInstanceCreate) SetExpirationTime(t time.Time) *ComputeInstanc
 }
 
 // SetStatus sets the "status" field.
-func (cic *ComputeInstanceCreate) SetStatus(i int8) *ComputeInstanceCreate {
-	cic.mutation.SetStatus(i)
+func (cic *ComputeInstanceCreate) SetStatus(cs consts.InstanceStatus) *ComputeInstanceCreate {
+	cic.mutation.SetStatus(cs)
 	return cic
 }
 
@@ -91,16 +92,16 @@ func (cic *ComputeInstanceCreate) SetNillableContainerID(s *string) *ComputeInst
 	return cic
 }
 
-// SetPeerID sets the "peer_id" field.
-func (cic *ComputeInstanceCreate) SetPeerID(s string) *ComputeInstanceCreate {
-	cic.mutation.SetPeerID(s)
+// SetAgentID sets the "agent_id" field.
+func (cic *ComputeInstanceCreate) SetAgentID(s string) *ComputeInstanceCreate {
+	cic.mutation.SetAgentID(s)
 	return cic
 }
 
-// SetNillablePeerID sets the "peer_id" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillablePeerID(s *string) *ComputeInstanceCreate {
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillableAgentID(s *string) *ComputeInstanceCreate {
 	if s != nil {
-		cic.SetPeerID(*s)
+		cic.SetAgentID(*s)
 	}
 	return cic
 }
@@ -293,9 +294,9 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 		_spec.SetField(computeinstance.FieldContainerID, field.TypeString, value)
 		_node.ContainerID = value
 	}
-	if value, ok := cic.mutation.PeerID(); ok {
-		_spec.SetField(computeinstance.FieldPeerID, field.TypeString, value)
-		_node.PeerID = value
+	if value, ok := cic.mutation.AgentID(); ok {
+		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
+		_node.AgentID = value
 	}
 	if value, ok := cic.mutation.Command(); ok {
 		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)

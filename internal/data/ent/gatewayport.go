@@ -17,8 +17,8 @@ type GatewayPort struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// FkGatewayID holds the value of the "fk_gateway_id" field.
-	FkGatewayID string `json:"fk_gateway_id,omitempty"`
+	// gateway id
+	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// 端口号
 	Port int64 `json:"port,omitempty"`
 	// 是否使用
@@ -35,9 +35,7 @@ func (*GatewayPort) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case gatewayport.FieldPort:
 			values[i] = new(sql.NullInt64)
-		case gatewayport.FieldFkGatewayID:
-			values[i] = new(sql.NullString)
-		case gatewayport.FieldID:
+		case gatewayport.FieldID, gatewayport.FieldFkGatewayID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -61,10 +59,10 @@ func (gp *GatewayPort) assignValues(columns []string, values []any) error {
 				gp.ID = *value
 			}
 		case gatewayport.FieldFkGatewayID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_gateway_id", values[i])
-			} else if value.Valid {
-				gp.FkGatewayID = value.String
+			} else if value != nil {
+				gp.FkGatewayID = *value
 			}
 		case gatewayport.FieldPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -115,7 +113,7 @@ func (gp *GatewayPort) String() string {
 	builder.WriteString("GatewayPort(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", gp.ID))
 	builder.WriteString("fk_gateway_id=")
-	builder.WriteString(gp.FkGatewayID)
+	builder.WriteString(fmt.Sprintf("%v", gp.FkGatewayID))
 	builder.WriteString(", ")
 	builder.WriteString("port=")
 	builder.WriteString(fmt.Sprintf("%v", gp.Port))

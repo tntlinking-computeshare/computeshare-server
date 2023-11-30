@@ -30,8 +30,8 @@ const (
 	FieldStatus = "status"
 	// FieldContainerID holds the string denoting the container_id field in the database.
 	FieldContainerID = "container_id"
-	// FieldPeerID holds the string denoting the peer_id field in the database.
-	FieldPeerID = "peer_id"
+	// FieldAgentID holds the string denoting the agent_id field in the database.
+	FieldAgentID = "agent_id"
 	// FieldCommand holds the string denoting the command field in the database.
 	FieldCommand = "command"
 	// Table holds the table name of the computeinstance in the database.
@@ -50,7 +50,7 @@ var Columns = []string{
 	FieldExpirationTime,
 	FieldStatus,
 	FieldContainerID,
-	FieldPeerID,
+	FieldAgentID,
 	FieldCommand,
 }
 
@@ -132,9 +132,9 @@ func ByContainerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContainerID, opts...).ToFunc()
 }
 
-// ByPeerID orders the results by the peer_id field.
-func ByPeerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPeerID, opts...).ToFunc()
+// ByAgentID orders the results by the agent_id field.
+func ByAgentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAgentID, opts...).ToFunc()
 }
 
 // ByCommand orders the results by the command field.

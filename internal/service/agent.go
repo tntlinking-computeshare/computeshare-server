@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 
 	//"github.com/ipfs/go-ipfs/core"
@@ -32,16 +33,16 @@ func NewAgentService(uc *biz.AgentUsecase, logger log.Logger) *AgentService {
 func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentRequest) (*pb.CreateAgentReply, error) {
 	s.log.Infof("input data %v", req)
 
-	agent := &biz.Agent{
+	agent := biz.Agent{
 		PeerId: req.GetName(),
 		Active: true,
 	}
-	err := s.uc.Create(ctx, agent)
+	id, err := s.uc.Create(ctx, &agent)
 	return &pb.CreateAgentReply{
 		Code:    200,
 		Message: SUCCESS,
 		Data: &pb.CreateAgentReply_Data{
-			Id: agent.ID.String(),
+			Id: id.String(),
 		},
 	}, err
 }
@@ -111,9 +112,9 @@ func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.
 	instance := &biz.ComputeInstance{
 		ID:          id,
 		ContainerID: req.ContainerId,
-		PeerID:      req.PeerId,
+		AgentId:     req.PeerId,
 		Command:     req.Command,
-		Status:      int8(req.Status),
+		Status:      consts.InstanceStatus(req.Status),
 	}
 	err = s.uc.ReportInstanceStatus(ctx, instance)
 	return &pb.ReportInstanceStatusReply{

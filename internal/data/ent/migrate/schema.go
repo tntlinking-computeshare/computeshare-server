@@ -62,7 +62,7 @@ var (
 		{Name: "expiration_time", Type: field.TypeTime},
 		{Name: "status", Type: field.TypeInt8},
 		{Name: "container_id", Type: field.TypeString, Nullable: true},
-		{Name: "peer_id", Type: field.TypeString, Nullable: true},
+		{Name: "agent_id", Type: field.TypeString, Nullable: true},
 		{Name: "command", Type: field.TypeString, Nullable: true},
 	}
 	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
@@ -147,7 +147,7 @@ var (
 	// GatewayPortsColumns holds the columns for the "gateway_ports" table.
 	GatewayPortsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "fk_gateway_id", Type: field.TypeString, Size: 36},
+		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "port", Type: field.TypeInt64},
 		{Name: "is_use", Type: field.TypeBool, Default: false},
 	}
@@ -248,7 +248,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "agent_id", Type: field.TypeString, Size: 50},
 		{Name: "cmd", Type: field.TypeInt32, Default: 0},
-		{Name: "params", Type: field.TypeString, Size: 255},
+		{Name: "params", Type: field.TypeString, Size: 1024},
 		{Name: "status", Type: field.TypeInt},
 		{Name: "create_time", Type: field.TypeTime},
 	}

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -28,8 +29,8 @@ func (gpu *GatewayPortUpdate) Where(ps ...predicate.GatewayPort) *GatewayPortUpd
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpu *GatewayPortUpdate) SetFkGatewayID(s string) *GatewayPortUpdate {
-	gpu.mutation.SetFkGatewayID(s)
+func (gpu *GatewayPortUpdate) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdate {
+	gpu.mutation.SetFkGatewayID(u)
 	return gpu
 }
 
@@ -92,20 +93,7 @@ func (gpu *GatewayPortUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (gpu *GatewayPortUpdate) check() error {
-	if v, ok := gpu.mutation.FkGatewayID(); ok {
-		if err := gatewayport.FkGatewayIDValidator(v); err != nil {
-			return &ValidationError{Name: "fk_gateway_id", err: fmt.Errorf(`ent: validator failed for field "GatewayPort.fk_gateway_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := gpu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(gatewayport.Table, gatewayport.Columns, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
 	if ps := gpu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -115,7 +103,7 @@ func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := gpu.mutation.FkGatewayID(); ok {
-		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeString, value)
+		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := gpu.mutation.Port(); ok {
 		_spec.SetField(gatewayport.FieldPort, field.TypeInt64, value)
@@ -147,8 +135,8 @@ type GatewayPortUpdateOne struct {
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpuo *GatewayPortUpdateOne) SetFkGatewayID(s string) *GatewayPortUpdateOne {
-	gpuo.mutation.SetFkGatewayID(s)
+func (gpuo *GatewayPortUpdateOne) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdateOne {
+	gpuo.mutation.SetFkGatewayID(u)
 	return gpuo
 }
 
@@ -224,20 +212,7 @@ func (gpuo *GatewayPortUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (gpuo *GatewayPortUpdateOne) check() error {
-	if v, ok := gpuo.mutation.FkGatewayID(); ok {
-		if err := gatewayport.FkGatewayIDValidator(v); err != nil {
-			return &ValidationError{Name: "fk_gateway_id", err: fmt.Errorf(`ent: validator failed for field "GatewayPort.fk_gateway_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPort, err error) {
-	if err := gpuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(gatewayport.Table, gatewayport.Columns, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
 	id, ok := gpuo.mutation.ID()
 	if !ok {
@@ -264,7 +239,7 @@ func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPo
 		}
 	}
 	if value, ok := gpuo.mutation.FkGatewayID(); ok {
-		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeString, value)
+		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := gpuo.mutation.Port(); ok {
 		_spec.SetField(gatewayport.FieldPort, field.TypeInt64, value)

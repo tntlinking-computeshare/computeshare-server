@@ -74,6 +74,12 @@ service ComputeInstance {
 			body: "*",
 		};
 	}
+
+	rpc GetInstanceConsole(GetInstanceRequest) returns (GetInstanceConsoleReply) {
+		option (google.api.http) = {
+			get: "/v1/instance/{id}/console"
+		};
+	}
 }
 
 message ListComputeSpecRequest {
@@ -130,6 +136,8 @@ message CreateInstanceRequest {
 	int32 image_id = 2;
 	int32 duration = 3;
 	string name = 4;
+	string public_key = 5;
+	string password = 6;
 }
 
 message PortBinding {
@@ -200,4 +208,10 @@ message StopInstanceReply {
 message StartInstanceReply {
 	int32 code = 1;
 	string message = 2;
+}
+
+message GetInstanceConsoleReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
 }

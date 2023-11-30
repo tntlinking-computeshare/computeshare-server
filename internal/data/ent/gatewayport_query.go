@@ -262,7 +262,7 @@ func (gpq *GatewayPortQuery) Clone() *GatewayPortQuery {
 // Example:
 //
 //	var v []struct {
-//		FkGatewayID string `json:"fk_gateway_id,omitempty"`
+//		FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -285,7 +285,7 @@ func (gpq *GatewayPortQuery) GroupBy(field string, fields ...string) *GatewayPor
 // Example:
 //
 //	var v []struct {
-//		FkGatewayID string `json:"fk_gateway_id,omitempty"`
+//		FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 //	}
 //
 //	client.GatewayPort.Query().

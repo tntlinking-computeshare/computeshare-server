@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/google/uuid"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
@@ -50,4 +51,22 @@ func (repo *GatewayPortRepo) toBiz(item *ent.GatewayPort, _ int) *biz.GatewayPor
 		Port:        item.Port,
 		IsUse:       item.IsUse,
 	}
+}
+
+func (repo *GatewayPortRepo) Update(ctx context.Context, gp *biz.GatewayPort) error {
+	if gp == nil {
+		return nil
+	}
+
+	return repo.data.db.GatewayPort.UpdateOneID(gp.ID).
+		SetIsUse(gp.IsUse).
+		Exec(ctx)
+}
+
+func (repo *GatewayPortRepo) GetGatewayPortByGatewayIdAndPort(ctx context.Context, gatewayId uuid.UUID, port int) (*biz.GatewayPort, error) {
+	data, err := repo.data.db.GatewayPort.Query().
+		Where(gatewayport.FkGatewayIDEQ(gatewayId), gatewayport.PortEQ(int64(port))).
+		First(ctx)
+
+	return repo.toBiz(data, 0), err
 }

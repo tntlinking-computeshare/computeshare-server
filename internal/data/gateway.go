@@ -2,6 +2,8 @@ package data
 
 import (
 	"context"
+	"errors"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -11,14 +13,16 @@ import (
 )
 
 type GatewayRepo struct {
-	data *Data
-	log  *log.Helper
+	data            *Data
+	gatewayPortRepo biz.GatewayPortRepo
+	log             *log.Helper
 }
 
-func NewGatewayRepo(data *Data, logger log.Logger) biz.GatewayRepo {
+func NewGatewayRepo(data *Data, gatewayPortRepo biz.GatewayPortRepo, logger log.Logger) biz.GatewayRepo {
 	return &GatewayRepo{
-		data: data,
-		log:  log.NewHelper(logger),
+		data:            data,
+		gatewayPortRepo: gatewayPortRepo,
+		log:             log.NewHelper(logger),
 	}
 }
 
@@ -45,4 +49,30 @@ func (repo *GatewayRepo) toBiz(item *ent.Gateway, _ int) *biz.Gateway {
 		IP:   item.IP,
 		Port: item.Port,
 	}
+}
+
+func (repo *GatewayRepo) FindInstanceSuitableGateway(ctx context.Context, instanceId uuid.UUID) (*biz.Gateway, error) {
+
+	networkMapping, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkComputerIDEQ(instanceId)).First(ctx)
+	if err == nil {
+		return repo.GetGateway(ctx, networkMapping.FkGatewayID)
+	}
+
+	counts, err := repo.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+	if err != nil {
+		return nil, err
+	}
+	if len(counts) == 0 {
+		return nil, errors.New("no available gateway")
+	}
+	maxCount := lo.MaxBy(counts, func(item *biz.GatewayPortCount, max *biz.GatewayPortCount) bool {
+		return item.Count > max.Count
+	})
+
+	if maxCount.Count == 0 {
+		return nil, errors.New("no available gateway")
+	}
+
+	return repo.GetGateway(ctx, maxCount.FkGatewayID)
+
 }

@@ -84,6 +84,8 @@ message NatNetworkMappingTaskParamVO {
   int64 instancePort = 4;
   int64 remotePort = 5;
   string gatewayId = 6;
+  string gatewayIp = 7;
+  int64 gatewayPort = 8;
 }
 
 message ComputeInstanceTaskParamVO {
@@ -93,4 +95,6 @@ message ComputeInstanceTaskParamVO {
   int64 memory = 4;
   string image = 5;
   string publicKey = 6;
+  string password = 7;
+  string instanceId = 8;
 }

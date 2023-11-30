@@ -1,6 +1,6 @@
 ### POST
 POST http://127.0.0.1:8000/v1/storage/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
+Authorization: Bearer {{ access_token }}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ### 下载
 POST https://computeshare-frontend.hamster.newtouch.com/api/v1/storage/download?id=5c82490f-7479-4394-adcc-d69b00a80282
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU5NjgwMTJ9.YYZo1yC6AU96ZQlSgwioV8BcS0dxWxse3xo6Wl_etYE
+Authorization: Bearer {{ access_token }}
 
 
 ###
@@ -23,7 +23,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwM
 #  -H 'accept: application/json'
 GET  http://127.0.0.1:8000/v1/user
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJkMmIyYzE1Yy1hM2RmLTQ1OGItYmVjMC1jNTU2YWYxNDMxOTMiLCJleHAiOjE2OTUyNzY5ODR9.GU4Va3rQSzT2YKsZUxJIJQdf4TpwCdIANVyJkdjKoPY
+Authorization: Bearer {{ access_token }}
 
 ###
 
@@ -50,22 +50,20 @@ Content-Type: application/json
 ###
 GET http://127.0.0.1:8000/v1/compute-power/script/info/1
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6ImEzNTQ2ZTUxLTg5NzYtNDRlYS05NGEzLTFjNzRlYmRhMDExOCIsImV4cCI6MTY5NDU3NjY1N30.PMUmQZcv0u71X4XKQ6lqLx2ok_kUmL3Ydf_lX1fZblI
-
-
+Authorization: Bearer {{ access_token }}
 
 
 ###
 GET http://127.0.0.1:8000/v1/user
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTUyODMxMjF9.gh8uLnrTGERkN8k-bkiAYvMyqs1O8vrNJIeMCoPsSO4
+Authorization: Bearer {{ access_token }}
 
 
 ### 修改密码
 PUT http://127.0.0.1:8000/v1/user/password
 Content-Type: application/json
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTUyODMxMjF9.gh8uLnrTGERkN8k-bkiAYvMyqs1O8vrNJIeMCoPsSO4
+Authorization: Bearer {{ access_token }}
 
 {
   "oldPassword": "",
@@ -97,87 +95,94 @@ Content-Type: application/json
 ### 创建虚拟机
 POST  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU4ODM1MjB9.wBjKUJ2n0GFK66iYa2kHKXU9F4m9LQ4OpD9pakg07HM
+Authorization: Bearer {{ access_token }}
 
 {
   "specId": 1,
   "imageId": 1,
   "duration": 1,
-  "name": "my-vm"
+  "name": "my-vm",
+  "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
+  "password":  "Abcd12345"
 }
 
 ### 关闭虚拟机
-PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/stop
+PUT  http://127.0.0.1:8000/v1/instance/{{instanceId}}/stop
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+Authorization: Bearer {{ access_token }}
 
 {
 
 }
 
 ### 启动虚拟机
-PUT  http://127.0.0.1:8000/v1/instance/1e6d989f-1dac-414e-a914-c93c0d23d64d/start
+PUT  http://127.0.0.1:8000/v1/instance/{{instanceId}}/start
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  http://127.0.0.1:8000/v1/instance/59029fbc-54ee-4e51-b86b-570edafc4fc7
+DELETE  http://127.0.0.1:8000/v1/instance/{{instanceId}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhZDkwMWZlZi0xZTBjLTQxMmQtODE0My0xNzExMTA0ZmMxZGYiLCJleHAiOjE2OTU0MzY3NjZ9.UE51p2kQVDEtM-VNfsFe2S0-TSzVox2K1EVjV9G-LOg
+Authorization: Bearer {{ access_token }}
 
 
 ### 查询虚拟机
 GET  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIxNzU1OWRlZi1jNTE0LTQxZmQtYjA0NC1iNTliODFmMmZiNmIiLCJleHAiOjE2OTU2OTg3Nzl9.PTmJQ29qS2RcB6eegLzw7epSseW1s84LzEA87JR9xsY
+Authorization: Bearer {{ access_token }}
 
 
 ### 查询文件列表
 GET  https://computeshare.hamster.newtouch.com/v1/storage
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI1NTh9.1GE-cKVFIk6VozVI6QGtZRxuOoM_Fvw8GBZbdGhsAcU
+Authorization: Bearer {{ access_token }}
 
 
 ### 创建网络映射
 POST  http://127.0.0.1:8000/v1/network-mappings
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDA2MTc3Mjd9.8_txM1SWcoKAGvgBUbBzodoyPDSbFUi--kMFRiclg2I
+Authorization: Bearer {{ access_token }}
 
 {
-  "name": "redis-port",
-  "computer_id": "00d460f0-ec1a-4a0f-a452-1afb4b5d1686",
-  "computer_port": 6379
+  "name": "ssh2-port",
+  "computer_id": "a5992431-dc1c-49b7-a537-f9e40b2355b6",
+  "computer_port": 22
 }
 
 ### 查询网络映射
 GET  http://127.0.0.1:8000/v1/network-mappings/page?computer_id=00d460f0-ec1a-4a0f-a452-1afb4b5d1686&page=1&size=1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDA2MTc3Mjd9.8_txM1SWcoKAGvgBUbBzodoyPDSbFUi--kMFRiclg2I
+Authorization: Bearer {{ access_token }}
 
 ### 网络映射详情
 GET  http://127.0.0.1:8000/v1/network-mappings/7f4d03d5-445e-4b1b-9a3c-227123a0f9c6
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+Authorization: Bearer {{ access_token }}
 
 ### 删除网络映射
-DELETE   http://127.0.0.1:8000/v1/network-mappings/7f4d03d5-445e-4b1b-9a3c-227123a0f9c6
+DELETE   http://127.0.0.1:8000/v1/network-mappings/62470099-64a0-40e3-9469-c2ecbc7b35ce
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+Authorization: Bearer {{ access_token }}
 
 
 ### 查询任务
 GET  http://127.0.0.1:8000/v1/queue/task?id=00c460f0-ec1a-4a0f-a452-1afb4b5d1686
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+Authorization: Bearer {{ access_token }}
 
 ### 更新任务状态
 PUT  http://127.0.0.1:8000/v1/queue/task
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiIzNjhjMjBlNC00NmY1LTQ0ZDAtYTU1ZC01MjI5NDg5OTUwNzciLCJleHAiOjE3MDAwMzI5MzN9.DY_FCKRtnfnJttkFH_TB_OF3RlPGvEPnEtzST3BbdqI
+Authorization: Bearer {{ access_token }}
 
 {
   "id":"ac4d35fc-7ec1-4275-bf48-5fcc568736cd",
   "agentId":"00c460f0-ec1a-4a0f-a452-1afb4b5d1686",
   "status":1,
 }
+
+### 获取VNC CONSOLE
+GET http://127.0.0.1:8000/v1/instance/{{ instanceId }}/console
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}

@@ -2,7 +2,10 @@ package biz
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"strconv"
 	"time"
 )
 
@@ -13,6 +16,22 @@ type ComputeSpec struct {
 	Core string `json:"core,omitempty"`
 	// Memory holds the value of the "memory" field.
 	Memory string `json:"memory,omitempty"`
+}
+
+func (c *ComputeSpec) GetCore() int64 {
+	core, err := strconv.Atoi(c.Core)
+	if err != nil {
+		return 1
+	}
+	return int64(core)
+}
+
+func (c *ComputeSpec) GetMemory() int64 {
+	memory, err := strconv.Atoi(c.Memory)
+	if err != nil {
+		return 1024
+	}
+	return int64(memory)
 }
 
 type ComputeInstance struct {
@@ -32,27 +51,38 @@ type ComputeInstance struct {
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
-	Status int8 `json:"status,omitempty"`
+	Status consts.InstanceStatus `json:"status,omitempty"`
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	PeerID  string                `json:"peer_id,omitempty"`
+	AgentId string                `json:"peer_id,omitempty"`
 	Command string                `json:"command,omitempty"`
 	Stats   []*ComputeInstanceRds `json:"stats"`
 }
 
-const (
-	InstanceStatusStarting int8 = iota
-	InstanceStatusRunning
-	InstanceStatusTerminal
-	InstanceStatusExpire
-)
+func (i *ComputeInstance) GetCore() int64 {
+	core, err := strconv.Atoi(i.Core)
+	if err != nil {
+		return 0
+	}
+	return int64(core)
+}
+
+func (i *ComputeInstance) GetMemory() int64 {
+	memory, err := strconv.Atoi(i.Memory)
+	if err != nil {
+		return 0
+	}
+	return int64(memory)
+}
 
 type ComputeInstanceCreate struct {
-	SpecId   int32
-	ImageId  int32
-	Duration int32
-	Name     string
+	SpecId    int32
+	ImageId   int32
+	Duration  int32
+	Name      string
+	PublicKey string
+	Password  string
 }
 
 type ComputeImage struct {
@@ -67,6 +97,10 @@ type ComputeImage struct {
 	// 端口号
 	Port    int32 `json:"port,omitempty"`
 	Command string
+}
+
+func (c *ComputeImage) GetImageTag() string {
+	return fmt.Sprintf("%s:%s", c.Image, c.Tag)
 }
 
 type ComputeInstanceRds struct {

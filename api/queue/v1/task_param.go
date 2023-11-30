@@ -7,21 +7,15 @@ import (
 
 func (task *QueueTaskVo) GetTaskParam() (any, error) {
 	switch task.Cmd {
-	case TaskCmd_VM_CREATE:
-	case TaskCmd_VM_DELETE:
-	case TaskCmd_VM_START:
-	case TaskCmd_VM_SHUTDOWN:
-	case TaskCmd_VM_RESTART:
-	case TaskCmd_VM_VNC_CONNECT:
+	case TaskCmd_VM_CREATE, TaskCmd_VM_DELETE, TaskCmd_VM_START,
+		TaskCmd_VM_SHUTDOWN, TaskCmd_VM_RESTART:
 
 		var vo ComputeInstanceTaskParamVO
 		err := json.Unmarshal([]byte(task.GetParams()), &vo)
 		return vo, err
 
-	case TaskCmd_NAT_PROXY_CREATE:
-	case TaskCmd_NAT_PROXY_DELETE:
-	case TaskCmd_NAT_VISITOR_CREATE:
-	case TaskCmd_NAT_VISITOR_DELETE:
+	case TaskCmd_NAT_PROXY_CREATE, TaskCmd_NAT_PROXY_DELETE,
+		TaskCmd_NAT_VISITOR_CREATE, TaskCmd_NAT_VISITOR_DELETE, TaskCmd_VM_VNC_CONNECT:
 		var vo NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(task.GetParams()), &vo)
 		return vo, err

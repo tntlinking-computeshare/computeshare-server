@@ -76,3 +76,11 @@ func (repo *TaskRepo) toBiz(item *ent.Task, _ int) *biz.Task {
 		Status:     queue.TaskStatus(item.Status),
 	}
 }
+
+func (repo *TaskRepo) GetToDoTaskByAgentId(ctx context.Context, agentId string) (*biz.Task, error) {
+	t, err := repo.data.db.Task.Query().
+		Where(task.AgentIDEQ(agentId), task.StatusEQ(int(queue.TaskStatus_CREATED))).
+		Order(task.ByCreateTime(sql.OrderAsc())).
+		First(ctx)
+	return repo.toBiz(t, 0), err
+}

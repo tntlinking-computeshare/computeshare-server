@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -40,19 +41,13 @@ type Task struct {
 
 func (task *Task) GetTaskParam() (any, error) {
 	switch task.Cmd {
-	case queue.TaskCmd_VM_CREATE:
-	case queue.TaskCmd_VM_DELETE:
-	case queue.TaskCmd_VM_START:
-	case queue.TaskCmd_VM_SHUTDOWN:
-	case queue.TaskCmd_VM_RESTART:
-	case queue.TaskCmd_VM_VNC_CONNECT:
+	case queue.TaskCmd_VM_CREATE, queue.TaskCmd_VM_DELETE, queue.TaskCmd_VM_START,
+		queue.TaskCmd_VM_SHUTDOWN, queue.TaskCmd_VM_RESTART, queue.TaskCmd_VM_VNC_CONNECT:
 		var vo queue.ComputeInstanceTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
 		return vo, err
-	case queue.TaskCmd_NAT_PROXY_CREATE:
-	case queue.TaskCmd_NAT_PROXY_DELETE:
-	case queue.TaskCmd_NAT_VISITOR_CREATE:
-	case queue.TaskCmd_NAT_VISITOR_DELETE:
+	case queue.TaskCmd_NAT_PROXY_CREATE, queue.TaskCmd_NAT_PROXY_DELETE,
+		queue.TaskCmd_NAT_VISITOR_CREATE, queue.TaskCmd_NAT_VISITOR_DELETE:
 		var vo queue.NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
 		return vo, err
@@ -65,18 +60,21 @@ type TaskRepo interface {
 	GetTask(ctx context.Context, id uuid.UUID) (*Task, error)
 	ListTaskByAgentID(ctx context.Context, agentID string) ([]*Task, error)
 	UpdateTask(ctx context.Context, task *Task) error
+	GetToDoTaskByAgentId(ctx context.Context, id string) (*Task, error)
 }
 
 type TaskUseCase struct {
 	repo                  TaskRepo
 	networkMappingUseCase *NetworkMappingUseCase
+	computeInstanceRepo   ComputeInstanceRepo
 	log                   *log.Helper
 }
 
-func NewTaskUseCase(repo TaskRepo, networkMappingUseCase *NetworkMappingUseCase, logger log.Logger) *TaskUseCase {
+func NewTaskUseCase(repo TaskRepo, networkMappingUseCase *NetworkMappingUseCase, computeInstanceRepo ComputeInstanceRepo, logger log.Logger) *TaskUseCase {
 	return &TaskUseCase{
 		repo:                  repo,
 		networkMappingUseCase: networkMappingUseCase,
+		computeInstanceRepo:   computeInstanceRepo,
 		log:                   log.NewHelper(logger),
 	}
 }
@@ -94,33 +92,134 @@ func (m *TaskUseCase) ListTaskByAgentID(ctx context.Context, agentID string) ([]
 	return m.repo.ListTaskByAgentID(ctx, agentID)
 }
 
+func (m *TaskUseCase) GetToDoTaskByAgentId(ctx context.Context, agentID string) (*Task, error) {
+	m.log.WithContext(ctx).Infof("GetToDoTaskByAgentId %s %d %d", agentID)
+	return m.repo.GetToDoTaskByAgentId(ctx, agentID)
+}
+
 func (m *TaskUseCase) GetTask(ctx context.Context, id uuid.UUID) (*Task, error) {
 	m.log.WithContext(ctx).Infof("GetTask %s", id)
 	return m.repo.GetTask(ctx, id)
 }
 
 func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
-	//进行任务状态后的逻辑处理 TODO
+	//TODO ...进行任务状态后的逻辑处理
 	param, err := task.GetTaskParam()
 	if err != nil {
 		return err
 	}
-	switch task.Cmd {
-	case queue.TaskCmd_VM_CREATE:
-	case queue.TaskCmd_VM_DELETE:
-	case queue.TaskCmd_VM_START:
-	case queue.TaskCmd_VM_SHUTDOWN:
-	case queue.TaskCmd_VM_RESTART:
-	case queue.TaskCmd_VM_VNC_CONNECT:
-	case queue.TaskCmd_NAT_PROXY_CREATE:
-		id, err := uuid.Parse(param.(queue.NatNetworkMappingTaskParamVO).Id)
-		if err != nil {
-			return err
+
+	getInstanceId := func(param any) (uuid.UUID, error) {
+		vo, ok := param.(queue.ComputeInstanceTaskParamVO)
+		if !ok {
+			return uuid.Nil, errors.New("get task param error")
 		}
-		m.networkMappingUseCase.UpdateNetorkMapping(ctx, id, int(task.Status))
-	case queue.TaskCmd_NAT_PROXY_DELETE:
-	case queue.TaskCmd_NAT_VISITOR_CREATE:
-	case queue.TaskCmd_NAT_VISITOR_DELETE:
+		instanceId, err := uuid.Parse(vo.InstanceId)
+		if err != nil {
+			return uuid.Nil, err
+		}
+		return instanceId, nil
 	}
+
+	switch task.Status {
+
+	case queue.TaskStatus_CREATED:
+
+	case queue.TaskStatus_EXECUTING:
+
+		switch task.Cmd {
+		case queue.TaskCmd_VM_CREATE:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusCreating)
+		case queue.TaskCmd_VM_DELETE:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleting)
+		case queue.TaskCmd_VM_START:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusStarting)
+		case queue.TaskCmd_VM_SHUTDOWN:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosing)
+		case queue.TaskCmd_VM_RESTART:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRestarting)
+		case queue.TaskCmd_VM_VNC_CONNECT:
+
+		case queue.TaskCmd_NAT_PROXY_CREATE,
+			queue.TaskCmd_NAT_PROXY_DELETE,
+			queue.TaskCmd_NAT_VISITOR_CREATE,
+			queue.TaskCmd_NAT_VISITOR_DELETE:
+			id, err := uuid.Parse(param.(queue.NatNetworkMappingTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			m.networkMappingUseCase.UpdateNetorkMapping(ctx, id, int(task.Status))
+		}
+
+	case queue.TaskStatus_EXECUTED:
+
+		switch task.Cmd {
+		case queue.TaskCmd_VM_CREATE:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+		case queue.TaskCmd_VM_DELETE:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleted)
+		case queue.TaskCmd_VM_START:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+		case queue.TaskCmd_VM_SHUTDOWN:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosed)
+		case queue.TaskCmd_VM_RESTART:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+		case queue.TaskCmd_VM_VNC_CONNECT:
+
+		case queue.TaskCmd_NAT_PROXY_CREATE,
+			queue.TaskCmd_NAT_PROXY_DELETE,
+			queue.TaskCmd_NAT_VISITOR_CREATE,
+			queue.TaskCmd_NAT_VISITOR_DELETE:
+			id, err := uuid.Parse(param.(queue.NatNetworkMappingTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			m.networkMappingUseCase.UpdateNetorkMapping(ctx, id, int(task.Status))
+		}
+
+	case queue.TaskStatus_FAILED:
+
+	}
+
 	return m.repo.UpdateTask(ctx, task)
 }
