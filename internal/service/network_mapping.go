@@ -13,12 +13,14 @@ import (
 type NetworkMappingService struct {
 	pb.UnimplementedNetworkMappingServer
 	nm  *biz.NetworkMappingUseCase
+	dm  *biz.DomainBindingUseCase
 	log *log.Helper
 }
 
-func NewNetworkMappingService(nm *biz.NetworkMappingUseCase, logger log.Logger) *NetworkMappingService {
+func NewNetworkMappingService(nm *biz.NetworkMappingUseCase, dm *biz.DomainBindingUseCase, logger log.Logger) *NetworkMappingService {
 	return &NetworkMappingService{
 		nm:  nm,
+		dm:  dm,
 		log: log.NewHelper(logger),
 	}
 }
@@ -39,7 +41,7 @@ func (s *NetworkMappingService) CreateNetworkMapping(ctx context.Context, req *p
 	return &pb.CreateNetworkMappingReply{
 		Code:           200,
 		Message:        SUCCESS,
-		NetworkMapping: s.toReply(networkmapping, 0),
+		NetworkMapping: s.toReply(ctx, networkmapping, 0),
 	}, nil
 }
 func (s *NetworkMappingService) PageNetworkMapping(ctx context.Context, req *pb.PageNetworkMappingRequest) (*pb.PageNetworkMappingReply, error) {
@@ -47,7 +49,7 @@ func (s *NetworkMappingService) PageNetworkMapping(ctx context.Context, req *pb.
 	if err != nil {
 		return nil, err
 	}
-	list, total, err := s.nm.PageNetorkMapping(ctx, computerId, req.Page, req.Size)
+	list, total, err := s.nm.PageNetworkMapping(ctx, computerId, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +57,9 @@ func (s *NetworkMappingService) PageNetworkMapping(ctx context.Context, req *pb.
 		Code:    200,
 		Message: SUCCESS,
 		Data: &pb.PageNetworkMappingReply_Data{
-			List:  lo.Map(list, s.toReply),
+			List: lo.Map(list, func(item *biz.NetworkMapping, index int) *pb.NetworkMappingVO {
+				return s.toReply(ctx, item, index)
+			}),
 			Total: total,
 			Page:  req.GetPage(),
 			Size:  req.GetSize(),
@@ -78,7 +82,7 @@ func (s *NetworkMappingService) GetNetworkMapping(ctx context.Context, req *pb.G
 	return &pb.GetNetworkMappingReply{
 		Code:           200,
 		Message:        SUCCESS,
-		NetworkMapping: s.toReply(networkmapping, 0),
+		NetworkMapping: s.toReply(ctx, networkmapping, 0),
 	}, nil
 }
 func (s *NetworkMappingService) DeleteNetworkMapping(ctx context.Context, req *pb.DeleteNetworkMappingRequest) (*pb.DeleteNetworkMappingReply, error) {
@@ -99,10 +103,12 @@ func (s *NetworkMappingService) DeleteNetworkMapping(ctx context.Context, req *p
 	}, nil
 }
 
-func (s *NetworkMappingService) toReply(p *biz.NetworkMapping, _ int) *pb.NetworkMappingVO {
+func (s *NetworkMappingService) toReply(ctx context.Context, p *biz.NetworkMapping, _ int) *pb.NetworkMappingVO {
 	if p == nil {
 		return nil
 	}
+	list, _ := s.dm.ListByNetworkMappingId(ctx, p.ID)
+
 	return &pb.NetworkMappingVO{
 		Id:           p.ID.String(),
 		Name:         p.Name,
@@ -111,5 +117,6 @@ func (s *NetworkMappingService) toReply(p *biz.NetworkMapping, _ int) *pb.Networ
 		ComputerId:   p.FkComputerID.String(),
 		GatewayPort:  int32(p.GatewayPort),
 		ComputerPort: int32(p.ComputerPort),
+		Domains:      list,
 	}
 }

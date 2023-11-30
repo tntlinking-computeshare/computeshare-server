@@ -11,4 +11,5 @@ var ProviderSet = wire.NewSet(
 	NewScriptUseCase,
 	NewNetworkMappingUseCase,
 	NewTaskUseCase,
+	NewDomainBindingUseCase,
 )

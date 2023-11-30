@@ -20,6 +20,8 @@ type Tx struct {
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// DomainBinding is the client for interacting with the DomainBinding builders.
+	DomainBinding *DomainBindingClient
 	// Employee is the client for interacting with the Employee builders.
 	Employee *EmployeeClient
 	// Gateway is the client for interacting with the Gateway builders.
@@ -173,6 +175,7 @@ func (tx *Tx) init() {
 	tx.ComputeImage = NewComputeImageClient(tx.config)
 	tx.ComputeInstance = NewComputeInstanceClient(tx.config)
 	tx.ComputeSpec = NewComputeSpecClient(tx.config)
+	tx.DomainBinding = NewDomainBindingClient(tx.config)
 	tx.Employee = NewEmployeeClient(tx.config)
 	tx.Gateway = NewGatewayClient(tx.config)
 	tx.GatewayPort = NewGatewayPortClient(tx.config)

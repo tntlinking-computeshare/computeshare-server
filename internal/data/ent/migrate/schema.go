@@ -102,6 +102,23 @@ var (
 			},
 		},
 	}
+	// DomainBindingsColumns holds the columns for the "domain_bindings" table.
+	DomainBindingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "fk_compute_instance_id", Type: field.TypeUUID},
+		{Name: "fk_network_mapping_id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString, Size: 50},
+		{Name: "domain", Type: field.TypeString, Size: 255},
+		{Name: "gateway_port", Type: field.TypeInt},
+		{Name: "create_time", Type: field.TypeTime},
+	}
+	// DomainBindingsTable holds the schema information for the "domain_bindings" table.
+	DomainBindingsTable = &schema.Table{
+		Name:       "domain_bindings",
+		Columns:    DomainBindingsColumns,
+		PrimaryKey: []*schema.Column{DomainBindingsColumns[0]},
+	}
 	// EmployeesColumns holds the columns for the "employees" table.
 	EmployeesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -289,6 +306,7 @@ var (
 		ComputeImagesTable,
 		ComputeInstancesTable,
 		ComputeSpecsTable,
+		DomainBindingsTable,
 		EmployeesTable,
 		GatewaysTable,
 		GatewayPortsTable,

@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.network_mapping.v1;
 
 import "google/api/annotations.proto";
+import "api/network_mapping/v1/domain_binding.proto";
 
 option go_package = "github.com/mohaijiang/computeshare-server/api/network_mapping/v1;v1";
 option java_multiple_files = true;
@@ -63,7 +64,7 @@ message GetNetworkMappingReply {
 message PageNetworkMappingRequest {
 	int32 page = 1;
 	int32 size = 2;
-  string computer_id = 3; 
+  string computer_id = 3;
 }
 
 message PageNetworkMappingReply {
@@ -86,4 +87,5 @@ message NetworkMappingVO {
   int32 gateway_port = 5;
   int32 computer_port = 6;
   int32 status = 7;
+  repeated DomainBindingVO domains = 8;
 }

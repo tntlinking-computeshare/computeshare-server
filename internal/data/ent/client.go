@@ -19,6 +19,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
@@ -43,6 +44,8 @@ type Client struct {
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// DomainBinding is the client for interacting with the DomainBinding builders.
+	DomainBinding *DomainBindingClient
 	// Employee is the client for interacting with the Employee builders.
 	Employee *EmployeeClient
 	// Gateway is the client for interacting with the Gateway builders.
@@ -78,6 +81,7 @@ func (c *Client) init() {
 	c.ComputeImage = NewComputeImageClient(c.config)
 	c.ComputeInstance = NewComputeInstanceClient(c.config)
 	c.ComputeSpec = NewComputeSpecClient(c.config)
+	c.DomainBinding = NewDomainBindingClient(c.config)
 	c.Employee = NewEmployeeClient(c.config)
 	c.Gateway = NewGatewayClient(c.config)
 	c.GatewayPort = NewGatewayPortClient(c.config)
@@ -173,6 +177,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		DomainBinding:         NewDomainBindingClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
 		GatewayPort:           NewGatewayPortClient(cfg),
@@ -205,6 +210,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		DomainBinding:         NewDomainBindingClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
 		GatewayPort:           NewGatewayPortClient(cfg),
@@ -243,9 +249,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script, c.ScriptExecutionRecord,
-		c.Storage, c.Task, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script,
+		c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -255,9 +261,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.Employee,
-		c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script, c.ScriptExecutionRecord,
-		c.Storage, c.Task, c.User,
+		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script,
+		c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -274,6 +280,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ComputeInstance.mutate(ctx, m)
 	case *ComputeSpecMutation:
 		return c.ComputeSpec.mutate(ctx, m)
+	case *DomainBindingMutation:
+		return c.DomainBinding.mutate(ctx, m)
 	case *EmployeeMutation:
 		return c.Employee.mutate(ctx, m)
 	case *GatewayMutation:
@@ -766,6 +774,124 @@ func (c *ComputeSpecClient) mutate(ctx context.Context, m *ComputeSpecMutation) 
 		return (&ComputeSpecDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ComputeSpec mutation op: %q", m.Op())
+	}
+}
+
+// DomainBindingClient is a client for the DomainBinding schema.
+type DomainBindingClient struct {
+	config
+}
+
+// NewDomainBindingClient returns a client for the DomainBinding from the given config.
+func NewDomainBindingClient(c config) *DomainBindingClient {
+	return &DomainBindingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `domainbinding.Hooks(f(g(h())))`.
+func (c *DomainBindingClient) Use(hooks ...Hook) {
+	c.hooks.DomainBinding = append(c.hooks.DomainBinding, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `domainbinding.Intercept(f(g(h())))`.
+func (c *DomainBindingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DomainBinding = append(c.inters.DomainBinding, interceptors...)
+}
+
+// Create returns a builder for creating a DomainBinding entity.
+func (c *DomainBindingClient) Create() *DomainBindingCreate {
+	mutation := newDomainBindingMutation(c.config, OpCreate)
+	return &DomainBindingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DomainBinding entities.
+func (c *DomainBindingClient) CreateBulk(builders ...*DomainBindingCreate) *DomainBindingCreateBulk {
+	return &DomainBindingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DomainBinding.
+func (c *DomainBindingClient) Update() *DomainBindingUpdate {
+	mutation := newDomainBindingMutation(c.config, OpUpdate)
+	return &DomainBindingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DomainBindingClient) UpdateOne(db *DomainBinding) *DomainBindingUpdateOne {
+	mutation := newDomainBindingMutation(c.config, OpUpdateOne, withDomainBinding(db))
+	return &DomainBindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DomainBindingClient) UpdateOneID(id uuid.UUID) *DomainBindingUpdateOne {
+	mutation := newDomainBindingMutation(c.config, OpUpdateOne, withDomainBindingID(id))
+	return &DomainBindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DomainBinding.
+func (c *DomainBindingClient) Delete() *DomainBindingDelete {
+	mutation := newDomainBindingMutation(c.config, OpDelete)
+	return &DomainBindingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DomainBindingClient) DeleteOne(db *DomainBinding) *DomainBindingDeleteOne {
+	return c.DeleteOneID(db.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DomainBindingClient) DeleteOneID(id uuid.UUID) *DomainBindingDeleteOne {
+	builder := c.Delete().Where(domainbinding.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DomainBindingDeleteOne{builder}
+}
+
+// Query returns a query builder for DomainBinding.
+func (c *DomainBindingClient) Query() *DomainBindingQuery {
+	return &DomainBindingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDomainBinding},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DomainBinding entity by its id.
+func (c *DomainBindingClient) Get(ctx context.Context, id uuid.UUID) (*DomainBinding, error) {
+	return c.Query().Where(domainbinding.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DomainBindingClient) GetX(ctx context.Context, id uuid.UUID) *DomainBinding {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DomainBindingClient) Hooks() []Hook {
+	return c.hooks.DomainBinding
+}
+
+// Interceptors returns the client interceptors.
+func (c *DomainBindingClient) Interceptors() []Interceptor {
+	return c.inters.DomainBinding
+}
+
+func (c *DomainBindingClient) mutate(ctx context.Context, m *DomainBindingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DomainBindingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DomainBindingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DomainBindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DomainBindingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown DomainBinding mutation op: %q", m.Op())
 	}
 }
 
@@ -1866,13 +1992,13 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
-		GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
-		User []ent.Hook
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
+		Gateway, GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage,
+		Task, User []ent.Hook
 	}
 	inters struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, Employee, Gateway,
-		GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage, Task,
-		User []ent.Interceptor
+		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
+		Gateway, GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage,
+		Task, User []ent.Interceptor
 	}
 )

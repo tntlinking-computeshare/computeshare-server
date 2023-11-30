@@ -16,6 +16,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
@@ -89,6 +90,7 @@ func checkColumn(table, column string) error {
 			computeimage.Table:          computeimage.ValidColumn,
 			computeinstance.Table:       computeinstance.ValidColumn,
 			computespec.Table:           computespec.ValidColumn,
+			domainbinding.Table:         domainbinding.ValidColumn,
 			employee.Table:              employee.ValidColumn,
 			gateway.Table:               gateway.ValidColumn,
 			gatewayport.Table:           gatewayport.ValidColumn,

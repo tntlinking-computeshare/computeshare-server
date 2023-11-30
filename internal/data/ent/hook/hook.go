@@ -57,6 +57,18 @@ func (f ComputeSpecFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeSpecMutation", m)
 }
 
+// The DomainBindingFunc type is an adapter to allow the use of ordinary
+// function as DomainBinding mutator.
+type DomainBindingFunc func(context.Context, *ent.DomainBindingMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DomainBindingFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DomainBindingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DomainBindingMutation", m)
+}
+
 // The EmployeeFunc type is an adapter to allow the use of ordinary
 // function as Employee mutator.
 type EmployeeFunc func(context.Context, *ent.EmployeeMutation) (ent.Value, error)

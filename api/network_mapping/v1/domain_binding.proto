@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package api.network_mapping.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/network_mapping/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.network_mapping.v1";
+
+service DomainBinding {
+	rpc CreateDomainBinding (CreateDomainBindingRequest) returns (CreateDomainBindingReply){
+		option (google.api.http) = {
+			post: "/v1/domain-binding",
+			body: "*",
+		};
+	};
+	rpc UpdateDomainBinding (UpdateDomainBindingRequest) returns (UpdateDomainBindingReply){
+		option (google.api.http) = {
+			put: "/v1/domain-binding/{id}",
+			body: "*",
+		};
+	};
+	rpc DeleteDomainBinding (DeleteDomainBindingRequest) returns (DeleteDomainBindingReply){
+		option (google.api.http) = {
+			delete: "/v1/domain-binding/{id}",
+		};
+	};
+	rpc GetDomainBinding (GetDomainBindingRequest) returns (GetDomainBindingReply) {
+		option (google.api.http) = {
+			get: "/v1/domain-binding/{id}",
+		};
+	};
+	rpc ListDomainBinding (ListDomainBindingRequest) returns (ListDomainBindingReply) {
+		option (google.api.http) = {
+			get: "/v1/domain-binding",
+		};
+	};
+	rpc NsLookup(NsLookupRequest) returns(NsLookupReply) {
+		option (google.api.http) = {
+			get: "/v1/domain-binding/nslookup",
+		};
+	}
+}
+
+message CreateDomainBindingRequest {
+	string compute_instance_id = 1;
+	string network_mapping_id = 2;
+	string name = 3;
+	string domain = 4;
+	int32 gateway_port = 5;
+}
+message CreateDomainBindingReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
+message UpdateDomainBindingRequest {
+	string id = 1;
+	string compute_instance_id = 2;
+	string network_mapping_id = 3;
+	string name = 4;
+	string domain = 5;
+	int32 gateway_port = 6;
+}
+message UpdateDomainBindingReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message DeleteDomainBindingRequest {
+	string id = 1;
+}
+message DeleteDomainBindingReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message GetDomainBindingRequest {
+	string id = 1;
+}
+message GetDomainBindingReply {
+	int32 code = 1;
+	string message = 2;
+	DomainBindingVO data = 3;
+}
+
+message ListDomainBindingRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+message ListDomainBindingReply {
+	int32 code = 1;
+	string message = 2;
+	DomainBindingPageResponse data = 3;
+}
+
+message DomainBindingVO {
+	string id = 1;
+	string compute_instance_id = 2;
+	string network_mapping_id = 3;
+	string name = 4;
+	string domain = 5;
+	int32 gateway_port = 6;
+	int64 create_time = 7;
+}
+
+message DomainBindingPageResponse {
+	repeated DomainBindingVO list = 1;
+	int64 total = 2;
+	int32 page = 3;
+	int32 size = 4;
+}
+
+message NsLookupRequest {
+	string domain = 1;
+}
+
+message NsLookupReply {
+	int32 code = 1;
+	string message = 2;
+	repeated string data = 3;
+}

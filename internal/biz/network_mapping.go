@@ -66,7 +66,7 @@ type GatewayPortCount struct {
 
 type GatewayPortRepo interface {
 	CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
-	GetGatwayPortFirstByNotUsed(ctx context.Context, gatewayID string) (*GatewayPort, error)
+	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID string) (*GatewayPort, error)
 }
 
 type NetworkMappingUseCase struct {
@@ -110,7 +110,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, fmt.Errorf("无可用端口")
 	}
 	// 查询当前 gateway 的空余端口并进行分配
-	gp, err := m.gatewayPortRepo.GetGatwayPortFirstByNotUsed(ctx, maxItem.FkGatewayID)
+	gp, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, maxItem.FkGatewayID)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +119,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 	gatewayPort := gp.Port
-	// TODO:更新 gateway 端口变为已使用
+
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
@@ -174,7 +174,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	return &nm, nil
 }
 
-func (m *NetworkMappingUseCase) PageNetorkMapping(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
+func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
 	m.log.WithContext(ctx).Infof("PageNetorkMapping %s %d %d", computerId, page, size)
 	return m.repo.PageNetworkMappingByComputerID(ctx, computerId, page, size)
 }

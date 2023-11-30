@@ -18,6 +18,9 @@ type ComputeInstance func(*sql.Selector)
 // ComputeSpec is the predicate function for computespec builders.
 type ComputeSpec func(*sql.Selector)
 
+// DomainBinding is the predicate function for domainbinding builders.
+type DomainBinding func(*sql.Selector)
+
 // Employee is the predicate function for employee builders.
 type Employee func(*sql.Selector)
 

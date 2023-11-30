@@ -10,6 +10,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
@@ -95,6 +96,34 @@ func init() {
 	computespecDescMemory := computespecFields[2].Descriptor()
 	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
 	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
+	domainbindingFields := schema.DomainBinding{}.Fields()
+	_ = domainbindingFields
+	// domainbindingDescName is the schema descriptor for name field.
+	domainbindingDescName := domainbindingFields[4].Descriptor()
+	// domainbinding.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	domainbinding.NameValidator = func() func(string) error {
+		validators := domainbindingDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// domainbindingDescDomain is the schema descriptor for domain field.
+	domainbindingDescDomain := domainbindingFields[5].Descriptor()
+	// domainbinding.DomainValidator is a validator for the "domain" field. It is called by the builders before save.
+	domainbinding.DomainValidator = domainbindingDescDomain.Validators[0].(func(string) error)
+	// domainbindingDescID is the schema descriptor for id field.
+	domainbindingDescID := domainbindingFields[0].Descriptor()
+	// domainbinding.DefaultID holds the default value on creation for the id field.
+	domainbinding.DefaultID = domainbindingDescID.Default.(func() uuid.UUID)
 	gatewayFields := schema.Gateway{}.Fields()
 	_ = gatewayFields
 	// gatewayDescName is the schema descriptor for name field.
