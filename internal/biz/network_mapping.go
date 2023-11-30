@@ -124,7 +124,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	if err != nil {
 		return nil, err
 	}
-	fkGatewayId, err := uuid.Parse(gp.FkGatewayID)
 	if err != nil {
 		return nil, err
 	}

@@ -34,7 +34,7 @@ func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUse
 	return counts, err
 }
 
-func (repo *GatewayPortRepo) GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID string) (*biz.GatewayPort, error) {
+func (repo *GatewayPortRepo) GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*biz.GatewayPort, error) {
 	instance, err := repo.data.db.GatewayPort.Query().
 		Where(gatewayport.FkGatewayID(gatewayID), gatewayport.IsUse(false)).
 		Order(gatewayport.ByPort(sql.OrderAsc())).First(ctx)
