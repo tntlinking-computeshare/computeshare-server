@@ -4,7 +4,6 @@ package networkmapping
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -77,6 +76,16 @@ func ComputerPort(v int) predicate.NetworkMapping {
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
 func Status(v int) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldStatus, v))
+}
+
+// FkComputerID applies equality check predicate on the "fk_computer_id" field. It's identical to FkComputerIDEQ.
+func FkComputerID(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldFkComputerID, v))
+}
+
+// FkUserID applies equality check predicate on the "fk_user_id" field. It's identical to FkUserIDEQ.
+func FkUserID(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldFkUserID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -304,27 +313,84 @@ func StatusLTE(v int) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLTE(FieldStatus, v))
 }
 
-// HasFkComputerID applies the HasEdge predicate on the "fk_computer_id" edge.
-func HasFkComputerID() predicate.NetworkMapping {
-	return predicate.NetworkMapping(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, FkComputerIDTable, FkComputerIDColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
+// FkComputerIDEQ applies the EQ predicate on the "fk_computer_id" field.
+func FkComputerIDEQ(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldFkComputerID, v))
 }
 
-// HasFkComputerIDWith applies the HasEdge predicate on the "fk_computer_id" edge with a given conditions (other predicates).
-func HasFkComputerIDWith(preds ...predicate.ComputeInstance) predicate.NetworkMapping {
-	return predicate.NetworkMapping(func(s *sql.Selector) {
-		step := newFkComputerIDStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
+// FkComputerIDNEQ applies the NEQ predicate on the "fk_computer_id" field.
+func FkComputerIDNEQ(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNEQ(FieldFkComputerID, v))
+}
+
+// FkComputerIDIn applies the In predicate on the "fk_computer_id" field.
+func FkComputerIDIn(vs ...uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldIn(FieldFkComputerID, vs...))
+}
+
+// FkComputerIDNotIn applies the NotIn predicate on the "fk_computer_id" field.
+func FkComputerIDNotIn(vs ...uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNotIn(FieldFkComputerID, vs...))
+}
+
+// FkComputerIDGT applies the GT predicate on the "fk_computer_id" field.
+func FkComputerIDGT(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGT(FieldFkComputerID, v))
+}
+
+// FkComputerIDGTE applies the GTE predicate on the "fk_computer_id" field.
+func FkComputerIDGTE(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGTE(FieldFkComputerID, v))
+}
+
+// FkComputerIDLT applies the LT predicate on the "fk_computer_id" field.
+func FkComputerIDLT(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLT(FieldFkComputerID, v))
+}
+
+// FkComputerIDLTE applies the LTE predicate on the "fk_computer_id" field.
+func FkComputerIDLTE(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLTE(FieldFkComputerID, v))
+}
+
+// FkUserIDEQ applies the EQ predicate on the "fk_user_id" field.
+func FkUserIDEQ(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldFkUserID, v))
+}
+
+// FkUserIDNEQ applies the NEQ predicate on the "fk_user_id" field.
+func FkUserIDNEQ(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNEQ(FieldFkUserID, v))
+}
+
+// FkUserIDIn applies the In predicate on the "fk_user_id" field.
+func FkUserIDIn(vs ...uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldIn(FieldFkUserID, vs...))
+}
+
+// FkUserIDNotIn applies the NotIn predicate on the "fk_user_id" field.
+func FkUserIDNotIn(vs ...uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNotIn(FieldFkUserID, vs...))
+}
+
+// FkUserIDGT applies the GT predicate on the "fk_user_id" field.
+func FkUserIDGT(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGT(FieldFkUserID, v))
+}
+
+// FkUserIDGTE applies the GTE predicate on the "fk_user_id" field.
+func FkUserIDGTE(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGTE(FieldFkUserID, v))
+}
+
+// FkUserIDLT applies the LT predicate on the "fk_user_id" field.
+func FkUserIDLT(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLT(FieldFkUserID, v))
+}
+
+// FkUserIDLTE applies the LTE predicate on the "fk_user_id" field.
+func FkUserIDLTE(v uuid.UUID) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLTE(FieldFkUserID, v))
 }
 
 // And groups predicates with the AND operator between them.

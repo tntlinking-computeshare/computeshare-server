@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -13,18 +12,16 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeInstanceQuery is the builder for querying ComputeInstance entities.
 type ComputeInstanceQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []computeinstance.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.ComputeInstance
-	withNetworkMappings *NetworkMappingQuery
+	ctx        *QueryContext
+	order      []computeinstance.OrderOption
+	inters     []Interceptor
+	predicates []predicate.ComputeInstance
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,28 +56,6 @@ func (ciq *ComputeInstanceQuery) Unique(unique bool) *ComputeInstanceQuery {
 func (ciq *ComputeInstanceQuery) Order(o ...computeinstance.OrderOption) *ComputeInstanceQuery {
 	ciq.order = append(ciq.order, o...)
 	return ciq
-}
-
-// QueryNetworkMappings chains the current query on the "networkMappings" edge.
-func (ciq *ComputeInstanceQuery) QueryNetworkMappings() *NetworkMappingQuery {
-	query := (&NetworkMappingClient{config: ciq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ciq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := ciq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(computeinstance.Table, computeinstance.FieldID, selector),
-			sqlgraph.To(networkmapping.Table, networkmapping.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, computeinstance.NetworkMappingsTable, computeinstance.NetworkMappingsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(ciq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first ComputeInstance entity from the query.
@@ -270,27 +245,15 @@ func (ciq *ComputeInstanceQuery) Clone() *ComputeInstanceQuery {
 		return nil
 	}
 	return &ComputeInstanceQuery{
-		config:              ciq.config,
-		ctx:                 ciq.ctx.Clone(),
-		order:               append([]computeinstance.OrderOption{}, ciq.order...),
-		inters:              append([]Interceptor{}, ciq.inters...),
-		predicates:          append([]predicate.ComputeInstance{}, ciq.predicates...),
-		withNetworkMappings: ciq.withNetworkMappings.Clone(),
+		config:     ciq.config,
+		ctx:        ciq.ctx.Clone(),
+		order:      append([]computeinstance.OrderOption{}, ciq.order...),
+		inters:     append([]Interceptor{}, ciq.inters...),
+		predicates: append([]predicate.ComputeInstance{}, ciq.predicates...),
 		// clone intermediate query.
 		sql:  ciq.sql.Clone(),
 		path: ciq.path,
 	}
-}
-
-// WithNetworkMappings tells the query-builder to eager-load the nodes that are connected to
-// the "networkMappings" edge. The optional arguments are used to configure the query builder of the edge.
-func (ciq *ComputeInstanceQuery) WithNetworkMappings(opts ...func(*NetworkMappingQuery)) *ComputeInstanceQuery {
-	query := (&NetworkMappingClient{config: ciq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	ciq.withNetworkMappings = query
-	return ciq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -369,11 +332,8 @@ func (ciq *ComputeInstanceQuery) prepareQuery(ctx context.Context) error {
 
 func (ciq *ComputeInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ComputeInstance, error) {
 	var (
-		nodes       = []*ComputeInstance{}
-		_spec       = ciq.querySpec()
-		loadedTypes = [1]bool{
-			ciq.withNetworkMappings != nil,
-		}
+		nodes = []*ComputeInstance{}
+		_spec = ciq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ComputeInstance).scanValues(nil, columns)
@@ -381,7 +341,6 @@ func (ciq *ComputeInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ComputeInstance{config: ciq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -393,48 +352,7 @@ func (ciq *ComputeInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := ciq.withNetworkMappings; query != nil {
-		if err := ciq.loadNetworkMappings(ctx, query, nodes,
-			func(n *ComputeInstance) { n.Edges.NetworkMappings = []*NetworkMapping{} },
-			func(n *ComputeInstance, e *NetworkMapping) {
-				n.Edges.NetworkMappings = append(n.Edges.NetworkMappings, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (ciq *ComputeInstanceQuery) loadNetworkMappings(ctx context.Context, query *NetworkMappingQuery, nodes []*ComputeInstance, init func(*ComputeInstance), assign func(*ComputeInstance, *NetworkMapping)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*ComputeInstance)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.NetworkMapping(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(computeinstance.NetworkMappingsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.compute_instance_network_mappings
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "compute_instance_network_mappings" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "compute_instance_network_mappings" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
 }
 
 func (ciq *ComputeInstanceQuery) sqlCount(ctx context.Context) (int, error) {

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 )
 
@@ -28,33 +27,11 @@ type NetworkMapping struct {
 	ComputerPort int `json:"computer_port,omitempty"`
 	//  0 待开始 1 进行中 2 已完成, 3 失败
 	Status int `json:"status,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the NetworkMappingQuery when eager-loading is set.
-	Edges                             NetworkMappingEdges `json:"edges"`
-	compute_instance_network_mappings *uuid.UUID
-	selectValues                      sql.SelectValues
-}
-
-// NetworkMappingEdges holds the relations/edges for other nodes in the graph.
-type NetworkMappingEdges struct {
-	// FkComputerID holds the value of the fk_computer_id edge.
-	FkComputerID *ComputeInstance `json:"fk_computer_id,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// FkComputerIDOrErr returns the FkComputerID value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e NetworkMappingEdges) FkComputerIDOrErr() (*ComputeInstance, error) {
-	if e.loadedTypes[0] {
-		if e.FkComputerID == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: computeinstance.Label}
-		}
-		return e.FkComputerID, nil
-	}
-	return nil, &NotLoadedError{edge: "fk_computer_id"}
+	// 虚拟机实例ID
+	FkComputerID uuid.UUID `json:"fk_computer_id,omitempty"`
+	// 用户id
+	FkUserID     uuid.UUID `json:"fk_user_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -66,10 +43,8 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case networkmapping.FieldName:
 			values[i] = new(sql.NullString)
-		case networkmapping.FieldID, networkmapping.FieldFkGatewayID:
+		case networkmapping.FieldID, networkmapping.FieldFkGatewayID, networkmapping.FieldFkComputerID, networkmapping.FieldFkUserID:
 			values[i] = new(uuid.UUID)
-		case networkmapping.ForeignKeys[0]: // compute_instance_network_mappings
-			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -121,12 +96,17 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nm.Status = int(value.Int64)
 			}
-		case networkmapping.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field compute_instance_network_mappings", values[i])
-			} else if value.Valid {
-				nm.compute_instance_network_mappings = new(uuid.UUID)
-				*nm.compute_instance_network_mappings = *value.S.(*uuid.UUID)
+		case networkmapping.FieldFkComputerID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field fk_computer_id", values[i])
+			} else if value != nil {
+				nm.FkComputerID = *value
+			}
+		case networkmapping.FieldFkUserID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
+			} else if value != nil {
+				nm.FkUserID = *value
 			}
 		default:
 			nm.selectValues.Set(columns[i], values[i])
@@ -139,11 +119,6 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (nm *NetworkMapping) Value(name string) (ent.Value, error) {
 	return nm.selectValues.Get(name)
-}
-
-// QueryFkComputerID queries the "fk_computer_id" edge of the NetworkMapping entity.
-func (nm *NetworkMapping) QueryFkComputerID() *ComputeInstanceQuery {
-	return NewNetworkMappingClient(nm.config).QueryFkComputerID(nm)
 }
 
 // Update returns a builder for updating this NetworkMapping.
@@ -183,6 +158,12 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", nm.Status))
+	builder.WriteString(", ")
+	builder.WriteString("fk_computer_id=")
+	builder.WriteString(fmt.Sprintf("%v", nm.FkComputerID))
+	builder.WriteString(", ")
+	builder.WriteString("fk_user_id=")
+	builder.WriteString(fmt.Sprintf("%v", nm.FkUserID))
 	builder.WriteByte(')')
 	return builder.String()
 }

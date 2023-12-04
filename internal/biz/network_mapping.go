@@ -3,7 +3,9 @@ package biz
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
 	"time"
 
@@ -28,6 +30,8 @@ type NetworkMapping struct {
 	ComputerPort int `json:"computer_port,omitempty"`
 	//  0 待开始 1 进行中 2 已完成，3 失败
 	Status int `json:"status,omitempty"`
+	// 用户id
+	UserId uuid.UUID `json:"user_id"`
 }
 
 type NetworkMappingCreate struct {
@@ -40,7 +44,7 @@ type NetworkMappingRepo interface {
 	CreateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error)
 	DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error
-	PageNetworkMappingByComputerID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
+	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 }
 
@@ -118,7 +122,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	if maxItem == nil {
 		return nil, fmt.Errorf("无可用 Gateway")
 	}
-	if maxItem.Count <= 1 {
+	if maxItem.Count <= 0 {
 		return nil, fmt.Errorf("无可用端口")
 	}
 	// 查询当前 gateway 的空余端口并进行分配
@@ -130,6 +134,11 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 	gatewayPort := gp.Port
+
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorize")
+	}
 
 	// 保存数据库
 	// 进行网络映射转换
@@ -146,6 +155,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		ComputerPort: int(nmc.ComputerPort),
 		//  0 待开始 1 进行中 2 已完成，3 失败
 		Status: 0,
+		UserId: claim.GetUserId(),
 	}
 	err = m.repo.CreateNetworkMapping(ctx, &nm)
 	if err != nil {
@@ -200,9 +210,9 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	return &nm, err
 }
 
-func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
-	m.log.WithContext(ctx).Infof("PageNetorkMapping %s %d %d", computerId, page, size)
-	return m.repo.PageNetworkMappingByComputerID(ctx, computerId, page, size)
+func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
+	m.log.WithContext(ctx).Infof("PageNetorkMapping %s %d %d", userId, page, size)
+	return m.repo.PageNetworkMappingByUserID(ctx, userId, page, size)
 }
 
 func (m *NetworkMappingUseCase) GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error) {

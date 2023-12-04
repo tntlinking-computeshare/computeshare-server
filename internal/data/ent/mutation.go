@@ -22,6 +22,8 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
@@ -48,6 +50,8 @@ const (
 	TypeGateway               = "Gateway"
 	TypeGatewayPort           = "GatewayPort"
 	TypeNetworkMapping        = "NetworkMapping"
+	TypeS3Bucket              = "S3Bucket"
+	TypeS3User                = "S3User"
 	TypeScript                = "Script"
 	TypeScriptExecutionRecord = "ScriptExecutionRecord"
 	TypeStorage               = "Storage"
@@ -1082,28 +1086,25 @@ func (m *ComputeImageMutation) ResetEdge(name string) error {
 // ComputeInstanceMutation represents an operation that mutates the ComputeInstance nodes in the graph.
 type ComputeInstanceMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *uuid.UUID
-	owner                  *string
-	name                   *string
-	core                   *string
-	memory                 *string
-	image                  *string
-	port                   *string
-	expiration_time        *time.Time
-	status                 *consts.InstanceStatus
-	addstatus              *consts.InstanceStatus
-	container_id           *string
-	agent_id               *string
-	command                *string
-	clearedFields          map[string]struct{}
-	networkMappings        map[uuid.UUID]struct{}
-	removednetworkMappings map[uuid.UUID]struct{}
-	clearednetworkMappings bool
-	done                   bool
-	oldValue               func(context.Context) (*ComputeInstance, error)
-	predicates             []predicate.ComputeInstance
+	op              Op
+	typ             string
+	id              *uuid.UUID
+	owner           *string
+	name            *string
+	core            *string
+	memory          *string
+	image           *string
+	port            *string
+	expiration_time *time.Time
+	status          *consts.InstanceStatus
+	addstatus       *consts.InstanceStatus
+	container_id    *string
+	agent_id        *string
+	command         *string
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*ComputeInstance, error)
+	predicates      []predicate.ComputeInstance
 }
 
 var _ ent.Mutation = (*ComputeInstanceMutation)(nil)
@@ -1678,60 +1679,6 @@ func (m *ComputeInstanceMutation) ResetCommand() {
 	delete(m.clearedFields, computeinstance.FieldCommand)
 }
 
-// AddNetworkMappingIDs adds the "networkMappings" edge to the NetworkMapping entity by ids.
-func (m *ComputeInstanceMutation) AddNetworkMappingIDs(ids ...uuid.UUID) {
-	if m.networkMappings == nil {
-		m.networkMappings = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		m.networkMappings[ids[i]] = struct{}{}
-	}
-}
-
-// ClearNetworkMappings clears the "networkMappings" edge to the NetworkMapping entity.
-func (m *ComputeInstanceMutation) ClearNetworkMappings() {
-	m.clearednetworkMappings = true
-}
-
-// NetworkMappingsCleared reports if the "networkMappings" edge to the NetworkMapping entity was cleared.
-func (m *ComputeInstanceMutation) NetworkMappingsCleared() bool {
-	return m.clearednetworkMappings
-}
-
-// RemoveNetworkMappingIDs removes the "networkMappings" edge to the NetworkMapping entity by IDs.
-func (m *ComputeInstanceMutation) RemoveNetworkMappingIDs(ids ...uuid.UUID) {
-	if m.removednetworkMappings == nil {
-		m.removednetworkMappings = make(map[uuid.UUID]struct{})
-	}
-	for i := range ids {
-		delete(m.networkMappings, ids[i])
-		m.removednetworkMappings[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedNetworkMappings returns the removed IDs of the "networkMappings" edge to the NetworkMapping entity.
-func (m *ComputeInstanceMutation) RemovedNetworkMappingsIDs() (ids []uuid.UUID) {
-	for id := range m.removednetworkMappings {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// NetworkMappingsIDs returns the "networkMappings" edge IDs in the mutation.
-func (m *ComputeInstanceMutation) NetworkMappingsIDs() (ids []uuid.UUID) {
-	for id := range m.networkMappings {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetNetworkMappings resets all changes to the "networkMappings" edge.
-func (m *ComputeInstanceMutation) ResetNetworkMappings() {
-	m.networkMappings = nil
-	m.clearednetworkMappings = false
-	m.removednetworkMappings = nil
-}
-
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -2077,85 +2024,49 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ComputeInstanceMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.networkMappings != nil {
-		edges = append(edges, computeinstance.EdgeNetworkMappings)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ComputeInstanceMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case computeinstance.EdgeNetworkMappings:
-		ids := make([]ent.Value, 0, len(m.networkMappings))
-		for id := range m.networkMappings {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ComputeInstanceMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removednetworkMappings != nil {
-		edges = append(edges, computeinstance.EdgeNetworkMappings)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ComputeInstanceMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case computeinstance.EdgeNetworkMappings:
-		ids := make([]ent.Value, 0, len(m.removednetworkMappings))
-		for id := range m.removednetworkMappings {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ComputeInstanceMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearednetworkMappings {
-		edges = append(edges, computeinstance.EdgeNetworkMappings)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ComputeInstanceMutation) EdgeCleared(name string) bool {
-	switch name {
-	case computeinstance.EdgeNetworkMappings:
-		return m.clearednetworkMappings
-	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ComputeInstanceMutation) ClearEdge(name string) error {
-	switch name {
-	}
 	return fmt.Errorf("unknown ComputeInstance unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ComputeInstanceMutation) ResetEdge(name string) error {
-	switch name {
-	case computeinstance.EdgeNetworkMappings:
-		m.ResetNetworkMappings()
-		return nil
-	}
 	return fmt.Errorf("unknown ComputeInstance edge %s", name)
 }
 
@@ -4631,23 +4542,23 @@ func (m *GatewayPortMutation) ResetEdge(name string) error {
 // NetworkMappingMutation represents an operation that mutates the NetworkMapping nodes in the graph.
 type NetworkMappingMutation struct {
 	config
-	op                    Op
-	typ                   string
-	id                    *uuid.UUID
-	name                  *string
-	fk_gateway_id         *uuid.UUID
-	gateway_port          *int
-	addgateway_port       *int
-	computer_port         *int
-	addcomputer_port      *int
-	status                *int
-	addstatus             *int
-	clearedFields         map[string]struct{}
-	fk_computer_id        *uuid.UUID
-	clearedfk_computer_id bool
-	done                  bool
-	oldValue              func(context.Context) (*NetworkMapping, error)
-	predicates            []predicate.NetworkMapping
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	name             *string
+	fk_gateway_id    *uuid.UUID
+	gateway_port     *int
+	addgateway_port  *int
+	computer_port    *int
+	addcomputer_port *int
+	status           *int
+	addstatus        *int
+	fk_computer_id   *uuid.UUID
+	fk_user_id       *uuid.UUID
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*NetworkMapping, error)
+	predicates       []predicate.NetworkMapping
 }
 
 var _ ent.Mutation = (*NetworkMappingMutation)(nil)
@@ -4994,43 +4905,76 @@ func (m *NetworkMappingMutation) ResetStatus() {
 	m.addstatus = nil
 }
 
-// SetFkComputerIDID sets the "fk_computer_id" edge to the ComputeInstance entity by id.
-func (m *NetworkMappingMutation) SetFkComputerIDID(id uuid.UUID) {
-	m.fk_computer_id = &id
+// SetFkComputerID sets the "fk_computer_id" field.
+func (m *NetworkMappingMutation) SetFkComputerID(u uuid.UUID) {
+	m.fk_computer_id = &u
 }
 
-// ClearFkComputerID clears the "fk_computer_id" edge to the ComputeInstance entity.
-func (m *NetworkMappingMutation) ClearFkComputerID() {
-	m.clearedfk_computer_id = true
-}
-
-// FkComputerIDCleared reports if the "fk_computer_id" edge to the ComputeInstance entity was cleared.
-func (m *NetworkMappingMutation) FkComputerIDCleared() bool {
-	return m.clearedfk_computer_id
-}
-
-// FkComputerIDID returns the "fk_computer_id" edge ID in the mutation.
-func (m *NetworkMappingMutation) FkComputerIDID() (id uuid.UUID, exists bool) {
-	if m.fk_computer_id != nil {
-		return *m.fk_computer_id, true
+// FkComputerID returns the value of the "fk_computer_id" field in the mutation.
+func (m *NetworkMappingMutation) FkComputerID() (r uuid.UUID, exists bool) {
+	v := m.fk_computer_id
+	if v == nil {
+		return
 	}
-	return
+	return *v, true
 }
 
-// FkComputerIDIDs returns the "fk_computer_id" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// FkComputerIDID instead. It exists only for internal usage by the builders.
-func (m *NetworkMappingMutation) FkComputerIDIDs() (ids []uuid.UUID) {
-	if id := m.fk_computer_id; id != nil {
-		ids = append(ids, *id)
+// OldFkComputerID returns the old "fk_computer_id" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldFkComputerID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFkComputerID is only allowed on UpdateOne operations")
 	}
-	return
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFkComputerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFkComputerID: %w", err)
+	}
+	return oldValue.FkComputerID, nil
 }
 
-// ResetFkComputerID resets all changes to the "fk_computer_id" edge.
+// ResetFkComputerID resets all changes to the "fk_computer_id" field.
 func (m *NetworkMappingMutation) ResetFkComputerID() {
 	m.fk_computer_id = nil
-	m.clearedfk_computer_id = false
+}
+
+// SetFkUserID sets the "fk_user_id" field.
+func (m *NetworkMappingMutation) SetFkUserID(u uuid.UUID) {
+	m.fk_user_id = &u
+}
+
+// FkUserID returns the value of the "fk_user_id" field in the mutation.
+func (m *NetworkMappingMutation) FkUserID() (r uuid.UUID, exists bool) {
+	v := m.fk_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFkUserID returns the old "fk_user_id" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldFkUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFkUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFkUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFkUserID: %w", err)
+	}
+	return oldValue.FkUserID, nil
+}
+
+// ResetFkUserID resets all changes to the "fk_user_id" field.
+func (m *NetworkMappingMutation) ResetFkUserID() {
+	m.fk_user_id = nil
 }
 
 // Where appends a list predicates to the NetworkMappingMutation builder.
@@ -5067,7 +5011,7 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 7)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
 	}
@@ -5082,6 +5026,12 @@ func (m *NetworkMappingMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, networkmapping.FieldStatus)
+	}
+	if m.fk_computer_id != nil {
+		fields = append(fields, networkmapping.FieldFkComputerID)
+	}
+	if m.fk_user_id != nil {
+		fields = append(fields, networkmapping.FieldFkUserID)
 	}
 	return fields
 }
@@ -5101,6 +5051,10 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 		return m.ComputerPort()
 	case networkmapping.FieldStatus:
 		return m.Status()
+	case networkmapping.FieldFkComputerID:
+		return m.FkComputerID()
+	case networkmapping.FieldFkUserID:
+		return m.FkUserID()
 	}
 	return nil, false
 }
@@ -5120,6 +5074,10 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldComputerPort(ctx)
 	case networkmapping.FieldStatus:
 		return m.OldStatus(ctx)
+	case networkmapping.FieldFkComputerID:
+		return m.OldFkComputerID(ctx)
+	case networkmapping.FieldFkUserID:
+		return m.OldFkUserID(ctx)
 	}
 	return nil, fmt.Errorf("unknown NetworkMapping field %s", name)
 }
@@ -5163,6 +5121,20 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case networkmapping.FieldFkComputerID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFkComputerID(v)
+		return nil
+	case networkmapping.FieldFkUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFkUserID(v)
 		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)
@@ -5267,34 +5239,31 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 	case networkmapping.FieldStatus:
 		m.ResetStatus()
 		return nil
+	case networkmapping.FieldFkComputerID:
+		m.ResetFkComputerID()
+		return nil
+	case networkmapping.FieldFkUserID:
+		m.ResetFkUserID()
+		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NetworkMappingMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.fk_computer_id != nil {
-		edges = append(edges, networkmapping.EdgeFkComputerID)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *NetworkMappingMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case networkmapping.EdgeFkComputerID:
-		if id := m.fk_computer_id; id != nil {
-			return []ent.Value{*id}
-		}
-	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NetworkMappingMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 0)
 	return edges
 }
 
@@ -5306,43 +5275,958 @@ func (m *NetworkMappingMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NetworkMappingMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedfk_computer_id {
-		edges = append(edges, networkmapping.EdgeFkComputerID)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *NetworkMappingMutation) EdgeCleared(name string) bool {
-	switch name {
-	case networkmapping.EdgeFkComputerID:
-		return m.clearedfk_computer_id
-	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *NetworkMappingMutation) ClearEdge(name string) error {
-	switch name {
-	case networkmapping.EdgeFkComputerID:
-		m.ClearFkComputerID()
-		return nil
-	}
 	return fmt.Errorf("unknown NetworkMapping unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *NetworkMappingMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown NetworkMapping edge %s", name)
+}
+
+// S3BucketMutation represents an operation that mutates the S3Bucket nodes in the graph.
+type S3BucketMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	bucket        *string
+	clearedFields map[string]struct{}
+	user          *uuid.UUID
+	cleareduser   bool
+	done          bool
+	oldValue      func(context.Context) (*S3Bucket, error)
+	predicates    []predicate.S3Bucket
+}
+
+var _ ent.Mutation = (*S3BucketMutation)(nil)
+
+// s3bucketOption allows management of the mutation configuration using functional options.
+type s3bucketOption func(*S3BucketMutation)
+
+// newS3BucketMutation creates new mutation for the S3Bucket entity.
+func newS3BucketMutation(c config, op Op, opts ...s3bucketOption) *S3BucketMutation {
+	m := &S3BucketMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeS3Bucket,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withS3BucketID sets the ID field of the mutation.
+func withS3BucketID(id uuid.UUID) s3bucketOption {
+	return func(m *S3BucketMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *S3Bucket
+		)
+		m.oldValue = func(ctx context.Context) (*S3Bucket, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().S3Bucket.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withS3Bucket sets the old S3Bucket of the mutation.
+func withS3Bucket(node *S3Bucket) s3bucketOption {
+	return func(m *S3BucketMutation) {
+		m.oldValue = func(context.Context) (*S3Bucket, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m S3BucketMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m S3BucketMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of S3Bucket entities.
+func (m *S3BucketMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *S3BucketMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *S3BucketMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().S3Bucket.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetBucket sets the "bucket" field.
+func (m *S3BucketMutation) SetBucket(s string) {
+	m.bucket = &s
+}
+
+// Bucket returns the value of the "bucket" field in the mutation.
+func (m *S3BucketMutation) Bucket() (r string, exists bool) {
+	v := m.bucket
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBucket returns the old "bucket" field's value of the S3Bucket entity.
+// If the S3Bucket object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *S3BucketMutation) OldBucket(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBucket is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBucket requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBucket: %w", err)
+	}
+	return oldValue.Bucket, nil
+}
+
+// ResetBucket resets all changes to the "bucket" field.
+func (m *S3BucketMutation) ResetBucket() {
+	m.bucket = nil
+}
+
+// SetUserID sets the "user" edge to the S3User entity by id.
+func (m *S3BucketMutation) SetUserID(id uuid.UUID) {
+	m.user = &id
+}
+
+// ClearUser clears the "user" edge to the S3User entity.
+func (m *S3BucketMutation) ClearUser() {
+	m.cleareduser = true
+}
+
+// UserCleared reports if the "user" edge to the S3User entity was cleared.
+func (m *S3BucketMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// UserID returns the "user" edge ID in the mutation.
+func (m *S3BucketMutation) UserID() (id uuid.UUID, exists bool) {
+	if m.user != nil {
+		return *m.user, true
+	}
+	return
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *S3BucketMutation) UserIDs() (ids []uuid.UUID) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *S3BucketMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+}
+
+// Where appends a list predicates to the S3BucketMutation builder.
+func (m *S3BucketMutation) Where(ps ...predicate.S3Bucket) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the S3BucketMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *S3BucketMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.S3Bucket, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *S3BucketMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *S3BucketMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (S3Bucket).
+func (m *S3BucketMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *S3BucketMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.bucket != nil {
+		fields = append(fields, s3bucket.FieldBucket)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *S3BucketMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case networkmapping.EdgeFkComputerID:
-		m.ResetFkComputerID()
+	case s3bucket.FieldBucket:
+		return m.Bucket()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *S3BucketMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case s3bucket.FieldBucket:
+		return m.OldBucket(ctx)
+	}
+	return nil, fmt.Errorf("unknown S3Bucket field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *S3BucketMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case s3bucket.FieldBucket:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBucket(v)
 		return nil
 	}
-	return fmt.Errorf("unknown NetworkMapping edge %s", name)
+	return fmt.Errorf("unknown S3Bucket field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *S3BucketMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *S3BucketMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *S3BucketMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown S3Bucket numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *S3BucketMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *S3BucketMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *S3BucketMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown S3Bucket nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *S3BucketMutation) ResetField(name string) error {
+	switch name {
+	case s3bucket.FieldBucket:
+		m.ResetBucket()
+		return nil
+	}
+	return fmt.Errorf("unknown S3Bucket field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *S3BucketMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.user != nil {
+		edges = append(edges, s3bucket.EdgeUser)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *S3BucketMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case s3bucket.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *S3BucketMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *S3BucketMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *S3BucketMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.cleareduser {
+		edges = append(edges, s3bucket.EdgeUser)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *S3BucketMutation) EdgeCleared(name string) bool {
+	switch name {
+	case s3bucket.EdgeUser:
+		return m.cleareduser
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *S3BucketMutation) ClearEdge(name string) error {
+	switch name {
+	case s3bucket.EdgeUser:
+		m.ClearUser()
+		return nil
+	}
+	return fmt.Errorf("unknown S3Bucket unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *S3BucketMutation) ResetEdge(name string) error {
+	switch name {
+	case s3bucket.EdgeUser:
+		m.ResetUser()
+		return nil
+	}
+	return fmt.Errorf("unknown S3Bucket edge %s", name)
+}
+
+// S3UserMutation represents an operation that mutates the S3User nodes in the graph.
+type S3UserMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	fk_user_id     *uuid.UUID
+	access_key     *string
+	secret_key     *string
+	clearedFields  map[string]struct{}
+	buckets        map[uuid.UUID]struct{}
+	removedbuckets map[uuid.UUID]struct{}
+	clearedbuckets bool
+	done           bool
+	oldValue       func(context.Context) (*S3User, error)
+	predicates     []predicate.S3User
+}
+
+var _ ent.Mutation = (*S3UserMutation)(nil)
+
+// s3userOption allows management of the mutation configuration using functional options.
+type s3userOption func(*S3UserMutation)
+
+// newS3UserMutation creates new mutation for the S3User entity.
+func newS3UserMutation(c config, op Op, opts ...s3userOption) *S3UserMutation {
+	m := &S3UserMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeS3User,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withS3UserID sets the ID field of the mutation.
+func withS3UserID(id uuid.UUID) s3userOption {
+	return func(m *S3UserMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *S3User
+		)
+		m.oldValue = func(ctx context.Context) (*S3User, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().S3User.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withS3User sets the old S3User of the mutation.
+func withS3User(node *S3User) s3userOption {
+	return func(m *S3UserMutation) {
+		m.oldValue = func(context.Context) (*S3User, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m S3UserMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m S3UserMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of S3User entities.
+func (m *S3UserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *S3UserMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *S3UserMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().S3User.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetFkUserID sets the "fk_user_id" field.
+func (m *S3UserMutation) SetFkUserID(u uuid.UUID) {
+	m.fk_user_id = &u
+}
+
+// FkUserID returns the value of the "fk_user_id" field in the mutation.
+func (m *S3UserMutation) FkUserID() (r uuid.UUID, exists bool) {
+	v := m.fk_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFkUserID returns the old "fk_user_id" field's value of the S3User entity.
+// If the S3User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *S3UserMutation) OldFkUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFkUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFkUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFkUserID: %w", err)
+	}
+	return oldValue.FkUserID, nil
+}
+
+// ResetFkUserID resets all changes to the "fk_user_id" field.
+func (m *S3UserMutation) ResetFkUserID() {
+	m.fk_user_id = nil
+}
+
+// SetAccessKey sets the "access_key" field.
+func (m *S3UserMutation) SetAccessKey(s string) {
+	m.access_key = &s
+}
+
+// AccessKey returns the value of the "access_key" field in the mutation.
+func (m *S3UserMutation) AccessKey() (r string, exists bool) {
+	v := m.access_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccessKey returns the old "access_key" field's value of the S3User entity.
+// If the S3User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *S3UserMutation) OldAccessKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccessKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccessKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccessKey: %w", err)
+	}
+	return oldValue.AccessKey, nil
+}
+
+// ResetAccessKey resets all changes to the "access_key" field.
+func (m *S3UserMutation) ResetAccessKey() {
+	m.access_key = nil
+}
+
+// SetSecretKey sets the "secret_key" field.
+func (m *S3UserMutation) SetSecretKey(s string) {
+	m.secret_key = &s
+}
+
+// SecretKey returns the value of the "secret_key" field in the mutation.
+func (m *S3UserMutation) SecretKey() (r string, exists bool) {
+	v := m.secret_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSecretKey returns the old "secret_key" field's value of the S3User entity.
+// If the S3User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *S3UserMutation) OldSecretKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSecretKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSecretKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSecretKey: %w", err)
+	}
+	return oldValue.SecretKey, nil
+}
+
+// ResetSecretKey resets all changes to the "secret_key" field.
+func (m *S3UserMutation) ResetSecretKey() {
+	m.secret_key = nil
+}
+
+// AddBucketIDs adds the "buckets" edge to the S3Bucket entity by ids.
+func (m *S3UserMutation) AddBucketIDs(ids ...uuid.UUID) {
+	if m.buckets == nil {
+		m.buckets = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		m.buckets[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBuckets clears the "buckets" edge to the S3Bucket entity.
+func (m *S3UserMutation) ClearBuckets() {
+	m.clearedbuckets = true
+}
+
+// BucketsCleared reports if the "buckets" edge to the S3Bucket entity was cleared.
+func (m *S3UserMutation) BucketsCleared() bool {
+	return m.clearedbuckets
+}
+
+// RemoveBucketIDs removes the "buckets" edge to the S3Bucket entity by IDs.
+func (m *S3UserMutation) RemoveBucketIDs(ids ...uuid.UUID) {
+	if m.removedbuckets == nil {
+		m.removedbuckets = make(map[uuid.UUID]struct{})
+	}
+	for i := range ids {
+		delete(m.buckets, ids[i])
+		m.removedbuckets[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBuckets returns the removed IDs of the "buckets" edge to the S3Bucket entity.
+func (m *S3UserMutation) RemovedBucketsIDs() (ids []uuid.UUID) {
+	for id := range m.removedbuckets {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BucketsIDs returns the "buckets" edge IDs in the mutation.
+func (m *S3UserMutation) BucketsIDs() (ids []uuid.UUID) {
+	for id := range m.buckets {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBuckets resets all changes to the "buckets" edge.
+func (m *S3UserMutation) ResetBuckets() {
+	m.buckets = nil
+	m.clearedbuckets = false
+	m.removedbuckets = nil
+}
+
+// Where appends a list predicates to the S3UserMutation builder.
+func (m *S3UserMutation) Where(ps ...predicate.S3User) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the S3UserMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *S3UserMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.S3User, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *S3UserMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *S3UserMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (S3User).
+func (m *S3UserMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *S3UserMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.fk_user_id != nil {
+		fields = append(fields, s3user.FieldFkUserID)
+	}
+	if m.access_key != nil {
+		fields = append(fields, s3user.FieldAccessKey)
+	}
+	if m.secret_key != nil {
+		fields = append(fields, s3user.FieldSecretKey)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *S3UserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case s3user.FieldFkUserID:
+		return m.FkUserID()
+	case s3user.FieldAccessKey:
+		return m.AccessKey()
+	case s3user.FieldSecretKey:
+		return m.SecretKey()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *S3UserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case s3user.FieldFkUserID:
+		return m.OldFkUserID(ctx)
+	case s3user.FieldAccessKey:
+		return m.OldAccessKey(ctx)
+	case s3user.FieldSecretKey:
+		return m.OldSecretKey(ctx)
+	}
+	return nil, fmt.Errorf("unknown S3User field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *S3UserMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case s3user.FieldFkUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFkUserID(v)
+		return nil
+	case s3user.FieldAccessKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccessKey(v)
+		return nil
+	case s3user.FieldSecretKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSecretKey(v)
+		return nil
+	}
+	return fmt.Errorf("unknown S3User field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *S3UserMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *S3UserMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *S3UserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown S3User numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *S3UserMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *S3UserMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *S3UserMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown S3User nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *S3UserMutation) ResetField(name string) error {
+	switch name {
+	case s3user.FieldFkUserID:
+		m.ResetFkUserID()
+		return nil
+	case s3user.FieldAccessKey:
+		m.ResetAccessKey()
+		return nil
+	case s3user.FieldSecretKey:
+		m.ResetSecretKey()
+		return nil
+	}
+	return fmt.Errorf("unknown S3User field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *S3UserMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.buckets != nil {
+		edges = append(edges, s3user.EdgeBuckets)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *S3UserMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case s3user.EdgeBuckets:
+		ids := make([]ent.Value, 0, len(m.buckets))
+		for id := range m.buckets {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *S3UserMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedbuckets != nil {
+		edges = append(edges, s3user.EdgeBuckets)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *S3UserMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case s3user.EdgeBuckets:
+		ids := make([]ent.Value, 0, len(m.removedbuckets))
+		for id := range m.removedbuckets {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *S3UserMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedbuckets {
+		edges = append(edges, s3user.EdgeBuckets)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *S3UserMutation) EdgeCleared(name string) bool {
+	switch name {
+	case s3user.EdgeBuckets:
+		return m.clearedbuckets
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *S3UserMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown S3User unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *S3UserMutation) ResetEdge(name string) error {
+	switch name {
+	case s3user.EdgeBuckets:
+		m.ResetBuckets()
+		return nil
+	}
+	return fmt.Errorf("unknown S3User edge %s", name)
 }
 
 // ScriptMutation represents an operation that mutates the Script nodes in the graph.

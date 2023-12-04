@@ -53,7 +53,7 @@ func (s *DomainBindingService) CreateDomainBinding(ctx context.Context, req *pb.
 		Data:    domainBinding.ID.String(),
 	}, nil
 }
-func (s *DomainBindingService) UpdateDomainBinding(ctx context.Context, req *pb.UpdateDomainBindingRequest) (*pb.UpdateDomainBindingReply, error) {
+func (s *DomainBindingService) UpdateDomainBinding(_ context.Context, _ *pb.UpdateDomainBindingRequest) (*pb.UpdateDomainBindingReply, error) {
 	return &pb.UpdateDomainBindingReply{}, nil
 }
 func (s *DomainBindingService) DeleteDomainBinding(ctx context.Context, req *pb.DeleteDomainBindingRequest) (*pb.DeleteDomainBindingReply, error) {
@@ -74,7 +74,7 @@ func (s *DomainBindingService) DeleteDomainBinding(ctx context.Context, req *pb.
 		Message: SUCCESS,
 	}, nil
 }
-func (s *DomainBindingService) GetDomainBinding(ctx context.Context, req *pb.GetDomainBindingRequest) (*pb.GetDomainBindingReply, error) {
+func (s *DomainBindingService) GetDomainBinding(_ context.Context, _ *pb.GetDomainBindingRequest) (*pb.GetDomainBindingReply, error) {
 
 	return &pb.GetDomainBindingReply{}, nil
 }
@@ -83,7 +83,12 @@ func (s *DomainBindingService) ListDomainBinding(ctx context.Context, req *pb.Li
 	if !ok {
 		return nil, errors.New("unauthorized")
 	}
-	page, err := s.domainBindingUseCase.List(ctx, user.GetUserId(), req.Page, req.Size)
+
+	networkMappingId, err := uuid.Parse(req.GetNetworkMappingId())
+	if err != nil {
+		return nil, errors.New("networkMapping is not uuid")
+	}
+	page, err := s.domainBindingUseCase.List(ctx, user.GetUserId(), networkMappingId, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +104,7 @@ func (s *DomainBindingService) ListDomainBinding(ctx context.Context, req *pb.Li
 	}, nil
 }
 
-func (s *DomainBindingService) NsLookup(ctx context.Context, req *pb.NsLookupRequest) (*pb.NsLookupReply, error) {
+func (s *DomainBindingService) NsLookup(_ context.Context, req *pb.NsLookupRequest) (*pb.NsLookupReply, error) {
 	ips, err := net.LookupIP(req.Domain)
 	if err != nil {
 		fmt.Printf("Error looking up IP for %s: %s\n", req.Domain, err)

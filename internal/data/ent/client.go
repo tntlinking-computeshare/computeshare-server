@@ -24,6 +24,8 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
@@ -54,6 +56,10 @@ type Client struct {
 	GatewayPort *GatewayPortClient
 	// NetworkMapping is the client for interacting with the NetworkMapping builders.
 	NetworkMapping *NetworkMappingClient
+	// S3Bucket is the client for interacting with the S3Bucket builders.
+	S3Bucket *S3BucketClient
+	// S3User is the client for interacting with the S3User builders.
+	S3User *S3UserClient
 	// Script is the client for interacting with the Script builders.
 	Script *ScriptClient
 	// ScriptExecutionRecord is the client for interacting with the ScriptExecutionRecord builders.
@@ -86,6 +92,8 @@ func (c *Client) init() {
 	c.Gateway = NewGatewayClient(c.config)
 	c.GatewayPort = NewGatewayPortClient(c.config)
 	c.NetworkMapping = NewNetworkMappingClient(c.config)
+	c.S3Bucket = NewS3BucketClient(c.config)
+	c.S3User = NewS3UserClient(c.config)
 	c.Script = NewScriptClient(c.config)
 	c.ScriptExecutionRecord = NewScriptExecutionRecordClient(c.config)
 	c.Storage = NewStorageClient(c.config)
@@ -182,6 +190,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Gateway:               NewGatewayClient(cfg),
 		GatewayPort:           NewGatewayPortClient(cfg),
 		NetworkMapping:        NewNetworkMappingClient(cfg),
+		S3Bucket:              NewS3BucketClient(cfg),
+		S3User:                NewS3UserClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
@@ -215,6 +225,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Gateway:               NewGatewayClient(cfg),
 		GatewayPort:           NewGatewayPortClient(cfg),
 		NetworkMapping:        NewNetworkMappingClient(cfg),
+		S3Bucket:              NewS3BucketClient(cfg),
+		S3User:                NewS3UserClient(cfg),
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
@@ -250,8 +262,8 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
-		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -262,8 +274,8 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
-		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -290,6 +302,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.GatewayPort.mutate(ctx, m)
 	case *NetworkMappingMutation:
 		return c.NetworkMapping.mutate(ctx, m)
+	case *S3BucketMutation:
+		return c.S3Bucket.mutate(ctx, m)
+	case *S3UserMutation:
+		return c.S3User.mutate(ctx, m)
 	case *ScriptMutation:
 		return c.Script.mutate(ctx, m)
 	case *ScriptExecutionRecordMutation:
@@ -632,22 +648,6 @@ func (c *ComputeInstanceClient) GetX(ctx context.Context, id uuid.UUID) *Compute
 		panic(err)
 	}
 	return obj
-}
-
-// QueryNetworkMappings queries the networkMappings edge of a ComputeInstance.
-func (c *ComputeInstanceClient) QueryNetworkMappings(ci *ComputeInstance) *NetworkMappingQuery {
-	query := (&NetworkMappingClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ci.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(computeinstance.Table, computeinstance.FieldID, id),
-			sqlgraph.To(networkmapping.Table, networkmapping.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, computeinstance.NetworkMappingsTable, computeinstance.NetworkMappingsColumn),
-		)
-		fromV = sqlgraph.Neighbors(ci.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // Hooks returns the client hooks.
@@ -1358,22 +1358,6 @@ func (c *NetworkMappingClient) GetX(ctx context.Context, id uuid.UUID) *NetworkM
 	return obj
 }
 
-// QueryFkComputerID queries the fk_computer_id edge of a NetworkMapping.
-func (c *NetworkMappingClient) QueryFkComputerID(nm *NetworkMapping) *ComputeInstanceQuery {
-	query := (&ComputeInstanceClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := nm.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(networkmapping.Table, networkmapping.FieldID, id),
-			sqlgraph.To(computeinstance.Table, computeinstance.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, networkmapping.FkComputerIDTable, networkmapping.FkComputerIDColumn),
-		)
-		fromV = sqlgraph.Neighbors(nm.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *NetworkMappingClient) Hooks() []Hook {
 	return c.hooks.NetworkMapping
@@ -1396,6 +1380,274 @@ func (c *NetworkMappingClient) mutate(ctx context.Context, m *NetworkMappingMuta
 		return (&NetworkMappingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown NetworkMapping mutation op: %q", m.Op())
+	}
+}
+
+// S3BucketClient is a client for the S3Bucket schema.
+type S3BucketClient struct {
+	config
+}
+
+// NewS3BucketClient returns a client for the S3Bucket from the given config.
+func NewS3BucketClient(c config) *S3BucketClient {
+	return &S3BucketClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `s3bucket.Hooks(f(g(h())))`.
+func (c *S3BucketClient) Use(hooks ...Hook) {
+	c.hooks.S3Bucket = append(c.hooks.S3Bucket, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `s3bucket.Intercept(f(g(h())))`.
+func (c *S3BucketClient) Intercept(interceptors ...Interceptor) {
+	c.inters.S3Bucket = append(c.inters.S3Bucket, interceptors...)
+}
+
+// Create returns a builder for creating a S3Bucket entity.
+func (c *S3BucketClient) Create() *S3BucketCreate {
+	mutation := newS3BucketMutation(c.config, OpCreate)
+	return &S3BucketCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of S3Bucket entities.
+func (c *S3BucketClient) CreateBulk(builders ...*S3BucketCreate) *S3BucketCreateBulk {
+	return &S3BucketCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for S3Bucket.
+func (c *S3BucketClient) Update() *S3BucketUpdate {
+	mutation := newS3BucketMutation(c.config, OpUpdate)
+	return &S3BucketUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *S3BucketClient) UpdateOne(s *S3Bucket) *S3BucketUpdateOne {
+	mutation := newS3BucketMutation(c.config, OpUpdateOne, withS3Bucket(s))
+	return &S3BucketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *S3BucketClient) UpdateOneID(id uuid.UUID) *S3BucketUpdateOne {
+	mutation := newS3BucketMutation(c.config, OpUpdateOne, withS3BucketID(id))
+	return &S3BucketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for S3Bucket.
+func (c *S3BucketClient) Delete() *S3BucketDelete {
+	mutation := newS3BucketMutation(c.config, OpDelete)
+	return &S3BucketDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *S3BucketClient) DeleteOne(s *S3Bucket) *S3BucketDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *S3BucketClient) DeleteOneID(id uuid.UUID) *S3BucketDeleteOne {
+	builder := c.Delete().Where(s3bucket.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &S3BucketDeleteOne{builder}
+}
+
+// Query returns a query builder for S3Bucket.
+func (c *S3BucketClient) Query() *S3BucketQuery {
+	return &S3BucketQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeS3Bucket},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a S3Bucket entity by its id.
+func (c *S3BucketClient) Get(ctx context.Context, id uuid.UUID) (*S3Bucket, error) {
+	return c.Query().Where(s3bucket.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *S3BucketClient) GetX(ctx context.Context, id uuid.UUID) *S3Bucket {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a S3Bucket.
+func (c *S3BucketClient) QueryUser(s *S3Bucket) *S3UserQuery {
+	query := (&S3UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(s3bucket.Table, s3bucket.FieldID, id),
+			sqlgraph.To(s3user.Table, s3user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.UserTable, s3bucket.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *S3BucketClient) Hooks() []Hook {
+	return c.hooks.S3Bucket
+}
+
+// Interceptors returns the client interceptors.
+func (c *S3BucketClient) Interceptors() []Interceptor {
+	return c.inters.S3Bucket
+}
+
+func (c *S3BucketClient) mutate(ctx context.Context, m *S3BucketMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&S3BucketCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&S3BucketUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&S3BucketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&S3BucketDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown S3Bucket mutation op: %q", m.Op())
+	}
+}
+
+// S3UserClient is a client for the S3User schema.
+type S3UserClient struct {
+	config
+}
+
+// NewS3UserClient returns a client for the S3User from the given config.
+func NewS3UserClient(c config) *S3UserClient {
+	return &S3UserClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `s3user.Hooks(f(g(h())))`.
+func (c *S3UserClient) Use(hooks ...Hook) {
+	c.hooks.S3User = append(c.hooks.S3User, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `s3user.Intercept(f(g(h())))`.
+func (c *S3UserClient) Intercept(interceptors ...Interceptor) {
+	c.inters.S3User = append(c.inters.S3User, interceptors...)
+}
+
+// Create returns a builder for creating a S3User entity.
+func (c *S3UserClient) Create() *S3UserCreate {
+	mutation := newS3UserMutation(c.config, OpCreate)
+	return &S3UserCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of S3User entities.
+func (c *S3UserClient) CreateBulk(builders ...*S3UserCreate) *S3UserCreateBulk {
+	return &S3UserCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for S3User.
+func (c *S3UserClient) Update() *S3UserUpdate {
+	mutation := newS3UserMutation(c.config, OpUpdate)
+	return &S3UserUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *S3UserClient) UpdateOne(s *S3User) *S3UserUpdateOne {
+	mutation := newS3UserMutation(c.config, OpUpdateOne, withS3User(s))
+	return &S3UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *S3UserClient) UpdateOneID(id uuid.UUID) *S3UserUpdateOne {
+	mutation := newS3UserMutation(c.config, OpUpdateOne, withS3UserID(id))
+	return &S3UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for S3User.
+func (c *S3UserClient) Delete() *S3UserDelete {
+	mutation := newS3UserMutation(c.config, OpDelete)
+	return &S3UserDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *S3UserClient) DeleteOne(s *S3User) *S3UserDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *S3UserClient) DeleteOneID(id uuid.UUID) *S3UserDeleteOne {
+	builder := c.Delete().Where(s3user.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &S3UserDeleteOne{builder}
+}
+
+// Query returns a query builder for S3User.
+func (c *S3UserClient) Query() *S3UserQuery {
+	return &S3UserQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeS3User},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a S3User entity by its id.
+func (c *S3UserClient) Get(ctx context.Context, id uuid.UUID) (*S3User, error) {
+	return c.Query().Where(s3user.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *S3UserClient) GetX(ctx context.Context, id uuid.UUID) *S3User {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBuckets queries the buckets edge of a S3User.
+func (c *S3UserClient) QueryBuckets(s *S3User) *S3BucketQuery {
+	query := (&S3BucketClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(s3user.Table, s3user.FieldID, id),
+			sqlgraph.To(s3bucket.Table, s3bucket.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, s3user.BucketsTable, s3user.BucketsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *S3UserClient) Hooks() []Hook {
+	return c.hooks.S3User
+}
+
+// Interceptors returns the client interceptors.
+func (c *S3UserClient) Interceptors() []Interceptor {
+	return c.inters.S3User
+}
+
+func (c *S3UserClient) mutate(ctx context.Context, m *S3UserMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&S3UserCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&S3UserUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&S3UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&S3UserDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown S3User mutation op: %q", m.Op())
 	}
 }
 
@@ -2025,12 +2277,12 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 type (
 	hooks struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
-		Gateway, GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage,
-		Task, User []ent.Hook
+		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
+		ScriptExecutionRecord, Storage, Task, User []ent.Hook
 	}
 	inters struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
-		Gateway, GatewayPort, NetworkMapping, Script, ScriptExecutionRecord, Storage,
-		Task, User []ent.Interceptor
+		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
+		ScriptExecutionRecord, Storage, Task, User []ent.Interceptor
 	}
 )

@@ -50,6 +50,7 @@ func NewHTTPServer(c *conf.Server,
 	instanceService *service.ComputeInstanceService,
 	powerService *service.ComputePowerService,
 	networkMappingService *service.NetworkMappingService,
+	domainBindingService *service.DomainBindingService,
 	job *service.CronJob,
 	logger log.Logger) *http.Server {
 
@@ -86,6 +87,7 @@ func NewHTTPServer(c *conf.Server,
 	systemv1.RegisterUserHTTPServer(srv, userService)
 	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
+	networkmappingV1.RegisterDomainBindingHTTPServer(srv, domainBindingService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))

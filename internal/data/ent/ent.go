@@ -21,6 +21,8 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
@@ -95,6 +97,8 @@ func checkColumn(table, column string) error {
 			gateway.Table:               gateway.ValidColumn,
 			gatewayport.Table:           gatewayport.ValidColumn,
 			networkmapping.Table:        networkmapping.ValidColumn,
+			s3bucket.Table:              s3bucket.ValidColumn,
+			s3user.Table:                s3user.ValidColumn,
 			script.Table:                script.ValidColumn,
 			scriptexecutionrecord.Table: scriptexecutionrecord.ValidColumn,
 			storage.Table:               storage.ValidColumn,

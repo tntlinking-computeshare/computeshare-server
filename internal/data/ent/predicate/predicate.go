@@ -33,6 +33,12 @@ type GatewayPort func(*sql.Selector)
 // NetworkMapping is the predicate function for networkmapping builders.
 type NetworkMapping func(*sql.Selector)
 
+// S3Bucket is the predicate function for s3bucket builders.
+type S3Bucket func(*sql.Selector)
+
+// S3User is the predicate function for s3user builders.
+type S3User func(*sql.Selector)
+
 // Script is the predicate function for script builders.
 type Script func(*sql.Selector)
 

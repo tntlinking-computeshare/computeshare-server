@@ -2,8 +2,6 @@ package data
 
 import (
 	"context"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -29,10 +27,11 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 	data, err := repo.data.db.NetworkMapping.Create().
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
-		SetFkComputerIDID(entity.FkComputerID).
+		SetFkComputerID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
+		SetFkUserID(entity.UserId).
 		Save(ctx)
 
 	if err != nil {
@@ -51,8 +50,8 @@ func (repo *NetworkMappingRepo) DeleteNetworkMapping(ctx context.Context, id uui
 	return repo.data.db.NetworkMapping.DeleteOneID(id).Exec(ctx)
 }
 
-func (repo *NetworkMappingRepo) PageNetworkMappingByComputerID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
-	count, err := repo.data.db.NetworkMapping.Query().Select(networkmapping.FieldID).Where(networkmapping.HasFkComputerIDWith(computeinstance.ID(computerId))).Count(ctx)
+func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
+	count, err := repo.data.db.NetworkMapping.Query().Select(networkmapping.FieldID).Where(networkmapping.FkUserID(userId)).Count(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -62,7 +61,7 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByComputerID(ctx context.Conte
 	} else {
 		offset = page * size
 	}
-	list, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.HasFkComputerIDWith(computeinstance.ID(computerId))).Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	list, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkUserID(userId)).Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -73,7 +72,7 @@ func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity
 	return repo.data.db.NetworkMapping.UpdateOneID(entity.ID).
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
-		SetFkComputerIDID(entity.FkComputerID).
+		SetFkComputerID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
@@ -84,14 +83,22 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 	if item == nil {
 		return nil
 	}
+
+	var instanceName string
+	instance, err := repo.data.db.ComputeInstance.Get(context.Background(), item.FkComputerID)
+	if err == nil {
+		instanceName = instance.Name
+	}
+
 	return &biz.NetworkMapping{
 		ID:                   item.ID,
 		Name:                 item.Name,
-		FkComputerID:         item.Edges.FkComputerID.ID,
+		FkComputerID:         item.FkComputerID,
 		ComputerPort:         item.ComputerPort,
-		ComputerInstanceName: item.Edges.FkComputerID.Name,
+		ComputerInstanceName: instanceName,
 		FkGatewayID:          item.FkGatewayID,
 		GatewayPort:          item.GatewayPort,
 		Status:               item.Status,
+		UserId:               item.FkUserID,
 	}
 }

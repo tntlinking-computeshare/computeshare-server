@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 )
@@ -21,13 +20,12 @@ func (NetworkMapping) Fields() []ent.Field {
 		field.Int("gateway_port").Comment("映射到网关的端口号"),
 		field.Int("computer_port").Comment("需要映射的虚拟机端口号"),
 		field.Int("status").Default(0).Comment(" 0 待开始 1 进行中 2 已完成, 3 失败"),
+		field.UUID("fk_computer_id", uuid.UUID{}).Comment("虚拟机实例ID"),
+		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
 	}
 }
 
 // Edges of the NetworkMapping.
 func (NetworkMapping) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.From("fk_computer_id", ComputeInstance.Type).
-			Ref("networkMappings").Unique(),
-	}
+	return nil
 }

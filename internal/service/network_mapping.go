@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"errors"
+	"github.com/mohaijiang/computeshare-server/internal/global"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -45,11 +47,11 @@ func (s *NetworkMappingService) CreateNetworkMapping(ctx context.Context, req *p
 	}, nil
 }
 func (s *NetworkMappingService) PageNetworkMapping(ctx context.Context, req *pb.PageNetworkMappingRequest) (*pb.PageNetworkMappingReply, error) {
-	computerId, err := uuid.Parse(req.ComputerId)
-	if err != nil {
-		return nil, err
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorize")
 	}
-	list, total, err := s.nm.PageNetworkMapping(ctx, computerId, req.Page, req.Size)
+	list, total, err := s.nm.PageNetworkMapping(ctx, claim.GetUserId(), req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +116,8 @@ func (s *NetworkMappingService) toReply(ctx context.Context, p *biz.NetworkMappi
 		Name:         p.Name,
 		Status:       int32(p.Status),
 		GatewayId:    p.FkGatewayID.String(),
-		InstanceId:   p.ComputerInstanceName,
+		InstanceId:   p.FkComputerID.String(),
+		InstanceName: p.ComputerInstanceName,
 		GatewayPort:  int32(p.GatewayPort),
 		InstancePort: int32(p.ComputerPort),
 		Domains:      list,

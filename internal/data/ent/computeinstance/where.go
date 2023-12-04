@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
@@ -830,29 +829,6 @@ func CommandEqualFold(v string) predicate.ComputeInstance {
 // CommandContainsFold applies the ContainsFold predicate on the "command" field.
 func CommandContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldCommand, v))
-}
-
-// HasNetworkMappings applies the HasEdge predicate on the "networkMappings" edge.
-func HasNetworkMappings() predicate.ComputeInstance {
-	return predicate.ComputeInstance(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, NetworkMappingsTable, NetworkMappingsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasNetworkMappingsWith applies the HasEdge predicate on the "networkMappings" edge with a given conditions (other predicates).
-func HasNetworkMappingsWith(preds ...predicate.NetworkMapping) predicate.ComputeInstance {
-	return predicate.ComputeInstance(func(s *sql.Selector) {
-		step := newNetworkMappingsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
 }
 
 // And groups predicates with the AND operator between them.

@@ -165,21 +165,47 @@ var (
 		{Name: "gateway_port", Type: field.TypeInt},
 		{Name: "computer_port", Type: field.TypeInt},
 		{Name: "status", Type: field.TypeInt, Default: 0},
-		{Name: "compute_instance_network_mappings", Type: field.TypeUUID, Nullable: true},
+		{Name: "fk_computer_id", Type: field.TypeUUID},
+		{Name: "fk_user_id", Type: field.TypeUUID},
 	}
 	// NetworkMappingsTable holds the schema information for the "network_mappings" table.
 	NetworkMappingsTable = &schema.Table{
 		Name:       "network_mappings",
 		Columns:    NetworkMappingsColumns,
 		PrimaryKey: []*schema.Column{NetworkMappingsColumns[0]},
+	}
+	// S3bucketsColumns holds the columns for the "s3buckets" table.
+	S3bucketsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "bucket", Type: field.TypeString, Size: 50},
+		{Name: "s3bucket_user", Type: field.TypeUUID, Nullable: true},
+	}
+	// S3bucketsTable holds the schema information for the "s3buckets" table.
+	S3bucketsTable = &schema.Table{
+		Name:       "s3buckets",
+		Columns:    S3bucketsColumns,
+		PrimaryKey: []*schema.Column{S3bucketsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "network_mappings_compute_instances_networkMappings",
-				Columns:    []*schema.Column{NetworkMappingsColumns[6]},
-				RefColumns: []*schema.Column{ComputeInstancesColumns[0]},
+				Symbol:     "s3buckets_s3users_user",
+				Columns:    []*schema.Column{S3bucketsColumns[2]},
+				RefColumns: []*schema.Column{S3usersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
+	}
+	// S3usersColumns holds the columns for the "s3users" table.
+	S3usersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "access_key", Type: field.TypeString, Size: 50},
+		{Name: "secret_key", Type: field.TypeString, Size: 50},
+	}
+	// S3usersTable holds the schema information for the "s3users" table.
+	S3usersTable = &schema.Table{
+		Name:       "s3users",
+		Columns:    S3usersColumns,
+		PrimaryKey: []*schema.Column{S3usersColumns[0]},
 	}
 	// ScriptsColumns holds the columns for the "scripts" table.
 	ScriptsColumns = []*schema.Column{
@@ -319,6 +345,8 @@ var (
 		GatewaysTable,
 		GatewayPortsTable,
 		NetworkMappingsTable,
+		S3bucketsTable,
+		S3usersTable,
 		ScriptsTable,
 		ScriptExecutionRecordsTable,
 		StoragesTable,
@@ -328,6 +356,6 @@ var (
 )
 
 func init() {
-	NetworkMappingsTable.ForeignKeys[0].RefTable = ComputeInstancesTable
+	S3bucketsTable.ForeignKeys[0].RefTable = S3usersTable
 	ScriptExecutionRecordsTable.ForeignKeys[0].RefTable = ScriptsTable
 }

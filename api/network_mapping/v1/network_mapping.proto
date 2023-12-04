@@ -64,7 +64,6 @@ message GetNetworkMappingReply {
 message PageNetworkMappingRequest {
 	int32 page = 1;
 	int32 size = 2;
-  string computer_id = 3;
 }
 
 message PageNetworkMappingReply {

@@ -14,6 +14,8 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/schema"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
@@ -186,6 +188,30 @@ func init() {
 	networkmappingDescID := networkmappingFields[0].Descriptor()
 	// networkmapping.DefaultID holds the default value on creation for the id field.
 	networkmapping.DefaultID = networkmappingDescID.Default.(func() uuid.UUID)
+	s3bucketFields := schema.S3Bucket{}.Fields()
+	_ = s3bucketFields
+	// s3bucketDescBucket is the schema descriptor for bucket field.
+	s3bucketDescBucket := s3bucketFields[1].Descriptor()
+	// s3bucket.BucketValidator is a validator for the "bucket" field. It is called by the builders before save.
+	s3bucket.BucketValidator = s3bucketDescBucket.Validators[0].(func(string) error)
+	// s3bucketDescID is the schema descriptor for id field.
+	s3bucketDescID := s3bucketFields[0].Descriptor()
+	// s3bucket.DefaultID holds the default value on creation for the id field.
+	s3bucket.DefaultID = s3bucketDescID.Default.(func() uuid.UUID)
+	s3userFields := schema.S3User{}.Fields()
+	_ = s3userFields
+	// s3userDescAccessKey is the schema descriptor for access_key field.
+	s3userDescAccessKey := s3userFields[2].Descriptor()
+	// s3user.AccessKeyValidator is a validator for the "access_key" field. It is called by the builders before save.
+	s3user.AccessKeyValidator = s3userDescAccessKey.Validators[0].(func(string) error)
+	// s3userDescSecretKey is the schema descriptor for secret_key field.
+	s3userDescSecretKey := s3userFields[3].Descriptor()
+	// s3user.SecretKeyValidator is a validator for the "secret_key" field. It is called by the builders before save.
+	s3user.SecretKeyValidator = s3userDescSecretKey.Validators[0].(func(string) error)
+	// s3userDescID is the schema descriptor for id field.
+	s3userDescID := s3userFields[0].Descriptor()
+	// s3user.DefaultID holds the default value on creation for the id field.
+	s3user.DefaultID = s3userDescID.Default.(func() uuid.UUID)
 	scriptFields := schema.Script{}.Fields()
 	_ = scriptFields
 	// scriptDescTaskNumber is the schema descriptor for task_number field.

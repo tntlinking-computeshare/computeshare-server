@@ -3,7 +3,6 @@ package data
 import (
 	"context"
 	"errors"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -54,7 +53,7 @@ func (repo *GatewayRepo) toBiz(item *ent.Gateway, _ int) *biz.Gateway {
 
 func (repo *GatewayRepo) FindInstanceSuitableGateway(ctx context.Context, instanceId uuid.UUID) (*biz.Gateway, error) {
 
-	networkMapping, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.HasFkComputerIDWith(computeinstance.ID(instanceId))).First(ctx)
+	networkMapping, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkComputerIDEQ(instanceId)).First(ctx)
 	if err == nil {
 		return repo.GetGateway(ctx, networkMapping.FkGatewayID)
 	}

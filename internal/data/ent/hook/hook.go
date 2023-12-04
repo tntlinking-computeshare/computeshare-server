@@ -117,6 +117,30 @@ func (f NetworkMappingFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Val
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.NetworkMappingMutation", m)
 }
 
+// The S3BucketFunc type is an adapter to allow the use of ordinary
+// function as S3Bucket mutator.
+type S3BucketFunc func(context.Context, *ent.S3BucketMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f S3BucketFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.S3BucketMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.S3BucketMutation", m)
+}
+
+// The S3UserFunc type is an adapter to allow the use of ordinary
+// function as S3User mutator.
+type S3UserFunc func(context.Context, *ent.S3UserMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f S3UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.S3UserMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.S3UserMutation", m)
+}
+
 // The ScriptFunc type is an adapter to allow the use of ordinary
 // function as Script mutator.
 type ScriptFunc func(context.Context, *ent.ScriptMutation) (ent.Value, error)

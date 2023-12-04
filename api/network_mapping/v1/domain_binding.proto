@@ -8,6 +8,7 @@ option go_package = "github.com/mohaijiang/computeshare-server/api/network_mappi
 option java_multiple_files = true;
 option java_package = "api.network_mapping.v1";
 
+
 service DomainBinding {
 	rpc CreateDomainBinding (CreateDomainBindingRequest) returns (CreateDomainBindingReply){
 		option (google.api.http) = {
@@ -44,11 +45,9 @@ service DomainBinding {
 }
 
 message CreateDomainBindingRequest {
-	string compute_instance_id = 1;
-	string network_mapping_id = 2;
-	string name = 3;
-	string domain = 4;
-	int32 gateway_port = 5;
+	string network_mapping_id = 1;
+	string name = 2;
+	string domain = 3;
 }
 message CreateDomainBindingReply {
 	int32 code = 1;
@@ -58,11 +57,9 @@ message CreateDomainBindingReply {
 
 message UpdateDomainBindingRequest {
 	string id = 1;
-	string compute_instance_id = 2;
-	string network_mapping_id = 3;
-	string name = 4;
-	string domain = 5;
-	int32 gateway_port = 6;
+	string network_mapping_id = 2;
+	string name = 3;
+	string domain = 4;
 }
 message UpdateDomainBindingReply {
 	int32 code = 1;
@@ -89,6 +86,7 @@ message GetDomainBindingReply {
 message ListDomainBindingRequest {
 	int32 page = 1;
 	int32 size = 2;
+	string network_mapping_id = 3;
 }
 message ListDomainBindingReply {
 	int32 code = 1;

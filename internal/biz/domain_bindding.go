@@ -17,6 +17,7 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	"path/filepath"
@@ -46,7 +47,7 @@ type DomainBinding struct {
 }
 
 type DomainBindingRepository interface {
-	PageQuery(ctx context.Context, userId uuid.UUID, page, size int32) (*global.Page[*DomainBinding], error)
+	PageQuery(ctx context.Context, userId, networkMappingId uuid.UUID, page, size int32) (*global.Page[*DomainBinding], error)
 	Save(ctx context.Context, domainBinding *DomainBinding) error
 	Get(ctx context.Context, id uuid.UUID) (*DomainBinding, error)
 	Delete(ctx context.Context, id uuid.UUID) error
@@ -65,10 +66,13 @@ func NewDomainBindingUseCase(domainBindingRepository DomainBindingRepository,
 	}
 	flag.Parse()
 
-	// use the current context in kubeconfig
+	//use the current context in kubeconfig
 	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
-		return nil, err
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// create the clientset
@@ -90,8 +94,8 @@ type DomainBindingUseCase struct {
 	log                     *log.Helper
 }
 
-func (uc *DomainBindingUseCase) List(ctx context.Context, fkUserId uuid.UUID, page, size int32) (*global.Page[*pb.DomainBindingVO], error) {
-	resp, err := uc.domainBindingRepository.PageQuery(ctx, fkUserId, page, size)
+func (uc *DomainBindingUseCase) List(ctx context.Context, fkUserId, networkMappingId uuid.UUID, page, size int32) (*global.Page[*pb.DomainBindingVO], error) {
+	resp, err := uc.domainBindingRepository.PageQuery(ctx, fkUserId, networkMappingId, page, size)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +127,7 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 
 	ingressName := domainBinding.Name
 	hostIp := gateway.IP
-	hostPort := domainBinding.GatewayPort
+	hostPort := networkMapping.GatewayPort
 	hostDomain := domainBinding.Domain
 
 	domainBinding.FkComputeInstanceID = networkMapping.FkComputerID

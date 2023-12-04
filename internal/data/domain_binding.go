@@ -35,9 +35,9 @@ func (r *domainRepositoryImpl) List(ctx context.Context, userId uuid.UUID) ([]*b
 	return lo.Map(list, r.toBiz), err
 }
 
-func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId uuid.UUID, page, size int32) (*global.Page[*biz.DomainBinding], error) {
+func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId, networkMappingId uuid.UUID, page, size int32) (*global.Page[*biz.DomainBinding], error) {
 	list, err := r.data.db.DomainBinding.Query().
-		Where(domainbinding.UserIDEQ(userId)).
+		Where(domainbinding.UserIDEQ(userId), domainbinding.FkNetworkMappingIDEQ(networkMappingId)).
 		Order(domainbinding.ByCreateTime(sql.OrderDesc())).
 		Offset(int(page - 1)).Limit(int(size)).
 		All(ctx)

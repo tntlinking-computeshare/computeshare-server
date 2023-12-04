@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
@@ -34,9 +33,7 @@ func (ComputeInstance) Fields() []ent.Field {
 
 // Edges of the ComputeInstance.
 func (ComputeInstance) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("networkMappings", NetworkMapping.Type),
-	}
+	return nil
 }
 
 func (ComputeInstance) Indexes() []ent.Index {

@@ -30,6 +30,10 @@ type Tx struct {
 	GatewayPort *GatewayPortClient
 	// NetworkMapping is the client for interacting with the NetworkMapping builders.
 	NetworkMapping *NetworkMappingClient
+	// S3Bucket is the client for interacting with the S3Bucket builders.
+	S3Bucket *S3BucketClient
+	// S3User is the client for interacting with the S3User builders.
+	S3User *S3UserClient
 	// Script is the client for interacting with the Script builders.
 	Script *ScriptClient
 	// ScriptExecutionRecord is the client for interacting with the ScriptExecutionRecord builders.
@@ -180,6 +184,8 @@ func (tx *Tx) init() {
 	tx.Gateway = NewGatewayClient(tx.config)
 	tx.GatewayPort = NewGatewayPortClient(tx.config)
 	tx.NetworkMapping = NewNetworkMappingClient(tx.config)
+	tx.S3Bucket = NewS3BucketClient(tx.config)
+	tx.S3User = NewS3UserClient(tx.config)
 	tx.Script = NewScriptClient(tx.config)
 	tx.ScriptExecutionRecord = NewScriptExecutionRecordClient(tx.config)
 	tx.Storage = NewStorageClient(tx.config)
