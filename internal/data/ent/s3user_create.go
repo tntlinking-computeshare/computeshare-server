@@ -130,9 +130,6 @@ func (sc *S3UserCreate) check() error {
 			return &ValidationError{Name: "secret_key", err: fmt.Errorf(`ent: validator failed for field "S3User.secret_key": %w`, err)}
 		}
 	}
-	if len(sc.mutation.BucketsIDs()) == 0 {
-		return &ValidationError{Name: "buckets", err: errors.New(`ent: missing required edge "S3User.buckets"`)}
-	}
 	return nil
 }
 

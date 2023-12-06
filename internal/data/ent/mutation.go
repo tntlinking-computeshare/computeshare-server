@@ -27,6 +27,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
@@ -55,6 +56,7 @@ const (
 	TypeScript                = "Script"
 	TypeScriptExecutionRecord = "ScriptExecutionRecord"
 	TypeStorage               = "Storage"
+	TypeStorageProvider       = "StorageProvider"
 	TypeTask                  = "Task"
 	TypeUser                  = "User"
 )
@@ -2467,8 +2469,8 @@ type DomainBindingMutation struct {
 	fk_network_mapping_id  *uuid.UUID
 	name                   *string
 	domain                 *string
-	gateway_port           *int
-	addgateway_port        *int
+	gateway_port           *int32
+	addgateway_port        *int32
 	create_time            *time.Time
 	clearedFields          map[string]struct{}
 	done                   bool
@@ -2761,13 +2763,13 @@ func (m *DomainBindingMutation) ResetDomain() {
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (m *DomainBindingMutation) SetGatewayPort(i int) {
+func (m *DomainBindingMutation) SetGatewayPort(i int32) {
 	m.gateway_port = &i
 	m.addgateway_port = nil
 }
 
 // GatewayPort returns the value of the "gateway_port" field in the mutation.
-func (m *DomainBindingMutation) GatewayPort() (r int, exists bool) {
+func (m *DomainBindingMutation) GatewayPort() (r int32, exists bool) {
 	v := m.gateway_port
 	if v == nil {
 		return
@@ -2778,7 +2780,7 @@ func (m *DomainBindingMutation) GatewayPort() (r int, exists bool) {
 // OldGatewayPort returns the old "gateway_port" field's value of the DomainBinding entity.
 // If the DomainBinding object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DomainBindingMutation) OldGatewayPort(ctx context.Context) (v int, err error) {
+func (m *DomainBindingMutation) OldGatewayPort(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldGatewayPort is only allowed on UpdateOne operations")
 	}
@@ -2793,7 +2795,7 @@ func (m *DomainBindingMutation) OldGatewayPort(ctx context.Context) (v int, err 
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (m *DomainBindingMutation) AddGatewayPort(i int) {
+func (m *DomainBindingMutation) AddGatewayPort(i int32) {
 	if m.addgateway_port != nil {
 		*m.addgateway_port += i
 	} else {
@@ -2802,7 +2804,7 @@ func (m *DomainBindingMutation) AddGatewayPort(i int) {
 }
 
 // AddedGatewayPort returns the value that was added to the "gateway_port" field in this mutation.
-func (m *DomainBindingMutation) AddedGatewayPort() (r int, exists bool) {
+func (m *DomainBindingMutation) AddedGatewayPort() (r int32, exists bool) {
 	v := m.addgateway_port
 	if v == nil {
 		return
@@ -2998,7 +3000,7 @@ func (m *DomainBindingMutation) SetField(name string, value ent.Value) error {
 		m.SetDomain(v)
 		return nil
 	case domainbinding.FieldGatewayPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3042,7 +3044,7 @@ func (m *DomainBindingMutation) AddedField(name string) (ent.Value, bool) {
 func (m *DomainBindingMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case domainbinding.FieldGatewayPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3595,8 +3597,8 @@ type GatewayMutation struct {
 	id            *uuid.UUID
 	name          *string
 	ip            *string
-	port          *int
-	addport       *int
+	port          *int32
+	addport       *int32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Gateway, error)
@@ -3780,13 +3782,13 @@ func (m *GatewayMutation) ResetIP() {
 }
 
 // SetPort sets the "port" field.
-func (m *GatewayMutation) SetPort(i int) {
+func (m *GatewayMutation) SetPort(i int32) {
 	m.port = &i
 	m.addport = nil
 }
 
 // Port returns the value of the "port" field in the mutation.
-func (m *GatewayMutation) Port() (r int, exists bool) {
+func (m *GatewayMutation) Port() (r int32, exists bool) {
 	v := m.port
 	if v == nil {
 		return
@@ -3797,7 +3799,7 @@ func (m *GatewayMutation) Port() (r int, exists bool) {
 // OldPort returns the old "port" field's value of the Gateway entity.
 // If the Gateway object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GatewayMutation) OldPort(ctx context.Context) (v int, err error) {
+func (m *GatewayMutation) OldPort(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPort is only allowed on UpdateOne operations")
 	}
@@ -3812,7 +3814,7 @@ func (m *GatewayMutation) OldPort(ctx context.Context) (v int, err error) {
 }
 
 // AddPort adds i to the "port" field.
-func (m *GatewayMutation) AddPort(i int) {
+func (m *GatewayMutation) AddPort(i int32) {
 	if m.addport != nil {
 		*m.addport += i
 	} else {
@@ -3821,7 +3823,7 @@ func (m *GatewayMutation) AddPort(i int) {
 }
 
 // AddedPort returns the value that was added to the "port" field in this mutation.
-func (m *GatewayMutation) AddedPort() (r int, exists bool) {
+func (m *GatewayMutation) AddedPort() (r int32, exists bool) {
 	v := m.addport
 	if v == nil {
 		return
@@ -3932,7 +3934,7 @@ func (m *GatewayMutation) SetField(name string, value ent.Value) error {
 		m.SetIP(v)
 		return nil
 	case gateway.FieldPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3969,7 +3971,7 @@ func (m *GatewayMutation) AddedField(name string) (ent.Value, bool) {
 func (m *GatewayMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case gateway.FieldPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4070,8 +4072,8 @@ type GatewayPortMutation struct {
 	typ           string
 	id            *uuid.UUID
 	fk_gateway_id *uuid.UUID
-	port          *int64
-	addport       *int64
+	port          *int32
+	addport       *int32
 	is_use        *bool
 	clearedFields map[string]struct{}
 	done          bool
@@ -4220,13 +4222,13 @@ func (m *GatewayPortMutation) ResetFkGatewayID() {
 }
 
 // SetPort sets the "port" field.
-func (m *GatewayPortMutation) SetPort(i int64) {
+func (m *GatewayPortMutation) SetPort(i int32) {
 	m.port = &i
 	m.addport = nil
 }
 
 // Port returns the value of the "port" field in the mutation.
-func (m *GatewayPortMutation) Port() (r int64, exists bool) {
+func (m *GatewayPortMutation) Port() (r int32, exists bool) {
 	v := m.port
 	if v == nil {
 		return
@@ -4237,7 +4239,7 @@ func (m *GatewayPortMutation) Port() (r int64, exists bool) {
 // OldPort returns the old "port" field's value of the GatewayPort entity.
 // If the GatewayPort object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int64, err error) {
+func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPort is only allowed on UpdateOne operations")
 	}
@@ -4252,7 +4254,7 @@ func (m *GatewayPortMutation) OldPort(ctx context.Context) (v int64, err error) 
 }
 
 // AddPort adds i to the "port" field.
-func (m *GatewayPortMutation) AddPort(i int64) {
+func (m *GatewayPortMutation) AddPort(i int32) {
 	if m.addport != nil {
 		*m.addport += i
 	} else {
@@ -4261,7 +4263,7 @@ func (m *GatewayPortMutation) AddPort(i int64) {
 }
 
 // AddedPort returns the value that was added to the "port" field in this mutation.
-func (m *GatewayPortMutation) AddedPort() (r int64, exists bool) {
+func (m *GatewayPortMutation) AddedPort() (r int32, exists bool) {
 	v := m.addport
 	if v == nil {
 		return
@@ -4401,7 +4403,7 @@ func (m *GatewayPortMutation) SetField(name string, value ent.Value) error {
 		m.SetFkGatewayID(v)
 		return nil
 	case gatewayport.FieldPort:
-		v, ok := value.(int64)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4445,7 +4447,7 @@ func (m *GatewayPortMutation) AddedField(name string) (ent.Value, bool) {
 func (m *GatewayPortMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case gatewayport.FieldPort:
-		v, ok := value.(int64)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4547,10 +4549,10 @@ type NetworkMappingMutation struct {
 	id               *uuid.UUID
 	name             *string
 	fk_gateway_id    *uuid.UUID
-	gateway_port     *int
-	addgateway_port  *int
-	computer_port    *int
-	addcomputer_port *int
+	gateway_port     *int32
+	addgateway_port  *int32
+	computer_port    *int32
+	addcomputer_port *int32
 	status           *int
 	addstatus        *int
 	fk_computer_id   *uuid.UUID
@@ -4738,13 +4740,13 @@ func (m *NetworkMappingMutation) ResetFkGatewayID() {
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (m *NetworkMappingMutation) SetGatewayPort(i int) {
+func (m *NetworkMappingMutation) SetGatewayPort(i int32) {
 	m.gateway_port = &i
 	m.addgateway_port = nil
 }
 
 // GatewayPort returns the value of the "gateway_port" field in the mutation.
-func (m *NetworkMappingMutation) GatewayPort() (r int, exists bool) {
+func (m *NetworkMappingMutation) GatewayPort() (r int32, exists bool) {
 	v := m.gateway_port
 	if v == nil {
 		return
@@ -4755,7 +4757,7 @@ func (m *NetworkMappingMutation) GatewayPort() (r int, exists bool) {
 // OldGatewayPort returns the old "gateway_port" field's value of the NetworkMapping entity.
 // If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NetworkMappingMutation) OldGatewayPort(ctx context.Context) (v int, err error) {
+func (m *NetworkMappingMutation) OldGatewayPort(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldGatewayPort is only allowed on UpdateOne operations")
 	}
@@ -4770,7 +4772,7 @@ func (m *NetworkMappingMutation) OldGatewayPort(ctx context.Context) (v int, err
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (m *NetworkMappingMutation) AddGatewayPort(i int) {
+func (m *NetworkMappingMutation) AddGatewayPort(i int32) {
 	if m.addgateway_port != nil {
 		*m.addgateway_port += i
 	} else {
@@ -4779,7 +4781,7 @@ func (m *NetworkMappingMutation) AddGatewayPort(i int) {
 }
 
 // AddedGatewayPort returns the value that was added to the "gateway_port" field in this mutation.
-func (m *NetworkMappingMutation) AddedGatewayPort() (r int, exists bool) {
+func (m *NetworkMappingMutation) AddedGatewayPort() (r int32, exists bool) {
 	v := m.addgateway_port
 	if v == nil {
 		return
@@ -4794,13 +4796,13 @@ func (m *NetworkMappingMutation) ResetGatewayPort() {
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (m *NetworkMappingMutation) SetComputerPort(i int) {
+func (m *NetworkMappingMutation) SetComputerPort(i int32) {
 	m.computer_port = &i
 	m.addcomputer_port = nil
 }
 
 // ComputerPort returns the value of the "computer_port" field in the mutation.
-func (m *NetworkMappingMutation) ComputerPort() (r int, exists bool) {
+func (m *NetworkMappingMutation) ComputerPort() (r int32, exists bool) {
 	v := m.computer_port
 	if v == nil {
 		return
@@ -4811,7 +4813,7 @@ func (m *NetworkMappingMutation) ComputerPort() (r int, exists bool) {
 // OldComputerPort returns the old "computer_port" field's value of the NetworkMapping entity.
 // If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NetworkMappingMutation) OldComputerPort(ctx context.Context) (v int, err error) {
+func (m *NetworkMappingMutation) OldComputerPort(ctx context.Context) (v int32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldComputerPort is only allowed on UpdateOne operations")
 	}
@@ -4826,7 +4828,7 @@ func (m *NetworkMappingMutation) OldComputerPort(ctx context.Context) (v int, er
 }
 
 // AddComputerPort adds i to the "computer_port" field.
-func (m *NetworkMappingMutation) AddComputerPort(i int) {
+func (m *NetworkMappingMutation) AddComputerPort(i int32) {
 	if m.addcomputer_port != nil {
 		*m.addcomputer_port += i
 	} else {
@@ -4835,7 +4837,7 @@ func (m *NetworkMappingMutation) AddComputerPort(i int) {
 }
 
 // AddedComputerPort returns the value that was added to the "computer_port" field in this mutation.
-func (m *NetworkMappingMutation) AddedComputerPort() (r int, exists bool) {
+func (m *NetworkMappingMutation) AddedComputerPort() (r int32, exists bool) {
 	v := m.addcomputer_port
 	if v == nil {
 		return
@@ -5102,14 +5104,14 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 		m.SetFkGatewayID(v)
 		return nil
 	case networkmapping.FieldGatewayPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGatewayPort(v)
 		return nil
 	case networkmapping.FieldComputerPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5177,14 +5179,14 @@ func (m *NetworkMappingMutation) AddedField(name string) (ent.Value, bool) {
 func (m *NetworkMappingMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case networkmapping.FieldGatewayPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddGatewayPort(v)
 		return nil
 	case networkmapping.FieldComputerPort:
-		v, ok := value.(int)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5300,16 +5302,17 @@ func (m *NetworkMappingMutation) ResetEdge(name string) error {
 // S3BucketMutation represents an operation that mutates the S3Bucket nodes in the graph.
 type S3BucketMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *uuid.UUID
-	bucket        *string
-	clearedFields map[string]struct{}
-	user          *uuid.UUID
-	cleareduser   bool
-	done          bool
-	oldValue      func(context.Context) (*S3Bucket, error)
-	predicates    []predicate.S3Bucket
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	bucket         *string
+	createdTime    *time.Time
+	clearedFields  map[string]struct{}
+	s3_user        *uuid.UUID
+	cleareds3_user bool
+	done           bool
+	oldValue       func(context.Context) (*S3Bucket, error)
+	predicates     []predicate.S3Bucket
 }
 
 var _ ent.Mutation = (*S3BucketMutation)(nil)
@@ -5452,43 +5455,79 @@ func (m *S3BucketMutation) ResetBucket() {
 	m.bucket = nil
 }
 
-// SetUserID sets the "user" edge to the S3User entity by id.
-func (m *S3BucketMutation) SetUserID(id uuid.UUID) {
-	m.user = &id
+// SetCreatedTime sets the "createdTime" field.
+func (m *S3BucketMutation) SetCreatedTime(t time.Time) {
+	m.createdTime = &t
 }
 
-// ClearUser clears the "user" edge to the S3User entity.
-func (m *S3BucketMutation) ClearUser() {
-	m.cleareduser = true
+// CreatedTime returns the value of the "createdTime" field in the mutation.
+func (m *S3BucketMutation) CreatedTime() (r time.Time, exists bool) {
+	v := m.createdTime
+	if v == nil {
+		return
+	}
+	return *v, true
 }
 
-// UserCleared reports if the "user" edge to the S3User entity was cleared.
-func (m *S3BucketMutation) UserCleared() bool {
-	return m.cleareduser
+// OldCreatedTime returns the old "createdTime" field's value of the S3Bucket entity.
+// If the S3Bucket object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *S3BucketMutation) OldCreatedTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedTime: %w", err)
+	}
+	return oldValue.CreatedTime, nil
 }
 
-// UserID returns the "user" edge ID in the mutation.
-func (m *S3BucketMutation) UserID() (id uuid.UUID, exists bool) {
-	if m.user != nil {
-		return *m.user, true
+// ResetCreatedTime resets all changes to the "createdTime" field.
+func (m *S3BucketMutation) ResetCreatedTime() {
+	m.createdTime = nil
+}
+
+// SetS3UserID sets the "s3_user" edge to the S3User entity by id.
+func (m *S3BucketMutation) SetS3UserID(id uuid.UUID) {
+	m.s3_user = &id
+}
+
+// ClearS3User clears the "s3_user" edge to the S3User entity.
+func (m *S3BucketMutation) ClearS3User() {
+	m.cleareds3_user = true
+}
+
+// S3UserCleared reports if the "s3_user" edge to the S3User entity was cleared.
+func (m *S3BucketMutation) S3UserCleared() bool {
+	return m.cleareds3_user
+}
+
+// S3UserID returns the "s3_user" edge ID in the mutation.
+func (m *S3BucketMutation) S3UserID() (id uuid.UUID, exists bool) {
+	if m.s3_user != nil {
+		return *m.s3_user, true
 	}
 	return
 }
 
-// UserIDs returns the "user" edge IDs in the mutation.
+// S3UserIDs returns the "s3_user" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// UserID instead. It exists only for internal usage by the builders.
-func (m *S3BucketMutation) UserIDs() (ids []uuid.UUID) {
-	if id := m.user; id != nil {
+// S3UserID instead. It exists only for internal usage by the builders.
+func (m *S3BucketMutation) S3UserIDs() (ids []uuid.UUID) {
+	if id := m.s3_user; id != nil {
 		ids = append(ids, *id)
 	}
 	return
 }
 
-// ResetUser resets all changes to the "user" edge.
-func (m *S3BucketMutation) ResetUser() {
-	m.user = nil
-	m.cleareduser = false
+// ResetS3User resets all changes to the "s3_user" edge.
+func (m *S3BucketMutation) ResetS3User() {
+	m.s3_user = nil
+	m.cleareds3_user = false
 }
 
 // Where appends a list predicates to the S3BucketMutation builder.
@@ -5525,9 +5564,12 @@ func (m *S3BucketMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *S3BucketMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.bucket != nil {
 		fields = append(fields, s3bucket.FieldBucket)
+	}
+	if m.createdTime != nil {
+		fields = append(fields, s3bucket.FieldCreatedTime)
 	}
 	return fields
 }
@@ -5539,6 +5581,8 @@ func (m *S3BucketMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case s3bucket.FieldBucket:
 		return m.Bucket()
+	case s3bucket.FieldCreatedTime:
+		return m.CreatedTime()
 	}
 	return nil, false
 }
@@ -5550,6 +5594,8 @@ func (m *S3BucketMutation) OldField(ctx context.Context, name string) (ent.Value
 	switch name {
 	case s3bucket.FieldBucket:
 		return m.OldBucket(ctx)
+	case s3bucket.FieldCreatedTime:
+		return m.OldCreatedTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown S3Bucket field %s", name)
 }
@@ -5565,6 +5611,13 @@ func (m *S3BucketMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBucket(v)
+		return nil
+	case s3bucket.FieldCreatedTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown S3Bucket field %s", name)
@@ -5618,6 +5671,9 @@ func (m *S3BucketMutation) ResetField(name string) error {
 	case s3bucket.FieldBucket:
 		m.ResetBucket()
 		return nil
+	case s3bucket.FieldCreatedTime:
+		m.ResetCreatedTime()
+		return nil
 	}
 	return fmt.Errorf("unknown S3Bucket field %s", name)
 }
@@ -5625,8 +5681,8 @@ func (m *S3BucketMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *S3BucketMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.user != nil {
-		edges = append(edges, s3bucket.EdgeUser)
+	if m.s3_user != nil {
+		edges = append(edges, s3bucket.EdgeS3User)
 	}
 	return edges
 }
@@ -5635,8 +5691,8 @@ func (m *S3BucketMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *S3BucketMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case s3bucket.EdgeUser:
-		if id := m.user; id != nil {
+	case s3bucket.EdgeS3User:
+		if id := m.s3_user; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -5658,8 +5714,8 @@ func (m *S3BucketMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *S3BucketMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.cleareduser {
-		edges = append(edges, s3bucket.EdgeUser)
+	if m.cleareds3_user {
+		edges = append(edges, s3bucket.EdgeS3User)
 	}
 	return edges
 }
@@ -5668,8 +5724,8 @@ func (m *S3BucketMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *S3BucketMutation) EdgeCleared(name string) bool {
 	switch name {
-	case s3bucket.EdgeUser:
-		return m.cleareduser
+	case s3bucket.EdgeS3User:
+		return m.cleareds3_user
 	}
 	return false
 }
@@ -5678,8 +5734,8 @@ func (m *S3BucketMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *S3BucketMutation) ClearEdge(name string) error {
 	switch name {
-	case s3bucket.EdgeUser:
-		m.ClearUser()
+	case s3bucket.EdgeS3User:
+		m.ClearS3User()
 		return nil
 	}
 	return fmt.Errorf("unknown S3Bucket unique edge %s", name)
@@ -5689,8 +5745,8 @@ func (m *S3BucketMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *S3BucketMutation) ResetEdge(name string) error {
 	switch name {
-	case s3bucket.EdgeUser:
-		m.ResetUser()
+	case s3bucket.EdgeS3User:
+		m.ResetS3User()
 		return nil
 	}
 	return fmt.Errorf("unknown S3Bucket edge %s", name)
@@ -8724,6 +8780,764 @@ func (m *StorageMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *StorageMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Storage edge %s", name)
+}
+
+// StorageProviderMutation represents an operation that mutates the StorageProvider nodes in the graph.
+type StorageProviderMutation struct {
+	config
+	op             Op
+	typ            string
+	id             *uuid.UUID
+	agent_id       *uuid.UUID
+	status         *consts.StorageProviderStatus
+	addstatus      *consts.StorageProviderStatus
+	master_server  *string
+	public_ip      *string
+	public_port    *int32
+	addpublic_port *int32
+	grpc_port      *int32
+	addgrpc_port   *int32
+	created_time   *time.Time
+	clearedFields  map[string]struct{}
+	done           bool
+	oldValue       func(context.Context) (*StorageProvider, error)
+	predicates     []predicate.StorageProvider
+}
+
+var _ ent.Mutation = (*StorageProviderMutation)(nil)
+
+// storageproviderOption allows management of the mutation configuration using functional options.
+type storageproviderOption func(*StorageProviderMutation)
+
+// newStorageProviderMutation creates new mutation for the StorageProvider entity.
+func newStorageProviderMutation(c config, op Op, opts ...storageproviderOption) *StorageProviderMutation {
+	m := &StorageProviderMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeStorageProvider,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withStorageProviderID sets the ID field of the mutation.
+func withStorageProviderID(id uuid.UUID) storageproviderOption {
+	return func(m *StorageProviderMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *StorageProvider
+		)
+		m.oldValue = func(ctx context.Context) (*StorageProvider, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().StorageProvider.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withStorageProvider sets the old StorageProvider of the mutation.
+func withStorageProvider(node *StorageProvider) storageproviderOption {
+	return func(m *StorageProviderMutation) {
+		m.oldValue = func(context.Context) (*StorageProvider, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m StorageProviderMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m StorageProviderMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of StorageProvider entities.
+func (m *StorageProviderMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *StorageProviderMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *StorageProviderMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().StorageProvider.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetAgentID sets the "agent_id" field.
+func (m *StorageProviderMutation) SetAgentID(u uuid.UUID) {
+	m.agent_id = &u
+}
+
+// AgentID returns the value of the "agent_id" field in the mutation.
+func (m *StorageProviderMutation) AgentID() (r uuid.UUID, exists bool) {
+	v := m.agent_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAgentID returns the old "agent_id" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldAgentID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAgentID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAgentID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAgentID: %w", err)
+	}
+	return oldValue.AgentID, nil
+}
+
+// ResetAgentID resets all changes to the "agent_id" field.
+func (m *StorageProviderMutation) ResetAgentID() {
+	m.agent_id = nil
+}
+
+// SetStatus sets the "status" field.
+func (m *StorageProviderMutation) SetStatus(cps consts.StorageProviderStatus) {
+	m.status = &cps
+	m.addstatus = nil
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *StorageProviderMutation) Status() (r consts.StorageProviderStatus, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldStatus(ctx context.Context) (v consts.StorageProviderStatus, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// AddStatus adds cps to the "status" field.
+func (m *StorageProviderMutation) AddStatus(cps consts.StorageProviderStatus) {
+	if m.addstatus != nil {
+		*m.addstatus += cps
+	} else {
+		m.addstatus = &cps
+	}
+}
+
+// AddedStatus returns the value that was added to the "status" field in this mutation.
+func (m *StorageProviderMutation) AddedStatus() (r consts.StorageProviderStatus, exists bool) {
+	v := m.addstatus
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *StorageProviderMutation) ResetStatus() {
+	m.status = nil
+	m.addstatus = nil
+}
+
+// SetMasterServer sets the "master_server" field.
+func (m *StorageProviderMutation) SetMasterServer(s string) {
+	m.master_server = &s
+}
+
+// MasterServer returns the value of the "master_server" field in the mutation.
+func (m *StorageProviderMutation) MasterServer() (r string, exists bool) {
+	v := m.master_server
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMasterServer returns the old "master_server" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldMasterServer(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMasterServer is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMasterServer requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMasterServer: %w", err)
+	}
+	return oldValue.MasterServer, nil
+}
+
+// ResetMasterServer resets all changes to the "master_server" field.
+func (m *StorageProviderMutation) ResetMasterServer() {
+	m.master_server = nil
+}
+
+// SetPublicIP sets the "public_ip" field.
+func (m *StorageProviderMutation) SetPublicIP(s string) {
+	m.public_ip = &s
+}
+
+// PublicIP returns the value of the "public_ip" field in the mutation.
+func (m *StorageProviderMutation) PublicIP() (r string, exists bool) {
+	v := m.public_ip
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicIP returns the old "public_ip" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldPublicIP(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicIP is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicIP requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicIP: %w", err)
+	}
+	return oldValue.PublicIP, nil
+}
+
+// ResetPublicIP resets all changes to the "public_ip" field.
+func (m *StorageProviderMutation) ResetPublicIP() {
+	m.public_ip = nil
+}
+
+// SetPublicPort sets the "public_port" field.
+func (m *StorageProviderMutation) SetPublicPort(i int32) {
+	m.public_port = &i
+	m.addpublic_port = nil
+}
+
+// PublicPort returns the value of the "public_port" field in the mutation.
+func (m *StorageProviderMutation) PublicPort() (r int32, exists bool) {
+	v := m.public_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublicPort returns the old "public_port" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldPublicPort(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublicPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublicPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublicPort: %w", err)
+	}
+	return oldValue.PublicPort, nil
+}
+
+// AddPublicPort adds i to the "public_port" field.
+func (m *StorageProviderMutation) AddPublicPort(i int32) {
+	if m.addpublic_port != nil {
+		*m.addpublic_port += i
+	} else {
+		m.addpublic_port = &i
+	}
+}
+
+// AddedPublicPort returns the value that was added to the "public_port" field in this mutation.
+func (m *StorageProviderMutation) AddedPublicPort() (r int32, exists bool) {
+	v := m.addpublic_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPublicPort resets all changes to the "public_port" field.
+func (m *StorageProviderMutation) ResetPublicPort() {
+	m.public_port = nil
+	m.addpublic_port = nil
+}
+
+// SetGrpcPort sets the "grpc_port" field.
+func (m *StorageProviderMutation) SetGrpcPort(i int32) {
+	m.grpc_port = &i
+	m.addgrpc_port = nil
+}
+
+// GrpcPort returns the value of the "grpc_port" field in the mutation.
+func (m *StorageProviderMutation) GrpcPort() (r int32, exists bool) {
+	v := m.grpc_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGrpcPort returns the old "grpc_port" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldGrpcPort(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGrpcPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGrpcPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGrpcPort: %w", err)
+	}
+	return oldValue.GrpcPort, nil
+}
+
+// AddGrpcPort adds i to the "grpc_port" field.
+func (m *StorageProviderMutation) AddGrpcPort(i int32) {
+	if m.addgrpc_port != nil {
+		*m.addgrpc_port += i
+	} else {
+		m.addgrpc_port = &i
+	}
+}
+
+// AddedGrpcPort returns the value that was added to the "grpc_port" field in this mutation.
+func (m *StorageProviderMutation) AddedGrpcPort() (r int32, exists bool) {
+	v := m.addgrpc_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetGrpcPort resets all changes to the "grpc_port" field.
+func (m *StorageProviderMutation) ResetGrpcPort() {
+	m.grpc_port = nil
+	m.addgrpc_port = nil
+}
+
+// SetCreatedTime sets the "created_time" field.
+func (m *StorageProviderMutation) SetCreatedTime(t time.Time) {
+	m.created_time = &t
+}
+
+// CreatedTime returns the value of the "created_time" field in the mutation.
+func (m *StorageProviderMutation) CreatedTime() (r time.Time, exists bool) {
+	v := m.created_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedTime returns the old "created_time" field's value of the StorageProvider entity.
+// If the StorageProvider object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *StorageProviderMutation) OldCreatedTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedTime: %w", err)
+	}
+	return oldValue.CreatedTime, nil
+}
+
+// ResetCreatedTime resets all changes to the "created_time" field.
+func (m *StorageProviderMutation) ResetCreatedTime() {
+	m.created_time = nil
+}
+
+// Where appends a list predicates to the StorageProviderMutation builder.
+func (m *StorageProviderMutation) Where(ps ...predicate.StorageProvider) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the StorageProviderMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *StorageProviderMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.StorageProvider, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *StorageProviderMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *StorageProviderMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (StorageProvider).
+func (m *StorageProviderMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *StorageProviderMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.agent_id != nil {
+		fields = append(fields, storageprovider.FieldAgentID)
+	}
+	if m.status != nil {
+		fields = append(fields, storageprovider.FieldStatus)
+	}
+	if m.master_server != nil {
+		fields = append(fields, storageprovider.FieldMasterServer)
+	}
+	if m.public_ip != nil {
+		fields = append(fields, storageprovider.FieldPublicIP)
+	}
+	if m.public_port != nil {
+		fields = append(fields, storageprovider.FieldPublicPort)
+	}
+	if m.grpc_port != nil {
+		fields = append(fields, storageprovider.FieldGrpcPort)
+	}
+	if m.created_time != nil {
+		fields = append(fields, storageprovider.FieldCreatedTime)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *StorageProviderMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case storageprovider.FieldAgentID:
+		return m.AgentID()
+	case storageprovider.FieldStatus:
+		return m.Status()
+	case storageprovider.FieldMasterServer:
+		return m.MasterServer()
+	case storageprovider.FieldPublicIP:
+		return m.PublicIP()
+	case storageprovider.FieldPublicPort:
+		return m.PublicPort()
+	case storageprovider.FieldGrpcPort:
+		return m.GrpcPort()
+	case storageprovider.FieldCreatedTime:
+		return m.CreatedTime()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *StorageProviderMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case storageprovider.FieldAgentID:
+		return m.OldAgentID(ctx)
+	case storageprovider.FieldStatus:
+		return m.OldStatus(ctx)
+	case storageprovider.FieldMasterServer:
+		return m.OldMasterServer(ctx)
+	case storageprovider.FieldPublicIP:
+		return m.OldPublicIP(ctx)
+	case storageprovider.FieldPublicPort:
+		return m.OldPublicPort(ctx)
+	case storageprovider.FieldGrpcPort:
+		return m.OldGrpcPort(ctx)
+	case storageprovider.FieldCreatedTime:
+		return m.OldCreatedTime(ctx)
+	}
+	return nil, fmt.Errorf("unknown StorageProvider field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *StorageProviderMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case storageprovider.FieldAgentID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAgentID(v)
+		return nil
+	case storageprovider.FieldStatus:
+		v, ok := value.(consts.StorageProviderStatus)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case storageprovider.FieldMasterServer:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMasterServer(v)
+		return nil
+	case storageprovider.FieldPublicIP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicIP(v)
+		return nil
+	case storageprovider.FieldPublicPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublicPort(v)
+		return nil
+	case storageprovider.FieldGrpcPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGrpcPort(v)
+		return nil
+	case storageprovider.FieldCreatedTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedTime(v)
+		return nil
+	}
+	return fmt.Errorf("unknown StorageProvider field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *StorageProviderMutation) AddedFields() []string {
+	var fields []string
+	if m.addstatus != nil {
+		fields = append(fields, storageprovider.FieldStatus)
+	}
+	if m.addpublic_port != nil {
+		fields = append(fields, storageprovider.FieldPublicPort)
+	}
+	if m.addgrpc_port != nil {
+		fields = append(fields, storageprovider.FieldGrpcPort)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *StorageProviderMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case storageprovider.FieldStatus:
+		return m.AddedStatus()
+	case storageprovider.FieldPublicPort:
+		return m.AddedPublicPort()
+	case storageprovider.FieldGrpcPort:
+		return m.AddedGrpcPort()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *StorageProviderMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case storageprovider.FieldStatus:
+		v, ok := value.(consts.StorageProviderStatus)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStatus(v)
+		return nil
+	case storageprovider.FieldPublicPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPublicPort(v)
+		return nil
+	case storageprovider.FieldGrpcPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddGrpcPort(v)
+		return nil
+	}
+	return fmt.Errorf("unknown StorageProvider numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *StorageProviderMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *StorageProviderMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *StorageProviderMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown StorageProvider nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *StorageProviderMutation) ResetField(name string) error {
+	switch name {
+	case storageprovider.FieldAgentID:
+		m.ResetAgentID()
+		return nil
+	case storageprovider.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case storageprovider.FieldMasterServer:
+		m.ResetMasterServer()
+		return nil
+	case storageprovider.FieldPublicIP:
+		m.ResetPublicIP()
+		return nil
+	case storageprovider.FieldPublicPort:
+		m.ResetPublicPort()
+		return nil
+	case storageprovider.FieldGrpcPort:
+		m.ResetGrpcPort()
+		return nil
+	case storageprovider.FieldCreatedTime:
+		m.ResetCreatedTime()
+		return nil
+	}
+	return fmt.Errorf("unknown StorageProvider field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *StorageProviderMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *StorageProviderMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *StorageProviderMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *StorageProviderMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *StorageProviderMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *StorageProviderMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *StorageProviderMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown StorageProvider unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *StorageProviderMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown StorageProvider edge %s", name)
 }
 
 // TaskMutation represents an operation that mutates the Task nodes in the graph.

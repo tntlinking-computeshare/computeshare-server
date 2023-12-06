@@ -26,6 +26,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
@@ -102,6 +103,7 @@ func checkColumn(table, column string) error {
 			script.Table:                script.ValidColumn,
 			scriptexecutionrecord.Table: scriptexecutionrecord.ValidColumn,
 			storage.Table:               storage.ValidColumn,
+			storageprovider.Table:       storageprovider.ValidColumn,
 			task.Table:                  task.ValidColumn,
 			user.Table:                  user.ValidColumn,
 		})

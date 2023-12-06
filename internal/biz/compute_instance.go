@@ -262,7 +262,7 @@ func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId
 		RemotePort:   gp.Port,
 		GatewayId:    gateway.ID.String(),
 		GatewayIp:    gateway.IP,
-		GatewayPort:  int64(gateway.Port),
+		GatewayPort:  gateway.Port,
 	}
 	paramData, err := json.Marshal(taskParam)
 	if err != nil {

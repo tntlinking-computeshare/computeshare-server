@@ -63,9 +63,9 @@ func (repo *GatewayPortRepo) Update(ctx context.Context, gp *biz.GatewayPort) er
 		Exec(ctx)
 }
 
-func (repo *GatewayPortRepo) GetGatewayPortByGatewayIdAndPort(ctx context.Context, gatewayId uuid.UUID, port int) (*biz.GatewayPort, error) {
+func (repo *GatewayPortRepo) GetGatewayPortByGatewayIdAndPort(ctx context.Context, gatewayId uuid.UUID, port int32) (*biz.GatewayPort, error) {
 	data, err := repo.data.db.GatewayPort.Query().
-		Where(gatewayport.FkGatewayIDEQ(gatewayId), gatewayport.PortEQ(int64(port))).
+		Where(gatewayport.FkGatewayIDEQ(gatewayId), gatewayport.PortEQ(port)).
 		First(ctx)
 
 	return repo.toBiz(data, 0), err

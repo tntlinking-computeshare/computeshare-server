@@ -17,7 +17,7 @@ func (S3User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
-		field.String("access_key").MaxLen(50).Comment("accessKey"),
+		field.String("access_key").MaxLen(50).Comment("accessKey").Unique(),
 		field.String("secret_key").MaxLen(50).Comment("secretKey"),
 	}
 }
@@ -27,10 +27,6 @@ func (S3User) Edges() []ent.Edge {
 	return []ent.Edge{
 
 		edge.From("buckets", S3Bucket.Type).
-			Ref("user").
-			// We add the "Required" method to the builder
-			// to make this edge required on entity creation.
-			// i.e. Card cannot be created without its owner.
-			Required(),
+			Ref("s3_user"),
 	}
 }

@@ -20,7 +20,7 @@ func (DomainBinding) Fields() []ent.Field {
 		field.UUID("fk_network_mapping_id", uuid.UUID{}).Comment("网络映射id"),
 		field.String("name").NotEmpty().MaxLen(50).Comment("映射名"),
 		field.String("domain").MaxLen(255).Comment("域名"),
-		field.Int("gateway_port").Comment("映射到gateway的端口"),
+		field.Int32("gateway_port").Comment("映射到gateway的端口"),
 		field.Time("create_time").Comment("创建时间"),
 	}
 }

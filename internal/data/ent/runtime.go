@@ -20,8 +20,10 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -318,6 +320,24 @@ func init() {
 	storageDescID := storageFields[0].Descriptor()
 	// storage.DefaultID holds the default value on creation for the id field.
 	storage.DefaultID = storageDescID.Default.(func() uuid.UUID)
+	storageproviderFields := schema.StorageProvider{}.Fields()
+	_ = storageproviderFields
+	// storageproviderDescStatus is the schema descriptor for status field.
+	storageproviderDescStatus := storageproviderFields[2].Descriptor()
+	// storageprovider.DefaultStatus holds the default value on creation for the status field.
+	storageprovider.DefaultStatus = consts.StorageProviderStatus(storageproviderDescStatus.Default.(int))
+	// storageproviderDescMasterServer is the schema descriptor for master_server field.
+	storageproviderDescMasterServer := storageproviderFields[3].Descriptor()
+	// storageprovider.MasterServerValidator is a validator for the "master_server" field. It is called by the builders before save.
+	storageprovider.MasterServerValidator = storageproviderDescMasterServer.Validators[0].(func(string) error)
+	// storageproviderDescPublicIP is the schema descriptor for public_ip field.
+	storageproviderDescPublicIP := storageproviderFields[4].Descriptor()
+	// storageprovider.PublicIPValidator is a validator for the "public_ip" field. It is called by the builders before save.
+	storageprovider.PublicIPValidator = storageproviderDescPublicIP.Validators[0].(func(string) error)
+	// storageproviderDescID is the schema descriptor for id field.
+	storageproviderDescID := storageproviderFields[0].Descriptor()
+	// storageprovider.DefaultID holds the default value on creation for the id field.
+	storageprovider.DefaultID = storageproviderDescID.Default.(func() uuid.UUID)
 	taskFields := schema.Task{}.Fields()
 	_ = taskFields
 	// taskDescAgentID is the schema descriptor for agent_id field.

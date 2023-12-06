@@ -40,14 +40,14 @@ func (gu *GatewayUpdate) SetIP(s string) *GatewayUpdate {
 }
 
 // SetPort sets the "port" field.
-func (gu *GatewayUpdate) SetPort(i int) *GatewayUpdate {
+func (gu *GatewayUpdate) SetPort(i int32) *GatewayUpdate {
 	gu.mutation.ResetPort()
 	gu.mutation.SetPort(i)
 	return gu
 }
 
 // AddPort adds i to the "port" field.
-func (gu *GatewayUpdate) AddPort(i int) *GatewayUpdate {
+func (gu *GatewayUpdate) AddPort(i int32) *GatewayUpdate {
 	gu.mutation.AddPort(i)
 	return gu
 }
@@ -113,10 +113,10 @@ func (gu *GatewayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(gateway.FieldIP, field.TypeString, value)
 	}
 	if value, ok := gu.mutation.Port(); ok {
-		_spec.SetField(gateway.FieldPort, field.TypeInt, value)
+		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := gu.mutation.AddedPort(); ok {
-		_spec.AddField(gateway.FieldPort, field.TypeInt, value)
+		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -151,14 +151,14 @@ func (guo *GatewayUpdateOne) SetIP(s string) *GatewayUpdateOne {
 }
 
 // SetPort sets the "port" field.
-func (guo *GatewayUpdateOne) SetPort(i int) *GatewayUpdateOne {
+func (guo *GatewayUpdateOne) SetPort(i int32) *GatewayUpdateOne {
 	guo.mutation.ResetPort()
 	guo.mutation.SetPort(i)
 	return guo
 }
 
 // AddPort adds i to the "port" field.
-func (guo *GatewayUpdateOne) AddPort(i int) *GatewayUpdateOne {
+func (guo *GatewayUpdateOne) AddPort(i int32) *GatewayUpdateOne {
 	guo.mutation.AddPort(i)
 	return guo
 }
@@ -254,10 +254,10 @@ func (guo *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err e
 		_spec.SetField(gateway.FieldIP, field.TypeString, value)
 	}
 	if value, ok := guo.mutation.Port(); ok {
-		_spec.SetField(gateway.FieldPort, field.TypeInt, value)
+		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := guo.mutation.AddedPort(); ok {
-		_spec.AddField(gateway.FieldPort, field.TypeInt, value)
+		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
 	}
 	_node = &Gateway{config: guo.config}
 	_spec.Assign = _node.assignValues

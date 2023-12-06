@@ -110,7 +110,7 @@ var (
 		{Name: "fk_network_mapping_id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Size: 50},
 		{Name: "domain", Type: field.TypeString, Size: 255},
-		{Name: "gateway_port", Type: field.TypeInt},
+		{Name: "gateway_port", Type: field.TypeInt32},
 		{Name: "create_time", Type: field.TypeTime},
 	}
 	// DomainBindingsTable holds the schema information for the "domain_bindings" table.
@@ -136,7 +136,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString, Size: 50},
 		{Name: "ip", Type: field.TypeString},
-		{Name: "port", Type: field.TypeInt},
+		{Name: "port", Type: field.TypeInt32},
 	}
 	// GatewaysTable holds the schema information for the "gateways" table.
 	GatewaysTable = &schema.Table{
@@ -148,7 +148,7 @@ var (
 	GatewayPortsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
-		{Name: "port", Type: field.TypeInt64},
+		{Name: "port", Type: field.TypeInt32},
 		{Name: "is_use", Type: field.TypeBool, Default: false},
 	}
 	// GatewayPortsTable holds the schema information for the "gateway_ports" table.
@@ -162,8 +162,8 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString, Size: 50},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
-		{Name: "gateway_port", Type: field.TypeInt},
-		{Name: "computer_port", Type: field.TypeInt},
+		{Name: "gateway_port", Type: field.TypeInt32},
+		{Name: "computer_port", Type: field.TypeInt32},
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "fk_computer_id", Type: field.TypeUUID},
 		{Name: "fk_user_id", Type: field.TypeUUID},
@@ -178,7 +178,8 @@ var (
 	S3bucketsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "bucket", Type: field.TypeString, Size: 50},
-		{Name: "s3bucket_user", Type: field.TypeUUID, Nullable: true},
+		{Name: "created_time", Type: field.TypeTime},
+		{Name: "s3bucket_s3_user", Type: field.TypeUUID, Nullable: true},
 	}
 	// S3bucketsTable holds the schema information for the "s3buckets" table.
 	S3bucketsTable = &schema.Table{
@@ -187,8 +188,8 @@ var (
 		PrimaryKey: []*schema.Column{S3bucketsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "s3buckets_s3users_user",
-				Columns:    []*schema.Column{S3bucketsColumns[2]},
+				Symbol:     "s3buckets_s3users_s3_user",
+				Columns:    []*schema.Column{S3bucketsColumns[3]},
 				RefColumns: []*schema.Column{S3usersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -198,7 +199,7 @@ var (
 	S3usersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "fk_user_id", Type: field.TypeUUID},
-		{Name: "access_key", Type: field.TypeString, Size: 50},
+		{Name: "access_key", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "secret_key", Type: field.TypeString, Size: 50},
 	}
 	// S3usersTable holds the schema information for the "s3users" table.
@@ -277,6 +278,23 @@ var (
 			},
 		},
 	}
+	// StorageProvidersColumns holds the columns for the "storage_providers" table.
+	StorageProvidersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "agent_id", Type: field.TypeUUID, Unique: true},
+		{Name: "status", Type: field.TypeInt, Default: 0},
+		{Name: "master_server", Type: field.TypeString},
+		{Name: "public_ip", Type: field.TypeString},
+		{Name: "public_port", Type: field.TypeInt32},
+		{Name: "grpc_port", Type: field.TypeInt32},
+		{Name: "created_time", Type: field.TypeTime},
+	}
+	// StorageProvidersTable holds the schema information for the "storage_providers" table.
+	StorageProvidersTable = &schema.Table{
+		Name:       "storage_providers",
+		Columns:    StorageProvidersColumns,
+		PrimaryKey: []*schema.Column{StorageProvidersColumns[0]},
+	}
 	// TasksColumns holds the columns for the "tasks" table.
 	TasksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -350,6 +368,7 @@ var (
 		ScriptsTable,
 		ScriptExecutionRecordsTable,
 		StoragesTable,
+		StorageProvidersTable,
 		TasksTable,
 		UsersTable,
 	}

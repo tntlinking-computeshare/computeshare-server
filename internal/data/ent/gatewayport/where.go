@@ -59,7 +59,7 @@ func FkGatewayID(v uuid.UUID) predicate.GatewayPort {
 }
 
 // Port applies equality check predicate on the "port" field. It's identical to PortEQ.
-func Port(v int64) predicate.GatewayPort {
+func Port(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldEQ(FieldPort, v))
 }
 
@@ -109,42 +109,42 @@ func FkGatewayIDLTE(v uuid.UUID) predicate.GatewayPort {
 }
 
 // PortEQ applies the EQ predicate on the "port" field.
-func PortEQ(v int64) predicate.GatewayPort {
+func PortEQ(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldEQ(FieldPort, v))
 }
 
 // PortNEQ applies the NEQ predicate on the "port" field.
-func PortNEQ(v int64) predicate.GatewayPort {
+func PortNEQ(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldNEQ(FieldPort, v))
 }
 
 // PortIn applies the In predicate on the "port" field.
-func PortIn(vs ...int64) predicate.GatewayPort {
+func PortIn(vs ...int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldIn(FieldPort, vs...))
 }
 
 // PortNotIn applies the NotIn predicate on the "port" field.
-func PortNotIn(vs ...int64) predicate.GatewayPort {
+func PortNotIn(vs ...int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldNotIn(FieldPort, vs...))
 }
 
 // PortGT applies the GT predicate on the "port" field.
-func PortGT(v int64) predicate.GatewayPort {
+func PortGT(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldGT(FieldPort, v))
 }
 
 // PortGTE applies the GTE predicate on the "port" field.
-func PortGTE(v int64) predicate.GatewayPort {
+func PortGTE(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldGTE(FieldPort, v))
 }
 
 // PortLT applies the LT predicate on the "port" field.
-func PortLT(v int64) predicate.GatewayPort {
+func PortLT(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldLT(FieldPort, v))
 }
 
 // PortLTE applies the LTE predicate on the "port" field.
-func PortLTE(v int64) predicate.GatewayPort {
+func PortLTE(v int32) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldLTE(FieldPort, v))
 }
 

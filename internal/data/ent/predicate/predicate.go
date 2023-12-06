@@ -48,6 +48,9 @@ type ScriptExecutionRecord func(*sql.Selector)
 // Storage is the predicate function for storage builders.
 type Storage func(*sql.Selector)
 
+// StorageProvider is the predicate function for storageprovider builders.
+type StorageProvider func(*sql.Selector)
+
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)
 

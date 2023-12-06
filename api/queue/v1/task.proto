@@ -20,6 +20,9 @@ enum TaskCmd //枚举消息类型
   NAT_PROXY_DELETE = 7; // nat 代理删除
   NAT_VISITOR_CREATE = 8; // nat 访问创建
   NAT_VISITOR_DELETE = 9; // nat 访问删除
+  STORAGE_CREATE = 10; // 存储节点创建（虚拟机)
+  STORAGE_DELETE = 11; // 存储节点删除（虚拟机）
+  PING = 99; // ping
 }
 
 enum TaskStatus // 任务状态
@@ -81,11 +84,11 @@ message NatNetworkMappingTaskParamVO {
   string id = 1;
   string name = 2;
   string instanceName = 3;
-  int64 instancePort = 4;
-  int64 remotePort = 5;
+  int32 instancePort = 4;
+  int32 remotePort = 5;
   string gatewayId = 6;
   string gatewayIp = 7;
-  int64 gatewayPort = 8;
+  int32 gatewayPort = 8;
 }
 
 message ComputeInstanceTaskParamVO {
@@ -97,4 +100,11 @@ message ComputeInstanceTaskParamVO {
   string publicKey = 6;
   string password = 7;
   string instanceId = 8;
+}
+
+message StorageSetupTaskParamVO {
+  string masterServer = 1;
+  string publicIp = 2;
+  int32 publicPort = 3;
+  int32 grpcPort = 4;
 }

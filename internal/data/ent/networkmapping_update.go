@@ -41,27 +41,27 @@ func (nmu *NetworkMappingUpdate) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpda
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmu *NetworkMappingUpdate) SetGatewayPort(i int) *NetworkMappingUpdate {
+func (nmu *NetworkMappingUpdate) SetGatewayPort(i int32) *NetworkMappingUpdate {
 	nmu.mutation.ResetGatewayPort()
 	nmu.mutation.SetGatewayPort(i)
 	return nmu
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (nmu *NetworkMappingUpdate) AddGatewayPort(i int) *NetworkMappingUpdate {
+func (nmu *NetworkMappingUpdate) AddGatewayPort(i int32) *NetworkMappingUpdate {
 	nmu.mutation.AddGatewayPort(i)
 	return nmu
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmu *NetworkMappingUpdate) SetComputerPort(i int) *NetworkMappingUpdate {
+func (nmu *NetworkMappingUpdate) SetComputerPort(i int32) *NetworkMappingUpdate {
 	nmu.mutation.ResetComputerPort()
 	nmu.mutation.SetComputerPort(i)
 	return nmu
 }
 
 // AddComputerPort adds i to the "computer_port" field.
-func (nmu *NetworkMappingUpdate) AddComputerPort(i int) *NetworkMappingUpdate {
+func (nmu *NetworkMappingUpdate) AddComputerPort(i int32) *NetworkMappingUpdate {
 	nmu.mutation.AddComputerPort(i)
 	return nmu
 }
@@ -160,16 +160,16 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := nmu.mutation.GatewayPort(); ok {
-		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := nmu.mutation.AddedGatewayPort(); ok {
-		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt, value)
+		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := nmu.mutation.ComputerPort(); ok {
-		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
 	if value, ok := nmu.mutation.AddedComputerPort(); ok {
-		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt, value)
+		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
 	if value, ok := nmu.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)
@@ -216,27 +216,27 @@ func (nmuo *NetworkMappingUpdateOne) SetFkGatewayID(u uuid.UUID) *NetworkMapping
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmuo *NetworkMappingUpdateOne) SetGatewayPort(i int) *NetworkMappingUpdateOne {
+func (nmuo *NetworkMappingUpdateOne) SetGatewayPort(i int32) *NetworkMappingUpdateOne {
 	nmuo.mutation.ResetGatewayPort()
 	nmuo.mutation.SetGatewayPort(i)
 	return nmuo
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (nmuo *NetworkMappingUpdateOne) AddGatewayPort(i int) *NetworkMappingUpdateOne {
+func (nmuo *NetworkMappingUpdateOne) AddGatewayPort(i int32) *NetworkMappingUpdateOne {
 	nmuo.mutation.AddGatewayPort(i)
 	return nmuo
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmuo *NetworkMappingUpdateOne) SetComputerPort(i int) *NetworkMappingUpdateOne {
+func (nmuo *NetworkMappingUpdateOne) SetComputerPort(i int32) *NetworkMappingUpdateOne {
 	nmuo.mutation.ResetComputerPort()
 	nmuo.mutation.SetComputerPort(i)
 	return nmuo
 }
 
 // AddComputerPort adds i to the "computer_port" field.
-func (nmuo *NetworkMappingUpdateOne) AddComputerPort(i int) *NetworkMappingUpdateOne {
+func (nmuo *NetworkMappingUpdateOne) AddComputerPort(i int32) *NetworkMappingUpdateOne {
 	nmuo.mutation.AddComputerPort(i)
 	return nmuo
 }
@@ -365,16 +365,16 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := nmuo.mutation.GatewayPort(); ok {
-		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := nmuo.mutation.AddedGatewayPort(); ok {
-		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt, value)
+		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := nmuo.mutation.ComputerPort(); ok {
-		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
 	if value, ok := nmuo.mutation.AddedComputerPort(); ok {
-		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt, value)
+		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
 	if value, ok := nmuo.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)

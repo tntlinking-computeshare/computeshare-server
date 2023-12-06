@@ -22,12 +22,14 @@ const _ = http.SupportPackageIsVersion1
 const OperationNetworkMappingCreateNetworkMapping = "/api.network_mapping.v1.NetworkMapping/CreateNetworkMapping"
 const OperationNetworkMappingDeleteNetworkMapping = "/api.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
 const OperationNetworkMappingGetNetworkMapping = "/api.network_mapping.v1.NetworkMapping/GetNetworkMapping"
+const OperationNetworkMappingNextNetworkMapping = "/api.network_mapping.v1.NetworkMapping/NextNetworkMapping"
 const OperationNetworkMappingPageNetworkMapping = "/api.network_mapping.v1.NetworkMapping/PageNetworkMapping"
 
 type NetworkMappingHTTPServer interface {
 	CreateNetworkMapping(context.Context, *CreateNetworkMappingRequest) (*CreateNetworkMappingReply, error)
 	DeleteNetworkMapping(context.Context, *DeleteNetworkMappingRequest) (*DeleteNetworkMappingReply, error)
 	GetNetworkMapping(context.Context, *GetNetworkMappingRequest) (*GetNetworkMappingReply, error)
+	NextNetworkMapping(context.Context, *NextNetworkMappingRequest) (*NextNetworkMappingReply, error)
 	PageNetworkMapping(context.Context, *PageNetworkMappingRequest) (*PageNetworkMappingReply, error)
 }
 
@@ -37,6 +39,7 @@ func RegisterNetworkMappingHTTPServer(s *http.Server, srv NetworkMappingHTTPServ
 	r.GET("/v1/network-mappings/page", _NetworkMapping_PageNetworkMapping0_HTTP_Handler(srv))
 	r.GET("/v1/network-mappings/{id}", _NetworkMapping_GetNetworkMapping0_HTTP_Handler(srv))
 	r.DELETE("/v1/network-mappings/{id}", _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv))
+	r.GET("/v1/network-mappings/next", _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv))
 }
 
 func _NetworkMapping_CreateNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
@@ -124,10 +127,30 @@ func _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPSe
 	}
 }
 
+func _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in NextNetworkMappingRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNetworkMappingNextNetworkMapping)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.NextNetworkMapping(ctx, req.(*NextNetworkMappingRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*NextNetworkMappingReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NetworkMappingHTTPClient interface {
 	CreateNetworkMapping(ctx context.Context, req *CreateNetworkMappingRequest, opts ...http.CallOption) (rsp *CreateNetworkMappingReply, err error)
 	DeleteNetworkMapping(ctx context.Context, req *DeleteNetworkMappingRequest, opts ...http.CallOption) (rsp *DeleteNetworkMappingReply, err error)
 	GetNetworkMapping(ctx context.Context, req *GetNetworkMappingRequest, opts ...http.CallOption) (rsp *GetNetworkMappingReply, err error)
+	NextNetworkMapping(ctx context.Context, req *NextNetworkMappingRequest, opts ...http.CallOption) (rsp *NextNetworkMappingReply, err error)
 	PageNetworkMapping(ctx context.Context, req *PageNetworkMappingRequest, opts ...http.CallOption) (rsp *PageNetworkMappingReply, err error)
 }
 
@@ -170,6 +193,19 @@ func (c *NetworkMappingHTTPClientImpl) GetNetworkMapping(ctx context.Context, in
 	pattern := "/v1/network-mappings/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationNetworkMappingGetNetworkMapping))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NetworkMappingHTTPClientImpl) NextNetworkMapping(ctx context.Context, in *NextNetworkMappingRequest, opts ...http.CallOption) (*NextNetworkMappingReply, error) {
+	var out NextNetworkMappingReply
+	pattern := "/v1/network-mappings/next"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationNetworkMappingNextNetworkMapping))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

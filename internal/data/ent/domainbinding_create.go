@@ -52,7 +52,7 @@ func (dbc *DomainBindingCreate) SetDomain(s string) *DomainBindingCreate {
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbc *DomainBindingCreate) SetGatewayPort(i int) *DomainBindingCreate {
+func (dbc *DomainBindingCreate) SetGatewayPort(i int32) *DomainBindingCreate {
 	dbc.mutation.SetGatewayPort(i)
 	return dbc
 }
@@ -207,7 +207,7 @@ func (dbc *DomainBindingCreate) createSpec() (*DomainBinding, *sqlgraph.CreateSp
 		_node.Domain = value
 	}
 	if value, ok := dbc.mutation.GatewayPort(); ok {
-		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 		_node.GatewayPort = value
 	}
 	if value, ok := dbc.mutation.CreateTime(); ok {

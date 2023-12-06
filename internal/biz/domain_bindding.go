@@ -41,7 +41,7 @@ type DomainBinding struct {
 	// 域名
 	Domain string `json:"domain,omitempty"`
 	// 映射到gateway的端口
-	GatewayPort int `json:"gateway_port,omitempty"`
+	GatewayPort int32 `json:"gateway_port,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
 }

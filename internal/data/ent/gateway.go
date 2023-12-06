@@ -22,7 +22,7 @@ type Gateway struct {
 	// 网关ip
 	IP string `json:"ip,omitempty"`
 	// 端口号
-	Port         int `json:"port,omitempty"`
+	Port         int32 `json:"port,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -74,7 +74,7 @@ func (ga *Gateway) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
-				ga.Port = int(value.Int64)
+				ga.Port = int32(value.Int64)
 			}
 		default:
 			ga.selectValues.Set(columns[i], values[i])

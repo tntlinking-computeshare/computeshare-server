@@ -60,14 +60,14 @@ func (dbu *DomainBindingUpdate) SetDomain(s string) *DomainBindingUpdate {
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbu *DomainBindingUpdate) SetGatewayPort(i int) *DomainBindingUpdate {
+func (dbu *DomainBindingUpdate) SetGatewayPort(i int32) *DomainBindingUpdate {
 	dbu.mutation.ResetGatewayPort()
 	dbu.mutation.SetGatewayPort(i)
 	return dbu
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (dbu *DomainBindingUpdate) AddGatewayPort(i int) *DomainBindingUpdate {
+func (dbu *DomainBindingUpdate) AddGatewayPort(i int32) *DomainBindingUpdate {
 	dbu.mutation.AddGatewayPort(i)
 	return dbu
 }
@@ -153,10 +153,10 @@ func (dbu *DomainBindingUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		_spec.SetField(domainbinding.FieldDomain, field.TypeString, value)
 	}
 	if value, ok := dbu.mutation.GatewayPort(); ok {
-		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := dbu.mutation.AddedGatewayPort(); ok {
-		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt, value)
+		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := dbu.mutation.CreateTime(); ok {
 		_spec.SetField(domainbinding.FieldCreateTime, field.TypeTime, value)
@@ -212,14 +212,14 @@ func (dbuo *DomainBindingUpdateOne) SetDomain(s string) *DomainBindingUpdateOne 
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbuo *DomainBindingUpdateOne) SetGatewayPort(i int) *DomainBindingUpdateOne {
+func (dbuo *DomainBindingUpdateOne) SetGatewayPort(i int32) *DomainBindingUpdateOne {
 	dbuo.mutation.ResetGatewayPort()
 	dbuo.mutation.SetGatewayPort(i)
 	return dbuo
 }
 
 // AddGatewayPort adds i to the "gateway_port" field.
-func (dbuo *DomainBindingUpdateOne) AddGatewayPort(i int) *DomainBindingUpdateOne {
+func (dbuo *DomainBindingUpdateOne) AddGatewayPort(i int32) *DomainBindingUpdateOne {
 	dbuo.mutation.AddGatewayPort(i)
 	return dbuo
 }
@@ -335,10 +335,10 @@ func (dbuo *DomainBindingUpdateOne) sqlSave(ctx context.Context) (_node *DomainB
 		_spec.SetField(domainbinding.FieldDomain, field.TypeString, value)
 	}
 	if value, ok := dbuo.mutation.GatewayPort(); ok {
-		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := dbuo.mutation.AddedGatewayPort(); ok {
-		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt, value)
+		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
 	if value, ok := dbuo.mutation.CreateTime(); ok {
 		_spec.SetField(domainbinding.FieldCreateTime, field.TypeTime, value)

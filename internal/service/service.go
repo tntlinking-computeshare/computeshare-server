@@ -18,6 +18,7 @@ var ProviderSet = wire.NewSet(
 	NewIpfShell,
 	NewNetworkMappingService,
 	NewDomainBindingService,
+	NewStorageS3Service,
 )
 
 func NewIpfShell(c *conf.Data) *shell.Shell {

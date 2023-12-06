@@ -17,7 +17,7 @@ func (Gateway) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("name").NotEmpty().MaxLen(50),
 		field.String("ip").Comment("网关ip"),
-		field.Int("port").Comment("端口号"),
+		field.Int32("port").Comment("端口号"),
 	}
 }
 

@@ -16,12 +16,14 @@ import (
 type DomainBindingService struct {
 	pb.UnimplementedDomainBindingServer
 
-	domainBindingUseCase *biz.DomainBindingUseCase
+	domainBindingUseCase  *biz.DomainBindingUseCase
+	networkMappingUseCase *biz.NetworkMappingUseCase
 }
 
-func NewDomainBindingService(domainBindingUseCase *biz.DomainBindingUseCase) *DomainBindingService {
+func NewDomainBindingService(domainBindingUseCase *biz.DomainBindingUseCase, networkMappingUseCase *biz.NetworkMappingUseCase) *DomainBindingService {
 	return &DomainBindingService{
-		domainBindingUseCase: domainBindingUseCase,
+		domainBindingUseCase:  domainBindingUseCase,
+		networkMappingUseCase: networkMappingUseCase,
 	}
 }
 
@@ -104,7 +106,18 @@ func (s *DomainBindingService) ListDomainBinding(ctx context.Context, req *pb.Li
 	}, nil
 }
 
-func (s *DomainBindingService) NsLookup(_ context.Context, req *pb.NsLookupRequest) (*pb.NsLookupReply, error) {
+func (s *DomainBindingService) NsLookup(ctx context.Context, req *pb.NsLookupRequest) (*pb.NsLookupReply, error) {
+
+	networkMappingId, err := uuid.Parse(req.GetNetworkMappingId())
+	if err != nil {
+		return nil, errors.New("networkMappingId is not uuid")
+	}
+
+	ip, err := s.networkMappingUseCase.GetNetworkMappingIP(ctx, networkMappingId)
+	if err != nil {
+		return nil, err
+	}
+
 	ips, err := net.LookupIP(req.Domain)
 	if err != nil {
 		fmt.Printf("Error looking up IP for %s: %s\n", req.Domain, err)
@@ -114,8 +127,8 @@ func (s *DomainBindingService) NsLookup(_ context.Context, req *pb.NsLookupReque
 	return &pb.NsLookupReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data: lo.Map(ips, func(item net.IP, index int) string {
-			return item.String()
+		Data: lo.ContainsBy(ips, func(item net.IP) bool {
+			return item.String() == ip
 		}),
 	}, err
 }

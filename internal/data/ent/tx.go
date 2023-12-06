@@ -40,6 +40,8 @@ type Tx struct {
 	ScriptExecutionRecord *ScriptExecutionRecordClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
+	// StorageProvider is the client for interacting with the StorageProvider builders.
+	StorageProvider *StorageProviderClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// User is the client for interacting with the User builders.
@@ -189,6 +191,7 @@ func (tx *Tx) init() {
 	tx.Script = NewScriptClient(tx.config)
 	tx.ScriptExecutionRecord = NewScriptExecutionRecordClient(tx.config)
 	tx.Storage = NewStorageClient(tx.config)
+	tx.StorageProvider = NewStorageProviderClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }

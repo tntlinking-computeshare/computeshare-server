@@ -19,6 +19,10 @@ func (task *QueueTaskVo) GetTaskParam() (any, error) {
 		var vo NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(task.GetParams()), &vo)
 		return vo, err
+	case TaskCmd_STORAGE_CREATE, TaskCmd_STORAGE_DELETE:
+		var vo StorageSetupTaskParamVO
+		err := json.Unmarshal([]byte(task.GetParams()), &vo)
+		return vo, err
 	}
 	return nil, errors.New("cannot issue command")
 }

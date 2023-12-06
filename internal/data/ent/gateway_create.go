@@ -33,7 +33,7 @@ func (gc *GatewayCreate) SetIP(s string) *GatewayCreate {
 }
 
 // SetPort sets the "port" field.
-func (gc *GatewayCreate) SetPort(i int) *GatewayCreate {
+func (gc *GatewayCreate) SetPort(i int32) *GatewayCreate {
 	gc.mutation.SetPort(i)
 	return gc
 }
@@ -153,7 +153,7 @@ func (gc *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
 		_node.IP = value
 	}
 	if value, ok := gc.mutation.Port(); ok {
-		_spec.SetField(gateway.FieldPort, field.TypeInt, value)
+		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 		_node.Port = value
 	}
 	return _node, _spec

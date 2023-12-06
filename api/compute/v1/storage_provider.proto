@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package api.compute.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service StorageProvider {
+	rpc CreateStorageProvider (CreateStorageProviderRequest) returns (CreateStorageProviderReply) {
+		option (google.api.http) = {
+			post: "/v1/storage_provider"
+			body: "*"
+		};
+	};
+	rpc DeleteStorageProvider (DeleteStorageProviderRequest) returns (DeleteStorageProviderReply){
+		option (google.api.http) = {
+			delete: "/v1/storage_provider/{id}"
+		};
+	};
+	rpc GetStorageProvider (GetStorageProviderRequest) returns (GetStorageProviderReply) {
+		option (google.api.http) = {
+			get: "/v1/storage_provider/{id}"
+		};
+	};
+	rpc ListStorageProvider (ListStorageProviderRequest) returns (ListStorageProviderReply) {
+		option (google.api.http) = {
+			get: "/v1/storage_provider"
+		};
+	};
+}
+
+message CreateStorageProviderRequest {
+	string agentId = 1;
+}
+message CreateStorageProviderReply {
+	int32 code = 1;
+	string message = 2;
+	StorageProviderInfo data = 3;
+}
+
+message DeleteStorageProviderRequest {
+	string id = 1;
+}
+message DeleteStorageProviderReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message GetStorageProviderRequest {
+	string id = 1;
+}
+message GetStorageProviderReply {
+	int32 code = 1;
+	string message = 2;
+	StorageProviderInfo data = 3;
+}
+
+message ListStorageProviderRequest {}
+message ListStorageProviderReply {
+	int32 code = 1;
+	string message = 2;
+	repeated StorageProviderInfo data = 3; // bucket id
+}
+
+message StorageProviderInfo {
+	string id = 1;
+	string agent_id = 2;
+	int32 status = 3;
+	string masterServer = 4;
+	string publicIp = 5;
+	int32 publicPort = 6;
+	int32 grpcPort = 7;
+}

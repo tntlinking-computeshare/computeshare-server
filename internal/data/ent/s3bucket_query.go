@@ -23,7 +23,7 @@ type S3BucketQuery struct {
 	order      []s3bucket.OrderOption
 	inters     []Interceptor
 	predicates []predicate.S3Bucket
-	withUser   *S3UserQuery
+	withS3User *S3UserQuery
 	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -61,8 +61,8 @@ func (sq *S3BucketQuery) Order(o ...s3bucket.OrderOption) *S3BucketQuery {
 	return sq
 }
 
-// QueryUser chains the current query on the "user" edge.
-func (sq *S3BucketQuery) QueryUser() *S3UserQuery {
+// QueryS3User chains the current query on the "s3_user" edge.
+func (sq *S3BucketQuery) QueryS3User() *S3UserQuery {
 	query := (&S3UserClient{config: sq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sq.prepareQuery(ctx); err != nil {
@@ -75,7 +75,7 @@ func (sq *S3BucketQuery) QueryUser() *S3UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(s3bucket.Table, s3bucket.FieldID, selector),
 			sqlgraph.To(s3user.Table, s3user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.UserTable, s3bucket.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.S3UserTable, s3bucket.S3UserColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -275,21 +275,21 @@ func (sq *S3BucketQuery) Clone() *S3BucketQuery {
 		order:      append([]s3bucket.OrderOption{}, sq.order...),
 		inters:     append([]Interceptor{}, sq.inters...),
 		predicates: append([]predicate.S3Bucket{}, sq.predicates...),
-		withUser:   sq.withUser.Clone(),
+		withS3User: sq.withS3User.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
 }
 
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *S3BucketQuery) WithUser(opts ...func(*S3UserQuery)) *S3BucketQuery {
+// WithS3User tells the query-builder to eager-load the nodes that are connected to
+// the "s3_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *S3BucketQuery) WithS3User(opts ...func(*S3UserQuery)) *S3BucketQuery {
 	query := (&S3UserClient{config: sq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	sq.withUser = query
+	sq.withS3User = query
 	return sq
 }
 
@@ -373,10 +373,10 @@ func (sq *S3BucketQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S3B
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
 		loadedTypes = [1]bool{
-			sq.withUser != nil,
+			sq.withS3User != nil,
 		}
 	)
-	if sq.withUser != nil {
+	if sq.withS3User != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -400,23 +400,23 @@ func (sq *S3BucketQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S3B
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withUser; query != nil {
-		if err := sq.loadUser(ctx, query, nodes, nil,
-			func(n *S3Bucket, e *S3User) { n.Edges.User = e }); err != nil {
+	if query := sq.withS3User; query != nil {
+		if err := sq.loadS3User(ctx, query, nodes, nil,
+			func(n *S3Bucket, e *S3User) { n.Edges.S3User = e }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (sq *S3BucketQuery) loadUser(ctx context.Context, query *S3UserQuery, nodes []*S3Bucket, init func(*S3Bucket), assign func(*S3Bucket, *S3User)) error {
+func (sq *S3BucketQuery) loadS3User(ctx context.Context, query *S3UserQuery, nodes []*S3Bucket, init func(*S3Bucket), assign func(*S3Bucket, *S3User)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*S3Bucket)
 	for i := range nodes {
-		if nodes[i].s3bucket_user == nil {
+		if nodes[i].s3bucket_s3_user == nil {
 			continue
 		}
-		fk := *nodes[i].s3bucket_user
+		fk := *nodes[i].s3bucket_s3_user
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -433,7 +433,7 @@ func (sq *S3BucketQuery) loadUser(ctx context.Context, query *S3UserQuery, nodes
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "s3bucket_user" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "s3bucket_s3_user" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

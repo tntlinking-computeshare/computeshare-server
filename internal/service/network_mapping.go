@@ -123,3 +123,19 @@ func (s *NetworkMappingService) toReply(ctx context.Context, p *biz.NetworkMappi
 		Domains:      list,
 	}
 }
+
+func (s *NetworkMappingService) NextNetworkMapping(ctx context.Context, req *pb.NextNetworkMappingRequest) (*pb.NextNetworkMappingReply, error) {
+	next, err := s.nm.NextNetworkMapping(ctx, req.GetComputerId())
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.NextNetworkMappingReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.NextNetworkMappingReply_Data{
+			PublicPort: next.PublicPort,
+			PublicIp:   next.PublicIP,
+		},
+	}, err
+}

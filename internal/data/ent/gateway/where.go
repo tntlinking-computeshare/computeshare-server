@@ -64,7 +64,7 @@ func IP(v string) predicate.Gateway {
 }
 
 // Port applies equality check predicate on the "port" field. It's identical to PortEQ.
-func Port(v int) predicate.Gateway {
+func Port(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldPort, v))
 }
 
@@ -199,42 +199,42 @@ func IPContainsFold(v string) predicate.Gateway {
 }
 
 // PortEQ applies the EQ predicate on the "port" field.
-func PortEQ(v int) predicate.Gateway {
+func PortEQ(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldPort, v))
 }
 
 // PortNEQ applies the NEQ predicate on the "port" field.
-func PortNEQ(v int) predicate.Gateway {
+func PortNEQ(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldNEQ(FieldPort, v))
 }
 
 // PortIn applies the In predicate on the "port" field.
-func PortIn(vs ...int) predicate.Gateway {
+func PortIn(vs ...int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldIn(FieldPort, vs...))
 }
 
 // PortNotIn applies the NotIn predicate on the "port" field.
-func PortNotIn(vs ...int) predicate.Gateway {
+func PortNotIn(vs ...int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldNotIn(FieldPort, vs...))
 }
 
 // PortGT applies the GT predicate on the "port" field.
-func PortGT(v int) predicate.Gateway {
+func PortGT(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldGT(FieldPort, v))
 }
 
 // PortGTE applies the GTE predicate on the "port" field.
-func PortGTE(v int) predicate.Gateway {
+func PortGTE(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldGTE(FieldPort, v))
 }
 
 // PortLT applies the LT predicate on the "port" field.
-func PortLT(v int) predicate.Gateway {
+func PortLT(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldLT(FieldPort, v))
 }
 
 // PortLTE applies the LTE predicate on the "port" field.
-func PortLTE(v int) predicate.Gateway {
+func PortLTE(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldLTE(FieldPort, v))
 }
 

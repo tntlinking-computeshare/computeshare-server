@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
 	"github.com/samber/lo"
 )
@@ -101,4 +102,50 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		Status:               item.Status,
 		UserId:               item.FkUserID,
 	}
+}
+
+func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error) {
+	computeInstances, err := repo.data.db.ComputeInstance.Query().Select(computeinstance.FieldID).Where(computeinstance.AgentID(agentId.String())).All(ctx)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	if len(computeInstances) == 0 {
+		first, err := repo.data.db.Gateway.Query().First(ctx)
+		if err != nil {
+			return uuid.Nil, err
+		}
+		return first.ID, nil
+	}
+
+	computeInstanceIds := lo.Map(computeInstances, func(item *ent.ComputeInstance, index int) uuid.UUID {
+		return item.ID
+	})
+
+	type networkMapingGroupByFkGatewayID struct {
+		FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
+		Count       int       `json:"count"`
+	}
+
+	var v []networkMapingGroupByFkGatewayID
+
+	err = repo.data.db.NetworkMapping.Query().
+		Where(networkmapping.FkComputerIDIn(computeInstanceIds...)).
+		GroupBy(networkmapping.FieldFkGatewayID).Aggregate(ent.Count()).Scan(ctx, &v)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	if len(v) == 0 {
+		first, err := repo.data.db.Gateway.Query().First(ctx)
+		if err != nil {
+			return uuid.Nil, err
+		}
+		return first.ID, nil
+	}
+
+	max := lo.MaxBy(v, func(a networkMapingGroupByFkGatewayID, b networkMapingGroupByFkGatewayID) bool {
+		return a.Count > b.Count
+	})
+	return max.FkGatewayID, nil
 }

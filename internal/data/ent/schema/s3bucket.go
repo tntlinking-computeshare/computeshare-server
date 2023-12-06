@@ -17,13 +17,14 @@ func (S3Bucket) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("bucket").MaxLen(50).Comment("bucket"),
+		field.Time("createdTime"),
 	}
 }
 
 // Edges of the S3Bucket.
 func (S3Bucket) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("user", S3User.Type).
+		edge.To("s3_user", S3User.Type).
 			Unique(),
 	}
 }

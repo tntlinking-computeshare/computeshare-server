@@ -25,9 +25,9 @@ type NetworkMapping struct {
 	// computer name
 	ComputerInstanceName string `json:"computer_instance_name"`
 	// 映射到网关的端口号
-	GatewayPort int `json:"gateway_port,omitempty"`
+	GatewayPort int32 `json:"gateway_port,omitempty"`
 	// 需要映射的虚拟机端口号
-	ComputerPort int `json:"computer_port,omitempty"`
+	ComputerPort int32 `json:"computer_port,omitempty"`
 	//  0 待开始 1 进行中 2 已完成，3 失败
 	Status int `json:"status,omitempty"`
 	// 用户id
@@ -40,19 +40,25 @@ type NetworkMappingCreate struct {
 	ComputerPort int32
 }
 
+type NextNetworkMappingInfo struct {
+	PublicIP   string
+	PublicPort int32
+}
+
 type NetworkMappingRepo interface {
 	CreateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error)
 	DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
+	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 }
 
 type Gateway struct {
 	ID   uuid.UUID
 	Name string
 	IP   string
-	Port int
+	Port int32
 }
 
 type GatewayRepo interface {
@@ -67,7 +73,7 @@ type GatewayRepo interface {
 type GatewayPort struct {
 	ID          uuid.UUID
 	FkGatewayID uuid.UUID
-	Port        int64
+	Port        int32
 	IsUse       bool
 }
 
@@ -80,7 +86,7 @@ type GatewayPortRepo interface {
 	CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
 	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*GatewayPort, error)
 	Update(ctx context.Context, gp *GatewayPort) error
-	GetGatewayPortByGatewayIdAndPort(ctx context.Context, id uuid.UUID, port int) (*GatewayPort, error)
+	GetGatewayPortByGatewayIdAndPort(ctx context.Context, id uuid.UUID, port int32) (*GatewayPort, error)
 }
 
 type NetworkMappingUseCase struct {
@@ -130,9 +136,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	if err != nil {
 		return nil, err
 	}
-	if err != nil {
-		return nil, err
-	}
 	gatewayPort := gp.Port
 
 	claim, ok := global.FromContext(ctx)
@@ -150,9 +153,9 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		// computer_id
 		FkComputerID: nmc.ComputerId,
 		// 映射到网关的端口号
-		GatewayPort: int(gatewayPort),
+		GatewayPort: gatewayPort,
 		// 需要映射的虚拟机端口号
-		ComputerPort: int(nmc.ComputerPort),
+		ComputerPort: nmc.ComputerPort,
 		//  0 待开始 1 进行中 2 已完成，3 失败
 		Status: 0,
 		UserId: claim.GetUserId(),
@@ -178,11 +181,11 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		Id:           nm.ID.String(),
 		Name:         nm.Name,
 		InstanceName: ci.Name,
-		InstancePort: int64(nm.ComputerPort),
-		RemotePort:   int64(nm.GatewayPort),
+		InstancePort: nm.ComputerPort,
+		RemotePort:   nm.GatewayPort,
 		GatewayId:    nm.FkGatewayID.String(),
 		GatewayIp:    gateway.IP,
-		GatewayPort:  int64(gateway.Port),
+		GatewayPort:  gateway.Port,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {
@@ -247,11 +250,11 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 		Id:           np.ID.String(),
 		Name:         np.Name,
 		InstanceName: instance.Name,
-		InstancePort: int64(np.ComputerPort),
-		RemotePort:   int64(np.GatewayPort),
+		InstancePort: np.ComputerPort,
+		RemotePort:   np.GatewayPort,
 		GatewayId:    gp.FkGatewayID.String(),
 		GatewayIp:    gateway.IP,
-		GatewayPort:  int64(gateway.Port),
+		GatewayPort:  gateway.Port,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {
@@ -283,12 +286,69 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	return m.repo.DeleteNetworkMapping(ctx, id)
 }
 
-func (m *NetworkMappingUseCase) UpdateNetorkMapping(ctx context.Context, id uuid.UUID, status int) error {
-	m.log.WithContext(ctx).Infof("UpdateNetorkMapping %s", id, status)
+func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {
+	m.log.WithContext(ctx).Infof("UpdateNetworkMapping %s", id, status)
 	nm, err := m.repo.GetNetworkMapping(ctx, id)
 	if err != nil {
 		return err
 	}
 	nm.Status = status
 	return m.repo.UpdateNetworkMapping(ctx, nm)
+}
+
+func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId string) (*NextNetworkMappingInfo, error) {
+	// 查看当前 gatewayID
+	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+	if err != nil {
+		return nil, err
+	}
+
+	maxItem := lo.MaxBy(gpcList, func(item *GatewayPortCount, max *GatewayPortCount) bool {
+		return item.Count > max.Count
+	})
+
+	if maxItem == nil {
+		return nil, fmt.Errorf("无可用 Gateway")
+	}
+	if maxItem.Count <= 0 {
+		return nil, fmt.Errorf("无可用端口")
+	}
+	// 查询当前 gateway 的空余端口并进行分配
+	gp, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, maxItem.FkGatewayID)
+	if err != nil {
+		return nil, err
+	}
+	gateway, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &NextNetworkMappingInfo{
+		PublicIP:   gateway.IP,
+		PublicPort: int32(gp.Port),
+	}, err
+}
+
+func (m *NetworkMappingUseCase) GetNetworkMappingIP(ctx context.Context, networkMappingId uuid.UUID) (string, error) {
+	mapping, err := m.repo.GetNetworkMapping(ctx, networkMappingId)
+	if err != nil {
+		return "", err
+	}
+	gateway, err := m.gatewayRepo.GetGateway(ctx, mapping.FkGatewayID)
+	if err != nil {
+		return "", err
+	}
+
+	return gateway.IP, err
+}
+
+func (m *NetworkMappingUseCase) GetNextGatewayPort(ctx context.Context, agentId uuid.UUID) (*GatewayPort, error) {
+	// 1. 判断这个agent 是否有networkmapping 记录
+	gatewayId, err := m.repo.QueryGatewayIdByAgentId(ctx, agentId)
+	if err != nil {
+		return nil, err
+	}
+
+	//2. 查询gateway 的最小可用端口
+	return m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, gatewayId)
 }

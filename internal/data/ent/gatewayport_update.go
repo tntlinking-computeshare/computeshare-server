@@ -35,14 +35,14 @@ func (gpu *GatewayPortUpdate) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdate {
 }
 
 // SetPort sets the "port" field.
-func (gpu *GatewayPortUpdate) SetPort(i int64) *GatewayPortUpdate {
+func (gpu *GatewayPortUpdate) SetPort(i int32) *GatewayPortUpdate {
 	gpu.mutation.ResetPort()
 	gpu.mutation.SetPort(i)
 	return gpu
 }
 
 // AddPort adds i to the "port" field.
-func (gpu *GatewayPortUpdate) AddPort(i int64) *GatewayPortUpdate {
+func (gpu *GatewayPortUpdate) AddPort(i int32) *GatewayPortUpdate {
 	gpu.mutation.AddPort(i)
 	return gpu
 }
@@ -106,10 +106,10 @@ func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := gpu.mutation.Port(); ok {
-		_spec.SetField(gatewayport.FieldPort, field.TypeInt64, value)
+		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := gpu.mutation.AddedPort(); ok {
-		_spec.AddField(gatewayport.FieldPort, field.TypeInt64, value)
+		_spec.AddField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := gpu.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
@@ -141,14 +141,14 @@ func (gpuo *GatewayPortUpdateOne) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdate
 }
 
 // SetPort sets the "port" field.
-func (gpuo *GatewayPortUpdateOne) SetPort(i int64) *GatewayPortUpdateOne {
+func (gpuo *GatewayPortUpdateOne) SetPort(i int32) *GatewayPortUpdateOne {
 	gpuo.mutation.ResetPort()
 	gpuo.mutation.SetPort(i)
 	return gpuo
 }
 
 // AddPort adds i to the "port" field.
-func (gpuo *GatewayPortUpdateOne) AddPort(i int64) *GatewayPortUpdateOne {
+func (gpuo *GatewayPortUpdateOne) AddPort(i int32) *GatewayPortUpdateOne {
 	gpuo.mutation.AddPort(i)
 	return gpuo
 }
@@ -242,10 +242,10 @@ func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPo
 		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
 	if value, ok := gpuo.mutation.Port(); ok {
-		_spec.SetField(gatewayport.FieldPort, field.TypeInt64, value)
+		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := gpuo.mutation.AddedPort(); ok {
-		_spec.AddField(gatewayport.FieldPort, field.TypeInt64, value)
+		_spec.AddField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
 	if value, ok := gpuo.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)

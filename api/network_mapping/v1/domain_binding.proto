@@ -113,10 +113,11 @@ message DomainBindingPageResponse {
 
 message NsLookupRequest {
 	string domain = 1;
+	string networkMappingId = 2;
 }
 
 message NsLookupReply {
 	int32 code = 1;
 	string message = 2;
-	repeated string data = 3;
+	bool data = 3;
 }

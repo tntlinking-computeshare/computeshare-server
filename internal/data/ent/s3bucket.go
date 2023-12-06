@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -20,33 +21,35 @@ type S3Bucket struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// bucket
 	Bucket string `json:"bucket,omitempty"`
+	// CreatedTime holds the value of the "createdTime" field.
+	CreatedTime time.Time `json:"createdTime,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the S3BucketQuery when eager-loading is set.
-	Edges         S3BucketEdges `json:"edges"`
-	s3bucket_user *uuid.UUID
-	selectValues  sql.SelectValues
+	Edges            S3BucketEdges `json:"edges"`
+	s3bucket_s3_user *uuid.UUID
+	selectValues     sql.SelectValues
 }
 
 // S3BucketEdges holds the relations/edges for other nodes in the graph.
 type S3BucketEdges struct {
-	// User holds the value of the user edge.
-	User *S3User `json:"user,omitempty"`
+	// S3User holds the value of the s3_user edge.
+	S3User *S3User `json:"s3_user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// UserOrErr returns the User value or an error if the edge
+// S3UserOrErr returns the S3User value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e S3BucketEdges) UserOrErr() (*S3User, error) {
+func (e S3BucketEdges) S3UserOrErr() (*S3User, error) {
 	if e.loadedTypes[0] {
-		if e.User == nil {
+		if e.S3User == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: s3user.Label}
 		}
-		return e.User, nil
+		return e.S3User, nil
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "s3_user"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -56,9 +59,11 @@ func (*S3Bucket) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case s3bucket.FieldBucket:
 			values[i] = new(sql.NullString)
+		case s3bucket.FieldCreatedTime:
+			values[i] = new(sql.NullTime)
 		case s3bucket.FieldID:
 			values[i] = new(uuid.UUID)
-		case s3bucket.ForeignKeys[0]: // s3bucket_user
+		case s3bucket.ForeignKeys[0]: // s3bucket_s3_user
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -87,12 +92,18 @@ func (s *S3Bucket) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Bucket = value.String
 			}
+		case s3bucket.FieldCreatedTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field createdTime", values[i])
+			} else if value.Valid {
+				s.CreatedTime = value.Time
+			}
 		case s3bucket.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field s3bucket_user", values[i])
+				return fmt.Errorf("unexpected type %T for field s3bucket_s3_user", values[i])
 			} else if value.Valid {
-				s.s3bucket_user = new(uuid.UUID)
-				*s.s3bucket_user = *value.S.(*uuid.UUID)
+				s.s3bucket_s3_user = new(uuid.UUID)
+				*s.s3bucket_s3_user = *value.S.(*uuid.UUID)
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -107,9 +118,9 @@ func (s *S3Bucket) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the S3Bucket entity.
-func (s *S3Bucket) QueryUser() *S3UserQuery {
-	return NewS3BucketClient(s.config).QueryUser(s)
+// QueryS3User queries the "s3_user" edge of the S3Bucket entity.
+func (s *S3Bucket) QueryS3User() *S3UserQuery {
+	return NewS3BucketClient(s.config).QueryS3User(s)
 }
 
 // Update returns a builder for updating this S3Bucket.
@@ -137,6 +148,9 @@ func (s *S3Bucket) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
 	builder.WriteString("bucket=")
 	builder.WriteString(s.Bucket)
+	builder.WriteString(", ")
+	builder.WriteString("createdTime=")
+	builder.WriteString(s.CreatedTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

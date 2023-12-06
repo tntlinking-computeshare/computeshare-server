@@ -177,6 +177,18 @@ func (f StorageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.StorageMutation", m)
 }
 
+// The StorageProviderFunc type is an adapter to allow the use of ordinary
+// function as StorageProvider mutator.
+type StorageProviderFunc func(context.Context, *ent.StorageProviderMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f StorageProviderFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.StorageProviderMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.StorageProviderMutation", m)
+}
+
 // The TaskFunc type is an adapter to allow the use of ordinary
 // function as Task mutator.
 type TaskFunc func(context.Context, *ent.TaskMutation) (ent.Value, error)

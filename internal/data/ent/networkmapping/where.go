@@ -64,12 +64,12 @@ func FkGatewayID(v uuid.UUID) predicate.NetworkMapping {
 }
 
 // GatewayPort applies equality check predicate on the "gateway_port" field. It's identical to GatewayPortEQ.
-func GatewayPort(v int) predicate.NetworkMapping {
+func GatewayPort(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldGatewayPort, v))
 }
 
 // ComputerPort applies equality check predicate on the "computer_port" field. It's identical to ComputerPortEQ.
-func ComputerPort(v int) predicate.NetworkMapping {
+func ComputerPort(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldComputerPort, v))
 }
 
@@ -194,82 +194,82 @@ func FkGatewayIDLTE(v uuid.UUID) predicate.NetworkMapping {
 }
 
 // GatewayPortEQ applies the EQ predicate on the "gateway_port" field.
-func GatewayPortEQ(v int) predicate.NetworkMapping {
+func GatewayPortEQ(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldGatewayPort, v))
 }
 
 // GatewayPortNEQ applies the NEQ predicate on the "gateway_port" field.
-func GatewayPortNEQ(v int) predicate.NetworkMapping {
+func GatewayPortNEQ(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldNEQ(FieldGatewayPort, v))
 }
 
 // GatewayPortIn applies the In predicate on the "gateway_port" field.
-func GatewayPortIn(vs ...int) predicate.NetworkMapping {
+func GatewayPortIn(vs ...int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldIn(FieldGatewayPort, vs...))
 }
 
 // GatewayPortNotIn applies the NotIn predicate on the "gateway_port" field.
-func GatewayPortNotIn(vs ...int) predicate.NetworkMapping {
+func GatewayPortNotIn(vs ...int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldNotIn(FieldGatewayPort, vs...))
 }
 
 // GatewayPortGT applies the GT predicate on the "gateway_port" field.
-func GatewayPortGT(v int) predicate.NetworkMapping {
+func GatewayPortGT(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldGT(FieldGatewayPort, v))
 }
 
 // GatewayPortGTE applies the GTE predicate on the "gateway_port" field.
-func GatewayPortGTE(v int) predicate.NetworkMapping {
+func GatewayPortGTE(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldGTE(FieldGatewayPort, v))
 }
 
 // GatewayPortLT applies the LT predicate on the "gateway_port" field.
-func GatewayPortLT(v int) predicate.NetworkMapping {
+func GatewayPortLT(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLT(FieldGatewayPort, v))
 }
 
 // GatewayPortLTE applies the LTE predicate on the "gateway_port" field.
-func GatewayPortLTE(v int) predicate.NetworkMapping {
+func GatewayPortLTE(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLTE(FieldGatewayPort, v))
 }
 
 // ComputerPortEQ applies the EQ predicate on the "computer_port" field.
-func ComputerPortEQ(v int) predicate.NetworkMapping {
+func ComputerPortEQ(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldComputerPort, v))
 }
 
 // ComputerPortNEQ applies the NEQ predicate on the "computer_port" field.
-func ComputerPortNEQ(v int) predicate.NetworkMapping {
+func ComputerPortNEQ(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldNEQ(FieldComputerPort, v))
 }
 
 // ComputerPortIn applies the In predicate on the "computer_port" field.
-func ComputerPortIn(vs ...int) predicate.NetworkMapping {
+func ComputerPortIn(vs ...int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldIn(FieldComputerPort, vs...))
 }
 
 // ComputerPortNotIn applies the NotIn predicate on the "computer_port" field.
-func ComputerPortNotIn(vs ...int) predicate.NetworkMapping {
+func ComputerPortNotIn(vs ...int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldNotIn(FieldComputerPort, vs...))
 }
 
 // ComputerPortGT applies the GT predicate on the "computer_port" field.
-func ComputerPortGT(v int) predicate.NetworkMapping {
+func ComputerPortGT(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldGT(FieldComputerPort, v))
 }
 
 // ComputerPortGTE applies the GTE predicate on the "computer_port" field.
-func ComputerPortGTE(v int) predicate.NetworkMapping {
+func ComputerPortGTE(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldGTE(FieldComputerPort, v))
 }
 
 // ComputerPortLT applies the LT predicate on the "computer_port" field.
-func ComputerPortLT(v int) predicate.NetworkMapping {
+func ComputerPortLT(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLT(FieldComputerPort, v))
 }
 
 // ComputerPortLTE applies the LTE predicate on the "computer_port" field.
-func ComputerPortLTE(v int) predicate.NetworkMapping {
+func ComputerPortLTE(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLTE(FieldComputerPort, v))
 }
 

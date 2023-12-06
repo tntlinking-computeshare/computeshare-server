@@ -33,13 +33,13 @@ func (nmc *NetworkMappingCreate) SetFkGatewayID(u uuid.UUID) *NetworkMappingCrea
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmc *NetworkMappingCreate) SetGatewayPort(i int) *NetworkMappingCreate {
+func (nmc *NetworkMappingCreate) SetGatewayPort(i int32) *NetworkMappingCreate {
 	nmc.mutation.SetGatewayPort(i)
 	return nmc
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmc *NetworkMappingCreate) SetComputerPort(i int) *NetworkMappingCreate {
+func (nmc *NetworkMappingCreate) SetComputerPort(i int32) *NetworkMappingCreate {
 	nmc.mutation.SetComputerPort(i)
 	return nmc
 }
@@ -201,11 +201,11 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 		_node.FkGatewayID = value
 	}
 	if value, ok := nmc.mutation.GatewayPort(); ok {
-		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 		_node.GatewayPort = value
 	}
 	if value, ok := nmc.mutation.ComputerPort(); ok {
-		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt, value)
+		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 		_node.ComputerPort = value
 	}
 	if value, ok := nmc.mutation.Status(); ok {

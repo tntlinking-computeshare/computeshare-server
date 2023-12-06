@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -27,6 +28,12 @@ func (sc *S3BucketCreate) SetBucket(s string) *S3BucketCreate {
 	return sc
 }
 
+// SetCreatedTime sets the "createdTime" field.
+func (sc *S3BucketCreate) SetCreatedTime(t time.Time) *S3BucketCreate {
+	sc.mutation.SetCreatedTime(t)
+	return sc
+}
+
 // SetID sets the "id" field.
 func (sc *S3BucketCreate) SetID(u uuid.UUID) *S3BucketCreate {
 	sc.mutation.SetID(u)
@@ -41,23 +48,23 @@ func (sc *S3BucketCreate) SetNillableID(u *uuid.UUID) *S3BucketCreate {
 	return sc
 }
 
-// SetUserID sets the "user" edge to the S3User entity by ID.
-func (sc *S3BucketCreate) SetUserID(id uuid.UUID) *S3BucketCreate {
-	sc.mutation.SetUserID(id)
+// SetS3UserID sets the "s3_user" edge to the S3User entity by ID.
+func (sc *S3BucketCreate) SetS3UserID(id uuid.UUID) *S3BucketCreate {
+	sc.mutation.SetS3UserID(id)
 	return sc
 }
 
-// SetNillableUserID sets the "user" edge to the S3User entity by ID if the given value is not nil.
-func (sc *S3BucketCreate) SetNillableUserID(id *uuid.UUID) *S3BucketCreate {
+// SetNillableS3UserID sets the "s3_user" edge to the S3User entity by ID if the given value is not nil.
+func (sc *S3BucketCreate) SetNillableS3UserID(id *uuid.UUID) *S3BucketCreate {
 	if id != nil {
-		sc = sc.SetUserID(*id)
+		sc = sc.SetS3UserID(*id)
 	}
 	return sc
 }
 
-// SetUser sets the "user" edge to the S3User entity.
-func (sc *S3BucketCreate) SetUser(s *S3User) *S3BucketCreate {
-	return sc.SetUserID(s.ID)
+// SetS3User sets the "s3_user" edge to the S3User entity.
+func (sc *S3BucketCreate) SetS3User(s *S3User) *S3BucketCreate {
+	return sc.SetS3UserID(s.ID)
 }
 
 // Mutation returns the S3BucketMutation object of the builder.
@@ -111,6 +118,9 @@ func (sc *S3BucketCreate) check() error {
 			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
 		}
 	}
+	if _, ok := sc.mutation.CreatedTime(); !ok {
+		return &ValidationError{Name: "createdTime", err: errors.New(`ent: missing required field "S3Bucket.createdTime"`)}
+	}
 	return nil
 }
 
@@ -150,12 +160,16 @@ func (sc *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
 		_spec.SetField(s3bucket.FieldBucket, field.TypeString, value)
 		_node.Bucket = value
 	}
-	if nodes := sc.mutation.UserIDs(); len(nodes) > 0 {
+	if value, ok := sc.mutation.CreatedTime(); ok {
+		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
+		_node.CreatedTime = value
+	}
+	if nodes := sc.mutation.S3UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   s3bucket.UserTable,
-			Columns: []string{s3bucket.UserColumn},
+			Table:   s3bucket.S3UserTable,
+			Columns: []string{s3bucket.S3UserColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
@@ -164,7 +178,7 @@ func (sc *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.s3bucket_user = &nodes[0]
+		_node.s3bucket_s3_user = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

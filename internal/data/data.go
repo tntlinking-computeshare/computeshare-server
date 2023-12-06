@@ -39,6 +39,8 @@ var ProviderSet = wire.NewSet(
 	NewGatewayPortRepo,
 	NewTaskRepo,
 	NewDomainBindingRepository,
+	NewS3UserRepo,
+	NewStorageProviderRepo,
 )
 
 // Data .

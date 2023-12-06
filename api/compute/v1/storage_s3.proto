@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package api.compute.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service StorageS3 {
+	rpc GetS3User(GetS3UserRequest) returns (GetS3UserReply){
+		option (google.api.http) = {
+			get: "/v1/s3user"
+		};
+	};
+	rpc CreateBucket (CreateBucketRequest) returns (CreateBucketReply){
+		option (google.api.http) = {
+			post: "/v1/s3bucket",
+			body: "*"
+		};
+	};
+	rpc DeleteBucket (DeleteBucketRequest) returns (DeleteBucketReply){
+		option (google.api.http) = {
+			delete: "/v1/s3bucket/{id}",
+		};
+	};
+	rpc ListBucket(ListBucketRequest) returns (ListBucketReply) {
+		option (google.api.http) = {
+			get: "/v1/s3bucket",
+		};
+	};
+}
+
+message S3User {
+	string accessKey = 1;
+	string secretKey  = 2;
+	string endpoint = 3;
+}
+
+message GetS3UserRequest {}
+message GetS3UserReply {
+	int32 code = 1;
+	string message = 2;
+	S3User data = 3;
+}
+
+message CreateBucketRequest {
+	string bucket = 1;
+	string accessKey = 2;
+}
+message CreateBucketReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3; // bucket id
+}
+
+message DeleteBucketRequest {
+	string id = 1;
+}
+message DeleteBucketReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message ListBucketRequest {
+
+}
+
+message ListBucketReply {
+	message BucketVo {
+		string id = 1;
+		string bucket = 2;
+		int64 createdTime = 3;
+	}
+	int32 code = 1;
+	string message = 2;
+	repeated BucketVo data = 3;
+}

@@ -20,7 +20,7 @@ type GatewayPort struct {
 	// gateway id
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// 端口号
-	Port int64 `json:"port,omitempty"`
+	Port int32 `json:"port,omitempty"`
 	// 是否使用
 	IsUse        bool `json:"is_use,omitempty"`
 	selectValues sql.SelectValues
@@ -68,7 +68,7 @@ func (gp *GatewayPort) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
-				gp.Port = value.Int64
+				gp.Port = int32(value.Int64)
 			}
 		case gatewayport.FieldIsUse:
 			if value, ok := values[i].(*sql.NullBool); !ok {

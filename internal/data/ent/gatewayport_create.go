@@ -27,7 +27,7 @@ func (gpc *GatewayPortCreate) SetFkGatewayID(u uuid.UUID) *GatewayPortCreate {
 }
 
 // SetPort sets the "port" field.
-func (gpc *GatewayPortCreate) SetPort(i int64) *GatewayPortCreate {
+func (gpc *GatewayPortCreate) SetPort(i int32) *GatewayPortCreate {
 	gpc.mutation.SetPort(i)
 	return gpc
 }
@@ -156,7 +156,7 @@ func (gpc *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) 
 		_node.FkGatewayID = value
 	}
 	if value, ok := gpc.mutation.Port(); ok {
-		_spec.SetField(gatewayport.FieldPort, field.TypeInt64, value)
+		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 		_node.Port = value
 	}
 	if value, ok := gpc.mutation.IsUse(); ok {

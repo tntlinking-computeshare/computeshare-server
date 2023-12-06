@@ -29,7 +29,7 @@ type DomainBinding struct {
 	// 域名
 	Domain string `json:"domain,omitempty"`
 	// 映射到gateway的端口
-	GatewayPort int `json:"gateway_port,omitempty"`
+	GatewayPort int32 `json:"gateway_port,omitempty"`
 	// 创建时间
 	CreateTime   time.Time `json:"create_time,omitempty"`
 	selectValues sql.SelectValues
@@ -103,7 +103,7 @@ func (db *DomainBinding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field gateway_port", values[i])
 			} else if value.Valid {
-				db.GatewayPort = int(value.Int64)
+				db.GatewayPort = int32(value.Int64)
 			}
 		case domainbinding.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {

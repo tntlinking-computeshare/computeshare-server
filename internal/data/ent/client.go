@@ -29,6 +29,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storage"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
 )
@@ -66,6 +67,8 @@ type Client struct {
 	ScriptExecutionRecord *ScriptExecutionRecordClient
 	// Storage is the client for interacting with the Storage builders.
 	Storage *StorageClient
+	// StorageProvider is the client for interacting with the StorageProvider builders.
+	StorageProvider *StorageProviderClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
 	// User is the client for interacting with the User builders.
@@ -97,6 +100,7 @@ func (c *Client) init() {
 	c.Script = NewScriptClient(c.config)
 	c.ScriptExecutionRecord = NewScriptExecutionRecordClient(c.config)
 	c.Storage = NewStorageClient(c.config)
+	c.StorageProvider = NewStorageProviderClient(c.config)
 	c.Task = NewTaskClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -195,6 +199,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
+		StorageProvider:       NewStorageProviderClient(cfg),
 		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
 	}, nil
@@ -230,6 +235,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Script:                NewScriptClient(cfg),
 		ScriptExecutionRecord: NewScriptExecutionRecordClient(cfg),
 		Storage:               NewStorageClient(cfg),
+		StorageProvider:       NewStorageProviderClient(cfg),
 		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
 	}, nil
@@ -263,7 +269,8 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
-		c.Script, c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
+		c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -275,7 +282,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
-		c.Script, c.ScriptExecutionRecord, c.Storage, c.Task, c.User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
+		c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -312,6 +320,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ScriptExecutionRecord.mutate(ctx, m)
 	case *StorageMutation:
 		return c.Storage.mutate(ctx, m)
+	case *StorageProviderMutation:
+		return c.StorageProvider.mutate(ctx, m)
 	case *TaskMutation:
 		return c.Task.mutate(ctx, m)
 	case *UserMutation:
@@ -1476,15 +1486,15 @@ func (c *S3BucketClient) GetX(ctx context.Context, id uuid.UUID) *S3Bucket {
 	return obj
 }
 
-// QueryUser queries the user edge of a S3Bucket.
-func (c *S3BucketClient) QueryUser(s *S3Bucket) *S3UserQuery {
+// QueryS3User queries the s3_user edge of a S3Bucket.
+func (c *S3BucketClient) QueryS3User(s *S3Bucket) *S3UserQuery {
 	query := (&S3UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := s.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(s3bucket.Table, s3bucket.FieldID, id),
 			sqlgraph.To(s3user.Table, s3user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.UserTable, s3bucket.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.S3UserTable, s3bucket.S3UserColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
@@ -2037,6 +2047,124 @@ func (c *StorageClient) mutate(ctx context.Context, m *StorageMutation) (Value, 
 	}
 }
 
+// StorageProviderClient is a client for the StorageProvider schema.
+type StorageProviderClient struct {
+	config
+}
+
+// NewStorageProviderClient returns a client for the StorageProvider from the given config.
+func NewStorageProviderClient(c config) *StorageProviderClient {
+	return &StorageProviderClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `storageprovider.Hooks(f(g(h())))`.
+func (c *StorageProviderClient) Use(hooks ...Hook) {
+	c.hooks.StorageProvider = append(c.hooks.StorageProvider, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `storageprovider.Intercept(f(g(h())))`.
+func (c *StorageProviderClient) Intercept(interceptors ...Interceptor) {
+	c.inters.StorageProvider = append(c.inters.StorageProvider, interceptors...)
+}
+
+// Create returns a builder for creating a StorageProvider entity.
+func (c *StorageProviderClient) Create() *StorageProviderCreate {
+	mutation := newStorageProviderMutation(c.config, OpCreate)
+	return &StorageProviderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of StorageProvider entities.
+func (c *StorageProviderClient) CreateBulk(builders ...*StorageProviderCreate) *StorageProviderCreateBulk {
+	return &StorageProviderCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for StorageProvider.
+func (c *StorageProviderClient) Update() *StorageProviderUpdate {
+	mutation := newStorageProviderMutation(c.config, OpUpdate)
+	return &StorageProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *StorageProviderClient) UpdateOne(sp *StorageProvider) *StorageProviderUpdateOne {
+	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProvider(sp))
+	return &StorageProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *StorageProviderClient) UpdateOneID(id uuid.UUID) *StorageProviderUpdateOne {
+	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProviderID(id))
+	return &StorageProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for StorageProvider.
+func (c *StorageProviderClient) Delete() *StorageProviderDelete {
+	mutation := newStorageProviderMutation(c.config, OpDelete)
+	return &StorageProviderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *StorageProviderClient) DeleteOne(sp *StorageProvider) *StorageProviderDeleteOne {
+	return c.DeleteOneID(sp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *StorageProviderClient) DeleteOneID(id uuid.UUID) *StorageProviderDeleteOne {
+	builder := c.Delete().Where(storageprovider.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &StorageProviderDeleteOne{builder}
+}
+
+// Query returns a query builder for StorageProvider.
+func (c *StorageProviderClient) Query() *StorageProviderQuery {
+	return &StorageProviderQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeStorageProvider},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a StorageProvider entity by its id.
+func (c *StorageProviderClient) Get(ctx context.Context, id uuid.UUID) (*StorageProvider, error) {
+	return c.Query().Where(storageprovider.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *StorageProviderClient) GetX(ctx context.Context, id uuid.UUID) *StorageProvider {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *StorageProviderClient) Hooks() []Hook {
+	return c.hooks.StorageProvider
+}
+
+// Interceptors returns the client interceptors.
+func (c *StorageProviderClient) Interceptors() []Interceptor {
+	return c.inters.StorageProvider
+}
+
+func (c *StorageProviderClient) mutate(ctx context.Context, m *StorageProviderMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&StorageProviderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&StorageProviderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&StorageProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&StorageProviderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown StorageProvider mutation op: %q", m.Op())
+	}
+}
+
 // TaskClient is a client for the Task schema.
 type TaskClient struct {
 	config
@@ -2278,11 +2406,11 @@ type (
 	hooks struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
 		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
-		ScriptExecutionRecord, Storage, Task, User []ent.Hook
+		ScriptExecutionRecord, Storage, StorageProvider, Task, User []ent.Hook
 	}
 	inters struct {
 		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
 		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
-		ScriptExecutionRecord, Storage, Task, User []ent.Interceptor
+		ScriptExecutionRecord, Storage, StorageProvider, Task, User []ent.Interceptor
 	}
 )
