@@ -3,17 +3,40 @@
 
 openapi: 3.0.3
 info:
-    title: QueueTask API
+    title: NetworkMapping API
     version: 0.0.1
 paths:
-    /v1/queue/task:
+    /v1/network-mappings:
+        post:
+            tags:
+                - NetworkMapping
+            operationId: NetworkMapping_CreateNetworkMapping
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateNetworkMappingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateNetworkMappingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/network-mappings/next:
         get:
             tags:
-                - QueueTask
-            description: 查询队列任务
-            operationId: QueueTask_GetAgentTask
+                - NetworkMapping
+            operationId: NetworkMapping_NextNetworkMapping
             parameters:
-                - name: id
+                - name: computerId
                   in: query
                   schema:
                     type: string
@@ -23,31 +46,83 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/QueueTaskGetResponse'
+                                $ref: '#/components/schemas/NextNetworkMappingReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        put:
+    /v1/network-mappings/page:
+        get:
             tags:
-                - QueueTask
-            description: 更新任务状态
-            operationId: QueueTask_UpdateAgentTask
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QueueTaskUpdateRequest'
-                required: true
+                - NetworkMapping
+            operationId: NetworkMapping_PageNetworkMapping
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/QueueTaskUpdateResponse'
+                                $ref: '#/components/schemas/PageNetworkMappingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/network-mappings/{id}:
+        get:
+            tags:
+                - NetworkMapping
+            operationId: NetworkMapping_GetNetworkMapping
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetNetworkMappingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - NetworkMapping
+            operationId: NetworkMapping_DeleteNetworkMapping
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteNetworkMappingReply'
                 default:
                     description: Default error response
                     content:
@@ -56,6 +131,63 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
+        CreateNetworkMappingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                networkMapping:
+                    $ref: '#/components/schemas/NetworkMappingVO'
+        CreateNetworkMappingRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                computerId:
+                    type: string
+                computerPort:
+                    type: integer
+                    format: int32
+        DeleteNetworkMappingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        DomainBindingVO:
+            type: object
+            properties:
+                id:
+                    type: string
+                computeInstanceId:
+                    type: string
+                networkMappingId:
+                    type: string
+                name:
+                    type: string
+                domain:
+                    type: string
+                gatewayPort:
+                    type: integer
+                    format: int32
+                createTime:
+                    type: integer
+                    format: int64
+        GetNetworkMappingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                networkMapping:
+                    $ref: '#/components/schemas/NetworkMappingVO'
         GoogleProtobufAny:
             type: object
             properties:
@@ -64,7 +196,35 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        QueueTaskGetResponse:
+        NetworkMappingVO:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gatewayId:
+                    type: string
+                instanceId:
+                    type: string
+                instanceName:
+                    type: string
+                gatewayPort:
+                    type: integer
+                    format: int32
+                instancePort:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: int32
+                gatewayIp:
+                    type: string
+                domains:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DomainBindingVO'
+        NextNetworkMappingReply:
             type: object
             properties:
                 code:
@@ -73,18 +233,16 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/QueueTaskVo'
-        QueueTaskUpdateRequest:
+                    $ref: '#/components/schemas/NextNetworkMappingReply_Data'
+        NextNetworkMappingReply_Data:
             type: object
             properties:
-                id:
+                publicIp:
                     type: string
-                agentId:
-                    type: string
-                status:
+                publicPort:
                     type: integer
-                    format: enum
-        QueueTaskUpdateResponse:
+                    format: int32
+        PageNetworkMappingReply:
             type: object
             properties:
                 code:
@@ -92,21 +250,24 @@ components:
                     format: int32
                 message:
                     type: string
-        QueueTaskVo:
+                data:
+                    $ref: '#/components/schemas/PageNetworkMappingReply_Data'
+        PageNetworkMappingReply_Data:
             type: object
             properties:
-                id:
-                    type: string
-                agentId:
-                    type: string
-                cmd:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/NetworkMappingVO'
+                total:
                     type: integer
-                    format: enum
-                params:
-                    type: string
-                status:
+                    format: int32
+                page:
                     type: integer
-                    format: enum
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
         Status:
             type: object
             properties:
@@ -124,4 +285,4 @@ components:
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
 tags:
-    - name: QueueTask
+    - name: NetworkMapping

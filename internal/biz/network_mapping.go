@@ -32,6 +32,8 @@ type NetworkMapping struct {
 	Status int `json:"status,omitempty"`
 	// 用户id
 	UserId uuid.UUID `json:"user_id"`
+	// gateway ip
+	GatewayIP string `json:"gateway_ip"`
 }
 
 type NetworkMappingCreate struct {
@@ -143,6 +145,11 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, errors.New("unauthorize")
 	}
 
+	g, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
+	if err != nil {
+		return nil, err
+	}
+
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
@@ -157,8 +164,9 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		// 需要映射的虚拟机端口号
 		ComputerPort: nmc.ComputerPort,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status: 0,
-		UserId: claim.GetUserId(),
+		Status:    0,
+		UserId:    claim.GetUserId(),
+		GatewayIP: g.IP,
 	}
 	err = m.repo.CreateNetworkMapping(ctx, &nm)
 	if err != nil {
@@ -172,11 +180,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	// 发送任务给 agentID
 	// 构建任务参数
 
-	gateway, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
-
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
 		Name:         nm.Name,
@@ -184,8 +187,8 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		InstancePort: nm.ComputerPort,
 		RemotePort:   nm.GatewayPort,
 		GatewayId:    nm.FkGatewayID.String(),
-		GatewayIp:    gateway.IP,
-		GatewayPort:  gateway.Port,
+		GatewayIp:    g.IP,
+		GatewayPort:  g.Port,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {

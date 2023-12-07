@@ -173,7 +173,10 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+
+		case queue.TaskCmd_STORAGE_CREATE:
+
 		}
 
 	case queue.TaskStatus_EXECUTED:
@@ -219,7 +222,10 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+
+		case queue.TaskCmd_STORAGE_CREATE:
+
 		}
 
 	case queue.TaskStatus_FAILED:

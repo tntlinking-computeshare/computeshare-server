@@ -163,6 +163,7 @@ var (
 		{Name: "name", Type: field.TypeString, Size: 100},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "gateway_port", Type: field.TypeInt32},
+		{Name: "gateway_ip", Type: field.TypeString},
 		{Name: "computer_port", Type: field.TypeInt32},
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "fk_computer_id", Type: field.TypeUUID},

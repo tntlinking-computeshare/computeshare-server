@@ -103,8 +103,9 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 		// 需要映射的虚拟机端口号
 		ComputerPort: gp.Port,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status: 0,
-		UserId: claim.GetUserId(),
+		Status:    0,
+		UserId:    claim.GetUserId(),
+		GatewayIP: gateway.IP,
 	}
 	err = c.networkMappingRepo.CreateNetworkMapping(ctx, &nm)
 	if err != nil {

@@ -23,6 +23,8 @@ type NetworkMapping struct {
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// 映射到网关的端口号
 	GatewayPort int32 `json:"gateway_port,omitempty"`
+	// 网关ip
+	GatewayIP string `json:"gateway_ip,omitempty"`
 	// 需要映射的虚拟机端口号
 	ComputerPort int32 `json:"computer_port,omitempty"`
 	//  0 待开始 1 进行中 2 已完成, 3 失败
@@ -41,7 +43,7 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case networkmapping.FieldGatewayPort, networkmapping.FieldComputerPort, networkmapping.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case networkmapping.FieldName:
+		case networkmapping.FieldName, networkmapping.FieldGatewayIP:
 			values[i] = new(sql.NullString)
 		case networkmapping.FieldID, networkmapping.FieldFkGatewayID, networkmapping.FieldFkComputerID, networkmapping.FieldFkUserID:
 			values[i] = new(uuid.UUID)
@@ -83,6 +85,12 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field gateway_port", values[i])
 			} else if value.Valid {
 				nm.GatewayPort = int32(value.Int64)
+			}
+		case networkmapping.FieldGatewayIP:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field gateway_ip", values[i])
+			} else if value.Valid {
+				nm.GatewayIP = value.String
 			}
 		case networkmapping.FieldComputerPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -152,6 +160,9 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("gateway_port=")
 	builder.WriteString(fmt.Sprintf("%v", nm.GatewayPort))
+	builder.WriteString(", ")
+	builder.WriteString("gateway_ip=")
+	builder.WriteString(nm.GatewayIP)
 	builder.WriteString(", ")
 	builder.WriteString("computer_port=")
 	builder.WriteString(fmt.Sprintf("%v", nm.ComputerPort))

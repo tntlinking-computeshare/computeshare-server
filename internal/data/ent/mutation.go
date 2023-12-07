@@ -4551,6 +4551,7 @@ type NetworkMappingMutation struct {
 	fk_gateway_id    *uuid.UUID
 	gateway_port     *int32
 	addgateway_port  *int32
+	gateway_ip       *string
 	computer_port    *int32
 	addcomputer_port *int32
 	status           *int
@@ -4795,6 +4796,42 @@ func (m *NetworkMappingMutation) ResetGatewayPort() {
 	m.addgateway_port = nil
 }
 
+// SetGatewayIP sets the "gateway_ip" field.
+func (m *NetworkMappingMutation) SetGatewayIP(s string) {
+	m.gateway_ip = &s
+}
+
+// GatewayIP returns the value of the "gateway_ip" field in the mutation.
+func (m *NetworkMappingMutation) GatewayIP() (r string, exists bool) {
+	v := m.gateway_ip
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGatewayIP returns the old "gateway_ip" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldGatewayIP(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGatewayIP is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGatewayIP requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGatewayIP: %w", err)
+	}
+	return oldValue.GatewayIP, nil
+}
+
+// ResetGatewayIP resets all changes to the "gateway_ip" field.
+func (m *NetworkMappingMutation) ResetGatewayIP() {
+	m.gateway_ip = nil
+}
+
 // SetComputerPort sets the "computer_port" field.
 func (m *NetworkMappingMutation) SetComputerPort(i int32) {
 	m.computer_port = &i
@@ -5013,7 +5050,7 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
 	}
@@ -5022,6 +5059,9 @@ func (m *NetworkMappingMutation) Fields() []string {
 	}
 	if m.gateway_port != nil {
 		fields = append(fields, networkmapping.FieldGatewayPort)
+	}
+	if m.gateway_ip != nil {
+		fields = append(fields, networkmapping.FieldGatewayIP)
 	}
 	if m.computer_port != nil {
 		fields = append(fields, networkmapping.FieldComputerPort)
@@ -5049,6 +5089,8 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 		return m.FkGatewayID()
 	case networkmapping.FieldGatewayPort:
 		return m.GatewayPort()
+	case networkmapping.FieldGatewayIP:
+		return m.GatewayIP()
 	case networkmapping.FieldComputerPort:
 		return m.ComputerPort()
 	case networkmapping.FieldStatus:
@@ -5072,6 +5114,8 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldFkGatewayID(ctx)
 	case networkmapping.FieldGatewayPort:
 		return m.OldGatewayPort(ctx)
+	case networkmapping.FieldGatewayIP:
+		return m.OldGatewayIP(ctx)
 	case networkmapping.FieldComputerPort:
 		return m.OldComputerPort(ctx)
 	case networkmapping.FieldStatus:
@@ -5109,6 +5153,13 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGatewayPort(v)
+		return nil
+	case networkmapping.FieldGatewayIP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGatewayIP(v)
 		return nil
 	case networkmapping.FieldComputerPort:
 		v, ok := value.(int32)
@@ -5234,6 +5285,9 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 		return nil
 	case networkmapping.FieldGatewayPort:
 		m.ResetGatewayPort()
+		return nil
+	case networkmapping.FieldGatewayIP:
+		m.ResetGatewayIP()
 		return nil
 	case networkmapping.FieldComputerPort:
 		m.ResetComputerPort()

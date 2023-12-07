@@ -38,6 +38,12 @@ func (nmc *NetworkMappingCreate) SetGatewayPort(i int32) *NetworkMappingCreate {
 	return nmc
 }
 
+// SetGatewayIP sets the "gateway_ip" field.
+func (nmc *NetworkMappingCreate) SetGatewayIP(s string) *NetworkMappingCreate {
+	nmc.mutation.SetGatewayIP(s)
+	return nmc
+}
+
 // SetComputerPort sets the "computer_port" field.
 func (nmc *NetworkMappingCreate) SetComputerPort(i int32) *NetworkMappingCreate {
 	nmc.mutation.SetComputerPort(i)
@@ -145,6 +151,9 @@ func (nmc *NetworkMappingCreate) check() error {
 	if _, ok := nmc.mutation.GatewayPort(); !ok {
 		return &ValidationError{Name: "gateway_port", err: errors.New(`ent: missing required field "NetworkMapping.gateway_port"`)}
 	}
+	if _, ok := nmc.mutation.GatewayIP(); !ok {
+		return &ValidationError{Name: "gateway_ip", err: errors.New(`ent: missing required field "NetworkMapping.gateway_ip"`)}
+	}
 	if _, ok := nmc.mutation.ComputerPort(); !ok {
 		return &ValidationError{Name: "computer_port", err: errors.New(`ent: missing required field "NetworkMapping.computer_port"`)}
 	}
@@ -203,6 +212,10 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 	if value, ok := nmc.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 		_node.GatewayPort = value
+	}
+	if value, ok := nmc.mutation.GatewayIP(); ok {
+		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
+		_node.GatewayIP = value
 	}
 	if value, ok := nmc.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)

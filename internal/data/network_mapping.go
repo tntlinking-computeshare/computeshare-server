@@ -33,6 +33,7 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
 		SetFkUserID(entity.UserId).
+		SetGatewayIP(entity.GatewayIP).
 		Save(ctx)
 
 	if err != nil {
@@ -77,6 +78,7 @@ func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
+		SetGatewayIP(entity.GatewayIP).
 		Exec(ctx)
 }
 
@@ -101,6 +103,7 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		GatewayPort:          item.GatewayPort,
 		Status:               item.Status,
 		UserId:               item.FkUserID,
+		GatewayIP:            item.GatewayIP,
 	}
 }
 

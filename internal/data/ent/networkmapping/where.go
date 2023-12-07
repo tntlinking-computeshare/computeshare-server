@@ -68,6 +68,11 @@ func GatewayPort(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldGatewayPort, v))
 }
 
+// GatewayIP applies equality check predicate on the "gateway_ip" field. It's identical to GatewayIPEQ.
+func GatewayIP(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldGatewayIP, v))
+}
+
 // ComputerPort applies equality check predicate on the "computer_port" field. It's identical to ComputerPortEQ.
 func ComputerPort(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldComputerPort, v))
@@ -231,6 +236,71 @@ func GatewayPortLT(v int32) predicate.NetworkMapping {
 // GatewayPortLTE applies the LTE predicate on the "gateway_port" field.
 func GatewayPortLTE(v int32) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLTE(FieldGatewayPort, v))
+}
+
+// GatewayIPEQ applies the EQ predicate on the "gateway_ip" field.
+func GatewayIPEQ(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldGatewayIP, v))
+}
+
+// GatewayIPNEQ applies the NEQ predicate on the "gateway_ip" field.
+func GatewayIPNEQ(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNEQ(FieldGatewayIP, v))
+}
+
+// GatewayIPIn applies the In predicate on the "gateway_ip" field.
+func GatewayIPIn(vs ...string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldIn(FieldGatewayIP, vs...))
+}
+
+// GatewayIPNotIn applies the NotIn predicate on the "gateway_ip" field.
+func GatewayIPNotIn(vs ...string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNotIn(FieldGatewayIP, vs...))
+}
+
+// GatewayIPGT applies the GT predicate on the "gateway_ip" field.
+func GatewayIPGT(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGT(FieldGatewayIP, v))
+}
+
+// GatewayIPGTE applies the GTE predicate on the "gateway_ip" field.
+func GatewayIPGTE(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGTE(FieldGatewayIP, v))
+}
+
+// GatewayIPLT applies the LT predicate on the "gateway_ip" field.
+func GatewayIPLT(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLT(FieldGatewayIP, v))
+}
+
+// GatewayIPLTE applies the LTE predicate on the "gateway_ip" field.
+func GatewayIPLTE(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLTE(FieldGatewayIP, v))
+}
+
+// GatewayIPContains applies the Contains predicate on the "gateway_ip" field.
+func GatewayIPContains(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldContains(FieldGatewayIP, v))
+}
+
+// GatewayIPHasPrefix applies the HasPrefix predicate on the "gateway_ip" field.
+func GatewayIPHasPrefix(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldHasPrefix(FieldGatewayIP, v))
+}
+
+// GatewayIPHasSuffix applies the HasSuffix predicate on the "gateway_ip" field.
+func GatewayIPHasSuffix(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldHasSuffix(FieldGatewayIP, v))
+}
+
+// GatewayIPEqualFold applies the EqualFold predicate on the "gateway_ip" field.
+func GatewayIPEqualFold(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEqualFold(FieldGatewayIP, v))
+}
+
+// GatewayIPContainsFold applies the ContainsFold predicate on the "gateway_ip" field.
+func GatewayIPContainsFold(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldContainsFold(FieldGatewayIP, v))
 }
 
 // ComputerPortEQ applies the EQ predicate on the "computer_port" field.
