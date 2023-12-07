@@ -21,6 +21,11 @@ service NetworkMapping {
       get: "/v1/network-mappings/page",
     };
   };
+  rpc NextNetworkMapping (NextNetworkMappingRequest) returns (NextNetworkMappingReply) {
+    option (google.api.http) = {
+      get: "/v1/network-mappings/next",
+    };
+  }
 	rpc GetNetworkMapping (GetNetworkMappingRequest) returns (GetNetworkMappingReply){
     option (google.api.http) = {
       get: "/v1/network-mappings/{id}",
@@ -31,12 +36,6 @@ service NetworkMapping {
       delete: "/v1/network-mappings/{id}",
     };
   };
-
-  rpc NextNetworkMapping (NextNetworkMappingRequest) returns (NextNetworkMappingReply) {
-    option (google.api.http) = {
-      get: "/v1/network-mappings/next",
-    };
-  }
 }
 
 message CreateNetworkMappingRequest {

@@ -38,6 +38,7 @@ type StorageProviderRepo interface {
 	Get(ctx context.Context, id uuid.UUID) (*StorageProvider, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	QueryByAgentId(ctx context.Context, id uuid.UUID) (*StorageProvider, error)
+	UpdateStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error
 }
 
 func NewStorageProviderUseCase(
@@ -189,6 +190,7 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 	}
 
 	sstp := &queue.StorageSetupTaskParamVO{
+		Id:           sp.ID.String(),
 		MasterServer: sp.MasterServer,
 		PublicIp:     sp.PublicIP,
 		PublicPort:   sp.PublicPort,
@@ -230,4 +232,8 @@ func (c *StorageProviderUseCase) GetStorageProvider(ctx context.Context, id uuid
 func (c *StorageProviderUseCase) ListStorageProvider(ctx context.Context) ([]*StorageProvider, error) {
 
 	return c.storageProviderRepo.List(ctx)
+}
+
+func (c *StorageProviderUseCase) UpdateStorageProviderStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error {
+	return c.storageProviderRepo.UpdateStatus(ctx, id, status)
 }

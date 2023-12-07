@@ -125,6 +125,11 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, age
 		return item.ID
 	})
 
+	return repo.QueryGatewayIdByComputeIds(ctx, computeInstanceIds)
+
+}
+
+func (repo *NetworkMappingRepo) QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error) {
 	type networkMapingGroupByFkGatewayID struct {
 		FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 		Count       int       `json:"count"`
@@ -132,7 +137,7 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, age
 
 	var v []networkMapingGroupByFkGatewayID
 
-	err = repo.data.db.NetworkMapping.Query().
+	err := repo.data.db.NetworkMapping.Query().
 		Where(networkmapping.FkComputerIDIn(computeInstanceIds...)).
 		GroupBy(networkmapping.FieldFkGatewayID).Aggregate(ent.Count()).Scan(ctx, &v)
 	if err != nil {

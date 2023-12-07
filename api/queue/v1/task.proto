@@ -103,8 +103,9 @@ message ComputeInstanceTaskParamVO {
 }
 
 message StorageSetupTaskParamVO {
-  string masterServer = 1;
-  string publicIp = 2;
-  int32 publicPort = 3;
-  int32 grpcPort = 4;
+  string id = 1;
+  string masterServer = 2;
+  string publicIp = 3;
+  int32 publicPort = 4;
+  int32 grpcPort = 5;
 }

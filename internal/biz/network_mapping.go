@@ -54,6 +54,7 @@ type NetworkMappingRepo interface {
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
+	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
 }
 
 type Gateway struct {
@@ -299,36 +300,24 @@ func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uui
 	return m.repo.UpdateNetworkMapping(ctx, nm)
 }
 
-func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId string) (*NextNetworkMappingInfo, error) {
-	// 查看当前 gatewayID
-	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId uuid.UUID) (*NextNetworkMappingInfo, error) {
+	// 1. 判断这个agent 是否有networkmapping 记录
+	gatewayId, err := m.repo.QueryGatewayIdByComputeIds(ctx, []uuid.UUID{computeInstanceId})
 	if err != nil {
 		return nil, err
 	}
 
-	maxItem := lo.MaxBy(gpcList, func(item *GatewayPortCount, max *GatewayPortCount) bool {
-		return item.Count > max.Count
-	})
+	g, err := m.gatewayRepo.GetGateway(ctx, gatewayId)
+	if err != nil {
+		return nil, err
+	}
 
-	if maxItem == nil {
-		return nil, fmt.Errorf("无可用 Gateway")
-	}
-	if maxItem.Count <= 0 {
-		return nil, fmt.Errorf("无可用端口")
-	}
-	// 查询当前 gateway 的空余端口并进行分配
-	gp, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, maxItem.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
-	gateway, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
+	//2. 查询gateway 的最小可用端口
+	gatewayPort, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, gatewayId)
 
 	return &NextNetworkMappingInfo{
-		PublicIP:   gateway.IP,
-		PublicPort: int32(gp.Port),
+		PublicIP:   g.IP,
+		PublicPort: gatewayPort.Port,
 	}, err
 }
 

@@ -69,18 +69,24 @@ type TaskRepo interface {
 }
 
 type TaskUseCase struct {
-	repo                  TaskRepo
-	networkMappingUseCase *NetworkMappingUseCase
-	computeInstanceRepo   ComputeInstanceRepo
-	log                   *log.Helper
+	repo                   TaskRepo
+	networkMappingUseCase  *NetworkMappingUseCase
+	computeInstanceRepo    ComputeInstanceRepo
+	storageProviderUseCase *StorageProviderUseCase
+	log                    *log.Helper
 }
 
-func NewTaskUseCase(repo TaskRepo, networkMappingUseCase *NetworkMappingUseCase, computeInstanceRepo ComputeInstanceRepo, logger log.Logger) *TaskUseCase {
+func NewTaskUseCase(repo TaskRepo,
+	networkMappingUseCase *NetworkMappingUseCase,
+	computeInstanceRepo ComputeInstanceRepo,
+	storageProviderUseCase *StorageProviderUseCase,
+	logger log.Logger) *TaskUseCase {
 	return &TaskUseCase{
-		repo:                  repo,
-		networkMappingUseCase: networkMappingUseCase,
-		computeInstanceRepo:   computeInstanceRepo,
-		log:                   log.NewHelper(logger),
+		repo:                   repo,
+		networkMappingUseCase:  networkMappingUseCase,
+		computeInstanceRepo:    computeInstanceRepo,
+		storageProviderUseCase: storageProviderUseCase,
+		log:                    log.NewHelper(logger),
 	}
 }
 
@@ -169,14 +175,25 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			queue.TaskCmd_NAT_PROXY_DELETE,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
 			queue.TaskCmd_NAT_VISITOR_DELETE:
-			id, err := uuid.Parse(param.(queue.NatNetworkMappingTaskParamVO).Id)
+			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
 			if err != nil {
 				return err
 			}
 			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
 
 		case queue.TaskCmd_STORAGE_CREATE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_SETUPING)
 
+		case queue.TaskCmd_STORAGE_DELETE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_NOT_RUN)
 		}
 
 	case queue.TaskStatus_EXECUTED:
@@ -218,17 +235,45 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			queue.TaskCmd_NAT_PROXY_DELETE,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
 			queue.TaskCmd_NAT_VISITOR_DELETE:
-			id, err := uuid.Parse(param.(queue.NatNetworkMappingTaskParamVO).Id)
+			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
 			if err != nil {
 				return err
 			}
 			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
 
 		case queue.TaskCmd_STORAGE_CREATE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_RUNNING)
 
+		case queue.TaskCmd_STORAGE_DELETE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_NOT_RUN)
 		}
 
 	case queue.TaskStatus_FAILED:
+
+		switch task.Cmd {
+
+		case queue.TaskCmd_STORAGE_CREATE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_SETUP_FAIL)
+
+		case queue.TaskCmd_STORAGE_DELETE:
+			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			_ = m.storageProviderUseCase.UpdateStorageProviderStatus(ctx, id, consts.StorageProviderStatus_NOT_RUN)
+		}
 
 	}
 

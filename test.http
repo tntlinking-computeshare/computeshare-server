@@ -229,3 +229,9 @@ Authorization: Bearer {{ access_token }}
 {
   "agentId": "5b0c430e-3f65-461b-8593-6ecad56460bd"
 }
+
+### 下一个网络端口
+GET http://127.0.0.1:8000/v1/network-mappings/next?computerId=2f5e4fdc-b976-4870-9307-ac7705ae32e0
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+

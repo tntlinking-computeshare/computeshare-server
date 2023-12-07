@@ -8,6 +8,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 )
 
@@ -79,4 +80,8 @@ func (r *storageProviderRepo) toBiz(item *ent.StorageProvider, _ int) *biz.Stora
 		GrpcPort:     item.GrpcPort,
 		CreatedTime:  item.CreatedTime,
 	}
+}
+
+func (r *storageProviderRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error {
+	return r.data.db.StorageProvider.UpdateOneID(id).SetStatus(status).Exec(ctx)
 }
