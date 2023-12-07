@@ -51,6 +51,7 @@ func NewHTTPServer(c *conf.Server,
 	powerService *service.ComputePowerService,
 	networkMappingService *service.NetworkMappingService,
 	domainBindingService *service.DomainBindingService,
+	storageProviderService *service.StorageProviderService,
 	job *service.CronJob,
 	logger log.Logger) *http.Server {
 
@@ -84,6 +85,7 @@ func NewHTTPServer(c *conf.Server,
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
+	computeV1.RegisterStorageProviderHTTPServer(srv, storageProviderService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
 	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)

@@ -71,8 +71,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	}
 	networkMappingService := service.NewNetworkMappingService(networkMappingUseCase, domainBindingUseCase, logger)
 	domainBindingService := service.NewDomainBindingService(domainBindingUseCase, networkMappingUseCase)
+	storageProviderRepo := data.NewStorageProviderRepo(dataData, logger)
+	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
+	storageProviderService := service.NewStorageProviderService(storageProviderUseCase)
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, cronJob, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, cronJob, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

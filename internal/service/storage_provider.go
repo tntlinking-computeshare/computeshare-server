@@ -11,10 +11,10 @@ import (
 
 type StorageProviderService struct {
 	pb.UnimplementedStorageProviderServer
-	uc biz.StorageProviderUseCase
+	uc *biz.StorageProviderUseCase
 }
 
-func NewStorageProviderService(uc biz.StorageProviderUseCase) *StorageProviderService {
+func NewStorageProviderService(uc *biz.StorageProviderUseCase) *StorageProviderService {
 	return &StorageProviderService{
 		uc: uc,
 	}

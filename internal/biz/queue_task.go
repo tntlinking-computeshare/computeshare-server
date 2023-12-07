@@ -45,13 +45,18 @@ func (task *Task) GetTaskParam() (any, error) {
 		queue.TaskCmd_VM_SHUTDOWN, queue.TaskCmd_VM_RESTART, queue.TaskCmd_VM_VNC_CONNECT:
 		var vo queue.ComputeInstanceTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
-		return vo, err
+		return &vo, err
 	case queue.TaskCmd_NAT_PROXY_CREATE, queue.TaskCmd_NAT_PROXY_DELETE,
 		queue.TaskCmd_NAT_VISITOR_CREATE, queue.TaskCmd_NAT_VISITOR_DELETE:
-		var vo queue.NatNetworkMappingTaskParamVO
+		var vo *queue.NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
-		return vo, err
+		return &vo, err
+	case queue.TaskCmd_STORAGE_CREATE, queue.TaskCmd_STORAGE_DELETE:
+		var vo queue.StorageSetupTaskParamVO
+		err := json.Unmarshal([]byte(*task.Params), &vo)
+		return &vo, err
 	}
+
 	return nil, errors.New("cannot issue command")
 }
 
@@ -110,7 +115,7 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 	}
 
 	getInstanceId := func(param any) (uuid.UUID, error) {
-		vo, ok := param.(queue.ComputeInstanceTaskParamVO)
+		vo, ok := param.(*queue.ComputeInstanceTaskParamVO)
 		if !ok {
 			return uuid.Nil, errors.New("get task param error")
 		}

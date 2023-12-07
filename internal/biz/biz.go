@@ -13,4 +13,5 @@ var ProviderSet = wire.NewSet(
 	NewTaskUseCase,
 	NewDomainBindingUseCase,
 	NewStorageS3UseCase,
+	NewStorageProviderUseCase,
 )

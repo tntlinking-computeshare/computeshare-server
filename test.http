@@ -219,3 +219,13 @@ Authorization: Bearer {{ access_token }}
   "name": "d1",
   "domain": "test.computeshare.hamster.newtouch.com"
 }
+
+
+### 新增网络提供
+POST http://127.0.0.1:8000/v1/storage_provider
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "agentId": "5b0c430e-3f65-461b-8593-6ecad56460bd"
+}

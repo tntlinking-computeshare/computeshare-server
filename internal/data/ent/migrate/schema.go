@@ -160,7 +160,7 @@ var (
 	// NetworkMappingsColumns holds the columns for the "network_mappings" table.
 	NetworkMappingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "name", Type: field.TypeString, Size: 50},
+		{Name: "name", Type: field.TypeString, Size: 100},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "gateway_port", Type: field.TypeInt32},
 		{Name: "computer_port", Type: field.TypeInt32},

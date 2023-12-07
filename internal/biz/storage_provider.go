@@ -48,7 +48,7 @@ func NewStorageProviderUseCase(
 	networkMappingRepo NetworkMappingRepo,
 	gatewayRepo GatewayRepo,
 	taskRepo TaskRepo,
-	networkMappingUseCase NetworkMappingUseCase,
+	networkMappingUseCase *NetworkMappingUseCase,
 ) *StorageProviderUseCase {
 	return &StorageProviderUseCase{
 		log:                   log.NewHelper(logger),
@@ -70,7 +70,7 @@ type StorageProviderUseCase struct {
 	gatewayPortRepo       GatewayPortRepo
 	taskRepo              TaskRepo
 	networkMappingRepo    NetworkMappingRepo
-	networkMappingUseCase NetworkMappingUseCase
+	networkMappingUseCase *NetworkMappingUseCase
 }
 
 func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, agentId uuid.UUID, networkMappingName string) (int32, error) {
@@ -169,7 +169,9 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 
 	//创建grpc 端口映射
 	publicGrpcPort, err := c.createNetworkMappingPort(ctx, agentId, fmt.Sprintf("WEED_VOLUME_GRPC_%s", agentId.String()))
-
+	if err != nil {
+		return nil, err
+	}
 	sp = &StorageProvider{
 		AgentID:      agent.ID,
 		Status:       consts.StorageProviderStatus_NOT_RUN,
@@ -177,8 +179,13 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 		PublicIP:     "computeshare.newtouch.com",
 		PublicPort:   publicHttpPort,
 		GrpcPort:     publicGrpcPort,
+		CreatedTime:  time.Now(),
 	}
 	sp, err = c.storageProviderRepo.Create(ctx, sp)
+
+	if err != nil {
+		return nil, err
+	}
 
 	sstp := &queue.StorageSetupTaskParamVO{
 		MasterServer: sp.MasterServer,

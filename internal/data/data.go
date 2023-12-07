@@ -103,3 +103,13 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 		}
 	}, nil
 }
+
+type BaseRepo struct {
+	data *Data
+}
+
+func (r *BaseRepo) StartTx(ctx context.Context) (*ent.Tx, error) {
+	tx, err := r.data.db.Tx(ctx)
+
+	return tx, err
+}
