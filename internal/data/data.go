@@ -49,6 +49,146 @@ type Data struct {
 	rdb *redis.Client
 }
 
+func (d *Data) GetDB() *ent.Client {
+	return d.db
+}
+
+func (d *Data) getUserClient(ctx context.Context) *ent.UserClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.User
+	}
+	return d.db.User
+}
+
+func (d *Data) getEmployeeClient(ctx context.Context) *ent.EmployeeClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Employee
+	}
+	return d.db.Employee
+}
+
+func (d *Data) getTaskClient(ctx context.Context) *ent.TaskClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Task
+	}
+	return d.db.Task
+}
+
+func (d *Data) getS3UserClient(ctx context.Context) *ent.S3UserClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.S3User
+	}
+	return d.db.S3User
+}
+
+func (d *Data) getS3BucketClient(ctx context.Context) *ent.S3BucketClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.S3Bucket
+	}
+	return d.db.S3Bucket
+}
+
+func (d *Data) getStorageProviderClient(ctx context.Context) *ent.StorageProviderClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.StorageProvider
+	}
+	return d.db.StorageProvider
+}
+
+func (d *Data) getStorage(ctx context.Context) *ent.StorageClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Storage
+	}
+	return d.db.Storage
+}
+
+func (d *Data) getScriptExecutionRecord(ctx context.Context) *ent.ScriptExecutionRecordClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.ScriptExecutionRecord
+	}
+	return d.db.ScriptExecutionRecord
+}
+
+func (d *Data) getScript(ctx context.Context) *ent.ScriptClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Script
+	}
+	return d.db.Script
+}
+
+func (d *Data) getNetworkMapping(ctx context.Context) *ent.NetworkMappingClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.NetworkMapping
+	}
+	return d.db.NetworkMapping
+}
+
+func (d *Data) getGatewayPort(ctx context.Context) *ent.GatewayPortClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.GatewayPort
+	}
+	return d.db.GatewayPort
+}
+
+func (d *Data) getGateway(ctx context.Context) *ent.GatewayClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Gateway
+	}
+	return d.db.Gateway
+}
+
+func (d *Data) getDomainBinding(ctx context.Context) *ent.DomainBindingClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.DomainBinding
+	}
+	return d.db.DomainBinding
+}
+
+func (d *Data) getComputeSpec(ctx context.Context) *ent.ComputeSpecClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.ComputeSpec
+	}
+	return d.db.ComputeSpec
+}
+
+func (d *Data) getComputeImage(ctx context.Context) *ent.ComputeImageClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.ComputeImage
+	}
+	return d.db.ComputeImage
+}
+
+func (d *Data) getComputeInstance(ctx context.Context) *ent.ComputeInstanceClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.ComputeInstance
+	}
+	return d.db.ComputeInstance
+}
+
+func (d *Data) getAgent(ctx context.Context) *ent.AgentClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Agent
+	}
+	return d.db.Agent
+}
+
 // NewData .
 func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
@@ -104,12 +244,10 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	}, nil
 }
 
-type BaseRepo struct {
-	data *Data
-}
-
-func (r *BaseRepo) StartTx(ctx context.Context) (*ent.Tx, error) {
-	tx, err := r.data.db.Tx(ctx)
-
-	return tx, err
+func getTx(ctx context.Context) (*ent.Tx, bool) {
+	if tx, ok := ctx.Value("tx").(*ent.Tx); ok {
+		return tx, ok
+	} else {
+		return nil, false
+	}
 }

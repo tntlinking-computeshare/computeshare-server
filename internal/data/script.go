@@ -29,13 +29,13 @@ func NewScriptRepo(data *Data, logger log.Logger) biz.ScriptRepo {
 func (s *scriptRepo) Save(ctx context.Context, g *biz.Script) (*biz.Script, error) {
 	//先查用户最新的脚本序号
 	taskNumber := 1
-	first, err := s.data.db.Script.Query().Select(script.FieldID).Where(script.UserID(g.UserId)).Order(script.ByTaskNumber(sql.OrderDesc())).First(ctx)
+	first, err := s.data.getScript(ctx).Query().Select(script.FieldID).Where(script.UserID(g.UserId)).Order(script.ByTaskNumber(sql.OrderDesc())).First(ctx)
 	if first == nil {
 		taskNumber = 1
 	} else {
 		taskNumber = int(first.TaskNumber + 1)
 	}
-	save, err := s.data.db.Script.Create().SetUserID(g.UserId).SetTaskNumber(int32(taskNumber)).
+	save, err := s.data.getScript(ctx).Create().SetUserID(g.UserId).SetTaskNumber(int32(taskNumber)).
 		SetScriptName(g.ScriptName).SetFileAddress(g.FileAddress).SetScriptContent(g.ScriptContent).
 		SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
@@ -45,11 +45,11 @@ func (s *scriptRepo) Save(ctx context.Context, g *biz.Script) (*biz.Script, erro
 }
 
 func (s *scriptRepo) Update(ctx context.Context, g *biz.Script) (*biz.Script, error) {
-	_, err := s.data.db.Script.Query().Where(script.ID(g.ID)).First(ctx)
+	_, err := s.data.getScript(ctx).Query().Where(script.ID(g.ID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
-	update, err := s.data.db.Script.UpdateOneID(g.ID).SetUpdateTime(time.Now()).Save(ctx)
+	update, err := s.data.getScript(ctx).UpdateOneID(g.ID).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (s *scriptRepo) Update(ctx context.Context, g *biz.Script) (*biz.Script, er
 }
 
 func (s *scriptRepo) FindByID(ctx context.Context, id int32) (*biz.Script, error) {
-	first, err := s.data.db.Script.Query().Where(script.ID(id)).First(ctx)
+	first, err := s.data.getScript(ctx).Query().Where(script.ID(id)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (s *scriptRepo) FindByID(ctx context.Context, id int32) (*biz.Script, error
 }
 
 func (s *scriptRepo) PageByUserID(ctx context.Context, userId string, page int32, size int32) ([]*biz.Script, int32, error) {
-	count, err := s.data.db.Script.Query().Select(script.FieldID).Where(script.UserID(userId)).Count(ctx)
+	count, err := s.data.getScript(ctx).Query().Select(script.FieldID).Where(script.UserID(userId)).Count(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -75,7 +75,7 @@ func (s *scriptRepo) PageByUserID(ctx context.Context, userId string, page int32
 	} else {
 		offset = page * size
 	}
-	scripts, err := s.data.db.Script.Query().Where(script.UserID(userId)).Order(script.ByCreateTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	scripts, err := s.data.getScript(ctx).Query().Where(script.UserID(userId)).Order(script.ByCreateTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}

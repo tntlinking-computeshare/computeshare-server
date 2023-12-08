@@ -21,7 +21,7 @@ func NewComputeSpecRepo(data *Data, logger log.Logger) biz.ComputeSpecRepo {
 }
 
 func (csr *computeSpecRepo) List(ctx context.Context) ([]*biz.ComputeSpec, error) {
-	list, err := csr.data.db.ComputeSpec.Query().All(ctx)
+	list, err := csr.data.getComputeSpec(ctx).Query().All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (csr *computeSpecRepo) toBiz(item *ent.ComputeSpec, _ int) *biz.ComputeSpec
 }
 
 func (csr *computeSpecRepo) Get(ctx context.Context, id int32) (*biz.ComputeSpec, error) {
-	entity, err := csr.data.db.ComputeSpec.Get(ctx, id)
+	entity, err := csr.data.getComputeSpec(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}

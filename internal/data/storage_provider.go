@@ -26,7 +26,7 @@ type storageProviderRepo struct {
 }
 
 func (r *storageProviderRepo) Create(ctx context.Context, item *biz.StorageProvider) (*biz.StorageProvider, error) {
-	save, err := r.data.db.StorageProvider.Create().
+	save, err := r.data.getStorageProviderClient(ctx).Create().
 		SetAgentID(item.AgentID).
 		SetMasterServer(item.MasterServer).
 		SetStatus(item.Status).
@@ -41,25 +41,25 @@ func (r *storageProviderRepo) Create(ctx context.Context, item *biz.StorageProvi
 	return r.toBiz(save, 0), nil
 }
 func (r *storageProviderRepo) List(ctx context.Context) ([]*biz.StorageProvider, error) {
-	list, err := r.data.db.StorageProvider.Query().Order(storageprovider.ByCreatedTime(sql.OrderDesc())).All(ctx)
+	list, err := r.data.getStorageProviderClient(ctx).Query().Order(storageprovider.ByCreatedTime(sql.OrderDesc())).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(list, r.toBiz), err
 }
 func (r *storageProviderRepo) Get(ctx context.Context, id uuid.UUID) (*biz.StorageProvider, error) {
-	item, err := r.data.db.StorageProvider.Get(ctx, id)
+	item, err := r.data.getStorageProviderClient(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 	return r.toBiz(item, 0), err
 }
 func (r *storageProviderRepo) Delete(ctx context.Context, id uuid.UUID) error {
-	return r.data.db.StorageProvider.DeleteOneID(id).Exec(ctx)
+	return r.data.getStorageProviderClient(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (r *storageProviderRepo) QueryByAgentId(ctx context.Context, id uuid.UUID) (*biz.StorageProvider, error) {
-	item, err := r.data.db.StorageProvider.Query().Where(storageprovider.AgentID(id)).First(ctx)
+	item, err := r.data.getStorageProviderClient(ctx).Query().Where(storageprovider.AgentID(id)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -83,5 +83,5 @@ func (r *storageProviderRepo) toBiz(item *ent.StorageProvider, _ int) *biz.Stora
 }
 
 func (r *storageProviderRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error {
-	return r.data.db.StorageProvider.UpdateOneID(id).SetStatus(status).Exec(ctx)
+	return r.data.getStorageProviderClient(ctx).UpdateOneID(id).SetStatus(status).Exec(ctx)
 }

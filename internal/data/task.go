@@ -26,7 +26,7 @@ func NewTaskRepo(data *Data, logger log.Logger) biz.TaskRepo {
 }
 
 func (repo *TaskRepo) CreateTask(ctx context.Context, entity *biz.Task) error {
-	data, err := repo.data.db.Task.Create().
+	data, err := repo.data.getTaskClient(ctx).Create().
 		SetAgentID(entity.AgentID).
 		SetCmd(int32(entity.Cmd)).
 		SetParams(*entity.Params).
@@ -42,12 +42,12 @@ func (repo *TaskRepo) CreateTask(ctx context.Context, entity *biz.Task) error {
 }
 
 func (repo *TaskRepo) GetTask(ctx context.Context, id uuid.UUID) (*biz.Task, error) {
-	instance, err := repo.data.db.Task.Get(ctx, id)
+	instance, err := repo.data.getTaskClient(ctx).Get(ctx, id)
 	return repo.toBiz(instance, 0), err
 }
 
 func (repo *TaskRepo) ListTaskByAgentID(ctx context.Context, agentID string) ([]*biz.Task, error) {
-	list, err := repo.data.db.Task.Query().Where(task.AgentID(agentID)).Order(task.ByCreateTime(sql.OrderAsc())).All(ctx)
+	list, err := repo.data.getTaskClient(ctx).Query().Where(task.AgentID(agentID)).Order(task.ByCreateTime(sql.OrderAsc())).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (repo *TaskRepo) ListTaskByAgentID(ctx context.Context, agentID string) ([]
 }
 
 func (repo *TaskRepo) UpdateTask(ctx context.Context, entity *biz.Task) error {
-	return repo.data.db.Task.UpdateOneID(entity.ID).
+	return repo.data.getTaskClient(ctx).UpdateOneID(entity.ID).
 		SetAgentID(entity.AgentID).
 		SetCmd(int32(entity.Cmd)).
 		SetParams(*entity.Params).
@@ -78,7 +78,7 @@ func (repo *TaskRepo) toBiz(item *ent.Task, _ int) *biz.Task {
 }
 
 func (repo *TaskRepo) GetToDoTaskByAgentId(ctx context.Context, agentId string) (*biz.Task, error) {
-	t, err := repo.data.db.Task.Query().
+	t, err := repo.data.getTaskClient(ctx).Query().
 		Where(task.AgentIDEQ(agentId), task.StatusEQ(int(queue.TaskStatus_CREATED))).
 		Order(task.ByCreateTime(sql.OrderAsc())).
 		First(ctx)

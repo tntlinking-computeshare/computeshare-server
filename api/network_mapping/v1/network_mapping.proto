@@ -93,7 +93,8 @@ message NetworkMappingVO {
   int32 instance_port = 7;
   int32 status = 8;
   string gateway_ip = 9;
-  repeated DomainBindingVO domains = 10;
+  int64 createdTime = 10;
+  repeated DomainBindingVO domains = 11;
 }
 
 message NextNetworkMappingRequest {

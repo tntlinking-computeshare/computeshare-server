@@ -27,12 +27,12 @@ func NewGatewayRepo(data *Data, gatewayPortRepo biz.GatewayPortRepo, logger log.
 }
 
 func (repo *GatewayRepo) GetGateway(ctx context.Context, id uuid.UUID) (*biz.Gateway, error) {
-	instance, err := repo.data.db.Gateway.Get(ctx, id)
+	instance, err := repo.data.getGateway(ctx).Get(ctx, id)
 	return repo.toBiz(instance, 0), err
 }
 
 func (repo *GatewayRepo) ListGateway(ctx context.Context) ([]*biz.Gateway, error) {
-	list, err := repo.data.db.Gateway.Query().All(ctx)
+	list, err := repo.data.getGateway(ctx).Query().All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (repo *GatewayRepo) toBiz(item *ent.Gateway, _ int) *biz.Gateway {
 
 func (repo *GatewayRepo) FindInstanceSuitableGateway(ctx context.Context, instanceId uuid.UUID) (*biz.Gateway, error) {
 
-	networkMapping, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkComputerIDEQ(instanceId)).First(ctx)
+	networkMapping, err := repo.data.getNetworkMapping(ctx).Query().Where(networkmapping.FkComputerIDEQ(instanceId)).First(ctx)
 	if err == nil {
 		return repo.GetGateway(ctx, networkMapping.FkGatewayID)
 	}
