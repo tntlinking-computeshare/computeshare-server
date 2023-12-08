@@ -30,6 +30,31 @@ service StorageS3 {
 			get: "/v1/s3bucket",
 		};
 	};
+
+	rpc S3StorageInBucketList (S3StorageInBucketListRequest) returns (S3StorageInBucketListReply){
+		option (google.api.http) = {
+			get: "/v1/s3bucket/{bucketName}/objects",
+		};
+	};
+	rpc UploadFile (S3StorageUploadFileRequest) returns (S3StorageUploadFileReply){
+		option (google.api.http) = {
+			post: "/v1/storage/{bucketName}/objects/upload/ersatz",
+			body: "*"
+		};
+	};
+
+	rpc Download (S3StorageDownloadRequest) returns (S3StorageDownloadReply){
+		option (google.api.http) = {
+			get: "/v1/storage/{bucketName}/objects/download/ersatz",
+		};
+	};
+
+	rpc Delete (S3StorageDeleteRequest) returns (DeleteReply){
+		option (google.api.http) = {
+			delete: "/v1/storage/{bucketName}/objects/delete",
+		};
+	};
+
 }
 
 message S3User {
@@ -47,7 +72,7 @@ message GetS3UserReply {
 
 message CreateBucketRequest {
 	string bucket = 1;
-	string accessKey = 2;
+	string secretKey = 2;
 }
 message CreateBucketReply {
 	int32 code = 1;
@@ -76,4 +101,55 @@ message ListBucketReply {
 	int32 code = 1;
 	string message = 2;
 	repeated BucketVo data = 3;
+}
+
+message S3Object {
+	string etag = 1;
+	string name = 3;
+	int32 size = 4;
+	int64 last_modify = 5;
+}
+
+message S3StorageInBucketListRequest {
+	string bucketName = 1;
+	string prefix = 2;
+}
+message S3StorageInBucketListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated S3Object data = 3;
+}
+
+message S3StorageUploadFileRequest {
+	bytes body = 1;
+	string bucketName = 2;
+}
+
+message S3StorageUploadFileReply{
+	int32 code = 1;
+	string message = 2;
+	S3Object data = 3;
+}
+
+message S3StorageDownloadRequest {
+	string bucketName = 1;
+	string key = 2;
+}
+message S3StorageDownloadReply {
+	message Data {
+		bytes body = 1;
+		string name = 2;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message S3StorageDeleteRequest {
+	string bucketName = 1;
+	string key = 2;
+}
+message DeleteReply {
+	int32 code = 1;
+	string message = 2;
 }

@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	entgo.io/ent v0.12.3
+	github.com/aws/aws-sdk-go v1.48.12
 	github.com/docker/docker v24.0.5+incompatible
 	github.com/fatedier/frp v0.52.3
 	github.com/go-kratos/kratos/v2 v2.7.0
@@ -37,7 +38,6 @@ require (
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 // indirect
-	github.com/aws/aws-sdk-go v1.48.12 // indirect
 	github.com/benbjohnson/clock v1.3.5 // indirect
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

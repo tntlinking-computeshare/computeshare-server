@@ -75,8 +75,8 @@ func (c *StorageS3UseCase) GetS3User(ctx context.Context, userId uuid.UUID) (*S3
 	return c.repo.GetS3User(ctx, userId)
 }
 
-func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, bucket, accessKey string) (*S3Bucket, error) {
-	s3User, err := c.createS3User(ctx, userId, accessKey)
+func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, bucket, secretKey string) (*S3Bucket, error) {
+	s3User, err := c.createS3User(ctx, userId, secretKey)
 	if err != nil {
 		return nil, err
 	}
