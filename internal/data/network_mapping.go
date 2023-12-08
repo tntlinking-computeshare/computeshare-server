@@ -25,7 +25,7 @@ func NewNetworkMappingRepo(data *Data, logger log.Logger) biz.NetworkMappingRepo
 }
 
 func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
-	data, err := repo.data.db.NetworkMapping.Create().
+	data, err := repo.data.getNetworkMapping(ctx).Create().
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
 		SetFkComputerID(entity.FkComputerID).
@@ -33,6 +33,7 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
 		SetFkUserID(entity.UserId).
+		SetGatewayIP(entity.GatewayIP).
 		Save(ctx)
 
 	if err != nil {
@@ -43,16 +44,19 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 }
 
 func (repo *NetworkMappingRepo) GetNetworkMapping(ctx context.Context, id uuid.UUID) (*biz.NetworkMapping, error) {
-	instance, err := repo.data.db.NetworkMapping.Get(ctx, id)
+	instance, err := repo.data.getNetworkMapping(ctx).Get(ctx, id)
 	return repo.toBiz(instance, 0), err
 }
 
 func (repo *NetworkMappingRepo) DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error {
-	return repo.data.db.NetworkMapping.DeleteOneID(id).Exec(ctx)
+	return repo.data.getNetworkMapping(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
-	count, err := repo.data.db.NetworkMapping.Query().Select(networkmapping.FieldID).Where(networkmapping.FkUserID(userId)).Count(ctx)
+	count, err := repo.data.getNetworkMapping(ctx).Query().
+		Select(networkmapping.FieldID).
+		Where(networkmapping.FkUserID(userId)).
+		Count(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -62,7 +66,9 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 	} else {
 		offset = page * size
 	}
-	list, err := repo.data.db.NetworkMapping.Query().Where(networkmapping.FkUserID(userId)).Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	list, err := repo.data.getNetworkMapping(ctx).Query().
+		Where(networkmapping.FkUserID(userId)).
+		Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -70,13 +76,14 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 }
 
 func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
-	return repo.data.db.NetworkMapping.UpdateOneID(entity.ID).
+	return repo.data.getNetworkMapping(ctx).UpdateOneID(entity.ID).
 		SetName(entity.Name).
 		SetComputerPort(entity.ComputerPort).
 		SetFkComputerID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
+		SetGatewayIP(entity.GatewayIP).
 		Exec(ctx)
 }
 
@@ -86,6 +93,7 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 	}
 
 	var instanceName string
+	// 特殊查询，不参与事物
 	instance, err := repo.data.db.ComputeInstance.Get(context.Background(), item.FkComputerID)
 	if err == nil {
 		instanceName = instance.Name
@@ -101,17 +109,18 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		GatewayPort:          item.GatewayPort,
 		Status:               item.Status,
 		UserId:               item.FkUserID,
+		GatewayIP:            item.GatewayIP,
 	}
 }
 
 func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error) {
-	computeInstances, err := repo.data.db.ComputeInstance.Query().Select(computeinstance.FieldID).Where(computeinstance.AgentID(agentId.String())).All(ctx)
+	computeInstances, err := repo.data.getComputeInstance(ctx).Query().Select(computeinstance.FieldID).Where(computeinstance.AgentID(agentId.String())).All(ctx)
 	if err != nil {
 		return uuid.Nil, err
 	}
 
 	if len(computeInstances) == 0 {
-		first, err := repo.data.db.Gateway.Query().First(ctx)
+		first, err := repo.data.getGateway(ctx).Query().First(ctx)
 		if err != nil {
 			return uuid.Nil, err
 		}
@@ -122,6 +131,11 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, age
 		return item.ID
 	})
 
+	return repo.QueryGatewayIdByComputeIds(ctx, computeInstanceIds)
+
+}
+
+func (repo *NetworkMappingRepo) QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error) {
 	type networkMapingGroupByFkGatewayID struct {
 		FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 		Count       int       `json:"count"`
@@ -129,7 +143,7 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, age
 
 	var v []networkMapingGroupByFkGatewayID
 
-	err = repo.data.db.NetworkMapping.Query().
+	err := repo.data.getNetworkMapping(ctx).Query().
 		Where(networkmapping.FkComputerIDIn(computeInstanceIds...)).
 		GroupBy(networkmapping.FieldFkGatewayID).Aggregate(ent.Count()).Scan(ctx, &v)
 	if err != nil {
@@ -137,7 +151,7 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByAgentId(ctx context.Context, age
 	}
 
 	if len(v) == 0 {
-		first, err := repo.data.db.Gateway.Query().First(ctx)
+		first, err := repo.data.getGateway(ctx).Query().First(ctx)
 		if err != nil {
 			return uuid.Nil, err
 		}

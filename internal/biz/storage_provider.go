@@ -38,6 +38,7 @@ type StorageProviderRepo interface {
 	Get(ctx context.Context, id uuid.UUID) (*StorageProvider, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	QueryByAgentId(ctx context.Context, id uuid.UUID) (*StorageProvider, error)
+	UpdateStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error
 }
 
 func NewStorageProviderUseCase(
@@ -48,7 +49,7 @@ func NewStorageProviderUseCase(
 	networkMappingRepo NetworkMappingRepo,
 	gatewayRepo GatewayRepo,
 	taskRepo TaskRepo,
-	networkMappingUseCase NetworkMappingUseCase,
+	networkMappingUseCase *NetworkMappingUseCase,
 ) *StorageProviderUseCase {
 	return &StorageProviderUseCase{
 		log:                   log.NewHelper(logger),
@@ -70,7 +71,7 @@ type StorageProviderUseCase struct {
 	gatewayPortRepo       GatewayPortRepo
 	taskRepo              TaskRepo
 	networkMappingRepo    NetworkMappingRepo
-	networkMappingUseCase NetworkMappingUseCase
+	networkMappingUseCase *NetworkMappingUseCase
 }
 
 func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, agentId uuid.UUID, networkMappingName string) (int32, error) {
@@ -103,8 +104,9 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 		// 需要映射的虚拟机端口号
 		ComputerPort: gp.Port,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status: 0,
-		UserId: claim.GetUserId(),
+		Status:    0,
+		UserId:    claim.GetUserId(),
+		GatewayIP: gateway.IP,
 	}
 	err = c.networkMappingRepo.CreateNetworkMapping(ctx, &nm)
 	if err != nil {
@@ -169,7 +171,9 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 
 	//创建grpc 端口映射
 	publicGrpcPort, err := c.createNetworkMappingPort(ctx, agentId, fmt.Sprintf("WEED_VOLUME_GRPC_%s", agentId.String()))
-
+	if err != nil {
+		return nil, err
+	}
 	sp = &StorageProvider{
 		AgentID:      agent.ID,
 		Status:       consts.StorageProviderStatus_NOT_RUN,
@@ -177,10 +181,16 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 		PublicIP:     "computeshare.newtouch.com",
 		PublicPort:   publicHttpPort,
 		GrpcPort:     publicGrpcPort,
+		CreatedTime:  time.Now(),
 	}
 	sp, err = c.storageProviderRepo.Create(ctx, sp)
 
+	if err != nil {
+		return nil, err
+	}
+
 	sstp := &queue.StorageSetupTaskParamVO{
+		Id:           sp.ID.String(),
 		MasterServer: sp.MasterServer,
 		PublicIp:     sp.PublicIP,
 		PublicPort:   sp.PublicPort,
@@ -222,4 +232,8 @@ func (c *StorageProviderUseCase) GetStorageProvider(ctx context.Context, id uuid
 func (c *StorageProviderUseCase) ListStorageProvider(ctx context.Context) ([]*StorageProvider, error) {
 
 	return c.storageProviderRepo.List(ctx)
+}
+
+func (c *StorageProviderUseCase) UpdateStorageProviderStatus(ctx context.Context, id uuid.UUID, status consts.StorageProviderStatus) error {
+	return c.storageProviderRepo.UpdateStatus(ctx, id, status)
 }

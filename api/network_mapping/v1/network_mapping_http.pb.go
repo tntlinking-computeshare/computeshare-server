@@ -37,9 +37,9 @@ func RegisterNetworkMappingHTTPServer(s *http.Server, srv NetworkMappingHTTPServ
 	r := s.Route("/")
 	r.POST("/v1/network-mappings", _NetworkMapping_CreateNetworkMapping0_HTTP_Handler(srv))
 	r.GET("/v1/network-mappings/page", _NetworkMapping_PageNetworkMapping0_HTTP_Handler(srv))
+	r.GET("/v1/network-mappings/next", _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv))
 	r.GET("/v1/network-mappings/{id}", _NetworkMapping_GetNetworkMapping0_HTTP_Handler(srv))
 	r.DELETE("/v1/network-mappings/{id}", _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv))
-	r.GET("/v1/network-mappings/next", _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv))
 }
 
 func _NetworkMapping_CreateNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
@@ -79,6 +79,25 @@ func _NetworkMapping_PageNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServ
 			return err
 		}
 		reply := out.(*PageNetworkMappingReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in NextNetworkMappingRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNetworkMappingNextNetworkMapping)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.NextNetworkMapping(ctx, req.(*NextNetworkMappingRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*NextNetworkMappingReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -123,25 +142,6 @@ func _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPSe
 			return err
 		}
 		reply := out.(*DeleteNetworkMappingReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in NextNetworkMappingRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationNetworkMappingNextNetworkMapping)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.NextNetworkMapping(ctx, req.(*NextNetworkMappingRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*NextNetworkMappingReply)
 		return ctx.Result(200, reply)
 	}
 }

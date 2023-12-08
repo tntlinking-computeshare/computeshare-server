@@ -24,7 +24,7 @@ func NewAgentRepo(data *Data, logger log.Logger) biz.AgentRepo {
 }
 
 func (ar *agentRepo) ListAgent(ctx context.Context) ([]*biz.Agent, error) {
-	ps, err := ar.data.db.Agent.Query().All(ctx)
+	ps, err := ar.data.getAgent(ctx).Query().All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (ar *agentRepo) ListAgent(ctx context.Context) ([]*biz.Agent, error) {
 }
 
 func (ar *agentRepo) GetAgent(ctx context.Context, id uuid.UUID) (*biz.Agent, error) {
-	p, err := ar.data.db.Agent.Get(ctx, id)
+	p, err := ar.data.getAgent(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (ar *agentRepo) GetAgent(ctx context.Context, id uuid.UUID) (*biz.Agent, er
 }
 
 func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
-	result, err := ar.data.db.Agent.
+	result, err := ar.data.getAgent(ctx).
 		Create().
 		SetPeerID(agent.PeerId).
 		SetActive(agent.Active).
@@ -54,7 +54,7 @@ func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
 }
 
 func (ar *agentRepo) UpdateAgent(ctx context.Context, id uuid.UUID, agent *biz.Agent) error {
-	p, err := ar.data.db.Agent.Get(ctx, id)
+	p, err := ar.data.getAgent(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -66,12 +66,12 @@ func (ar *agentRepo) UpdateAgent(ctx context.Context, id uuid.UUID, agent *biz.A
 }
 
 func (ar *agentRepo) DeleteAgent(ctx context.Context, id uuid.UUID) error {
-	return ar.data.db.Agent.DeleteOneID(id).Exec(ctx)
+	return ar.data.getAgent(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (ar *agentRepo) FindByPeerId(ctx context.Context, peerId string) (*biz.Agent, error) {
 
-	p, err := ar.data.db.Agent.Query().Where(agent.PeerIDEQ(peerId)).First(ctx)
+	p, err := ar.data.getAgent(ctx).Query().Where(agent.PeerIDEQ(peerId)).First(ctx)
 
 	return ar.toBiz(p, 0), err
 }
@@ -90,6 +90,6 @@ func (ar *agentRepo) toBiz(p *ent.Agent, _ int) *biz.Agent {
 
 func (ar *agentRepo) FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*biz.Agent, error) {
 
-	entity, err := ar.data.db.Agent.Query().Where(agent.Active(true)).First(ctx)
+	entity, err := ar.data.getAgent(ctx).Query().Where(agent.Active(true)).First(ctx)
 	return ar.toBiz(entity, 0), err
 }

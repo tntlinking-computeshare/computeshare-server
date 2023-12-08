@@ -18,6 +18,8 @@ const (
 	FieldFkGatewayID = "fk_gateway_id"
 	// FieldGatewayPort holds the string denoting the gateway_port field in the database.
 	FieldGatewayPort = "gateway_port"
+	// FieldGatewayIP holds the string denoting the gateway_ip field in the database.
+	FieldGatewayIP = "gateway_ip"
 	// FieldComputerPort holds the string denoting the computer_port field in the database.
 	FieldComputerPort = "computer_port"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -36,6 +38,7 @@ var Columns = []string{
 	FieldName,
 	FieldFkGatewayID,
 	FieldGatewayPort,
+	FieldGatewayIP,
 	FieldComputerPort,
 	FieldStatus,
 	FieldFkComputerID,
@@ -82,6 +85,11 @@ func ByFkGatewayID(opts ...sql.OrderTermOption) OrderOption {
 // ByGatewayPort orders the results by the gateway_port field.
 func ByGatewayPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGatewayPort, opts...).ToFunc()
+}
+
+// ByGatewayIP orders the results by the gateway_ip field.
+func ByGatewayIP(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGatewayIP, opts...).ToFunc()
 }
 
 // ByComputerPort orders the results by the computer_port field.

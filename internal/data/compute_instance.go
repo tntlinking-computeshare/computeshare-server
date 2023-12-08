@@ -27,7 +27,7 @@ func NewComputeInstanceRepo(data *Data, logger log.Logger) biz.ComputeInstanceRe
 }
 
 func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.ComputeInstance, error) {
-	list, err := csr.data.db.ComputeInstance.Query().
+	list, err := csr.data.getComputeInstance(ctx).Query().
 		Where(computeinstance.OwnerEQ(owner)).
 		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
 		All(ctx)
@@ -38,7 +38,7 @@ func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.
 }
 
 func (csr *computeInstanceRepo) ListByPeerId(ctx context.Context, agentId string) ([]*biz.ComputeInstance, error) {
-	list, err := csr.data.db.ComputeInstance.Query().
+	list, err := csr.data.getComputeInstance(ctx).Query().
 		Where(computeinstance.AgentIDEQ(agentId)).
 		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
 		All(ctx)
@@ -49,7 +49,7 @@ func (csr *computeInstanceRepo) ListByPeerId(ctx context.Context, agentId string
 }
 
 func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInstance) error {
-	entity, err := crs.data.db.ComputeInstance.Create().
+	entity, err := crs.data.getComputeInstance(ctx).Create().
 		SetOwner(in.Owner).
 		SetName(in.Name).
 		SetCore(in.Core).
@@ -71,11 +71,11 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 }
 
 func (crs *computeInstanceRepo) Delete(ctx context.Context, id uuid.UUID) error {
-	return crs.data.db.ComputeInstance.DeleteOneID(id).Exec(ctx)
+	return crs.data.getComputeInstance(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (crs *computeInstanceRepo) Update(ctx context.Context, id uuid.UUID, instance *biz.ComputeInstance) error {
-	return crs.data.db.ComputeInstance.UpdateOneID(id).
+	return crs.data.getComputeInstance(ctx).UpdateOneID(id).
 		SetStatus(instance.Status).
 		SetAgentID(instance.AgentId).
 		SetContainerID(instance.ContainerID).
@@ -103,12 +103,12 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 }
 
 func (crs *computeInstanceRepo) Get(ctx context.Context, id uuid.UUID) (*biz.ComputeInstance, error) {
-	instance, err := crs.data.db.ComputeInstance.Get(ctx, id)
+	instance, err := crs.data.getComputeInstance(ctx).Get(ctx, id)
 	return crs.toBiz(instance, 0), err
 }
 
 func (crs *computeInstanceRepo) ListAll(ctx context.Context) ([]*biz.ComputeInstance, error) {
-	result, err := crs.data.db.ComputeInstance.Query().Where(computeinstance.StatusEQ(consts.InstanceStatusRunning)).All(ctx)
+	result, err := crs.data.getComputeInstance(ctx).Query().Where(computeinstance.StatusEQ(consts.InstanceStatusRunning)).All(ctx)
 	if err != nil {
 		return []*biz.ComputeInstance{}, err
 	}
@@ -147,7 +147,7 @@ func (crs *computeInstanceRepo) GetInstanceStats(ctx context.Context, id uuid.UU
 }
 
 func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error {
-	return crs.data.db.ComputeInstance.Update().
+	return crs.data.getComputeInstance(ctx).Update().
 		SetStatus(consts.InstanceStatusExpire).
 		Where(
 			computeinstance.ExpirationTimeLT(time.Now()),
@@ -157,5 +157,5 @@ func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error
 }
 
 func (crs *computeInstanceRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error {
-	return crs.data.db.ComputeInstance.UpdateOneID(id).SetStatus(status).Exec(ctx)
+	return crs.data.getComputeInstance(ctx).UpdateOneID(id).SetStatus(status).Exec(ctx)
 }

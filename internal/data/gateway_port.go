@@ -25,7 +25,7 @@ func NewGatewayPortRepo(data *Data, logger log.Logger) biz.GatewayPortRepo {
 
 func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
 	var counts []*biz.GatewayPortCount
-	err := repo.data.db.GatewayPort.Query().
+	err := repo.data.getGatewayPort(ctx).Query().
 		Select(gatewayport.FieldFkGatewayID).
 		Where(gatewayport.IsUse(isUsed)).
 		GroupBy(gatewayport.FieldFkGatewayID).
@@ -35,7 +35,7 @@ func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUse
 }
 
 func (repo *GatewayPortRepo) GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*biz.GatewayPort, error) {
-	instance, err := repo.data.db.GatewayPort.Query().
+	instance, err := repo.data.getGatewayPort(ctx).Query().
 		Where(gatewayport.FkGatewayID(gatewayID), gatewayport.IsUse(false)).
 		Order(gatewayport.ByPort(sql.OrderAsc())).First(ctx)
 	return repo.toBiz(instance, 0), err
@@ -58,13 +58,13 @@ func (repo *GatewayPortRepo) Update(ctx context.Context, gp *biz.GatewayPort) er
 		return nil
 	}
 
-	return repo.data.db.GatewayPort.UpdateOneID(gp.ID).
+	return repo.data.getGatewayPort(ctx).UpdateOneID(gp.ID).
 		SetIsUse(gp.IsUse).
 		Exec(ctx)
 }
 
 func (repo *GatewayPortRepo) GetGatewayPortByGatewayIdAndPort(ctx context.Context, gatewayId uuid.UUID, port int32) (*biz.GatewayPort, error) {
-	data, err := repo.data.db.GatewayPort.Query().
+	data, err := repo.data.getGatewayPort(ctx).Query().
 		Where(gatewayport.FkGatewayIDEQ(gatewayId), gatewayport.PortEQ(port)).
 		First(ctx)
 

@@ -21,7 +21,7 @@ func NewComputeImageRepo(data *Data, logger log.Logger) biz.ComputeImageRepo {
 }
 
 func (csr *computeImageRepo) List(ctx context.Context) ([]*biz.ComputeImage, error) {
-	list, err := csr.data.db.ComputeImage.Query().All(ctx)
+	list, err := csr.data.getComputeImage(ctx).Query().All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (csr *computeImageRepo) toBiz(item *ent.ComputeImage, _ int) *biz.ComputeIm
 }
 
 func (csr *computeImageRepo) Get(ctx context.Context, id int32) (*biz.ComputeImage, error) {
-	entity, err := csr.data.db.ComputeImage.Get(ctx, id)
+	entity, err := csr.data.getComputeImage(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}

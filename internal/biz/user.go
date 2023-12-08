@@ -100,8 +100,9 @@ func (uc *UserUsercase) Delete(ctx context.Context, id uuid.UUID) error {
 	return uc.repo.DeleteUser(ctx, id)
 }
 
-func (uc *UserUsercase) SendValidateCode(ctx context.Context, entity User) error {
-	return uc.repo.SendValidateCode(ctx, entity)
+func (uc *UserUsercase) SendValidateCode(ctx context.Context, entity User) (err error) {
+	err = uc.repo.SendValidateCode(ctx, entity)
+	return
 }
 
 func (uc *UserUsercase) GetValidateCode(ctx context.Context, user User) (string, error) {

@@ -26,17 +26,17 @@ type s3UserRepoImpl struct {
 }
 
 func (r *s3UserRepoImpl) CreateS3User(ctx context.Context, user *biz.S3User) (*biz.S3User, error) {
-	entity, err := r.data.db.S3User.Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	entity, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 
 	if err == nil && entity != nil {
 		entity.FkUserID = user.FkUserID
 		entity.AccessKey = user.AccessKey
 		entity.SecretKey = user.SecretKey
-		err := r.data.db.S3User.UpdateOne(entity).Exec(ctx)
+		err := r.data.getS3UserClient(ctx).UpdateOne(entity).Exec(ctx)
 		return r.toBiz(entity, 0), err
 	}
 
-	entity, err = r.data.db.S3User.Create().
+	entity, err = r.data.getS3UserClient(ctx).Create().
 		SetFkUserID(user.FkUserID).
 		SetAccessKey(user.AccessKey).
 		SetSecretKey(user.SecretKey).
@@ -47,14 +47,14 @@ func (r *s3UserRepoImpl) CreateS3User(ctx context.Context, user *biz.S3User) (*b
 	return r.toBiz(entity, 0), err
 }
 func (r *s3UserRepoImpl) GetS3User(ctx context.Context, userId uuid.UUID) (*biz.S3User, error) {
-	entity, err := r.data.db.S3User.Query().Where(s3user.FkUserID(userId)).First(ctx)
+	entity, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(userId)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return r.toBiz(entity, 0), err
 }
 func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, bucket string) (*biz.S3Bucket, error) {
-	s3User, err := r.data.db.S3User.Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, buc
 	return r.toBucketBiz(s3Bucket, 0), err
 }
 func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, bucketId uuid.UUID) error {
-	s3User, err := r.data.db.S3User.Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, buc
 
 }
 func (r *s3UserRepoImpl) ListBucket(ctx context.Context, userId uuid.UUID) ([]*biz.S3Bucket, error) {
-	s3User, err := r.data.db.S3User.Query().Where(s3user.FkUserID(userId)).First(ctx)
+	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(userId)).First(ctx)
 
 	if err != nil {
 		return nil, err

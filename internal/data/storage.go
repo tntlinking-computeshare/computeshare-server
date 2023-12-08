@@ -28,7 +28,7 @@ func NewStorageRepo(data *Data, logger log.Logger) biz.StorageRepo {
 
 func (ur *storageRepo) ListStorage(ctx context.Context, owner string, parentId string) ([]*biz.Storage, error) {
 	parentIdPredicate := storage.ParentID(parentId)
-	ps, err := ur.data.db.Storage.Query().
+	ps, err := ur.data.getStorage(ctx).Query().
 		Where(storage.OwnerEQ(owner), parentIdPredicate).Order(storage.ByLastModify(sql.OrderDesc())).All(ctx)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (ur *storageRepo) ListStorage(ctx context.Context, owner string, parentId s
 	return rv, nil
 }
 func (ur *storageRepo) GetStorage(ctx context.Context, id uuid.UUID) (*biz.Storage, error) {
-	p, err := ur.data.db.Storage.Get(ctx, id)
+	p, err := ur.data.getStorage(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (ur *storageRepo) GetStorage(ctx context.Context, id uuid.UUID) (*biz.Stora
 func (ur *storageRepo) CreateStorage(ctx context.Context, entity *biz.Storage) error {
 
 	// 判断有该目录有无重复的文件夹
-	exists, err := ur.data.db.Storage.Query().Where(
+	exists, err := ur.data.getStorage(ctx).Query().Where(
 		storage.OwnerEQ(entity.Owner),
 		storage.ParentIDEQ(entity.ParentID),
 		storage.NameEQ(entity.Name),
@@ -119,7 +119,7 @@ func (ur *storageRepo) CreateStorage(ctx context.Context, entity *biz.Storage) e
 			fmt.Println("文件名前缀:", fileName)
 			fmt.Println("文件后缀:", fileExt)
 			name = fmt.Sprintf("%s%s", fileName, fileExt)
-			exists = ur.data.db.Storage.Query().Where(
+			exists = ur.data.getStorage(ctx).Query().Where(
 				storage.OwnerEQ(entity.Owner),
 				storage.ParentIDEQ(entity.ParentID),
 				storage.NameEQ(name),
@@ -129,7 +129,7 @@ func (ur *storageRepo) CreateStorage(ctx context.Context, entity *biz.Storage) e
 
 	}
 
-	client := ur.data.db.Storage.
+	client := ur.data.getStorage(ctx).
 		Create().
 		SetOwner(entity.Owner).
 		SetName(name).
@@ -150,7 +150,7 @@ func (ur *storageRepo) CreateStorage(ctx context.Context, entity *biz.Storage) e
 	return err
 }
 func (ur *storageRepo) UpdateStorage(ctx context.Context, id uuid.UUID, storage *biz.Storage) error {
-	p, err := ur.data.db.Storage.Get(ctx, id)
+	p, err := ur.data.getStorage(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -165,12 +165,12 @@ func (ur *storageRepo) UpdateStorage(ctx context.Context, id uuid.UUID, storage 
 	return err
 }
 func (ur *storageRepo) DeleteStorage(ctx context.Context, id uuid.UUID) error {
-	result, err := ur.data.db.Storage.Get(ctx, id)
+	result, err := ur.data.getStorage(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	children, err := ur.data.db.Storage.Query().Where(storage.ParentID(result.ID.String())).All(ctx)
+	children, err := ur.data.getStorage(ctx).Query().Where(storage.ParentID(result.ID.String())).All(ctx)
 	if err != nil {
 		return err
 	}
@@ -181,5 +181,5 @@ func (ur *storageRepo) DeleteStorage(ctx context.Context, id uuid.UUID) error {
 			return err
 		}
 	}
-	return ur.data.db.Storage.DeleteOneID(id).Exec(ctx)
+	return ur.data.getStorage(ctx).DeleteOneID(id).Exec(ctx)
 }

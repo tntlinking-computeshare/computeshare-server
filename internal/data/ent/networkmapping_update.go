@@ -53,6 +53,12 @@ func (nmu *NetworkMappingUpdate) AddGatewayPort(i int32) *NetworkMappingUpdate {
 	return nmu
 }
 
+// SetGatewayIP sets the "gateway_ip" field.
+func (nmu *NetworkMappingUpdate) SetGatewayIP(s string) *NetworkMappingUpdate {
+	nmu.mutation.SetGatewayIP(s)
+	return nmu
+}
+
 // SetComputerPort sets the "computer_port" field.
 func (nmu *NetworkMappingUpdate) SetComputerPort(i int32) *NetworkMappingUpdate {
 	nmu.mutation.ResetComputerPort()
@@ -165,6 +171,9 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if value, ok := nmu.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
+	if value, ok := nmu.mutation.GatewayIP(); ok {
+		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
+	}
 	if value, ok := nmu.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
@@ -225,6 +234,12 @@ func (nmuo *NetworkMappingUpdateOne) SetGatewayPort(i int32) *NetworkMappingUpda
 // AddGatewayPort adds i to the "gateway_port" field.
 func (nmuo *NetworkMappingUpdateOne) AddGatewayPort(i int32) *NetworkMappingUpdateOne {
 	nmuo.mutation.AddGatewayPort(i)
+	return nmuo
+}
+
+// SetGatewayIP sets the "gateway_ip" field.
+func (nmuo *NetworkMappingUpdateOne) SetGatewayIP(s string) *NetworkMappingUpdateOne {
+	nmuo.mutation.SetGatewayIP(s)
 	return nmuo
 }
 
@@ -369,6 +384,9 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	}
 	if value, ok := nmuo.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
+	}
+	if value, ok := nmuo.mutation.GatewayIP(); ok {
+		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
 	}
 	if value, ok := nmuo.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)

@@ -30,13 +30,13 @@ func NewScriptExecutionRecordRepo(data *Data, logger log.Logger) biz.ScriptExecu
 func (s *scriptExecutionRecordRepo) Save(ctx context.Context, scriptExecutionRecord *biz.ScriptExecutionRecord) (*biz.ScriptExecutionRecord, error) {
 	//先查用户最新的脚本序号
 	taskNumber := 1
-	first, err := s.data.db.ScriptExecutionRecord.Query().Select(script.FieldTaskNumber).Where(scriptexecutionrecord.UserID(scriptExecutionRecord.UserID)).Order(scriptexecutionrecord.ByTaskNumber(sql.OrderDesc())).First(ctx)
+	first, err := s.data.getScriptExecutionRecord(ctx).Query().Select(script.FieldTaskNumber).Where(scriptexecutionrecord.UserID(scriptExecutionRecord.UserID)).Order(scriptexecutionrecord.ByTaskNumber(sql.OrderDesc())).First(ctx)
 	if first == nil {
 		taskNumber = 1
 	} else {
 		taskNumber = int(first.TaskNumber + 1)
 	}
-	save, err := s.data.db.ScriptExecutionRecord.Create().SetFkScriptID(scriptExecutionRecord.FkScriptID).SetScriptContent(scriptExecutionRecord.ScriptContent).
+	save, err := s.data.getScriptExecutionRecord(ctx).Create().SetFkScriptID(scriptExecutionRecord.FkScriptID).SetScriptContent(scriptExecutionRecord.ScriptContent).
 		SetUserID(scriptExecutionRecord.UserID).SetFileAddress(scriptExecutionRecord.FileAddress).SetExecuteState(consts.Executing).SetTaskNumber(int32(taskNumber)).
 		SetScriptName(scriptExecutionRecord.ScriptName).SetExecuteResult(scriptExecutionRecord.ExecuteResult).SetCreateTime(time.Now()).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *scriptExecutionRecordRepo) Save(ctx context.Context, scriptExecutionRec
 }
 
 func (s *scriptExecutionRecordRepo) Update(ctx context.Context, scriptExecutionRecord *biz.ScriptExecutionRecord) (*biz.ScriptExecutionRecord, error) {
-	save, err := s.data.db.ScriptExecutionRecord.UpdateOneID(scriptExecutionRecord.ID).SetExecuteResult(scriptExecutionRecord.ExecuteResult).
+	save, err := s.data.getScriptExecutionRecord(ctx).UpdateOneID(scriptExecutionRecord.ID).SetExecuteResult(scriptExecutionRecord.ExecuteResult).
 		SetExecuteState(scriptExecutionRecord.ExecuteState).SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (s *scriptExecutionRecordRepo) Update(ctx context.Context, scriptExecutionR
 }
 
 func (s *scriptExecutionRecordRepo) FindByID(ctx context.Context, id int32) (*biz.ScriptExecutionRecord, error) {
-	first, err := s.data.db.ScriptExecutionRecord.Query().Where(scriptexecutionrecord.ID(id)).First(ctx)
+	first, err := s.data.getScriptExecutionRecord(ctx).Query().Where(scriptexecutionrecord.ID(id)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (s *scriptExecutionRecordRepo) FindByID(ctx context.Context, id int32) (*bi
 }
 
 func (s *scriptExecutionRecordRepo) PageByUserId(ctx context.Context, userId string, page int32, size int32) ([]*biz.ScriptExecutionRecord, int32, error) {
-	count, err := s.data.db.ScriptExecutionRecord.Query().Select(scriptexecutionrecord.FieldID).Where(scriptexecutionrecord.UserID(userId)).Count(ctx)
+	count, err := s.data.getScriptExecutionRecord(ctx).Query().Select(scriptexecutionrecord.FieldID).Where(scriptexecutionrecord.UserID(userId)).Count(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -73,7 +73,7 @@ func (s *scriptExecutionRecordRepo) PageByUserId(ctx context.Context, userId str
 	} else {
 		offset = page * size
 	}
-	scripts, err := s.data.db.ScriptExecutionRecord.Query().Where(scriptexecutionrecord.UserID(userId)).Order(scriptexecutionrecord.ByCreateTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	scripts, err := s.data.getScriptExecutionRecord(ctx).Query().Where(scriptexecutionrecord.UserID(userId)).Order(scriptexecutionrecord.ByCreateTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -81,7 +81,7 @@ func (s *scriptExecutionRecordRepo) PageByUserId(ctx context.Context, userId str
 }
 
 func (s *scriptExecutionRecordRepo) FindLatestByUserIdAndScript(ctx context.Context, userId string, scriptId int32) (*biz.ScriptExecutionRecord, error) {
-	first, err := s.data.db.ScriptExecutionRecord.Query().Where(scriptexecutionrecord.UserIDEQ(userId), scriptexecutionrecord.FkScriptIDEQ(scriptId)).
+	first, err := s.data.getScriptExecutionRecord(ctx).Query().Where(scriptexecutionrecord.UserIDEQ(userId), scriptexecutionrecord.FkScriptIDEQ(scriptId)).
 		Order(scriptexecutionrecord.ByCreateTime(sql.OrderDesc())).First(ctx)
 	if err != nil {
 		return nil, err

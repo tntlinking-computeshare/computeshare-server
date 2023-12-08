@@ -25,14 +25,15 @@ type userRepo struct {
 }
 
 func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
+	lg := log.NewHelper(logger)
 	return &userRepo{
 		data: data,
-		log:  log.NewHelper(logger),
+		log:  lg,
 	}
 }
 
 func (ur *userRepo) ListUser(ctx context.Context, entity biz.User) ([]*biz.User, error) {
-	ps, err := ur.data.db.User.Query().
+	ps, err := ur.data.getUserClient(ctx).Query().
 		Where(user.CountryCallCodingContains(entity.CountryCallCoding), user.TelephoneNumberContains(entity.TelephoneNumber)).
 		All(ctx)
 	if err != nil {
@@ -42,7 +43,7 @@ func (ur *userRepo) ListUser(ctx context.Context, entity biz.User) ([]*biz.User,
 }
 
 func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error) {
-	p, err := ur.data.db.User.Get(ctx, id)
+	p, err := ur.data.getUserClient(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
 	if err == nil && code == user.ValidateCode {
 		encodePassword := md5.Sum([]byte(user.Password))
-		result, err := ur.data.db.User.
+		result, err := ur.data.getUserClient(ctx).
 			Create().
 			SetCountryCallCoding(user.CountryCallCoding).
 			SetTelephoneNumber(user.TelephoneNumber).
@@ -87,7 +88,7 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
 }
 func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User) error {
-	p, err := ur.data.db.User.Get(ctx, id)
+	p, err := ur.data.getUserClient(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -99,14 +100,14 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 }
 
 func (ur *userRepo) UpdateUserTelephone(ctx context.Context, id uuid.UUID, updateUser *biz.User) error {
-	first, err := ur.data.db.User.Query().Where(user.TelephoneNumber(updateUser.TelephoneNumber), user.CountryCallCoding(updateUser.CountryCallCoding)).First(ctx)
+	first, err := ur.data.getUserClient(ctx).Query().Where(user.TelephoneNumber(updateUser.TelephoneNumber), user.CountryCallCoding(updateUser.CountryCallCoding)).First(ctx)
 	if err != nil {
 		return err
 	}
 	if first != nil {
 		return errors.New("该手机号已经被注册")
 	}
-	p, err := ur.data.db.User.Get(ctx, id)
+	p, err := ur.data.getUserClient(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -118,7 +119,7 @@ func (ur *userRepo) UpdateUserTelephone(ctx context.Context, id uuid.UUID, updat
 }
 
 func (ur *userRepo) UpdateUserPassword(ctx context.Context, id uuid.UUID, user *biz.User) error {
-	p, err := ur.data.db.User.Get(ctx, id)
+	p, err := ur.data.getUserClient(ctx).Get(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -130,7 +131,7 @@ func (ur *userRepo) UpdateUserPassword(ctx context.Context, id uuid.UUID, user *
 }
 
 func (ur *userRepo) DeleteUser(ctx context.Context, id uuid.UUID) error {
-	return ur.data.db.User.DeleteOneID(id).Exec(ctx)
+	return ur.data.getUserClient(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (ur *userRepo) SendValidateCode(ctx context.Context, entity biz.User) error {
@@ -145,7 +146,7 @@ func (ur *userRepo) GetValidateCode(ctx context.Context, user biz.User) (string,
 
 func (ur *userRepo) FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*biz.User, error) {
 
-	p, err := ur.data.db.User.Query().Where(user.CountryCallCodingEQ(countryCallCoding), user.TelephoneNumberEQ(telephone)).First(ctx)
+	p, err := ur.data.getUserClient(ctx).Query().Where(user.CountryCallCodingEQ(countryCallCoding), user.TelephoneNumberEQ(telephone)).First(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -71,8 +71,8 @@ Authorization: Bearer {{ access_token }}
 }
 
 ### 验证码
-POST http://127.0.0.1:8000/v1/sms/send
-#POST  http://127.0.0.1:8000/v1/sms/send
+#POST http://computeshare.hamster.newtouch.com/v1/sms/send
+POST  http://127.0.0.1:8000/v1/sms/send
 Content-Type: application/json
 
 {
@@ -82,7 +82,7 @@ Content-Type: application/json
 
 
 ### 登录
-POST http://127.0.0.1:8000/v1/user/login_by_vc
+POST http://computeshare.hamster.newtouch.com/v1/user/login_by_vc
 Content-Type: application/json
 
 {
@@ -209,13 +209,29 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 新增域名绑定
-POST http://127.0.0.1:8000/v1/domain-binding
+#POST http://127.0.0.1:8000/v1/domain-binding
+POST https://computeshare.hamster.newtouch.com/v1/domain-binding
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {
-  "computeInstanceId": "2f5e4fdc-b976-4870-9307-ac7705ae32e0",
   "networkMappingId": "05f536a9-2064-416d-a561-3bc9d0deeffc",
-  "name": "d1",
-  "domain": "test.computeshare.hamster.newtouch.com"
+  "name": "d2",
+  "domain": "test1.computeshare.hamster.newtouch.com"
 }
+
+
+### 新增网络提供
+POST http://127.0.0.1:8000/v1/storage_provider
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "agentId": "5b0c430e-3f65-461b-8593-6ecad56460bd"
+}
+
+### 下一个网络端口
+GET https://computeshare.hamster.newtouch.com/v1/network-mappings/next?computerId=2f5e4fdc-b976-4870-9307-ac7705ae32e0
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+

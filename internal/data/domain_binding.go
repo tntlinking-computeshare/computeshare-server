@@ -25,7 +25,7 @@ func NewDomainBindingRepository(data *Data, logger log.Logger) biz.DomainBinding
 }
 
 func (r *domainRepositoryImpl) List(ctx context.Context, userId uuid.UUID) ([]*biz.DomainBinding, error) {
-	list, err := r.data.db.DomainBinding.Query().
+	list, err := r.data.getDomainBinding(ctx).Query().
 		Where(domainbinding.UserIDEQ(userId)).
 		Order(domainbinding.ByCreateTime(sql.OrderDesc())).
 		All(ctx)
@@ -36,7 +36,7 @@ func (r *domainRepositoryImpl) List(ctx context.Context, userId uuid.UUID) ([]*b
 }
 
 func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId, networkMappingId uuid.UUID, page, size int32) (*global.Page[*biz.DomainBinding], error) {
-	list, err := r.data.db.DomainBinding.Query().
+	list, err := r.data.getDomainBinding(ctx).Query().
 		Where(domainbinding.UserIDEQ(userId), domainbinding.FkNetworkMappingIDEQ(networkMappingId)).
 		Order(domainbinding.ByCreateTime(sql.OrderDesc())).
 		Offset(int(page - 1)).Limit(int(size)).
@@ -45,7 +45,7 @@ func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId, networkMap
 		return nil, err
 	}
 
-	total, err := r.data.db.DomainBinding.Query().
+	total, err := r.data.getDomainBinding(ctx).Query().
 		Where(domainbinding.UserIDEQ(userId)).
 		Order(domainbinding.ByCreateTime(sql.OrderDesc())).Count(ctx)
 	if err != nil {
@@ -61,7 +61,7 @@ func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId, networkMap
 }
 
 func (r *domainRepositoryImpl) Save(ctx context.Context, entity *biz.DomainBinding) error {
-	data, err := r.data.db.DomainBinding.Create().
+	data, err := r.data.getDomainBinding(ctx).Create().
 		SetCreateTime(entity.CreateTime).
 		SetName(entity.Name).
 		SetDomain(entity.Domain).
@@ -76,7 +76,7 @@ func (r *domainRepositoryImpl) Save(ctx context.Context, entity *biz.DomainBindi
 	return err
 }
 func (r *domainRepositoryImpl) Get(ctx context.Context, id uuid.UUID) (*biz.DomainBinding, error) {
-	data, err := r.data.db.DomainBinding.Get(ctx, id)
+	data, err := r.data.getDomainBinding(ctx).Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -84,11 +84,11 @@ func (r *domainRepositoryImpl) Get(ctx context.Context, id uuid.UUID) (*biz.Doma
 }
 func (r *domainRepositoryImpl) Delete(ctx context.Context, id uuid.UUID) error {
 
-	return r.data.db.DomainBinding.DeleteOneID(id).Exec(ctx)
+	return r.data.getDomainBinding(ctx).DeleteOneID(id).Exec(ctx)
 }
 
 func (r *domainRepositoryImpl) ListByNetworkMappingId(ctx context.Context, networkMappingId uuid.UUID) ([]*biz.DomainBinding, error) {
-	list, err := r.data.db.DomainBinding.Query().Where(domainbinding.FkNetworkMappingIDEQ(networkMappingId)).All(ctx)
+	list, err := r.data.getDomainBinding(ctx).Query().Where(domainbinding.FkNetworkMappingIDEQ(networkMappingId)).All(ctx)
 	if err != nil {
 		return nil, err
 	}

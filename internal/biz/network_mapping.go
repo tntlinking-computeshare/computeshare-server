@@ -32,6 +32,8 @@ type NetworkMapping struct {
 	Status int `json:"status,omitempty"`
 	// 用户id
 	UserId uuid.UUID `json:"user_id"`
+	// gateway ip
+	GatewayIP string `json:"gateway_ip"`
 }
 
 type NetworkMappingCreate struct {
@@ -52,6 +54,7 @@ type NetworkMappingRepo interface {
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
+	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
 }
 
 type Gateway struct {
@@ -143,6 +146,11 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, errors.New("unauthorize")
 	}
 
+	g, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
+	if err != nil {
+		return nil, err
+	}
+
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
@@ -157,8 +165,9 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		// 需要映射的虚拟机端口号
 		ComputerPort: nmc.ComputerPort,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status: 0,
-		UserId: claim.GetUserId(),
+		Status:    0,
+		UserId:    claim.GetUserId(),
+		GatewayIP: g.IP,
 	}
 	err = m.repo.CreateNetworkMapping(ctx, &nm)
 	if err != nil {
@@ -172,11 +181,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	// 发送任务给 agentID
 	// 构建任务参数
 
-	gateway, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
-
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
 		Name:         nm.Name,
@@ -184,8 +188,8 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		InstancePort: nm.ComputerPort,
 		RemotePort:   nm.GatewayPort,
 		GatewayId:    nm.FkGatewayID.String(),
-		GatewayIp:    gateway.IP,
-		GatewayPort:  gateway.Port,
+		GatewayIp:    g.IP,
+		GatewayPort:  g.Port,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {
@@ -296,36 +300,24 @@ func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uui
 	return m.repo.UpdateNetworkMapping(ctx, nm)
 }
 
-func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId string) (*NextNetworkMappingInfo, error) {
-	// 查看当前 gatewayID
-	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId uuid.UUID) (*NextNetworkMappingInfo, error) {
+	// 1. 判断这个agent 是否有networkmapping 记录
+	gatewayId, err := m.repo.QueryGatewayIdByComputeIds(ctx, []uuid.UUID{computeInstanceId})
 	if err != nil {
 		return nil, err
 	}
 
-	maxItem := lo.MaxBy(gpcList, func(item *GatewayPortCount, max *GatewayPortCount) bool {
-		return item.Count > max.Count
-	})
+	g, err := m.gatewayRepo.GetGateway(ctx, gatewayId)
+	if err != nil {
+		return nil, err
+	}
 
-	if maxItem == nil {
-		return nil, fmt.Errorf("无可用 Gateway")
-	}
-	if maxItem.Count <= 0 {
-		return nil, fmt.Errorf("无可用端口")
-	}
-	// 查询当前 gateway 的空余端口并进行分配
-	gp, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, maxItem.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
-	gateway, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
-	if err != nil {
-		return nil, err
-	}
+	//2. 查询gateway 的最小可用端口
+	gatewayPort, err := m.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, gatewayId)
 
 	return &NextNetworkMappingInfo{
-		PublicIP:   gateway.IP,
-		PublicPort: int32(gp.Port),
+		PublicIP:   g.IP,
+		PublicPort: gatewayPort.Port,
 	}, err
 }
 

@@ -2,6 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/middleware"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"github.com/go-kratos/kratos/v2/transport"
+	"github.com/mohaijiang/computeshare-server/internal/data"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
@@ -40,6 +45,35 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	}
 }
 
+func TransactionMiddleware(db *ent.Client) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
+			if _, ok := transport.FromServerContext(ctx); ok {
+				// Do something on entering
+				tx, txErr := db.Tx(ctx)
+
+				if txErr != nil {
+					return nil, txErr
+				}
+
+				ctx = context.WithValue(ctx, "tx", tx)
+
+				defer func() {
+					// Do something on exiting
+					if err != nil {
+						_ = tx.Rollback()
+					} else {
+						_ = tx.Commit()
+					}
+				}()
+			}
+			reply, err = handler(ctx, req)
+
+			return
+		}
+	}
+}
+
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server,
 	ac *conf.Auth,
@@ -51,7 +85,9 @@ func NewHTTPServer(c *conf.Server,
 	powerService *service.ComputePowerService,
 	networkMappingService *service.NetworkMappingService,
 	domainBindingService *service.DomainBindingService,
+	storageProviderService *service.StorageProviderService,
 	job *service.CronJob,
+	data *data.Data,
 	logger log.Logger) *http.Server {
 
 	jetMiddleware := selector.Server(
@@ -65,7 +101,9 @@ func NewHTTPServer(c *conf.Server,
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(logger),
 			jetMiddleware,
+			TransactionMiddleware(data.GetDB()),
 		),
 	}
 	if c.Http.Network != "" {
@@ -84,6 +122,7 @@ func NewHTTPServer(c *conf.Server,
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
+	computeV1.RegisterStorageProviderHTTPServer(srv, storageProviderService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
 	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
