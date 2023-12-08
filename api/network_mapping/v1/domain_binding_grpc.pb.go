@@ -20,11 +20,11 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	DomainBinding_CreateDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/CreateDomainBinding"
+	DomainBinding_NsLookup_FullMethodName            = "/api.network_mapping.v1.DomainBinding/NsLookup"
 	DomainBinding_UpdateDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/UpdateDomainBinding"
 	DomainBinding_DeleteDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/DeleteDomainBinding"
 	DomainBinding_GetDomainBinding_FullMethodName    = "/api.network_mapping.v1.DomainBinding/GetDomainBinding"
 	DomainBinding_ListDomainBinding_FullMethodName   = "/api.network_mapping.v1.DomainBinding/ListDomainBinding"
-	DomainBinding_NsLookup_FullMethodName            = "/api.network_mapping.v1.DomainBinding/NsLookup"
 )
 
 // DomainBindingClient is the client API for DomainBinding service.
@@ -32,11 +32,11 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DomainBindingClient interface {
 	CreateDomainBinding(ctx context.Context, in *CreateDomainBindingRequest, opts ...grpc.CallOption) (*CreateDomainBindingReply, error)
+	NsLookup(ctx context.Context, in *NsLookupRequest, opts ...grpc.CallOption) (*NsLookupReply, error)
 	UpdateDomainBinding(ctx context.Context, in *UpdateDomainBindingRequest, opts ...grpc.CallOption) (*UpdateDomainBindingReply, error)
 	DeleteDomainBinding(ctx context.Context, in *DeleteDomainBindingRequest, opts ...grpc.CallOption) (*DeleteDomainBindingReply, error)
 	GetDomainBinding(ctx context.Context, in *GetDomainBindingRequest, opts ...grpc.CallOption) (*GetDomainBindingReply, error)
 	ListDomainBinding(ctx context.Context, in *ListDomainBindingRequest, opts ...grpc.CallOption) (*ListDomainBindingReply, error)
-	NsLookup(ctx context.Context, in *NsLookupRequest, opts ...grpc.CallOption) (*NsLookupReply, error)
 }
 
 type domainBindingClient struct {
@@ -50,6 +50,15 @@ func NewDomainBindingClient(cc grpc.ClientConnInterface) DomainBindingClient {
 func (c *domainBindingClient) CreateDomainBinding(ctx context.Context, in *CreateDomainBindingRequest, opts ...grpc.CallOption) (*CreateDomainBindingReply, error) {
 	out := new(CreateDomainBindingReply)
 	err := c.cc.Invoke(ctx, DomainBinding_CreateDomainBinding_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *domainBindingClient) NsLookup(ctx context.Context, in *NsLookupRequest, opts ...grpc.CallOption) (*NsLookupReply, error) {
+	out := new(NsLookupReply)
+	err := c.cc.Invoke(ctx, DomainBinding_NsLookup_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -92,25 +101,16 @@ func (c *domainBindingClient) ListDomainBinding(ctx context.Context, in *ListDom
 	return out, nil
 }
 
-func (c *domainBindingClient) NsLookup(ctx context.Context, in *NsLookupRequest, opts ...grpc.CallOption) (*NsLookupReply, error) {
-	out := new(NsLookupReply)
-	err := c.cc.Invoke(ctx, DomainBinding_NsLookup_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // DomainBindingServer is the server API for DomainBinding service.
 // All implementations must embed UnimplementedDomainBindingServer
 // for forward compatibility
 type DomainBindingServer interface {
 	CreateDomainBinding(context.Context, *CreateDomainBindingRequest) (*CreateDomainBindingReply, error)
+	NsLookup(context.Context, *NsLookupRequest) (*NsLookupReply, error)
 	UpdateDomainBinding(context.Context, *UpdateDomainBindingRequest) (*UpdateDomainBindingReply, error)
 	DeleteDomainBinding(context.Context, *DeleteDomainBindingRequest) (*DeleteDomainBindingReply, error)
 	GetDomainBinding(context.Context, *GetDomainBindingRequest) (*GetDomainBindingReply, error)
 	ListDomainBinding(context.Context, *ListDomainBindingRequest) (*ListDomainBindingReply, error)
-	NsLookup(context.Context, *NsLookupRequest) (*NsLookupReply, error)
 	mustEmbedUnimplementedDomainBindingServer()
 }
 
@@ -120,6 +120,9 @@ type UnimplementedDomainBindingServer struct {
 
 func (UnimplementedDomainBindingServer) CreateDomainBinding(context.Context, *CreateDomainBindingRequest) (*CreateDomainBindingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateDomainBinding not implemented")
+}
+func (UnimplementedDomainBindingServer) NsLookup(context.Context, *NsLookupRequest) (*NsLookupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NsLookup not implemented")
 }
 func (UnimplementedDomainBindingServer) UpdateDomainBinding(context.Context, *UpdateDomainBindingRequest) (*UpdateDomainBindingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDomainBinding not implemented")
@@ -132,9 +135,6 @@ func (UnimplementedDomainBindingServer) GetDomainBinding(context.Context, *GetDo
 }
 func (UnimplementedDomainBindingServer) ListDomainBinding(context.Context, *ListDomainBindingRequest) (*ListDomainBindingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDomainBinding not implemented")
-}
-func (UnimplementedDomainBindingServer) NsLookup(context.Context, *NsLookupRequest) (*NsLookupReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method NsLookup not implemented")
 }
 func (UnimplementedDomainBindingServer) mustEmbedUnimplementedDomainBindingServer() {}
 
@@ -163,6 +163,24 @@ func _DomainBinding_CreateDomainBinding_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DomainBindingServer).CreateDomainBinding(ctx, req.(*CreateDomainBindingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DomainBinding_NsLookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NsLookupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DomainBindingServer).NsLookup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DomainBinding_NsLookup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DomainBindingServer).NsLookup(ctx, req.(*NsLookupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -239,24 +257,6 @@ func _DomainBinding_ListDomainBinding_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DomainBinding_NsLookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NsLookupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DomainBindingServer).NsLookup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: DomainBinding_NsLookup_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DomainBindingServer).NsLookup(ctx, req.(*NsLookupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // DomainBinding_ServiceDesc is the grpc.ServiceDesc for DomainBinding service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -267,6 +267,10 @@ var DomainBinding_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateDomainBinding",
 			Handler:    _DomainBinding_CreateDomainBinding_Handler,
+		},
+		{
+			MethodName: "NsLookup",
+			Handler:    _DomainBinding_NsLookup_Handler,
 		},
 		{
 			MethodName: "UpdateDomainBinding",
@@ -283,10 +287,6 @@ var DomainBinding_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDomainBinding",
 			Handler:    _DomainBinding_ListDomainBinding_Handler,
-		},
-		{
-			MethodName: "NsLookup",
-			Handler:    _DomainBinding_NsLookup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

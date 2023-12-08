@@ -38,11 +38,11 @@ type DomainBindingHTTPServer interface {
 func RegisterDomainBindingHTTPServer(s *http.Server, srv DomainBindingHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/domain-binding", _DomainBinding_CreateDomainBinding0_HTTP_Handler(srv))
+	r.GET("/v1/domain-binding/nslookup", _DomainBinding_NsLookup0_HTTP_Handler(srv))
 	r.PUT("/v1/domain-binding/{id}", _DomainBinding_UpdateDomainBinding0_HTTP_Handler(srv))
 	r.DELETE("/v1/domain-binding/{id}", _DomainBinding_DeleteDomainBinding0_HTTP_Handler(srv))
 	r.GET("/v1/domain-binding/{id}", _DomainBinding_GetDomainBinding0_HTTP_Handler(srv))
 	r.GET("/v1/domain-binding", _DomainBinding_ListDomainBinding0_HTTP_Handler(srv))
-	r.GET("/v1/domain-binding/nslookup", _DomainBinding_NsLookup0_HTTP_Handler(srv))
 }
 
 func _DomainBinding_CreateDomainBinding0_HTTP_Handler(srv DomainBindingHTTPServer) func(ctx http.Context) error {
@@ -63,6 +63,25 @@ func _DomainBinding_CreateDomainBinding0_HTTP_Handler(srv DomainBindingHTTPServe
 			return err
 		}
 		reply := out.(*CreateDomainBindingReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _DomainBinding_NsLookup0_HTTP_Handler(srv DomainBindingHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in NsLookupRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDomainBindingNsLookup)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.NsLookup(ctx, req.(*NsLookupRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*NsLookupReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -151,25 +170,6 @@ func _DomainBinding_ListDomainBinding0_HTTP_Handler(srv DomainBindingHTTPServer)
 			return err
 		}
 		reply := out.(*ListDomainBindingReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _DomainBinding_NsLookup0_HTTP_Handler(srv DomainBindingHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in NsLookupRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationDomainBindingNsLookup)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.NsLookup(ctx, req.(*NsLookupRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*NsLookupReply)
 		return ctx.Result(200, reply)
 	}
 }

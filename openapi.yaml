@@ -3,61 +3,14 @@
 
 openapi: 3.0.3
 info:
-    title: NetworkMapping API
+    title: DomainBinding API
     version: 0.0.1
 paths:
-    /v1/network-mappings:
-        post:
-            tags:
-                - NetworkMapping
-            operationId: NetworkMapping_CreateNetworkMapping
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CreateNetworkMappingRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CreateNetworkMappingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/network-mappings/next:
+    /v1/domain-binding:
         get:
             tags:
-                - NetworkMapping
-            operationId: NetworkMapping_NextNetworkMapping
-            parameters:
-                - name: computerId
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/NextNetworkMappingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/network-mappings/page:
-        get:
-            tags:
-                - NetworkMapping
-            operationId: NetworkMapping_PageNetworkMapping
+                - DomainBinding
+            operationId: DomainBinding_ListDomainBinding
             parameters:
                 - name: page
                   in: query
@@ -69,24 +22,78 @@ paths:
                   schema:
                     type: integer
                     format: int32
+                - name: networkMappingId
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/PageNetworkMappingReply'
+                                $ref: '#/components/schemas/ListDomainBindingReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/network-mappings/{id}:
+        post:
+            tags:
+                - DomainBinding
+            operationId: DomainBinding_CreateDomainBinding
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateDomainBindingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateDomainBindingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/domain-binding/nslookup:
         get:
             tags:
-                - NetworkMapping
-            operationId: NetworkMapping_GetNetworkMapping
+                - DomainBinding
+            operationId: DomainBinding_NsLookup
+            parameters:
+                - name: domain
+                  in: query
+                  schema:
+                    type: string
+                - name: networkMappingId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NsLookupReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/domain-binding/{id}:
+        get:
+            tags:
+                - DomainBinding
+            operationId: DomainBinding_GetDomainBinding
             parameters:
                 - name: id
                   in: path
@@ -99,7 +106,36 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetNetworkMappingReply'
+                                $ref: '#/components/schemas/GetDomainBindingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - DomainBinding
+            operationId: DomainBinding_UpdateDomainBinding
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateDomainBindingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateDomainBindingReply'
                 default:
                     description: Default error response
                     content:
@@ -108,8 +144,8 @@ paths:
                                 $ref: '#/components/schemas/Status'
         delete:
             tags:
-                - NetworkMapping
-            operationId: NetworkMapping_DeleteNetworkMapping
+                - DomainBinding
+            operationId: DomainBinding_DeleteDomainBinding
             parameters:
                 - name: id
                   in: path
@@ -122,7 +158,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/DeleteNetworkMappingReply'
+                                $ref: '#/components/schemas/DeleteDomainBindingReply'
                 default:
                     description: Default error response
                     content:
@@ -131,7 +167,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateNetworkMappingReply:
+        CreateDomainBindingReply:
             type: object
             properties:
                 code:
@@ -139,19 +175,18 @@ components:
                     format: int32
                 message:
                     type: string
-                networkMapping:
-                    $ref: '#/components/schemas/NetworkMappingVO'
-        CreateNetworkMappingRequest:
+                data:
+                    type: string
+        CreateDomainBindingRequest:
             type: object
             properties:
+                networkMappingId:
+                    type: string
                 name:
                     type: string
-                computerId:
+                domain:
                     type: string
-                computerPort:
-                    type: integer
-                    format: int32
-        DeleteNetworkMappingReply:
+        DeleteDomainBindingReply:
             type: object
             properties:
                 code:
@@ -159,6 +194,22 @@ components:
                     format: int32
                 message:
                     type: string
+        DomainBindingPageResponse:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DomainBindingVO'
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
         DomainBindingVO:
             type: object
             properties:
@@ -178,7 +229,7 @@ components:
                 createTime:
                     type: integer
                     format: int64
-        GetNetworkMappingReply:
+        GetDomainBindingReply:
             type: object
             properties:
                 code:
@@ -186,8 +237,8 @@ components:
                     format: int32
                 message:
                     type: string
-                networkMapping:
-                    $ref: '#/components/schemas/NetworkMappingVO'
+                data:
+                    $ref: '#/components/schemas/DomainBindingVO'
         GoogleProtobufAny:
             type: object
             properties:
@@ -196,35 +247,7 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        NetworkMappingVO:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-                gatewayId:
-                    type: string
-                instanceId:
-                    type: string
-                instanceName:
-                    type: string
-                gatewayPort:
-                    type: integer
-                    format: int32
-                instancePort:
-                    type: integer
-                    format: int32
-                status:
-                    type: integer
-                    format: int32
-                gatewayIp:
-                    type: string
-                domains:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/DomainBindingVO'
-        NextNetworkMappingReply:
+        ListDomainBindingReply:
             type: object
             properties:
                 code:
@@ -233,16 +256,8 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/NextNetworkMappingReply_Data'
-        NextNetworkMappingReply_Data:
-            type: object
-            properties:
-                publicIp:
-                    type: string
-                publicPort:
-                    type: integer
-                    format: int32
-        PageNetworkMappingReply:
+                    $ref: '#/components/schemas/DomainBindingPageResponse'
+        NsLookupReply:
             type: object
             properties:
                 code:
@@ -251,23 +266,7 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/PageNetworkMappingReply_Data'
-        PageNetworkMappingReply_Data:
-            type: object
-            properties:
-                list:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/NetworkMappingVO'
-                total:
-                    type: integer
-                    format: int32
-                page:
-                    type: integer
-                    format: int32
-                size:
-                    type: integer
-                    format: int32
+                    type: boolean
         Status:
             type: object
             properties:
@@ -284,5 +283,24 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateDomainBindingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        UpdateDomainBindingRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                networkMappingId:
+                    type: string
+                name:
+                    type: string
+                domain:
+                    type: string
 tags:
-    - name: NetworkMapping
+    - name: DomainBinding
