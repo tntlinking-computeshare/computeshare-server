@@ -36,20 +36,20 @@ service StorageS3 {
 			get: "/v1/s3bucket/{bucketName}/objects",
 		};
 	};
-	rpc UploadFile (S3StorageUploadFileRequest) returns (S3StorageUploadFileReply){
+	rpc S3StorageUploadFile (S3StorageUploadFileRequest) returns (S3StorageUploadFileReply){
 		option (google.api.http) = {
 			post: "/v1/storage/{bucketName}/objects/upload/ersatz",
 			body: "*"
 		};
 	};
 
-	rpc Download (S3StorageDownloadRequest) returns (S3StorageDownloadReply){
+	rpc S3StorageDownload (S3StorageDownloadRequest) returns (S3StorageDownloadReply){
 		option (google.api.http) = {
 			get: "/v1/storage/{bucketName}/objects/download/ersatz",
 		};
 	};
 
-	rpc Delete (S3StorageDeleteRequest) returns (DeleteReply){
+	rpc S3StorageDelete (S3StorageDeleteRequest) returns (S3StorageDeleteReply){
 		option (google.api.http) = {
 			delete: "/v1/storage/{bucketName}/objects/delete",
 		};
@@ -122,7 +122,8 @@ message S3StorageInBucketListReply {
 
 message S3StorageUploadFileRequest {
 	bytes body = 1;
-	string bucketName = 2;
+	string prefix = 2;
+	string bucketName = 3;
 }
 
 message S3StorageUploadFileReply{
@@ -149,7 +150,7 @@ message S3StorageDeleteRequest {
 	string bucketName = 1;
 	string key = 2;
 }
-message DeleteReply {
+message S3StorageDeleteReply {
 	int32 code = 1;
 	string message = 2;
 }

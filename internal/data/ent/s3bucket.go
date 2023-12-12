@@ -19,7 +19,7 @@ type S3Bucket struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// bucket
+	// bucketName
 	Bucket string `json:"bucket,omitempty"`
 	// CreatedTime holds the value of the "createdTime" field.
 	CreatedTime time.Time `json:"createdTime,omitempty"`

@@ -32,12 +32,12 @@ func TestUpload(t *testing.T) {
 
 	s3Client := s3.New(sess)
 
-	//_, err = s3Client.CreateBucket(&s3.CreateBucketInput{
-	//	Bucket: aws.String(bucket),
-	//})
-	//if err != nil {
-	//	return
-	//}
+	_, err = s3Client.CreateBucket(&s3.CreateBucketInput{
+		Bucket: aws.String(bucket),
+	})
+	if err != nil {
+		return
+	}
 
 	// 示例：列出存储桶中的对象
 	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucket)})

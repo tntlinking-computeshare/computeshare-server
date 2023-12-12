@@ -3,10 +3,15 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
+	files "github.com/ipfs/go-ipfs-files"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	"io"
+	"path/filepath"
+	"time"
 
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 )
@@ -49,7 +54,7 @@ func (s *StorageS3Service) CreateBucket(ctx context.Context, req *pb.CreateBucke
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	bucket, err := s.uc.CreateBucket(ctx, userId, req.GetBucket(), req.GetAccessKey())
+	bucket, err := s.uc.CreateBucket(ctx, userId, req.GetBucket(), req.GetSecretKey())
 	if err != nil {
 		return nil, err
 	}
@@ -100,5 +105,93 @@ func (s *StorageS3Service) ListBucket(ctx context.Context, req *pb.ListBucketReq
 				CreatedTime: item.CreatedTime.UnixMilli(),
 			}
 		}),
+	}, nil
+}
+func (s *StorageS3Service) S3StorageInBucketList(ctx context.Context, req *pb.S3StorageInBucketListRequest) (*pb.S3StorageInBucketListReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	objects, err := s.uc.S3StorageInBucketList(ctx, userId, req.BucketName, req.Prefix)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.S3StorageInBucketListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: lo.Map(objects, func(item *s3.Object, _ int) *pb.S3Object {
+			return &pb.S3Object{
+				Etag:       *item.ETag,
+				Name:       *item.Key,
+				Size:       int32(*item.Size),
+				LastModify: item.LastModified.UnixMilli(),
+			}
+		}),
+	}, nil
+}
+func (s *StorageS3Service) S3StorageUploadFile(ctx context.Context, req *pb.S3StorageUploadFileRequest) (*pb.S3StorageUploadFileReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	file := files.NewBytesFile(req.Body)
+	uploadFile, err := s.uc.S3StorageUploadFile(ctx, userId, req.BucketName, req.Prefix, file)
+	if err != nil {
+		return nil, err
+	}
+	size, err := file.Size()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.S3StorageUploadFileReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.S3Object{
+			Etag:       *uploadFile.ETag,
+			Name:       req.Prefix,
+			Size:       int32(size),
+			LastModify: time.Now().UnixMilli(),
+		},
+	}, nil
+}
+func (s *StorageS3Service) S3StorageDownload(ctx context.Context, req *pb.S3StorageDownloadRequest) (*pb.S3StorageDownloadReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	objectOutput, err := s.uc.S3StorageDownload(ctx, userId, req.BucketName, req.Key)
+	if err != nil {
+		return nil, err
+	}
+	data, err := io.ReadAll(objectOutput.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.S3StorageDownloadReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.S3StorageDownloadReply_Data{
+			Body: data,
+			Name: filepath.Base(req.Key),
+		},
+	}, nil
+}
+func (s *StorageS3Service) S3StorageDelete(ctx context.Context, req *pb.S3StorageDeleteRequest) (*pb.S3StorageDeleteReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	err := s.uc.S3StorageDelete(ctx, userId, req.BucketName, req.Key)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.S3StorageDeleteReply{
+		Code:    200,
+		Message: SUCCESS,
 	}, nil
 }

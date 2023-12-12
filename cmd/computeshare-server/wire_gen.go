@@ -53,7 +53,10 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		cleanup()
 		return nil, nil, err
 	}
+	s3UserRepo := data.NewS3UserRepo(dataData, logger)
 	userRepo := data.NewUserRepo(dataData, logger)
+	storageS3UseCase := biz.NewStorageS3UseCase(s3UserRepo, userRepo, logger)
+	storageS3Service := service.NewStorageS3Service(storageS3UseCase)
 	userUsercase := biz.NewUserUsecase(auth, userRepo, logger)
 	userService := service.NewUserService(userUsercase, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
@@ -75,7 +78,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	domainBindingService := service.NewDomainBindingService(domainBindingUseCase, networkMappingUseCase)
 	storageProviderService := service.NewStorageProviderService(storageProviderUseCase)
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, cronJob, dataData, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, cronJob, dataData, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

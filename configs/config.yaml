@@ -3,7 +3,7 @@ server:
     addr: 0.0.0.0:8000
     timeout: 10s
   grpc:
-    addr: 0.0.0.0:9000
+    addr: 0.0.0.0:9009
     timeout: 10s
   p2p:
     port: 4002
