@@ -235,3 +235,9 @@ GET https://computeshare.hamster.newtouch.com/v1/network-mappings/next?computerI
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
+
+### 域名检查
+#GET https://computeshare.hamster.newtouch.com/v1/domain-binding/nslookup?domain=test2.computeshare.hamster.newtouch.com&networkMappingId=2fe434fc-7e7d-4abb-9b0f-d1870b0625e6
+GET http://127.0.0.1:8000/v1/domain-binding/nslookup?domain=test2.computeshare.newtouch.com&networkMappingId=2fe434fc-7e7d-4abb-9b0f-d1870b0625e6
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
