@@ -3,36 +3,21 @@
 
 openapi: 3.0.3
 info:
-    title: DomainBinding API
+    title: StorageS3 API
     version: 0.0.1
 paths:
-    /v1/domain-binding:
+    /v1/s3bucket:
         get:
             tags:
-                - DomainBinding
-            operationId: DomainBinding_ListDomainBinding
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: networkMappingId
-                  in: query
-                  schema:
-                    type: string
+                - StorageS3
+            operationId: StorageS3_ListBucket
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListDomainBindingReply'
+                                $ref: '#/components/schemas/ListBucketReply'
                 default:
                     description: Default error response
                     content:
@@ -41,13 +26,13 @@ paths:
                                 $ref: '#/components/schemas/Status'
         post:
             tags:
-                - DomainBinding
-            operationId: DomainBinding_CreateDomainBinding
+                - StorageS3
+            operationId: StorageS3_CreateBucket
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateDomainBindingRequest'
+                            $ref: '#/components/schemas/CreateBucketRequest'
                 required: true
             responses:
                 "200":
@@ -55,97 +40,46 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateDomainBindingReply'
+                                $ref: '#/components/schemas/CreateBucketReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/domain-binding/nslookup:
+    /v1/s3bucket/{bucketName}/objects:
         get:
             tags:
-                - DomainBinding
-            operationId: DomainBinding_NsLookup
+                - StorageS3
+            operationId: StorageS3_S3StorageInBucketList
             parameters:
-                - name: domain
-                  in: query
-                  schema:
-                    type: string
-                - name: networkMappingId
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/NsLookupReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/domain-binding/{id}:
-        get:
-            tags:
-                - DomainBinding
-            operationId: DomainBinding_GetDomainBinding
-            parameters:
-                - name: id
+                - name: bucketName
                   in: path
                   required: true
                   schema:
                     type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetDomainBindingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-        put:
-            tags:
-                - DomainBinding
-            operationId: DomainBinding_UpdateDomainBinding
-            parameters:
-                - name: id
-                  in: path
-                  required: true
+                - name: prefix
+                  in: query
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateDomainBindingRequest'
-                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/UpdateDomainBindingReply'
+                                $ref: '#/components/schemas/S3StorageInBucketListReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{id}:
         delete:
             tags:
-                - DomainBinding
-            operationId: DomainBinding_DeleteDomainBinding
+                - StorageS3
+            operationId: StorageS3_DeleteBucket
             parameters:
                 - name: id
                   in: path
@@ -158,7 +92,111 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/DeleteDomainBindingReply'
+                                $ref: '#/components/schemas/DeleteBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_GetS3User
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetS3UserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/delete:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDelete
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDeleteReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/download/ersatz:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDownload
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDownloadReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/upload/ersatz:
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageUploadFile
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/S3StorageUploadFileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageUploadFileReply'
                 default:
                     description: Default error response
                     content:
@@ -167,7 +205,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateDomainBindingReply:
+        CreateBucketReply:
             type: object
             properties:
                 code:
@@ -177,16 +215,14 @@ components:
                     type: string
                 data:
                     type: string
-        CreateDomainBindingRequest:
+        CreateBucketRequest:
             type: object
             properties:
-                networkMappingId:
+                bucket:
                     type: string
-                name:
+                secretKey:
                     type: string
-                domain:
-                    type: string
-        DeleteDomainBindingReply:
+        DeleteBucketReply:
             type: object
             properties:
                 code:
@@ -194,42 +230,7 @@ components:
                     format: int32
                 message:
                     type: string
-        DomainBindingPageResponse:
-            type: object
-            properties:
-                list:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/DomainBindingVO'
-                total:
-                    type: integer
-                    format: int64
-                page:
-                    type: integer
-                    format: int32
-                size:
-                    type: integer
-                    format: int32
-        DomainBindingVO:
-            type: object
-            properties:
-                id:
-                    type: string
-                computeInstanceId:
-                    type: string
-                networkMappingId:
-                    type: string
-                name:
-                    type: string
-                domain:
-                    type: string
-                gatewayPort:
-                    type: integer
-                    format: int32
-                createTime:
-                    type: integer
-                    format: int64
-        GetDomainBindingReply:
+        GetS3UserReply:
             type: object
             properties:
                 code:
@@ -238,7 +239,7 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/DomainBindingVO'
+                    $ref: '#/components/schemas/S3User'
         GoogleProtobufAny:
             type: object
             properties:
@@ -247,7 +248,7 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        ListDomainBindingReply:
+        ListBucketReply:
             type: object
             properties:
                 code:
@@ -256,8 +257,41 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/DomainBindingPageResponse'
-        NsLookupReply:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
+        ListBucketReply_BucketVo:
+            type: object
+            properties:
+                id:
+                    type: string
+                bucket:
+                    type: string
+                createdTime:
+                    type: integer
+                    format: int64
+        S3Object:
+            type: object
+            properties:
+                etag:
+                    type: string
+                name:
+                    type: string
+                size:
+                    type: integer
+                    format: int32
+                lastModify:
+                    type: integer
+                    format: int64
+        S3StorageDeleteReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        S3StorageDownloadReply:
             type: object
             properties:
                 code:
@@ -266,7 +300,56 @@ components:
                 message:
                     type: string
                 data:
-                    type: boolean
+                    $ref: '#/components/schemas/S3StorageDownloadReply_Data'
+        S3StorageDownloadReply_Data:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+        S3StorageInBucketListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/S3Object'
+        S3StorageUploadFileReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3Object'
+        S3StorageUploadFileRequest:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                prefix:
+                    type: string
+                bucketName:
+                    type: string
+        S3User:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                endpoint:
+                    type: string
         Status:
             type: object
             properties:
@@ -283,24 +366,5 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        UpdateDomainBindingReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateDomainBindingRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                networkMappingId:
-                    type: string
-                name:
-                    type: string
-                domain:
-                    type: string
 tags:
-    - name: DomainBinding
+    - name: StorageS3

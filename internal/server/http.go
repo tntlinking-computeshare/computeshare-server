@@ -80,6 +80,7 @@ func NewHTTPServer(c *conf.Server,
 	agenter *service.AgentService,
 	queueTaskService *service.QueueTaskService,
 	storageService *service.StorageService,
+	storageS3Service *service.StorageS3Service,
 	userService *service.UserService,
 	instanceService *service.ComputeInstanceService,
 	powerService *service.ComputePowerService,
@@ -120,6 +121,7 @@ func NewHTTPServer(c *conf.Server,
 	srv.HandlePrefix("/q/", openAPIhandler)
 	agentV1.RegisterAgentHTTPServer(srv, agenter)
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
+	computeV1.RegisterStorageS3HTTPServer(srv, storageS3Service)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
 	computeV1.RegisterStorageProviderHTTPServer(srv, storageProviderService)
@@ -132,6 +134,9 @@ func NewHTTPServer(c *conf.Server,
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/compute-power/upload/script", computeV1.Compute_Power_UploadSceipt_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
+	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
+	srv.Route("/").POST("/v1/storage/{bucketName}/objects/upload", computeV1.Storage_S3_UploadFile_Extend_HTTP_Handler(storageS3Service))
+	srv.Route("/").POST("/v1/storage/{bucketName}/objects/download", computeV1.Storage_S3_DownloadFile_Extend_HTTP_Handler(storageS3Service))
 
 	job.StartJob()
 

@@ -19,10 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StorageS3_GetS3User_FullMethodName    = "/api.compute.v1.StorageS3/GetS3User"
-	StorageS3_CreateBucket_FullMethodName = "/api.compute.v1.StorageS3/CreateBucket"
-	StorageS3_DeleteBucket_FullMethodName = "/api.compute.v1.StorageS3/DeleteBucket"
-	StorageS3_ListBucket_FullMethodName   = "/api.compute.v1.StorageS3/ListBucket"
+	StorageS3_GetS3User_FullMethodName             = "/api.compute.v1.StorageS3/GetS3User"
+	StorageS3_CreateBucket_FullMethodName          = "/api.compute.v1.StorageS3/CreateBucket"
+	StorageS3_DeleteBucket_FullMethodName          = "/api.compute.v1.StorageS3/DeleteBucket"
+	StorageS3_ListBucket_FullMethodName            = "/api.compute.v1.StorageS3/ListBucket"
+	StorageS3_S3StorageInBucketList_FullMethodName = "/api.compute.v1.StorageS3/S3StorageInBucketList"
+	StorageS3_S3StorageUploadFile_FullMethodName   = "/api.compute.v1.StorageS3/S3StorageUploadFile"
+	StorageS3_S3StorageDownload_FullMethodName     = "/api.compute.v1.StorageS3/S3StorageDownload"
+	StorageS3_S3StorageDelete_FullMethodName       = "/api.compute.v1.StorageS3/S3StorageDelete"
 )
 
 // StorageS3Client is the client API for StorageS3 service.
@@ -33,6 +37,10 @@ type StorageS3Client interface {
 	CreateBucket(ctx context.Context, in *CreateBucketRequest, opts ...grpc.CallOption) (*CreateBucketReply, error)
 	DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...grpc.CallOption) (*DeleteBucketReply, error)
 	ListBucket(ctx context.Context, in *ListBucketRequest, opts ...grpc.CallOption) (*ListBucketReply, error)
+	S3StorageInBucketList(ctx context.Context, in *S3StorageInBucketListRequest, opts ...grpc.CallOption) (*S3StorageInBucketListReply, error)
+	S3StorageUploadFile(ctx context.Context, in *S3StorageUploadFileRequest, opts ...grpc.CallOption) (*S3StorageUploadFileReply, error)
+	S3StorageDownload(ctx context.Context, in *S3StorageDownloadRequest, opts ...grpc.CallOption) (*S3StorageDownloadReply, error)
+	S3StorageDelete(ctx context.Context, in *S3StorageDeleteRequest, opts ...grpc.CallOption) (*S3StorageDeleteReply, error)
 }
 
 type storageS3Client struct {
@@ -79,6 +87,42 @@ func (c *storageS3Client) ListBucket(ctx context.Context, in *ListBucketRequest,
 	return out, nil
 }
 
+func (c *storageS3Client) S3StorageInBucketList(ctx context.Context, in *S3StorageInBucketListRequest, opts ...grpc.CallOption) (*S3StorageInBucketListReply, error) {
+	out := new(S3StorageInBucketListReply)
+	err := c.cc.Invoke(ctx, StorageS3_S3StorageInBucketList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) S3StorageUploadFile(ctx context.Context, in *S3StorageUploadFileRequest, opts ...grpc.CallOption) (*S3StorageUploadFileReply, error) {
+	out := new(S3StorageUploadFileReply)
+	err := c.cc.Invoke(ctx, StorageS3_S3StorageUploadFile_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) S3StorageDownload(ctx context.Context, in *S3StorageDownloadRequest, opts ...grpc.CallOption) (*S3StorageDownloadReply, error) {
+	out := new(S3StorageDownloadReply)
+	err := c.cc.Invoke(ctx, StorageS3_S3StorageDownload_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) S3StorageDelete(ctx context.Context, in *S3StorageDeleteRequest, opts ...grpc.CallOption) (*S3StorageDeleteReply, error) {
+	out := new(S3StorageDeleteReply)
+	err := c.cc.Invoke(ctx, StorageS3_S3StorageDelete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StorageS3Server is the server API for StorageS3 service.
 // All implementations must embed UnimplementedStorageS3Server
 // for forward compatibility
@@ -87,6 +131,10 @@ type StorageS3Server interface {
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error)
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketReply, error)
 	ListBucket(context.Context, *ListBucketRequest) (*ListBucketReply, error)
+	S3StorageInBucketList(context.Context, *S3StorageInBucketListRequest) (*S3StorageInBucketListReply, error)
+	S3StorageUploadFile(context.Context, *S3StorageUploadFileRequest) (*S3StorageUploadFileReply, error)
+	S3StorageDownload(context.Context, *S3StorageDownloadRequest) (*S3StorageDownloadReply, error)
+	S3StorageDelete(context.Context, *S3StorageDeleteRequest) (*S3StorageDeleteReply, error)
 	mustEmbedUnimplementedStorageS3Server()
 }
 
@@ -105,6 +153,18 @@ func (UnimplementedStorageS3Server) DeleteBucket(context.Context, *DeleteBucketR
 }
 func (UnimplementedStorageS3Server) ListBucket(context.Context, *ListBucketRequest) (*ListBucketReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBucket not implemented")
+}
+func (UnimplementedStorageS3Server) S3StorageInBucketList(context.Context, *S3StorageInBucketListRequest) (*S3StorageInBucketListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method S3StorageInBucketList not implemented")
+}
+func (UnimplementedStorageS3Server) S3StorageUploadFile(context.Context, *S3StorageUploadFileRequest) (*S3StorageUploadFileReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method S3StorageUploadFile not implemented")
+}
+func (UnimplementedStorageS3Server) S3StorageDownload(context.Context, *S3StorageDownloadRequest) (*S3StorageDownloadReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method S3StorageDownload not implemented")
+}
+func (UnimplementedStorageS3Server) S3StorageDelete(context.Context, *S3StorageDeleteRequest) (*S3StorageDeleteReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method S3StorageDelete not implemented")
 }
 func (UnimplementedStorageS3Server) mustEmbedUnimplementedStorageS3Server() {}
 
@@ -191,6 +251,78 @@ func _StorageS3_ListBucket_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StorageS3_S3StorageInBucketList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(S3StorageInBucketListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).S3StorageInBucketList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_S3StorageInBucketList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).S3StorageInBucketList(ctx, req.(*S3StorageInBucketListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageS3_S3StorageUploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(S3StorageUploadFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).S3StorageUploadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_S3StorageUploadFile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).S3StorageUploadFile(ctx, req.(*S3StorageUploadFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageS3_S3StorageDownload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(S3StorageDownloadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).S3StorageDownload(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_S3StorageDownload_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).S3StorageDownload(ctx, req.(*S3StorageDownloadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageS3_S3StorageDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(S3StorageDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).S3StorageDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_S3StorageDelete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).S3StorageDelete(ctx, req.(*S3StorageDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StorageS3_ServiceDesc is the grpc.ServiceDesc for StorageS3 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -213,6 +345,22 @@ var StorageS3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListBucket",
 			Handler:    _StorageS3_ListBucket_Handler,
+		},
+		{
+			MethodName: "S3StorageInBucketList",
+			Handler:    _StorageS3_S3StorageInBucketList_Handler,
+		},
+		{
+			MethodName: "S3StorageUploadFile",
+			Handler:    _StorageS3_S3StorageUploadFile_Handler,
+		},
+		{
+			MethodName: "S3StorageDownload",
+			Handler:    _StorageS3_S3StorageDownload_Handler,
+		},
+		{
+			MethodName: "S3StorageDelete",
+			Handler:    _StorageS3_S3StorageDelete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

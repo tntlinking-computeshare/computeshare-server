@@ -178,7 +178,7 @@ var (
 	// S3bucketsColumns holds the columns for the "s3buckets" table.
 	S3bucketsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "bucket", Type: field.TypeString, Size: 50},
+		{Name: "bucket", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "created_time", Type: field.TypeTime},
 		{Name: "s3bucket_s3_user", Type: field.TypeUUID, Nullable: true},
 	}

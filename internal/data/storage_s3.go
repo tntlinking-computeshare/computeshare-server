@@ -27,7 +27,6 @@ type s3UserRepoImpl struct {
 
 func (r *s3UserRepoImpl) CreateS3User(ctx context.Context, user *biz.S3User) (*biz.S3User, error) {
 	entity, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
-
 	if err == nil && entity != nil {
 		entity.FkUserID = user.FkUserID
 		entity.AccessKey = user.AccessKey
@@ -54,12 +53,12 @@ func (r *s3UserRepoImpl) GetS3User(ctx context.Context, userId uuid.UUID) (*biz.
 	return r.toBiz(entity, 0), err
 }
 func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, bucket string) (*biz.S3Bucket, error) {
-	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	_, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	s3Bucket, err := r.data.db.S3Bucket.Create().SetS3User(s3User).SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
+	s3Bucket, err := r.data.db.S3Bucket.Create().SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}

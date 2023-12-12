@@ -16,7 +16,7 @@ type S3Bucket struct {
 func (S3Bucket) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
-		field.String("bucket").MaxLen(50).Comment("bucket"),
+		field.String("bucket").MaxLen(50).Comment("bucketName").Unique(),
 		field.Time("createdTime"),
 	}
 }
