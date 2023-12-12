@@ -33,7 +33,6 @@ func getData() *Data {
 	dataConf := &conf.Data{
 		Database: &conf.Data_Database{
 			Driver: "mysql",
-			//Source: "root:Aline123456@tcp(61.172.179.6:30303)/computeshare?charset=utf8&parseTime=true",
 			Source: "root:123456@tcp(127.0.0.1:3306)/computeshare?charset=utf8&parseTime=true",
 		},
 		Redis: &conf.Data_Redis{
@@ -48,6 +47,17 @@ func getData() *Data {
 	return data
 }
 
+func getLogger() log.Logger {
+	return log.With(log.NewStdLogger(os.Stdout),
+		"ts", log.DefaultTimestamp,
+		"caller", log.DefaultCaller,
+		"service.id", 1,
+		"service.name", "test",
+		"service.version", "Testv1",
+		"trace.id", tracing.TraceID(),
+		"span.id", tracing.SpanID(),
+	)
+}
 func TestS3UserCreate(t *testing.T) {
 	data := getData()
 	userId, _ := uuid.Parse("17559def-c514-41fd-b044-b59b81f2fb6b")

@@ -53,12 +53,12 @@ func (r *s3UserRepoImpl) GetS3User(ctx context.Context, userId uuid.UUID) (*biz.
 	return r.toBiz(entity, 0), err
 }
 func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, bucket string) (*biz.S3Bucket, error) {
-	_, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	s3User, err := r.data.db.S3User.Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	s3Bucket, err := r.data.db.S3Bucket.Create().SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
+	s3Bucket, err := r.data.db.S3Bucket.Create().SetS3User(s3User).SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -180,7 +180,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "bucket", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "created_time", Type: field.TypeTime},
-		{Name: "s3bucket_s3_user", Type: field.TypeUUID, Nullable: true},
+		{Name: "s3bucket_s3_user", Type: field.TypeUUID},
 	}
 	// S3bucketsTable holds the schema information for the "s3buckets" table.
 	S3bucketsTable = &schema.Table{
@@ -192,7 +192,7 @@ var (
 				Symbol:     "s3buckets_s3users_s3_user",
 				Columns:    []*schema.Column{S3bucketsColumns[3]},
 				RefColumns: []*schema.Column{S3usersColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
