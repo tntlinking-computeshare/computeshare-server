@@ -25,6 +25,6 @@ func (S3Bucket) Fields() []ent.Field {
 func (S3Bucket) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("s3_user", S3User.Type).
-			Unique(),
+			Unique().Required(),
 	}
 }

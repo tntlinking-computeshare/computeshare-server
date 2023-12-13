@@ -48,7 +48,7 @@ func (task *Task) GetTaskParam() (any, error) {
 		return &vo, err
 	case queue.TaskCmd_NAT_PROXY_CREATE, queue.TaskCmd_NAT_PROXY_DELETE,
 		queue.TaskCmd_NAT_VISITOR_CREATE, queue.TaskCmd_NAT_VISITOR_DELETE:
-		var vo *queue.NatNetworkMappingTaskParamVO
+		var vo queue.NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
 		return &vo, err
 	case queue.TaskCmd_STORAGE_CREATE, queue.TaskCmd_STORAGE_DELETE:

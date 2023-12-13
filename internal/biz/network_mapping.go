@@ -18,6 +18,8 @@ type NetworkMapping struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// 协议
+	Protocol string `json:"protocol"`
 	// gateway id
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// computer_id
@@ -38,6 +40,7 @@ type NetworkMapping struct {
 
 type NetworkMappingCreate struct {
 	Name         string
+	Protocol     string
 	ComputerId   uuid.UUID
 	ComputerPort int32
 }
@@ -55,6 +58,7 @@ type NetworkMappingRepo interface {
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
+	GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*NetworkMapping, error)
 }
 
 type Gateway struct {
@@ -118,6 +122,7 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 }
 
 func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *NetworkMappingCreate) (*NetworkMapping, error) {
+
 	// 查看当前 gatewayID
 	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
 	if err != nil {
@@ -151,11 +156,17 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 
+	natworkMappingName := nmc.Name
+	if natworkMappingName == "" {
+		natworkMappingName = fmt.Sprintf("%s_%s_%d", claim.UserID, gp.ID.String(), nmc.ComputerPort)
+	}
+
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
-		ID:   uuid.UUID{},
-		Name: nmc.Name,
+		ID:       uuid.UUID{},
+		Name:     natworkMappingName,
+		Protocol: nmc.Protocol,
 		// gateway id
 		FkGatewayID: gp.FkGatewayID,
 		// computer_id

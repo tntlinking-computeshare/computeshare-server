@@ -34,6 +34,20 @@ func (nmu *NetworkMappingUpdate) SetName(s string) *NetworkMappingUpdate {
 	return nmu
 }
 
+// SetProtocol sets the "protocol" field.
+func (nmu *NetworkMappingUpdate) SetProtocol(s string) *NetworkMappingUpdate {
+	nmu.mutation.SetProtocol(s)
+	return nmu
+}
+
+// SetNillableProtocol sets the "protocol" field if the given value is not nil.
+func (nmu *NetworkMappingUpdate) SetNillableProtocol(s *string) *NetworkMappingUpdate {
+	if s != nil {
+		nmu.SetProtocol(*s)
+	}
+	return nmu
+}
+
 // SetFkGatewayID sets the "fk_gateway_id" field.
 func (nmu *NetworkMappingUpdate) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpdate {
 	nmu.mutation.SetFkGatewayID(u)
@@ -144,6 +158,11 @@ func (nmu *NetworkMappingUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
 		}
 	}
+	if v, ok := nmu.mutation.Protocol(); ok {
+		if err := networkmapping.ProtocolValidator(v); err != nil {
+			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -161,6 +180,9 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := nmu.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
+	}
+	if value, ok := nmu.mutation.Protocol(); ok {
+		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
 	}
 	if value, ok := nmu.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
@@ -215,6 +237,20 @@ type NetworkMappingUpdateOne struct {
 // SetName sets the "name" field.
 func (nmuo *NetworkMappingUpdateOne) SetName(s string) *NetworkMappingUpdateOne {
 	nmuo.mutation.SetName(s)
+	return nmuo
+}
+
+// SetProtocol sets the "protocol" field.
+func (nmuo *NetworkMappingUpdateOne) SetProtocol(s string) *NetworkMappingUpdateOne {
+	nmuo.mutation.SetProtocol(s)
+	return nmuo
+}
+
+// SetNillableProtocol sets the "protocol" field if the given value is not nil.
+func (nmuo *NetworkMappingUpdateOne) SetNillableProtocol(s *string) *NetworkMappingUpdateOne {
+	if s != nil {
+		nmuo.SetProtocol(*s)
+	}
 	return nmuo
 }
 
@@ -341,6 +377,11 @@ func (nmuo *NetworkMappingUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
 		}
 	}
+	if v, ok := nmuo.mutation.Protocol(); ok {
+		if err := networkmapping.ProtocolValidator(v); err != nil {
+			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -375,6 +416,9 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	}
 	if value, ok := nmuo.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
+	}
+	if value, ok := nmuo.mutation.Protocol(); ok {
+		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
 	}
 	if value, ok := nmuo.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)

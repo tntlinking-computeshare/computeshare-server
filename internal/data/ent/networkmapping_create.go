@@ -26,6 +26,20 @@ func (nmc *NetworkMappingCreate) SetName(s string) *NetworkMappingCreate {
 	return nmc
 }
 
+// SetProtocol sets the "protocol" field.
+func (nmc *NetworkMappingCreate) SetProtocol(s string) *NetworkMappingCreate {
+	nmc.mutation.SetProtocol(s)
+	return nmc
+}
+
+// SetNillableProtocol sets the "protocol" field if the given value is not nil.
+func (nmc *NetworkMappingCreate) SetNillableProtocol(s *string) *NetworkMappingCreate {
+	if s != nil {
+		nmc.SetProtocol(*s)
+	}
+	return nmc
+}
+
 // SetFkGatewayID sets the "fk_gateway_id" field.
 func (nmc *NetworkMappingCreate) SetFkGatewayID(u uuid.UUID) *NetworkMappingCreate {
 	nmc.mutation.SetFkGatewayID(u)
@@ -125,6 +139,10 @@ func (nmc *NetworkMappingCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (nmc *NetworkMappingCreate) defaults() {
+	if _, ok := nmc.mutation.Protocol(); !ok {
+		v := networkmapping.DefaultProtocol
+		nmc.mutation.SetProtocol(v)
+	}
 	if _, ok := nmc.mutation.Status(); !ok {
 		v := networkmapping.DefaultStatus
 		nmc.mutation.SetStatus(v)
@@ -143,6 +161,14 @@ func (nmc *NetworkMappingCreate) check() error {
 	if v, ok := nmc.mutation.Name(); ok {
 		if err := networkmapping.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
+		}
+	}
+	if _, ok := nmc.mutation.Protocol(); !ok {
+		return &ValidationError{Name: "protocol", err: errors.New(`ent: missing required field "NetworkMapping.protocol"`)}
+	}
+	if v, ok := nmc.mutation.Protocol(); ok {
+		if err := networkmapping.ProtocolValidator(v); err != nil {
+			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
 		}
 	}
 	if _, ok := nmc.mutation.FkGatewayID(); !ok {
@@ -204,6 +230,10 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 	if value, ok := nmc.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := nmc.mutation.Protocol(); ok {
+		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
+		_node.Protocol = value
 	}
 	if value, ok := nmc.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)

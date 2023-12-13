@@ -40,8 +40,9 @@ service NetworkMapping {
 
 message CreateNetworkMappingRequest {
   string name = 1;
-  string computer_id = 2;
-  int32 computer_port = 3;
+  string protocol = 2;
+  string computer_id = 3;
+  int32 computer_port = 4;
 }
 message CreateNetworkMappingReply {
   int32 code = 1;

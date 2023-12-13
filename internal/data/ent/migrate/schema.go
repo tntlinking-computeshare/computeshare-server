@@ -160,7 +160,8 @@ var (
 	// NetworkMappingsColumns holds the columns for the "network_mappings" table.
 	NetworkMappingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "name", Type: field.TypeString, Size: 100},
+		{Name: "name", Type: field.TypeString, Unique: true, Size: 100},
+		{Name: "protocol", Type: field.TypeString, Default: "TCP"},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "gateway_port", Type: field.TypeInt32},
 		{Name: "gateway_ip", Type: field.TypeString},
@@ -180,7 +181,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "bucket", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "created_time", Type: field.TypeTime},
-		{Name: "s3bucket_s3_user", Type: field.TypeUUID, Nullable: true},
+		{Name: "s3bucket_s3_user", Type: field.TypeUUID},
 	}
 	// S3bucketsTable holds the schema information for the "s3buckets" table.
 	S3bucketsTable = &schema.Table{
@@ -192,7 +193,7 @@ var (
 				Symbol:     "s3buckets_s3users_s3_user",
 				Columns:    []*schema.Column{S3bucketsColumns[3]},
 				RefColumns: []*schema.Column{S3usersColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}

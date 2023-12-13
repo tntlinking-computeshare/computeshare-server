@@ -89,13 +89,13 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 		},
 	}, err
 }
-func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInstanceRequest) (*pb.DeleteInstanceReply, error) {
+func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInstanceRequest) (*pb.CommonReply, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 	err = s.uc.Delete(ctx, id)
-	return &pb.DeleteInstanceReply{
+	return &pb.CommonReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, err
@@ -124,24 +124,24 @@ func (s *ComputeInstanceService) List(ctx context.Context, req *pb.ListInstanceR
 		Data:    lo.Map(list, s.toReply),
 	}, err
 }
-func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.StopInstanceReply, error) {
+func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 	err = s.uc.Stop(ctx, id)
-	return &pb.StopInstanceReply{
+	return &pb.CommonReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, err
 }
-func (s *ComputeInstanceService) StartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.StartInstanceReply, error) {
+func (s *ComputeInstanceService) StartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
 	id, err := uuid.Parse(req.GetId())
 	if err != nil {
 		return nil, err
 	}
 	err = s.uc.Start(ctx, id)
-	return &pb.StartInstanceReply{
+	return &pb.CommonReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, err
@@ -187,5 +187,21 @@ func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, req *pb
 		Code:    200,
 		Message: SUCCESS,
 		Data:    consoleUrl,
+	}, nil
+}
+
+func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
+	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.uc.Reboot(ctx, instanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CommonReply{
+		Code:    200,
+		Message: SUCCESS,
 	}, nil
 }

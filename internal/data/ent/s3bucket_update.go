@@ -48,14 +48,6 @@ func (su *S3BucketUpdate) SetS3UserID(id uuid.UUID) *S3BucketUpdate {
 	return su
 }
 
-// SetNillableS3UserID sets the "s3_user" edge to the S3User entity by ID if the given value is not nil.
-func (su *S3BucketUpdate) SetNillableS3UserID(id *uuid.UUID) *S3BucketUpdate {
-	if id != nil {
-		su = su.SetS3UserID(*id)
-	}
-	return su
-}
-
 // SetS3User sets the "s3_user" edge to the S3User entity.
 func (su *S3BucketUpdate) SetS3User(s *S3User) *S3BucketUpdate {
 	return su.SetS3UserID(s.ID)
@@ -105,6 +97,9 @@ func (su *S3BucketUpdate) check() error {
 		if err := s3bucket.BucketValidator(v); err != nil {
 			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
 		}
+	}
+	if _, ok := su.mutation.S3UserID(); su.mutation.S3UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "S3Bucket.s3_user"`)
 	}
 	return nil
 }
@@ -194,14 +189,6 @@ func (suo *S3BucketUpdateOne) SetS3UserID(id uuid.UUID) *S3BucketUpdateOne {
 	return suo
 }
 
-// SetNillableS3UserID sets the "s3_user" edge to the S3User entity by ID if the given value is not nil.
-func (suo *S3BucketUpdateOne) SetNillableS3UserID(id *uuid.UUID) *S3BucketUpdateOne {
-	if id != nil {
-		suo = suo.SetS3UserID(*id)
-	}
-	return suo
-}
-
 // SetS3User sets the "s3_user" edge to the S3User entity.
 func (suo *S3BucketUpdateOne) SetS3User(s *S3User) *S3BucketUpdateOne {
 	return suo.SetS3UserID(s.ID)
@@ -264,6 +251,9 @@ func (suo *S3BucketUpdateOne) check() error {
 		if err := s3bucket.BucketValidator(v); err != nil {
 			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
 		}
+	}
+	if _, ok := suo.mutation.S3UserID(); suo.mutation.S3UserCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "S3Bucket.s3_user"`)
 	}
 	return nil
 }

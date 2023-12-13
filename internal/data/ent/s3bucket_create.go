@@ -54,14 +54,6 @@ func (sc *S3BucketCreate) SetS3UserID(id uuid.UUID) *S3BucketCreate {
 	return sc
 }
 
-// SetNillableS3UserID sets the "s3_user" edge to the S3User entity by ID if the given value is not nil.
-func (sc *S3BucketCreate) SetNillableS3UserID(id *uuid.UUID) *S3BucketCreate {
-	if id != nil {
-		sc = sc.SetS3UserID(*id)
-	}
-	return sc
-}
-
 // SetS3User sets the "s3_user" edge to the S3User entity.
 func (sc *S3BucketCreate) SetS3User(s *S3User) *S3BucketCreate {
 	return sc.SetS3UserID(s.ID)
@@ -120,6 +112,9 @@ func (sc *S3BucketCreate) check() error {
 	}
 	if _, ok := sc.mutation.CreatedTime(); !ok {
 		return &ValidationError{Name: "createdTime", err: errors.New(`ent: missing required field "S3Bucket.createdTime"`)}
+	}
+	if _, ok := sc.mutation.S3UserID(); !ok {
+		return &ValidationError{Name: "s3_user", err: errors.New(`ent: missing required edge "S3Bucket.s3_user"`)}
 	}
 	return nil
 }

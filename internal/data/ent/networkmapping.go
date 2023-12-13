@@ -19,6 +19,8 @@ type NetworkMapping struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Protocol holds the value of the "protocol" field.
+	Protocol string `json:"protocol,omitempty"`
 	// gateway id
 	FkGatewayID uuid.UUID `json:"fk_gateway_id,omitempty"`
 	// 映射到网关的端口号
@@ -43,7 +45,7 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case networkmapping.FieldGatewayPort, networkmapping.FieldComputerPort, networkmapping.FieldStatus:
 			values[i] = new(sql.NullInt64)
-		case networkmapping.FieldName, networkmapping.FieldGatewayIP:
+		case networkmapping.FieldName, networkmapping.FieldProtocol, networkmapping.FieldGatewayIP:
 			values[i] = new(sql.NullString)
 		case networkmapping.FieldID, networkmapping.FieldFkGatewayID, networkmapping.FieldFkComputerID, networkmapping.FieldFkUserID:
 			values[i] = new(uuid.UUID)
@@ -73,6 +75,12 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				nm.Name = value.String
+			}
+		case networkmapping.FieldProtocol:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field protocol", values[i])
+			} else if value.Valid {
+				nm.Protocol = value.String
 			}
 		case networkmapping.FieldFkGatewayID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -154,6 +162,9 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", nm.ID))
 	builder.WriteString("name=")
 	builder.WriteString(nm.Name)
+	builder.WriteString(", ")
+	builder.WriteString("protocol=")
+	builder.WriteString(nm.Protocol)
 	builder.WriteString(", ")
 	builder.WriteString("fk_gateway_id=")
 	builder.WriteString(fmt.Sprintf("%v", nm.FkGatewayID))

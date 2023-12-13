@@ -58,6 +58,11 @@ func Name(v string) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldName, v))
 }
 
+// Protocol applies equality check predicate on the "protocol" field. It's identical to ProtocolEQ.
+func Protocol(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldProtocol, v))
+}
+
 // FkGatewayID applies equality check predicate on the "fk_gateway_id" field. It's identical to FkGatewayIDEQ.
 func FkGatewayID(v uuid.UUID) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldFkGatewayID, v))
@@ -156,6 +161,71 @@ func NameEqualFold(v string) predicate.NetworkMapping {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldContainsFold(FieldName, v))
+}
+
+// ProtocolEQ applies the EQ predicate on the "protocol" field.
+func ProtocolEQ(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldProtocol, v))
+}
+
+// ProtocolNEQ applies the NEQ predicate on the "protocol" field.
+func ProtocolNEQ(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNEQ(FieldProtocol, v))
+}
+
+// ProtocolIn applies the In predicate on the "protocol" field.
+func ProtocolIn(vs ...string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldIn(FieldProtocol, vs...))
+}
+
+// ProtocolNotIn applies the NotIn predicate on the "protocol" field.
+func ProtocolNotIn(vs ...string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNotIn(FieldProtocol, vs...))
+}
+
+// ProtocolGT applies the GT predicate on the "protocol" field.
+func ProtocolGT(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGT(FieldProtocol, v))
+}
+
+// ProtocolGTE applies the GTE predicate on the "protocol" field.
+func ProtocolGTE(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldGTE(FieldProtocol, v))
+}
+
+// ProtocolLT applies the LT predicate on the "protocol" field.
+func ProtocolLT(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLT(FieldProtocol, v))
+}
+
+// ProtocolLTE applies the LTE predicate on the "protocol" field.
+func ProtocolLTE(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldLTE(FieldProtocol, v))
+}
+
+// ProtocolContains applies the Contains predicate on the "protocol" field.
+func ProtocolContains(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldContains(FieldProtocol, v))
+}
+
+// ProtocolHasPrefix applies the HasPrefix predicate on the "protocol" field.
+func ProtocolHasPrefix(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldHasPrefix(FieldProtocol, v))
+}
+
+// ProtocolHasSuffix applies the HasSuffix predicate on the "protocol" field.
+func ProtocolHasSuffix(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldHasSuffix(FieldProtocol, v))
+}
+
+// ProtocolEqualFold applies the EqualFold predicate on the "protocol" field.
+func ProtocolEqualFold(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEqualFold(FieldProtocol, v))
+}
+
+// ProtocolContainsFold applies the ContainsFold predicate on the "protocol" field.
+func ProtocolContainsFold(v string) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldContainsFold(FieldProtocol, v))
 }
 
 // FkGatewayIDEQ applies the EQ predicate on the "fk_gateway_id" field.
