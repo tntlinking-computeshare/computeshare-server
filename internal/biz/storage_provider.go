@@ -129,7 +129,7 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 	param := string(paramData)
 	task := &Task{
 		AgentID: agentId.String(),
-		Cmd:     queue.TaskCmd_NAT_PROXY_DELETE,
+		Cmd:     queue.TaskCmd_NAT_PROXY_CREATE,
 		// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
 		Params: &param,
 		//   CREATED = 0; //创建
