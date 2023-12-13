@@ -3,19 +3,36 @@
 
 openapi: 3.0.3
 info:
-    title: NetworkMapping API
+    title: StorageS3 API
     version: 0.0.1
 paths:
-    /v1/network-mappings:
+    /v1/s3bucket:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_ListBucket
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
-                - NetworkMapping
-            operationId: NetworkMapping_CreateNetworkMapping
+                - StorageS3
+            operationId: StorageS3_CreateBucket
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateNetworkMappingRequest'
+                            $ref: '#/components/schemas/CreateBucketRequest'
                 required: true
             responses:
                 "200":
@@ -23,95 +40,20 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateNetworkMappingReply'
+                                $ref: '#/components/schemas/CreateBucketReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/network-mappings/next:
-        get:
-            tags:
-                - NetworkMapping
-            operationId: NetworkMapping_NextNetworkMapping
-            parameters:
-                - name: computerId
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/NextNetworkMappingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/network-mappings/page:
-        get:
-            tags:
-                - NetworkMapping
-            operationId: NetworkMapping_PageNetworkMapping
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/PageNetworkMappingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/network-mappings/{id}:
-        get:
-            tags:
-                - NetworkMapping
-            operationId: NetworkMapping_GetNetworkMapping
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetNetworkMappingReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}:
         delete:
             tags:
-                - NetworkMapping
-            operationId: NetworkMapping_DeleteNetworkMapping
+                - StorageS3
+            operationId: StorageS3_DeleteBucket
             parameters:
-                - name: id
+                - name: bucketName
                   in: path
                   required: true
                   schema:
@@ -122,7 +64,139 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/DeleteNetworkMappingReply'
+                                $ref: '#/components/schemas/DeleteBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}/objects:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageInBucketList
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: prefix
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageInBucketListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_GetS3User
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetS3UserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/delete:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDelete
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDeleteReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/download/ersatz:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDownload
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDownloadReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/upload/ersatz:
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageUploadFile
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/S3StorageUploadFileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageUploadFileReply'
                 default:
                     description: Default error response
                     content:
@@ -131,7 +205,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateNetworkMappingReply:
+        CreateBucketReply:
             type: object
             properties:
                 code:
@@ -139,21 +213,16 @@ components:
                     format: int32
                 message:
                     type: string
-                networkMapping:
-                    $ref: '#/components/schemas/NetworkMappingVO'
-        CreateNetworkMappingRequest:
+                data:
+                    type: string
+        CreateBucketRequest:
             type: object
             properties:
-                name:
+                bucket:
                     type: string
-                protocol:
+                secretKey:
                     type: string
-                computerId:
-                    type: string
-                computerPort:
-                    type: integer
-                    format: int32
-        DeleteNetworkMappingReply:
+        DeleteBucketReply:
             type: object
             properties:
                 code:
@@ -161,26 +230,7 @@ components:
                     format: int32
                 message:
                     type: string
-        DomainBindingVO:
-            type: object
-            properties:
-                id:
-                    type: string
-                computeInstanceId:
-                    type: string
-                networkMappingId:
-                    type: string
-                name:
-                    type: string
-                domain:
-                    type: string
-                gatewayPort:
-                    type: integer
-                    format: int32
-                createTime:
-                    type: integer
-                    format: int64
-        GetNetworkMappingReply:
+        GetS3UserReply:
             type: object
             properties:
                 code:
@@ -188,8 +238,8 @@ components:
                     format: int32
                 message:
                     type: string
-                networkMapping:
-                    $ref: '#/components/schemas/NetworkMappingVO'
+                data:
+                    $ref: '#/components/schemas/S3User'
         GoogleProtobufAny:
             type: object
             properties:
@@ -198,81 +248,110 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        NetworkMappingVO:
+        ListBucketReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
+        ListBucketReply_BucketVo:
             type: object
             properties:
                 id:
                     type: string
-                name:
-                    type: string
-                gatewayId:
-                    type: string
-                instanceId:
-                    type: string
-                instanceName:
-                    type: string
-                gatewayPort:
-                    type: integer
-                    format: int32
-                instancePort:
-                    type: integer
-                    format: int32
-                status:
-                    type: integer
-                    format: int32
-                gatewayIp:
+                bucket:
                     type: string
                 createdTime:
                     type: integer
                     format: int64
-                domains:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/DomainBindingVO'
-        NextNetworkMappingReply:
+        S3Object:
             type: object
             properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
+                etag:
                     type: string
-                data:
-                    $ref: '#/components/schemas/NextNetworkMappingReply_Data'
-        NextNetworkMappingReply_Data:
-            type: object
-            properties:
-                publicIp:
+                name:
                     type: string
-                publicPort:
-                    type: integer
-                    format: int32
-        PageNetworkMappingReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/PageNetworkMappingReply_Data'
-        PageNetworkMappingReply_Data:
-            type: object
-            properties:
-                list:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/NetworkMappingVO'
-                total:
-                    type: integer
-                    format: int32
-                page:
-                    type: integer
-                    format: int32
                 size:
                     type: integer
                     format: int32
+                lastModify:
+                    type: integer
+                    format: int64
+        S3StorageDeleteReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        S3StorageDownloadReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3StorageDownloadReply_Data'
+        S3StorageDownloadReply_Data:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+        S3StorageInBucketListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/S3Object'
+        S3StorageUploadFileReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3Object'
+        S3StorageUploadFileRequest:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                prefix:
+                    type: string
+                fileName:
+                    type: string
+                bucketName:
+                    type: string
+        S3User:
+            type: object
+            properties:
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                endpoint:
+                    type: string
         Status:
             type: object
             properties:
@@ -290,4 +369,4 @@ components:
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
 tags:
-    - name: NetworkMapping
+    - name: StorageS3

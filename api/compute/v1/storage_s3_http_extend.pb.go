@@ -13,15 +13,16 @@ func Storage_S3_UploadFile_Extend_HTTP_Handler(srv StorageS3HTTPServer) func(ctx
 
 		req := ctx.Request()
 		fmt.Println(req.Header.Get("x-md-globa-owner"))
-		bucketName := req.FormValue("bucketName")
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
 		prefix := req.FormValue("prefix")
-		file, _, err := req.FormFile("file")
+		file, fileHeader, err := req.FormFile("file")
 		if err != nil {
 			return err
 		}
-
-		in.BucketName = bucketName
 		in.Prefix = prefix
+		in.FileName = fileHeader.Filename
 		in.Body, err = io.ReadAll(file)
 		defer file.Close()
 
@@ -55,7 +56,7 @@ func Storage_S3_DownloadFile_Extend_HTTP_Handler(srv StorageS3HTTPServer) func(c
 		if err != nil {
 			return err
 		}
-		reply := out.(*DownloadReply)
+		reply := out.(*S3StorageDownloadReply)
 		disposition := fmt.Sprintf("attachment; filename=%s", reply.Data.Name)
 		ctx.Response().Header().Set("Content-Type", "application/octet-stream")
 		ctx.Response().Header().Set("Content-Disposition", disposition)
