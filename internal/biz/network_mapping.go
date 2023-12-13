@@ -156,16 +156,11 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 
-	natworkMappingName := nmc.Name
-	if natworkMappingName == "" {
-		natworkMappingName = fmt.Sprintf("%s_%s_%d", claim.UserID, gp.ID.String(), nmc.ComputerPort)
-	}
-
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
 		ID:       uuid.UUID{},
-		Name:     natworkMappingName,
+		Name:     nmc.Name,
 		Protocol: nmc.Protocol,
 		// gateway id
 		FkGatewayID: gp.FkGatewayID,
@@ -194,7 +189,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
-		Name:         nm.Name,
+		Name:         fmt.Sprintf("NetworkMapping_%s", nm.ID.String()),
 		InstanceName: ci.Name,
 		InstancePort: nm.ComputerPort,
 		RemotePort:   nm.GatewayPort,
