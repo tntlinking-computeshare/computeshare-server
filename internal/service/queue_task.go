@@ -25,10 +25,12 @@ func NewQueueTaskService(taskUseCase *biz.TaskUseCase, logger log.Logger) *Queue
 func (s *QueueTaskService) GetAgentTask(ctx context.Context, req *pb.QueueTaskGetRequest) (*pb.QueueTaskGetResponse, error) {
 	task, err := s.taskUseCase.GetToDoTaskByAgentId(ctx, req.Id)
 	if err != nil {
+		s.log.Debugf("No Task to do")
 		return &pb.QueueTaskGetResponse{
-			Code:    500,
-			Message: "ERROR",
-		}, err
+			Code:    200,
+			Message: SUCCESS,
+			Data:    nil,
+		}, nil
 	}
 	return &pb.QueueTaskGetResponse{
 		Code:    200,
