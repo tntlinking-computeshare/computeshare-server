@@ -34,6 +34,7 @@ func (s *NetworkMappingService) CreateNetworkMapping(ctx context.Context, req *p
 	}
 	networkmapping, err := s.nm.CreateNetworkMapping(ctx, &biz.NetworkMappingCreate{
 		Name:         req.Name,
+		Protocol:     req.Protocol,
 		ComputerId:   computerId,
 		ComputerPort: req.ComputerPort,
 	})

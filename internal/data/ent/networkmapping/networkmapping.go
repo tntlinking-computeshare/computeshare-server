@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldProtocol holds the string denoting the protocol field in the database.
+	FieldProtocol = "protocol"
 	// FieldFkGatewayID holds the string denoting the fk_gateway_id field in the database.
 	FieldFkGatewayID = "fk_gateway_id"
 	// FieldGatewayPort holds the string denoting the gateway_port field in the database.
@@ -36,6 +38,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldProtocol,
 	FieldFkGatewayID,
 	FieldGatewayPort,
 	FieldGatewayIP,
@@ -58,6 +61,10 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultProtocol holds the default value on creation for the "protocol" field.
+	DefaultProtocol string
+	// ProtocolValidator is a validator for the "protocol" field. It is called by the builders before save.
+	ProtocolValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int
 	// DefaultID holds the default value on creation for the "id" field.
@@ -75,6 +82,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByProtocol orders the results by the protocol field.
+func ByProtocol(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProtocol, opts...).ToFunc()
 }
 
 // ByFkGatewayID orders the results by the fk_gateway_id field.

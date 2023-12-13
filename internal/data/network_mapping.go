@@ -27,6 +27,7 @@ func NewNetworkMappingRepo(data *Data, logger log.Logger) biz.NetworkMappingRepo
 func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
 	data, err := repo.data.getNetworkMapping(ctx).Create().
 		SetName(entity.Name).
+		SetProtocol(entity.Protocol).
 		SetComputerPort(entity.ComputerPort).
 		SetFkComputerID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
@@ -78,6 +79,7 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
 	return repo.data.getNetworkMapping(ctx).UpdateOneID(entity.ID).
 		SetName(entity.Name).
+		SetProtocol(entity.Protocol).
 		SetComputerPort(entity.ComputerPort).
 		SetFkComputerID(entity.FkComputerID).
 		SetFkGatewayID(entity.FkGatewayID).
@@ -102,6 +104,7 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 	return &biz.NetworkMapping{
 		ID:                   item.ID,
 		Name:                 item.Name,
+		Protocol:             item.Protocol,
 		FkComputerID:         item.FkComputerID,
 		ComputerPort:         item.ComputerPort,
 		ComputerInstanceName: instanceName,

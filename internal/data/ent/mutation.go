@@ -4548,6 +4548,7 @@ type NetworkMappingMutation struct {
 	typ              string
 	id               *uuid.UUID
 	name             *string
+	protocol         *string
 	fk_gateway_id    *uuid.UUID
 	gateway_port     *int32
 	addgateway_port  *int32
@@ -4702,6 +4703,42 @@ func (m *NetworkMappingMutation) OldName(ctx context.Context) (v string, err err
 // ResetName resets all changes to the "name" field.
 func (m *NetworkMappingMutation) ResetName() {
 	m.name = nil
+}
+
+// SetProtocol sets the "protocol" field.
+func (m *NetworkMappingMutation) SetProtocol(s string) {
+	m.protocol = &s
+}
+
+// Protocol returns the value of the "protocol" field in the mutation.
+func (m *NetworkMappingMutation) Protocol() (r string, exists bool) {
+	v := m.protocol
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldProtocol returns the old "protocol" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldProtocol(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldProtocol is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldProtocol requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldProtocol: %w", err)
+	}
+	return oldValue.Protocol, nil
+}
+
+// ResetProtocol resets all changes to the "protocol" field.
+func (m *NetworkMappingMutation) ResetProtocol() {
+	m.protocol = nil
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
@@ -5050,9 +5087,12 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
+	}
+	if m.protocol != nil {
+		fields = append(fields, networkmapping.FieldProtocol)
 	}
 	if m.fk_gateway_id != nil {
 		fields = append(fields, networkmapping.FieldFkGatewayID)
@@ -5085,6 +5125,8 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case networkmapping.FieldName:
 		return m.Name()
+	case networkmapping.FieldProtocol:
+		return m.Protocol()
 	case networkmapping.FieldFkGatewayID:
 		return m.FkGatewayID()
 	case networkmapping.FieldGatewayPort:
@@ -5110,6 +5152,8 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 	switch name {
 	case networkmapping.FieldName:
 		return m.OldName(ctx)
+	case networkmapping.FieldProtocol:
+		return m.OldProtocol(ctx)
 	case networkmapping.FieldFkGatewayID:
 		return m.OldFkGatewayID(ctx)
 	case networkmapping.FieldGatewayPort:
@@ -5139,6 +5183,13 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case networkmapping.FieldProtocol:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetProtocol(v)
 		return nil
 	case networkmapping.FieldFkGatewayID:
 		v, ok := value.(uuid.UUID)
@@ -5279,6 +5330,9 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 	switch name {
 	case networkmapping.FieldName:
 		m.ResetName()
+		return nil
+	case networkmapping.FieldProtocol:
+		m.ResetProtocol()
 		return nil
 	case networkmapping.FieldFkGatewayID:
 		m.ResetFkGatewayID()

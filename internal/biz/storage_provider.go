@@ -93,8 +93,9 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
-		ID:   uuid.UUID{},
-		Name: networkMappingName,
+		ID:       uuid.UUID{},
+		Name:     networkMappingName,
+		Protocol: "TCP",
 		// gateway id
 		FkGatewayID: gp.FkGatewayID,
 		// computer_id
