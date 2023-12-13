@@ -55,6 +55,7 @@ type NetworkMappingRepo interface {
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
+	GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*NetworkMapping, error)
 }
 
 type Gateway struct {

@@ -293,3 +293,27 @@ func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
 	ctx := context.Background()
 	_ = uc.instanceRepo.SetInstanceExpiration(ctx)
 }
+
+func (uc *ComputeInstanceUsercase) Reboot(ctx context.Context, instanceId uuid.UUID) error {
+	instance, err := uc.Get(ctx, instanceId)
+	if err != nil {
+		return err
+	}
+
+	instance.Status = consts.InstanceStatusRestarting
+
+	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
+
+	if err != nil {
+		uc.log.Error("创建容器重启指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_RESTART, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

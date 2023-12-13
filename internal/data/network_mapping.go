@@ -163,3 +163,11 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByComputeIds(ctx context.Context, 
 	})
 	return max.FkGatewayID, nil
 }
+
+func (repo *NetworkMappingRepo) GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*biz.NetworkMapping, error) {
+	first, err := repo.data.getNetworkMapping(ctx).Query().Where(networkmapping.GatewayIP(ip), networkmapping.GatewayPort(port)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return repo.toBiz(first, 0), err
+}

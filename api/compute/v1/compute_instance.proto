@@ -39,7 +39,7 @@ service ComputeInstance {
 	};
 
 	//删除实例
-	rpc Delete (DeleteInstanceRequest) returns (DeleteInstanceReply){
+	rpc Delete (DeleteInstanceRequest) returns (CommonReply){
 		option (google.api.http) = {
 			delete: "/v1/instance/{id}",
 		};
@@ -60,7 +60,7 @@ service ComputeInstance {
 	};
 
 	//停止实例
-	rpc StopInstance(GetInstanceRequest) returns (StopInstanceReply) {
+	rpc StopInstance(GetInstanceRequest) returns (CommonReply) {
 		option (google.api.http) = {
 			put: "/v1/instance/{id}/stop",
 			body: "*",
@@ -68,9 +68,17 @@ service ComputeInstance {
 	}
 
 	//启动实例
-	rpc StartInstance(GetInstanceRequest) returns (StartInstanceReply) {
+	rpc StartInstance(GetInstanceRequest) returns (CommonReply) {
 		option (google.api.http) = {
 			put: "/v1/instance/{id}/start",
+			body: "*",
+		};
+	}
+
+	// 重启实例
+	rpc RestartInstance(GetInstanceRequest) returns (CommonReply) {
+		option (google.api.http) = {
+			put: "/v1/instance/{id}/restart",
 			body: "*",
 		};
 	}
@@ -158,10 +166,6 @@ message CreateInstanceReply {
 message DeleteInstanceRequest {
 	string id = 1;
 }
-message DeleteInstanceReply {
-	int32 code = 1;
-	string message = 2;
-}
 
 message GetInstanceRequest {
 	string id = 1;
@@ -200,15 +204,12 @@ message ListInstanceReply {
 	repeated Instance data = 3;
 }
 
-message StopInstanceReply {
+message CommonReply {
 	int32 code = 1;
 	string message = 2;
 }
 
-message StartInstanceReply {
-	int32 code = 1;
-	string message = 2;
-}
+
 
 message GetInstanceConsoleReply {
 	int32 code = 1;

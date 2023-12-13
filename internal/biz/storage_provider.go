@@ -151,6 +151,64 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 	return gp.Port, nil
 }
 
+func (c *StorageProviderUseCase) deleteNetworkMappingPort(ctx context.Context, agentId uuid.UUID, ip string, port int32) error {
+	_, ok := global.FromContext(ctx)
+	if !ok {
+		return errors.New("unauthorize")
+	}
+
+	nm, err := c.networkMappingRepo.GetNetworkMappingByPublicIpdAndPort(ctx, ip, port)
+
+	if err != nil {
+		return err
+	}
+
+	// 查询下一个可用的gateway 端口
+	gatewayId, err := c.networkMappingRepo.QueryGatewayIdByAgentId(ctx, agentId)
+	gateway, err := c.gatewayRepo.GetGateway(ctx, gatewayId)
+	gp, err := c.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, gatewayId, port)
+
+	nptp := &queue.NatNetworkMappingTaskParamVO{
+		Id:           nm.ID.String(),
+		Name:         nm.Name,
+		InstanceName: "",
+		InstancePort: gp.Port,
+		RemotePort:   gp.Port,
+		GatewayId:    gp.FkGatewayID.String(),
+		GatewayIp:    gateway.IP,
+		GatewayPort:  gateway.Port,
+	}
+	paramData, err := json.Marshal(nptp)
+	if err != nil {
+		return err
+	}
+	param := string(paramData)
+	task := &Task{
+		AgentID: agentId.String(),
+		Cmd:     queue.TaskCmd_NAT_PROXY_DELETE,
+		// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+		Params: &param,
+		//   CREATED = 0; //创建
+		Status: queue.TaskStatus_CREATED,
+		// CreateTime holds the value of the "create_time" field.
+		CreateTime: time.Now(),
+	}
+	err = c.taskRepo.CreateTask(ctx, task)
+	if err != nil {
+		return err
+	}
+
+	// 标记此gateway 被使用
+	gp.IsUse = false
+	err = c.gatewayPortRepo.Update(ctx, gp)
+	if err != nil {
+		return err
+	}
+
+	return c.networkMappingRepo.DeleteNetworkMapping(ctx, nm.ID)
+
+}
+
 func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agentId uuid.UUID) (*StorageProvider, error) {
 	agent, err := c.agentRepo.GetAgent(ctx, agentId)
 	if err != nil {
@@ -222,6 +280,49 @@ func (c *StorageProviderUseCase) CreateStorageProvider(ctx context.Context, agen
 }
 
 func (c *StorageProviderUseCase) DeleteStorageProvider(ctx context.Context, id uuid.UUID) error {
+	sp, err := c.GetStorageProvider(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	err = c.deleteNetworkMappingPort(ctx, sp.AgentID, sp.PublicIP, sp.PublicPort)
+	if err != nil {
+		return err
+	}
+
+	err = c.deleteNetworkMappingPort(ctx, sp.AgentID, sp.PublicIP, sp.GrpcPort)
+	if err != nil {
+		return err
+	}
+	sstp := &queue.StorageSetupTaskParamVO{
+		Id:           sp.ID.String(),
+		MasterServer: sp.MasterServer,
+		PublicIp:     sp.PublicIP,
+		PublicPort:   sp.PublicPort,
+		GrpcPort:     sp.GrpcPort,
+	}
+	paramData, err := json.Marshal(sstp)
+	if err != nil {
+		return err
+	}
+	param := string(paramData)
+
+	// 下发Storage 任务
+	task := &Task{
+		AgentID: sp.AgentID.String(),
+		Cmd:     queue.TaskCmd_STORAGE_DELETE,
+		// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+		Params: &param,
+		//   CREATED = 0; //创建
+		Status: queue.TaskStatus_CREATED,
+		// CreateTime holds the value of the "create_time" field.
+		CreateTime: time.Now(),
+	}
+	err = c.taskRepo.CreateTask(ctx, task)
+	if err != nil {
+		return err
+	}
+
 	return c.storageProviderRepo.Delete(ctx, id)
 }
 
