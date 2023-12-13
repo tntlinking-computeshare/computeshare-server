@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/google/uuid"
-	files "github.com/ipfs/go-ipfs-files"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
@@ -70,11 +68,7 @@ func (s *StorageS3Service) DeleteBucket(ctx context.Context, req *pb.DeleteBucke
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	bucketId, err := uuid.Parse(req.GetId())
-	if err != nil {
-		return nil, err
-	}
-	err = s.uc.DeleteBucket(ctx, userId, bucketId)
+	err := s.uc.DeleteBucket(ctx, userId, req.BucketName)
 	if err != nil {
 		return nil, err
 	}
@@ -136,12 +130,16 @@ func (s *StorageS3Service) S3StorageUploadFile(ctx context.Context, req *pb.S3St
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	file := files.NewBytesFile(req.Body)
-	uploadFile, err := s.uc.S3StorageUploadFile(ctx, userId, req.BucketName, req.Prefix, file)
+	var key string
+	if len(req.Prefix) > 0 {
+		key = "/" + req.Prefix + "/" + req.FileName
+	} else {
+		key = req.FileName
+	}
+	uploadFile, err := s.uc.S3StorageUploadFile(ctx, userId, req.BucketName, key, req.Body)
 	if err != nil {
 		return nil, err
 	}
-	size, err := file.Size()
 	if err != nil {
 		return nil, err
 	}
@@ -150,8 +148,8 @@ func (s *StorageS3Service) S3StorageUploadFile(ctx context.Context, req *pb.S3St
 		Message: SUCCESS,
 		Data: &pb.S3Object{
 			Etag:       *uploadFile.ETag,
-			Name:       req.Prefix,
-			Size:       int32(size),
+			Name:       key,
+			Size:       int32(len(req.Body)),
 			LastModify: time.Now().UnixMilli(),
 		},
 	}, nil

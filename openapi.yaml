@@ -47,6 +47,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_DeleteBucket
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/s3bucket/{bucketName}/objects:
         get:
             tags:
@@ -69,30 +93,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/S3StorageInBucketListReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/s3bucket/{id}:
-        delete:
-            tags:
-                - StorageS3
-            operationId: StorageS3_DeleteBucket
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteBucketReply'
                 default:
                     description: Default error response
                     content:
@@ -338,6 +338,8 @@ components:
                     type: string
                     format: bytes
                 prefix:
+                    type: string
+                fileName:
                     type: string
                 bucketName:
                     type: string

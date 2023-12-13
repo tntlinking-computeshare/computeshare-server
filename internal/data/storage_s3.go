@@ -64,13 +64,13 @@ func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, buc
 	}
 	return r.toBucketBiz(s3Bucket, 0), err
 }
-func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, bucketId uuid.UUID) error {
+func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, bucketName string) error {
 	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 
 	if err != nil {
 		return err
 	}
-	first, err := s3User.QueryBuckets().Where(s3bucket.IDEQ(bucketId)).First(ctx)
+	first, err := s3User.QueryBuckets().Where(s3bucket.BucketEQ(bucketName)).First(ctx)
 	if err != nil {
 		return err
 	}
