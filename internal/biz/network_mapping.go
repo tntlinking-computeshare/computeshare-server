@@ -97,27 +97,30 @@ type GatewayPortRepo interface {
 }
 
 type NetworkMappingUseCase struct {
-	repo            NetworkMappingRepo
-	gatewayRepo     GatewayRepo
-	gatewayPortRepo GatewayPortRepo
-	taskRepo        TaskRepo
-	ciu             *ComputeInstanceUsercase
-	log             *log.Helper
+	repo              NetworkMappingRepo
+	gatewayRepo       GatewayRepo
+	gatewayPortRepo   GatewayPortRepo
+	taskRepo          TaskRepo
+	ciu               *ComputeInstanceUsercase
+	domainBindingRepo DomainBindingRepository
+	log               *log.Helper
 }
 
 func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	gatewayRepo GatewayRepo,
 	gatewayPortRepo GatewayPortRepo,
 	taskRepo TaskRepo,
+	domainBindingRepo DomainBindingRepository,
 	ciu *ComputeInstanceUsercase,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
-		repo:            repo,
-		gatewayRepo:     gatewayRepo,
-		gatewayPortRepo: gatewayPortRepo,
-		ciu:             ciu,
-		taskRepo:        taskRepo,
-		log:             log.NewHelper(logger),
+		repo:              repo,
+		gatewayRepo:       gatewayRepo,
+		gatewayPortRepo:   gatewayPortRepo,
+		ciu:               ciu,
+		taskRepo:          taskRepo,
+		domainBindingRepo: domainBindingRepo,
+		log:               log.NewHelper(logger),
 	}
 }
 
@@ -246,6 +249,16 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 		return err
 	}
 
+	// 判断有无域名绑定
+	domains, err := m.domainBindingRepo.ListByNetworkMappingId(ctx, nwp.ID)
+	if err != nil {
+		return err
+	}
+
+	if len(domains) > 0 {
+		return errors.New("请先解绑域名")
+	}
+
 	gp, err := m.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, nwp.FkGatewayID, nwp.GatewayPort)
 	if err != nil {
 		return err
@@ -293,12 +306,8 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 
 	gp.IsUse = false
 
-	err = m.gatewayPortRepo.Update(ctx, gp)
-	if err != nil {
-		return err
-	}
+	return m.gatewayPortRepo.Update(ctx, gp)
 
-	return m.repo.DeleteNetworkMapping(ctx, id)
 }
 
 func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {

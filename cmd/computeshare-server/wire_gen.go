@@ -38,10 +38,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 	storageProviderRepo := data.NewStorageProviderRepo(dataData, logger)
 	gatewayPortRepo := data.NewGatewayPortRepo(dataData, logger)
 	gatewayRepo := data.NewGatewayRepo(dataData, gatewayPortRepo, logger)
+	domainBindingRepository := data.NewDomainBindingRepository(dataData, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
 	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, logger)
-	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, computeInstanceUsercase, logger)
+	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceUsercase, logger)
 	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
 	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, logger)
 	queueTaskService := service.NewQueueTaskService(taskUseCase, logger)
@@ -68,7 +69,6 @@ func wireApp(confServer *conf.Server, confData *conf.Data, auth *conf.Auth, logg
 		cleanup()
 		return nil, nil, err
 	}
-	domainBindingRepository := data.NewDomainBindingRepository(dataData, logger)
 	domainBindingUseCase, err := biz.NewDomainBindingUseCase(domainBindingRepository, networkMappingRepo, gatewayRepo, logger)
 	if err != nil {
 		cleanup()

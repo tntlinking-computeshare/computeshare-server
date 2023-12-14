@@ -174,11 +174,10 @@ Authorization: Bearer {{ access_token }}
 ### 更新任务状态
 PUT  http://127.0.0.1:8000/v1/queue/task
 Content-Type: application/json
-Authorization: Bearer {{ access_token }}
 
 {
-  "id":"ac4d35fc-7ec1-4275-bf48-5fcc568736cd",
-  "agentId":"00c460f0-ec1a-4a0f-a452-1afb4b5d1686",
+  "id":"24182f01-72f3-4f09-8403-5c0d7c80440b",
+  "agentId":"2e07eb09-b2c7-4929-b1b4-207e1a2ca9de",
   "status":1
 }
 
@@ -210,14 +209,14 @@ Authorization: Bearer {{ access_token }}
 
 ### 新增域名绑定
 #POST http://127.0.0.1:8000/v1/domain-binding
-POST https://computeshare.hamster.newtouch.com/v1/domain-binding
+POST https://api.computeshare.newtouch.com/v1/domain-binding
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {
-  "networkMappingId": "05f536a9-2064-416d-a561-3bc9d0deeffc",
+  "networkMappingId": "5f60396d-3789-475f-a979-b962e7b1f312",
   "name": "d2",
-  "domain": "test1.computeshare.hamster.newtouch.com"
+  "domain": "test1.computeshare.newtouch.com"
 }
 
 
