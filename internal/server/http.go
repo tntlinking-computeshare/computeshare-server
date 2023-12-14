@@ -136,7 +136,7 @@ func NewHTTPServer(c *conf.Server,
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/compute-power/download", computeV1.Compute_Powere_DownloadResult_Extend_HTTP_Handler(powerService))
 	srv.Route("/").POST("/v1/storage/{bucketName}/objects/upload", computeV1.Storage_S3_UploadFile_Extend_HTTP_Handler(storageS3Service))
-	srv.Route("/").POST("/v1/storage/{bucketName}/objects/download", computeV1.Storage_S3_DownloadFile_Extend_HTTP_Handler(storageS3Service))
+	srv.Route("/").GET("/v1/storage/{bucketName}/objects/download", computeV1.Storage_S3_DownloadFile_Extend_HTTP_Handler(storageS3Service))
 
 	job.StartJob()
 

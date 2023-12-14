@@ -182,8 +182,14 @@ func init() {
 			return nil
 		}
 	}()
+	// networkmappingDescProtocol is the schema descriptor for protocol field.
+	networkmappingDescProtocol := networkmappingFields[2].Descriptor()
+	// networkmapping.DefaultProtocol holds the default value on creation for the protocol field.
+	networkmapping.DefaultProtocol = networkmappingDescProtocol.Default.(string)
+	// networkmapping.ProtocolValidator is a validator for the "protocol" field. It is called by the builders before save.
+	networkmapping.ProtocolValidator = networkmappingDescProtocol.Validators[0].(func(string) error)
 	// networkmappingDescStatus is the schema descriptor for status field.
-	networkmappingDescStatus := networkmappingFields[6].Descriptor()
+	networkmappingDescStatus := networkmappingFields[7].Descriptor()
 	// networkmapping.DefaultStatus holds the default value on creation for the status field.
 	networkmapping.DefaultStatus = networkmappingDescStatus.Default.(int)
 	// networkmappingDescID is the schema descriptor for id field.

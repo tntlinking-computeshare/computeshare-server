@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -92,8 +93,19 @@ func (uc *UserUsercase) Create(ctx context.Context, user *User) error {
 	return uc.repo.CreateUser(ctx, user)
 }
 
+func isValidUsername(username string) bool {
+	// 包含小写字母、数字、中划线
+	// 大于3个英文字母并小于等于32个字符
+	re := regexp.MustCompile("^[a-z0-9-]{3,32}$")
+	return re.MatchString(username)
+}
+
 func (uc *UserUsercase) Update(ctx context.Context, id uuid.UUID, user *User) error {
-	return uc.repo.UpdateUser(ctx, id, user)
+	if isValidUsername(user.Name) {
+		return uc.repo.UpdateUser(ctx, id, user)
+	} else {
+		return errors.New(400, "USERNAME_INVALID", "用户名不符合规范")
+	}
 }
 
 func (uc *UserUsercase) Delete(ctx context.Context, id uuid.UUID) error {

@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
@@ -11,7 +12,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	files "github.com/ipfs/go-ipfs-files"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/samber/lo"
 	"io"
 	"os"
@@ -42,21 +43,27 @@ type S3UserRepo interface {
 	CreateS3User(ctx context.Context, user *S3User) (*S3User, error)
 	GetS3User(ctx context.Context, userId uuid.UUID) (*S3User, error)
 	CreateBucket(ctx context.Context, user *S3User, bucket string) (*S3Bucket, error)
-	DeleteBucket(ctx context.Context, user *S3User, id uuid.UUID) error
+	DeleteBucket(ctx context.Context, user *S3User, bucketName string) error
 	ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error)
 }
 
 type StorageS3UseCase struct {
-	repo     S3UserRepo
-	userRepo UserRepo
-	log      *log.Helper
+	repo       S3UserRepo
+	userRepo   UserRepo
+	log        *log.Helper
+	dockerHost string
 }
 
-func NewStorageS3UseCase(repo S3UserRepo, userRepo UserRepo, logger log.Logger) *StorageS3UseCase {
+func NewStorageS3UseCase(
+	repo S3UserRepo,
+	userRepo UserRepo,
+	conf *conf.Data,
+	logger log.Logger) *StorageS3UseCase {
 	return &StorageS3UseCase{
-		repo:     repo,
-		userRepo: userRepo,
-		log:      log.NewHelper(logger),
+		repo:       repo,
+		userRepo:   userRepo,
+		dockerHost: conf.Docker.Host,
+		log:        log.NewHelper(logger),
 	}
 }
 
@@ -103,7 +110,7 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 	}, "")
 
 	// 创建Docker客户端
-	cli, err := client.NewClientWithOpts(client.WithHost("unix:///var/run/docker.sock"))
+	cli, err := client.NewClientWithOpts(client.WithHost(c.dockerHost))
 
 	// 构建命令
 	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=Read,Write,List,Tagging,Admin -apply " | weed shell`,
@@ -176,12 +183,29 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 	return s3Bucket, err
 }
 
-func (c *StorageS3UseCase) DeleteBucket(ctx context.Context, userId uuid.UUID, bucketId uuid.UUID) error {
+func (c *StorageS3UseCase) DeleteBucket(ctx context.Context, userId uuid.UUID, bucketName string) error {
 	s3User, err := c.GetS3User(ctx, userId)
 	if err != nil {
 		return err
 	}
-	return c.repo.DeleteBucket(ctx, s3User, bucketId)
+	config := &aws.Config{
+		Region:           aws.String(os.Getenv("S3_REGION")),
+		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
+		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
+	}
+	session, err := session.NewSession(config)
+	if err != nil {
+		return err
+	}
+	s3Client := s3.New(session)
+	if err != nil {
+		return err
+	}
+	s3Client.DeleteBucket(&s3.DeleteBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+	return c.repo.DeleteBucket(ctx, s3User, bucketName)
 }
 
 func (c *StorageS3UseCase) ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error) {
@@ -214,7 +238,7 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 	return resp.Contents, nil
 }
 
-func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.UUID, bucketName, prefix string, file files.File) (*s3.PutObjectOutput, error) {
+func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.UUID, bucketName, key string, fileByte []byte) (*s3.PutObjectOutput, error) {
 	s3User, err := c.GetS3User(ctx, userId)
 	if err != nil {
 		return nil, err
@@ -233,11 +257,10 @@ func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.
 	if err != nil {
 		return nil, err
 	}
-
-	putObject, err := s3Client.PutObject(&s3.PutObjectInput{
-		Body:   aws.ReadSeekCloser(file),
+	putObject, err := s3Client.PutObjectWithContext(context.Background(), &s3.PutObjectInput{
+		Body:   bytes.NewReader(fileByte),
 		Bucket: aws.String(bucketName),
-		Key:    aws.String(prefix),
+		Key:    aws.String(key),
 	})
 	if err != nil {
 		return nil, err

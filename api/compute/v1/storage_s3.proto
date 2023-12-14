@@ -22,7 +22,7 @@ service StorageS3 {
 	};
 	rpc DeleteBucket (DeleteBucketRequest) returns (DeleteBucketReply){
 		option (google.api.http) = {
-			delete: "/v1/s3bucket/{id}",
+			delete: "/v1/s3bucket/{bucketName}",
 		};
 	};
 	rpc ListBucket(ListBucketRequest) returns (ListBucketReply) {
@@ -81,7 +81,7 @@ message CreateBucketReply {
 }
 
 message DeleteBucketRequest {
-	string id = 1;
+	string bucketName = 1;
 }
 message DeleteBucketReply {
 	int32 code = 1;
@@ -123,7 +123,8 @@ message S3StorageInBucketListReply {
 message S3StorageUploadFileRequest {
 	bytes body = 1;
 	string prefix = 2;
-	string bucketName = 3;
+	string fileName = 3;
+	string bucketName = 4;
 }
 
 message S3StorageUploadFileReply{

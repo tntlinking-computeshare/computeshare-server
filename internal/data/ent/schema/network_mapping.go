@@ -16,6 +16,7 @@ func (NetworkMapping) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("name").NotEmpty().MaxLen(100),
+		field.String("protocol").NotEmpty().Default("TCP"),
 		field.UUID("fk_gateway_id", uuid.UUID{}).Comment("gateway id"),
 		field.Int32("gateway_port").Comment("映射到网关的端口号"),
 		field.String("gateway_ip").Comment("网关ip"),

@@ -43,7 +43,7 @@ func RegisterStorageS3HTTPServer(s *http.Server, srv StorageS3HTTPServer) {
 	r := s.Route("/")
 	r.GET("/v1/s3user", _StorageS3_GetS3User0_HTTP_Handler(srv))
 	r.POST("/v1/s3bucket", _StorageS3_CreateBucket0_HTTP_Handler(srv))
-	r.DELETE("/v1/s3bucket/{id}", _StorageS3_DeleteBucket0_HTTP_Handler(srv))
+	r.DELETE("/v1/s3bucket/{bucketName}", _StorageS3_DeleteBucket0_HTTP_Handler(srv))
 	r.GET("/v1/s3bucket", _StorageS3_ListBucket0_HTTP_Handler(srv))
 	r.GET("/v1/s3bucket/{bucketName}/objects", _StorageS3_S3StorageInBucketList0_HTTP_Handler(srv))
 	r.POST("/v1/storage/{bucketName}/objects/upload/ersatz", _StorageS3_S3StorageUploadFile0_HTTP_Handler(srv))
@@ -258,7 +258,7 @@ func (c *StorageS3HTTPClientImpl) CreateBucket(ctx context.Context, in *CreateBu
 
 func (c *StorageS3HTTPClientImpl) DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...http.CallOption) (*DeleteBucketReply, error) {
 	var out DeleteBucketReply
-	pattern := "/v1/s3bucket/{id}"
+	pattern := "/v1/s3bucket/{bucketName}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationStorageS3DeleteBucket))
 	opts = append(opts, http.PathTemplate(pattern))

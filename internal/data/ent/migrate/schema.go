@@ -161,6 +161,7 @@ var (
 	NetworkMappingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "name", Type: field.TypeString, Size: 100},
+		{Name: "protocol", Type: field.TypeString, Default: "TCP"},
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "gateway_port", Type: field.TypeInt32},
 		{Name: "gateway_ip", Type: field.TypeString},

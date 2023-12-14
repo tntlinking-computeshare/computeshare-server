@@ -138,7 +138,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 	}
 
 	taskParam := queue.ComputeInstanceTaskParamVO{
-		Id:         uuid.NewString(),
+		Id:         instance.ID.String(),
 		Name:       instance.Name,
 		Cpu:        instance.GetCore(),
 		Memory:     instance.GetMemory(),
@@ -147,7 +147,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Password:   password,
 		InstanceId: instance.ID.String(),
 	}
-	paramData, err := json.Marshal(taskParam)
+	paramData, err := json.Marshal(&taskParam)
 	if err != nil {
 		return err
 	}
@@ -257,7 +257,7 @@ func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId
 	taskParam := queue.NatNetworkMappingTaskParamVO{
 		Id:           uuid.NewString(),
 		Name:         instance.Name,
-		InstanceName: instance.Name,
+		InstanceId:   instance.ID.String(),
 		InstancePort: 0,
 		RemotePort:   gp.Port,
 		GatewayId:    gateway.ID.String(),
@@ -292,4 +292,28 @@ func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId
 func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
 	ctx := context.Background()
 	_ = uc.instanceRepo.SetInstanceExpiration(ctx)
+}
+
+func (uc *ComputeInstanceUsercase) Reboot(ctx context.Context, instanceId uuid.UUID) error {
+	instance, err := uc.Get(ctx, instanceId)
+	if err != nil {
+		return err
+	}
+
+	instance.Status = consts.InstanceStatusRestarting
+
+	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
+
+	if err != nil {
+		uc.log.Error("创建容器重启指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_RESTART, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
