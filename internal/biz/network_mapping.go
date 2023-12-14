@@ -263,7 +263,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           np.ID.String(),
-		Name:         np.Name,
+		Name:         fmt.Sprintf("NetworkMapping_%s", instance.ID.String()),
 		InstanceId:   instance.ID.String(),
 		InstancePort: np.ComputerPort,
 		RemotePort:   np.GatewayPort,
