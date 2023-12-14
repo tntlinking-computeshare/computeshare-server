@@ -83,7 +83,7 @@ message QueueTaskUpdateResponse {
 message NatNetworkMappingTaskParamVO {
   string id = 1;
   string name = 2;
-  string instanceName = 3;
+  string instanceId = 3;
   int32 instancePort = 4;
   int32 remotePort = 5;
   string gatewayId = 6;

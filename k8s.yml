@@ -45,8 +45,6 @@ spec:
           volumeMounts:
             - mountPath: /data/conf
               name: config
-            - mountPath: /root/.ipfs
-              name: computeshare-server-data
       volumes:
         - name: config
           configMap:
@@ -56,10 +54,6 @@ spec:
             items:
               - key: "config.yaml"
                 path: "config.yaml"
-        - name: computeshare-server-data
-          persistentVolumeClaim:
-            claimName: computeshare-server-data
-
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -86,97 +80,6 @@ spec:
     - hosts:
         - api.computeshare.newtouch.com
       secretName: computeshare-server-tls
-
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt-prod","nginx.ingress.kubernetes.io/proxy-read-timeout":"3600","nginx.ingress.kubernetes.io/proxy-send-timeout":"3600"},"name":"computeshare-frontend","namespace":"computeshare"},"spec":{"ingressClassName":"nginx","rules":[{"host":"computeshare-frontend.hamster.newtouch.com","http":{"paths":[{"backend":{"service":{"name":"computeshare-frontend","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}],"tls":[{"hosts":["computeshare-frontend.hamster.newtouch.com"],"secretName":"computeshare-frontend-tls"}]},"status":{"loadBalancer":{}}}
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-  name: computeshare-frontend
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: computeshare.newtouch.com
-      http:
-        paths:
-          - backend:
-              service:
-                name: computeshare-frontend
-                port:
-                  number: 80
-            path: /
-            pathType: Prefix
-  tls:
-    - hosts:
-        - computeshare.newtouch.com
-      secretName: computeshare-frontend-tls
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: computeshare-frontend
-  name: computeshare-frontend
-spec:
-  ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 80
-  selector:
-    app: computeshare-frontend
-  sessionAffinity: None
-  type: ClusterIP
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: computeshare-frontend
-  name: computeshare-frontend
-spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      app: computeshare-frontend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: computeshare-frontend
-    spec:
-      containers:
-        - image: hamstershare/computeshare-frontend:20231009175939
-          imagePullPolicy: Always
-          name: computeshare-frontend
-          ports:
-            - containerPort: 80
-              protocol: TCP
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-
 ---
 
 apiVersion: v1
@@ -207,14 +110,16 @@ data:
     data:
       database:
         driver: mysql
-        source: root:123456@tcp(127.0.0.1:3306)/computeshare?charset=utf8&parseTime=true
+        source: root:Aline123456@tcp(mysql:3306)/computeshare?charset=utf8&parseTime=true
       redis:
-        addr: 127.0.0.1:6379
+        addr: redis:6379
         dial_timeout: 1s
         read_timeout: 0.4s
         write_timeout: 0.6s
       ipfs:
         url: 127.0.0.1:5001
+      docker:
+        host: tcp://172.16.0.8:2375
     auth:
       service_key: some-secret-key
       api_key: some-secret-key-for-forntend
@@ -333,10 +238,11 @@ spec:
       port: 3306
       protocol: TCP
       targetPort: 3306
+      nodePort: 31252
   selector:
     app: mysql
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
 
 ---
 

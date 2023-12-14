@@ -3,36 +3,43 @@
 
 openapi: 3.0.3
 info:
-    title: StorageS3 API
+    title: QueueTask API
     version: 0.0.1
 paths:
-    /v1/s3bucket:
+    /v1/queue/task:
         get:
             tags:
-                - StorageS3
-            operationId: StorageS3_ListBucket
+                - QueueTask
+            description: 查询队列任务
+            operationId: QueueTask_GetAgentTask
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListBucketReply'
+                                $ref: '#/components/schemas/QueueTaskGetResponse'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        post:
+        put:
             tags:
-                - StorageS3
-            operationId: StorageS3_CreateBucket
+                - QueueTask
+            description: 更新任务状态
+            operationId: QueueTask_UpdateAgentTask
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateBucketRequest'
+                            $ref: '#/components/schemas/QueueTaskUpdateRequest'
                 required: true
             responses:
                 "200":
@@ -40,163 +47,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateBucketReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/s3bucket/{bucketName}:
-        delete:
-            tags:
-                - StorageS3
-            operationId: StorageS3_DeleteBucket
-            parameters:
-                - name: bucketName
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeleteBucketReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/s3bucket/{bucketName}/objects:
-        get:
-            tags:
-                - StorageS3
-            operationId: StorageS3_S3StorageInBucketList
-            parameters:
-                - name: bucketName
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: prefix
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/S3StorageInBucketListReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/s3user:
-        get:
-            tags:
-                - StorageS3
-            operationId: StorageS3_GetS3User
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetS3UserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/storage/{bucketName}/objects/delete:
-        delete:
-            tags:
-                - StorageS3
-            operationId: StorageS3_S3StorageDelete
-            parameters:
-                - name: bucketName
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: key
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/S3StorageDeleteReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/storage/{bucketName}/objects/download/ersatz:
-        get:
-            tags:
-                - StorageS3
-            operationId: StorageS3_S3StorageDownload
-            parameters:
-                - name: bucketName
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-                - name: key
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/S3StorageDownloadReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/storage/{bucketName}/objects/upload/ersatz:
-        post:
-            tags:
-                - StorageS3
-            operationId: StorageS3_S3StorageUploadFile
-            parameters:
-                - name: bucketName
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/S3StorageUploadFileRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/S3StorageUploadFileReply'
+                                $ref: '#/components/schemas/QueueTaskUpdateResponse'
                 default:
                     description: Default error response
                     content:
@@ -205,41 +56,6 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateBucketReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: string
-        CreateBucketRequest:
-            type: object
-            properties:
-                bucket:
-                    type: string
-                secretKey:
-                    type: string
-        DeleteBucketReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        GetS3UserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/S3User'
         GoogleProtobufAny:
             type: object
             properties:
@@ -248,7 +64,7 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        ListBucketReply:
+        QueueTaskGetResponse:
             type: object
             properties:
                 code:
@@ -257,33 +73,18 @@ components:
                 message:
                     type: string
                 data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
-        ListBucketReply_BucketVo:
+                    $ref: '#/components/schemas/QueueTaskVo'
+        QueueTaskUpdateRequest:
             type: object
             properties:
                 id:
                     type: string
-                bucket:
+                agentId:
                     type: string
-                createdTime:
+                status:
                     type: integer
-                    format: int64
-        S3Object:
-            type: object
-            properties:
-                etag:
-                    type: string
-                name:
-                    type: string
-                size:
-                    type: integer
-                    format: int32
-                lastModify:
-                    type: integer
-                    format: int64
-        S3StorageDeleteReply:
+                    format: enum
+        QueueTaskUpdateResponse:
             type: object
             properties:
                 code:
@@ -291,67 +92,21 @@ components:
                     format: int32
                 message:
                     type: string
-        S3StorageDownloadReply:
+        QueueTaskVo:
             type: object
             properties:
-                code:
+                id:
+                    type: string
+                agentId:
+                    type: string
+                cmd:
                     type: integer
-                    format: int32
-                message:
+                    format: enum
+                params:
                     type: string
-                data:
-                    $ref: '#/components/schemas/S3StorageDownloadReply_Data'
-        S3StorageDownloadReply_Data:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                name:
-                    type: string
-        S3StorageInBucketListReply:
-            type: object
-            properties:
-                code:
+                status:
                     type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/S3Object'
-        S3StorageUploadFileReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/S3Object'
-        S3StorageUploadFileRequest:
-            type: object
-            properties:
-                body:
-                    type: string
-                    format: bytes
-                prefix:
-                    type: string
-                fileName:
-                    type: string
-                bucketName:
-                    type: string
-        S3User:
-            type: object
-            properties:
-                accessKey:
-                    type: string
-                secretKey:
-                    type: string
-                endpoint:
-                    type: string
+                    format: enum
         Status:
             type: object
             properties:
@@ -369,4 +124,4 @@ components:
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
 tags:
-    - name: StorageS3
+    - name: QueueTask

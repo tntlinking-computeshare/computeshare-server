@@ -138,7 +138,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 	}
 
 	taskParam := queue.ComputeInstanceTaskParamVO{
-		Id:         uuid.NewString(),
+		Id:         instance.ID.String(),
 		Name:       instance.Name,
 		Cpu:        instance.GetCore(),
 		Memory:     instance.GetMemory(),
@@ -147,7 +147,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Password:   password,
 		InstanceId: instance.ID.String(),
 	}
-	paramData, err := json.Marshal(taskParam)
+	paramData, err := json.Marshal(&taskParam)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) erro
 		return err
 	}
 
-	instance.Status = consts.InstanceStatusRunning
+	instance.Status = consts.InstanceStatusStarting
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 
@@ -257,7 +257,7 @@ func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId
 	taskParam := queue.NatNetworkMappingTaskParamVO{
 		Id:           uuid.NewString(),
 		Name:         instance.Name,
-		InstanceName: instance.Name,
+		InstanceId:   instance.ID.String(),
 		InstancePort: 0,
 		RemotePort:   gp.Port,
 		GatewayId:    gateway.ID.String(),
