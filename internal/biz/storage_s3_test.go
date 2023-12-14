@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"strings"
 	"testing"
 )
 
@@ -49,4 +50,49 @@ func TestUpload(t *testing.T) {
 	for _, item := range resp.Contents {
 		fmt.Println(*item.Key)
 	}
+}
+func TestKey(t *testing.T) {
+	prefix := "d"
+	var keys []string
+	keys = append(keys, "a.txt")
+	keys = append(keys, "b.txt")
+	keys = append(keys, "c.txt")
+	keys = append(keys, "d/a.txt")
+	keys = append(keys, "d/d.txt")
+	keys = append(keys, "w/d.txt")
+	keys = append(keys, "c/d/a.txt")
+	keys = append(keys, "c/d/r.txt")
+	keys = append(keys, "d/d/t.txt")
+	keys = append(keys, "d/d/d/d.txt")
+	var file []string
+	for _, key := range keys {
+		if prefix == "" {
+			splitN := strings.SplitN(key, "/", 2)
+			if len(splitN) > 1 && !contains(file, splitN[0]+"/") {
+				file = append(file, splitN[0]+"/")
+			} else if len(splitN) == 1 {
+				file = append(file, splitN[0])
+			}
+		} else {
+			dir := prefix + "/"
+			if key[:len(dir)] == dir {
+				splitN := strings.SplitN(key[len(dir):], "/", 2)
+				if len(splitN) > 1 && !contains(file, splitN[0]+"/") {
+					file = append(file, splitN[0]+"/")
+				} else if len(splitN) == 1 {
+					file = append(file, splitN[0])
+				}
+			}
+		}
+	}
+	fmt.Println(file)
+}
+
+func contains(slice []string, target string) bool {
+	for _, s := range slice {
+		if s == target {
+			return true
+		}
+	}
+	return false
 }
