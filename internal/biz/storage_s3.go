@@ -12,6 +12,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/samber/lo"
 	"io"
@@ -212,7 +213,7 @@ func (c *StorageS3UseCase) ListBucket(ctx context.Context, userId uuid.UUID) ([]
 	return c.repo.ListBucket(ctx, userId)
 }
 
-func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix string) ([]*s3.Object, error) {
+func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix string) ([]*pb.S3Object, error) {
 	s3User, err := c.GetS3User(ctx, userId)
 	if err != nil {
 		return nil, err
@@ -235,7 +236,47 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 	if err != nil {
 		return nil, err
 	}
-	return resp.Contents, nil
+	var s3ObjectList []*pb.S3Object
+	for _, object := range resp.Contents {
+		var s3Object pb.S3Object
+		key := *object.Key
+		if prefix == "" {
+			splitN := strings.SplitN(key, "/", 2)
+			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
+				s3Object.Name = splitN[0] + "/"
+			} else if len(splitN) == 1 {
+				s3Object.Etag = *object.ETag
+				s3Object.LastModify = object.LastModified.UnixMilli()
+				s3Object.Size = int32(*object.Size)
+				s3Object.Name = splitN[0]
+			}
+		} else {
+			dir := prefix + "/"
+			if key[:len(dir)] == dir {
+				splitN := strings.SplitN(key[len(dir):], "/", 2)
+				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
+					s3Object.Name = splitN[0] + "/"
+				} else if len(splitN) == 1 {
+					s3Object.Etag = *object.ETag
+					s3Object.LastModify = object.LastModified.UnixMilli()
+					s3Object.Size = int32(*object.Size)
+					s3Object.Name = splitN[0]
+				}
+			}
+		}
+		s3ObjectList = append(s3ObjectList, &s3Object)
+	}
+
+	return s3ObjectList, nil
+}
+
+func containsDir(slice []*pb.S3Object, target string) bool {
+	for _, s := range slice {
+		if s.Name == target {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.UUID, bucketName, key string, fileByte []byte) (*s3.PutObjectOutput, error) {

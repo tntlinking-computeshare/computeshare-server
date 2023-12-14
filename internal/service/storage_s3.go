@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
@@ -114,14 +113,7 @@ func (s *StorageS3Service) S3StorageInBucketList(ctx context.Context, req *pb.S3
 	return &pb.S3StorageInBucketListReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data: lo.Map(objects, func(item *s3.Object, _ int) *pb.S3Object {
-			return &pb.S3Object{
-				Etag:       *item.ETag,
-				Name:       *item.Key,
-				Size:       int32(*item.Size),
-				LastModify: item.LastModified.UnixMilli(),
-			}
-		}),
+		Data:    objects,
 	}, nil
 }
 func (s *StorageS3Service) S3StorageUploadFile(ctx context.Context, req *pb.S3StorageUploadFileRequest) (*pb.S3StorageUploadFileReply, error) {
