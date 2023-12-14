@@ -71,7 +71,7 @@ Authorization: Bearer {{ access_token }}
 }
 
 ### 验证码
-#POST http://computeshare.hamster.newtouch.com/v1/sms/send
+#POST http://api.computeshare.newtouch.com/v1/sms/send
 POST  http://127.0.0.1:8000/v1/sms/send
 Content-Type: application/json
 
@@ -82,7 +82,7 @@ Content-Type: application/json
 
 
 ### 登录
-POST http://computeshare.hamster.newtouch.com/v1/user/login_by_vc
+POST http://api.computeshare.newtouch.com/v1/user/login_by_vc
 Content-Type: application/json
 
 {
@@ -134,7 +134,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 查询文件列表
-GET  https://computeshare.hamster.newtouch.com/v1/storage
+GET  https://api.computeshare.newtouch.com/v1/storage
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -188,14 +188,14 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 查询网络映射
-GET https://computeshare.hamster.newtouch.com/v1/network-mappings/page?page=1&size=10
+GET https://api.computeshare.newtouch.com/v1/network-mappings/page?page=1&size=10
 #GET http://127.0.0.1:8000/v1/network-mappings/page?page=1&size=10
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 
 ### 新增网络映射
-POST https://computeshare.hamster.newtouch.com/v1/network-mappings
+POST https://api.computeshare.newtouch.com/v1/network-mappings
 #POST http://127.0.0.1:8000/v1/network-mappings
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
@@ -230,23 +230,35 @@ Authorization: Bearer {{ access_token }}
 }
 
 ### 下一个网络端口
-GET https://computeshare.hamster.newtouch.com/v1/network-mappings/next?computerId=2f5e4fdc-b976-4870-9307-ac7705ae32e0
+GET https://api.computeshare.newtouch.com/v1/network-mappings/next?computerId=2f5e4fdc-b976-4870-9307-ac7705ae32e0
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 
 ### 域名检查
-GET https://computeshare.hamster.newtouch.com/v1/domain-binding/nslookup?domain=test2.computeshare.newtouch.com&networkMappingId=2fe434fc-7e7d-4abb-9b0f-d1870b0625e6
+GET https://api.computeshare.newtouch.com/v1/domain-binding/nslookup?domain=test2.computeshare.newtouch.com&networkMappingId=2fe434fc-7e7d-4abb-9b0f-d1870b0625e6
 #GET http://127.0.0.1:8000/v1/domain-binding/nslookup?domain=test2.computeshare.newtouch.com&networkMappingId=2fe434fc-7e7d-4abb-9b0f-d1870b0625e6
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 
 ### 启动存储提供 ccea3e0d-50e4-4e63-bdb3-c92c30ebb9f3
-POST https://computeshare.hamster.newtouch.com/v1/storage_provider
+POST https://api.computeshare.newtouch.com/v1/storage_provider
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {
   "agentId": "ccea3e0d-50e4-4e63-bdb3-c92c30ebb9f3"
+}
+
+
+### 启动存储提供 ccea3e0d-50e4-4e63-bdb3-c92c30ebb9f3
+#POST https://api.computeshare.newtouch.com/v1/s3bucket
+POST http://127.0.0.1:8000/v1/s3bucket
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "bucket": "mohaijiang02",
+  "secretKey": "Abcd1234"
 }
