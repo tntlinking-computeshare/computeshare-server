@@ -123,8 +123,14 @@ data:
     auth:
       service_key: some-secret-key
       api_key: some-secret-key-for-forntend
-
-kind: ConfigMap
+    dispose:
+      s3:
+        target_docker_host: unix:///var/run/docker.sock
+        target_docker_container_name: seaweedfs-master-1
+        endpoint: computeshare.newtouch.com:8333
+        region: shanghai
+      
+      kind: ConfigMap
 metadata:
   name: config
 

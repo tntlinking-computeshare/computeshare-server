@@ -49,22 +49,22 @@ type S3UserRepo interface {
 }
 
 type StorageS3UseCase struct {
-	repo       S3UserRepo
-	userRepo   UserRepo
-	log        *log.Helper
-	dockerHost string
+	repo     S3UserRepo
+	userRepo UserRepo
+	log      *log.Helper
+	dispose  conf.Dispose
 }
 
 func NewStorageS3UseCase(
 	repo S3UserRepo,
 	userRepo UserRepo,
-	conf *conf.Data,
+	confDispose *conf.Dispose,
 	logger log.Logger) *StorageS3UseCase {
 	return &StorageS3UseCase{
-		repo:       repo,
-		userRepo:   userRepo,
-		dockerHost: conf.Docker.Host,
-		log:        log.NewHelper(logger),
+		repo:     repo,
+		userRepo: userRepo,
+		dispose:  *confDispose,
+		log:      log.NewHelper(logger),
 	}
 }
 
@@ -111,7 +111,7 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 	}, "")
 
 	// 创建Docker客户端
-	cli, err := client.NewClientWithOpts(client.WithHost(c.dockerHost))
+	cli, err := client.NewClientWithOpts(client.WithHost(c.dispose.S3.TargetDockerHost))
 
 	// 构建命令
 	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=Read,Write,List,Tagging,Admin -apply " | weed shell`,
@@ -128,7 +128,7 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 	}
 
 	// 创建容器执行命令的请求
-	execResp, err := cli.ContainerExecCreate(context.Background(), "seaweedfs-master-1", execConfig)
+	execResp, err := cli.ContainerExecCreate(context.Background(), c.dispose.S3.TargetDockerContainerName, execConfig)
 	if err != nil {
 		fmt.Printf("无法创建容器执行命令: %v\n", err)
 		return nil, err
@@ -162,8 +162,8 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 
 	fmt.Println("命令执行成功")
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
@@ -190,8 +190,8 @@ func (c *StorageS3UseCase) DeleteBucket(ctx context.Context, userId uuid.UUID, b
 		return err
 	}
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
@@ -219,8 +219,8 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 		return nil, err
 	}
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
@@ -285,8 +285,8 @@ func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.
 		return nil, err
 	}
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
@@ -315,8 +315,8 @@ func (c *StorageS3UseCase) S3StorageDownload(ctx context.Context, userId uuid.UU
 		return nil, err
 	}
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
@@ -345,8 +345,8 @@ func (c *StorageS3UseCase) S3StorageDelete(ctx context.Context, userId uuid.UUID
 		return err
 	}
 	config := &aws.Config{
-		Region:           aws.String(os.Getenv("S3_REGION")),
-		Endpoint:         aws.String(os.Getenv("S3_ENDPOINT")),
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
 		Credentials:      credentials.NewStaticCredentials(s3User.AccessKey, s3User.SecretKey, ""),
 		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
 	}
