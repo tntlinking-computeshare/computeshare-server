@@ -238,10 +238,11 @@ spec:
       port: 3306
       protocol: TCP
       targetPort: 3306
+      nodePort: 31252
   selector:
     app: mysql
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
 
 ---
 

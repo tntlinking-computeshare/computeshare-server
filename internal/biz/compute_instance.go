@@ -138,7 +138,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 	}
 
 	taskParam := queue.ComputeInstanceTaskParamVO{
-		Id:         uuid.NewString(),
+		Id:         instance.ID.String(),
 		Name:       instance.Name,
 		Cpu:        instance.GetCore(),
 		Memory:     instance.GetMemory(),
@@ -147,7 +147,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Password:   password,
 		InstanceId: instance.ID.String(),
 	}
-	paramData, err := json.Marshal(taskParam)
+	paramData, err := json.Marshal(&taskParam)
 	if err != nil {
 		return err
 	}
