@@ -116,7 +116,7 @@ func (c *StorageProviderUseCase) createNetworkMappingPort(ctx context.Context, a
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
 		Name:         nm.Name,
-		InstanceName: "",
+		InstanceId:   "",
 		InstancePort: gp.Port,
 		RemotePort:   gp.Port,
 		GatewayId:    gp.FkGatewayID.String(),
@@ -172,7 +172,7 @@ func (c *StorageProviderUseCase) deleteNetworkMappingPort(ctx context.Context, a
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
 		Name:         nm.Name,
-		InstanceName: "",
+		InstanceId:   "",
 		InstancePort: gp.Port,
 		RemotePort:   gp.Port,
 		GatewayId:    gp.FkGatewayID.String(),

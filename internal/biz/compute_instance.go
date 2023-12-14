@@ -257,7 +257,7 @@ func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId
 	taskParam := queue.NatNetworkMappingTaskParamVO{
 		Id:           uuid.NewString(),
 		Name:         instance.Name,
-		InstanceName: instance.Name,
+		InstanceId:   instance.ID.String(),
 		InstancePort: 0,
 		RemotePort:   gp.Port,
 		GatewayId:    gateway.ID.String(),

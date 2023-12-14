@@ -195,7 +195,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           nm.ID.String(),
 		Name:         fmt.Sprintf("NetworkMapping_%s", nm.ID.String()),
-		InstanceName: ci.Name,
+		InstanceId:   ci.ID.String(),
 		InstancePort: nm.ComputerPort,
 		RemotePort:   nm.GatewayPort,
 		GatewayId:    nm.FkGatewayID.String(),
@@ -264,7 +264,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	nptp := &queue.NatNetworkMappingTaskParamVO{
 		Id:           np.ID.String(),
 		Name:         np.Name,
-		InstanceName: instance.Name,
+		InstanceId:   instance.ID.String(),
 		InstancePort: np.ComputerPort,
 		RemotePort:   np.GatewayPort,
 		GatewayId:    gp.FkGatewayID.String(),
