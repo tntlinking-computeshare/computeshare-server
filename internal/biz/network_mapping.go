@@ -163,7 +163,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 
 	// 保存数据库
 	// 进行网络映射转换
-	nm := NetworkMapping{
+	nwp := NetworkMapping{
 		ID:       uuid.UUID{},
 		Name:     nmc.Name,
 		Protocol: protocol,
@@ -180,7 +180,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		UserId:    claim.GetUserId(),
 		GatewayIP: g.IP,
 	}
-	err = m.repo.CreateNetworkMapping(ctx, &nm)
+	err = m.repo.CreateNetworkMapping(ctx, &nwp)
 	if err != nil {
 		return nil, err
 	}
@@ -193,12 +193,12 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	// 构建任务参数
 
 	nptp := &queue.NatNetworkMappingTaskParamVO{
-		Id:           nm.ID.String(),
-		Name:         fmt.Sprintf("NetworkMapping_%s", nm.ID.String()),
+		Id:           nwp.ID.String(),
+		Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
 		InstanceId:   ci.ID.String(),
-		InstancePort: nm.ComputerPort,
-		RemotePort:   nm.GatewayPort,
-		GatewayId:    nm.FkGatewayID.String(),
+		InstancePort: nwp.ComputerPort,
+		RemotePort:   nwp.GatewayPort,
+		GatewayId:    nwp.FkGatewayID.String(),
 		GatewayIp:    g.IP,
 		GatewayPort:  g.Port,
 	}
@@ -225,7 +225,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 
 	gp.IsUse = true
 	err = m.gatewayPortRepo.Update(ctx, gp)
-	return &nm, err
+	return &nwp, err
 }
 
 func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
@@ -241,17 +241,17 @@ func (m *NetworkMappingUseCase) GetNetworkMapping(ctx context.Context, id uuid.U
 func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error {
 	m.log.WithContext(ctx).Infof("DeleteNetworkMapping %s", id)
 
-	np, err := m.GetNetworkMapping(ctx, id)
+	nwp, err := m.GetNetworkMapping(ctx, id)
 	if err != nil {
 		return err
 	}
 
-	gp, err := m.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, np.FkGatewayID, np.GatewayPort)
+	gp, err := m.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, nwp.FkGatewayID, nwp.GatewayPort)
 	if err != nil {
 		return err
 	}
 
-	instance, err := m.ciu.Get(ctx, np.FkComputerID)
+	instance, err := m.ciu.Get(ctx, nwp.FkComputerID)
 	if err != nil {
 		return err
 	}
@@ -262,11 +262,11 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	}
 
 	nptp := &queue.NatNetworkMappingTaskParamVO{
-		Id:           np.ID.String(),
-		Name:         fmt.Sprintf("NetworkMapping_%s", instance.ID.String()),
+		Id:           nwp.ID.String(),
+		Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
 		InstanceId:   instance.ID.String(),
-		InstancePort: np.ComputerPort,
-		RemotePort:   np.GatewayPort,
+		InstancePort: nwp.ComputerPort,
+		RemotePort:   nwp.GatewayPort,
 		GatewayId:    gp.FkGatewayID.String(),
 		GatewayIp:    gateway.IP,
 		GatewayPort:  gateway.Port,
