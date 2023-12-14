@@ -195,7 +195,7 @@ func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) erro
 		return err
 	}
 
-	instance.Status = consts.InstanceStatusRunning
+	instance.Status = consts.InstanceStatusStarting
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 

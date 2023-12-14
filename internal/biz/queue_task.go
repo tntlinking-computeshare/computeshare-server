@@ -70,20 +70,20 @@ type TaskRepo interface {
 
 type TaskUseCase struct {
 	repo                   TaskRepo
-	networkMappingUseCase  *NetworkMappingUseCase
+	networkMappingRepo     NetworkMappingRepo
 	computeInstanceRepo    ComputeInstanceRepo
 	storageProviderUseCase *StorageProviderUseCase
 	log                    *log.Helper
 }
 
 func NewTaskUseCase(repo TaskRepo,
-	networkMappingUseCase *NetworkMappingUseCase,
+	networkMappingRepo NetworkMappingRepo,
 	computeInstanceRepo ComputeInstanceRepo,
 	storageProviderUseCase *StorageProviderUseCase,
 	logger log.Logger) *TaskUseCase {
 	return &TaskUseCase{
 		repo:                   repo,
-		networkMappingUseCase:  networkMappingUseCase,
+		networkMappingRepo:     networkMappingRepo,
 		computeInstanceRepo:    computeInstanceRepo,
 		storageProviderUseCase: storageProviderUseCase,
 		log:                    log.NewHelper(logger),
@@ -179,7 +179,12 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+			mapping, err := m.networkMappingRepo.GetNetworkMapping(ctx, id)
+			if err != nil {
+				return err
+			}
+			mapping.Status = int(task.Status)
+			_ = m.networkMappingRepo.UpdateNetworkMapping(ctx, mapping)
 
 		case queue.TaskCmd_STORAGE_CREATE:
 			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
@@ -211,6 +216,7 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 				return err
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleted)
+			_ = m.computeInstanceRepo.Delete(ctx, instanceId)
 		case queue.TaskCmd_VM_START:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
@@ -232,15 +238,25 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 		case queue.TaskCmd_VM_VNC_CONNECT:
 
 		case queue.TaskCmd_NAT_PROXY_CREATE,
-			queue.TaskCmd_NAT_PROXY_DELETE,
-			queue.TaskCmd_NAT_VISITOR_CREATE,
-			queue.TaskCmd_NAT_VISITOR_DELETE:
+			queue.TaskCmd_NAT_VISITOR_CREATE:
+
 			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
 			if err != nil {
 				return err
 			}
-			_ = m.networkMappingUseCase.UpdateNetworkMapping(ctx, id, int(task.Status))
+			mapping, err := m.networkMappingRepo.GetNetworkMapping(ctx, id)
+			if err != nil {
+				return err
+			}
+			mapping.Status = int(task.Status)
+			_ = m.networkMappingRepo.UpdateNetworkMapping(ctx, mapping)
 
+		case queue.TaskCmd_NAT_PROXY_DELETE, queue.TaskCmd_NAT_VISITOR_DELETE:
+			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
+			if err != nil {
+				return err
+			}
+			err = m.networkMappingRepo.DeleteNetworkMapping(ctx, id)
 		case queue.TaskCmd_STORAGE_CREATE:
 			id, err := uuid.Parse(param.(*queue.StorageSetupTaskParamVO).Id)
 			if err != nil {
