@@ -12,6 +12,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/samber/lo"
 	"io"
 	"os"
@@ -47,16 +48,22 @@ type S3UserRepo interface {
 }
 
 type StorageS3UseCase struct {
-	repo     S3UserRepo
-	userRepo UserRepo
-	log      *log.Helper
+	repo       S3UserRepo
+	userRepo   UserRepo
+	log        *log.Helper
+	dockerHost string
 }
 
-func NewStorageS3UseCase(repo S3UserRepo, userRepo UserRepo, logger log.Logger) *StorageS3UseCase {
+func NewStorageS3UseCase(
+	repo S3UserRepo,
+	userRepo UserRepo,
+	conf *conf.Data,
+	logger log.Logger) *StorageS3UseCase {
 	return &StorageS3UseCase{
-		repo:     repo,
-		userRepo: userRepo,
-		log:      log.NewHelper(logger),
+		repo:       repo,
+		userRepo:   userRepo,
+		dockerHost: conf.Docker.Host,
+		log:        log.NewHelper(logger),
 	}
 }
 
@@ -103,7 +110,7 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 	}, "")
 
 	// 创建Docker客户端
-	cli, err := client.NewClientWithOpts(client.WithHost("unix:///var/run/docker.sock"))
+	cli, err := client.NewClientWithOpts(client.WithHost(c.dockerHost))
 
 	// 构建命令
 	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=Read,Write,List,Tagging,Admin -apply " | weed shell`,

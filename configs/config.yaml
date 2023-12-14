@@ -24,6 +24,8 @@ data:
     write_timeout: 0.6s
   ipfs:
     url: 127.0.0.1:5001
+  docker:
+    host: unix:///var/run/docker.sock
 auth:
   service_key: some-secret-key
   api_key: some-secret-key-for-forntend

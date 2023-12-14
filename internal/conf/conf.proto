@@ -49,9 +49,13 @@ message Data {
   message Ipfs {
     string url = 1;
   }
+  message Docker{
+    string host = 1;
+  }
   Database database = 1;
   Redis redis = 2;
   Ipfs ipfs = 3;
+  Docker docker = 4;
 }
 
 message Auth {

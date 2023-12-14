@@ -156,12 +156,17 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 
+	protocol := nmc.Protocol
+	if protocol == "" {
+		protocol = "TCP"
+	}
+
 	// 保存数据库
 	// 进行网络映射转换
 	nm := NetworkMapping{
 		ID:       uuid.UUID{},
 		Name:     nmc.Name,
-		Protocol: nmc.Protocol,
+		Protocol: protocol,
 		// gateway id
 		FkGatewayID: gp.FkGatewayID,
 		// computer_id
