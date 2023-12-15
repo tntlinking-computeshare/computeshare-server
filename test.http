@@ -253,8 +253,8 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 启动存储提供 ccea3e0d-50e4-4e63-bdb3-c92c30ebb9f3
-#POST https://api.computeshare.newtouch.com/v1/s3bucket
-POST http://127.0.0.1:8000/v1/s3bucket
+POST https://api.computeshare.newtouch.com/v1/s3bucket
+#POST http://127.0.0.1:8000/v1/s3bucket
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -262,3 +262,16 @@ Authorization: Bearer {{ access_token }}
   "bucket": "mohaijiang02",
   "secretKey": "Abcd1234"
 }
+
+
+### 删除域名绑定
+DELETE http://127.0.0.1:8000/v1/domain-binding/4cec566d-a4ae-41aa-8cf7-293210d9d48f
+Authorization: Bearer {{ access_token }}
+
+
+### 新增域名绑定
+POST http://127.0.0.1:8000/v1/domain-binding
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
