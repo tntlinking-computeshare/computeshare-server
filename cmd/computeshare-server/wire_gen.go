@@ -41,7 +41,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	domainBindingRepository := data.NewDomainBindingRepository(dataData, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, networkMappingRepo, logger)
 	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceUsercase, logger)
 	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
 	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, logger)
