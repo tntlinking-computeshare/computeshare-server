@@ -86,6 +86,9 @@ spec:
 ---
 
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
 data:
   client.yaml: "server:\n  http:\n    addr: 0.0.0.0:8000\n    timeout: 20s\n  grpc:\n
     \   addr: 0.0.0.0:9000\n    timeout: 10s\n  p2p:\n    port: 4001\n    swarm_key:
@@ -135,9 +138,7 @@ data:
         s3_url_prefix: s3://
         url_prefix: http://computeshare.newtouch.com:8333/
       
-      kind: ConfigMap
-metadata:
-  name: config
+
 
 ---
 
