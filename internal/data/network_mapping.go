@@ -35,6 +35,7 @@ func (repo *NetworkMappingRepo) CreateNetworkMapping(ctx context.Context, entity
 		SetGatewayPort(entity.GatewayPort).
 		SetFkUserID(entity.UserId).
 		SetGatewayIP(entity.GatewayIP).
+		SetDeleteState(entity.DeleteState).
 		Save(ctx)
 
 	if err != nil {
@@ -56,7 +57,7 @@ func (repo *NetworkMappingRepo) DeleteNetworkMapping(ctx context.Context, id uui
 func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
 	count, err := repo.data.getNetworkMapping(ctx).Query().
 		Select(networkmapping.FieldID).
-		Where(networkmapping.FkUserID(userId)).
+		Where(networkmapping.FkUserID(userId), networkmapping.DeleteState(false)).
 		Count(ctx)
 	if err != nil {
 		return nil, 0, err
@@ -68,7 +69,7 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 		offset = page * size
 	}
 	list, err := repo.data.getNetworkMapping(ctx).Query().
-		Where(networkmapping.FkUserID(userId)).
+		Where(networkmapping.FkUserID(userId), networkmapping.DeleteState(false)).
 		Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
@@ -86,6 +87,7 @@ func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity
 		SetStatus(entity.Status).
 		SetGatewayPort(entity.GatewayPort).
 		SetGatewayIP(entity.GatewayIP).
+		SetDeleteState(entity.DeleteState).
 		Exec(ctx)
 }
 
@@ -147,7 +149,7 @@ func (repo *NetworkMappingRepo) QueryGatewayIdByComputeIds(ctx context.Context, 
 	var v []networkMapingGroupByFkGatewayID
 
 	err := repo.data.getNetworkMapping(ctx).Query().
-		Where(networkmapping.FkComputerIDIn(computeInstanceIds...)).
+		Where(networkmapping.FkComputerIDIn(computeInstanceIds...), networkmapping.DeleteState(false)).
 		GroupBy(networkmapping.FieldFkGatewayID).Aggregate(ent.Count()).Scan(ctx, &v)
 	if err != nil {
 		return uuid.Nil, err

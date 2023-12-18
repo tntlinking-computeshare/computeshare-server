@@ -30,12 +30,14 @@ type NetworkMapping struct {
 	GatewayPort int32 `json:"gateway_port,omitempty"`
 	// 需要映射的虚拟机端口号
 	ComputerPort int32 `json:"computer_port,omitempty"`
-	//  0 待开始 1 进行中 2 已完成，3 失败
+	//  0 待开始 1 进行中 2 已完成，3 失败 4 删除中
 	Status int `json:"status,omitempty"`
 	// 用户id
 	UserId uuid.UUID `json:"user_id"`
 	// gateway ip
 	GatewayIP string `json:"gateway_ip"`
+	// 删除标记
+	DeleteState bool `json:"delete_state"`
 }
 
 type NetworkMappingCreate struct {
@@ -179,9 +181,10 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		// 需要映射的虚拟机端口号
 		ComputerPort: nmc.ComputerPort,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status:    0,
-		UserId:    claim.GetUserId(),
-		GatewayIP: g.IP,
+		Status:      0,
+		UserId:      claim.GetUserId(),
+		GatewayIP:   g.IP,
+		DeleteState: false,
 	}
 	err = m.repo.CreateNetworkMapping(ctx, &nwp)
 	if err != nil {
@@ -306,7 +309,13 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 
 	gp.IsUse = false
 
-	return m.gatewayPortRepo.Update(ctx, gp)
+	err = m.gatewayPortRepo.Update(ctx, gp)
+	if err != nil {
+		return err
+	}
+
+	nwp.DeleteState = true
+	return m.repo.UpdateNetworkMapping(ctx, nwp)
 
 }
 

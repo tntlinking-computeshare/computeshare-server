@@ -192,6 +192,10 @@ func init() {
 	networkmappingDescStatus := networkmappingFields[7].Descriptor()
 	// networkmapping.DefaultStatus holds the default value on creation for the status field.
 	networkmapping.DefaultStatus = networkmappingDescStatus.Default.(int)
+	// networkmappingDescDeleteState is the schema descriptor for delete_state field.
+	networkmappingDescDeleteState := networkmappingFields[10].Descriptor()
+	// networkmapping.DefaultDeleteState holds the default value on creation for the delete_state field.
+	networkmapping.DefaultDeleteState = networkmappingDescDeleteState.Default.(bool)
 	// networkmappingDescID is the schema descriptor for id field.
 	networkmappingDescID := networkmappingFields[0].Descriptor()
 	// networkmapping.DefaultID holds the default value on creation for the id field.

@@ -169,6 +169,7 @@ var (
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "fk_computer_id", Type: field.TypeUUID},
 		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "delete_state", Type: field.TypeBool, Default: false},
 	}
 	// NetworkMappingsTable holds the schema information for the "network_mappings" table.
 	NetworkMappingsTable = &schema.Table{

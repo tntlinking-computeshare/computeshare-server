@@ -4559,6 +4559,7 @@ type NetworkMappingMutation struct {
 	addstatus        *int
 	fk_computer_id   *uuid.UUID
 	fk_user_id       *uuid.UUID
+	delete_state     *bool
 	clearedFields    map[string]struct{}
 	done             bool
 	oldValue         func(context.Context) (*NetworkMapping, error)
@@ -5053,6 +5054,42 @@ func (m *NetworkMappingMutation) ResetFkUserID() {
 	m.fk_user_id = nil
 }
 
+// SetDeleteState sets the "delete_state" field.
+func (m *NetworkMappingMutation) SetDeleteState(b bool) {
+	m.delete_state = &b
+}
+
+// DeleteState returns the value of the "delete_state" field in the mutation.
+func (m *NetworkMappingMutation) DeleteState() (r bool, exists bool) {
+	v := m.delete_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteState returns the old "delete_state" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldDeleteState(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeleteState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeleteState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteState: %w", err)
+	}
+	return oldValue.DeleteState, nil
+}
+
+// ResetDeleteState resets all changes to the "delete_state" field.
+func (m *NetworkMappingMutation) ResetDeleteState() {
+	m.delete_state = nil
+}
+
 // Where appends a list predicates to the NetworkMappingMutation builder.
 func (m *NetworkMappingMutation) Where(ps ...predicate.NetworkMapping) {
 	m.predicates = append(m.predicates, ps...)
@@ -5087,7 +5124,7 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
 	}
@@ -5115,6 +5152,9 @@ func (m *NetworkMappingMutation) Fields() []string {
 	if m.fk_user_id != nil {
 		fields = append(fields, networkmapping.FieldFkUserID)
 	}
+	if m.delete_state != nil {
+		fields = append(fields, networkmapping.FieldDeleteState)
+	}
 	return fields
 }
 
@@ -5141,6 +5181,8 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 		return m.FkComputerID()
 	case networkmapping.FieldFkUserID:
 		return m.FkUserID()
+	case networkmapping.FieldDeleteState:
+		return m.DeleteState()
 	}
 	return nil, false
 }
@@ -5168,6 +5210,8 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldFkComputerID(ctx)
 	case networkmapping.FieldFkUserID:
 		return m.OldFkUserID(ctx)
+	case networkmapping.FieldDeleteState:
+		return m.OldDeleteState(ctx)
 	}
 	return nil, fmt.Errorf("unknown NetworkMapping field %s", name)
 }
@@ -5239,6 +5283,13 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFkUserID(v)
+		return nil
+	case networkmapping.FieldDeleteState:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteState(v)
 		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)
@@ -5354,6 +5405,9 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 		return nil
 	case networkmapping.FieldFkUserID:
 		m.ResetFkUserID()
+		return nil
+	case networkmapping.FieldDeleteState:
+		m.ResetDeleteState()
 		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)

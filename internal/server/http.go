@@ -2,9 +2,11 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/transport"
+	"github.com/gorilla/websocket"
 	"github.com/mohaijiang/computeshare-server/internal/data"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 
@@ -119,6 +121,7 @@ func NewHTTPServer(c *conf.Server,
 	srv := http.NewServer(opts...)
 	openAPIhandler := openapiv2.NewHandler()
 	srv.HandlePrefix("/q/", openAPIhandler)
+	srv.HandleFunc("/websockify", WsHandler)
 	agentV1.RegisterAgentHTTPServer(srv, agenter)
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterStorageS3HTTPServer(srv, storageS3Service)
@@ -141,4 +144,63 @@ func NewHTTPServer(c *conf.Server,
 	job.StartJob()
 
 	return srv
+}
+
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		// 允许所有请求，也可以根据需要自定义检查
+		return true
+	},
+}
+
+func WsHandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+
+	//192.168.22.238:5915
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer conn.Close()
+
+	// 在这里添加 JWT Token 验证逻辑
+	// 如果验证失败，可以关闭连接并返回错误
+
+	// 连接到 noVNC 服务
+	noVNCConn, _, err := websocket.DefaultDialer.Dial("ws://192.168.22.238:6801/websockify", nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer noVNCConn.Close()
+
+	// 开启 goroutine 将 noVNC 发送的消息转发给客户端
+	go func() {
+		for {
+			_, message, err := noVNCConn.ReadMessage()
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			err = conn.WriteMessage(websocket.BinaryMessage, message)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		}
+	}()
+
+	// 从客户端读取消息并发送到 noVNC 服务
+	for {
+		_, message, err := conn.ReadMessage()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		err = noVNCConn.WriteMessage(websocket.BinaryMessage, message)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
 }
