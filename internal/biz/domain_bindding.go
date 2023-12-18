@@ -21,6 +21,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -125,7 +126,6 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 		return err
 	}
 
-	ingressName := domainBinding.Name
 	hostIp := gateway.IP
 	hostPort := networkMapping.GatewayPort
 	hostDomain := domainBinding.Domain
@@ -133,6 +133,10 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 	domainBinding.FkComputeInstanceID = networkMapping.FkComputerID
 	domainBinding.GatewayPort = networkMapping.GatewayPort
 	domainBinding.CreateTime = time.Now()
+
+	err = uc.domainBindingRepository.Save(ctx, domainBinding)
+
+	ingressName := strings.ReplaceAll(domainBinding.Name, ".", "-")
 
 	namespace, err := uc.clientset.CoreV1().Namespaces().Get(ctx, DEFAULT_NAMESPACE, v1.GetOptions{})
 	if err != nil {
@@ -167,7 +171,7 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 				},
 				Ports: []apicorev1.EndpointPort{
 					{
-						Port: int32(hostPort),
+						Port: hostPort,
 					},
 				},
 			},
@@ -175,8 +179,16 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 	}
 	if err != nil {
 		endpoint, err = endpointClient.Create(ctx, endpoint, v1.CreateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	} else {
 		endpoint, err = endpointClient.Update(ctx, endpoint, v1.UpdateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	}
 
 	if err != nil {
@@ -196,10 +208,10 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 			Ports: []apicorev1.ServicePort{
 				{
 					Protocol: apicorev1.ProtocolTCP,
-					Port:     int32(hostPort),
+					Port:     hostPort,
 					TargetPort: intstr.IntOrString{
 						Type:   intstr.Int,
-						IntVal: int32(hostPort),
+						IntVal: hostPort,
 					},
 				},
 			},
@@ -208,8 +220,16 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 
 	if err != nil {
 		service, err = serviceClient.Create(ctx, service, v1.CreateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	} else {
 		service, err = serviceClient.Update(ctx, service, v1.UpdateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	}
 
 	// 检查ingress 是否存在，并创建
@@ -261,11 +281,17 @@ func (uc *DomainBindingUseCase) CreateDomainBinding(ctx context.Context, domainB
 	}
 	if err != nil {
 		ingress, err = ingressClient.Create(ctx, ingress, v1.CreateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	} else {
 		ingress, err = ingressClient.Update(ctx, ingress, v1.UpdateOptions{})
+		if err != nil {
+			uc.log.Error(err)
+			return err
+		}
 	}
-
-	err = uc.domainBindingRepository.Save(ctx, domainBinding)
 
 	return err
 }
@@ -279,7 +305,7 @@ func (uc *DomainBindingUseCase) DeleteDomainBinding(ctx context.Context, id uuid
 		return errors.New("no permission")
 	}
 
-	ingressName := domainBinding.Name
+	ingressName := strings.ReplaceAll(domainBinding.Name, ".", "-")
 	namespace, err := uc.clientset.CoreV1().Namespaces().Get(ctx, DEFAULT_NAMESPACE, v1.GetOptions{})
 	if err != nil {
 		namespace = &apicorev1.Namespace{
@@ -293,27 +319,28 @@ func (uc *DomainBindingUseCase) DeleteDomainBinding(ctx context.Context, id uuid
 		return err
 	}
 
-	// 检查endpoint是否重复并删除
-	endpointClient := uc.clientset.CoreV1().Endpoints(DEFAULT_NAMESPACE)
-	_, err = endpointClient.Get(ctx, ingressName, v1.GetOptions{})
+	// 检查ingress 是否存在，并删除
+	ingressClient := uc.clientset.NetworkingV1().Ingresses(DEFAULT_NAMESPACE)
 
+	_, err = ingressClient.Get(ctx, ingressName, v1.GetOptions{})
 	if err == nil {
-		_ = endpointClient.Delete(ctx, ingressName, v1.DeleteOptions{})
+		_ = ingressClient.Delete(ctx, ingressName, v1.DeleteOptions{})
 	}
 
 	// 检查service是否重复并删除
 	serviceClient := uc.clientset.CoreV1().Services(DEFAULT_NAMESPACE)
 	_, err = serviceClient.Get(ctx, ingressName, v1.GetOptions{})
-	if err != nil {
+	if err == nil {
 		_ = serviceClient.Delete(ctx, ingressName, v1.DeleteOptions{})
 	}
 
-	// 检查ingress 是否存在，并删除
-	ingressClient := uc.clientset.NetworkingV1().Ingresses(DEFAULT_NAMESPACE)
+	// 检查endpoint是否重复并删除
+	endpointClient := uc.clientset.CoreV1().Endpoints(DEFAULT_NAMESPACE)
+	_, err = endpointClient.Get(ctx, ingressName, v1.GetOptions{})
 
-	_, err = ingressClient.Get(ctx, ingressName, v1.GetOptions{})
-	if err != nil {
-		err = ingressClient.Delete(ctx, ingressName, v1.DeleteOptions{})
+	if err == nil {
+		err = endpointClient.Delete(ctx, ingressName, v1.DeleteOptions{})
+		fmt.Println(err)
 	}
 
 	err = uc.domainBindingRepository.Delete(ctx, id)

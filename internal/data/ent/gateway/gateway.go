@@ -18,6 +18,8 @@ const (
 	FieldIP = "ip"
 	// FieldPort holds the string denoting the port field in the database.
 	FieldPort = "port"
+	// FieldInternalIP holds the string denoting the internal_ip field in the database.
+	FieldInternalIP = "internal_ip"
 	// Table holds the table name of the gateway in the database.
 	Table = "gateways"
 )
@@ -28,6 +30,7 @@ var Columns = []string{
 	FieldName,
 	FieldIP,
 	FieldPort,
+	FieldInternalIP,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -68,4 +71,9 @@ func ByIP(opts ...sql.OrderTermOption) OrderOption {
 // ByPort orders the results by the port field.
 func ByPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPort, opts...).ToFunc()
+}
+
+// ByInternalIP orders the results by the internal_ip field.
+func ByInternalIP(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalIP, opts...).ToFunc()
 }

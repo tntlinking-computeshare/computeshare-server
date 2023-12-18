@@ -27,7 +27,8 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.Int8("status").GoType(consts.InstanceStatus(0)).Comment("0: 启动中,1:运行中,2:连接中断, 3:过期"),
 		field.String("container_id").Optional().Comment("容器id"),
 		field.String("agent_id").Optional().Comment("p2p agent Id"),
-		field.String("command").Optional().Comment("容器启动命令"),
+		field.String("vnc_ip").Comment("vnc 内网链接ip"),
+		field.Int32("vnc_port").Comment("vnc 内网链接端口号"),
 	}
 }
 

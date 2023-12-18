@@ -1102,7 +1102,9 @@ type ComputeInstanceMutation struct {
 	addstatus       *consts.InstanceStatus
 	container_id    *string
 	agent_id        *string
-	command         *string
+	vnc_ip          *string
+	vnc_port        *int32
+	addvnc_port     *int32
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -1632,53 +1634,96 @@ func (m *ComputeInstanceMutation) ResetAgentID() {
 	delete(m.clearedFields, computeinstance.FieldAgentID)
 }
 
-// SetCommand sets the "command" field.
-func (m *ComputeInstanceMutation) SetCommand(s string) {
-	m.command = &s
+// SetVncIP sets the "vnc_ip" field.
+func (m *ComputeInstanceMutation) SetVncIP(s string) {
+	m.vnc_ip = &s
 }
 
-// Command returns the value of the "command" field in the mutation.
-func (m *ComputeInstanceMutation) Command() (r string, exists bool) {
-	v := m.command
+// VncIP returns the value of the "vnc_ip" field in the mutation.
+func (m *ComputeInstanceMutation) VncIP() (r string, exists bool) {
+	v := m.vnc_ip
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCommand returns the old "command" field's value of the ComputeInstance entity.
+// OldVncIP returns the old "vnc_ip" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldCommand(ctx context.Context) (v string, err error) {
+func (m *ComputeInstanceMutation) OldVncIP(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+		return v, errors.New("OldVncIP is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCommand requires an ID field in the mutation")
+		return v, errors.New("OldVncIP requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+		return v, fmt.Errorf("querying old value for OldVncIP: %w", err)
 	}
-	return oldValue.Command, nil
+	return oldValue.VncIP, nil
 }
 
-// ClearCommand clears the value of the "command" field.
-func (m *ComputeInstanceMutation) ClearCommand() {
-	m.command = nil
-	m.clearedFields[computeinstance.FieldCommand] = struct{}{}
+// ResetVncIP resets all changes to the "vnc_ip" field.
+func (m *ComputeInstanceMutation) ResetVncIP() {
+	m.vnc_ip = nil
 }
 
-// CommandCleared returns if the "command" field was cleared in this mutation.
-func (m *ComputeInstanceMutation) CommandCleared() bool {
-	_, ok := m.clearedFields[computeinstance.FieldCommand]
-	return ok
+// SetVncPort sets the "vnc_port" field.
+func (m *ComputeInstanceMutation) SetVncPort(i int32) {
+	m.vnc_port = &i
+	m.addvnc_port = nil
 }
 
-// ResetCommand resets all changes to the "command" field.
-func (m *ComputeInstanceMutation) ResetCommand() {
-	m.command = nil
-	delete(m.clearedFields, computeinstance.FieldCommand)
+// VncPort returns the value of the "vnc_port" field in the mutation.
+func (m *ComputeInstanceMutation) VncPort() (r int32, exists bool) {
+	v := m.vnc_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldVncPort returns the old "vnc_port" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldVncPort(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldVncPort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldVncPort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldVncPort: %w", err)
+	}
+	return oldValue.VncPort, nil
+}
+
+// AddVncPort adds i to the "vnc_port" field.
+func (m *ComputeInstanceMutation) AddVncPort(i int32) {
+	if m.addvnc_port != nil {
+		*m.addvnc_port += i
+	} else {
+		m.addvnc_port = &i
+	}
+}
+
+// AddedVncPort returns the value that was added to the "vnc_port" field in this mutation.
+func (m *ComputeInstanceMutation) AddedVncPort() (r int32, exists bool) {
+	v := m.addvnc_port
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetVncPort resets all changes to the "vnc_port" field.
+func (m *ComputeInstanceMutation) ResetVncPort() {
+	m.vnc_port = nil
+	m.addvnc_port = nil
 }
 
 // Where appends a list predicates to the ComputeInstanceMutation builder.
@@ -1715,7 +1760,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -1746,8 +1791,11 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.agent_id != nil {
 		fields = append(fields, computeinstance.FieldAgentID)
 	}
-	if m.command != nil {
-		fields = append(fields, computeinstance.FieldCommand)
+	if m.vnc_ip != nil {
+		fields = append(fields, computeinstance.FieldVncIP)
+	}
+	if m.vnc_port != nil {
+		fields = append(fields, computeinstance.FieldVncPort)
 	}
 	return fields
 }
@@ -1777,8 +1825,10 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.ContainerID()
 	case computeinstance.FieldAgentID:
 		return m.AgentID()
-	case computeinstance.FieldCommand:
-		return m.Command()
+	case computeinstance.FieldVncIP:
+		return m.VncIP()
+	case computeinstance.FieldVncPort:
+		return m.VncPort()
 	}
 	return nil, false
 }
@@ -1808,8 +1858,10 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldContainerID(ctx)
 	case computeinstance.FieldAgentID:
 		return m.OldAgentID(ctx)
-	case computeinstance.FieldCommand:
-		return m.OldCommand(ctx)
+	case computeinstance.FieldVncIP:
+		return m.OldVncIP(ctx)
+	case computeinstance.FieldVncPort:
+		return m.OldVncPort(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -1889,12 +1941,19 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAgentID(v)
 		return nil
-	case computeinstance.FieldCommand:
+	case computeinstance.FieldVncIP:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCommand(v)
+		m.SetVncIP(v)
+		return nil
+	case computeinstance.FieldVncPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetVncPort(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -1907,6 +1966,9 @@ func (m *ComputeInstanceMutation) AddedFields() []string {
 	if m.addstatus != nil {
 		fields = append(fields, computeinstance.FieldStatus)
 	}
+	if m.addvnc_port != nil {
+		fields = append(fields, computeinstance.FieldVncPort)
+	}
 	return fields
 }
 
@@ -1917,6 +1979,8 @@ func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case computeinstance.FieldStatus:
 		return m.AddedStatus()
+	case computeinstance.FieldVncPort:
+		return m.AddedVncPort()
 	}
 	return nil, false
 }
@@ -1932,6 +1996,13 @@ func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddStatus(v)
+		return nil
+	case computeinstance.FieldVncPort:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddVncPort(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance numeric field %s", name)
@@ -1949,9 +2020,6 @@ func (m *ComputeInstanceMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(computeinstance.FieldAgentID) {
 		fields = append(fields, computeinstance.FieldAgentID)
-	}
-	if m.FieldCleared(computeinstance.FieldCommand) {
-		fields = append(fields, computeinstance.FieldCommand)
 	}
 	return fields
 }
@@ -1975,9 +2043,6 @@ func (m *ComputeInstanceMutation) ClearField(name string) error {
 		return nil
 	case computeinstance.FieldAgentID:
 		m.ClearAgentID()
-		return nil
-	case computeinstance.FieldCommand:
-		m.ClearCommand()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance nullable field %s", name)
@@ -2017,8 +2082,11 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 	case computeinstance.FieldAgentID:
 		m.ResetAgentID()
 		return nil
-	case computeinstance.FieldCommand:
-		m.ResetCommand()
+	case computeinstance.FieldVncIP:
+		m.ResetVncIP()
+		return nil
+	case computeinstance.FieldVncPort:
+		m.ResetVncPort()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -3599,6 +3667,7 @@ type GatewayMutation struct {
 	ip            *string
 	port          *int32
 	addport       *int32
+	internal_ip   *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Gateway, error)
@@ -3837,6 +3906,42 @@ func (m *GatewayMutation) ResetPort() {
 	m.addport = nil
 }
 
+// SetInternalIP sets the "internal_ip" field.
+func (m *GatewayMutation) SetInternalIP(s string) {
+	m.internal_ip = &s
+}
+
+// InternalIP returns the value of the "internal_ip" field in the mutation.
+func (m *GatewayMutation) InternalIP() (r string, exists bool) {
+	v := m.internal_ip
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalIP returns the old "internal_ip" field's value of the Gateway entity.
+// If the Gateway object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GatewayMutation) OldInternalIP(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalIP is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalIP requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalIP: %w", err)
+	}
+	return oldValue.InternalIP, nil
+}
+
+// ResetInternalIP resets all changes to the "internal_ip" field.
+func (m *GatewayMutation) ResetInternalIP() {
+	m.internal_ip = nil
+}
+
 // Where appends a list predicates to the GatewayMutation builder.
 func (m *GatewayMutation) Where(ps ...predicate.Gateway) {
 	m.predicates = append(m.predicates, ps...)
@@ -3871,7 +3976,7 @@ func (m *GatewayMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GatewayMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.name != nil {
 		fields = append(fields, gateway.FieldName)
 	}
@@ -3880,6 +3985,9 @@ func (m *GatewayMutation) Fields() []string {
 	}
 	if m.port != nil {
 		fields = append(fields, gateway.FieldPort)
+	}
+	if m.internal_ip != nil {
+		fields = append(fields, gateway.FieldInternalIP)
 	}
 	return fields
 }
@@ -3895,6 +4003,8 @@ func (m *GatewayMutation) Field(name string) (ent.Value, bool) {
 		return m.IP()
 	case gateway.FieldPort:
 		return m.Port()
+	case gateway.FieldInternalIP:
+		return m.InternalIP()
 	}
 	return nil, false
 }
@@ -3910,6 +4020,8 @@ func (m *GatewayMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldIP(ctx)
 	case gateway.FieldPort:
 		return m.OldPort(ctx)
+	case gateway.FieldInternalIP:
+		return m.OldInternalIP(ctx)
 	}
 	return nil, fmt.Errorf("unknown Gateway field %s", name)
 }
@@ -3939,6 +4051,13 @@ func (m *GatewayMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPort(v)
+		return nil
+	case gateway.FieldInternalIP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalIP(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Gateway field %s", name)
@@ -4013,6 +4132,9 @@ func (m *GatewayMutation) ResetField(name string) error {
 	case gateway.FieldPort:
 		m.ResetPort()
 		return nil
+	case gateway.FieldInternalIP:
+		m.ResetInternalIP()
+		return nil
 	}
 	return fmt.Errorf("unknown Gateway field %s", name)
 }
@@ -4075,6 +4197,7 @@ type GatewayPortMutation struct {
 	port          *int32
 	addport       *int32
 	is_use        *bool
+	is_public     *bool
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*GatewayPort, error)
@@ -4313,6 +4436,42 @@ func (m *GatewayPortMutation) ResetIsUse() {
 	m.is_use = nil
 }
 
+// SetIsPublic sets the "is_public" field.
+func (m *GatewayPortMutation) SetIsPublic(b bool) {
+	m.is_public = &b
+}
+
+// IsPublic returns the value of the "is_public" field in the mutation.
+func (m *GatewayPortMutation) IsPublic() (r bool, exists bool) {
+	v := m.is_public
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsPublic returns the old "is_public" field's value of the GatewayPort entity.
+// If the GatewayPort object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GatewayPortMutation) OldIsPublic(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsPublic is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsPublic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsPublic: %w", err)
+	}
+	return oldValue.IsPublic, nil
+}
+
+// ResetIsPublic resets all changes to the "is_public" field.
+func (m *GatewayPortMutation) ResetIsPublic() {
+	m.is_public = nil
+}
+
 // Where appends a list predicates to the GatewayPortMutation builder.
 func (m *GatewayPortMutation) Where(ps ...predicate.GatewayPort) {
 	m.predicates = append(m.predicates, ps...)
@@ -4347,7 +4506,7 @@ func (m *GatewayPortMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GatewayPortMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.fk_gateway_id != nil {
 		fields = append(fields, gatewayport.FieldFkGatewayID)
 	}
@@ -4356,6 +4515,9 @@ func (m *GatewayPortMutation) Fields() []string {
 	}
 	if m.is_use != nil {
 		fields = append(fields, gatewayport.FieldIsUse)
+	}
+	if m.is_public != nil {
+		fields = append(fields, gatewayport.FieldIsPublic)
 	}
 	return fields
 }
@@ -4371,6 +4533,8 @@ func (m *GatewayPortMutation) Field(name string) (ent.Value, bool) {
 		return m.Port()
 	case gatewayport.FieldIsUse:
 		return m.IsUse()
+	case gatewayport.FieldIsPublic:
+		return m.IsPublic()
 	}
 	return nil, false
 }
@@ -4386,6 +4550,8 @@ func (m *GatewayPortMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldPort(ctx)
 	case gatewayport.FieldIsUse:
 		return m.OldIsUse(ctx)
+	case gatewayport.FieldIsPublic:
+		return m.OldIsPublic(ctx)
 	}
 	return nil, fmt.Errorf("unknown GatewayPort field %s", name)
 }
@@ -4415,6 +4581,13 @@ func (m *GatewayPortMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIsUse(v)
+		return nil
+	case gatewayport.FieldIsPublic:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsPublic(v)
 		return nil
 	}
 	return fmt.Errorf("unknown GatewayPort field %s", name)
@@ -4489,6 +4662,9 @@ func (m *GatewayPortMutation) ResetField(name string) error {
 	case gatewayport.FieldIsUse:
 		m.ResetIsUse()
 		return nil
+	case gatewayport.FieldIsPublic:
+		m.ResetIsPublic()
+		return nil
 	}
 	return fmt.Errorf("unknown GatewayPort field %s", name)
 }
@@ -4559,6 +4735,7 @@ type NetworkMappingMutation struct {
 	addstatus        *int
 	fk_computer_id   *uuid.UUID
 	fk_user_id       *uuid.UUID
+	delete_state     *bool
 	clearedFields    map[string]struct{}
 	done             bool
 	oldValue         func(context.Context) (*NetworkMapping, error)
@@ -5053,6 +5230,42 @@ func (m *NetworkMappingMutation) ResetFkUserID() {
 	m.fk_user_id = nil
 }
 
+// SetDeleteState sets the "delete_state" field.
+func (m *NetworkMappingMutation) SetDeleteState(b bool) {
+	m.delete_state = &b
+}
+
+// DeleteState returns the value of the "delete_state" field in the mutation.
+func (m *NetworkMappingMutation) DeleteState() (r bool, exists bool) {
+	v := m.delete_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteState returns the old "delete_state" field's value of the NetworkMapping entity.
+// If the NetworkMapping object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NetworkMappingMutation) OldDeleteState(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeleteState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeleteState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteState: %w", err)
+	}
+	return oldValue.DeleteState, nil
+}
+
+// ResetDeleteState resets all changes to the "delete_state" field.
+func (m *NetworkMappingMutation) ResetDeleteState() {
+	m.delete_state = nil
+}
+
 // Where appends a list predicates to the NetworkMappingMutation builder.
 func (m *NetworkMappingMutation) Where(ps ...predicate.NetworkMapping) {
 	m.predicates = append(m.predicates, ps...)
@@ -5087,7 +5300,7 @@ func (m *NetworkMappingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NetworkMappingMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.name != nil {
 		fields = append(fields, networkmapping.FieldName)
 	}
@@ -5115,6 +5328,9 @@ func (m *NetworkMappingMutation) Fields() []string {
 	if m.fk_user_id != nil {
 		fields = append(fields, networkmapping.FieldFkUserID)
 	}
+	if m.delete_state != nil {
+		fields = append(fields, networkmapping.FieldDeleteState)
+	}
 	return fields
 }
 
@@ -5141,6 +5357,8 @@ func (m *NetworkMappingMutation) Field(name string) (ent.Value, bool) {
 		return m.FkComputerID()
 	case networkmapping.FieldFkUserID:
 		return m.FkUserID()
+	case networkmapping.FieldDeleteState:
+		return m.DeleteState()
 	}
 	return nil, false
 }
@@ -5168,6 +5386,8 @@ func (m *NetworkMappingMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldFkComputerID(ctx)
 	case networkmapping.FieldFkUserID:
 		return m.OldFkUserID(ctx)
+	case networkmapping.FieldDeleteState:
+		return m.OldDeleteState(ctx)
 	}
 	return nil, fmt.Errorf("unknown NetworkMapping field %s", name)
 }
@@ -5239,6 +5459,13 @@ func (m *NetworkMappingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFkUserID(v)
+		return nil
+	case networkmapping.FieldDeleteState:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteState(v)
 		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)
@@ -5354,6 +5581,9 @@ func (m *NetworkMappingMutation) ResetField(name string) error {
 		return nil
 	case networkmapping.FieldFkUserID:
 		m.ResetFkUserID()
+		return nil
+	case networkmapping.FieldDeleteState:
+		m.ResetDeleteState()
 		return nil
 	}
 	return fmt.Errorf("unknown NetworkMapping field %s", name)

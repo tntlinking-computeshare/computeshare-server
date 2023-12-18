@@ -119,6 +119,20 @@ func (nmu *NetworkMappingUpdate) SetFkUserID(u uuid.UUID) *NetworkMappingUpdate 
 	return nmu
 }
 
+// SetDeleteState sets the "delete_state" field.
+func (nmu *NetworkMappingUpdate) SetDeleteState(b bool) *NetworkMappingUpdate {
+	nmu.mutation.SetDeleteState(b)
+	return nmu
+}
+
+// SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
+func (nmu *NetworkMappingUpdate) SetNillableDeleteState(b *bool) *NetworkMappingUpdate {
+	if b != nil {
+		nmu.SetDeleteState(*b)
+	}
+	return nmu
+}
+
 // Mutation returns the NetworkMappingMutation object of the builder.
 func (nmu *NetworkMappingUpdate) Mutation() *NetworkMappingMutation {
 	return nmu.mutation
@@ -213,6 +227,9 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := nmu.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
+	}
+	if value, ok := nmu.mutation.DeleteState(); ok {
+		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nmu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -322,6 +339,20 @@ func (nmuo *NetworkMappingUpdateOne) SetFkComputerID(u uuid.UUID) *NetworkMappin
 // SetFkUserID sets the "fk_user_id" field.
 func (nmuo *NetworkMappingUpdateOne) SetFkUserID(u uuid.UUID) *NetworkMappingUpdateOne {
 	nmuo.mutation.SetFkUserID(u)
+	return nmuo
+}
+
+// SetDeleteState sets the "delete_state" field.
+func (nmuo *NetworkMappingUpdateOne) SetDeleteState(b bool) *NetworkMappingUpdateOne {
+	nmuo.mutation.SetDeleteState(b)
+	return nmuo
+}
+
+// SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
+func (nmuo *NetworkMappingUpdateOne) SetNillableDeleteState(b *bool) *NetworkMappingUpdateOne {
+	if b != nil {
+		nmuo.SetDeleteState(*b)
+	}
 	return nmuo
 }
 
@@ -449,6 +480,9 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	}
 	if value, ok := nmuo.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
+	}
+	if value, ok := nmuo.mutation.DeleteState(); ok {
+		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 	}
 	_node = &NetworkMapping{config: nmuo.config}
 	_spec.Assign = _node.assignValues

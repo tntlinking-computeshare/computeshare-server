@@ -30,6 +30,8 @@ const (
 	FieldFkComputerID = "fk_computer_id"
 	// FieldFkUserID holds the string denoting the fk_user_id field in the database.
 	FieldFkUserID = "fk_user_id"
+	// FieldDeleteState holds the string denoting the delete_state field in the database.
+	FieldDeleteState = "delete_state"
 	// Table holds the table name of the networkmapping in the database.
 	Table = "network_mappings"
 )
@@ -46,6 +48,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldFkComputerID,
 	FieldFkUserID,
+	FieldDeleteState,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -67,6 +70,8 @@ var (
 	ProtocolValidator func(string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus int
+	// DefaultDeleteState holds the default value on creation for the "delete_state" field.
+	DefaultDeleteState bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -122,4 +127,9 @@ func ByFkComputerID(opts ...sql.OrderTermOption) OrderOption {
 // ByFkUserID orders the results by the fk_user_id field.
 func ByFkUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFkUserID, opts...).ToFunc()
+}
+
+// ByDeleteState orders the results by the delete_state field.
+func ByDeleteState(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeleteState, opts...).ToFunc()
 }

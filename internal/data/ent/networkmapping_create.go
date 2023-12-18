@@ -90,6 +90,20 @@ func (nmc *NetworkMappingCreate) SetFkUserID(u uuid.UUID) *NetworkMappingCreate 
 	return nmc
 }
 
+// SetDeleteState sets the "delete_state" field.
+func (nmc *NetworkMappingCreate) SetDeleteState(b bool) *NetworkMappingCreate {
+	nmc.mutation.SetDeleteState(b)
+	return nmc
+}
+
+// SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
+func (nmc *NetworkMappingCreate) SetNillableDeleteState(b *bool) *NetworkMappingCreate {
+	if b != nil {
+		nmc.SetDeleteState(*b)
+	}
+	return nmc
+}
+
 // SetID sets the "id" field.
 func (nmc *NetworkMappingCreate) SetID(u uuid.UUID) *NetworkMappingCreate {
 	nmc.mutation.SetID(u)
@@ -147,6 +161,10 @@ func (nmc *NetworkMappingCreate) defaults() {
 		v := networkmapping.DefaultStatus
 		nmc.mutation.SetStatus(v)
 	}
+	if _, ok := nmc.mutation.DeleteState(); !ok {
+		v := networkmapping.DefaultDeleteState
+		nmc.mutation.SetDeleteState(v)
+	}
 	if _, ok := nmc.mutation.ID(); !ok {
 		v := networkmapping.DefaultID()
 		nmc.mutation.SetID(v)
@@ -191,6 +209,9 @@ func (nmc *NetworkMappingCreate) check() error {
 	}
 	if _, ok := nmc.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_user_id"`)}
+	}
+	if _, ok := nmc.mutation.DeleteState(); !ok {
+		return &ValidationError{Name: "delete_state", err: errors.New(`ent: missing required field "NetworkMapping.delete_state"`)}
 	}
 	return nil
 }
@@ -262,6 +283,10 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 	if value, ok := nmc.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
+	}
+	if value, ok := nmc.mutation.DeleteState(); ok {
+		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
+		_node.DeleteState = value
 	}
 	return _node, _spec
 }

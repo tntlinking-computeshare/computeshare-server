@@ -39,8 +39,10 @@ type ComputeInstance struct {
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
 	AgentID string `json:"agent_id,omitempty"`
-	// 容器启动命令
-	Command      string `json:"command,omitempty"`
+	// vnc 内网链接ip
+	VncIP string `json:"vnc_ip,omitempty"`
+	// vnc 内网链接端口号
+	VncPort      int32 `json:"vnc_port,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -49,9 +51,9 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computeinstance.FieldStatus:
+		case computeinstance.FieldStatus, computeinstance.FieldVncPort:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldCommand:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -138,11 +140,17 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.AgentID = value.String
 			}
-		case computeinstance.FieldCommand:
+		case computeinstance.FieldVncIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field command", values[i])
+				return fmt.Errorf("unexpected type %T for field vnc_ip", values[i])
 			} else if value.Valid {
-				ci.Command = value.String
+				ci.VncIP = value.String
+			}
+		case computeinstance.FieldVncPort:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field vnc_port", values[i])
+			} else if value.Valid {
+				ci.VncPort = int32(value.Int64)
 			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
@@ -210,8 +218,11 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString("agent_id=")
 	builder.WriteString(ci.AgentID)
 	builder.WriteString(", ")
-	builder.WriteString("command=")
-	builder.WriteString(ci.Command)
+	builder.WriteString("vnc_ip=")
+	builder.WriteString(ci.VncIP)
+	builder.WriteString(", ")
+	builder.WriteString("vnc_port=")
+	builder.WriteString(fmt.Sprintf("%v", ci.VncPort))
 	builder.WriteByte(')')
 	return builder.String()
 }

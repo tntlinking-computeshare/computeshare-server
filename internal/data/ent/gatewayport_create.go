@@ -46,6 +46,20 @@ func (gpc *GatewayPortCreate) SetNillableIsUse(b *bool) *GatewayPortCreate {
 	return gpc
 }
 
+// SetIsPublic sets the "is_public" field.
+func (gpc *GatewayPortCreate) SetIsPublic(b bool) *GatewayPortCreate {
+	gpc.mutation.SetIsPublic(b)
+	return gpc
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (gpc *GatewayPortCreate) SetNillableIsPublic(b *bool) *GatewayPortCreate {
+	if b != nil {
+		gpc.SetIsPublic(*b)
+	}
+	return gpc
+}
+
 // SetID sets the "id" field.
 func (gpc *GatewayPortCreate) SetID(u uuid.UUID) *GatewayPortCreate {
 	gpc.mutation.SetID(u)
@@ -99,6 +113,10 @@ func (gpc *GatewayPortCreate) defaults() {
 		v := gatewayport.DefaultIsUse
 		gpc.mutation.SetIsUse(v)
 	}
+	if _, ok := gpc.mutation.IsPublic(); !ok {
+		v := gatewayport.DefaultIsPublic
+		gpc.mutation.SetIsPublic(v)
+	}
 	if _, ok := gpc.mutation.ID(); !ok {
 		v := gatewayport.DefaultID()
 		gpc.mutation.SetID(v)
@@ -115,6 +133,9 @@ func (gpc *GatewayPortCreate) check() error {
 	}
 	if _, ok := gpc.mutation.IsUse(); !ok {
 		return &ValidationError{Name: "is_use", err: errors.New(`ent: missing required field "GatewayPort.is_use"`)}
+	}
+	if _, ok := gpc.mutation.IsPublic(); !ok {
+		return &ValidationError{Name: "is_public", err: errors.New(`ent: missing required field "GatewayPort.is_public"`)}
 	}
 	return nil
 }
@@ -162,6 +183,10 @@ func (gpc *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) 
 	if value, ok := gpc.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
 		_node.IsUse = value
+	}
+	if value, ok := gpc.mutation.IsPublic(); ok {
+		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
+		_node.IsPublic = value
 	}
 	return _node, _spec
 }

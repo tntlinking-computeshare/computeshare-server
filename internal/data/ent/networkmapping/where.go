@@ -98,6 +98,11 @@ func FkUserID(v uuid.UUID) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldFkUserID, v))
 }
 
+// DeleteState applies equality check predicate on the "delete_state" field. It's identical to DeleteStateEQ.
+func DeleteState(v bool) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldDeleteState, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldEQ(FieldName, v))
@@ -531,6 +536,16 @@ func FkUserIDLT(v uuid.UUID) predicate.NetworkMapping {
 // FkUserIDLTE applies the LTE predicate on the "fk_user_id" field.
 func FkUserIDLTE(v uuid.UUID) predicate.NetworkMapping {
 	return predicate.NetworkMapping(sql.FieldLTE(FieldFkUserID, v))
+}
+
+// DeleteStateEQ applies the EQ predicate on the "delete_state" field.
+func DeleteStateEQ(v bool) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldEQ(FieldDeleteState, v))
+}
+
+// DeleteStateNEQ applies the NEQ predicate on the "delete_state" field.
+func DeleteStateNEQ(v bool) predicate.NetworkMapping {
+	return predicate.NetworkMapping(sql.FieldNEQ(FieldDeleteState, v))
 }
 
 // And groups predicates with the AND operator between them.

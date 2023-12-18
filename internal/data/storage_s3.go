@@ -53,12 +53,12 @@ func (r *s3UserRepoImpl) GetS3User(ctx context.Context, userId uuid.UUID) (*biz.
 	return r.toBiz(entity, 0), err
 }
 func (r *s3UserRepoImpl) CreateBucket(ctx context.Context, user *biz.S3User, bucket string) (*biz.S3Bucket, error) {
-	s3User, err := r.data.db.S3User.Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
+	s3User, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	s3Bucket, err := r.data.db.S3Bucket.Create().SetS3User(s3User).SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
+	s3Bucket, err := r.data.getS3BucketClient(ctx).Create().SetS3User(s3User).SetBucket(bucket).SetCreatedTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, buc
 	if err != nil {
 		return err
 	}
-	return r.data.db.S3Bucket.DeleteOne(first).Exec(ctx)
+	return r.data.getS3BucketClient(ctx).DeleteOne(first).Exec(ctx)
 
 }
 func (r *s3UserRepoImpl) ListBucket(ctx context.Context, userId uuid.UUID) ([]*biz.S3Bucket, error) {
@@ -94,7 +94,7 @@ func (r *s3UserRepoImpl) toBiz(item *ent.S3User, _ int) *biz.S3User {
 		FkUserID:  item.FkUserID,
 		AccessKey: item.AccessKey,
 		SecretKey: item.SecretKey,
-		Endpoint:  "",
+		Endpoint:  "computeshare.newtouch.com:8333",
 	}
 }
 

@@ -107,9 +107,14 @@ func AgentID(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldAgentID, v))
 }
 
-// Command applies equality check predicate on the "command" field. It's identical to CommandEQ.
-func Command(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldCommand, v))
+// VncIP applies equality check predicate on the "vnc_ip" field. It's identical to VncIPEQ.
+func VncIP(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldVncIP, v))
+}
+
+// VncPort applies equality check predicate on the "vnc_port" field. It's identical to VncPortEQ.
+func VncPort(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldVncPort, v))
 }
 
 // OwnerEQ applies the EQ predicate on the "owner" field.
@@ -756,79 +761,109 @@ func AgentIDContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldAgentID, v))
 }
 
-// CommandEQ applies the EQ predicate on the "command" field.
-func CommandEQ(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEQ(FieldCommand, v))
+// VncIPEQ applies the EQ predicate on the "vnc_ip" field.
+func VncIPEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldVncIP, v))
 }
 
-// CommandNEQ applies the NEQ predicate on the "command" field.
-func CommandNEQ(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNEQ(FieldCommand, v))
+// VncIPNEQ applies the NEQ predicate on the "vnc_ip" field.
+func VncIPNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldVncIP, v))
 }
 
-// CommandIn applies the In predicate on the "command" field.
-func CommandIn(vs ...string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldIn(FieldCommand, vs...))
+// VncIPIn applies the In predicate on the "vnc_ip" field.
+func VncIPIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldVncIP, vs...))
 }
 
-// CommandNotIn applies the NotIn predicate on the "command" field.
-func CommandNotIn(vs ...string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNotIn(FieldCommand, vs...))
+// VncIPNotIn applies the NotIn predicate on the "vnc_ip" field.
+func VncIPNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldVncIP, vs...))
 }
 
-// CommandGT applies the GT predicate on the "command" field.
-func CommandGT(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGT(FieldCommand, v))
+// VncIPGT applies the GT predicate on the "vnc_ip" field.
+func VncIPGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldVncIP, v))
 }
 
-// CommandGTE applies the GTE predicate on the "command" field.
-func CommandGTE(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldGTE(FieldCommand, v))
+// VncIPGTE applies the GTE predicate on the "vnc_ip" field.
+func VncIPGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldVncIP, v))
 }
 
-// CommandLT applies the LT predicate on the "command" field.
-func CommandLT(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLT(FieldCommand, v))
+// VncIPLT applies the LT predicate on the "vnc_ip" field.
+func VncIPLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldVncIP, v))
 }
 
-// CommandLTE applies the LTE predicate on the "command" field.
-func CommandLTE(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldLTE(FieldCommand, v))
+// VncIPLTE applies the LTE predicate on the "vnc_ip" field.
+func VncIPLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldVncIP, v))
 }
 
-// CommandContains applies the Contains predicate on the "command" field.
-func CommandContains(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContains(FieldCommand, v))
+// VncIPContains applies the Contains predicate on the "vnc_ip" field.
+func VncIPContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldVncIP, v))
 }
 
-// CommandHasPrefix applies the HasPrefix predicate on the "command" field.
-func CommandHasPrefix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldCommand, v))
+// VncIPHasPrefix applies the HasPrefix predicate on the "vnc_ip" field.
+func VncIPHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldVncIP, v))
 }
 
-// CommandHasSuffix applies the HasSuffix predicate on the "command" field.
-func CommandHasSuffix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldCommand, v))
+// VncIPHasSuffix applies the HasSuffix predicate on the "vnc_ip" field.
+func VncIPHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldVncIP, v))
 }
 
-// CommandIsNil applies the IsNil predicate on the "command" field.
-func CommandIsNil() predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldIsNull(FieldCommand))
+// VncIPEqualFold applies the EqualFold predicate on the "vnc_ip" field.
+func VncIPEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldVncIP, v))
 }
 
-// CommandNotNil applies the NotNil predicate on the "command" field.
-func CommandNotNil() predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldNotNull(FieldCommand))
+// VncIPContainsFold applies the ContainsFold predicate on the "vnc_ip" field.
+func VncIPContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldVncIP, v))
 }
 
-// CommandEqualFold applies the EqualFold predicate on the "command" field.
-func CommandEqualFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEqualFold(FieldCommand, v))
+// VncPortEQ applies the EQ predicate on the "vnc_port" field.
+func VncPortEQ(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldVncPort, v))
 }
 
-// CommandContainsFold applies the ContainsFold predicate on the "command" field.
-func CommandContainsFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContainsFold(FieldCommand, v))
+// VncPortNEQ applies the NEQ predicate on the "vnc_port" field.
+func VncPortNEQ(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldVncPort, v))
+}
+
+// VncPortIn applies the In predicate on the "vnc_port" field.
+func VncPortIn(vs ...int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldVncPort, vs...))
+}
+
+// VncPortNotIn applies the NotIn predicate on the "vnc_port" field.
+func VncPortNotIn(vs ...int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldVncPort, vs...))
+}
+
+// VncPortGT applies the GT predicate on the "vnc_port" field.
+func VncPortGT(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldVncPort, v))
+}
+
+// VncPortGTE applies the GTE predicate on the "vnc_port" field.
+func VncPortGTE(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldVncPort, v))
+}
+
+// VncPortLT applies the LT predicate on the "vnc_port" field.
+func VncPortLT(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldVncPort, v))
+}
+
+// VncPortLTE applies the LTE predicate on the "vnc_port" field.
+func VncPortLTE(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldVncPort, v))
 }
 
 // And groups predicates with the AND operator between them.

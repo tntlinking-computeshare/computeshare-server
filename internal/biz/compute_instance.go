@@ -38,15 +38,16 @@ type ComputeImageRepo interface {
 }
 
 type ComputeInstanceUsercase struct {
-	specRepo        ComputeSpecRepo
-	instanceRepo    ComputeInstanceRepo
-	imageRepo       ComputeImageRepo
-	agentRepo       AgentRepo
-	taskRepo        TaskRepo
-	gatewayRepo     GatewayRepo
-	gatewayPortRepo GatewayPortRepo
-	p2pClient       *P2pClient
-	log             *log.Helper
+	specRepo           ComputeSpecRepo
+	instanceRepo       ComputeInstanceRepo
+	imageRepo          ComputeImageRepo
+	agentRepo          AgentRepo
+	taskRepo           TaskRepo
+	gatewayRepo        GatewayRepo
+	gatewayPortRepo    GatewayPortRepo
+	networkMappingRepo NetworkMappingRepo
+	p2pClient          *P2pClient
+	log                *log.Helper
 }
 
 func NewComputeInstanceUsercase(
@@ -57,16 +58,18 @@ func NewComputeInstanceUsercase(
 	taskRepo TaskRepo,
 	gatewayRepo GatewayRepo,
 	gatewayPortRepo GatewayPortRepo,
+	networkMappingRepo NetworkMappingRepo,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
-		specRepo:        specRepo,
-		instanceRepo:    instanceRepo,
-		imageRepo:       imageRepo,
-		agentRepo:       agentRepo,
-		taskRepo:        taskRepo,
-		gatewayRepo:     gatewayRepo,
-		gatewayPortRepo: gatewayPortRepo,
-		log:             log.NewHelper(logger),
+		specRepo:           specRepo,
+		instanceRepo:       instanceRepo,
+		imageRepo:          imageRepo,
+		agentRepo:          agentRepo,
+		taskRepo:           taskRepo,
+		gatewayRepo:        gatewayRepo,
+		gatewayPortRepo:    gatewayPortRepo,
+		networkMappingRepo: networkMappingRepo,
+		log:                log.NewHelper(logger),
 	}
 }
 
@@ -118,9 +121,37 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
-	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_CREATE, func() (string, string) {
-		return cic.PublicKey, cic.Password
+	gatewayId, err := uc.networkMappingRepo.QueryGatewayIdByAgentId(ctx, agent.ID)
+	if err != nil {
+		return nil, err
+	}
+	gw, err := uc.gatewayRepo.GetGateway(ctx, gatewayId)
+	if err != nil {
+		return nil, err
+	}
+
+	gp, err := uc.gatewayPortRepo.GetGatewayPortFirstByNotUsedAndIsPublic(ctx, gatewayId, false)
+	if err != nil {
+		return nil, err
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_CREATE, func() InstanceCreateParam {
+		return InstanceCreateParam{
+			PublicKey:      cic.PublicKey,
+			Password:       cic.Password,
+			GatewayIP:      gw.IP,
+			GatewayPort:    gw.Port,
+			VncConnectIP:   gw.InternalIP,
+			VncConnectPort: gp.Port,
+		}
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	gp.IsUse = true
+
+	err = uc.gatewayPortRepo.Update(ctx, gp)
 	if err != nil {
 		return nil, err
 	}
@@ -128,14 +159,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	return instance, err
 }
 
-func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *ComputeInstance, cmd queue.TaskCmd, publicKeyAndPassword func() (string, string)) error {
-
-	publicKey := ""
-	password := ""
-
-	if publicKeyAndPassword != nil {
-		publicKey, password = publicKeyAndPassword()
-	}
+func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *ComputeInstance, cmd queue.TaskCmd, publicKeyAndPassword func() InstanceCreateParam) error {
 
 	taskParam := queue.ComputeInstanceTaskParamVO{
 		Id:         instance.ID.String(),
@@ -143,9 +167,16 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Cpu:        instance.GetCore(),
 		Memory:     instance.GetMemory(),
 		Image:      instance.Image,
-		PublicKey:  publicKey,
-		Password:   password,
 		InstanceId: instance.ID.String(),
+	}
+	if publicKeyAndPassword != nil {
+		instanceCreateParam := publicKeyAndPassword()
+		taskParam.PublicKey = instanceCreateParam.PublicKey
+		taskParam.Password = instanceCreateParam.Password
+		taskParam.GatewayIp = instanceCreateParam.GatewayIP
+		taskParam.GatewayPort = instanceCreateParam.GatewayPort
+		taskParam.VncConnectIp = instanceCreateParam.VncConnectIP
+		taskParam.VncConnectPort = instanceCreateParam.VncConnectPort
 	}
 	paramData, err := json.Marshal(&taskParam)
 	if err != nil {

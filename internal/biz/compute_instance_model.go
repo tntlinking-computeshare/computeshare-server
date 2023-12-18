@@ -118,3 +118,12 @@ func (m *ComputeInstanceRds) UnmarshalBinary(data []byte) error {
 	return json.Unmarshal(data, m)
 
 }
+
+type InstanceCreateParam struct {
+	PublicKey      string
+	Password       string
+	GatewayIP      string
+	GatewayPort    int32
+	VncConnectIP   string
+	VncConnectPort int32
+}

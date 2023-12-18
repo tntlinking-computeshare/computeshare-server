@@ -32,8 +32,10 @@ const (
 	FieldContainerID = "container_id"
 	// FieldAgentID holds the string denoting the agent_id field in the database.
 	FieldAgentID = "agent_id"
-	// FieldCommand holds the string denoting the command field in the database.
-	FieldCommand = "command"
+	// FieldVncIP holds the string denoting the vnc_ip field in the database.
+	FieldVncIP = "vnc_ip"
+	// FieldVncPort holds the string denoting the vnc_port field in the database.
+	FieldVncPort = "vnc_port"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
 )
@@ -51,7 +53,8 @@ var Columns = []string{
 	FieldStatus,
 	FieldContainerID,
 	FieldAgentID,
-	FieldCommand,
+	FieldVncIP,
+	FieldVncPort,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -137,7 +140,12 @@ func ByAgentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAgentID, opts...).ToFunc()
 }
 
-// ByCommand orders the results by the command field.
-func ByCommand(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCommand, opts...).ToFunc()
+// ByVncIP orders the results by the vnc_ip field.
+func ByVncIP(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVncIP, opts...).ToFunc()
+}
+
+// ByVncPort orders the results by the vnc_port field.
+func ByVncPort(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVncPort, opts...).ToFunc()
 }

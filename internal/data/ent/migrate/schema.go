@@ -63,7 +63,8 @@ var (
 		{Name: "status", Type: field.TypeInt8},
 		{Name: "container_id", Type: field.TypeString, Nullable: true},
 		{Name: "agent_id", Type: field.TypeString, Nullable: true},
-		{Name: "command", Type: field.TypeString, Nullable: true},
+		{Name: "vnc_ip", Type: field.TypeString},
+		{Name: "vnc_port", Type: field.TypeInt32},
 	}
 	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
 	ComputeInstancesTable = &schema.Table{
@@ -137,6 +138,7 @@ var (
 		{Name: "name", Type: field.TypeString, Size: 50},
 		{Name: "ip", Type: field.TypeString},
 		{Name: "port", Type: field.TypeInt32},
+		{Name: "internal_ip", Type: field.TypeString},
 	}
 	// GatewaysTable holds the schema information for the "gateways" table.
 	GatewaysTable = &schema.Table{
@@ -150,6 +152,7 @@ var (
 		{Name: "fk_gateway_id", Type: field.TypeUUID},
 		{Name: "port", Type: field.TypeInt32},
 		{Name: "is_use", Type: field.TypeBool, Default: false},
+		{Name: "is_public", Type: field.TypeBool, Default: true},
 	}
 	// GatewayPortsTable holds the schema information for the "gateway_ports" table.
 	GatewayPortsTable = &schema.Table{
@@ -169,6 +172,7 @@ var (
 		{Name: "status", Type: field.TypeInt, Default: 0},
 		{Name: "fk_computer_id", Type: field.TypeUUID},
 		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "delete_state", Type: field.TypeBool, Default: false},
 	}
 	// NetworkMappingsTable holds the schema information for the "network_mappings" table.
 	NetworkMappingsTable = &schema.Table{

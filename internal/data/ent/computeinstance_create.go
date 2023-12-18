@@ -106,17 +106,15 @@ func (cic *ComputeInstanceCreate) SetNillableAgentID(s *string) *ComputeInstance
 	return cic
 }
 
-// SetCommand sets the "command" field.
-func (cic *ComputeInstanceCreate) SetCommand(s string) *ComputeInstanceCreate {
-	cic.mutation.SetCommand(s)
+// SetVncIP sets the "vnc_ip" field.
+func (cic *ComputeInstanceCreate) SetVncIP(s string) *ComputeInstanceCreate {
+	cic.mutation.SetVncIP(s)
 	return cic
 }
 
-// SetNillableCommand sets the "command" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillableCommand(s *string) *ComputeInstanceCreate {
-	if s != nil {
-		cic.SetCommand(*s)
-	}
+// SetVncPort sets the "vnc_port" field.
+func (cic *ComputeInstanceCreate) SetVncPort(i int32) *ComputeInstanceCreate {
+	cic.mutation.SetVncPort(i)
 	return cic
 }
 
@@ -223,6 +221,12 @@ func (cic *ComputeInstanceCreate) check() error {
 	if _, ok := cic.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "ComputeInstance.status"`)}
 	}
+	if _, ok := cic.mutation.VncIP(); !ok {
+		return &ValidationError{Name: "vnc_ip", err: errors.New(`ent: missing required field "ComputeInstance.vnc_ip"`)}
+	}
+	if _, ok := cic.mutation.VncPort(); !ok {
+		return &ValidationError{Name: "vnc_port", err: errors.New(`ent: missing required field "ComputeInstance.vnc_port"`)}
+	}
 	return nil
 }
 
@@ -298,9 +302,13 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 		_node.AgentID = value
 	}
-	if value, ok := cic.mutation.Command(); ok {
-		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
-		_node.Command = value
+	if value, ok := cic.mutation.VncIP(); ok {
+		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
+		_node.VncIP = value
+	}
+	if value, ok := cic.mutation.VncPort(); ok {
+		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
+		_node.VncPort = value
 	}
 	return _node, _spec
 }

@@ -34,7 +34,9 @@ type NetworkMapping struct {
 	// 虚拟机实例ID
 	FkComputerID uuid.UUID `json:"fk_computer_id,omitempty"`
 	// 用户id
-	FkUserID     uuid.UUID `json:"fk_user_id,omitempty"`
+	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
+	// 删除状态
+	DeleteState  bool `json:"delete_state,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -43,6 +45,8 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case networkmapping.FieldDeleteState:
+			values[i] = new(sql.NullBool)
 		case networkmapping.FieldGatewayPort, networkmapping.FieldComputerPort, networkmapping.FieldStatus:
 			values[i] = new(sql.NullInt64)
 		case networkmapping.FieldName, networkmapping.FieldProtocol, networkmapping.FieldGatewayIP:
@@ -124,6 +128,12 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				nm.FkUserID = *value
 			}
+		case networkmapping.FieldDeleteState:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field delete_state", values[i])
+			} else if value.Valid {
+				nm.DeleteState = value.Bool
+			}
 		default:
 			nm.selectValues.Set(columns[i], values[i])
 		}
@@ -186,6 +196,9 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fk_user_id=")
 	builder.WriteString(fmt.Sprintf("%v", nm.FkUserID))
+	builder.WriteString(", ")
+	builder.WriteString("delete_state=")
+	builder.WriteString(fmt.Sprintf("%v", nm.DeleteState))
 	builder.WriteByte(')')
 	return builder.String()
 }

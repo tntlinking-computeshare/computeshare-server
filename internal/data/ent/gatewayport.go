@@ -22,7 +22,9 @@ type GatewayPort struct {
 	// 端口号
 	Port int32 `json:"port,omitempty"`
 	// 是否使用
-	IsUse        bool `json:"is_use,omitempty"`
+	IsUse bool `json:"is_use,omitempty"`
+	// 是否public 端口
+	IsPublic     bool `json:"is_public,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -31,7 +33,7 @@ func (*GatewayPort) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case gatewayport.FieldIsUse:
+		case gatewayport.FieldIsUse, gatewayport.FieldIsPublic:
 			values[i] = new(sql.NullBool)
 		case gatewayport.FieldPort:
 			values[i] = new(sql.NullInt64)
@@ -75,6 +77,12 @@ func (gp *GatewayPort) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_use", values[i])
 			} else if value.Valid {
 				gp.IsUse = value.Bool
+			}
+		case gatewayport.FieldIsPublic:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_public", values[i])
+			} else if value.Valid {
+				gp.IsPublic = value.Bool
 			}
 		default:
 			gp.selectValues.Set(columns[i], values[i])
@@ -120,6 +128,9 @@ func (gp *GatewayPort) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_use=")
 	builder.WriteString(fmt.Sprintf("%v", gp.IsUse))
+	builder.WriteString(", ")
+	builder.WriteString("is_public=")
+	builder.WriteString(fmt.Sprintf("%v", gp.IsPublic))
 	builder.WriteByte(')')
 	return builder.String()
 }

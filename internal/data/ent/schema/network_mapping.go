@@ -24,6 +24,7 @@ func (NetworkMapping) Fields() []ent.Field {
 		field.Int("status").Default(0).Comment(" 0 待开始 1 进行中 2 已完成, 3 失败"),
 		field.UUID("fk_computer_id", uuid.UUID{}).Comment("虚拟机实例ID"),
 		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
+		field.Bool("delete_state").Default(false).Comment("删除状态"),
 	}
 }
 

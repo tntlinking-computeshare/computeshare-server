@@ -18,6 +18,8 @@ const (
 	FieldPort = "port"
 	// FieldIsUse holds the string denoting the is_use field in the database.
 	FieldIsUse = "is_use"
+	// FieldIsPublic holds the string denoting the is_public field in the database.
+	FieldIsPublic = "is_public"
 	// Table holds the table name of the gatewayport in the database.
 	Table = "gateway_ports"
 )
@@ -28,6 +30,7 @@ var Columns = []string{
 	FieldFkGatewayID,
 	FieldPort,
 	FieldIsUse,
+	FieldIsPublic,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -43,6 +46,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultIsUse holds the default value on creation for the "is_use" field.
 	DefaultIsUse bool
+	// DefaultIsPublic holds the default value on creation for the "is_public" field.
+	DefaultIsPublic bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -68,4 +73,9 @@ func ByPort(opts ...sql.OrderTermOption) OrderOption {
 // ByIsUse orders the results by the is_use field.
 func ByIsUse(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsUse, opts...).ToFunc()
+}
+
+// ByIsPublic orders the results by the is_public field.
+func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPublic, opts...).ToFunc()
 }

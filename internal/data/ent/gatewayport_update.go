@@ -61,6 +61,20 @@ func (gpu *GatewayPortUpdate) SetNillableIsUse(b *bool) *GatewayPortUpdate {
 	return gpu
 }
 
+// SetIsPublic sets the "is_public" field.
+func (gpu *GatewayPortUpdate) SetIsPublic(b bool) *GatewayPortUpdate {
+	gpu.mutation.SetIsPublic(b)
+	return gpu
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (gpu *GatewayPortUpdate) SetNillableIsPublic(b *bool) *GatewayPortUpdate {
+	if b != nil {
+		gpu.SetIsPublic(*b)
+	}
+	return gpu
+}
+
 // Mutation returns the GatewayPortMutation object of the builder.
 func (gpu *GatewayPortUpdate) Mutation() *GatewayPortMutation {
 	return gpu.mutation
@@ -114,6 +128,9 @@ func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := gpu.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
 	}
+	if value, ok := gpu.mutation.IsPublic(); ok {
+		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, gpu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gatewayport.Label}
@@ -163,6 +180,20 @@ func (gpuo *GatewayPortUpdateOne) SetIsUse(b bool) *GatewayPortUpdateOne {
 func (gpuo *GatewayPortUpdateOne) SetNillableIsUse(b *bool) *GatewayPortUpdateOne {
 	if b != nil {
 		gpuo.SetIsUse(*b)
+	}
+	return gpuo
+}
+
+// SetIsPublic sets the "is_public" field.
+func (gpuo *GatewayPortUpdateOne) SetIsPublic(b bool) *GatewayPortUpdateOne {
+	gpuo.mutation.SetIsPublic(b)
+	return gpuo
+}
+
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (gpuo *GatewayPortUpdateOne) SetNillableIsPublic(b *bool) *GatewayPortUpdateOne {
+	if b != nil {
+		gpuo.SetIsPublic(*b)
 	}
 	return gpuo
 }
@@ -249,6 +280,9 @@ func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPo
 	}
 	if value, ok := gpuo.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
+	}
+	if value, ok := gpuo.mutation.IsPublic(); ok {
+		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
 	}
 	_node = &GatewayPort{config: gpuo.config}
 	_spec.Assign = _node.assignValues

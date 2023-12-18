@@ -30,12 +30,14 @@ type NetworkMapping struct {
 	GatewayPort int32 `json:"gateway_port,omitempty"`
 	// 需要映射的虚拟机端口号
 	ComputerPort int32 `json:"computer_port,omitempty"`
-	//  0 待开始 1 进行中 2 已完成，3 失败
+	//  0 待开始 1 进行中 2 已完成，3 失败 4 删除中
 	Status int `json:"status,omitempty"`
 	// 用户id
 	UserId uuid.UUID `json:"user_id"`
 	// gateway ip
 	GatewayIP string `json:"gateway_ip"`
+	// 删除标记
+	DeleteState bool `json:"delete_state"`
 }
 
 type NetworkMappingCreate struct {
@@ -62,10 +64,11 @@ type NetworkMappingRepo interface {
 }
 
 type Gateway struct {
-	ID   uuid.UUID
-	Name string
-	IP   string
-	Port int32
+	ID         uuid.UUID
+	Name       string
+	IP         string
+	Port       int32
+	InternalIP string
 }
 
 type GatewayRepo interface {
@@ -94,30 +97,34 @@ type GatewayPortRepo interface {
 	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*GatewayPort, error)
 	Update(ctx context.Context, gp *GatewayPort) error
 	GetGatewayPortByGatewayIdAndPort(ctx context.Context, id uuid.UUID, port int32) (*GatewayPort, error)
+	GetGatewayPortFirstByNotUsedAndIsPublic(ctx context.Context, gatewayID uuid.UUID, isPublic bool) (*GatewayPort, error)
 }
 
 type NetworkMappingUseCase struct {
-	repo            NetworkMappingRepo
-	gatewayRepo     GatewayRepo
-	gatewayPortRepo GatewayPortRepo
-	taskRepo        TaskRepo
-	ciu             *ComputeInstanceUsercase
-	log             *log.Helper
+	repo              NetworkMappingRepo
+	gatewayRepo       GatewayRepo
+	gatewayPortRepo   GatewayPortRepo
+	taskRepo          TaskRepo
+	ciu               *ComputeInstanceUsercase
+	domainBindingRepo DomainBindingRepository
+	log               *log.Helper
 }
 
 func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	gatewayRepo GatewayRepo,
 	gatewayPortRepo GatewayPortRepo,
 	taskRepo TaskRepo,
+	domainBindingRepo DomainBindingRepository,
 	ciu *ComputeInstanceUsercase,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
-		repo:            repo,
-		gatewayRepo:     gatewayRepo,
-		gatewayPortRepo: gatewayPortRepo,
-		ciu:             ciu,
-		taskRepo:        taskRepo,
-		log:             log.NewHelper(logger),
+		repo:              repo,
+		gatewayRepo:       gatewayRepo,
+		gatewayPortRepo:   gatewayPortRepo,
+		ciu:               ciu,
+		taskRepo:          taskRepo,
+		domainBindingRepo: domainBindingRepo,
+		log:               log.NewHelper(logger),
 	}
 }
 
@@ -176,9 +183,10 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		// 需要映射的虚拟机端口号
 		ComputerPort: nmc.ComputerPort,
 		//  0 待开始 1 进行中 2 已完成，3 失败
-		Status:    0,
-		UserId:    claim.GetUserId(),
-		GatewayIP: g.IP,
+		Status:      0,
+		UserId:      claim.GetUserId(),
+		GatewayIP:   g.IP,
+		DeleteState: false,
 	}
 	err = m.repo.CreateNetworkMapping(ctx, &nwp)
 	if err != nil {
@@ -246,6 +254,16 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 		return err
 	}
 
+	// 判断有无域名绑定
+	domains, err := m.domainBindingRepo.ListByNetworkMappingId(ctx, nwp.ID)
+	if err != nil {
+		return err
+	}
+
+	if len(domains) > 0 {
+		return errors.New("请先解绑域名")
+	}
+
 	gp, err := m.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, nwp.FkGatewayID, nwp.GatewayPort)
 	if err != nil {
 		return err
@@ -298,7 +316,9 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 		return err
 	}
 
-	return m.repo.DeleteNetworkMapping(ctx, id)
+	nwp.DeleteState = true
+	return m.repo.UpdateNetworkMapping(ctx, nwp)
+
 }
 
 func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {

@@ -52,6 +52,12 @@ func (gu *GatewayUpdate) AddPort(i int32) *GatewayUpdate {
 	return gu
 }
 
+// SetInternalIP sets the "internal_ip" field.
+func (gu *GatewayUpdate) SetInternalIP(s string) *GatewayUpdate {
+	gu.mutation.SetInternalIP(s)
+	return gu
+}
+
 // Mutation returns the GatewayMutation object of the builder.
 func (gu *GatewayUpdate) Mutation() *GatewayMutation {
 	return gu.mutation
@@ -118,6 +124,9 @@ func (gu *GatewayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := gu.mutation.AddedPort(); ok {
 		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
 	}
+	if value, ok := gu.mutation.InternalIP(); ok {
+		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gateway.Label}
@@ -160,6 +169,12 @@ func (guo *GatewayUpdateOne) SetPort(i int32) *GatewayUpdateOne {
 // AddPort adds i to the "port" field.
 func (guo *GatewayUpdateOne) AddPort(i int32) *GatewayUpdateOne {
 	guo.mutation.AddPort(i)
+	return guo
+}
+
+// SetInternalIP sets the "internal_ip" field.
+func (guo *GatewayUpdateOne) SetInternalIP(s string) *GatewayUpdateOne {
+	guo.mutation.SetInternalIP(s)
 	return guo
 }
 
@@ -258,6 +273,9 @@ func (guo *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err e
 	}
 	if value, ok := guo.mutation.AddedPort(); ok {
 		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
+	}
+	if value, ok := guo.mutation.InternalIP(); ok {
+		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
 	}
 	_node = &Gateway{config: guo.config}
 	_spec.Assign = _node.assignValues
