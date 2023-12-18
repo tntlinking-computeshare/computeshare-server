@@ -103,24 +103,6 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
-	instance := &ComputeInstance{
-		Owner:          claim.UserID,
-		Name:           cic.Name,
-		Core:           computeSpec.Core,
-		Memory:         computeSpec.Memory,
-		Port:           fmt.Sprintf("%d", computeImage.Port),
-		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
-		Command:        computeImage.Command,
-		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
-		AgentId:        agent.ID.String(),
-		Status:         consts.InstanceStatusCreating,
-	}
-
-	err = uc.instanceRepo.Create(ctx, instance)
-	if err != nil {
-		return nil, err
-	}
-
 	gatewayId, err := uc.networkMappingRepo.QueryGatewayIdByAgentId(ctx, agent.ID)
 	if err != nil {
 		return nil, err
@@ -129,8 +111,26 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	if err != nil {
 		return nil, err
 	}
-
 	gp, err := uc.gatewayPortRepo.GetGatewayPortFirstByNotUsedAndIsPublic(ctx, gatewayId, false)
+	if err != nil {
+		return nil, err
+	}
+
+	instance := &ComputeInstance{
+		Owner:          claim.UserID,
+		Name:           cic.Name,
+		Core:           computeSpec.Core,
+		Memory:         computeSpec.Memory,
+		Port:           fmt.Sprintf("%d", computeImage.Port),
+		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
+		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
+		AgentId:        agent.ID.String(),
+		Status:         consts.InstanceStatusCreating,
+		VncIP:          gw.InternalIP,
+		VncPort:        gp.Port,
+	}
+
+	err = uc.instanceRepo.Create(ctx, instance)
 	if err != nil {
 		return nil, err
 	}

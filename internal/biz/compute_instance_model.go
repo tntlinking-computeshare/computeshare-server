@@ -55,8 +55,11 @@ type ComputeInstance struct {
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	AgentId string                `json:"peer_id,omitempty"`
-	Command string                `json:"command,omitempty"`
+	AgentId string `json:"peer_id,omitempty"`
+	// vnc 内网链接ip
+	VncIP string `json:"vnc_ip,omitempty"`
+	// vnc 内网链接端口号
+	VncPort int32                 `json:"vnc_port,omitempty"`
 	Stats   []*ComputeInstanceRds `json:"stats"`
 }
 

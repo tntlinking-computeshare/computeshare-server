@@ -59,6 +59,8 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetStatus(in.Status).
 		SetPort(in.Port).
 		SetAgentID(in.AgentId).
+		SetVncIP(in.VncIP).
+		SetVncPort(in.VncPort).
 		Save(ctx)
 
 	if err != nil {
@@ -97,6 +99,8 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 		Status:         item.Status,
 		ContainerID:    item.ContainerID,
 		AgentId:        item.AgentID,
+		VncIP:          item.VncIP,
+		VncPort:        item.VncPort,
 	}
 }
 
