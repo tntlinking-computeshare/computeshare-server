@@ -100,7 +100,9 @@ message ComputeInstanceTaskParamVO {
   string publicKey = 6;
   string password = 7;
   string instanceId = 8;
-  int32 vncPort = 9;
+  string gatewayIp = 9;
+  int32 gatewayPort = 10;
+  int32 vncPort = 11;
 }
 
 message StorageSetupTaskParamVO {
