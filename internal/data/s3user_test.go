@@ -33,7 +33,7 @@ func getData() *Data {
 	dataConf := &conf.Data{
 		Database: &conf.Data_Database{
 			Driver: "mysql",
-			Source: "root:123456@tcp(127.0.0.1:3306)/computeshare?charset=utf8&parseTime=true",
+			Source: "root:Aline123456@tcp(computeshare.newtouch.com:31252)/computeshare?charset=utf8&parseTime=true",
 		},
 		Redis: &conf.Data_Redis{
 			Addr: "127.0.0.1:6379",

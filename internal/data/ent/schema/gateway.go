@@ -18,6 +18,7 @@ func (Gateway) Fields() []ent.Field {
 		field.String("name").NotEmpty().MaxLen(50),
 		field.String("ip").Comment("网关ip"),
 		field.Int32("port").Comment("端口号"),
+		field.String("internal_ip").Comment("内网ip"),
 	}
 }
 

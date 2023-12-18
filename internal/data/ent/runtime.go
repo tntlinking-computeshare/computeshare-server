@@ -158,6 +158,10 @@ func init() {
 	gatewayportDescIsUse := gatewayportFields[3].Descriptor()
 	// gatewayport.DefaultIsUse holds the default value on creation for the is_use field.
 	gatewayport.DefaultIsUse = gatewayportDescIsUse.Default.(bool)
+	// gatewayportDescIsPublic is the schema descriptor for is_public field.
+	gatewayportDescIsPublic := gatewayportFields[4].Descriptor()
+	// gatewayport.DefaultIsPublic holds the default value on creation for the is_public field.
+	gatewayport.DefaultIsPublic = gatewayportDescIsPublic.Default.(bool)
 	// gatewayportDescID is the schema descriptor for id field.
 	gatewayportDescID := gatewayportFields[0].Descriptor()
 	// gatewayport.DefaultID holds the default value on creation for the id field.

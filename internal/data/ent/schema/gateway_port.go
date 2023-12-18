@@ -18,6 +18,7 @@ func (GatewayPort) Fields() []ent.Field {
 		field.UUID("fk_gateway_id", uuid.UUID{}).Comment("gateway id"),
 		field.Int32("port").Comment("端口号"),
 		field.Bool("is_use").Comment("是否使用").Default(false),
+		field.Bool("is_public").Comment("是否public 端口").Default(true),
 	}
 }
 

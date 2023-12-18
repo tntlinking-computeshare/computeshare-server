@@ -64,10 +64,11 @@ type NetworkMappingRepo interface {
 }
 
 type Gateway struct {
-	ID   uuid.UUID
-	Name string
-	IP   string
-	Port int32
+	ID         uuid.UUID
+	Name       string
+	IP         string
+	Port       int32
+	InternalIP string
 }
 
 type GatewayRepo interface {
@@ -96,6 +97,7 @@ type GatewayPortRepo interface {
 	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*GatewayPort, error)
 	Update(ctx context.Context, gp *GatewayPort) error
 	GetGatewayPortByGatewayIdAndPort(ctx context.Context, id uuid.UUID, port int32) (*GatewayPort, error)
+	GetGatewayPortFirstByNotUsedAndIsPublic(ctx context.Context, gatewayID uuid.UUID, isPublic bool) (*GatewayPort, error)
 }
 
 type NetworkMappingUseCase struct {

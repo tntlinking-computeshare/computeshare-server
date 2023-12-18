@@ -22,7 +22,9 @@ type Gateway struct {
 	// 网关ip
 	IP string `json:"ip,omitempty"`
 	// 端口号
-	Port         int32 `json:"port,omitempty"`
+	Port int32 `json:"port,omitempty"`
+	// 内网ip
+	InternalIP   string `json:"internal_ip,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -33,7 +35,7 @@ func (*Gateway) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case gateway.FieldPort:
 			values[i] = new(sql.NullInt64)
-		case gateway.FieldName, gateway.FieldIP:
+		case gateway.FieldName, gateway.FieldIP, gateway.FieldInternalIP:
 			values[i] = new(sql.NullString)
 		case gateway.FieldID:
 			values[i] = new(uuid.UUID)
@@ -75,6 +77,12 @@ func (ga *Gateway) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
 				ga.Port = int32(value.Int64)
+			}
+		case gateway.FieldInternalIP:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_ip", values[i])
+			} else if value.Valid {
+				ga.InternalIP = value.String
 			}
 		default:
 			ga.selectValues.Set(columns[i], values[i])
@@ -120,6 +128,9 @@ func (ga *Gateway) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("port=")
 	builder.WriteString(fmt.Sprintf("%v", ga.Port))
+	builder.WriteString(", ")
+	builder.WriteString("internal_ip=")
+	builder.WriteString(ga.InternalIP)
 	builder.WriteByte(')')
 	return builder.String()
 }

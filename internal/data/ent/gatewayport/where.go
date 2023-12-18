@@ -68,6 +68,11 @@ func IsUse(v bool) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldEQ(FieldIsUse, v))
 }
 
+// IsPublic applies equality check predicate on the "is_public" field. It's identical to IsPublicEQ.
+func IsPublic(v bool) predicate.GatewayPort {
+	return predicate.GatewayPort(sql.FieldEQ(FieldIsPublic, v))
+}
+
 // FkGatewayIDEQ applies the EQ predicate on the "fk_gateway_id" field.
 func FkGatewayIDEQ(v uuid.UUID) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldEQ(FieldFkGatewayID, v))
@@ -156,6 +161,16 @@ func IsUseEQ(v bool) predicate.GatewayPort {
 // IsUseNEQ applies the NEQ predicate on the "is_use" field.
 func IsUseNEQ(v bool) predicate.GatewayPort {
 	return predicate.GatewayPort(sql.FieldNEQ(FieldIsUse, v))
+}
+
+// IsPublicEQ applies the EQ predicate on the "is_public" field.
+func IsPublicEQ(v bool) predicate.GatewayPort {
+	return predicate.GatewayPort(sql.FieldEQ(FieldIsPublic, v))
+}
+
+// IsPublicNEQ applies the NEQ predicate on the "is_public" field.
+func IsPublicNEQ(v bool) predicate.GatewayPort {
+	return predicate.GatewayPort(sql.FieldNEQ(FieldIsPublic, v))
 }
 
 // And groups predicates with the AND operator between them.

@@ -38,6 +38,12 @@ func (gc *GatewayCreate) SetPort(i int32) *GatewayCreate {
 	return gc
 }
 
+// SetInternalIP sets the "internal_ip" field.
+func (gc *GatewayCreate) SetInternalIP(s string) *GatewayCreate {
+	gc.mutation.SetInternalIP(s)
+	return gc
+}
+
 // SetID sets the "id" field.
 func (gc *GatewayCreate) SetID(u uuid.UUID) *GatewayCreate {
 	gc.mutation.SetID(u)
@@ -109,6 +115,9 @@ func (gc *GatewayCreate) check() error {
 	if _, ok := gc.mutation.Port(); !ok {
 		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "Gateway.port"`)}
 	}
+	if _, ok := gc.mutation.InternalIP(); !ok {
+		return &ValidationError{Name: "internal_ip", err: errors.New(`ent: missing required field "Gateway.internal_ip"`)}
+	}
 	return nil
 }
 
@@ -155,6 +164,10 @@ func (gc *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
 	if value, ok := gc.mutation.Port(); ok {
 		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 		_node.Port = value
+	}
+	if value, ok := gc.mutation.InternalIP(); ok {
+		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
+		_node.InternalIP = value
 	}
 	return _node, _spec
 }

@@ -138,23 +138,22 @@ func (ciu *ComputeInstanceUpdate) ClearAgentID() *ComputeInstanceUpdate {
 	return ciu
 }
 
-// SetCommand sets the "command" field.
-func (ciu *ComputeInstanceUpdate) SetCommand(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetCommand(s)
+// SetVncIP sets the "vnc_ip" field.
+func (ciu *ComputeInstanceUpdate) SetVncIP(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetVncIP(s)
 	return ciu
 }
 
-// SetNillableCommand sets the "command" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillableCommand(s *string) *ComputeInstanceUpdate {
-	if s != nil {
-		ciu.SetCommand(*s)
-	}
+// SetVncPort sets the "vnc_port" field.
+func (ciu *ComputeInstanceUpdate) SetVncPort(i int32) *ComputeInstanceUpdate {
+	ciu.mutation.ResetVncPort()
+	ciu.mutation.SetVncPort(i)
 	return ciu
 }
 
-// ClearCommand clears the value of the "command" field.
-func (ciu *ComputeInstanceUpdate) ClearCommand() *ComputeInstanceUpdate {
-	ciu.mutation.ClearCommand()
+// AddVncPort adds i to the "vnc_port" field.
+func (ciu *ComputeInstanceUpdate) AddVncPort(i int32) *ComputeInstanceUpdate {
+	ciu.mutation.AddVncPort(i)
 	return ciu
 }
 
@@ -274,11 +273,14 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	if ciu.mutation.AgentIDCleared() {
 		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
-	if value, ok := ciu.mutation.Command(); ok {
-		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+	if value, ok := ciu.mutation.VncIP(); ok {
+		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
 	}
-	if ciu.mutation.CommandCleared() {
-		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
+	if value, ok := ciu.mutation.VncPort(); ok {
+		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
+	}
+	if value, ok := ciu.mutation.AddedVncPort(); ok {
+		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -409,23 +411,22 @@ func (ciuo *ComputeInstanceUpdateOne) ClearAgentID() *ComputeInstanceUpdateOne {
 	return ciuo
 }
 
-// SetCommand sets the "command" field.
-func (ciuo *ComputeInstanceUpdateOne) SetCommand(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetCommand(s)
+// SetVncIP sets the "vnc_ip" field.
+func (ciuo *ComputeInstanceUpdateOne) SetVncIP(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetVncIP(s)
 	return ciuo
 }
 
-// SetNillableCommand sets the "command" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillableCommand(s *string) *ComputeInstanceUpdateOne {
-	if s != nil {
-		ciuo.SetCommand(*s)
-	}
+// SetVncPort sets the "vnc_port" field.
+func (ciuo *ComputeInstanceUpdateOne) SetVncPort(i int32) *ComputeInstanceUpdateOne {
+	ciuo.mutation.ResetVncPort()
+	ciuo.mutation.SetVncPort(i)
 	return ciuo
 }
 
-// ClearCommand clears the value of the "command" field.
-func (ciuo *ComputeInstanceUpdateOne) ClearCommand() *ComputeInstanceUpdateOne {
-	ciuo.mutation.ClearCommand()
+// AddVncPort adds i to the "vnc_port" field.
+func (ciuo *ComputeInstanceUpdateOne) AddVncPort(i int32) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddVncPort(i)
 	return ciuo
 }
 
@@ -575,11 +576,14 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	if ciuo.mutation.AgentIDCleared() {
 		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
-	if value, ok := ciuo.mutation.Command(); ok {
-		_spec.SetField(computeinstance.FieldCommand, field.TypeString, value)
+	if value, ok := ciuo.mutation.VncIP(); ok {
+		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
 	}
-	if ciuo.mutation.CommandCleared() {
-		_spec.ClearField(computeinstance.FieldCommand, field.TypeString)
+	if value, ok := ciuo.mutation.VncPort(); ok {
+		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
+	}
+	if value, ok := ciuo.mutation.AddedVncPort(); ok {
+		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
 	_node = &ComputeInstance{config: ciuo.config}
 	_spec.Assign = _node.assignValues

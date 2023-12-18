@@ -58,7 +58,6 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetExpirationTime(in.ExpirationTime).
 		SetStatus(in.Status).
 		SetPort(in.Port).
-		SetCommand(in.Command).
 		SetAgentID(in.AgentId).
 		Save(ctx)
 
@@ -98,7 +97,6 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 		Status:         item.Status,
 		ContainerID:    item.ContainerID,
 		AgentId:        item.AgentID,
-		Command:        item.Command,
 	}
 }
 

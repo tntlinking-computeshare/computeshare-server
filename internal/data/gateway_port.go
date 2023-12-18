@@ -27,7 +27,7 @@ func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUse
 	var counts []*biz.GatewayPortCount
 	err := repo.data.getGatewayPort(ctx).Query().
 		Select(gatewayport.FieldFkGatewayID).
-		Where(gatewayport.IsUse(isUsed)).
+		Where(gatewayport.IsUse(isUsed), gatewayport.IsPublic(true)).
 		GroupBy(gatewayport.FieldFkGatewayID).
 		Aggregate(ent.Count()).
 		Scan(ctx, &counts)
@@ -36,7 +36,7 @@ func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUse
 
 func (repo *GatewayPortRepo) GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*biz.GatewayPort, error) {
 	instance, err := repo.data.getGatewayPort(ctx).Query().
-		Where(gatewayport.FkGatewayID(gatewayID), gatewayport.IsUse(false)).
+		Where(gatewayport.FkGatewayID(gatewayID), gatewayport.IsUse(false), gatewayport.IsPublic(true)).
 		Order(gatewayport.ByPort(sql.OrderAsc())).First(ctx)
 	return repo.toBiz(instance, 0), err
 }
@@ -69,4 +69,11 @@ func (repo *GatewayPortRepo) GetGatewayPortByGatewayIdAndPort(ctx context.Contex
 		First(ctx)
 
 	return repo.toBiz(data, 0), err
+}
+
+func (repo *GatewayPortRepo) GetGatewayPortFirstByNotUsedAndIsPublic(ctx context.Context, gatewayID uuid.UUID, isPublic bool) (*biz.GatewayPort, error) {
+	instance, err := repo.data.getGatewayPort(ctx).Query().
+		Where(gatewayport.FkGatewayID(gatewayID), gatewayport.IsUse(false), gatewayport.IsPublic(isPublic)).
+		Order(gatewayport.ByPort(sql.OrderAsc())).First(ctx)
+	return repo.toBiz(instance, 0), err
 }

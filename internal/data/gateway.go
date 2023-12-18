@@ -44,10 +44,11 @@ func (repo *GatewayRepo) toBiz(item *ent.Gateway, _ int) *biz.Gateway {
 		return nil
 	}
 	return &biz.Gateway{
-		ID:   item.ID,
-		Name: item.Name,
-		IP:   item.IP,
-		Port: item.Port,
+		ID:         item.ID,
+		Name:       item.Name,
+		IP:         item.IP,
+		Port:       item.Port,
+		InternalIP: item.InternalIP,
 	}
 }
 

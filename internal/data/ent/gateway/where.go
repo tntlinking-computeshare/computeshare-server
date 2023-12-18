@@ -68,6 +68,11 @@ func Port(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldPort, v))
 }
 
+// InternalIP applies equality check predicate on the "internal_ip" field. It's identical to InternalIPEQ.
+func InternalIP(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEQ(FieldInternalIP, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldName, v))
@@ -236,6 +241,71 @@ func PortLT(v int32) predicate.Gateway {
 // PortLTE applies the LTE predicate on the "port" field.
 func PortLTE(v int32) predicate.Gateway {
 	return predicate.Gateway(sql.FieldLTE(FieldPort, v))
+}
+
+// InternalIPEQ applies the EQ predicate on the "internal_ip" field.
+func InternalIPEQ(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEQ(FieldInternalIP, v))
+}
+
+// InternalIPNEQ applies the NEQ predicate on the "internal_ip" field.
+func InternalIPNEQ(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldNEQ(FieldInternalIP, v))
+}
+
+// InternalIPIn applies the In predicate on the "internal_ip" field.
+func InternalIPIn(vs ...string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldIn(FieldInternalIP, vs...))
+}
+
+// InternalIPNotIn applies the NotIn predicate on the "internal_ip" field.
+func InternalIPNotIn(vs ...string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldNotIn(FieldInternalIP, vs...))
+}
+
+// InternalIPGT applies the GT predicate on the "internal_ip" field.
+func InternalIPGT(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldGT(FieldInternalIP, v))
+}
+
+// InternalIPGTE applies the GTE predicate on the "internal_ip" field.
+func InternalIPGTE(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldGTE(FieldInternalIP, v))
+}
+
+// InternalIPLT applies the LT predicate on the "internal_ip" field.
+func InternalIPLT(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldLT(FieldInternalIP, v))
+}
+
+// InternalIPLTE applies the LTE predicate on the "internal_ip" field.
+func InternalIPLTE(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldLTE(FieldInternalIP, v))
+}
+
+// InternalIPContains applies the Contains predicate on the "internal_ip" field.
+func InternalIPContains(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldContains(FieldInternalIP, v))
+}
+
+// InternalIPHasPrefix applies the HasPrefix predicate on the "internal_ip" field.
+func InternalIPHasPrefix(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldHasPrefix(FieldInternalIP, v))
+}
+
+// InternalIPHasSuffix applies the HasSuffix predicate on the "internal_ip" field.
+func InternalIPHasSuffix(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldHasSuffix(FieldInternalIP, v))
+}
+
+// InternalIPEqualFold applies the EqualFold predicate on the "internal_ip" field.
+func InternalIPEqualFold(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEqualFold(FieldInternalIP, v))
+}
+
+// InternalIPContainsFold applies the ContainsFold predicate on the "internal_ip" field.
+func InternalIPContainsFold(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldContainsFold(FieldInternalIP, v))
 }
 
 // And groups predicates with the AND operator between them.
