@@ -23,7 +23,7 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, confDispose *conf.Dispose, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
 	grpcServer := server.NewGRPCServer(confServer, logger)
 	dataData, cleanup, err := data.NewData(confData, logger)
 	if err != nil {
@@ -55,7 +55,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, confDispose *conf.Dis
 	}
 	s3UserRepo := data.NewS3UserRepo(dataData, logger)
 	userRepo := data.NewUserRepo(dataData, logger)
-	storageS3UseCase := biz.NewStorageS3UseCase(s3UserRepo, userRepo, confDispose, logger)
+	storageS3UseCase := biz.NewStorageS3UseCase(s3UserRepo, userRepo, dispose, logger)
 	storageS3Service := service.NewStorageS3Service(storageS3UseCase)
 	userUsercase := biz.NewUserUsecase(auth, userRepo, logger)
 	userService := service.NewUserService(userUsercase, logger)
