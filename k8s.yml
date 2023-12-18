@@ -129,6 +129,8 @@ data:
         target_docker_container_name: seaweedfs-master-1
         endpoint: computeshare.newtouch.com:8333
         region: shanghai
+        s3_url_prefix: s3://
+        url_prefix: http://computeshare.newtouch.com:8333/
       
       kind: ConfigMap
 metadata:

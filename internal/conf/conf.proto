@@ -68,5 +68,7 @@ message Dispose{
     string target_docker_container_name = 2;
     string endpoint = 3;
     string region = 4;
+    string s3_url_prefix = 5;
+    string url_prefix = 6;
   }
 }
