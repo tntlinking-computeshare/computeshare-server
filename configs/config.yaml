@@ -24,8 +24,16 @@ data:
     write_timeout: 0.6s
   ipfs:
     url: 127.0.0.1:5001
-  docker:
-    host: unix:///var/run/docker.sock
+
 auth:
   service_key: some-secret-key
   api_key: some-secret-key-for-forntend
+
+dispose:
+  s3:
+    target_docker_host: unix:///var/run/docker.sock
+    target_docker_container_name: seaweedfs-master-1
+    endpoint: http://127.0.0.1:8333
+    region: shanghai
+    s3_url_prefix: s3://
+    url_prefix: http://127.0.0.1:8333/

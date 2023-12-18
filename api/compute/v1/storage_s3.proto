@@ -25,6 +25,12 @@ service StorageS3 {
 			delete: "/v1/s3bucket/{bucketName}",
 		};
 	};
+	rpc EmptyBucket (EmptyBucketRequest) returns (EmptyBucketReply){
+		option (google.api.http) = {
+			delete: "/v1/s3bucket/{bucketName}/empty",
+		};
+	};
+
 	rpc ListBucket(ListBucketRequest) returns (ListBucketReply) {
 		option (google.api.http) = {
 			get: "/v1/s3bucket",
@@ -36,9 +42,17 @@ service StorageS3 {
 			get: "/v1/s3bucket/{bucketName}/objects",
 		};
 	};
+
 	rpc S3StorageUploadFile (S3StorageUploadFileRequest) returns (S3StorageUploadFileReply){
 		option (google.api.http) = {
 			post: "/v1/storage/{bucketName}/objects/upload/ersatz",
+			body: "*"
+		};
+	};
+
+	rpc S3StorageMkdir (S3StorageMkdirRequest) returns (S3StorageMkdirReply){
+		option (google.api.http) = {
+			post: "/v1/storage/{bucketName}/mkdir",
 			body: "*"
 		};
 	};
@@ -88,6 +102,14 @@ message DeleteBucketReply {
 	string message = 2;
 }
 
+message EmptyBucketRequest {
+	string bucketName = 1;
+}
+message EmptyBucketReply {
+	int32 code = 1;
+	string message = 2;
+}
+
 message ListBucketRequest {
 
 }
@@ -106,8 +128,10 @@ message ListBucketReply {
 message S3Object {
 	string etag = 1;
 	string name = 3;
-	int32 size = 4;
-	int64 last_modify = 5;
+	string s3Url = 4;
+	string url = 5;
+	int32 size = 6;
+	int64 last_modify = 7;
 }
 
 message S3StorageInBucketListRequest {
@@ -120,13 +144,22 @@ message S3StorageInBucketListReply {
 	repeated S3Object data = 3;
 }
 
+message S3StorageMkdirRequest {
+	string bucketName = 1;
+	string dirName = 2;
+}
+message S3StorageMkdirReply{
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
 message S3StorageUploadFileRequest {
 	bytes body = 1;
 	string prefix = 2;
 	string fileName = 3;
 	string bucketName = 4;
 }
-
 message S3StorageUploadFileReply{
 	int32 code = 1;
 	string message = 2;

@@ -76,6 +76,21 @@ func (s *StorageS3Service) DeleteBucket(ctx context.Context, req *pb.DeleteBucke
 		Message: SUCCESS,
 	}, nil
 }
+func (s *StorageS3Service) EmptyBucket(ctx context.Context, req *pb.EmptyBucketRequest) (*pb.EmptyBucketReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	err := s.uc.EmptyBucket(ctx, userId, req.BucketName)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.EmptyBucketReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
+}
 func (s *StorageS3Service) ListBucket(ctx context.Context, req *pb.ListBucketRequest) (*pb.ListBucketReply, error) {
 
 	claim, ok := global.FromContext(ctx)
@@ -144,6 +159,22 @@ func (s *StorageS3Service) S3StorageUploadFile(ctx context.Context, req *pb.S3St
 			Size:       int32(len(req.Body)),
 			LastModify: time.Now().UnixMilli(),
 		},
+	}, nil
+}
+func (s *StorageS3Service) S3StorageMkdir(ctx context.Context, req *pb.S3StorageMkdirRequest) (*pb.S3StorageMkdirReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	err := s.uc.S3StorageMkdir(ctx, userId, req.BucketName, req.DirName)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.S3StorageMkdirReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    req.DirName,
 	}, nil
 }
 func (s *StorageS3Service) S3StorageDownload(ctx context.Context, req *pb.S3StorageDownloadRequest) (*pb.S3StorageDownloadReply, error) {
