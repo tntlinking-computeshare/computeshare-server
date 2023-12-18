@@ -98,7 +98,6 @@ func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentI
 				Core:           item.Core,
 				Memory:         item.Memory,
 				ContainerId:    item.ContainerID,
-				Command:        item.Command,
 			}
 		}),
 	}, err
@@ -113,7 +112,6 @@ func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.
 		ID:          id,
 		ContainerID: req.ContainerId,
 		AgentId:     req.PeerId,
-		Command:     req.Command,
 		Status:      consts.InstanceStatus(req.Status),
 	}
 	err = s.uc.ReportInstanceStatus(ctx, instance)
