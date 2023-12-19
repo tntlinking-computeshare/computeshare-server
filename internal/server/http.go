@@ -6,7 +6,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/mohaijiang/computeshare-server/internal/data"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
@@ -178,11 +177,12 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	})
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
-	var userId uuid.UUID
-	if claims, ok := token.Claims.(global.ComputeServerClaim); ok {
-		userId = claims.GetUserId()
+	var userId string
+	if claims, ok := token.Claims.(jwt2.MapClaims); ok {
+		userId, _ = claims["UserID"].(string)
 	} else {
 		fmt.Println("===== websocket失败 ======")
 		fmt.Println("       jwt token 验证失败         ")

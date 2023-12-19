@@ -271,12 +271,12 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 }
 
 // Terminal Deprecate
-func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId uuid.UUID, userId uuid.UUID) (string, error) {
+func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId uuid.UUID, userId string) (string, error) {
 	instance, err := uc.Get(ctx, instanceId)
 	if err != nil {
 		return "", err
 	}
-	if instance.Owner != userId.String() {
+	if instance.Owner != userId {
 		return "", errors.New(400, "unauthorized", "无权限")
 	}
 	return fmt.Sprintf("ws://%s:%d/websockify", instance.VncIP, instance.VncPort), err

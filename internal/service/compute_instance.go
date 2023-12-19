@@ -177,7 +177,7 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 	}
 }
 
-func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, id string, userId uuid.UUID) (string, error) {
+func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, id string, userId string) (string, error) {
 	instanceId, err := uuid.Parse(id)
 	if err != nil {
 		return "", err
