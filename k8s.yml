@@ -128,9 +128,9 @@ data:
       api_key: some-secret-key-for-forntend
     dispose:
       s3:
-        target_docker_host: unix:///var/run/docker.sock
+        target_docker_host: tcp://172.16.0.8:2375
         target_docker_container_name: seaweedfs-master-1
-        endpoint: computeshare.newtouch.com:8333
+        endpoint: http://computeshare.newtouch.com:8333
         region: shanghai
         s3_url_prefix: s3://
         url_prefix: http://computeshare.newtouch.com:8333/

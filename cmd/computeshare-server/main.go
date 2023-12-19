@@ -10,7 +10,6 @@ import (
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 
@@ -50,19 +49,16 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 func main() {
 	flag.Parse()
 	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
+		"ts", log.Timestamp("2006-01-02 15:04:05.000000"),
 		"caller", log.DefaultCaller,
-		"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
-		"trace.id", tracing.TraceID(),
-		"span.id", tracing.SpanID(),
 	)
+	logger.Log(log.LevelInfo)
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),
 		),
 	)
+
 	defer c.Close()
 
 	if err := c.Load(); err != nil {
