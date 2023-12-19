@@ -37,3 +37,6 @@ dispose:
     region: shanghai
     s3_url_prefix: s3://
     url_prefix: http://127.0.0.1:8333/
+  domain:
+    vnc_host: https://vnc.computeshare.newtouch.com
+    api_host: api.computeshare.newtouch.com

@@ -61,7 +61,9 @@ message Auth {
 }
 
 message Dispose{
-  S3 s3 = 2;
+  S3 s3 = 1;
+
+  Domain domain = 2;
 
   message S3{
     string target_docker_host = 1;
@@ -70,5 +72,10 @@ message Dispose{
     string region = 4;
     string s3_url_prefix = 5;
     string url_prefix = 6;
+  }
+
+  message Domain {
+    string vnc_host = 1;
+    string api_host = 2;
   }
 }

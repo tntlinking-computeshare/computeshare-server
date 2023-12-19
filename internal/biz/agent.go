@@ -75,10 +75,6 @@ func (uc *AgentUsecase) Delete(ctx context.Context, id uuid.UUID) error {
 	return uc.repo.DeleteAgent(ctx, id)
 }
 
-func (uc *AgentUsecase) FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error) {
-	return uc.repo.FindOneActiveAgent(ctx, cpu, memory)
-}
-
 func (s *AgentUsecase) SyncAgentStatus() {
 	ctx := context.Background()
 	list, err := s.List(ctx)

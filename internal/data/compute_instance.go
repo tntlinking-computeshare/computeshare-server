@@ -161,3 +161,14 @@ func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error
 func (crs *computeInstanceRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error {
 	return crs.data.getComputeInstance(ctx).UpdateOneID(id).SetStatus(status).Exec(ctx)
 }
+
+func (csr *computeInstanceRepo) ListExpiration(ctx context.Context) ([]*biz.ComputeInstance, error) {
+	list, err := csr.data.getComputeInstance(ctx).Query().Where(
+		computeinstance.ExpirationTimeLT(time.Now()), computeinstance.StatusNEQ(consts.InstanceStatusExpire),
+	).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Map(list, csr.toBiz), err
+}

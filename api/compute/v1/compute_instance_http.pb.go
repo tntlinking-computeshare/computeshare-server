@@ -22,7 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationComputeInstanceCreate = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Create"
 const OperationComputeInstanceDelete = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Delete"
 const OperationComputeInstanceGet = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/Get"
-const OperationComputeInstanceGetInstanceConsole = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/GetInstanceConsole"
+const OperationComputeInstanceGetInstanceVncURL = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/GetInstanceVncURL"
 const OperationComputeInstanceList = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/List"
 const OperationComputeInstanceListComputeImage = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeImage"
 const OperationComputeInstanceListComputeInstanceDuration = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/ListComputeInstanceDuration"
@@ -38,7 +38,8 @@ type ComputeInstanceHTTPServer interface {
 	Delete(context.Context, *DeleteInstanceRequest) (*CommonReply, error)
 	// Get获取实例详情
 	Get(context.Context, *GetInstanceRequest) (*GetInstanceReply, error)
-	GetInstanceConsole(context.Context, *GetInstanceRequest) (*GetInstanceConsoleReply, error)
+	// GetInstanceVncURL 获取vnc 地址
+	GetInstanceVncURL(context.Context, *GetInstanceRequest) (*GetInstanceVncURLReply, error)
 	// List实例列表
 	List(context.Context, *ListInstanceRequest) (*ListInstanceReply, error)
 	// ListComputeImage 查询镜像
@@ -67,7 +68,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StopInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/restart", _ComputeInstance_RestartInstance0_HTTP_Handler(srv))
-	r.GET("/v1/instance/{id}/console", _ComputeInstance_GetInstanceConsole0_HTTP_Handler(srv))
+	r.GET("/v1/instance/{id}/vnc", _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv))
 }
 
 func _ComputeInstance_ListComputeSpec0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
@@ -287,7 +288,7 @@ func _ComputeInstance_RestartInstance0_HTTP_Handler(srv ComputeInstanceHTTPServe
 	}
 }
 
-func _ComputeInstance_GetInstanceConsole0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
+func _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetInstanceRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -296,15 +297,15 @@ func _ComputeInstance_GetInstanceConsole0_HTTP_Handler(srv ComputeInstanceHTTPSe
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationComputeInstanceGetInstanceConsole)
+		http.SetOperation(ctx, OperationComputeInstanceGetInstanceVncURL)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetInstanceConsole(ctx, req.(*GetInstanceRequest))
+			return srv.GetInstanceVncURL(ctx, req.(*GetInstanceRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetInstanceConsoleReply)
+		reply := out.(*GetInstanceVncURLReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -313,7 +314,7 @@ type ComputeInstanceHTTPClient interface {
 	Create(ctx context.Context, req *CreateInstanceRequest, opts ...http.CallOption) (rsp *CreateInstanceReply, err error)
 	Delete(ctx context.Context, req *DeleteInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	Get(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *GetInstanceReply, err error)
-	GetInstanceConsole(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *GetInstanceConsoleReply, err error)
+	GetInstanceVncURL(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *GetInstanceVncURLReply, err error)
 	List(ctx context.Context, req *ListInstanceRequest, opts ...http.CallOption) (rsp *ListInstanceReply, err error)
 	ListComputeImage(ctx context.Context, req *ListComputeImageRequest, opts ...http.CallOption) (rsp *ListComputeImageReply, err error)
 	ListComputeInstanceDuration(ctx context.Context, req *ListComputeDurationRequest, opts ...http.CallOption) (rsp *ListComputeDurationReply, err error)
@@ -370,11 +371,11 @@ func (c *ComputeInstanceHTTPClientImpl) Get(ctx context.Context, in *GetInstance
 	return &out, err
 }
 
-func (c *ComputeInstanceHTTPClientImpl) GetInstanceConsole(ctx context.Context, in *GetInstanceRequest, opts ...http.CallOption) (*GetInstanceConsoleReply, error) {
-	var out GetInstanceConsoleReply
-	pattern := "/v1/instance/{id}/console"
+func (c *ComputeInstanceHTTPClientImpl) GetInstanceVncURL(ctx context.Context, in *GetInstanceRequest, opts ...http.CallOption) (*GetInstanceVncURLReply, error) {
+	var out GetInstanceVncURLReply
+	pattern := "/v1/instance/{id}/vnc"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationComputeInstanceGetInstanceConsole))
+	opts = append(opts, http.Operation(OperationComputeInstanceGetInstanceVncURL))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

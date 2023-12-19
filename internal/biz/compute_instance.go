@@ -3,8 +3,8 @@ package biz
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
@@ -30,6 +30,7 @@ type ComputeInstanceRepo interface {
 	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
 	SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *ComputeInstanceRds) error
 	GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*ComputeInstanceRds, error)
+	ListExpiration(ctx context.Context) ([]*ComputeInstance, error)
 }
 
 type ComputeImageRepo interface {
@@ -85,7 +86,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 
 	claim, ok := global.FromContext(ctx)
 	if !ok {
-		return nil, errors.New("cannot get user ID")
+		return nil, errors.New(400, "unauthorized", "无权限")
 	}
 
 	computeSpec, err := uc.specRepo.Get(ctx, cic.SpecId)
@@ -270,59 +271,38 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 }
 
 // Terminal Deprecate
-func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId uuid.UUID) (string, error) {
+func (uc *ComputeInstanceUsercase) GetVncConsole(ctx context.Context, instanceId uuid.UUID, userId uuid.UUID) (string, error) {
 	instance, err := uc.Get(ctx, instanceId)
 	if err != nil {
 		return "", err
 	}
-
-	// 查询实例需要链接到的gateway
-	// 1). 判断此实例有无配置端口映射，如果配置，直接使用此端口映射对应的gatewayId
-	// 2). 如果此实例未进行端口映射， 选择一个gateway进行端口映射
-	gateway, err := uc.gatewayRepo.FindInstanceSuitableGateway(ctx, instanceId)
-	if err != nil {
-		return "", err
+	if instance.Owner != userId.String() {
+		return "", errors.New(400, "unauthorized", "无权限")
 	}
-
-	gp, err := uc.gatewayPortRepo.GetGatewayPortFirstByNotUsed(ctx, gateway.ID)
-	taskParam := queue.NatNetworkMappingTaskParamVO{
-		Id:           uuid.NewString(),
-		Name:         instance.Name,
-		InstanceId:   instance.ID.String(),
-		InstancePort: 0,
-		RemotePort:   gp.Port,
-		GatewayId:    gateway.ID.String(),
-		GatewayIp:    gateway.IP,
-		GatewayPort:  gateway.Port,
-	}
-	paramData, err := json.Marshal(taskParam)
-	if err != nil {
-		return "", err
-	}
-	param := string(paramData)
-	task := Task{
-		AgentID:    instance.AgentId,
-		Cmd:        queue.TaskCmd_VM_VNC_CONNECT,
-		Params:     &param,
-		Status:     queue.TaskStatus_CREATED,
-		CreateTime: time.Now(),
-	}
-	err = uc.taskRepo.CreateTask(ctx, &task)
-
-	gp.IsUse = true
-	err = uc.gatewayPortRepo.Update(ctx, gp)
-	if err != nil {
-		return "", err
-	}
-
-	return fmt.Sprintf("http://%s:%d/vnc.html", gateway.IP, gp.Port), nil
-
+	return fmt.Sprintf("ws://%s:%d/websockify", instance.VncIP, instance.VncPort), err
 }
 
 // SyncContainerOverdue 同步资源实例的过期状态
 func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
 	ctx := context.Background()
-	_ = uc.instanceRepo.SetInstanceExpiration(ctx)
+	uc.log.Info("查询过期实例")
+	expirationList, err := uc.instanceRepo.ListExpiration(ctx)
+	if err != nil {
+		fmt.Println("查询过期实例失败")
+		return
+	}
+
+	for _, instance := range expirationList {
+		if instance.Status == consts.InstanceStatusRunning {
+			// 停止实例
+			_ = uc.Stop(ctx, instance.ID)
+		}
+
+		err := uc.instanceRepo.UpdateStatus(ctx, instance.ID, consts.InstanceStatusExpire)
+		if err != nil {
+			break
+		}
+	}
 }
 
 func (uc *ComputeInstanceUsercase) Reboot(ctx context.Context, instanceId uuid.UUID) error {

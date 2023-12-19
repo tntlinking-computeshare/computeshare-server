@@ -29,7 +29,7 @@ const (
 	ComputeInstance_StopInstance_FullMethodName                = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StopInstance"
 	ComputeInstance_StartInstance_FullMethodName               = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/StartInstance"
 	ComputeInstance_RestartInstance_FullMethodName             = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/RestartInstance"
-	ComputeInstance_GetInstanceConsole_FullMethodName          = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/GetInstanceConsole"
+	ComputeInstance_GetInstanceVncURL_FullMethodName           = "/github.com.mohaijiang.api.compute.v1.ComputeInstance/GetInstanceVncURL"
 )
 
 // ComputeInstanceClient is the client API for ComputeInstance service.
@@ -56,7 +56,8 @@ type ComputeInstanceClient interface {
 	StartInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error)
 	// 重启实例
 	RestartInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error)
-	GetInstanceConsole(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceConsoleReply, error)
+	// 获取vnc 地址
+	GetInstanceVncURL(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceVncURLReply, error)
 }
 
 type computeInstanceClient struct {
@@ -157,9 +158,9 @@ func (c *computeInstanceClient) RestartInstance(ctx context.Context, in *GetInst
 	return out, nil
 }
 
-func (c *computeInstanceClient) GetInstanceConsole(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceConsoleReply, error) {
-	out := new(GetInstanceConsoleReply)
-	err := c.cc.Invoke(ctx, ComputeInstance_GetInstanceConsole_FullMethodName, in, out, opts...)
+func (c *computeInstanceClient) GetInstanceVncURL(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceVncURLReply, error) {
+	out := new(GetInstanceVncURLReply)
+	err := c.cc.Invoke(ctx, ComputeInstance_GetInstanceVncURL_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +191,8 @@ type ComputeInstanceServer interface {
 	StartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error)
 	// 重启实例
 	RestartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error)
-	GetInstanceConsole(context.Context, *GetInstanceRequest) (*GetInstanceConsoleReply, error)
+	// 获取vnc 地址
+	GetInstanceVncURL(context.Context, *GetInstanceRequest) (*GetInstanceVncURLReply, error)
 	mustEmbedUnimplementedComputeInstanceServer()
 }
 
@@ -228,8 +230,8 @@ func (UnimplementedComputeInstanceServer) StartInstance(context.Context, *GetIns
 func (UnimplementedComputeInstanceServer) RestartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RestartInstance not implemented")
 }
-func (UnimplementedComputeInstanceServer) GetInstanceConsole(context.Context, *GetInstanceRequest) (*GetInstanceConsoleReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetInstanceConsole not implemented")
+func (UnimplementedComputeInstanceServer) GetInstanceVncURL(context.Context, *GetInstanceRequest) (*GetInstanceVncURLReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInstanceVncURL not implemented")
 }
 func (UnimplementedComputeInstanceServer) mustEmbedUnimplementedComputeInstanceServer() {}
 
@@ -424,20 +426,20 @@ func _ComputeInstance_RestartInstance_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ComputeInstance_GetInstanceConsole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ComputeInstance_GetInstanceVncURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetInstanceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ComputeInstanceServer).GetInstanceConsole(ctx, in)
+		return srv.(ComputeInstanceServer).GetInstanceVncURL(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ComputeInstance_GetInstanceConsole_FullMethodName,
+		FullMethod: ComputeInstance_GetInstanceVncURL_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputeInstanceServer).GetInstanceConsole(ctx, req.(*GetInstanceRequest))
+		return srv.(ComputeInstanceServer).GetInstanceVncURL(ctx, req.(*GetInstanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -490,8 +492,8 @@ var ComputeInstance_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ComputeInstance_RestartInstance_Handler,
 		},
 		{
-			MethodName: "GetInstanceConsole",
-			Handler:    _ComputeInstance_GetInstanceConsole_Handler,
+			MethodName: "GetInstanceVncURL",
+			Handler:    _ComputeInstance_GetInstanceVncURL_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
