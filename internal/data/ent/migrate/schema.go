@@ -11,9 +11,15 @@ var (
 	// AgentsColumns holds the columns for the "agents" table.
 	AgentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
-		{Name: "peer_id", Type: field.TypeString, Unique: true},
+		{Name: "mac", Type: field.TypeString, Unique: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "last_update_time", Type: field.TypeTime},
+		{Name: "hostname", Type: field.TypeString},
+		{Name: "total_cpu", Type: field.TypeInt32},
+		{Name: "total_memory", Type: field.TypeInt32},
+		{Name: "occupied_cpu", Type: field.TypeInt32},
+		{Name: "occupied_memory", Type: field.TypeInt32},
+		{Name: "ip", Type: field.TypeString},
 	}
 	// AgentsTable holds the schema information for the "agents" table.
 	AgentsTable = &schema.Table{

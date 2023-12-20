@@ -34,8 +34,14 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 	s.log.Infof("input data %v", req)
 
 	agent := biz.Agent{
-		PeerId: req.GetName(),
-		Active: true,
+		MAC:            req.Mac,
+		Hostname:       req.Hostname,
+		TotalCPU:       req.TotalCpu,
+		TotalMemory:    req.TotalMemory,
+		OccupiedCPU:    req.OccupiedCpu,
+		OccupiedMemory: req.OccupiedMemory,
+		IP:             req.Ip,
+		Active:         true,
 	}
 	id, err := s.uc.Create(ctx, &agent)
 	return &pb.CreateAgentReply{
@@ -72,7 +78,7 @@ func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*
 		Message: SUCCESS,
 		Data: &pb.AgentReply{
 			Id:   agent.ID.String(),
-			Name: agent.PeerId,
+			Name: agent.MAC,
 		},
 	}, err
 }
@@ -84,7 +90,7 @@ func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) 
 }
 
 func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentInstanceReq) (*computepb.ListInstanceReply, error) {
-	result, err := s.uc.ListAgentInstance(ctx, req.PeerId)
+	result, err := s.uc.ListAgentInstance(ctx, req.Mac)
 	return &computepb.ListInstanceReply{
 		Code:    200,
 		Message: SUCCESS,

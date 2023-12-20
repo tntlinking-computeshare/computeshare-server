@@ -37,7 +37,7 @@ func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.
 	return lo.Map(list, csr.toBiz), err
 }
 
-func (csr *computeInstanceRepo) ListByPeerId(ctx context.Context, agentId string) ([]*biz.ComputeInstance, error) {
+func (csr *computeInstanceRepo) ListByAgentId(ctx context.Context, agentId string) ([]*biz.ComputeInstance, error) {
 	list, err := csr.data.getComputeInstance(ctx).Query().
 		Where(computeinstance.AgentIDEQ(agentId)).
 		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).

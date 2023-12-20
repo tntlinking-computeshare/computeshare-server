@@ -28,9 +28,9 @@ func (au *AgentUpdate) Where(ps ...predicate.Agent) *AgentUpdate {
 	return au
 }
 
-// SetPeerID sets the "peer_id" field.
-func (au *AgentUpdate) SetPeerID(s string) *AgentUpdate {
-	au.mutation.SetPeerID(s)
+// SetMAC sets the "mac" field.
+func (au *AgentUpdate) SetMAC(s string) *AgentUpdate {
+	au.mutation.SetMAC(s)
 	return au
 }
 
@@ -51,6 +51,70 @@ func (au *AgentUpdate) SetNillableActive(b *bool) *AgentUpdate {
 // SetLastUpdateTime sets the "last_update_time" field.
 func (au *AgentUpdate) SetLastUpdateTime(t time.Time) *AgentUpdate {
 	au.mutation.SetLastUpdateTime(t)
+	return au
+}
+
+// SetHostname sets the "hostname" field.
+func (au *AgentUpdate) SetHostname(s string) *AgentUpdate {
+	au.mutation.SetHostname(s)
+	return au
+}
+
+// SetTotalCPU sets the "total_cpu" field.
+func (au *AgentUpdate) SetTotalCPU(i int32) *AgentUpdate {
+	au.mutation.ResetTotalCPU()
+	au.mutation.SetTotalCPU(i)
+	return au
+}
+
+// AddTotalCPU adds i to the "total_cpu" field.
+func (au *AgentUpdate) AddTotalCPU(i int32) *AgentUpdate {
+	au.mutation.AddTotalCPU(i)
+	return au
+}
+
+// SetTotalMemory sets the "total_memory" field.
+func (au *AgentUpdate) SetTotalMemory(i int32) *AgentUpdate {
+	au.mutation.ResetTotalMemory()
+	au.mutation.SetTotalMemory(i)
+	return au
+}
+
+// AddTotalMemory adds i to the "total_memory" field.
+func (au *AgentUpdate) AddTotalMemory(i int32) *AgentUpdate {
+	au.mutation.AddTotalMemory(i)
+	return au
+}
+
+// SetOccupiedCPU sets the "occupied_cpu" field.
+func (au *AgentUpdate) SetOccupiedCPU(i int32) *AgentUpdate {
+	au.mutation.ResetOccupiedCPU()
+	au.mutation.SetOccupiedCPU(i)
+	return au
+}
+
+// AddOccupiedCPU adds i to the "occupied_cpu" field.
+func (au *AgentUpdate) AddOccupiedCPU(i int32) *AgentUpdate {
+	au.mutation.AddOccupiedCPU(i)
+	return au
+}
+
+// SetOccupiedMemory sets the "occupied_memory" field.
+func (au *AgentUpdate) SetOccupiedMemory(i int32) *AgentUpdate {
+	au.mutation.ResetOccupiedMemory()
+	au.mutation.SetOccupiedMemory(i)
+	return au
+}
+
+// AddOccupiedMemory adds i to the "occupied_memory" field.
+func (au *AgentUpdate) AddOccupiedMemory(i int32) *AgentUpdate {
+	au.mutation.AddOccupiedMemory(i)
+	return au
+}
+
+// SetIP sets the "ip" field.
+func (au *AgentUpdate) SetIP(s string) *AgentUpdate {
+	au.mutation.SetIP(s)
 	return au
 }
 
@@ -97,9 +161,9 @@ func (au *AgentUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (au *AgentUpdate) check() error {
-	if v, ok := au.mutation.PeerID(); ok {
-		if err := agent.PeerIDValidator(v); err != nil {
-			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
+	if v, ok := au.mutation.MAC(); ok {
+		if err := agent.MACValidator(v); err != nil {
+			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
 	}
 	return nil
@@ -117,14 +181,44 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := au.mutation.PeerID(); ok {
-		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
+	if value, ok := au.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
 	if value, ok := au.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := au.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
+	}
+	if value, ok := au.mutation.Hostname(); ok {
+		_spec.SetField(agent.FieldHostname, field.TypeString, value)
+	}
+	if value, ok := au.mutation.TotalCPU(); ok {
+		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.AddedTotalCPU(); ok {
+		_spec.AddField(agent.FieldTotalCPU, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.TotalMemory(); ok {
+		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.AddedTotalMemory(); ok {
+		_spec.AddField(agent.FieldTotalMemory, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.OccupiedCPU(); ok {
+		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.AddedOccupiedCPU(); ok {
+		_spec.AddField(agent.FieldOccupiedCPU, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.OccupiedMemory(); ok {
+		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.AddedOccupiedMemory(); ok {
+		_spec.AddField(agent.FieldOccupiedMemory, field.TypeInt32, value)
+	}
+	if value, ok := au.mutation.IP(); ok {
+		_spec.SetField(agent.FieldIP, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -146,9 +240,9 @@ type AgentUpdateOne struct {
 	mutation *AgentMutation
 }
 
-// SetPeerID sets the "peer_id" field.
-func (auo *AgentUpdateOne) SetPeerID(s string) *AgentUpdateOne {
-	auo.mutation.SetPeerID(s)
+// SetMAC sets the "mac" field.
+func (auo *AgentUpdateOne) SetMAC(s string) *AgentUpdateOne {
+	auo.mutation.SetMAC(s)
 	return auo
 }
 
@@ -169,6 +263,70 @@ func (auo *AgentUpdateOne) SetNillableActive(b *bool) *AgentUpdateOne {
 // SetLastUpdateTime sets the "last_update_time" field.
 func (auo *AgentUpdateOne) SetLastUpdateTime(t time.Time) *AgentUpdateOne {
 	auo.mutation.SetLastUpdateTime(t)
+	return auo
+}
+
+// SetHostname sets the "hostname" field.
+func (auo *AgentUpdateOne) SetHostname(s string) *AgentUpdateOne {
+	auo.mutation.SetHostname(s)
+	return auo
+}
+
+// SetTotalCPU sets the "total_cpu" field.
+func (auo *AgentUpdateOne) SetTotalCPU(i int32) *AgentUpdateOne {
+	auo.mutation.ResetTotalCPU()
+	auo.mutation.SetTotalCPU(i)
+	return auo
+}
+
+// AddTotalCPU adds i to the "total_cpu" field.
+func (auo *AgentUpdateOne) AddTotalCPU(i int32) *AgentUpdateOne {
+	auo.mutation.AddTotalCPU(i)
+	return auo
+}
+
+// SetTotalMemory sets the "total_memory" field.
+func (auo *AgentUpdateOne) SetTotalMemory(i int32) *AgentUpdateOne {
+	auo.mutation.ResetTotalMemory()
+	auo.mutation.SetTotalMemory(i)
+	return auo
+}
+
+// AddTotalMemory adds i to the "total_memory" field.
+func (auo *AgentUpdateOne) AddTotalMemory(i int32) *AgentUpdateOne {
+	auo.mutation.AddTotalMemory(i)
+	return auo
+}
+
+// SetOccupiedCPU sets the "occupied_cpu" field.
+func (auo *AgentUpdateOne) SetOccupiedCPU(i int32) *AgentUpdateOne {
+	auo.mutation.ResetOccupiedCPU()
+	auo.mutation.SetOccupiedCPU(i)
+	return auo
+}
+
+// AddOccupiedCPU adds i to the "occupied_cpu" field.
+func (auo *AgentUpdateOne) AddOccupiedCPU(i int32) *AgentUpdateOne {
+	auo.mutation.AddOccupiedCPU(i)
+	return auo
+}
+
+// SetOccupiedMemory sets the "occupied_memory" field.
+func (auo *AgentUpdateOne) SetOccupiedMemory(i int32) *AgentUpdateOne {
+	auo.mutation.ResetOccupiedMemory()
+	auo.mutation.SetOccupiedMemory(i)
+	return auo
+}
+
+// AddOccupiedMemory adds i to the "occupied_memory" field.
+func (auo *AgentUpdateOne) AddOccupiedMemory(i int32) *AgentUpdateOne {
+	auo.mutation.AddOccupiedMemory(i)
+	return auo
+}
+
+// SetIP sets the "ip" field.
+func (auo *AgentUpdateOne) SetIP(s string) *AgentUpdateOne {
+	auo.mutation.SetIP(s)
 	return auo
 }
 
@@ -228,9 +386,9 @@ func (auo *AgentUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (auo *AgentUpdateOne) check() error {
-	if v, ok := auo.mutation.PeerID(); ok {
-		if err := agent.PeerIDValidator(v); err != nil {
-			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
+	if v, ok := auo.mutation.MAC(); ok {
+		if err := agent.MACValidator(v); err != nil {
+			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
 	}
 	return nil
@@ -265,14 +423,44 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			}
 		}
 	}
-	if value, ok := auo.mutation.PeerID(); ok {
-		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
+	if value, ok := auo.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := auo.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
+	}
+	if value, ok := auo.mutation.Hostname(); ok {
+		_spec.SetField(agent.FieldHostname, field.TypeString, value)
+	}
+	if value, ok := auo.mutation.TotalCPU(); ok {
+		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.AddedTotalCPU(); ok {
+		_spec.AddField(agent.FieldTotalCPU, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.TotalMemory(); ok {
+		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.AddedTotalMemory(); ok {
+		_spec.AddField(agent.FieldTotalMemory, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.OccupiedCPU(); ok {
+		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.AddedOccupiedCPU(); ok {
+		_spec.AddField(agent.FieldOccupiedCPU, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.OccupiedMemory(); ok {
+		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.AddedOccupiedMemory(); ok {
+		_spec.AddField(agent.FieldOccupiedMemory, field.TypeInt32, value)
+	}
+	if value, ok := auo.mutation.IP(); ok {
+		_spec.SetField(agent.FieldIP, field.TypeString, value)
 	}
 	_node = &Agent{config: auo.config}
 	_spec.Assign = _node.assignValues

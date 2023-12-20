@@ -18,13 +18,25 @@ type Agent struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
-	// PeerID holds the value of the "peer_id" field.
-	PeerID string `json:"peer_id,omitempty"`
+	// mac 网卡地址
+	MAC string `json:"mac,omitempty"`
 	// 是否活动
 	Active bool `json:"active,omitempty"`
 	// 最后更新时间
 	LastUpdateTime time.Time `json:"last_update_time,omitempty"`
-	selectValues   sql.SelectValues
+	// 主机名
+	Hostname string `json:"hostname,omitempty"`
+	// 总cpu数
+	TotalCPU int32 `json:"total_cpu,omitempty"`
+	// 总内存数
+	TotalMemory int32 `json:"total_memory,omitempty"`
+	// 占用的cpu
+	OccupiedCPU int32 `json:"occupied_cpu,omitempty"`
+	// 占用的内存
+	OccupiedMemory int32 `json:"occupied_memory,omitempty"`
+	// ip地址
+	IP           string `json:"ip,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -34,7 +46,9 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case agent.FieldActive:
 			values[i] = new(sql.NullBool)
-		case agent.FieldPeerID:
+		case agent.FieldTotalCPU, agent.FieldTotalMemory, agent.FieldOccupiedCPU, agent.FieldOccupiedMemory:
+			values[i] = new(sql.NullInt64)
+		case agent.FieldMAC, agent.FieldHostname, agent.FieldIP:
 			values[i] = new(sql.NullString)
 		case agent.FieldLastUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -61,11 +75,11 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				a.ID = *value
 			}
-		case agent.FieldPeerID:
+		case agent.FieldMAC:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field peer_id", values[i])
+				return fmt.Errorf("unexpected type %T for field mac", values[i])
 			} else if value.Valid {
-				a.PeerID = value.String
+				a.MAC = value.String
 			}
 		case agent.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -78,6 +92,42 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field last_update_time", values[i])
 			} else if value.Valid {
 				a.LastUpdateTime = value.Time
+			}
+		case agent.FieldHostname:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hostname", values[i])
+			} else if value.Valid {
+				a.Hostname = value.String
+			}
+		case agent.FieldTotalCPU:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field total_cpu", values[i])
+			} else if value.Valid {
+				a.TotalCPU = int32(value.Int64)
+			}
+		case agent.FieldTotalMemory:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field total_memory", values[i])
+			} else if value.Valid {
+				a.TotalMemory = int32(value.Int64)
+			}
+		case agent.FieldOccupiedCPU:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field occupied_cpu", values[i])
+			} else if value.Valid {
+				a.OccupiedCPU = int32(value.Int64)
+			}
+		case agent.FieldOccupiedMemory:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field occupied_memory", values[i])
+			} else if value.Valid {
+				a.OccupiedMemory = int32(value.Int64)
+			}
+		case agent.FieldIP:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ip", values[i])
+			} else if value.Valid {
+				a.IP = value.String
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -115,14 +165,32 @@ func (a *Agent) String() string {
 	var builder strings.Builder
 	builder.WriteString("Agent(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
-	builder.WriteString("peer_id=")
-	builder.WriteString(a.PeerID)
+	builder.WriteString("mac=")
+	builder.WriteString(a.MAC)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", a.Active))
 	builder.WriteString(", ")
 	builder.WriteString("last_update_time=")
 	builder.WriteString(a.LastUpdateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("hostname=")
+	builder.WriteString(a.Hostname)
+	builder.WriteString(", ")
+	builder.WriteString("total_cpu=")
+	builder.WriteString(fmt.Sprintf("%v", a.TotalCPU))
+	builder.WriteString(", ")
+	builder.WriteString("total_memory=")
+	builder.WriteString(fmt.Sprintf("%v", a.TotalMemory))
+	builder.WriteString(", ")
+	builder.WriteString("occupied_cpu=")
+	builder.WriteString(fmt.Sprintf("%v", a.OccupiedCPU))
+	builder.WriteString(", ")
+	builder.WriteString("occupied_memory=")
+	builder.WriteString(fmt.Sprintf("%v", a.OccupiedMemory))
+	builder.WriteString(", ")
+	builder.WriteString("ip=")
+	builder.WriteString(a.IP)
 	builder.WriteByte(')')
 	return builder.String()
 }
