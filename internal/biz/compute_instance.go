@@ -144,6 +144,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 			GatewayPort:    gw.Port,
 			VncConnectIP:   gw.InternalIP,
 			VncConnectPort: gp.Port,
+			DockerCompose:  cic.DockerCompose,
 		}
 	})
 	if err != nil {
@@ -178,6 +179,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		taskParam.GatewayPort = instanceCreateParam.GatewayPort
 		taskParam.VncConnectIp = instanceCreateParam.VncConnectIP
 		taskParam.VncConnectPort = instanceCreateParam.VncConnectPort
+		taskParam.DockerCompose = instanceCreateParam.DockerCompose
 	}
 	paramData, err := json.Marshal(&taskParam)
 	if err != nil {

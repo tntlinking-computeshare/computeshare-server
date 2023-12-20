@@ -61,6 +61,7 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetAgentID(in.AgentId).
 		SetVncIP(in.VncIP).
 		SetVncPort(in.VncPort).
+		SetDockerCompose(in.DockerCompose).
 		Save(ctx)
 
 	if err != nil {

@@ -117,6 +117,11 @@ func VncPort(v int32) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldVncPort, v))
 }
 
+// DockerCompose applies equality check predicate on the "docker_compose" field. It's identical to DockerComposeEQ.
+func DockerCompose(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldDockerCompose, v))
+}
+
 // OwnerEQ applies the EQ predicate on the "owner" field.
 func OwnerEQ(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldOwner, v))
@@ -864,6 +869,71 @@ func VncPortLT(v int32) predicate.ComputeInstance {
 // VncPortLTE applies the LTE predicate on the "vnc_port" field.
 func VncPortLTE(v int32) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLTE(FieldVncPort, v))
+}
+
+// DockerComposeEQ applies the EQ predicate on the "docker_compose" field.
+func DockerComposeEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldDockerCompose, v))
+}
+
+// DockerComposeNEQ applies the NEQ predicate on the "docker_compose" field.
+func DockerComposeNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldDockerCompose, v))
+}
+
+// DockerComposeIn applies the In predicate on the "docker_compose" field.
+func DockerComposeIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldDockerCompose, vs...))
+}
+
+// DockerComposeNotIn applies the NotIn predicate on the "docker_compose" field.
+func DockerComposeNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldDockerCompose, vs...))
+}
+
+// DockerComposeGT applies the GT predicate on the "docker_compose" field.
+func DockerComposeGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldDockerCompose, v))
+}
+
+// DockerComposeGTE applies the GTE predicate on the "docker_compose" field.
+func DockerComposeGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldDockerCompose, v))
+}
+
+// DockerComposeLT applies the LT predicate on the "docker_compose" field.
+func DockerComposeLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldDockerCompose, v))
+}
+
+// DockerComposeLTE applies the LTE predicate on the "docker_compose" field.
+func DockerComposeLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldDockerCompose, v))
+}
+
+// DockerComposeContains applies the Contains predicate on the "docker_compose" field.
+func DockerComposeContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldDockerCompose, v))
+}
+
+// DockerComposeHasPrefix applies the HasPrefix predicate on the "docker_compose" field.
+func DockerComposeHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldDockerCompose, v))
+}
+
+// DockerComposeHasSuffix applies the HasSuffix predicate on the "docker_compose" field.
+func DockerComposeHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldDockerCompose, v))
+}
+
+// DockerComposeEqualFold applies the EqualFold predicate on the "docker_compose" field.
+func DockerComposeEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldDockerCompose, v))
+}
+
+// DockerComposeContainsFold applies the ContainsFold predicate on the "docker_compose" field.
+func DockerComposeContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldDockerCompose, v))
 }
 
 // And groups predicates with the AND operator between them.

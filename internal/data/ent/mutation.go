@@ -1564,6 +1564,7 @@ type ComputeInstanceMutation struct {
 	vnc_ip          *string
 	vnc_port        *int32
 	addvnc_port     *int32
+	docker_compose  *string
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -2185,6 +2186,42 @@ func (m *ComputeInstanceMutation) ResetVncPort() {
 	m.addvnc_port = nil
 }
 
+// SetDockerCompose sets the "docker_compose" field.
+func (m *ComputeInstanceMutation) SetDockerCompose(s string) {
+	m.docker_compose = &s
+}
+
+// DockerCompose returns the value of the "docker_compose" field in the mutation.
+func (m *ComputeInstanceMutation) DockerCompose() (r string, exists bool) {
+	v := m.docker_compose
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDockerCompose returns the old "docker_compose" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldDockerCompose(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDockerCompose is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDockerCompose requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDockerCompose: %w", err)
+	}
+	return oldValue.DockerCompose, nil
+}
+
+// ResetDockerCompose resets all changes to the "docker_compose" field.
+func (m *ComputeInstanceMutation) ResetDockerCompose() {
+	m.docker_compose = nil
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -2219,7 +2256,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -2256,6 +2293,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.vnc_port != nil {
 		fields = append(fields, computeinstance.FieldVncPort)
 	}
+	if m.docker_compose != nil {
+		fields = append(fields, computeinstance.FieldDockerCompose)
+	}
 	return fields
 }
 
@@ -2288,6 +2328,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.VncIP()
 	case computeinstance.FieldVncPort:
 		return m.VncPort()
+	case computeinstance.FieldDockerCompose:
+		return m.DockerCompose()
 	}
 	return nil, false
 }
@@ -2321,6 +2363,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldVncIP(ctx)
 	case computeinstance.FieldVncPort:
 		return m.OldVncPort(ctx)
+	case computeinstance.FieldDockerCompose:
+		return m.OldDockerCompose(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -2413,6 +2457,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVncPort(v)
+		return nil
+	case computeinstance.FieldDockerCompose:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDockerCompose(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -2546,6 +2597,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldVncPort:
 		m.ResetVncPort()
+		return nil
+	case computeinstance.FieldDockerCompose:
+		m.ResetDockerCompose()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)

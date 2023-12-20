@@ -55,12 +55,13 @@ type ComputeInstance struct {
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
-	AgentId string `json:"peer_id,omitempty"`
+	AgentId string `json:"agent_id,omitempty"`
 	// vnc 内网链接ip
 	VncIP string `json:"vnc_ip,omitempty"`
 	// vnc 内网链接端口号
-	VncPort int32                 `json:"vnc_port,omitempty"`
-	Stats   []*ComputeInstanceRds `json:"stats"`
+	VncPort       int32                 `json:"vnc_port,omitempty"`
+	DockerCompose string                `json:"docker_compose"`
+	Stats         []*ComputeInstanceRds `json:"stats"`
 }
 
 func (i *ComputeInstance) GetCore() int64 {
@@ -80,12 +81,13 @@ func (i *ComputeInstance) GetMemory() int64 {
 }
 
 type ComputeInstanceCreate struct {
-	SpecId    int32
-	ImageId   int32
-	Duration  int32
-	Name      string
-	PublicKey string
-	Password  string
+	SpecId        int32
+	ImageId       int32
+	Duration      int32
+	Name          string
+	PublicKey     string
+	Password      string
+	DockerCompose string
 }
 
 type ComputeImage struct {
@@ -129,4 +131,5 @@ type InstanceCreateParam struct {
 	GatewayPort    int32
 	VncConnectIP   string
 	VncConnectPort int32
+	DockerCompose  string
 }

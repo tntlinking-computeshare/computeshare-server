@@ -117,7 +117,7 @@ func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.
 	instance := &biz.ComputeInstance{
 		ID:          id,
 		ContainerID: req.ContainerId,
-		AgentId:     req.PeerId,
+		AgentId:     req.AgentId,
 		Status:      consts.InstanceStatus(req.Status),
 	}
 	err = s.uc.ReportInstanceStatus(ctx, instance)

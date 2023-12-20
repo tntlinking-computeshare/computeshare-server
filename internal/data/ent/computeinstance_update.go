@@ -157,6 +157,12 @@ func (ciu *ComputeInstanceUpdate) AddVncPort(i int32) *ComputeInstanceUpdate {
 	return ciu
 }
 
+// SetDockerCompose sets the "docker_compose" field.
+func (ciu *ComputeInstanceUpdate) SetDockerCompose(s string) *ComputeInstanceUpdate {
+	ciu.mutation.SetDockerCompose(s)
+	return ciu
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (ciu *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
 	return ciu.mutation
@@ -281,6 +287,9 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := ciu.mutation.AddedVncPort(); ok {
 		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
+	}
+	if value, ok := ciu.mutation.DockerCompose(); ok {
+		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -427,6 +436,12 @@ func (ciuo *ComputeInstanceUpdateOne) SetVncPort(i int32) *ComputeInstanceUpdate
 // AddVncPort adds i to the "vnc_port" field.
 func (ciuo *ComputeInstanceUpdateOne) AddVncPort(i int32) *ComputeInstanceUpdateOne {
 	ciuo.mutation.AddVncPort(i)
+	return ciuo
+}
+
+// SetDockerCompose sets the "docker_compose" field.
+func (ciuo *ComputeInstanceUpdateOne) SetDockerCompose(s string) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetDockerCompose(s)
 	return ciuo
 }
 
@@ -584,6 +599,9 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if value, ok := ciuo.mutation.AddedVncPort(); ok {
 		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
+	}
+	if value, ok := ciuo.mutation.DockerCompose(); ok {
+		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 	}
 	_node = &ComputeInstance{config: ciuo.config}
 	_spec.Assign = _node.assignValues

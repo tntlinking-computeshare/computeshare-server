@@ -29,6 +29,7 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.String("agent_id").Optional().Comment("p2p agent Id"),
 		field.String("vnc_ip").Comment("vnc 内网链接ip"),
 		field.Int32("vnc_port").Comment("vnc 内网链接端口号"),
+		field.Text("docker_compose").Comment("初始化的docker容器"),
 	}
 }
 
