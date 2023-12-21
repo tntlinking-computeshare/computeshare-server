@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -19,32 +20,17 @@ type S3User struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// 用户id
 	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
+	// 类型
+	Type int8 `json:"type,omitempty"`
 	// accessKey
 	AccessKey string `json:"access_key,omitempty"`
 	// secretKey
 	SecretKey string `json:"secret_key,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the S3UserQuery when eager-loading is set.
-	Edges        S3UserEdges `json:"edges"`
+	// 创建时间
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// 修改时间
+	UpdateTime   time.Time `json:"update_time,omitempty"`
 	selectValues sql.SelectValues
-}
-
-// S3UserEdges holds the relations/edges for other nodes in the graph.
-type S3UserEdges struct {
-	// Buckets holds the value of the buckets edge.
-	Buckets []*S3Bucket `json:"buckets,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// BucketsOrErr returns the Buckets value or an error if the edge
-// was not loaded in eager-loading.
-func (e S3UserEdges) BucketsOrErr() ([]*S3Bucket, error) {
-	if e.loadedTypes[0] {
-		return e.Buckets, nil
-	}
-	return nil, &NotLoadedError{edge: "buckets"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -52,8 +38,12 @@ func (*S3User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case s3user.FieldType:
+			values[i] = new(sql.NullInt64)
 		case s3user.FieldAccessKey, s3user.FieldSecretKey:
 			values[i] = new(sql.NullString)
+		case s3user.FieldCreateTime, s3user.FieldUpdateTime:
+			values[i] = new(sql.NullTime)
 		case s3user.FieldID, s3user.FieldFkUserID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -83,6 +73,12 @@ func (s *S3User) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				s.FkUserID = *value
 			}
+		case s3user.FieldType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				s.Type = int8(value.Int64)
+			}
 		case s3user.FieldAccessKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field access_key", values[i])
@@ -95,6 +91,18 @@ func (s *S3User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.SecretKey = value.String
 			}
+		case s3user.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				s.CreateTime = value.Time
+			}
+		case s3user.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				s.UpdateTime = value.Time
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -106,11 +114,6 @@ func (s *S3User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *S3User) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
-}
-
-// QueryBuckets queries the "buckets" edge of the S3User entity.
-func (s *S3User) QueryBuckets() *S3BucketQuery {
-	return NewS3UserClient(s.config).QueryBuckets(s)
 }
 
 // Update returns a builder for updating this S3User.
@@ -139,11 +142,20 @@ func (s *S3User) String() string {
 	builder.WriteString("fk_user_id=")
 	builder.WriteString(fmt.Sprintf("%v", s.FkUserID))
 	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", s.Type))
+	builder.WriteString(", ")
 	builder.WriteString("access_key=")
 	builder.WriteString(s.AccessKey)
 	builder.WriteString(", ")
 	builder.WriteString("secret_key=")
 	builder.WriteString(s.SecretKey)
+	builder.WriteString(", ")
+	builder.WriteString("create_time=")
+	builder.WriteString(s.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(s.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

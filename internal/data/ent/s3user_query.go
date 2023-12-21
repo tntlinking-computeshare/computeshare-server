@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -13,18 +12,16 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
 // S3UserQuery is the builder for querying S3User entities.
 type S3UserQuery struct {
 	config
-	ctx         *QueryContext
-	order       []s3user.OrderOption
-	inters      []Interceptor
-	predicates  []predicate.S3User
-	withBuckets *S3BucketQuery
+	ctx        *QueryContext
+	order      []s3user.OrderOption
+	inters     []Interceptor
+	predicates []predicate.S3User
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -59,28 +56,6 @@ func (sq *S3UserQuery) Unique(unique bool) *S3UserQuery {
 func (sq *S3UserQuery) Order(o ...s3user.OrderOption) *S3UserQuery {
 	sq.order = append(sq.order, o...)
 	return sq
-}
-
-// QueryBuckets chains the current query on the "buckets" edge.
-func (sq *S3UserQuery) QueryBuckets() *S3BucketQuery {
-	query := (&S3BucketClient{config: sq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := sq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := sq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(s3user.Table, s3user.FieldID, selector),
-			sqlgraph.To(s3bucket.Table, s3bucket.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, s3user.BucketsTable, s3user.BucketsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first S3User entity from the query.
@@ -270,27 +245,15 @@ func (sq *S3UserQuery) Clone() *S3UserQuery {
 		return nil
 	}
 	return &S3UserQuery{
-		config:      sq.config,
-		ctx:         sq.ctx.Clone(),
-		order:       append([]s3user.OrderOption{}, sq.order...),
-		inters:      append([]Interceptor{}, sq.inters...),
-		predicates:  append([]predicate.S3User{}, sq.predicates...),
-		withBuckets: sq.withBuckets.Clone(),
+		config:     sq.config,
+		ctx:        sq.ctx.Clone(),
+		order:      append([]s3user.OrderOption{}, sq.order...),
+		inters:     append([]Interceptor{}, sq.inters...),
+		predicates: append([]predicate.S3User{}, sq.predicates...),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
-}
-
-// WithBuckets tells the query-builder to eager-load the nodes that are connected to
-// the "buckets" edge. The optional arguments are used to configure the query builder of the edge.
-func (sq *S3UserQuery) WithBuckets(opts ...func(*S3BucketQuery)) *S3UserQuery {
-	query := (&S3BucketClient{config: sq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	sq.withBuckets = query
-	return sq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -369,11 +332,8 @@ func (sq *S3UserQuery) prepareQuery(ctx context.Context) error {
 
 func (sq *S3UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S3User, error) {
 	var (
-		nodes       = []*S3User{}
-		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
-			sq.withBuckets != nil,
-		}
+		nodes = []*S3User{}
+		_spec = sq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*S3User).scanValues(nil, columns)
@@ -381,7 +341,6 @@ func (sq *S3UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S3Use
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &S3User{config: sq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -393,46 +352,7 @@ func (sq *S3UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S3Use
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := sq.withBuckets; query != nil {
-		if err := sq.loadBuckets(ctx, query, nodes,
-			func(n *S3User) { n.Edges.Buckets = []*S3Bucket{} },
-			func(n *S3User, e *S3Bucket) { n.Edges.Buckets = append(n.Edges.Buckets, e) }); err != nil {
-			return nil, err
-		}
-	}
 	return nodes, nil
-}
-
-func (sq *S3UserQuery) loadBuckets(ctx context.Context, query *S3BucketQuery, nodes []*S3User, init func(*S3User), assign func(*S3User, *S3Bucket)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[uuid.UUID]*S3User)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.S3Bucket(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(s3user.BucketsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.s3bucket_s3_user
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "s3bucket_s3_user" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "s3bucket_s3_user" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
 }
 
 func (sq *S3UserQuery) sqlCount(ctx context.Context) (int, error) {

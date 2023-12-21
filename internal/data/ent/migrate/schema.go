@@ -183,30 +183,25 @@ var (
 	// S3bucketsColumns holds the columns for the "s3buckets" table.
 	S3bucketsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "bucket", Type: field.TypeString, Unique: true, Size: 50},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "bucket_name", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "created_time", Type: field.TypeTime},
-		{Name: "s3bucket_s3_user", Type: field.TypeUUID},
 	}
 	// S3bucketsTable holds the schema information for the "s3buckets" table.
 	S3bucketsTable = &schema.Table{
 		Name:       "s3buckets",
 		Columns:    S3bucketsColumns,
 		PrimaryKey: []*schema.Column{S3bucketsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "s3buckets_s3users_s3_user",
-				Columns:    []*schema.Column{S3bucketsColumns[3]},
-				RefColumns: []*schema.Column{S3usersColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-		},
 	}
 	// S3usersColumns holds the columns for the "s3users" table.
 	S3usersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "type", Type: field.TypeInt8},
 		{Name: "access_key", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "secret_key", Type: field.TypeString, Size: 50},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 	}
 	// S3usersTable holds the schema information for the "s3users" table.
 	S3usersTable = &schema.Table{
@@ -381,6 +376,5 @@ var (
 )
 
 func init() {
-	S3bucketsTable.ForeignKeys[0].RefTable = S3usersTable
 	ScriptExecutionRecordsTable.ForeignKeys[0].RefTable = ScriptsTable
 }

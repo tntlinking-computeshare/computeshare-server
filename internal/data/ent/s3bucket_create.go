@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
 // S3BucketCreate is the builder for creating a S3Bucket entity.
@@ -22,9 +21,15 @@ type S3BucketCreate struct {
 	hooks    []Hook
 }
 
-// SetBucket sets the "bucket" field.
-func (sc *S3BucketCreate) SetBucket(s string) *S3BucketCreate {
-	sc.mutation.SetBucket(s)
+// SetFkUserID sets the "fk_user_id" field.
+func (sc *S3BucketCreate) SetFkUserID(u uuid.UUID) *S3BucketCreate {
+	sc.mutation.SetFkUserID(u)
+	return sc
+}
+
+// SetBucketName sets the "bucket_name" field.
+func (sc *S3BucketCreate) SetBucketName(s string) *S3BucketCreate {
+	sc.mutation.SetBucketName(s)
 	return sc
 }
 
@@ -46,17 +51,6 @@ func (sc *S3BucketCreate) SetNillableID(u *uuid.UUID) *S3BucketCreate {
 		sc.SetID(*u)
 	}
 	return sc
-}
-
-// SetS3UserID sets the "s3_user" edge to the S3User entity by ID.
-func (sc *S3BucketCreate) SetS3UserID(id uuid.UUID) *S3BucketCreate {
-	sc.mutation.SetS3UserID(id)
-	return sc
-}
-
-// SetS3User sets the "s3_user" edge to the S3User entity.
-func (sc *S3BucketCreate) SetS3User(s *S3User) *S3BucketCreate {
-	return sc.SetS3UserID(s.ID)
 }
 
 // Mutation returns the S3BucketMutation object of the builder.
@@ -102,19 +96,19 @@ func (sc *S3BucketCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *S3BucketCreate) check() error {
-	if _, ok := sc.mutation.Bucket(); !ok {
-		return &ValidationError{Name: "bucket", err: errors.New(`ent: missing required field "S3Bucket.bucket"`)}
+	if _, ok := sc.mutation.FkUserID(); !ok {
+		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "S3Bucket.fk_user_id"`)}
 	}
-	if v, ok := sc.mutation.Bucket(); ok {
-		if err := s3bucket.BucketValidator(v); err != nil {
-			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
+	if _, ok := sc.mutation.BucketName(); !ok {
+		return &ValidationError{Name: "bucket_name", err: errors.New(`ent: missing required field "S3Bucket.bucket_name"`)}
+	}
+	if v, ok := sc.mutation.BucketName(); ok {
+		if err := s3bucket.BucketNameValidator(v); err != nil {
+			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
 	}
 	if _, ok := sc.mutation.CreatedTime(); !ok {
 		return &ValidationError{Name: "createdTime", err: errors.New(`ent: missing required field "S3Bucket.createdTime"`)}
-	}
-	if _, ok := sc.mutation.S3UserID(); !ok {
-		return &ValidationError{Name: "s3_user", err: errors.New(`ent: missing required edge "S3Bucket.s3_user"`)}
 	}
 	return nil
 }
@@ -151,30 +145,17 @@ func (sc *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := sc.mutation.Bucket(); ok {
-		_spec.SetField(s3bucket.FieldBucket, field.TypeString, value)
-		_node.Bucket = value
+	if value, ok := sc.mutation.FkUserID(); ok {
+		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
+		_node.FkUserID = value
+	}
+	if value, ok := sc.mutation.BucketName(); ok {
+		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
+		_node.BucketName = value
 	}
 	if value, ok := sc.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
 		_node.CreatedTime = value
-	}
-	if nodes := sc.mutation.S3UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   s3bucket.S3UserTable,
-			Columns: []string{s3bucket.S3UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.s3bucket_s3_user = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

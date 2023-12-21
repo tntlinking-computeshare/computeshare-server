@@ -14,7 +14,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
 // S3BucketUpdate is the builder for updating S3Bucket entities.
@@ -30,9 +29,15 @@ func (su *S3BucketUpdate) Where(ps ...predicate.S3Bucket) *S3BucketUpdate {
 	return su
 }
 
-// SetBucket sets the "bucket" field.
-func (su *S3BucketUpdate) SetBucket(s string) *S3BucketUpdate {
-	su.mutation.SetBucket(s)
+// SetFkUserID sets the "fk_user_id" field.
+func (su *S3BucketUpdate) SetFkUserID(u uuid.UUID) *S3BucketUpdate {
+	su.mutation.SetFkUserID(u)
+	return su
+}
+
+// SetBucketName sets the "bucket_name" field.
+func (su *S3BucketUpdate) SetBucketName(s string) *S3BucketUpdate {
+	su.mutation.SetBucketName(s)
 	return su
 }
 
@@ -42,26 +47,9 @@ func (su *S3BucketUpdate) SetCreatedTime(t time.Time) *S3BucketUpdate {
 	return su
 }
 
-// SetS3UserID sets the "s3_user" edge to the S3User entity by ID.
-func (su *S3BucketUpdate) SetS3UserID(id uuid.UUID) *S3BucketUpdate {
-	su.mutation.SetS3UserID(id)
-	return su
-}
-
-// SetS3User sets the "s3_user" edge to the S3User entity.
-func (su *S3BucketUpdate) SetS3User(s *S3User) *S3BucketUpdate {
-	return su.SetS3UserID(s.ID)
-}
-
 // Mutation returns the S3BucketMutation object of the builder.
 func (su *S3BucketUpdate) Mutation() *S3BucketMutation {
 	return su.mutation
-}
-
-// ClearS3User clears the "s3_user" edge to the S3User entity.
-func (su *S3BucketUpdate) ClearS3User() *S3BucketUpdate {
-	su.mutation.ClearS3User()
-	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -93,13 +81,10 @@ func (su *S3BucketUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *S3BucketUpdate) check() error {
-	if v, ok := su.mutation.Bucket(); ok {
-		if err := s3bucket.BucketValidator(v); err != nil {
-			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
+	if v, ok := su.mutation.BucketName(); ok {
+		if err := s3bucket.BucketNameValidator(v); err != nil {
+			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
-	}
-	if _, ok := su.mutation.S3UserID(); su.mutation.S3UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "S3Bucket.s3_user"`)
 	}
 	return nil
 }
@@ -116,40 +101,14 @@ func (su *S3BucketUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := su.mutation.Bucket(); ok {
-		_spec.SetField(s3bucket.FieldBucket, field.TypeString, value)
+	if value, ok := su.mutation.FkUserID(); ok {
+		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
+	}
+	if value, ok := su.mutation.BucketName(); ok {
+		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
 	}
 	if value, ok := su.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
-	}
-	if su.mutation.S3UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   s3bucket.S3UserTable,
-			Columns: []string{s3bucket.S3UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.S3UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   s3bucket.S3UserTable,
-			Columns: []string{s3bucket.S3UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -171,9 +130,15 @@ type S3BucketUpdateOne struct {
 	mutation *S3BucketMutation
 }
 
-// SetBucket sets the "bucket" field.
-func (suo *S3BucketUpdateOne) SetBucket(s string) *S3BucketUpdateOne {
-	suo.mutation.SetBucket(s)
+// SetFkUserID sets the "fk_user_id" field.
+func (suo *S3BucketUpdateOne) SetFkUserID(u uuid.UUID) *S3BucketUpdateOne {
+	suo.mutation.SetFkUserID(u)
+	return suo
+}
+
+// SetBucketName sets the "bucket_name" field.
+func (suo *S3BucketUpdateOne) SetBucketName(s string) *S3BucketUpdateOne {
+	suo.mutation.SetBucketName(s)
 	return suo
 }
 
@@ -183,26 +148,9 @@ func (suo *S3BucketUpdateOne) SetCreatedTime(t time.Time) *S3BucketUpdateOne {
 	return suo
 }
 
-// SetS3UserID sets the "s3_user" edge to the S3User entity by ID.
-func (suo *S3BucketUpdateOne) SetS3UserID(id uuid.UUID) *S3BucketUpdateOne {
-	suo.mutation.SetS3UserID(id)
-	return suo
-}
-
-// SetS3User sets the "s3_user" edge to the S3User entity.
-func (suo *S3BucketUpdateOne) SetS3User(s *S3User) *S3BucketUpdateOne {
-	return suo.SetS3UserID(s.ID)
-}
-
 // Mutation returns the S3BucketMutation object of the builder.
 func (suo *S3BucketUpdateOne) Mutation() *S3BucketMutation {
 	return suo.mutation
-}
-
-// ClearS3User clears the "s3_user" edge to the S3User entity.
-func (suo *S3BucketUpdateOne) ClearS3User() *S3BucketUpdateOne {
-	suo.mutation.ClearS3User()
-	return suo
 }
 
 // Where appends a list predicates to the S3BucketUpdate builder.
@@ -247,13 +195,10 @@ func (suo *S3BucketUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *S3BucketUpdateOne) check() error {
-	if v, ok := suo.mutation.Bucket(); ok {
-		if err := s3bucket.BucketValidator(v); err != nil {
-			return &ValidationError{Name: "bucket", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket": %w`, err)}
+	if v, ok := suo.mutation.BucketName(); ok {
+		if err := s3bucket.BucketNameValidator(v); err != nil {
+			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
-	}
-	if _, ok := suo.mutation.S3UserID(); suo.mutation.S3UserCleared() && !ok {
-		return errors.New(`ent: clearing a required unique edge "S3Bucket.s3_user"`)
 	}
 	return nil
 }
@@ -287,40 +232,14 @@ func (suo *S3BucketUpdateOne) sqlSave(ctx context.Context) (_node *S3Bucket, err
 			}
 		}
 	}
-	if value, ok := suo.mutation.Bucket(); ok {
-		_spec.SetField(s3bucket.FieldBucket, field.TypeString, value)
+	if value, ok := suo.mutation.FkUserID(); ok {
+		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
+	}
+	if value, ok := suo.mutation.BucketName(); ok {
+		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
-	}
-	if suo.mutation.S3UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   s3bucket.S3UserTable,
-			Columns: []string{s3bucket.S3UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.S3UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   s3bucket.S3UserTable,
-			Columns: []string{s3bucket.S3UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3user.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &S3Bucket{config: suo.config}
 	_spec.Assign = _node.assignValues

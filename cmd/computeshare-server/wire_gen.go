@@ -58,7 +58,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	userRepo := data.NewUserRepo(dataData, logger)
 	storageS3UseCase := biz.NewStorageS3UseCase(s3UserRepo, userRepo, dispose, logger)
 	storageS3Service := service.NewStorageS3Service(storageS3UseCase)
-	userUsercase := biz.NewUserUsecase(auth, userRepo, logger)
+	userUsercase := biz.NewUserUsecase(auth, userRepo, logger, dispose)
 	userService := service.NewUserService(userUsercase, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)

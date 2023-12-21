@@ -127,7 +127,7 @@ paths:
         get:
             tags:
                 - StorageS3
-            operationId: StorageS3_GetS3User
+            operationId: StorageS3_GetUserS3User
             responses:
                 "200":
                     description: OK
@@ -135,6 +135,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/GetS3UserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user/create/key:
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_CreateS3Key
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateS3KeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateS3KeyReply'
                 default:
                     description: Default error response
                     content:
@@ -272,10 +296,19 @@ components:
         CreateBucketRequest:
             type: object
             properties:
-                bucket:
+                bucketName:
                     type: string
-                secretKey:
+        CreateS3KeyReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
+        CreateS3KeyRequest:
+            type: object
+            properties: {}
         DeleteBucketReply:
             type: object
             properties:
@@ -301,7 +334,9 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/S3User'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/S3User'
         GoogleProtobufAny:
             type: object
             properties:
@@ -433,6 +468,12 @@ components:
                     type: string
                 secretKey:
                     type: string
+                createTime:
+                    type: integer
+                    format: int64
+                updateTime:
+                    type: integer
+                    format: int64
                 endpoint:
                     type: string
         Status:

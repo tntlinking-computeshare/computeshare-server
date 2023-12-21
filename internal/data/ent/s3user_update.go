@@ -6,13 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
@@ -35,6 +35,19 @@ func (su *S3UserUpdate) SetFkUserID(u uuid.UUID) *S3UserUpdate {
 	return su
 }
 
+// SetType sets the "type" field.
+func (su *S3UserUpdate) SetType(i int8) *S3UserUpdate {
+	su.mutation.ResetType()
+	su.mutation.SetType(i)
+	return su
+}
+
+// AddType adds i to the "type" field.
+func (su *S3UserUpdate) AddType(i int8) *S3UserUpdate {
+	su.mutation.AddType(i)
+	return su
+}
+
 // SetAccessKey sets the "access_key" field.
 func (su *S3UserUpdate) SetAccessKey(s string) *S3UserUpdate {
 	su.mutation.SetAccessKey(s)
@@ -47,45 +60,37 @@ func (su *S3UserUpdate) SetSecretKey(s string) *S3UserUpdate {
 	return su
 }
 
-// AddBucketIDs adds the "buckets" edge to the S3Bucket entity by IDs.
-func (su *S3UserUpdate) AddBucketIDs(ids ...uuid.UUID) *S3UserUpdate {
-	su.mutation.AddBucketIDs(ids...)
+// SetCreateTime sets the "create_time" field.
+func (su *S3UserUpdate) SetCreateTime(t time.Time) *S3UserUpdate {
+	su.mutation.SetCreateTime(t)
 	return su
 }
 
-// AddBuckets adds the "buckets" edges to the S3Bucket entity.
-func (su *S3UserUpdate) AddBuckets(s ...*S3Bucket) *S3UserUpdate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (su *S3UserUpdate) SetNillableCreateTime(t *time.Time) *S3UserUpdate {
+	if t != nil {
+		su.SetCreateTime(*t)
 	}
-	return su.AddBucketIDs(ids...)
+	return su
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (su *S3UserUpdate) SetUpdateTime(t time.Time) *S3UserUpdate {
+	su.mutation.SetUpdateTime(t)
+	return su
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (su *S3UserUpdate) SetNillableUpdateTime(t *time.Time) *S3UserUpdate {
+	if t != nil {
+		su.SetUpdateTime(*t)
+	}
+	return su
 }
 
 // Mutation returns the S3UserMutation object of the builder.
 func (su *S3UserUpdate) Mutation() *S3UserMutation {
 	return su.mutation
-}
-
-// ClearBuckets clears all "buckets" edges to the S3Bucket entity.
-func (su *S3UserUpdate) ClearBuckets() *S3UserUpdate {
-	su.mutation.ClearBuckets()
-	return su
-}
-
-// RemoveBucketIDs removes the "buckets" edge to S3Bucket entities by IDs.
-func (su *S3UserUpdate) RemoveBucketIDs(ids ...uuid.UUID) *S3UserUpdate {
-	su.mutation.RemoveBucketIDs(ids...)
-	return su
-}
-
-// RemoveBuckets removes "buckets" edges to S3Bucket entities.
-func (su *S3UserUpdate) RemoveBuckets(s ...*S3Bucket) *S3UserUpdate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return su.RemoveBucketIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -145,56 +150,23 @@ func (su *S3UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := su.mutation.FkUserID(); ok {
 		_spec.SetField(s3user.FieldFkUserID, field.TypeUUID, value)
 	}
+	if value, ok := su.mutation.GetType(); ok {
+		_spec.SetField(s3user.FieldType, field.TypeInt8, value)
+	}
+	if value, ok := su.mutation.AddedType(); ok {
+		_spec.AddField(s3user.FieldType, field.TypeInt8, value)
+	}
 	if value, ok := su.mutation.AccessKey(); ok {
 		_spec.SetField(s3user.FieldAccessKey, field.TypeString, value)
 	}
 	if value, ok := su.mutation.SecretKey(); ok {
 		_spec.SetField(s3user.FieldSecretKey, field.TypeString, value)
 	}
-	if su.mutation.BucketsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	if value, ok := su.mutation.CreateTime(); ok {
+		_spec.SetField(s3user.FieldCreateTime, field.TypeTime, value)
 	}
-	if nodes := su.mutation.RemovedBucketsIDs(); len(nodes) > 0 && !su.mutation.BucketsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := su.mutation.BucketsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if value, ok := su.mutation.UpdateTime(); ok {
+		_spec.SetField(s3user.FieldUpdateTime, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -222,6 +194,19 @@ func (suo *S3UserUpdateOne) SetFkUserID(u uuid.UUID) *S3UserUpdateOne {
 	return suo
 }
 
+// SetType sets the "type" field.
+func (suo *S3UserUpdateOne) SetType(i int8) *S3UserUpdateOne {
+	suo.mutation.ResetType()
+	suo.mutation.SetType(i)
+	return suo
+}
+
+// AddType adds i to the "type" field.
+func (suo *S3UserUpdateOne) AddType(i int8) *S3UserUpdateOne {
+	suo.mutation.AddType(i)
+	return suo
+}
+
 // SetAccessKey sets the "access_key" field.
 func (suo *S3UserUpdateOne) SetAccessKey(s string) *S3UserUpdateOne {
 	suo.mutation.SetAccessKey(s)
@@ -234,45 +219,37 @@ func (suo *S3UserUpdateOne) SetSecretKey(s string) *S3UserUpdateOne {
 	return suo
 }
 
-// AddBucketIDs adds the "buckets" edge to the S3Bucket entity by IDs.
-func (suo *S3UserUpdateOne) AddBucketIDs(ids ...uuid.UUID) *S3UserUpdateOne {
-	suo.mutation.AddBucketIDs(ids...)
+// SetCreateTime sets the "create_time" field.
+func (suo *S3UserUpdateOne) SetCreateTime(t time.Time) *S3UserUpdateOne {
+	suo.mutation.SetCreateTime(t)
 	return suo
 }
 
-// AddBuckets adds the "buckets" edges to the S3Bucket entity.
-func (suo *S3UserUpdateOne) AddBuckets(s ...*S3Bucket) *S3UserUpdateOne {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (suo *S3UserUpdateOne) SetNillableCreateTime(t *time.Time) *S3UserUpdateOne {
+	if t != nil {
+		suo.SetCreateTime(*t)
 	}
-	return suo.AddBucketIDs(ids...)
+	return suo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (suo *S3UserUpdateOne) SetUpdateTime(t time.Time) *S3UserUpdateOne {
+	suo.mutation.SetUpdateTime(t)
+	return suo
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (suo *S3UserUpdateOne) SetNillableUpdateTime(t *time.Time) *S3UserUpdateOne {
+	if t != nil {
+		suo.SetUpdateTime(*t)
+	}
+	return suo
 }
 
 // Mutation returns the S3UserMutation object of the builder.
 func (suo *S3UserUpdateOne) Mutation() *S3UserMutation {
 	return suo.mutation
-}
-
-// ClearBuckets clears all "buckets" edges to the S3Bucket entity.
-func (suo *S3UserUpdateOne) ClearBuckets() *S3UserUpdateOne {
-	suo.mutation.ClearBuckets()
-	return suo
-}
-
-// RemoveBucketIDs removes the "buckets" edge to S3Bucket entities by IDs.
-func (suo *S3UserUpdateOne) RemoveBucketIDs(ids ...uuid.UUID) *S3UserUpdateOne {
-	suo.mutation.RemoveBucketIDs(ids...)
-	return suo
-}
-
-// RemoveBuckets removes "buckets" edges to S3Bucket entities.
-func (suo *S3UserUpdateOne) RemoveBuckets(s ...*S3Bucket) *S3UserUpdateOne {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return suo.RemoveBucketIDs(ids...)
 }
 
 // Where appends a list predicates to the S3UserUpdate builder.
@@ -362,56 +339,23 @@ func (suo *S3UserUpdateOne) sqlSave(ctx context.Context) (_node *S3User, err err
 	if value, ok := suo.mutation.FkUserID(); ok {
 		_spec.SetField(s3user.FieldFkUserID, field.TypeUUID, value)
 	}
+	if value, ok := suo.mutation.GetType(); ok {
+		_spec.SetField(s3user.FieldType, field.TypeInt8, value)
+	}
+	if value, ok := suo.mutation.AddedType(); ok {
+		_spec.AddField(s3user.FieldType, field.TypeInt8, value)
+	}
 	if value, ok := suo.mutation.AccessKey(); ok {
 		_spec.SetField(s3user.FieldAccessKey, field.TypeString, value)
 	}
 	if value, ok := suo.mutation.SecretKey(); ok {
 		_spec.SetField(s3user.FieldSecretKey, field.TypeString, value)
 	}
-	if suo.mutation.BucketsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	if value, ok := suo.mutation.CreateTime(); ok {
+		_spec.SetField(s3user.FieldCreateTime, field.TypeTime, value)
 	}
-	if nodes := suo.mutation.RemovedBucketsIDs(); len(nodes) > 0 && !suo.mutation.BucketsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := suo.mutation.BucketsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if value, ok := suo.mutation.UpdateTime(); ok {
+		_spec.SetField(s3user.FieldUpdateTime, field.TypeTime, value)
 	}
 	_node = &S3User{config: suo.config}
 	_spec.Assign = _node.assignValues

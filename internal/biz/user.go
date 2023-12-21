@@ -1,16 +1,23 @@
 package biz
 
 import (
+	"bytes"
 	"context"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	errors "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/mohaijiang/computeshare-server/internal/data/model"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"io"
+	"math/rand"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
@@ -49,23 +56,27 @@ type UserRepo interface {
 	UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *User) error
 	UpdateUserPassword(ctx context.Context, id uuid.UUID, user *User) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
-	SendValidateCode(ctx context.Context, entity User) error
+	SetValidateCode(ctx context.Context, entity User, vCode string) error
 	GetValidateCode(ctx context.Context, user User) (string, error)
+	SetResendVerification(ctx context.Context, telephoneNumber string) error
+	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
 	DeleteValidateCode(ctx context.Context, user User)
 	FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*User, error)
 }
 
 type UserUsercase struct {
-	repo   UserRepo
-	key    []byte
-	logger log.Logger
+	repo    UserRepo
+	key     []byte
+	logger  log.Logger
+	dispose conf.Dispose
 }
 
-func NewUserUsecase(conf *conf.Auth, repo UserRepo, logger log.Logger) *UserUsercase {
+func NewUserUsecase(conf *conf.Auth, repo UserRepo, logger log.Logger, confDispose *conf.Dispose) *UserUsercase {
 	return &UserUsercase{
-		repo:   repo,
-		logger: logger,
-		key:    []byte(conf.ApiKey),
+		repo:    repo,
+		logger:  logger,
+		key:     []byte(conf.ApiKey),
+		dispose: *confDispose,
 	}
 }
 
@@ -113,8 +124,21 @@ func (uc *UserUsercase) Delete(ctx context.Context, id uuid.UUID) error {
 }
 
 func (uc *UserUsercase) SendValidateCode(ctx context.Context, entity User) (err error) {
-	err = uc.repo.SendValidateCode(ctx, entity)
-	return
+	_, err = uc.repo.GetResendVerification(ctx, entity.TelephoneNumber)
+	if err != redis.Nil {
+		return fmt.Errorf("请勿频繁的发送验证码")
+	}
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	vCode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
+	err = uc.repo.SetResendVerification(ctx, entity.TelephoneNumber)
+	if err != nil {
+		return err
+	}
+	err = uc.repo.SetValidateCode(ctx, entity, vCode)
+	if err != nil {
+		return err
+	}
+	return uc.SendMessageFromDh3t(entity.TelephoneNumber, vCode)
 }
 
 func (uc *UserUsercase) GetValidateCode(ctx context.Context, user User) (string, error) {
@@ -205,4 +229,44 @@ func (uc *UserUsercase) UpdateUserTelephone(ctx context.Context, id uuid.UUID, u
 	}
 
 	return uc.repo.UpdateUserTelephone(ctx, id, user)
+}
+
+func (uc *UserUsercase) SendMessageFromDh3t(phone string, vCode string) (err error) {
+	dh3tCfg := uc.dispose.Dh3T
+	var dh3tTemplateContents []model.Dh3tTemplateContent
+	dh3tTemplateContents = append(dh3tTemplateContents, model.Dh3tTemplateContent{
+		Name:  "1",
+		Value: vCode,
+	})
+	template := &model.Template{
+		Id:        dh3tCfg.VerificationCodeTemplateId,
+		Variables: dh3tTemplateContents,
+	}
+	dh3t := &model.Dh3t{
+		Account:  dh3tCfg.Account,
+		Password: dh3tCfg.Password,
+		Phones:   phone,
+		Template: *template,
+	}
+
+	json, err := json.Marshal(dh3t)
+	if err != nil {
+		return err
+	}
+	reader := bytes.NewReader(json)
+	req, _ := http.NewRequest("POST", dh3tCfg.SendUrl, reader)
+	req.Header.Add("Content-Type", "application/json")
+	response, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	responseBody, _ := io.ReadAll(response.Body)
+	if strings.Contains(string(responseBody), "提交成功") {
+		uc.logger.Log(log.LevelInfo, "dh3t seed message result", string(responseBody))
+		return nil
+	} else {
+		uc.logger.Log(log.LevelError, "dh3t seed message result", string(responseBody))
+		return fmt.Errorf(string(responseBody))
+	}
+
 }

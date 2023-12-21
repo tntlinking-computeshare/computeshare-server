@@ -4,7 +4,6 @@ package s3bucket
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -13,34 +12,22 @@ const (
 	Label = "s3bucket"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldBucket holds the string denoting the bucket field in the database.
-	FieldBucket = "bucket"
+	// FieldFkUserID holds the string denoting the fk_user_id field in the database.
+	FieldFkUserID = "fk_user_id"
+	// FieldBucketName holds the string denoting the bucket_name field in the database.
+	FieldBucketName = "bucket_name"
 	// FieldCreatedTime holds the string denoting the createdtime field in the database.
 	FieldCreatedTime = "created_time"
-	// EdgeS3User holds the string denoting the s3_user edge name in mutations.
-	EdgeS3User = "s3_user"
 	// Table holds the table name of the s3bucket in the database.
 	Table = "s3buckets"
-	// S3UserTable is the table that holds the s3_user relation/edge.
-	S3UserTable = "s3buckets"
-	// S3UserInverseTable is the table name for the S3User entity.
-	// It exists in this package in order to avoid circular dependency with the "s3user" package.
-	S3UserInverseTable = "s3users"
-	// S3UserColumn is the table column denoting the s3_user relation/edge.
-	S3UserColumn = "s3bucket_s3_user"
 )
 
 // Columns holds all SQL columns for s3bucket fields.
 var Columns = []string{
 	FieldID,
-	FieldBucket,
+	FieldFkUserID,
+	FieldBucketName,
 	FieldCreatedTime,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "s3buckets"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"s3bucket_s3_user",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -50,17 +37,12 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
-			return true
-		}
-	}
 	return false
 }
 
 var (
-	// BucketValidator is a validator for the "bucket" field. It is called by the builders before save.
-	BucketValidator func(string) error
+	// BucketNameValidator is a validator for the "bucket_name" field. It is called by the builders before save.
+	BucketNameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -73,26 +55,17 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByBucket orders the results by the bucket field.
-func ByBucket(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBucket, opts...).ToFunc()
+// ByFkUserID orders the results by the fk_user_id field.
+func ByFkUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFkUserID, opts...).ToFunc()
+}
+
+// ByBucketName orders the results by the bucket_name field.
+func ByBucketName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBucketName, opts...).ToFunc()
 }
 
 // ByCreatedTime orders the results by the createdTime field.
 func ByCreatedTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedTime, opts...).ToFunc()
-}
-
-// ByS3UserField orders the results by s3_user field.
-func ByS3UserField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newS3UserStep(), sql.OrderByField(field, opts...))
-	}
-}
-func newS3UserStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(S3UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, S3UserTable, S3UserColumn),
-	)
 }
