@@ -9,7 +9,13 @@ option java_multiple_files = true;
 option java_package = "api.compute.v1";
 
 service StorageS3 {
-	rpc GetS3User(GetS3UserRequest) returns (GetS3UserReply){
+	rpc CreateS3Key(CreateS3KeyRequest) returns (CreateS3KeyReply){
+		option (google.api.http) = {
+			post: "/v1/s3user/create/key"
+			body: "*"
+		};
+	}
+	rpc GetUserS3User(GetS3UserRequest) returns (GetS3UserReply){
 		option (google.api.http) = {
 			get: "/v1/s3user"
 		};
@@ -71,22 +77,29 @@ service StorageS3 {
 
 }
 
+message CreateS3KeyRequest{}
+message CreateS3KeyReply{
+	int32 code = 1;
+	string message = 2;
+}
+
 message S3User {
 	string accessKey = 1;
 	string secretKey  = 2;
-	string endpoint = 3;
+	int64 createTime  = 3;
+	int64 updateTime  = 4;
+	string endpoint = 5;
 }
 
 message GetS3UserRequest {}
 message GetS3UserReply {
 	int32 code = 1;
 	string message = 2;
-	S3User data = 3;
+	repeated S3User data = 3;
 }
 
 message CreateBucketRequest {
-	string bucket = 1;
-	string secretKey = 2;
+	string bucketName = 1;
 }
 message CreateBucketReply {
 	int32 code = 1;

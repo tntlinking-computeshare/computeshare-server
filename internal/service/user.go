@@ -172,3 +172,10 @@ func (s *UserService) SendValidateCode(ctx context.Context, req *pb.SendValidate
 		Message: SUCCESS,
 	}, err
 }
+func (s *UserService) VerifyCode(ctx context.Context, req *pb.VerifyCodeRequest) (*pb.VerifyCodeReply, error) {
+	err := s.uc.VerifyCode(ctx, req.GetTelephoneNumber(), req.GetValidateCode())
+	return &pb.VerifyCodeReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
+}

@@ -3,8 +3,9 @@
 package s3user
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -59,6 +60,11 @@ func FkUserID(v uuid.UUID) predicate.S3User {
 	return predicate.S3User(sql.FieldEQ(FieldFkUserID, v))
 }
 
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldType, v))
+}
+
 // AccessKey applies equality check predicate on the "access_key" field. It's identical to AccessKeyEQ.
 func AccessKey(v string) predicate.S3User {
 	return predicate.S3User(sql.FieldEQ(FieldAccessKey, v))
@@ -67,6 +73,16 @@ func AccessKey(v string) predicate.S3User {
 // SecretKey applies equality check predicate on the "secret_key" field. It's identical to SecretKeyEQ.
 func SecretKey(v string) predicate.S3User {
 	return predicate.S3User(sql.FieldEQ(FieldSecretKey, v))
+}
+
+// CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
+func CreateTime(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldUpdateTime, v))
 }
 
 // FkUserIDEQ applies the EQ predicate on the "fk_user_id" field.
@@ -107,6 +123,46 @@ func FkUserIDLT(v uuid.UUID) predicate.S3User {
 // FkUserIDLTE applies the LTE predicate on the "fk_user_id" field.
 func FkUserIDLTE(v uuid.UUID) predicate.S3User {
 	return predicate.S3User(sql.FieldLTE(FieldFkUserID, v))
+}
+
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...int8) predicate.S3User {
+	return predicate.S3User(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...int8) predicate.S3User {
+	return predicate.S3User(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldGT(FieldType, v))
+}
+
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldGTE(FieldType, v))
+}
+
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldLT(FieldType, v))
+}
+
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v int8) predicate.S3User {
+	return predicate.S3User(sql.FieldLTE(FieldType, v))
 }
 
 // AccessKeyEQ applies the EQ predicate on the "access_key" field.
@@ -239,27 +295,84 @@ func SecretKeyContainsFold(v string) predicate.S3User {
 	return predicate.S3User(sql.FieldContainsFold(FieldSecretKey, v))
 }
 
-// HasBuckets applies the HasEdge predicate on the "buckets" edge.
-func HasBuckets() predicate.S3User {
-	return predicate.S3User(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, BucketsTable, BucketsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
+// CreateTimeEQ applies the EQ predicate on the "create_time" field.
+func CreateTimeEQ(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldCreateTime, v))
 }
 
-// HasBucketsWith applies the HasEdge predicate on the "buckets" edge with a given conditions (other predicates).
-func HasBucketsWith(preds ...predicate.S3Bucket) predicate.S3User {
-	return predicate.S3User(func(s *sql.Selector) {
-		step := newBucketsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
+// CreateTimeNEQ applies the NEQ predicate on the "create_time" field.
+func CreateTimeNEQ(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldNEQ(FieldCreateTime, v))
+}
+
+// CreateTimeIn applies the In predicate on the "create_time" field.
+func CreateTimeIn(vs ...time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeNotIn applies the NotIn predicate on the "create_time" field.
+func CreateTimeNotIn(vs ...time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldNotIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeGT applies the GT predicate on the "create_time" field.
+func CreateTimeGT(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldGT(FieldCreateTime, v))
+}
+
+// CreateTimeGTE applies the GTE predicate on the "create_time" field.
+func CreateTimeGTE(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldGTE(FieldCreateTime, v))
+}
+
+// CreateTimeLT applies the LT predicate on the "create_time" field.
+func CreateTimeLT(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldLT(FieldCreateTime, v))
+}
+
+// CreateTimeLTE applies the LTE predicate on the "create_time" field.
+func CreateTimeLTE(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldLTE(FieldCreateTime, v))
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldNEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldNotIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldGT(FieldUpdateTime, v))
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldGTE(FieldUpdateTime, v))
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldLT(FieldUpdateTime, v))
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.S3User {
+	return predicate.S3User(sql.FieldLTE(FieldUpdateTime, v))
 }
 
 // And groups predicates with the AND operator between them.

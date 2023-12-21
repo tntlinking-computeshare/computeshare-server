@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -56,9 +55,14 @@ func IDLTE(id uuid.UUID) predicate.S3Bucket {
 	return predicate.S3Bucket(sql.FieldLTE(FieldID, id))
 }
 
-// Bucket applies equality check predicate on the "bucket" field. It's identical to BucketEQ.
-func Bucket(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldEQ(FieldBucket, v))
+// FkUserID applies equality check predicate on the "fk_user_id" field. It's identical to FkUserIDEQ.
+func FkUserID(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldEQ(FieldFkUserID, v))
+}
+
+// BucketName applies equality check predicate on the "bucket_name" field. It's identical to BucketNameEQ.
+func BucketName(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldEQ(FieldBucketName, v))
 }
 
 // CreatedTime applies equality check predicate on the "createdTime" field. It's identical to CreatedTimeEQ.
@@ -66,69 +70,109 @@ func CreatedTime(v time.Time) predicate.S3Bucket {
 	return predicate.S3Bucket(sql.FieldEQ(FieldCreatedTime, v))
 }
 
-// BucketEQ applies the EQ predicate on the "bucket" field.
-func BucketEQ(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldEQ(FieldBucket, v))
+// FkUserIDEQ applies the EQ predicate on the "fk_user_id" field.
+func FkUserIDEQ(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldEQ(FieldFkUserID, v))
 }
 
-// BucketNEQ applies the NEQ predicate on the "bucket" field.
-func BucketNEQ(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldNEQ(FieldBucket, v))
+// FkUserIDNEQ applies the NEQ predicate on the "fk_user_id" field.
+func FkUserIDNEQ(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldNEQ(FieldFkUserID, v))
 }
 
-// BucketIn applies the In predicate on the "bucket" field.
-func BucketIn(vs ...string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldIn(FieldBucket, vs...))
+// FkUserIDIn applies the In predicate on the "fk_user_id" field.
+func FkUserIDIn(vs ...uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldIn(FieldFkUserID, vs...))
 }
 
-// BucketNotIn applies the NotIn predicate on the "bucket" field.
-func BucketNotIn(vs ...string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldNotIn(FieldBucket, vs...))
+// FkUserIDNotIn applies the NotIn predicate on the "fk_user_id" field.
+func FkUserIDNotIn(vs ...uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldNotIn(FieldFkUserID, vs...))
 }
 
-// BucketGT applies the GT predicate on the "bucket" field.
-func BucketGT(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldGT(FieldBucket, v))
+// FkUserIDGT applies the GT predicate on the "fk_user_id" field.
+func FkUserIDGT(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldGT(FieldFkUserID, v))
 }
 
-// BucketGTE applies the GTE predicate on the "bucket" field.
-func BucketGTE(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldGTE(FieldBucket, v))
+// FkUserIDGTE applies the GTE predicate on the "fk_user_id" field.
+func FkUserIDGTE(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldGTE(FieldFkUserID, v))
 }
 
-// BucketLT applies the LT predicate on the "bucket" field.
-func BucketLT(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldLT(FieldBucket, v))
+// FkUserIDLT applies the LT predicate on the "fk_user_id" field.
+func FkUserIDLT(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldLT(FieldFkUserID, v))
 }
 
-// BucketLTE applies the LTE predicate on the "bucket" field.
-func BucketLTE(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldLTE(FieldBucket, v))
+// FkUserIDLTE applies the LTE predicate on the "fk_user_id" field.
+func FkUserIDLTE(v uuid.UUID) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldLTE(FieldFkUserID, v))
 }
 
-// BucketContains applies the Contains predicate on the "bucket" field.
-func BucketContains(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldContains(FieldBucket, v))
+// BucketNameEQ applies the EQ predicate on the "bucket_name" field.
+func BucketNameEQ(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldEQ(FieldBucketName, v))
 }
 
-// BucketHasPrefix applies the HasPrefix predicate on the "bucket" field.
-func BucketHasPrefix(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldHasPrefix(FieldBucket, v))
+// BucketNameNEQ applies the NEQ predicate on the "bucket_name" field.
+func BucketNameNEQ(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldNEQ(FieldBucketName, v))
 }
 
-// BucketHasSuffix applies the HasSuffix predicate on the "bucket" field.
-func BucketHasSuffix(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldHasSuffix(FieldBucket, v))
+// BucketNameIn applies the In predicate on the "bucket_name" field.
+func BucketNameIn(vs ...string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldIn(FieldBucketName, vs...))
 }
 
-// BucketEqualFold applies the EqualFold predicate on the "bucket" field.
-func BucketEqualFold(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldEqualFold(FieldBucket, v))
+// BucketNameNotIn applies the NotIn predicate on the "bucket_name" field.
+func BucketNameNotIn(vs ...string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldNotIn(FieldBucketName, vs...))
 }
 
-// BucketContainsFold applies the ContainsFold predicate on the "bucket" field.
-func BucketContainsFold(v string) predicate.S3Bucket {
-	return predicate.S3Bucket(sql.FieldContainsFold(FieldBucket, v))
+// BucketNameGT applies the GT predicate on the "bucket_name" field.
+func BucketNameGT(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldGT(FieldBucketName, v))
+}
+
+// BucketNameGTE applies the GTE predicate on the "bucket_name" field.
+func BucketNameGTE(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldGTE(FieldBucketName, v))
+}
+
+// BucketNameLT applies the LT predicate on the "bucket_name" field.
+func BucketNameLT(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldLT(FieldBucketName, v))
+}
+
+// BucketNameLTE applies the LTE predicate on the "bucket_name" field.
+func BucketNameLTE(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldLTE(FieldBucketName, v))
+}
+
+// BucketNameContains applies the Contains predicate on the "bucket_name" field.
+func BucketNameContains(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldContains(FieldBucketName, v))
+}
+
+// BucketNameHasPrefix applies the HasPrefix predicate on the "bucket_name" field.
+func BucketNameHasPrefix(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldHasPrefix(FieldBucketName, v))
+}
+
+// BucketNameHasSuffix applies the HasSuffix predicate on the "bucket_name" field.
+func BucketNameHasSuffix(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldHasSuffix(FieldBucketName, v))
+}
+
+// BucketNameEqualFold applies the EqualFold predicate on the "bucket_name" field.
+func BucketNameEqualFold(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldEqualFold(FieldBucketName, v))
+}
+
+// BucketNameContainsFold applies the ContainsFold predicate on the "bucket_name" field.
+func BucketNameContainsFold(v string) predicate.S3Bucket {
+	return predicate.S3Bucket(sql.FieldContainsFold(FieldBucketName, v))
 }
 
 // CreatedTimeEQ applies the EQ predicate on the "createdTime" field.
@@ -169,29 +213,6 @@ func CreatedTimeLT(v time.Time) predicate.S3Bucket {
 // CreatedTimeLTE applies the LTE predicate on the "createdTime" field.
 func CreatedTimeLTE(v time.Time) predicate.S3Bucket {
 	return predicate.S3Bucket(sql.FieldLTE(FieldCreatedTime, v))
-}
-
-// HasS3User applies the HasEdge predicate on the "s3_user" edge.
-func HasS3User() predicate.S3Bucket {
-	return predicate.S3Bucket(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, S3UserTable, S3UserColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasS3UserWith applies the HasEdge predicate on the "s3_user" edge with a given conditions (other predicates).
-func HasS3UserWith(preds ...predicate.S3User) predicate.S3Bucket {
-	return predicate.S3Bucket(func(s *sql.Selector) {
-		step := newS3UserStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
 }
 
 // And groups predicates with the AND operator between them.

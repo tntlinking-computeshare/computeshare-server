@@ -3,8 +3,9 @@
 package s3user
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 )
 
@@ -15,29 +16,29 @@ const (
 	FieldID = "id"
 	// FieldFkUserID holds the string denoting the fk_user_id field in the database.
 	FieldFkUserID = "fk_user_id"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldAccessKey holds the string denoting the access_key field in the database.
 	FieldAccessKey = "access_key"
 	// FieldSecretKey holds the string denoting the secret_key field in the database.
 	FieldSecretKey = "secret_key"
-	// EdgeBuckets holds the string denoting the buckets edge name in mutations.
-	EdgeBuckets = "buckets"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the s3user in the database.
 	Table = "s3users"
-	// BucketsTable is the table that holds the buckets relation/edge.
-	BucketsTable = "s3buckets"
-	// BucketsInverseTable is the table name for the S3Bucket entity.
-	// It exists in this package in order to avoid circular dependency with the "s3bucket" package.
-	BucketsInverseTable = "s3buckets"
-	// BucketsColumn is the table column denoting the buckets relation/edge.
-	BucketsColumn = "s3bucket_s3_user"
 )
 
 // Columns holds all SQL columns for s3user fields.
 var Columns = []string{
 	FieldID,
 	FieldFkUserID,
+	FieldType,
 	FieldAccessKey,
 	FieldSecretKey,
+	FieldCreateTime,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -55,6 +56,10 @@ var (
 	AccessKeyValidator func(string) error
 	// SecretKeyValidator is a validator for the "secret_key" field. It is called by the builders before save.
 	SecretKeyValidator func(string) error
+	// DefaultCreateTime holds the default value on creation for the "create_time" field.
+	DefaultCreateTime func() time.Time
+	// DefaultUpdateTime holds the default value on creation for the "update_time" field.
+	DefaultUpdateTime func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -72,6 +77,11 @@ func ByFkUserID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFkUserID, opts...).ToFunc()
 }
 
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
 // ByAccessKey orders the results by the access_key field.
 func ByAccessKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAccessKey, opts...).ToFunc()
@@ -82,23 +92,12 @@ func BySecretKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecretKey, opts...).ToFunc()
 }
 
-// ByBucketsCount orders the results by buckets count.
-func ByBucketsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newBucketsStep(), opts...)
-	}
+// ByCreateTime orders the results by the create_time field.
+func ByCreateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateTime, opts...).ToFunc()
 }
 
-// ByBuckets orders the results by buckets terms.
-func ByBuckets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newBucketsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-func newBucketsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(BucketsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, true, BucketsTable, BucketsColumn),
-	)
+// ByUpdateTime orders the results by the update_time field.
+func ByUpdateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTime, opts...).ToFunc()
 }

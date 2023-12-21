@@ -10,9 +10,9 @@ server:
     swarm_key: |
       /key/swarm/psk/1.0.0/
       /base16/
-      55158d9b6b7e5a8e41aa8b34dd057ff1880e38348613d27ae194ad7c5b9670d7
+      **********
     bootstraps:
-      - "/ip4/34.139.126.73/tcp/4001/p2p/12D3KooWRsKNAgbGaQkVbbzg5xEw2FtvPRF7MiYtmRvFPYegNVnu"
+      - ""
 data:
   database:
     driver: mysql
@@ -27,16 +27,21 @@ data:
 
 auth:
   service_key: some-secret-key
-  api_key: some-secret-key-for-forntend
+  api_key:
 
 dispose:
   s3:
     target_docker_host: unix:///var/run/docker.sock
-    target_docker_container_name: seaweedfs-master-1
+    target_docker_container_name:
     endpoint: http://127.0.0.1:8333
     region: shanghai
     s3_url_prefix: s3://
     url_prefix: http://127.0.0.1:8333/
+  dh3t:
+    account:
+    password:
+    sendUrl:
+    verificationCodeTemplateId:
   domain:
     vnc_host: https://vnc.computeshare.newtouch.com
     api_host: api.computeshare.newtouch.com

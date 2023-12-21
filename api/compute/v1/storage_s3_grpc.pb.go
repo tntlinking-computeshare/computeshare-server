@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StorageS3_GetS3User_FullMethodName             = "/api.server.compute.v1.StorageS3/GetS3User"
+	StorageS3_CreateS3Key_FullMethodName           = "/api.server.compute.v1.StorageS3/CreateS3Key"
+	StorageS3_GetUserS3User_FullMethodName         = "/api.server.compute.v1.StorageS3/GetUserS3User"
 	StorageS3_CreateBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/CreateBucket"
 	StorageS3_DeleteBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/DeleteBucket"
 	StorageS3_EmptyBucket_FullMethodName           = "/api.server.compute.v1.StorageS3/EmptyBucket"
@@ -35,7 +36,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StorageS3Client interface {
-	GetS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error)
+	CreateS3Key(ctx context.Context, in *CreateS3KeyRequest, opts ...grpc.CallOption) (*CreateS3KeyReply, error)
+	GetUserS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error)
 	CreateBucket(ctx context.Context, in *CreateBucketRequest, opts ...grpc.CallOption) (*CreateBucketReply, error)
 	DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...grpc.CallOption) (*DeleteBucketReply, error)
 	EmptyBucket(ctx context.Context, in *EmptyBucketRequest, opts ...grpc.CallOption) (*EmptyBucketReply, error)
@@ -55,9 +57,18 @@ func NewStorageS3Client(cc grpc.ClientConnInterface) StorageS3Client {
 	return &storageS3Client{cc}
 }
 
-func (c *storageS3Client) GetS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error) {
+func (c *storageS3Client) CreateS3Key(ctx context.Context, in *CreateS3KeyRequest, opts ...grpc.CallOption) (*CreateS3KeyReply, error) {
+	out := new(CreateS3KeyReply)
+	err := c.cc.Invoke(ctx, StorageS3_CreateS3Key_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) GetUserS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error) {
 	out := new(GetS3UserReply)
-	err := c.cc.Invoke(ctx, StorageS3_GetS3User_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, StorageS3_GetUserS3User_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +160,8 @@ func (c *storageS3Client) S3StorageDelete(ctx context.Context, in *S3StorageDele
 // All implementations must embed UnimplementedStorageS3Server
 // for forward compatibility
 type StorageS3Server interface {
-	GetS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error)
+	CreateS3Key(context.Context, *CreateS3KeyRequest) (*CreateS3KeyReply, error)
+	GetUserS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error)
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error)
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketReply, error)
 	EmptyBucket(context.Context, *EmptyBucketRequest) (*EmptyBucketReply, error)
@@ -166,8 +178,11 @@ type StorageS3Server interface {
 type UnimplementedStorageS3Server struct {
 }
 
-func (UnimplementedStorageS3Server) GetS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetS3User not implemented")
+func (UnimplementedStorageS3Server) CreateS3Key(context.Context, *CreateS3KeyRequest) (*CreateS3KeyReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateS3Key not implemented")
+}
+func (UnimplementedStorageS3Server) GetUserS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserS3User not implemented")
 }
 func (UnimplementedStorageS3Server) CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBucket not implemented")
@@ -209,20 +224,38 @@ func RegisterStorageS3Server(s grpc.ServiceRegistrar, srv StorageS3Server) {
 	s.RegisterService(&StorageS3_ServiceDesc, srv)
 }
 
-func _StorageS3_GetS3User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StorageS3_CreateS3Key_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateS3KeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).CreateS3Key(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_CreateS3Key_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).CreateS3Key(ctx, req.(*CreateS3KeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageS3_GetUserS3User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetS3UserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StorageS3Server).GetS3User(ctx, in)
+		return srv.(StorageS3Server).GetUserS3User(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: StorageS3_GetS3User_FullMethodName,
+		FullMethod: StorageS3_GetUserS3User_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageS3Server).GetS3User(ctx, req.(*GetS3UserRequest))
+		return srv.(StorageS3Server).GetUserS3User(ctx, req.(*GetS3UserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -397,8 +430,12 @@ var StorageS3_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*StorageS3Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetS3User",
-			Handler:    _StorageS3_GetS3User_Handler,
+			MethodName: "CreateS3Key",
+			Handler:    _StorageS3_CreateS3Key_Handler,
+		},
+		{
+			MethodName: "GetUserS3User",
+			Handler:    _StorageS3_GetUserS3User_Handler,
 		},
 		{
 			MethodName: "CreateBucket",

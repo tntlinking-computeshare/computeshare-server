@@ -38,3 +38,5 @@ bin/
 *.swp
 /http-client.private.env.json
 /configs/config_test.yaml
+deploy_abing.sh
+configs/config.yaml

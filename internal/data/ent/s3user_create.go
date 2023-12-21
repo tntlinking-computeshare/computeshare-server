@@ -6,11 +6,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
@@ -27,6 +27,12 @@ func (sc *S3UserCreate) SetFkUserID(u uuid.UUID) *S3UserCreate {
 	return sc
 }
 
+// SetType sets the "type" field.
+func (sc *S3UserCreate) SetType(i int8) *S3UserCreate {
+	sc.mutation.SetType(i)
+	return sc
+}
+
 // SetAccessKey sets the "access_key" field.
 func (sc *S3UserCreate) SetAccessKey(s string) *S3UserCreate {
 	sc.mutation.SetAccessKey(s)
@@ -36,6 +42,34 @@ func (sc *S3UserCreate) SetAccessKey(s string) *S3UserCreate {
 // SetSecretKey sets the "secret_key" field.
 func (sc *S3UserCreate) SetSecretKey(s string) *S3UserCreate {
 	sc.mutation.SetSecretKey(s)
+	return sc
+}
+
+// SetCreateTime sets the "create_time" field.
+func (sc *S3UserCreate) SetCreateTime(t time.Time) *S3UserCreate {
+	sc.mutation.SetCreateTime(t)
+	return sc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (sc *S3UserCreate) SetNillableCreateTime(t *time.Time) *S3UserCreate {
+	if t != nil {
+		sc.SetCreateTime(*t)
+	}
+	return sc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (sc *S3UserCreate) SetUpdateTime(t time.Time) *S3UserCreate {
+	sc.mutation.SetUpdateTime(t)
+	return sc
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (sc *S3UserCreate) SetNillableUpdateTime(t *time.Time) *S3UserCreate {
+	if t != nil {
+		sc.SetUpdateTime(*t)
+	}
 	return sc
 }
 
@@ -51,21 +85,6 @@ func (sc *S3UserCreate) SetNillableID(u *uuid.UUID) *S3UserCreate {
 		sc.SetID(*u)
 	}
 	return sc
-}
-
-// AddBucketIDs adds the "buckets" edge to the S3Bucket entity by IDs.
-func (sc *S3UserCreate) AddBucketIDs(ids ...uuid.UUID) *S3UserCreate {
-	sc.mutation.AddBucketIDs(ids...)
-	return sc
-}
-
-// AddBuckets adds the "buckets" edges to the S3Bucket entity.
-func (sc *S3UserCreate) AddBuckets(s ...*S3Bucket) *S3UserCreate {
-	ids := make([]uuid.UUID, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
-	}
-	return sc.AddBucketIDs(ids...)
 }
 
 // Mutation returns the S3UserMutation object of the builder.
@@ -103,6 +122,14 @@ func (sc *S3UserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (sc *S3UserCreate) defaults() {
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		v := s3user.DefaultCreateTime()
+		sc.mutation.SetCreateTime(v)
+	}
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		v := s3user.DefaultUpdateTime()
+		sc.mutation.SetUpdateTime(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		v := s3user.DefaultID()
 		sc.mutation.SetID(v)
@@ -113,6 +140,9 @@ func (sc *S3UserCreate) defaults() {
 func (sc *S3UserCreate) check() error {
 	if _, ok := sc.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "S3User.fk_user_id"`)}
+	}
+	if _, ok := sc.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "S3User.type"`)}
 	}
 	if _, ok := sc.mutation.AccessKey(); !ok {
 		return &ValidationError{Name: "access_key", err: errors.New(`ent: missing required field "S3User.access_key"`)}
@@ -129,6 +159,12 @@ func (sc *S3UserCreate) check() error {
 		if err := s3user.SecretKeyValidator(v); err != nil {
 			return &ValidationError{Name: "secret_key", err: fmt.Errorf(`ent: validator failed for field "S3User.secret_key": %w`, err)}
 		}
+	}
+	if _, ok := sc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "S3User.create_time"`)}
+	}
+	if _, ok := sc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "S3User.update_time"`)}
 	}
 	return nil
 }
@@ -169,6 +205,10 @@ func (sc *S3UserCreate) createSpec() (*S3User, *sqlgraph.CreateSpec) {
 		_spec.SetField(s3user.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
+	if value, ok := sc.mutation.GetType(); ok {
+		_spec.SetField(s3user.FieldType, field.TypeInt8, value)
+		_node.Type = value
+	}
 	if value, ok := sc.mutation.AccessKey(); ok {
 		_spec.SetField(s3user.FieldAccessKey, field.TypeString, value)
 		_node.AccessKey = value
@@ -177,21 +217,13 @@ func (sc *S3UserCreate) createSpec() (*S3User, *sqlgraph.CreateSpec) {
 		_spec.SetField(s3user.FieldSecretKey, field.TypeString, value)
 		_node.SecretKey = value
 	}
-	if nodes := sc.mutation.BucketsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: true,
-			Table:   s3user.BucketsTable,
-			Columns: []string{s3user.BucketsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
+	if value, ok := sc.mutation.CreateTime(); ok {
+		_spec.SetField(s3user.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
+	}
+	if value, ok := sc.mutation.UpdateTime(); ok {
+		_spec.SetField(s3user.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

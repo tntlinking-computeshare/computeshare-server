@@ -16,7 +16,11 @@ import (
 )
 
 func likeKey(telephone string) string {
-	return fmt.Sprintf("telephone:%s", telephone)
+	return fmt.Sprintf("telephone_login:%s", telephone)
+}
+
+func likeResendVerificationKey(telephone string) string {
+	return fmt.Sprintf("telephone_send:%s", telephone)
 }
 
 type userRepo struct {
@@ -53,7 +57,7 @@ func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
-	code, err := ur.GetValidateCode(ctx, *user)
+	code, err := ur.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if user.Name == "" {
 		user.Name = user.GetFullTelephone()
@@ -134,13 +138,23 @@ func (ur *userRepo) DeleteUser(ctx context.Context, id uuid.UUID) error {
 	return ur.data.getUserClient(ctx).DeleteOneID(id).Exec(ctx)
 }
 
-func (ur *userRepo) SendValidateCode(ctx context.Context, entity biz.User) error {
-	_, err := ur.data.rdb.Set(ctx, likeKey(entity.GetFullTelephone()), "000000", time.Minute*10).Result()
+func (ur *userRepo) SetValidateCode(ctx context.Context, entity biz.User, vCode string) error {
+	_, err := ur.data.rdb.Set(ctx, likeKey(entity.GetFullTelephone()), vCode, time.Minute*10).Result()
 	return err
 }
 
-func (ur *userRepo) GetValidateCode(ctx context.Context, user biz.User) (string, error) {
-	get := ur.data.rdb.Get(ctx, likeKey(user.GetFullTelephone()))
+func (ur *userRepo) GetValidateCode(ctx context.Context, telephone string) (string, error) {
+	get := ur.data.rdb.Get(ctx, likeKey(telephone))
+	return get.Result()
+}
+
+func (ur *userRepo) SetResendVerification(ctx context.Context, telephoneNumber string) error {
+	_, err := ur.data.rdb.Set(ctx, likeResendVerificationKey(telephoneNumber), "Cooling", time.Minute).Result()
+	return err
+}
+
+func (ur *userRepo) GetResendVerification(ctx context.Context, telephoneNumber string) (string, error) {
+	get := ur.data.rdb.Get(ctx, likeResendVerificationKey(telephoneNumber))
 	return get.Result()
 }
 

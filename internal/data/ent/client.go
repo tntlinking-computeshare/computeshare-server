@@ -1486,22 +1486,6 @@ func (c *S3BucketClient) GetX(ctx context.Context, id uuid.UUID) *S3Bucket {
 	return obj
 }
 
-// QueryS3User queries the s3_user edge of a S3Bucket.
-func (c *S3BucketClient) QueryS3User(s *S3Bucket) *S3UserQuery {
-	query := (&S3UserClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(s3bucket.Table, s3bucket.FieldID, id),
-			sqlgraph.To(s3user.Table, s3user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, s3bucket.S3UserTable, s3bucket.S3UserColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *S3BucketClient) Hooks() []Hook {
 	return c.hooks.S3Bucket
@@ -1618,22 +1602,6 @@ func (c *S3UserClient) GetX(ctx context.Context, id uuid.UUID) *S3User {
 		panic(err)
 	}
 	return obj
-}
-
-// QueryBuckets queries the buckets edge of a S3User.
-func (c *S3UserClient) QueryBuckets(s *S3User) *S3BucketQuery {
-	query := (&S3BucketClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(s3user.Table, s3user.FieldID, id),
-			sqlgraph.To(s3bucket.Table, s3bucket.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, true, s3user.BucketsTable, s3user.BucketsColumn),
-		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // Hooks returns the client hooks.

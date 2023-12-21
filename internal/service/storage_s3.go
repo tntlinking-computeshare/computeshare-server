@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/mohaijiang/computeshare-server/internal/utils"
 	"github.com/samber/lo"
 	"io"
 	"path/filepath"
@@ -23,14 +24,28 @@ func NewStorageS3Service(uc *biz.StorageS3UseCase) *StorageS3Service {
 		uc: uc,
 	}
 }
-
-func (s *StorageS3Service) GetS3User(ctx context.Context, req *pb.GetS3UserRequest) (*pb.GetS3UserReply, error) {
+func (s *StorageS3Service) CreateS3Key(ctx context.Context, req *pb.CreateS3KeyRequest) (*pb.CreateS3KeyReply, error) {
 	claim, ok := global.FromContext(ctx)
 	if !ok {
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	user, err := s.uc.GetS3User(ctx, userId)
+	err := s.uc.CreateS3Key(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateS3KeyReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
+}
+func (s *StorageS3Service) GetUserS3User(ctx context.Context, req *pb.GetS3UserRequest) (*pb.GetS3UserReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	users, err := s.uc.GetUserS3User(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -38,11 +53,15 @@ func (s *StorageS3Service) GetS3User(ctx context.Context, req *pb.GetS3UserReque
 	return &pb.GetS3UserReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data: &pb.S3User{
-			AccessKey: user.AccessKey,
-			SecretKey: user.SecretKey,
-			Endpoint:  user.Endpoint,
-		},
+		Data: lo.Map(users, func(item *biz.S3User, _ int) *pb.S3User {
+			return &pb.S3User{
+				AccessKey:  utils.StringKeyDesensitization(item.AccessKey),
+				SecretKey:  utils.StringKeyDesensitization(item.SecretKey),
+				CreateTime: item.CreateTime.UnixMilli(),
+				UpdateTime: item.CreateTime.UnixMilli(),
+				Endpoint:   item.Endpoint,
+			}
+		}),
 	}, nil
 }
 func (s *StorageS3Service) CreateBucket(ctx context.Context, req *pb.CreateBucketRequest) (*pb.CreateBucketReply, error) {
@@ -51,7 +70,7 @@ func (s *StorageS3Service) CreateBucket(ctx context.Context, req *pb.CreateBucke
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	bucket, err := s.uc.CreateBucket(ctx, userId, req.GetBucket(), req.GetSecretKey())
+	bucket, err := s.uc.CreateBucket(ctx, userId, req.GetBucketName())
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +128,7 @@ func (s *StorageS3Service) ListBucket(ctx context.Context, req *pb.ListBucketReq
 		Data: lo.Map(buckets, func(item *biz.S3Bucket, _ int) *pb.ListBucketReply_BucketVo {
 			return &pb.ListBucketReply_BucketVo{
 				Id:          item.ID.String(),
-				Bucket:      item.Bucket,
+				Bucket:      item.BucketName,
 				CreatedTime: item.CreatedTime.UnixMilli(),
 			}
 		}),

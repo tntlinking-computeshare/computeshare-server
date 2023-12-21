@@ -28,6 +28,7 @@ const OperationUserSendValidateCode = "/api.server.system.v1.User/SendValidateCo
 const OperationUserUpdateUser = "/api.server.system.v1.User/UpdateUser"
 const OperationUserUpdateUserPassword = "/api.server.system.v1.User/UpdateUserPassword"
 const OperationUserUpdateUserTelephone = "/api.server.system.v1.User/UpdateUserTelephone"
+const OperationUserVerifyCode = "/api.server.system.v1.User/VerifyCode"
 
 type UserHTTPServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
@@ -45,6 +46,7 @@ type UserHTTPServer interface {
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
 	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
 	UpdateUserTelephone(context.Context, *UpdateUserTelephoneRequest) (*UpdateUserTelephoneReply, error)
+	VerifyCode(context.Context, *VerifyCodeRequest) (*VerifyCodeReply, error)
 }
 
 func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
@@ -58,6 +60,7 @@ func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r.POST("/v1/user/login", _User_Login0_HTTP_Handler(srv))
 	r.POST("/v1/user/login_by_vc", _User_LoginWithValidateCode0_HTTP_Handler(srv))
 	r.POST("/v1/sms/send", _User_SendValidateCode0_HTTP_Handler(srv))
+	r.POST("/v1/sms/code/verify", _User_VerifyCode0_HTTP_Handler(srv))
 }
 
 func _User_CreateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
@@ -252,6 +255,28 @@ func _User_SendValidateCode0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _User_VerifyCode0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in VerifyCodeRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserVerifyCode)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.VerifyCode(ctx, req.(*VerifyCodeRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*VerifyCodeReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserHTTPClient interface {
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
 	GetUser(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
@@ -262,6 +287,7 @@ type UserHTTPClient interface {
 	UpdateUser(ctx context.Context, req *UpdateUserRequest, opts ...http.CallOption) (rsp *UpdateUserReply, err error)
 	UpdateUserPassword(ctx context.Context, req *UpdateUserPasswordRequest, opts ...http.CallOption) (rsp *UpdateUserPasswordReply, err error)
 	UpdateUserTelephone(ctx context.Context, req *UpdateUserTelephoneRequest, opts ...http.CallOption) (rsp *UpdateUserTelephoneReply, err error)
+	VerifyCode(ctx context.Context, req *VerifyCodeRequest, opts ...http.CallOption) (rsp *VerifyCodeReply, err error)
 }
 
 type UserHTTPClientImpl struct {
@@ -383,6 +409,19 @@ func (c *UserHTTPClientImpl) UpdateUserTelephone(ctx context.Context, in *Update
 	opts = append(opts, http.Operation(OperationUserUpdateUserTelephone))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *UserHTTPClientImpl) VerifyCode(ctx context.Context, in *VerifyCodeRequest, opts ...http.CallOption) (*VerifyCodeReply, error) {
+	var out VerifyCodeReply
+	pattern := "/v1/sms/code/verify"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserVerifyCode))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

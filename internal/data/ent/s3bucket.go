@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
 )
 
 // S3Bucket is the model entity for the S3Bucket schema.
@@ -19,37 +18,13 @@ type S3Bucket struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// 用户id
+	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
 	// bucketName
-	Bucket string `json:"bucket,omitempty"`
+	BucketName string `json:"bucket_name,omitempty"`
 	// CreatedTime holds the value of the "createdTime" field.
-	CreatedTime time.Time `json:"createdTime,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the S3BucketQuery when eager-loading is set.
-	Edges            S3BucketEdges `json:"edges"`
-	s3bucket_s3_user *uuid.UUID
-	selectValues     sql.SelectValues
-}
-
-// S3BucketEdges holds the relations/edges for other nodes in the graph.
-type S3BucketEdges struct {
-	// S3User holds the value of the s3_user edge.
-	S3User *S3User `json:"s3_user,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// S3UserOrErr returns the S3User value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e S3BucketEdges) S3UserOrErr() (*S3User, error) {
-	if e.loadedTypes[0] {
-		if e.S3User == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: s3user.Label}
-		}
-		return e.S3User, nil
-	}
-	return nil, &NotLoadedError{edge: "s3_user"}
+	CreatedTime  time.Time `json:"createdTime,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -57,14 +32,12 @@ func (*S3Bucket) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case s3bucket.FieldBucket:
+		case s3bucket.FieldBucketName:
 			values[i] = new(sql.NullString)
 		case s3bucket.FieldCreatedTime:
 			values[i] = new(sql.NullTime)
-		case s3bucket.FieldID:
+		case s3bucket.FieldID, s3bucket.FieldFkUserID:
 			values[i] = new(uuid.UUID)
-		case s3bucket.ForeignKeys[0]: // s3bucket_s3_user
-			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -86,24 +59,23 @@ func (s *S3Bucket) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				s.ID = *value
 			}
-		case s3bucket.FieldBucket:
+		case s3bucket.FieldFkUserID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
+			} else if value != nil {
+				s.FkUserID = *value
+			}
+		case s3bucket.FieldBucketName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field bucket", values[i])
+				return fmt.Errorf("unexpected type %T for field bucket_name", values[i])
 			} else if value.Valid {
-				s.Bucket = value.String
+				s.BucketName = value.String
 			}
 		case s3bucket.FieldCreatedTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field createdTime", values[i])
 			} else if value.Valid {
 				s.CreatedTime = value.Time
-			}
-		case s3bucket.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field s3bucket_s3_user", values[i])
-			} else if value.Valid {
-				s.s3bucket_s3_user = new(uuid.UUID)
-				*s.s3bucket_s3_user = *value.S.(*uuid.UUID)
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -116,11 +88,6 @@ func (s *S3Bucket) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *S3Bucket) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
-}
-
-// QueryS3User queries the "s3_user" edge of the S3Bucket entity.
-func (s *S3Bucket) QueryS3User() *S3UserQuery {
-	return NewS3BucketClient(s.config).QueryS3User(s)
 }
 
 // Update returns a builder for updating this S3Bucket.
@@ -146,8 +113,11 @@ func (s *S3Bucket) String() string {
 	var builder strings.Builder
 	builder.WriteString("S3Bucket(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
-	builder.WriteString("bucket=")
-	builder.WriteString(s.Bucket)
+	builder.WriteString("fk_user_id=")
+	builder.WriteString(fmt.Sprintf("%v", s.FkUserID))
+	builder.WriteString(", ")
+	builder.WriteString("bucket_name=")
+	builder.WriteString(s.BucketName)
 	builder.WriteString(", ")
 	builder.WriteString("createdTime=")
 	builder.WriteString(s.CreatedTime.Format(time.ANSIC))

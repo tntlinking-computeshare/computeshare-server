@@ -1,6 +1,8 @@
 package service
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	jwt "github.com/golang-jwt/jwt/v4"
 	shell "github.com/ipfs/go-ipfs-api"
@@ -19,6 +21,16 @@ func TestAdd(t *testing.T) {
 		t.Error(err)
 	}
 	fmt.Println(cid)
+}
+
+func TestGenerateRandomString(t *testing.T) {
+	length := 20
+	bytes := make([]byte, length/2)
+	_, err := rand.Read(bytes)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(hex.EncodeToString(bytes)[:length])
 }
 
 func TestJWT(t *testing.T) {
