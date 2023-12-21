@@ -57,7 +57,7 @@ func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error
 
 func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
-	code, err := ur.GetValidateCode(ctx, *user)
+	code, err := ur.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if user.Name == "" {
 		user.Name = user.GetFullTelephone()
@@ -143,8 +143,8 @@ func (ur *userRepo) SetValidateCode(ctx context.Context, entity biz.User, vCode 
 	return err
 }
 
-func (ur *userRepo) GetValidateCode(ctx context.Context, user biz.User) (string, error) {
-	get := ur.data.rdb.Get(ctx, likeKey(user.GetFullTelephone()))
+func (ur *userRepo) GetValidateCode(ctx context.Context, telephone string) (string, error) {
+	get := ur.data.rdb.Get(ctx, likeKey(telephone))
 	return get.Result()
 }
 

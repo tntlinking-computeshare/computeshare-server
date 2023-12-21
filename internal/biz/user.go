@@ -57,7 +57,7 @@ type UserRepo interface {
 	UpdateUserPassword(ctx context.Context, id uuid.UUID, user *User) error
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	SetValidateCode(ctx context.Context, entity User, vCode string) error
-	GetValidateCode(ctx context.Context, user User) (string, error)
+	GetValidateCode(ctx context.Context, telephone string) (string, error)
 	SetResendVerification(ctx context.Context, telephoneNumber string) error
 	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
 	DeleteValidateCode(ctx context.Context, user User)
@@ -142,7 +142,7 @@ func (uc *UserUsercase) SendValidateCode(ctx context.Context, entity User) (err 
 }
 
 func (uc *UserUsercase) GetValidateCode(ctx context.Context, user User) (string, error) {
-	return uc.repo.GetValidateCode(ctx, user)
+	return uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 }
 
 func (uc *UserUsercase) Login(ctx context.Context, user *User) (string, error) {
@@ -167,7 +167,7 @@ func (uc *UserUsercase) Login(ctx context.Context, user *User) (string, error) {
 }
 
 func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (string, error) {
-	code, err := uc.repo.GetValidateCode(ctx, *user)
+	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if err != nil || code != user.ValidateCode {
 		return "", errors.New(400, "USER_NOT_FOUND", "telephone or password does not match")
@@ -200,6 +200,19 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	return tokenHeader.SignedString(uc.key)
 }
 
+func (uc *UserUsercase) VerifyCode(ctx context.Context, telephoneNumber, validateCode string) error {
+	code, err := uc.repo.GetValidateCode(ctx, telephoneNumber)
+	if err != nil {
+		return err
+	}
+	if code == validateCode {
+		return nil
+	} else {
+		return errors.New(400, "Incorrect_ValidateCode", "Incorrect_ValidateCode")
+	}
+
+}
+
 func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, oldPassword, newPassword string) error {
 	u, err := uc.Get(ctx, id)
 	if err != nil {
@@ -222,7 +235,7 @@ func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, ol
 }
 
 func (uc *UserUsercase) UpdateUserTelephone(ctx context.Context, id uuid.UUID, user *User) error {
-	code, err := uc.repo.GetValidateCode(ctx, *user)
+	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if err != nil || code != user.ValidateCode {
 		return errors.New(400, "VALIDATE_CODE_ERROR", "telephone or password does not match")

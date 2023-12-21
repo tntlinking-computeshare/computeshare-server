@@ -69,6 +69,12 @@ service User {
 			body: "*"
 		};
 	}
+	rpc VerifyCode(VerifyCodeRequest) returns (VerifyCodeReply){
+		option (google.api.http) = {
+			post: "/v1/sms/code/verify"
+			body: "*"
+		};
+	}
 }
 
 message LoginRequest {
@@ -175,6 +181,17 @@ message SendValidateCodeRequest {
 }
 
 message SendValidateCodeReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message VerifyCodeRequest {
+	string country_call_coding = 1;
+	string telephone_number = 2;
+	string validate_code = 3;
+}
+
+message VerifyCodeReply {
 	int32 code = 1;
 	string message = 2;
 }

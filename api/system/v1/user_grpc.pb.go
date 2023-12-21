@@ -28,6 +28,7 @@ const (
 	User_Login_FullMethodName                 = "/api.server.system.v1.User/Login"
 	User_LoginWithValidateCode_FullMethodName = "/api.server.system.v1.User/LoginWithValidateCode"
 	User_SendValidateCode_FullMethodName      = "/api.server.system.v1.User/SendValidateCode"
+	User_VerifyCode_FullMethodName            = "/api.server.system.v1.User/VerifyCode"
 )
 
 // UserClient is the client API for User service.
@@ -49,6 +50,7 @@ type UserClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	LoginWithValidateCode(ctx context.Context, in *LoginWithValidateCodeRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	SendValidateCode(ctx context.Context, in *SendValidateCodeRequest, opts ...grpc.CallOption) (*SendValidateCodeReply, error)
+	VerifyCode(ctx context.Context, in *VerifyCodeRequest, opts ...grpc.CallOption) (*VerifyCodeReply, error)
 }
 
 type userClient struct {
@@ -140,6 +142,15 @@ func (c *userClient) SendValidateCode(ctx context.Context, in *SendValidateCodeR
 	return out, nil
 }
 
+func (c *userClient) VerifyCode(ctx context.Context, in *VerifyCodeRequest, opts ...grpc.CallOption) (*VerifyCodeReply, error) {
+	out := new(VerifyCodeReply)
+	err := c.cc.Invoke(ctx, User_VerifyCode_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -159,6 +170,7 @@ type UserServer interface {
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	LoginWithValidateCode(context.Context, *LoginWithValidateCodeRequest) (*LoginReply, error)
 	SendValidateCode(context.Context, *SendValidateCodeRequest) (*SendValidateCodeReply, error)
+	VerifyCode(context.Context, *VerifyCodeRequest) (*VerifyCodeReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -192,6 +204,9 @@ func (UnimplementedUserServer) LoginWithValidateCode(context.Context, *LoginWith
 }
 func (UnimplementedUserServer) SendValidateCode(context.Context, *SendValidateCodeRequest) (*SendValidateCodeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendValidateCode not implemented")
+}
+func (UnimplementedUserServer) VerifyCode(context.Context, *VerifyCodeRequest) (*VerifyCodeReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyCode not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -368,6 +383,24 @@ func _User_SendValidateCode_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_VerifyCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyCodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).VerifyCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_VerifyCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).VerifyCode(ctx, req.(*VerifyCodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -410,6 +443,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendValidateCode",
 			Handler:    _User_SendValidateCode_Handler,
+		},
+		{
+			MethodName: "VerifyCode",
+			Handler:    _User_VerifyCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
