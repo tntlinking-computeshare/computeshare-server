@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.compute.v1;
+package api.server.compute.v1;
 
 import "google/api/annotations.proto";
 import "api/network_mapping/v1/network_mapping.proto";
@@ -20,8 +20,8 @@ service Process {
 }
 
 message CreateInstanceProcessRequest{
-	api.compute.v1.CreateInstanceRequest instance = 1;
-	repeated api.network_mapping.v1.CreateNetworkMappingRequest networkMapping = 2;
+	api.server.compute.v1.CreateInstanceRequest instance = 1;
+	repeated api.server.network_mapping.v1.CreateNetworkMappingRequest networkMapping = 2;
 }
 
 message CreateInstanceProcessReply {

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.network_mapping.v1;
+package api.server.network_mapping.v1;
 
 import "google/api/annotations.proto";
 

@@ -20,13 +20,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Agent_CreateAgent_FullMethodName          = "/api.agent.v1.Agent/CreateAgent"
-	Agent_UpdateAgent_FullMethodName          = "/api.agent.v1.Agent/UpdateAgent"
-	Agent_DeleteAgent_FullMethodName          = "/api.agent.v1.Agent/DeleteAgent"
-	Agent_GetAgent_FullMethodName             = "/api.agent.v1.Agent/GetAgent"
-	Agent_ListAgent_FullMethodName            = "/api.agent.v1.Agent/ListAgent"
-	Agent_ListAgentInstance_FullMethodName    = "/api.agent.v1.Agent/ListAgentInstance"
-	Agent_ReportInstanceStatus_FullMethodName = "/api.agent.v1.Agent/ReportInstanceStatus"
+	Agent_CreateAgent_FullMethodName          = "/api.server.agent.v1.Agent/CreateAgent"
+	Agent_UpdateAgent_FullMethodName          = "/api.server.agent.v1.Agent/UpdateAgent"
+	Agent_DeleteAgent_FullMethodName          = "/api.server.agent.v1.Agent/DeleteAgent"
+	Agent_GetAgent_FullMethodName             = "/api.server.agent.v1.Agent/GetAgent"
+	Agent_ListAgent_FullMethodName            = "/api.server.agent.v1.Agent/ListAgent"
+	Agent_ListAgentInstance_FullMethodName    = "/api.server.agent.v1.Agent/ListAgentInstance"
+	Agent_ReportInstanceStatus_FullMethodName = "/api.server.agent.v1.Agent/ReportInstanceStatus"
 )
 
 // AgentClient is the client API for Agent service.
@@ -295,7 +295,7 @@ func _Agent_ReportInstanceStatus_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Agent_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.agent.v1.Agent",
+	ServiceName: "api.server.agent.v1.Agent",
 	HandlerType: (*AgentServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

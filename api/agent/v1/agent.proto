@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.agent.v1;
+package api.server.agent.v1;
 
 import "google/api/annotations.proto";
 import "api/compute/v1/compute_instance.proto";
@@ -38,13 +38,13 @@ service Agent {
 			get: "/v1/agent"
 		};
 	};
-	rpc ListAgentInstance(ListAgentInstanceReq) returns(github.com.mohaijiang.api.compute.v1.ListInstanceReply){
+	rpc ListAgentInstance(ListAgentInstanceReq) returns(api.server.compute.v1.ListInstanceReply){
 		option (google.api.http) = {
 			get: "/v1/agent/instance/{mac}"
 		};
 	}
 
-	rpc ReportInstanceStatus(github.com.mohaijiang.api.compute.v1.Instance) returns (ReportInstanceStatusReply){
+	rpc ReportInstanceStatus(api.server.compute.v1.Instance) returns (ReportInstanceStatusReply){
 		option (google.api.http) = {
 			put: "/v1/agent/instance/report"
 			body: "*"

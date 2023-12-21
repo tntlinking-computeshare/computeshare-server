@@ -19,11 +19,11 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationStorageCreateDir = "/api.compute.v1.Storage/CreateDir"
-const OperationStorageDelete = "/api.compute.v1.Storage/Delete"
-const OperationStorageDownload = "/api.compute.v1.Storage/Download"
-const OperationStorageList = "/api.compute.v1.Storage/List"
-const OperationStorageUploadFile = "/api.compute.v1.Storage/UploadFile"
+const OperationStorageCreateDir = "/api.server.compute.v1.Storage/CreateDir"
+const OperationStorageDelete = "/api.server.compute.v1.Storage/Delete"
+const OperationStorageDownload = "/api.server.compute.v1.Storage/Download"
+const OperationStorageList = "/api.server.compute.v1.Storage/List"
+const OperationStorageUploadFile = "/api.server.compute.v1.Storage/UploadFile"
 
 type StorageHTTPServer interface {
 	CreateDir(context.Context, *CreateDirRequest) (*CreateDirReply, error)

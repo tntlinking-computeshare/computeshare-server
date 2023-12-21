@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package github.com.mohaijiang.api.queue.v1;
+package api.server.queue.v1;
 
 import "google/api/annotations.proto";
 

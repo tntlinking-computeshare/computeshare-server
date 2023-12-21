@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	User_CreateUser_FullMethodName            = "/api.system.v1.User/CreateUser"
-	User_UpdateUser_FullMethodName            = "/api.system.v1.User/UpdateUser"
-	User_UpdateUserPassword_FullMethodName    = "/api.system.v1.User/UpdateUserPassword"
-	User_UpdateUserTelephone_FullMethodName   = "/api.system.v1.User/UpdateUserTelephone"
-	User_GetUser_FullMethodName               = "/api.system.v1.User/GetUser"
-	User_ListUser_FullMethodName              = "/api.system.v1.User/ListUser"
-	User_Login_FullMethodName                 = "/api.system.v1.User/Login"
-	User_LoginWithValidateCode_FullMethodName = "/api.system.v1.User/LoginWithValidateCode"
-	User_SendValidateCode_FullMethodName      = "/api.system.v1.User/SendValidateCode"
+	User_CreateUser_FullMethodName            = "/api.server.system.v1.User/CreateUser"
+	User_UpdateUser_FullMethodName            = "/api.server.system.v1.User/UpdateUser"
+	User_UpdateUserPassword_FullMethodName    = "/api.server.system.v1.User/UpdateUserPassword"
+	User_UpdateUserTelephone_FullMethodName   = "/api.server.system.v1.User/UpdateUserTelephone"
+	User_GetUser_FullMethodName               = "/api.server.system.v1.User/GetUser"
+	User_ListUser_FullMethodName              = "/api.server.system.v1.User/ListUser"
+	User_Login_FullMethodName                 = "/api.server.system.v1.User/Login"
+	User_LoginWithValidateCode_FullMethodName = "/api.server.system.v1.User/LoginWithValidateCode"
+	User_SendValidateCode_FullMethodName      = "/api.server.system.v1.User/SendValidateCode"
 )
 
 // UserClient is the client API for User service.
@@ -372,7 +372,7 @@ func _User_SendValidateCode_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var User_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.system.v1.User",
+	ServiceName: "api.server.system.v1.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

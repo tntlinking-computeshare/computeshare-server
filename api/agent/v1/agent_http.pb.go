@@ -20,13 +20,13 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
-const OperationAgentDeleteAgent = "/api.agent.v1.Agent/DeleteAgent"
-const OperationAgentGetAgent = "/api.agent.v1.Agent/GetAgent"
-const OperationAgentListAgent = "/api.agent.v1.Agent/ListAgent"
-const OperationAgentListAgentInstance = "/api.agent.v1.Agent/ListAgentInstance"
-const OperationAgentReportInstanceStatus = "/api.agent.v1.Agent/ReportInstanceStatus"
-const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
+const OperationAgentCreateAgent = "/api.server.agent.v1.Agent/CreateAgent"
+const OperationAgentDeleteAgent = "/api.server.agent.v1.Agent/DeleteAgent"
+const OperationAgentGetAgent = "/api.server.agent.v1.Agent/GetAgent"
+const OperationAgentListAgent = "/api.server.agent.v1.Agent/ListAgent"
+const OperationAgentListAgentInstance = "/api.server.agent.v1.Agent/ListAgentInstance"
+const OperationAgentReportInstanceStatus = "/api.server.agent.v1.Agent/ReportInstanceStatus"
+const OperationAgentUpdateAgent = "/api.server.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
 	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)

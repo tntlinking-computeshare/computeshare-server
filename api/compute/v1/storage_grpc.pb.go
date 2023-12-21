@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Storage_List_FullMethodName       = "/api.compute.v1.Storage/List"
-	Storage_UploadFile_FullMethodName = "/api.compute.v1.Storage/UploadFile"
-	Storage_CreateDir_FullMethodName  = "/api.compute.v1.Storage/CreateDir"
-	Storage_Download_FullMethodName   = "/api.compute.v1.Storage/Download"
-	Storage_Delete_FullMethodName     = "/api.compute.v1.Storage/Delete"
+	Storage_List_FullMethodName       = "/api.server.compute.v1.Storage/List"
+	Storage_UploadFile_FullMethodName = "/api.server.compute.v1.Storage/UploadFile"
+	Storage_CreateDir_FullMethodName  = "/api.server.compute.v1.Storage/CreateDir"
+	Storage_Download_FullMethodName   = "/api.server.compute.v1.Storage/Download"
+	Storage_Delete_FullMethodName     = "/api.server.compute.v1.Storage/Delete"
 )
 
 // StorageClient is the client API for Storage service.
@@ -228,7 +228,7 @@ func _Storage_Delete_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Storage_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.compute.v1.Storage",
+	ServiceName: "api.server.compute.v1.Storage",
 	HandlerType: (*StorageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
