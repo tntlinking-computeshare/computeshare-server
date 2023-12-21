@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package github.com.mohaijiang.api.queue.v1;
+package api.server.queue.v1;
 
 import "google/api/annotations.proto";
 
@@ -104,6 +104,7 @@ message ComputeInstanceTaskParamVO {
   int32 gatewayPort = 10;
   string vncConnectIp = 11;
   int32 vncConnectPort = 12;
+  string docker_compose = 13;
 }
 
 message StorageSetupTaskParamVO {

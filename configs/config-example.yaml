@@ -38,11 +38,10 @@ dispose:
     s3_url_prefix: s3://
     url_prefix: http://127.0.0.1:8333/
   dh3t:
-    #用户名
     account:
-    #密码--已用MD5加密(32位小写)
     password:
-    #发送短信的url
     sendUrl:
-    #发送短信模版ID
     verificationCodeTemplateId:
+  domain:
+    vnc_host: https://vnc.computeshare.newtouch.com
+    api_host: api.computeshare.newtouch.com

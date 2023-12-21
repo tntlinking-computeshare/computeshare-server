@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ComputePower_UploadScriptFile_FullMethodName             = "/api.compute.v1.ComputePower/UploadScriptFile"
-	ComputePower_GetScriptExecutionRecordList_FullMethodName = "/api.compute.v1.ComputePower/GetScriptExecutionRecordList"
-	ComputePower_RunPythonPackage_FullMethodName             = "/api.compute.v1.ComputePower/RunPythonPackage"
-	ComputePower_CancelExecPythonPackage_FullMethodName      = "/api.compute.v1.ComputePower/CancelExecPythonPackage"
-	ComputePower_GetScriptExecutionRecordInfo_FullMethodName = "/api.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
-	ComputePower_DownloadScriptExecuteResult_FullMethodName  = "/api.compute.v1.ComputePower/DownloadScriptExecuteResult"
+	ComputePower_UploadScriptFile_FullMethodName             = "/api.server.compute.v1.ComputePower/UploadScriptFile"
+	ComputePower_GetScriptExecutionRecordList_FullMethodName = "/api.server.compute.v1.ComputePower/GetScriptExecutionRecordList"
+	ComputePower_RunPythonPackage_FullMethodName             = "/api.server.compute.v1.ComputePower/RunPythonPackage"
+	ComputePower_CancelExecPythonPackage_FullMethodName      = "/api.server.compute.v1.ComputePower/CancelExecPythonPackage"
+	ComputePower_GetScriptExecutionRecordInfo_FullMethodName = "/api.server.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
+	ComputePower_DownloadScriptExecuteResult_FullMethodName  = "/api.server.compute.v1.ComputePower/DownloadScriptExecuteResult"
 )
 
 // ComputePowerClient is the client API for ComputePower service.
@@ -273,7 +273,7 @@ func _ComputePower_DownloadScriptExecuteResult_Handler(srv interface{}, ctx cont
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ComputePower_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.compute.v1.ComputePower",
+	ServiceName: "api.server.compute.v1.ComputePower",
 	HandlerType: (*ComputePowerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

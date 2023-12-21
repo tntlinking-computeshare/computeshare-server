@@ -21,9 +21,9 @@ type AgentCreate struct {
 	hooks    []Hook
 }
 
-// SetPeerID sets the "peer_id" field.
-func (ac *AgentCreate) SetPeerID(s string) *AgentCreate {
-	ac.mutation.SetPeerID(s)
+// SetMAC sets the "mac" field.
+func (ac *AgentCreate) SetMAC(s string) *AgentCreate {
+	ac.mutation.SetMAC(s)
 	return ac
 }
 
@@ -52,6 +52,42 @@ func (ac *AgentCreate) SetNillableLastUpdateTime(t *time.Time) *AgentCreate {
 	if t != nil {
 		ac.SetLastUpdateTime(*t)
 	}
+	return ac
+}
+
+// SetHostname sets the "hostname" field.
+func (ac *AgentCreate) SetHostname(s string) *AgentCreate {
+	ac.mutation.SetHostname(s)
+	return ac
+}
+
+// SetTotalCPU sets the "total_cpu" field.
+func (ac *AgentCreate) SetTotalCPU(i int32) *AgentCreate {
+	ac.mutation.SetTotalCPU(i)
+	return ac
+}
+
+// SetTotalMemory sets the "total_memory" field.
+func (ac *AgentCreate) SetTotalMemory(i int32) *AgentCreate {
+	ac.mutation.SetTotalMemory(i)
+	return ac
+}
+
+// SetOccupiedCPU sets the "occupied_cpu" field.
+func (ac *AgentCreate) SetOccupiedCPU(i int32) *AgentCreate {
+	ac.mutation.SetOccupiedCPU(i)
+	return ac
+}
+
+// SetOccupiedMemory sets the "occupied_memory" field.
+func (ac *AgentCreate) SetOccupiedMemory(i int32) *AgentCreate {
+	ac.mutation.SetOccupiedMemory(i)
+	return ac
+}
+
+// SetIP sets the "ip" field.
+func (ac *AgentCreate) SetIP(s string) *AgentCreate {
+	ac.mutation.SetIP(s)
 	return ac
 }
 
@@ -120,12 +156,12 @@ func (ac *AgentCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (ac *AgentCreate) check() error {
-	if _, ok := ac.mutation.PeerID(); !ok {
-		return &ValidationError{Name: "peer_id", err: errors.New(`ent: missing required field "Agent.peer_id"`)}
+	if _, ok := ac.mutation.MAC(); !ok {
+		return &ValidationError{Name: "mac", err: errors.New(`ent: missing required field "Agent.mac"`)}
 	}
-	if v, ok := ac.mutation.PeerID(); ok {
-		if err := agent.PeerIDValidator(v); err != nil {
-			return &ValidationError{Name: "peer_id", err: fmt.Errorf(`ent: validator failed for field "Agent.peer_id": %w`, err)}
+	if v, ok := ac.mutation.MAC(); ok {
+		if err := agent.MACValidator(v); err != nil {
+			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
 	}
 	if _, ok := ac.mutation.Active(); !ok {
@@ -133,6 +169,24 @@ func (ac *AgentCreate) check() error {
 	}
 	if _, ok := ac.mutation.LastUpdateTime(); !ok {
 		return &ValidationError{Name: "last_update_time", err: errors.New(`ent: missing required field "Agent.last_update_time"`)}
+	}
+	if _, ok := ac.mutation.Hostname(); !ok {
+		return &ValidationError{Name: "hostname", err: errors.New(`ent: missing required field "Agent.hostname"`)}
+	}
+	if _, ok := ac.mutation.TotalCPU(); !ok {
+		return &ValidationError{Name: "total_cpu", err: errors.New(`ent: missing required field "Agent.total_cpu"`)}
+	}
+	if _, ok := ac.mutation.TotalMemory(); !ok {
+		return &ValidationError{Name: "total_memory", err: errors.New(`ent: missing required field "Agent.total_memory"`)}
+	}
+	if _, ok := ac.mutation.OccupiedCPU(); !ok {
+		return &ValidationError{Name: "occupied_cpu", err: errors.New(`ent: missing required field "Agent.occupied_cpu"`)}
+	}
+	if _, ok := ac.mutation.OccupiedMemory(); !ok {
+		return &ValidationError{Name: "occupied_memory", err: errors.New(`ent: missing required field "Agent.occupied_memory"`)}
+	}
+	if _, ok := ac.mutation.IP(); !ok {
+		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Agent.ip"`)}
 	}
 	return nil
 }
@@ -169,9 +223,9 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := ac.mutation.PeerID(); ok {
-		_spec.SetField(agent.FieldPeerID, field.TypeString, value)
-		_node.PeerID = value
+	if value, ok := ac.mutation.MAC(); ok {
+		_spec.SetField(agent.FieldMAC, field.TypeString, value)
+		_node.MAC = value
 	}
 	if value, ok := ac.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
@@ -180,6 +234,30 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 		_node.LastUpdateTime = value
+	}
+	if value, ok := ac.mutation.Hostname(); ok {
+		_spec.SetField(agent.FieldHostname, field.TypeString, value)
+		_node.Hostname = value
+	}
+	if value, ok := ac.mutation.TotalCPU(); ok {
+		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
+		_node.TotalCPU = value
+	}
+	if value, ok := ac.mutation.TotalMemory(); ok {
+		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
+		_node.TotalMemory = value
+	}
+	if value, ok := ac.mutation.OccupiedCPU(); ok {
+		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
+		_node.OccupiedCPU = value
+	}
+	if value, ok := ac.mutation.OccupiedMemory(); ok {
+		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
+		_node.OccupiedMemory = value
+	}
+	if value, ok := ac.mutation.IP(); ok {
+		_spec.SetField(agent.FieldIP, field.TypeString, value)
+		_node.IP = value
 	}
 	return _node, _spec
 }

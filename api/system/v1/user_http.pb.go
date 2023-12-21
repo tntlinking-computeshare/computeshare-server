@@ -19,15 +19,15 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserCreateUser = "/api.system.v1.User/CreateUser"
-const OperationUserGetUser = "/api.system.v1.User/GetUser"
-const OperationUserListUser = "/api.system.v1.User/ListUser"
-const OperationUserLogin = "/api.system.v1.User/Login"
-const OperationUserLoginWithValidateCode = "/api.system.v1.User/LoginWithValidateCode"
-const OperationUserSendValidateCode = "/api.system.v1.User/SendValidateCode"
-const OperationUserUpdateUser = "/api.system.v1.User/UpdateUser"
-const OperationUserUpdateUserPassword = "/api.system.v1.User/UpdateUserPassword"
-const OperationUserUpdateUserTelephone = "/api.system.v1.User/UpdateUserTelephone"
+const OperationUserCreateUser = "/api.server.system.v1.User/CreateUser"
+const OperationUserGetUser = "/api.server.system.v1.User/GetUser"
+const OperationUserListUser = "/api.server.system.v1.User/ListUser"
+const OperationUserLogin = "/api.server.system.v1.User/Login"
+const OperationUserLoginWithValidateCode = "/api.server.system.v1.User/LoginWithValidateCode"
+const OperationUserSendValidateCode = "/api.server.system.v1.User/SendValidateCode"
+const OperationUserUpdateUser = "/api.server.system.v1.User/UpdateUser"
+const OperationUserUpdateUserPassword = "/api.server.system.v1.User/UpdateUserPassword"
+const OperationUserUpdateUserTelephone = "/api.server.system.v1.User/UpdateUserTelephone"
 
 type UserHTTPServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)

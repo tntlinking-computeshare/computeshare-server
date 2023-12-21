@@ -19,12 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationComputePowerCancelExecPythonPackage = "/api.compute.v1.ComputePower/CancelExecPythonPackage"
-const OperationComputePowerDownloadScriptExecuteResult = "/api.compute.v1.ComputePower/DownloadScriptExecuteResult"
-const OperationComputePowerGetScriptExecutionRecordInfo = "/api.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
-const OperationComputePowerGetScriptExecutionRecordList = "/api.compute.v1.ComputePower/GetScriptExecutionRecordList"
-const OperationComputePowerRunPythonPackage = "/api.compute.v1.ComputePower/RunPythonPackage"
-const OperationComputePowerUploadScriptFile = "/api.compute.v1.ComputePower/UploadScriptFile"
+const OperationComputePowerCancelExecPythonPackage = "/api.server.compute.v1.ComputePower/CancelExecPythonPackage"
+const OperationComputePowerDownloadScriptExecuteResult = "/api.server.compute.v1.ComputePower/DownloadScriptExecuteResult"
+const OperationComputePowerGetScriptExecutionRecordInfo = "/api.server.compute.v1.ComputePower/GetScriptExecutionRecordInfo"
+const OperationComputePowerGetScriptExecutionRecordList = "/api.server.compute.v1.ComputePower/GetScriptExecutionRecordList"
+const OperationComputePowerRunPythonPackage = "/api.server.compute.v1.ComputePower/RunPythonPackage"
+const OperationComputePowerUploadScriptFile = "/api.server.compute.v1.ComputePower/UploadScriptFile"
 
 type ComputePowerHTTPServer interface {
 	// CancelExecPythonPackage取消执行

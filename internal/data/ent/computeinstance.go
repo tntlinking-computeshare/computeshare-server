@@ -42,8 +42,10 @@ type ComputeInstance struct {
 	// vnc 内网链接ip
 	VncIP string `json:"vnc_ip,omitempty"`
 	// vnc 内网链接端口号
-	VncPort      int32 `json:"vnc_port,omitempty"`
-	selectValues sql.SelectValues
+	VncPort int32 `json:"vnc_port,omitempty"`
+	// 初始化的docker容器
+	DockerCompose string `json:"docker_compose,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -53,7 +55,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldStatus, computeinstance.FieldVncPort:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -152,6 +154,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.VncPort = int32(value.Int64)
 			}
+		case computeinstance.FieldDockerCompose:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field docker_compose", values[i])
+			} else if value.Valid {
+				ci.DockerCompose = value.String
+			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
 		}
@@ -223,6 +231,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("vnc_port=")
 	builder.WriteString(fmt.Sprintf("%v", ci.VncPort))
+	builder.WriteString(", ")
+	builder.WriteString("docker_compose=")
+	builder.WriteString(ci.DockerCompose)
 	builder.WriteByte(')')
 	return builder.String()
 }

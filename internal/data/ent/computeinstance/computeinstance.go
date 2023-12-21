@@ -36,6 +36,8 @@ const (
 	FieldVncIP = "vnc_ip"
 	// FieldVncPort holds the string denoting the vnc_port field in the database.
 	FieldVncPort = "vnc_port"
+	// FieldDockerCompose holds the string denoting the docker_compose field in the database.
+	FieldDockerCompose = "docker_compose"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
 )
@@ -55,6 +57,7 @@ var Columns = []string{
 	FieldAgentID,
 	FieldVncIP,
 	FieldVncPort,
+	FieldDockerCompose,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -148,4 +151,9 @@ func ByVncIP(opts ...sql.OrderTermOption) OrderOption {
 // ByVncPort orders the results by the vnc_port field.
 func ByVncPort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVncPort, opts...).ToFunc()
+}
+
+// ByDockerCompose orders the results by the docker_compose field.
+func ByDockerCompose(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDockerCompose, opts...).ToFunc()
 }

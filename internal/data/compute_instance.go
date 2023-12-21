@@ -37,7 +37,7 @@ func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.
 	return lo.Map(list, csr.toBiz), err
 }
 
-func (csr *computeInstanceRepo) ListByPeerId(ctx context.Context, agentId string) ([]*biz.ComputeInstance, error) {
+func (csr *computeInstanceRepo) ListByAgentId(ctx context.Context, agentId string) ([]*biz.ComputeInstance, error) {
 	list, err := csr.data.getComputeInstance(ctx).Query().
 		Where(computeinstance.AgentIDEQ(agentId)).
 		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
@@ -59,6 +59,9 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetStatus(in.Status).
 		SetPort(in.Port).
 		SetAgentID(in.AgentId).
+		SetVncIP(in.VncIP).
+		SetVncPort(in.VncPort).
+		SetDockerCompose(in.DockerCompose).
 		Save(ctx)
 
 	if err != nil {
@@ -97,6 +100,8 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 		Status:         item.Status,
 		ContainerID:    item.ContainerID,
 		AgentId:        item.AgentID,
+		VncIP:          item.VncIP,
+		VncPort:        item.VncPort,
 	}
 }
 
@@ -156,4 +161,15 @@ func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error
 
 func (crs *computeInstanceRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error {
 	return crs.data.getComputeInstance(ctx).UpdateOneID(id).SetStatus(status).Exec(ctx)
+}
+
+func (csr *computeInstanceRepo) ListExpiration(ctx context.Context) ([]*biz.ComputeInstance, error) {
+	list, err := csr.data.getComputeInstance(ctx).Query().Where(
+		computeinstance.ExpirationTimeLT(time.Now()), computeinstance.StatusNEQ(consts.InstanceStatusExpire),
+	).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Map(list, csr.toBiz), err
 }

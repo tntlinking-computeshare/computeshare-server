@@ -14,12 +14,24 @@ const (
 	Label = "agent"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldPeerID holds the string denoting the peer_id field in the database.
-	FieldPeerID = "peer_id"
+	// FieldMAC holds the string denoting the mac field in the database.
+	FieldMAC = "mac"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
 	// FieldLastUpdateTime holds the string denoting the last_update_time field in the database.
 	FieldLastUpdateTime = "last_update_time"
+	// FieldHostname holds the string denoting the hostname field in the database.
+	FieldHostname = "hostname"
+	// FieldTotalCPU holds the string denoting the total_cpu field in the database.
+	FieldTotalCPU = "total_cpu"
+	// FieldTotalMemory holds the string denoting the total_memory field in the database.
+	FieldTotalMemory = "total_memory"
+	// FieldOccupiedCPU holds the string denoting the occupied_cpu field in the database.
+	FieldOccupiedCPU = "occupied_cpu"
+	// FieldOccupiedMemory holds the string denoting the occupied_memory field in the database.
+	FieldOccupiedMemory = "occupied_memory"
+	// FieldIP holds the string denoting the ip field in the database.
+	FieldIP = "ip"
 	// Table holds the table name of the agent in the database.
 	Table = "agents"
 )
@@ -27,9 +39,15 @@ const (
 // Columns holds all SQL columns for agent fields.
 var Columns = []string{
 	FieldID,
-	FieldPeerID,
+	FieldMAC,
 	FieldActive,
 	FieldLastUpdateTime,
+	FieldHostname,
+	FieldTotalCPU,
+	FieldTotalMemory,
+	FieldOccupiedCPU,
+	FieldOccupiedMemory,
+	FieldIP,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -43,8 +61,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// PeerIDValidator is a validator for the "peer_id" field. It is called by the builders before save.
-	PeerIDValidator func(string) error
+	// MACValidator is a validator for the "mac" field. It is called by the builders before save.
+	MACValidator func(string) error
 	// DefaultActive holds the default value on creation for the "active" field.
 	DefaultActive bool
 	// DefaultLastUpdateTime holds the default value on creation for the "last_update_time" field.
@@ -63,9 +81,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByPeerID orders the results by the peer_id field.
-func ByPeerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPeerID, opts...).ToFunc()
+// ByMAC orders the results by the mac field.
+func ByMAC(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMAC, opts...).ToFunc()
 }
 
 // ByActive orders the results by the active field.
@@ -76,4 +94,34 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 // ByLastUpdateTime orders the results by the last_update_time field.
 func ByLastUpdateTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastUpdateTime, opts...).ToFunc()
+}
+
+// ByHostname orders the results by the hostname field.
+func ByHostname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHostname, opts...).ToFunc()
+}
+
+// ByTotalCPU orders the results by the total_cpu field.
+func ByTotalCPU(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTotalCPU, opts...).ToFunc()
+}
+
+// ByTotalMemory orders the results by the total_memory field.
+func ByTotalMemory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTotalMemory, opts...).ToFunc()
+}
+
+// ByOccupiedCPU orders the results by the occupied_cpu field.
+func ByOccupiedCPU(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOccupiedCPU, opts...).ToFunc()
+}
+
+// ByOccupiedMemory orders the results by the occupied_memory field.
+func ByOccupiedMemory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOccupiedMemory, opts...).ToFunc()
+}
+
+// ByIP orders the results by the ip field.
+func ByIP(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIP, opts...).ToFunc()
 }

@@ -19,10 +19,10 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationStorageProviderCreateStorageProvider = "/api.compute.v1.StorageProvider/CreateStorageProvider"
-const OperationStorageProviderDeleteStorageProvider = "/api.compute.v1.StorageProvider/DeleteStorageProvider"
-const OperationStorageProviderGetStorageProvider = "/api.compute.v1.StorageProvider/GetStorageProvider"
-const OperationStorageProviderListStorageProvider = "/api.compute.v1.StorageProvider/ListStorageProvider"
+const OperationStorageProviderCreateStorageProvider = "/api.server.compute.v1.StorageProvider/CreateStorageProvider"
+const OperationStorageProviderDeleteStorageProvider = "/api.server.compute.v1.StorageProvider/DeleteStorageProvider"
+const OperationStorageProviderGetStorageProvider = "/api.server.compute.v1.StorageProvider/GetStorageProvider"
+const OperationStorageProviderListStorageProvider = "/api.server.compute.v1.StorageProvider/ListStorageProvider"
 
 type StorageProviderHTTPServer interface {
 	CreateStorageProvider(context.Context, *CreateStorageProviderRequest) (*CreateStorageProviderReply, error)

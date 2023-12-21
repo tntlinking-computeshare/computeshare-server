@@ -162,15 +162,19 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosing)
+			instance, err := m.computeInstanceRepo.Get(ctx, instanceId)
+			if err != nil {
+				return err
+			}
+			if instance.Status != consts.InstanceStatusExpire {
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosing)
+			}
 		case queue.TaskCmd_VM_RESTART:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRestarting)
-		case queue.TaskCmd_VM_VNC_CONNECT:
-
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_PROXY_DELETE,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
@@ -228,15 +232,19 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosed)
+			instance, err := m.computeInstanceRepo.Get(ctx, instanceId)
+			if err != nil {
+				return err
+			}
+			if instance.Status != consts.InstanceStatusExpire {
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosed)
+			}
 		case queue.TaskCmd_VM_RESTART:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
-		case queue.TaskCmd_VM_VNC_CONNECT:
-
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_VISITOR_CREATE:
 

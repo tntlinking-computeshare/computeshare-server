@@ -3,24 +3,28 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
 )
 
 type ComputeInstanceService struct {
 	pb.UnimplementedComputeInstanceServer
-	uc  *biz.ComputeInstanceUsercase
-	log *log.Helper
+	uc      *biz.ComputeInstanceUsercase
+	dispose *conf.Dispose
+	log     *log.Helper
 }
 
-func NewComputeInstanceService(uc *biz.ComputeInstanceUsercase, logger log.Logger) *ComputeInstanceService {
+func NewComputeInstanceService(uc *biz.ComputeInstanceUsercase, dispose *conf.Dispose, logger log.Logger) *ComputeInstanceService {
 	return &ComputeInstanceService{
-		uc:  uc,
-		log: log.NewHelper(logger),
+		uc:      uc,
+		log:     log.NewHelper(logger),
+		dispose: dispose,
 	}
 }
 
@@ -68,12 +72,13 @@ func (s *ComputeInstanceService) ListComputeInstanceDuration(ctx context.Context
 }
 func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInstanceRequest) (*pb.CreateInstanceReply, error) {
 	instance, err := s.uc.Create(ctx, &biz.ComputeInstanceCreate{
-		SpecId:    req.GetSpecId(),
-		ImageId:   req.GetImageId(),
-		Duration:  req.Duration,
-		Name:      req.Name,
-		PublicKey: req.PublicKey,
-		Password:  req.Password,
+		SpecId:        req.GetSpecId(),
+		ImageId:       req.GetImageId(),
+		Duration:      req.Duration,
+		Name:          req.Name,
+		PublicKey:     req.PublicKey,
+		Password:      req.Password,
+		DockerCompose: req.DockerCompose,
 	})
 
 	if err != nil {
@@ -173,21 +178,12 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 	}
 }
 
-func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceConsoleReply, error) {
-	instanceId, err := uuid.Parse(req.Id)
+func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, id string, userId string) (string, error) {
+	instanceId, err := uuid.Parse(id)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	consoleUrl, err := s.uc.GetVncConsole(ctx, instanceId)
-	if err != nil {
-		return nil, err
-	}
-
-	return &pb.GetInstanceConsoleReply{
-		Code:    200,
-		Message: SUCCESS,
-		Data:    consoleUrl,
-	}, nil
+	return s.uc.GetVncConsole(ctx, instanceId, userId)
 }
 
 func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
@@ -203,5 +199,13 @@ func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.Ge
 	return &pb.CommonReply{
 		Code:    200,
 		Message: SUCCESS,
+	}, nil
+}
+
+func (s *ComputeInstanceService) GetInstanceVncURL(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceVncURLReply, error) {
+	return &pb.GetInstanceVncURLReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    fmt.Sprintf("%s/vnc_lite.html?host=%s&instanceId=%s", s.dispose.Domain.VncHost, s.dispose.Domain.ApiHost, req.GetId()),
 	}, nil
 }

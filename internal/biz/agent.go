@@ -9,20 +9,35 @@ import (
 )
 
 type Agent struct {
-	ID             uuid.UUID
-	PeerId         string
-	Active         bool
-	LastUpdateTime time.Time
+	ID uuid.UUID `json:"id,omitempty"`
+	// mac 网卡地址
+	MAC string `json:"mac,omitempty"`
+	// 是否活动
+	Active bool `json:"active,omitempty"`
+	// 最后更新时间
+	LastUpdateTime time.Time `json:"last_update_time,omitempty"`
+	// 主机名
+	Hostname string `json:"hostname,omitempty"`
+	// 总cpu数
+	TotalCPU int32 `json:"total_cpu,omitempty"`
+	// 总内存数
+	TotalMemory int32 `json:"total_memory,omitempty"`
+	// 占用的cpu
+	OccupiedCPU int32 `json:"occupied_cpu,omitempty"`
+	// 占用的内存
+	OccupiedMemory int32 `json:"occupied_memory,omitempty"`
+	// ip地址
+	IP string `json:"ip,omitempty"`
 }
 
 type AgentRepo interface {
-	//db
 	ListAgent(ctx context.Context) ([]*Agent, error)
 	GetAgent(ctx context.Context, id uuid.UUID) (*Agent, error)
 	CreateAgent(ctx context.Context, agent *Agent) error
 	UpdateAgent(ctx context.Context, id uuid.UUID, agent *Agent) error
+	UpdateAgentStatus(ctx context.Context, id uuid.UUID, status bool) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
-	FindByPeerId(ctx context.Context, peerId string) (*Agent, error)
+	FindByMac(ctx context.Context, mac string) (*Agent, error)
 	FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error)
 }
 
@@ -57,7 +72,7 @@ func (uc *AgentUsecase) Get(ctx context.Context, id uuid.UUID) (p *Agent, err er
 }
 
 func (uc *AgentUsecase) Create(ctx context.Context, agent *Agent) (uuid.UUID, error) {
-	entity, err := uc.repo.FindByPeerId(ctx, agent.PeerId)
+	entity, err := uc.repo.FindByMac(ctx, agent.MAC)
 	if err != nil {
 		err := uc.repo.CreateAgent(ctx, agent)
 		return agent.ID, err
@@ -75,10 +90,6 @@ func (uc *AgentUsecase) Delete(ctx context.Context, id uuid.UUID) error {
 	return uc.repo.DeleteAgent(ctx, id)
 }
 
-func (uc *AgentUsecase) FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error) {
-	return uc.repo.FindOneActiveAgent(ctx, cpu, memory)
-}
-
 func (s *AgentUsecase) SyncAgentStatus() {
 	ctx := context.Background()
 	list, err := s.List(ctx)
@@ -90,23 +101,10 @@ func (s *AgentUsecase) SyncAgentStatus() {
 	// TODO ...
 	fmt.Println(list)
 
-	//for _, ag := range list {
-	//	err := s.p2pClient.CheckForwardHealth("/x/ssh", ag.PeerId)
-	//	if err != nil {
-	//		s.log.Warnf("agent %s cannot connect.", ag.PeerId)
-	//		ag.Active = false
-	//		_ = s.Update(ctx, ag.ID, ag)
-	//	} else {
-	//		ag.Active = true
-	//		log.Infof("agent %s check connect success.", ag.PeerId)
-	//		_ = s.Update(ctx, ag.ID, ag)
-	//	}
-	//
-	//}
 }
 
 func (uc *AgentUsecase) ListAgentInstance(ctx context.Context, peerId string) ([]*ComputeInstance, error) {
-	return uc.instanceRepo.ListByPeerId(ctx, peerId)
+	return uc.instanceRepo.ListByAgentId(ctx, peerId)
 }
 
 func (uc *AgentUsecase) ReportInstanceStatus(ctx context.Context, instance *ComputeInstance) error {

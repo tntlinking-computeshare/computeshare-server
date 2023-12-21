@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	NetworkMapping_CreateNetworkMapping_FullMethodName = "/api.network_mapping.v1.NetworkMapping/CreateNetworkMapping"
-	NetworkMapping_PageNetworkMapping_FullMethodName   = "/api.network_mapping.v1.NetworkMapping/PageNetworkMapping"
-	NetworkMapping_NextNetworkMapping_FullMethodName   = "/api.network_mapping.v1.NetworkMapping/NextNetworkMapping"
-	NetworkMapping_GetNetworkMapping_FullMethodName    = "/api.network_mapping.v1.NetworkMapping/GetNetworkMapping"
-	NetworkMapping_DeleteNetworkMapping_FullMethodName = "/api.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
+	NetworkMapping_CreateNetworkMapping_FullMethodName = "/api.server.network_mapping.v1.NetworkMapping/CreateNetworkMapping"
+	NetworkMapping_PageNetworkMapping_FullMethodName   = "/api.server.network_mapping.v1.NetworkMapping/PageNetworkMapping"
+	NetworkMapping_NextNetworkMapping_FullMethodName   = "/api.server.network_mapping.v1.NetworkMapping/NextNetworkMapping"
+	NetworkMapping_GetNetworkMapping_FullMethodName    = "/api.server.network_mapping.v1.NetworkMapping/GetNetworkMapping"
+	NetworkMapping_DeleteNetworkMapping_FullMethodName = "/api.server.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
 )
 
 // NetworkMappingClient is the client API for NetworkMapping service.
@@ -228,7 +228,7 @@ func _NetworkMapping_DeleteNetworkMapping_Handler(srv interface{}, ctx context.C
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NetworkMapping_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.network_mapping.v1.NetworkMapping",
+	ServiceName: "api.server.network_mapping.v1.NetworkMapping",
 	HandlerType: (*NetworkMappingServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

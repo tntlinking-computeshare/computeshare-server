@@ -110,15 +110,15 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32, userId 
 	if err != nil {
 		return nil, err
 	}
-	go uc.RunPythonPackageOnAgent(agent.PeerId, save)
+	go uc.RunPythonPackageOnAgent(agent.MAC, save)
 
 	return save, nil
 }
 
-func (uc *ScriptUseCase) RunPythonPackageOnAgent(peerId string, record *ScriptExecutionRecord) {
+func (uc *ScriptUseCase) RunPythonPackageOnAgent(mac string, record *ScriptExecutionRecord) {
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
 
-	computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(peerId)
+	computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(mac)
 	if err != nil {
 		uc.log.Error("创建ComputePowerHTTPClient链接失败")
 		uc.log.Error(err)

@@ -32,10 +32,10 @@ import (
 func init() {
 	agentFields := schema.Agent{}.Fields()
 	_ = agentFields
-	// agentDescPeerID is the schema descriptor for peer_id field.
-	agentDescPeerID := agentFields[1].Descriptor()
-	// agent.PeerIDValidator is a validator for the "peer_id" field. It is called by the builders before save.
-	agent.PeerIDValidator = agentDescPeerID.Validators[0].(func(string) error)
+	// agentDescMAC is the schema descriptor for mac field.
+	agentDescMAC := agentFields[1].Descriptor()
+	// agent.MACValidator is a validator for the "mac" field. It is called by the builders before save.
+	agent.MACValidator = agentDescMAC.Validators[0].(func(string) error)
 	// agentDescActive is the schema descriptor for active field.
 	agentDescActive := agentFields[2].Descriptor()
 	// agent.DefaultActive holds the default value on creation for the active field.

@@ -34,8 +34,14 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 	s.log.Infof("input data %v", req)
 
 	agent := biz.Agent{
-		PeerId: req.GetName(),
-		Active: true,
+		MAC:            req.Mac,
+		Hostname:       req.Hostname,
+		TotalCPU:       req.TotalCpu,
+		TotalMemory:    req.TotalMemory,
+		OccupiedCPU:    req.OccupiedCpu,
+		OccupiedMemory: req.OccupiedMemory,
+		IP:             req.Ip,
+		Active:         true,
 	}
 	id, err := s.uc.Create(ctx, &agent)
 	return &pb.CreateAgentReply{
@@ -46,14 +52,14 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 		},
 	}, err
 }
-func (s *AgentService) UpdateAgent(ctx context.Context, req *pb.UpdateAgentRequest) (*pb.UpdateAgentReply, error) {
+func (s *AgentService) UpdateAgent(_ context.Context, req *pb.UpdateAgentRequest) (*pb.UpdateAgentReply, error) {
 	s.log.Infof("input data %v", req)
 	return &pb.UpdateAgentReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, nil
 }
-func (s *AgentService) DeleteAgent(ctx context.Context, req *pb.DeleteAgentRequest) (*pb.DeleteAgentReply, error) {
+func (s *AgentService) DeleteAgent(_ context.Context, req *pb.DeleteAgentRequest) (*pb.DeleteAgentReply, error) {
 	s.log.Infof("input data %v", req)
 	return &pb.DeleteAgentReply{
 		Code:    200,
@@ -71,12 +77,12 @@ func (s *AgentService) GetAgent(ctx context.Context, req *pb.GetAgentRequest) (*
 		Code:    200,
 		Message: SUCCESS,
 		Data: &pb.AgentReply{
-			Id:   agent.ID.String(),
-			Name: agent.PeerId,
+			Id:  agent.ID.String(),
+			MAC: agent.MAC,
 		},
 	}, err
 }
-func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) (*pb.ListAgentReply, error) {
+func (s *AgentService) ListAgent(_ context.Context, _ *pb.ListAgentRequest) (*pb.ListAgentReply, error) {
 	return &pb.ListAgentReply{
 		Code:    200,
 		Message: SUCCESS,
@@ -84,7 +90,7 @@ func (s *AgentService) ListAgent(ctx context.Context, req *pb.ListAgentRequest) 
 }
 
 func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentInstanceReq) (*computepb.ListInstanceReply, error) {
-	result, err := s.uc.ListAgentInstance(ctx, req.PeerId)
+	result, err := s.uc.ListAgentInstance(ctx, req.Mac)
 	return &computepb.ListInstanceReply{
 		Code:    200,
 		Message: SUCCESS,
@@ -98,7 +104,6 @@ func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentI
 				Core:           item.Core,
 				Memory:         item.Memory,
 				ContainerId:    item.ContainerID,
-				Command:        item.Command,
 			}
 		}),
 	}, err
@@ -112,8 +117,7 @@ func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.
 	instance := &biz.ComputeInstance{
 		ID:          id,
 		ContainerID: req.ContainerId,
-		AgentId:     req.PeerId,
-		Command:     req.Command,
+		AgentId:     req.AgentId,
 		Status:      consts.InstanceStatus(req.Status),
 	}
 	err = s.uc.ReportInstanceStatus(ctx, instance)

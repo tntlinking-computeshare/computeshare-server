@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	QueueTask_GetAgentTask_FullMethodName    = "/github.com.mohaijiang.api.queue.v1.QueueTask/GetAgentTask"
-	QueueTask_UpdateAgentTask_FullMethodName = "/github.com.mohaijiang.api.queue.v1.QueueTask/UpdateAgentTask"
+	QueueTask_GetAgentTask_FullMethodName    = "/api.server.queue.v1.QueueTask/GetAgentTask"
+	QueueTask_UpdateAgentTask_FullMethodName = "/api.server.queue.v1.QueueTask/UpdateAgentTask"
 )
 
 // QueueTaskClient is the client API for QueueTask service.
@@ -133,7 +133,7 @@ func _QueueTask_UpdateAgentTask_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var QueueTask_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "github.com.mohaijiang.api.queue.v1.QueueTask",
+	ServiceName: "api.server.queue.v1.QueueTask",
 	HandlerType: (*QueueTaskServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StorageProvider_CreateStorageProvider_FullMethodName = "/api.compute.v1.StorageProvider/CreateStorageProvider"
-	StorageProvider_DeleteStorageProvider_FullMethodName = "/api.compute.v1.StorageProvider/DeleteStorageProvider"
-	StorageProvider_GetStorageProvider_FullMethodName    = "/api.compute.v1.StorageProvider/GetStorageProvider"
-	StorageProvider_ListStorageProvider_FullMethodName   = "/api.compute.v1.StorageProvider/ListStorageProvider"
+	StorageProvider_CreateStorageProvider_FullMethodName = "/api.server.compute.v1.StorageProvider/CreateStorageProvider"
+	StorageProvider_DeleteStorageProvider_FullMethodName = "/api.server.compute.v1.StorageProvider/DeleteStorageProvider"
+	StorageProvider_GetStorageProvider_FullMethodName    = "/api.server.compute.v1.StorageProvider/GetStorageProvider"
+	StorageProvider_ListStorageProvider_FullMethodName   = "/api.server.compute.v1.StorageProvider/ListStorageProvider"
 )
 
 // StorageProviderClient is the client API for StorageProvider service.
@@ -195,7 +195,7 @@ func _StorageProvider_ListStorageProvider_Handler(srv interface{}, ctx context.C
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var StorageProvider_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.compute.v1.StorageProvider",
+	ServiceName: "api.server.compute.v1.StorageProvider",
 	HandlerType: (*StorageProviderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

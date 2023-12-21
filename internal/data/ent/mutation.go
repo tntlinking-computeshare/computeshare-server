@@ -64,16 +64,26 @@ const (
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
 type AgentMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	peer_id          *string
-	active           *bool
-	last_update_time *time.Time
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*Agent, error)
-	predicates       []predicate.Agent
+	op                 Op
+	typ                string
+	id                 *uuid.UUID
+	mac                *string
+	active             *bool
+	last_update_time   *time.Time
+	hostname           *string
+	total_cpu          *int32
+	addtotal_cpu       *int32
+	total_memory       *int32
+	addtotal_memory    *int32
+	occupied_cpu       *int32
+	addoccupied_cpu    *int32
+	occupied_memory    *int32
+	addoccupied_memory *int32
+	ip                 *string
+	clearedFields      map[string]struct{}
+	done               bool
+	oldValue           func(context.Context) (*Agent, error)
+	predicates         []predicate.Agent
 }
 
 var _ ent.Mutation = (*AgentMutation)(nil)
@@ -180,40 +190,40 @@ func (m *AgentMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	}
 }
 
-// SetPeerID sets the "peer_id" field.
-func (m *AgentMutation) SetPeerID(s string) {
-	m.peer_id = &s
+// SetMAC sets the "mac" field.
+func (m *AgentMutation) SetMAC(s string) {
+	m.mac = &s
 }
 
-// PeerID returns the value of the "peer_id" field in the mutation.
-func (m *AgentMutation) PeerID() (r string, exists bool) {
-	v := m.peer_id
+// MAC returns the value of the "mac" field in the mutation.
+func (m *AgentMutation) MAC() (r string, exists bool) {
+	v := m.mac
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldPeerID returns the old "peer_id" field's value of the Agent entity.
+// OldMAC returns the old "mac" field's value of the Agent entity.
 // If the Agent object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AgentMutation) OldPeerID(ctx context.Context) (v string, err error) {
+func (m *AgentMutation) OldMAC(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPeerID is only allowed on UpdateOne operations")
+		return v, errors.New("OldMAC is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPeerID requires an ID field in the mutation")
+		return v, errors.New("OldMAC requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPeerID: %w", err)
+		return v, fmt.Errorf("querying old value for OldMAC: %w", err)
 	}
-	return oldValue.PeerID, nil
+	return oldValue.MAC, nil
 }
 
-// ResetPeerID resets all changes to the "peer_id" field.
-func (m *AgentMutation) ResetPeerID() {
-	m.peer_id = nil
+// ResetMAC resets all changes to the "mac" field.
+func (m *AgentMutation) ResetMAC() {
+	m.mac = nil
 }
 
 // SetActive sets the "active" field.
@@ -288,6 +298,302 @@ func (m *AgentMutation) ResetLastUpdateTime() {
 	m.last_update_time = nil
 }
 
+// SetHostname sets the "hostname" field.
+func (m *AgentMutation) SetHostname(s string) {
+	m.hostname = &s
+}
+
+// Hostname returns the value of the "hostname" field in the mutation.
+func (m *AgentMutation) Hostname() (r string, exists bool) {
+	v := m.hostname
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHostname returns the old "hostname" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldHostname(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHostname is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHostname requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHostname: %w", err)
+	}
+	return oldValue.Hostname, nil
+}
+
+// ResetHostname resets all changes to the "hostname" field.
+func (m *AgentMutation) ResetHostname() {
+	m.hostname = nil
+}
+
+// SetTotalCPU sets the "total_cpu" field.
+func (m *AgentMutation) SetTotalCPU(i int32) {
+	m.total_cpu = &i
+	m.addtotal_cpu = nil
+}
+
+// TotalCPU returns the value of the "total_cpu" field in the mutation.
+func (m *AgentMutation) TotalCPU() (r int32, exists bool) {
+	v := m.total_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTotalCPU returns the old "total_cpu" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldTotalCPU(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTotalCPU is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTotalCPU requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTotalCPU: %w", err)
+	}
+	return oldValue.TotalCPU, nil
+}
+
+// AddTotalCPU adds i to the "total_cpu" field.
+func (m *AgentMutation) AddTotalCPU(i int32) {
+	if m.addtotal_cpu != nil {
+		*m.addtotal_cpu += i
+	} else {
+		m.addtotal_cpu = &i
+	}
+}
+
+// AddedTotalCPU returns the value that was added to the "total_cpu" field in this mutation.
+func (m *AgentMutation) AddedTotalCPU() (r int32, exists bool) {
+	v := m.addtotal_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTotalCPU resets all changes to the "total_cpu" field.
+func (m *AgentMutation) ResetTotalCPU() {
+	m.total_cpu = nil
+	m.addtotal_cpu = nil
+}
+
+// SetTotalMemory sets the "total_memory" field.
+func (m *AgentMutation) SetTotalMemory(i int32) {
+	m.total_memory = &i
+	m.addtotal_memory = nil
+}
+
+// TotalMemory returns the value of the "total_memory" field in the mutation.
+func (m *AgentMutation) TotalMemory() (r int32, exists bool) {
+	v := m.total_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTotalMemory returns the old "total_memory" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldTotalMemory(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTotalMemory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTotalMemory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTotalMemory: %w", err)
+	}
+	return oldValue.TotalMemory, nil
+}
+
+// AddTotalMemory adds i to the "total_memory" field.
+func (m *AgentMutation) AddTotalMemory(i int32) {
+	if m.addtotal_memory != nil {
+		*m.addtotal_memory += i
+	} else {
+		m.addtotal_memory = &i
+	}
+}
+
+// AddedTotalMemory returns the value that was added to the "total_memory" field in this mutation.
+func (m *AgentMutation) AddedTotalMemory() (r int32, exists bool) {
+	v := m.addtotal_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTotalMemory resets all changes to the "total_memory" field.
+func (m *AgentMutation) ResetTotalMemory() {
+	m.total_memory = nil
+	m.addtotal_memory = nil
+}
+
+// SetOccupiedCPU sets the "occupied_cpu" field.
+func (m *AgentMutation) SetOccupiedCPU(i int32) {
+	m.occupied_cpu = &i
+	m.addoccupied_cpu = nil
+}
+
+// OccupiedCPU returns the value of the "occupied_cpu" field in the mutation.
+func (m *AgentMutation) OccupiedCPU() (r int32, exists bool) {
+	v := m.occupied_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOccupiedCPU returns the old "occupied_cpu" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldOccupiedCPU(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOccupiedCPU is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOccupiedCPU requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOccupiedCPU: %w", err)
+	}
+	return oldValue.OccupiedCPU, nil
+}
+
+// AddOccupiedCPU adds i to the "occupied_cpu" field.
+func (m *AgentMutation) AddOccupiedCPU(i int32) {
+	if m.addoccupied_cpu != nil {
+		*m.addoccupied_cpu += i
+	} else {
+		m.addoccupied_cpu = &i
+	}
+}
+
+// AddedOccupiedCPU returns the value that was added to the "occupied_cpu" field in this mutation.
+func (m *AgentMutation) AddedOccupiedCPU() (r int32, exists bool) {
+	v := m.addoccupied_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOccupiedCPU resets all changes to the "occupied_cpu" field.
+func (m *AgentMutation) ResetOccupiedCPU() {
+	m.occupied_cpu = nil
+	m.addoccupied_cpu = nil
+}
+
+// SetOccupiedMemory sets the "occupied_memory" field.
+func (m *AgentMutation) SetOccupiedMemory(i int32) {
+	m.occupied_memory = &i
+	m.addoccupied_memory = nil
+}
+
+// OccupiedMemory returns the value of the "occupied_memory" field in the mutation.
+func (m *AgentMutation) OccupiedMemory() (r int32, exists bool) {
+	v := m.occupied_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOccupiedMemory returns the old "occupied_memory" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldOccupiedMemory(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOccupiedMemory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOccupiedMemory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOccupiedMemory: %w", err)
+	}
+	return oldValue.OccupiedMemory, nil
+}
+
+// AddOccupiedMemory adds i to the "occupied_memory" field.
+func (m *AgentMutation) AddOccupiedMemory(i int32) {
+	if m.addoccupied_memory != nil {
+		*m.addoccupied_memory += i
+	} else {
+		m.addoccupied_memory = &i
+	}
+}
+
+// AddedOccupiedMemory returns the value that was added to the "occupied_memory" field in this mutation.
+func (m *AgentMutation) AddedOccupiedMemory() (r int32, exists bool) {
+	v := m.addoccupied_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetOccupiedMemory resets all changes to the "occupied_memory" field.
+func (m *AgentMutation) ResetOccupiedMemory() {
+	m.occupied_memory = nil
+	m.addoccupied_memory = nil
+}
+
+// SetIP sets the "ip" field.
+func (m *AgentMutation) SetIP(s string) {
+	m.ip = &s
+}
+
+// IP returns the value of the "ip" field in the mutation.
+func (m *AgentMutation) IP() (r string, exists bool) {
+	v := m.ip
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIP returns the old "ip" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldIP(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIP is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIP requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIP: %w", err)
+	}
+	return oldValue.IP, nil
+}
+
+// ResetIP resets all changes to the "ip" field.
+func (m *AgentMutation) ResetIP() {
+	m.ip = nil
+}
+
 // Where appends a list predicates to the AgentMutation builder.
 func (m *AgentMutation) Where(ps ...predicate.Agent) {
 	m.predicates = append(m.predicates, ps...)
@@ -322,15 +628,33 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 3)
-	if m.peer_id != nil {
-		fields = append(fields, agent.FieldPeerID)
+	fields := make([]string, 0, 9)
+	if m.mac != nil {
+		fields = append(fields, agent.FieldMAC)
 	}
 	if m.active != nil {
 		fields = append(fields, agent.FieldActive)
 	}
 	if m.last_update_time != nil {
 		fields = append(fields, agent.FieldLastUpdateTime)
+	}
+	if m.hostname != nil {
+		fields = append(fields, agent.FieldHostname)
+	}
+	if m.total_cpu != nil {
+		fields = append(fields, agent.FieldTotalCPU)
+	}
+	if m.total_memory != nil {
+		fields = append(fields, agent.FieldTotalMemory)
+	}
+	if m.occupied_cpu != nil {
+		fields = append(fields, agent.FieldOccupiedCPU)
+	}
+	if m.occupied_memory != nil {
+		fields = append(fields, agent.FieldOccupiedMemory)
+	}
+	if m.ip != nil {
+		fields = append(fields, agent.FieldIP)
 	}
 	return fields
 }
@@ -340,12 +664,24 @@ func (m *AgentMutation) Fields() []string {
 // schema.
 func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case agent.FieldPeerID:
-		return m.PeerID()
+	case agent.FieldMAC:
+		return m.MAC()
 	case agent.FieldActive:
 		return m.Active()
 	case agent.FieldLastUpdateTime:
 		return m.LastUpdateTime()
+	case agent.FieldHostname:
+		return m.Hostname()
+	case agent.FieldTotalCPU:
+		return m.TotalCPU()
+	case agent.FieldTotalMemory:
+		return m.TotalMemory()
+	case agent.FieldOccupiedCPU:
+		return m.OccupiedCPU()
+	case agent.FieldOccupiedMemory:
+		return m.OccupiedMemory()
+	case agent.FieldIP:
+		return m.IP()
 	}
 	return nil, false
 }
@@ -355,12 +691,24 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case agent.FieldPeerID:
-		return m.OldPeerID(ctx)
+	case agent.FieldMAC:
+		return m.OldMAC(ctx)
 	case agent.FieldActive:
 		return m.OldActive(ctx)
 	case agent.FieldLastUpdateTime:
 		return m.OldLastUpdateTime(ctx)
+	case agent.FieldHostname:
+		return m.OldHostname(ctx)
+	case agent.FieldTotalCPU:
+		return m.OldTotalCPU(ctx)
+	case agent.FieldTotalMemory:
+		return m.OldTotalMemory(ctx)
+	case agent.FieldOccupiedCPU:
+		return m.OldOccupiedCPU(ctx)
+	case agent.FieldOccupiedMemory:
+		return m.OldOccupiedMemory(ctx)
+	case agent.FieldIP:
+		return m.OldIP(ctx)
 	}
 	return nil, fmt.Errorf("unknown Agent field %s", name)
 }
@@ -370,12 +718,12 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *AgentMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case agent.FieldPeerID:
+	case agent.FieldMAC:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetPeerID(v)
+		m.SetMAC(v)
 		return nil
 	case agent.FieldActive:
 		v, ok := value.(bool)
@@ -391,6 +739,48 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLastUpdateTime(v)
 		return nil
+	case agent.FieldHostname:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHostname(v)
+		return nil
+	case agent.FieldTotalCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTotalCPU(v)
+		return nil
+	case agent.FieldTotalMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTotalMemory(v)
+		return nil
+	case agent.FieldOccupiedCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOccupiedCPU(v)
+		return nil
+	case agent.FieldOccupiedMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOccupiedMemory(v)
+		return nil
+	case agent.FieldIP:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIP(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
 }
@@ -398,13 +788,36 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *AgentMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addtotal_cpu != nil {
+		fields = append(fields, agent.FieldTotalCPU)
+	}
+	if m.addtotal_memory != nil {
+		fields = append(fields, agent.FieldTotalMemory)
+	}
+	if m.addoccupied_cpu != nil {
+		fields = append(fields, agent.FieldOccupiedCPU)
+	}
+	if m.addoccupied_memory != nil {
+		fields = append(fields, agent.FieldOccupiedMemory)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *AgentMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case agent.FieldTotalCPU:
+		return m.AddedTotalCPU()
+	case agent.FieldTotalMemory:
+		return m.AddedTotalMemory()
+	case agent.FieldOccupiedCPU:
+		return m.AddedOccupiedCPU()
+	case agent.FieldOccupiedMemory:
+		return m.AddedOccupiedMemory()
+	}
 	return nil, false
 }
 
@@ -413,6 +826,34 @@ func (m *AgentMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *AgentMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case agent.FieldTotalCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTotalCPU(v)
+		return nil
+	case agent.FieldTotalMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTotalMemory(v)
+		return nil
+	case agent.FieldOccupiedCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOccupiedCPU(v)
+		return nil
+	case agent.FieldOccupiedMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddOccupiedMemory(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Agent numeric field %s", name)
 }
@@ -440,14 +881,32 @@ func (m *AgentMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *AgentMutation) ResetField(name string) error {
 	switch name {
-	case agent.FieldPeerID:
-		m.ResetPeerID()
+	case agent.FieldMAC:
+		m.ResetMAC()
 		return nil
 	case agent.FieldActive:
 		m.ResetActive()
 		return nil
 	case agent.FieldLastUpdateTime:
 		m.ResetLastUpdateTime()
+		return nil
+	case agent.FieldHostname:
+		m.ResetHostname()
+		return nil
+	case agent.FieldTotalCPU:
+		m.ResetTotalCPU()
+		return nil
+	case agent.FieldTotalMemory:
+		m.ResetTotalMemory()
+		return nil
+	case agent.FieldOccupiedCPU:
+		m.ResetOccupiedCPU()
+		return nil
+	case agent.FieldOccupiedMemory:
+		m.ResetOccupiedMemory()
+		return nil
+	case agent.FieldIP:
+		m.ResetIP()
 		return nil
 	}
 	return fmt.Errorf("unknown Agent field %s", name)
@@ -1105,6 +1564,7 @@ type ComputeInstanceMutation struct {
 	vnc_ip          *string
 	vnc_port        *int32
 	addvnc_port     *int32
+	docker_compose  *string
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -1726,6 +2186,42 @@ func (m *ComputeInstanceMutation) ResetVncPort() {
 	m.addvnc_port = nil
 }
 
+// SetDockerCompose sets the "docker_compose" field.
+func (m *ComputeInstanceMutation) SetDockerCompose(s string) {
+	m.docker_compose = &s
+}
+
+// DockerCompose returns the value of the "docker_compose" field in the mutation.
+func (m *ComputeInstanceMutation) DockerCompose() (r string, exists bool) {
+	v := m.docker_compose
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDockerCompose returns the old "docker_compose" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldDockerCompose(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDockerCompose is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDockerCompose requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDockerCompose: %w", err)
+	}
+	return oldValue.DockerCompose, nil
+}
+
+// ResetDockerCompose resets all changes to the "docker_compose" field.
+func (m *ComputeInstanceMutation) ResetDockerCompose() {
+	m.docker_compose = nil
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -1760,7 +2256,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -1797,6 +2293,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.vnc_port != nil {
 		fields = append(fields, computeinstance.FieldVncPort)
 	}
+	if m.docker_compose != nil {
+		fields = append(fields, computeinstance.FieldDockerCompose)
+	}
 	return fields
 }
 
@@ -1829,6 +2328,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.VncIP()
 	case computeinstance.FieldVncPort:
 		return m.VncPort()
+	case computeinstance.FieldDockerCompose:
+		return m.DockerCompose()
 	}
 	return nil, false
 }
@@ -1862,6 +2363,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldVncIP(ctx)
 	case computeinstance.FieldVncPort:
 		return m.OldVncPort(ctx)
+	case computeinstance.FieldDockerCompose:
+		return m.OldDockerCompose(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -1954,6 +2457,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetVncPort(v)
+		return nil
+	case computeinstance.FieldDockerCompose:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDockerCompose(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -2087,6 +2597,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldVncPort:
 		m.ResetVncPort()
+		return nil
+	case computeinstance.FieldDockerCompose:
+		m.ResetDockerCompose()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)

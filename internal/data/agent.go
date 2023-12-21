@@ -42,8 +42,16 @@ func (ar *agentRepo) GetAgent(ctx context.Context, id uuid.UUID) (*biz.Agent, er
 func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
 	result, err := ar.data.getAgent(ctx).
 		Create().
-		SetPeerID(agent.PeerId).
+		SetHostname(agent.Hostname).
+		SetMAC(agent.MAC).
+		SetLastUpdateTime(time.Now()).
+		SetIP(agent.IP).
+		SetTotalCPU(agent.TotalCPU).
+		SetTotalMemory(agent.TotalMemory).
+		SetOccupiedCPU(agent.OccupiedCPU).
+		SetOccupiedMemory(agent.OccupiedMemory).
 		SetActive(agent.Active).
+		SetIP(agent.IP).
 		Save(ctx)
 	if err != nil {
 		return err
@@ -54,14 +62,28 @@ func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
 }
 
 func (ar *agentRepo) UpdateAgent(ctx context.Context, id uuid.UUID, agent *biz.Agent) error {
-	p, err := ar.data.getAgent(ctx).Get(ctx, id)
-	if err != nil {
-		return err
-	}
-	_, err = p.Update().
+	_, err := ar.data.getAgent(ctx).UpdateOneID(id).
+		SetHostname(agent.Hostname).
+		SetMAC(agent.MAC).
+		SetLastUpdateTime(time.Now()).
+		SetIP(agent.IP).
+		SetTotalCPU(agent.TotalCPU).
+		SetTotalMemory(agent.TotalMemory).
+		SetOccupiedCPU(agent.OccupiedCPU).
+		SetOccupiedMemory(agent.OccupiedMemory).
 		SetActive(agent.Active).
+		SetIP(agent.IP).
+		Save(ctx)
+	return err
+}
+
+func (ar *agentRepo) UpdateAgentStatus(ctx context.Context, id uuid.UUID, status bool) error {
+
+	_, err := ar.data.getAgent(ctx).UpdateOneID(id).
+		SetActive(status).
 		SetLastUpdateTime(time.Now()).
 		Save(ctx)
+
 	return err
 }
 
@@ -69,9 +91,9 @@ func (ar *agentRepo) DeleteAgent(ctx context.Context, id uuid.UUID) error {
 	return ar.data.getAgent(ctx).DeleteOneID(id).Exec(ctx)
 }
 
-func (ar *agentRepo) FindByPeerId(ctx context.Context, peerId string) (*biz.Agent, error) {
+func (ar *agentRepo) FindByMac(ctx context.Context, mac string) (*biz.Agent, error) {
 
-	p, err := ar.data.getAgent(ctx).Query().Where(agent.PeerIDEQ(peerId)).First(ctx)
+	p, err := ar.data.getAgent(ctx).Query().Where(agent.MACEQ(mac)).First(ctx)
 
 	return ar.toBiz(p, 0), err
 }
@@ -81,8 +103,19 @@ func (ar *agentRepo) toBiz(p *ent.Agent, _ int) *biz.Agent {
 		return &biz.Agent{}
 	}
 	return &biz.Agent{
-		ID:             p.ID,
-		PeerId:         p.PeerID,
+		ID:       p.ID,
+		MAC:      p.MAC,
+		Hostname: p.Hostname,
+		// 总cpu数
+		TotalCPU: p.TotalCPU,
+		// 总内存数
+		TotalMemory: p.TotalMemory,
+		// 占用的cpu
+		OccupiedCPU: p.OccupiedCPU,
+		// 占用的内存
+		OccupiedMemory: p.OccupiedMemory,
+		// ip地址
+		IP:             p.IP,
 		Active:         p.Active,
 		LastUpdateTime: p.LastUpdateTime,
 	}

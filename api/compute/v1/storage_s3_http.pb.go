@@ -19,17 +19,17 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationStorageS3CreateBucket = "/api.compute.v1.StorageS3/CreateBucket"
-const OperationStorageS3CreateS3Key = "/api.compute.v1.StorageS3/CreateS3Key"
-const OperationStorageS3DeleteBucket = "/api.compute.v1.StorageS3/DeleteBucket"
-const OperationStorageS3EmptyBucket = "/api.compute.v1.StorageS3/EmptyBucket"
-const OperationStorageS3GetUserS3User = "/api.compute.v1.StorageS3/GetUserS3User"
-const OperationStorageS3ListBucket = "/api.compute.v1.StorageS3/ListBucket"
-const OperationStorageS3S3StorageDelete = "/api.compute.v1.StorageS3/S3StorageDelete"
-const OperationStorageS3S3StorageDownload = "/api.compute.v1.StorageS3/S3StorageDownload"
-const OperationStorageS3S3StorageInBucketList = "/api.compute.v1.StorageS3/S3StorageInBucketList"
-const OperationStorageS3S3StorageMkdir = "/api.compute.v1.StorageS3/S3StorageMkdir"
-const OperationStorageS3S3StorageUploadFile = "/api.compute.v1.StorageS3/S3StorageUploadFile"
+const OperationStorageS3CreateBucket = "/api.server.compute.v1.StorageS3/CreateBucket"
+const OperationStorageS3CreateS3Key = "/api.server.compute.v1.StorageS3/CreateS3Key"
+const OperationStorageS3DeleteBucket = "/api.server.compute.v1.StorageS3/DeleteBucket"
+const OperationStorageS3EmptyBucket = "/api.server.compute.v1.StorageS3/EmptyBucket"
+const OperationStorageS3GetUserS3User = "/api.server.compute.v1.StorageS3/GetUserS3User"
+const OperationStorageS3ListBucket = "/api.server.compute.v1.StorageS3/ListBucket"
+const OperationStorageS3S3StorageDelete = "/api.server.compute.v1.StorageS3/S3StorageDelete"
+const OperationStorageS3S3StorageDownload = "/api.server.compute.v1.StorageS3/S3StorageDownload"
+const OperationStorageS3S3StorageInBucketList = "/api.server.compute.v1.StorageS3/S3StorageInBucketList"
+const OperationStorageS3S3StorageMkdir = "/api.server.compute.v1.StorageS3/S3StorageMkdir"
+const OperationStorageS3S3StorageUploadFile = "/api.server.compute.v1.StorageS3/S3StorageUploadFile"
 
 type StorageS3HTTPServer interface {
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error)

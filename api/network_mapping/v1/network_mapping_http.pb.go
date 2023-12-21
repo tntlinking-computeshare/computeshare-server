@@ -19,11 +19,11 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationNetworkMappingCreateNetworkMapping = "/api.network_mapping.v1.NetworkMapping/CreateNetworkMapping"
-const OperationNetworkMappingDeleteNetworkMapping = "/api.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
-const OperationNetworkMappingGetNetworkMapping = "/api.network_mapping.v1.NetworkMapping/GetNetworkMapping"
-const OperationNetworkMappingNextNetworkMapping = "/api.network_mapping.v1.NetworkMapping/NextNetworkMapping"
-const OperationNetworkMappingPageNetworkMapping = "/api.network_mapping.v1.NetworkMapping/PageNetworkMapping"
+const OperationNetworkMappingCreateNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/CreateNetworkMapping"
+const OperationNetworkMappingDeleteNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
+const OperationNetworkMappingGetNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/GetNetworkMapping"
+const OperationNetworkMappingNextNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/NextNetworkMapping"
+const OperationNetworkMappingPageNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/PageNetworkMapping"
 
 type NetworkMappingHTTPServer interface {
 	CreateNetworkMapping(context.Context, *CreateNetworkMappingRequest) (*CreateNetworkMappingReply, error)

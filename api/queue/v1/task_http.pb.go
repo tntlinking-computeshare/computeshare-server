@@ -19,8 +19,8 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationQueueTaskGetAgentTask = "/github.com.mohaijiang.api.queue.v1.QueueTask/GetAgentTask"
-const OperationQueueTaskUpdateAgentTask = "/github.com.mohaijiang.api.queue.v1.QueueTask/UpdateAgentTask"
+const OperationQueueTaskGetAgentTask = "/api.server.queue.v1.QueueTask/GetAgentTask"
+const OperationQueueTaskUpdateAgentTask = "/api.server.queue.v1.QueueTask/UpdateAgentTask"
 
 type QueueTaskHTTPServer interface {
 	// GetAgentTask 查询队列任务

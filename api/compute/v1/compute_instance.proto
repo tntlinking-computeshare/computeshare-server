@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package github.com.mohaijiang.api.compute.v1;
+package api.server.compute.v1;
 
 import "google/api/annotations.proto";
 
@@ -83,11 +83,14 @@ service ComputeInstance {
 		};
 	}
 
-	rpc GetInstanceConsole(GetInstanceRequest) returns (GetInstanceConsoleReply) {
+	// 获取vnc 地址
+	rpc GetInstanceVncURL(GetInstanceRequest) returns (GetInstanceVncURLReply) {
 		option (google.api.http) = {
-			get: "/v1/instance/{id}/console"
+			get: "/v1/instance/{id}/vnc",
 		};
 	}
+
+
 }
 
 message ListComputeSpecRequest {
@@ -146,6 +149,7 @@ message CreateInstanceRequest {
 	string name = 4;
 	string public_key = 5;
 	string password = 6;
+	string docker_compose = 7;
 }
 
 message PortBinding {
@@ -181,7 +185,7 @@ message Instance {
 	repeated InstanceStats stats = 8;
 	string containerId = 9;
 	string command = 10;
-	string peerId = 11;
+	string agent_id = 11;
 }
 
 message InstanceStats {
@@ -209,10 +213,9 @@ message CommonReply {
 	string message = 2;
 }
 
-
-
-message GetInstanceConsoleReply {
+message GetInstanceVncURLReply {
 	int32 code = 1;
 	string message = 2;
 	string data = 3;
 }
+

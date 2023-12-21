@@ -89,6 +89,7 @@ func NewHTTPServer(c *conf.Server,
 	networkMappingService *service.NetworkMappingService,
 	domainBindingService *service.DomainBindingService,
 	storageProviderService *service.StorageProviderService,
+	processService *service.ProcessService,
 	job *service.CronJob,
 	data *data.Data,
 	logger log.Logger) *http.Server {
@@ -121,13 +122,17 @@ func NewHTTPServer(c *conf.Server,
 	srv := http.NewServer(opts...)
 	openAPIhandler := openapiv2.NewHandler()
 	srv.HandlePrefix("/q/", openAPIhandler)
-	srv.HandleFunc("/websockify", WsHandler)
+	// vnc websocket
+	srv.HandleFunc("/websockify", func(w http.ResponseWriter, r *http.Request) {
+		wsHandler(w, r, instanceService, ac)
+	})
 	agentV1.RegisterAgentHTTPServer(srv, agenter)
 	computeV1.RegisterStorageHTTPServer(srv, storageService)
 	computeV1.RegisterStorageS3HTTPServer(srv, storageS3Service)
 	computeV1.RegisterComputeInstanceHTTPServer(srv, instanceService)
 	computeV1.RegisterComputePowerHTTPServer(srv, powerService)
 	computeV1.RegisterStorageProviderHTTPServer(srv, storageProviderService)
+	computeV1.RegisterProcessHTTPServer(srv, processService)
 	systemv1.RegisterUserHTTPServer(srv, userService)
 	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
@@ -153,12 +158,45 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func WsHandler(w http.ResponseWriter, r *http.Request) {
+func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.ComputeInstanceService, ac *conf.Auth) {
 	conn, err := upgrader.Upgrade(w, r, nil)
+
+	fmt.Println("======= 收到websocket请求 ======")
+	fmt.Println("")
+	fmt.Println("请求地址：", r.RequestURI)
+	cookie, _ := r.Cookie("token")
+	fmt.Println("请求Header:  cookie: ", cookie.Value)
+	tokenString := cookie.Value
+
+	token, err := jwt2.Parse(tokenString, func(token *jwt2.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt2.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return []byte(ac.ApiKey), nil
+	})
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	var userId string
+	if claims, ok := token.Claims.(jwt2.MapClaims); ok {
+		userId, _ = claims["UserID"].(string)
+	} else {
+		fmt.Println("===== websocket失败 ======")
+		fmt.Println("       jwt token 验证失败         ")
+		fmt.Println("=====              ======")
+		return
+	}
 
 	//192.168.22.238:5915
 	if err != nil {
+		fmt.Println("===== websocket失败 ======")
 		fmt.Println(err)
+		fmt.Println("=====              ======")
 		return
 	}
 	defer conn.Close()
@@ -166,10 +204,20 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	// 在这里添加 JWT Token 验证逻辑
 	// 如果验证失败，可以关闭连接并返回错误
 
-	// 连接到 noVNC 服务
-	noVNCConn, _, err := websocket.DefaultDialer.Dial("ws://192.168.22.238:6801/websockify", nil)
+	consoleUrl, err := instanceService.GetInstanceConsole(r.Context(), r.FormValue("instanceId"), userId)
 	if err != nil {
+		fmt.Println("===== websocket失败 ======")
 		fmt.Println(err)
+		fmt.Println("=====              ======")
+		return
+	}
+
+	// 连接到 noVNC 服务
+	noVNCConn, _, err := websocket.DefaultDialer.Dial(consoleUrl, nil)
+	if err != nil {
+		fmt.Println("===== websocket失败 ======")
+		fmt.Println(err)
+		fmt.Println("=====              ======")
 		return
 	}
 	defer noVNCConn.Close()
@@ -179,12 +227,16 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		for {
 			_, message, err := noVNCConn.ReadMessage()
 			if err != nil {
+				fmt.Println("===== websocket失败 ======")
 				fmt.Println(err)
+				fmt.Println("=====              ======")
 				return
 			}
 			err = conn.WriteMessage(websocket.BinaryMessage, message)
 			if err != nil {
+				fmt.Println("===== websocket失败 ======")
 				fmt.Println(err)
+				fmt.Println("=====              ======")
 				return
 			}
 		}
@@ -194,12 +246,16 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
+			fmt.Println("===== websocket失败 ======")
 			fmt.Println(err)
+			fmt.Println("=====              ======")
 			return
 		}
 		err = noVNCConn.WriteMessage(websocket.BinaryMessage, message)
 		if err != nil {
+			fmt.Println("===== websocket失败 ======")
 			fmt.Println(err)
+			fmt.Println("=====              ======")
 			return
 		}
 	}

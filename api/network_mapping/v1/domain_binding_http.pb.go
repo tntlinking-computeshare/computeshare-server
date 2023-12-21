@@ -19,12 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationDomainBindingCreateDomainBinding = "/api.network_mapping.v1.DomainBinding/CreateDomainBinding"
-const OperationDomainBindingDeleteDomainBinding = "/api.network_mapping.v1.DomainBinding/DeleteDomainBinding"
-const OperationDomainBindingGetDomainBinding = "/api.network_mapping.v1.DomainBinding/GetDomainBinding"
-const OperationDomainBindingListDomainBinding = "/api.network_mapping.v1.DomainBinding/ListDomainBinding"
-const OperationDomainBindingNsLookup = "/api.network_mapping.v1.DomainBinding/NsLookup"
-const OperationDomainBindingUpdateDomainBinding = "/api.network_mapping.v1.DomainBinding/UpdateDomainBinding"
+const OperationDomainBindingCreateDomainBinding = "/api.server.network_mapping.v1.DomainBinding/CreateDomainBinding"
+const OperationDomainBindingDeleteDomainBinding = "/api.server.network_mapping.v1.DomainBinding/DeleteDomainBinding"
+const OperationDomainBindingGetDomainBinding = "/api.server.network_mapping.v1.DomainBinding/GetDomainBinding"
+const OperationDomainBindingListDomainBinding = "/api.server.network_mapping.v1.DomainBinding/ListDomainBinding"
+const OperationDomainBindingNsLookup = "/api.server.network_mapping.v1.DomainBinding/NsLookup"
+const OperationDomainBindingUpdateDomainBinding = "/api.server.network_mapping.v1.DomainBinding/UpdateDomainBinding"
 
 type DomainBindingHTTPServer interface {
 	CreateDomainBinding(context.Context, *CreateDomainBindingRequest) (*CreateDomainBindingReply, error)

@@ -20,13 +20,13 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
-const OperationAgentDeleteAgent = "/api.agent.v1.Agent/DeleteAgent"
-const OperationAgentGetAgent = "/api.agent.v1.Agent/GetAgent"
-const OperationAgentListAgent = "/api.agent.v1.Agent/ListAgent"
-const OperationAgentListAgentInstance = "/api.agent.v1.Agent/ListAgentInstance"
-const OperationAgentReportInstanceStatus = "/api.agent.v1.Agent/ReportInstanceStatus"
-const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
+const OperationAgentCreateAgent = "/api.server.agent.v1.Agent/CreateAgent"
+const OperationAgentDeleteAgent = "/api.server.agent.v1.Agent/DeleteAgent"
+const OperationAgentGetAgent = "/api.server.agent.v1.Agent/GetAgent"
+const OperationAgentListAgent = "/api.server.agent.v1.Agent/ListAgent"
+const OperationAgentListAgentInstance = "/api.server.agent.v1.Agent/ListAgentInstance"
+const OperationAgentReportInstanceStatus = "/api.server.agent.v1.Agent/ReportInstanceStatus"
+const OperationAgentUpdateAgent = "/api.server.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
 	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)
@@ -45,7 +45,7 @@ func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r.DELETE("/v1/agent/{id}", _Agent_DeleteAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent/{id}", _Agent_GetAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent", _Agent_ListAgent0_HTTP_Handler(srv))
-	r.GET("/v1/agent/instance/{peerId}", _Agent_ListAgentInstance0_HTTP_Handler(srv))
+	r.GET("/v1/agent/instance/{mac}", _Agent_ListAgentInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/agent/instance/report", _Agent_ReportInstanceStatus0_HTTP_Handler(srv))
 }
 
@@ -275,7 +275,7 @@ func (c *AgentHTTPClientImpl) ListAgent(ctx context.Context, in *ListAgentReques
 
 func (c *AgentHTTPClientImpl) ListAgentInstance(ctx context.Context, in *ListAgentInstanceReq, opts ...http.CallOption) (*v1.ListInstanceReply, error) {
 	var out v1.ListInstanceReply
-	pattern := "/v1/agent/instance/{peerId}"
+	pattern := "/v1/agent/instance/{mac}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationAgentListAgentInstance))
 	opts = append(opts, http.PathTemplate(pattern))

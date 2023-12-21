@@ -118,6 +118,12 @@ func (cic *ComputeInstanceCreate) SetVncPort(i int32) *ComputeInstanceCreate {
 	return cic
 }
 
+// SetDockerCompose sets the "docker_compose" field.
+func (cic *ComputeInstanceCreate) SetDockerCompose(s string) *ComputeInstanceCreate {
+	cic.mutation.SetDockerCompose(s)
+	return cic
+}
+
 // SetID sets the "id" field.
 func (cic *ComputeInstanceCreate) SetID(u uuid.UUID) *ComputeInstanceCreate {
 	cic.mutation.SetID(u)
@@ -227,6 +233,9 @@ func (cic *ComputeInstanceCreate) check() error {
 	if _, ok := cic.mutation.VncPort(); !ok {
 		return &ValidationError{Name: "vnc_port", err: errors.New(`ent: missing required field "ComputeInstance.vnc_port"`)}
 	}
+	if _, ok := cic.mutation.DockerCompose(); !ok {
+		return &ValidationError{Name: "docker_compose", err: errors.New(`ent: missing required field "ComputeInstance.docker_compose"`)}
+	}
 	return nil
 }
 
@@ -309,6 +318,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.VncPort(); ok {
 		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
 		_node.VncPort = value
+	}
+	if value, ok := cic.mutation.DockerCompose(); ok {
+		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
+		_node.DockerCompose = value
 	}
 	return _node, _spec
 }

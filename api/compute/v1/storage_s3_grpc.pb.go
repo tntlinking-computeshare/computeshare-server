@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	StorageS3_CreateS3Key_FullMethodName           = "/api.compute.v1.StorageS3/CreateS3Key"
-	StorageS3_GetUserS3User_FullMethodName         = "/api.compute.v1.StorageS3/GetUserS3User"
-	StorageS3_CreateBucket_FullMethodName          = "/api.compute.v1.StorageS3/CreateBucket"
-	StorageS3_DeleteBucket_FullMethodName          = "/api.compute.v1.StorageS3/DeleteBucket"
-	StorageS3_EmptyBucket_FullMethodName           = "/api.compute.v1.StorageS3/EmptyBucket"
-	StorageS3_ListBucket_FullMethodName            = "/api.compute.v1.StorageS3/ListBucket"
-	StorageS3_S3StorageInBucketList_FullMethodName = "/api.compute.v1.StorageS3/S3StorageInBucketList"
-	StorageS3_S3StorageUploadFile_FullMethodName   = "/api.compute.v1.StorageS3/S3StorageUploadFile"
-	StorageS3_S3StorageMkdir_FullMethodName        = "/api.compute.v1.StorageS3/S3StorageMkdir"
-	StorageS3_S3StorageDownload_FullMethodName     = "/api.compute.v1.StorageS3/S3StorageDownload"
-	StorageS3_S3StorageDelete_FullMethodName       = "/api.compute.v1.StorageS3/S3StorageDelete"
+	StorageS3_CreateS3Key_FullMethodName           = "/api.server.compute.v1.StorageS3/CreateS3Key"
+	StorageS3_GetUserS3User_FullMethodName         = "/api.server.compute.v1.StorageS3/GetUserS3User"
+	StorageS3_CreateBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/CreateBucket"
+	StorageS3_DeleteBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/DeleteBucket"
+	StorageS3_EmptyBucket_FullMethodName           = "/api.server.compute.v1.StorageS3/EmptyBucket"
+	StorageS3_ListBucket_FullMethodName            = "/api.server.compute.v1.StorageS3/ListBucket"
+	StorageS3_S3StorageInBucketList_FullMethodName = "/api.server.compute.v1.StorageS3/S3StorageInBucketList"
+	StorageS3_S3StorageUploadFile_FullMethodName   = "/api.server.compute.v1.StorageS3/S3StorageUploadFile"
+	StorageS3_S3StorageMkdir_FullMethodName        = "/api.server.compute.v1.StorageS3/S3StorageMkdir"
+	StorageS3_S3StorageDownload_FullMethodName     = "/api.server.compute.v1.StorageS3/S3StorageDownload"
+	StorageS3_S3StorageDelete_FullMethodName       = "/api.server.compute.v1.StorageS3/S3StorageDelete"
 )
 
 // StorageS3Client is the client API for StorageS3 service.
@@ -426,7 +426,7 @@ func _StorageS3_S3StorageDelete_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var StorageS3_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.compute.v1.StorageS3",
+	ServiceName: "api.server.compute.v1.StorageS3",
 	HandlerType: (*StorageS3Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{

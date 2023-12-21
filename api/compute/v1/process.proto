@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.server.compute.v1;
+
+import "google/api/annotations.proto";
+import "api/network_mapping/v1/network_mapping.proto";
+import "api/compute/v1/compute_instance.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service Process {
+	rpc CreateInstanceProcess(CreateInstanceProcessRequest) returns(CreateInstanceProcessReply) {
+		option (google.api.http) = {
+			post: "/v1/instance-process",
+			body: "*",
+		};
+	}
+}
+
+message CreateInstanceProcessRequest{
+	api.server.compute.v1.CreateInstanceRequest instance = 1;
+	repeated api.server.network_mapping.v1.CreateNetworkMappingRequest networkMapping = 2;
+}
+
+message CreateInstanceProcessReply {
+	int32 code = 1;
+	string message = 2;
+}

@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	DomainBinding_CreateDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/CreateDomainBinding"
-	DomainBinding_NsLookup_FullMethodName            = "/api.network_mapping.v1.DomainBinding/NsLookup"
-	DomainBinding_UpdateDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/UpdateDomainBinding"
-	DomainBinding_DeleteDomainBinding_FullMethodName = "/api.network_mapping.v1.DomainBinding/DeleteDomainBinding"
-	DomainBinding_GetDomainBinding_FullMethodName    = "/api.network_mapping.v1.DomainBinding/GetDomainBinding"
-	DomainBinding_ListDomainBinding_FullMethodName   = "/api.network_mapping.v1.DomainBinding/ListDomainBinding"
+	DomainBinding_CreateDomainBinding_FullMethodName = "/api.server.network_mapping.v1.DomainBinding/CreateDomainBinding"
+	DomainBinding_NsLookup_FullMethodName            = "/api.server.network_mapping.v1.DomainBinding/NsLookup"
+	DomainBinding_UpdateDomainBinding_FullMethodName = "/api.server.network_mapping.v1.DomainBinding/UpdateDomainBinding"
+	DomainBinding_DeleteDomainBinding_FullMethodName = "/api.server.network_mapping.v1.DomainBinding/DeleteDomainBinding"
+	DomainBinding_GetDomainBinding_FullMethodName    = "/api.server.network_mapping.v1.DomainBinding/GetDomainBinding"
+	DomainBinding_ListDomainBinding_FullMethodName   = "/api.server.network_mapping.v1.DomainBinding/ListDomainBinding"
 )
 
 // DomainBindingClient is the client API for DomainBinding service.
@@ -261,7 +261,7 @@ func _DomainBinding_ListDomainBinding_Handler(srv interface{}, ctx context.Conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DomainBinding_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.network_mapping.v1.DomainBinding",
+	ServiceName: "api.server.network_mapping.v1.DomainBinding",
 	HandlerType: (*DomainBindingServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
