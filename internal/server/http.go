@@ -30,15 +30,14 @@ import (
 func NewWhiteListMatcher() selector.MatchFunc {
 
 	whiteList := make(map[string]struct{})
-	whiteList["/api.system.v1.User/CreateUser"] = struct{}{}
-	whiteList["/api.system.v1.User/Login"] = struct{}{}
-	whiteList["/api.system.v1.User/LoginWithValidateCode"] = struct{}{}
-	whiteList["/api.system.v1.User/SendValidateCode"] = struct{}{}
-	whiteList["/api.agent.v1.Agent/CreateAgent"] = struct{}{}
-	whiteList["/api.agent.v1.Agent/ListAgentInstance"] = struct{}{}
-	whiteList["/api.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
-	whiteList["/github.com.mohaijiang.api.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
-	whiteList["/github.com.mohaijiang.api.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
+	whiteList["/api.server.system.v1.User/Login"] = struct{}{}
+	whiteList["/api.server.system.v1.User/LoginWithValidateCode"] = struct{}{}
+	whiteList["/api.server.system.v1.User/SendValidateCode"] = struct{}{}
+	whiteList["/api.server.agent.v1.Agent/CreateAgent"] = struct{}{}
+	whiteList["/api.server.agent.v1.Agent/ListAgentInstance"] = struct{}{}
+	whiteList["/api.server.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
+	whiteList["/api.server.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
+	whiteList["/api.server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
