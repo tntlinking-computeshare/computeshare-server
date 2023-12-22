@@ -27,4 +27,15 @@ message CreateInstanceProcessRequest{
 message CreateInstanceProcessReply {
 	int32 code = 1;
 	string message = 2;
+	CreateInstanceProcessReply_Data data = 3;
+
+	message CreateInstanceProcessReply_Data {
+		string instanceId = 1;
+	}
+	message CreateInstanceProcessReply_NetworkMapping {
+		string id = 1;
+		int32 computer_port = 2;
+		string server_ip = 3;
+		int32 server_port = 4;
+	}
 }
