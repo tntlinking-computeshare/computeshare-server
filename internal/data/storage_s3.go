@@ -52,6 +52,13 @@ func (r *s3UserRepoImpl) GetS3User(ctx context.Context, id uuid.UUID) (*biz.S3Us
 	}
 	return r.toBiz(first, 0), err
 }
+func (r *s3UserRepoImpl) GetS3UserType(ctx context.Context, id uuid.UUID, creator int8) (*biz.S3User, error) {
+	first, err := r.data.getS3UserClient(ctx).Query().Where(s3user.ID(id), s3user.Type(creator)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return r.toBiz(first, 0), err
+}
 func (r *s3UserRepoImpl) DeleteS3User(ctx context.Context, id uuid.UUID) error {
 	first, err := r.data.getS3UserClient(ctx).Query().Where(s3user.ID(id)).First(ctx)
 	if err == nil {

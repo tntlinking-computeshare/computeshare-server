@@ -54,6 +54,7 @@ type S3UserRepo interface {
 	DeleteValidateCode(ctx context.Context, user User)
 	CreateS3User(ctx context.Context, user *S3User) (*S3User, error)
 	GetS3User(ctx context.Context, id uuid.UUID) (*S3User, error)
+	GetS3UserType(ctx context.Context, id uuid.UUID, creator int8) (*S3User, error)
 	DeleteS3User(ctx context.Context, id uuid.UUID) error
 	GetUserS3User(ctx context.Context, userId uuid.UUID) ([]*S3User, error)
 	GetPlatformS3User(ctx context.Context, userId uuid.UUID) (*S3User, error)
@@ -107,6 +108,10 @@ func (c *StorageS3UseCase) createS3User(ctx context.Context, userId uuid.UUID, c
 }
 
 func (c *StorageS3UseCase) CreateS3Key(ctx context.Context, userId uuid.UUID) error {
+	s3user, _ := c.repo.GetS3UserType(ctx, userId, int8(consts.UserCreation))
+	if s3user != nil {
+		return errors.New("当前只能创建一对密钥")
+	}
 	_, err := c.createS3User(ctx, userId, int8(consts.UserCreation))
 	if err != nil {
 		return err
@@ -343,7 +348,7 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 		if prefix == "" {
 			splitN := strings.SplitN(key, "/", 2)
 			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
-				s3Object.Name = splitN[0] + "/"
+				s3Object.Name = splitN[0]
 			} else if len(splitN) == 1 {
 				if splitN[0] == ".keep" {
 					continue
@@ -362,7 +367,7 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 			if key[:len(dir)] == dir {
 				splitN := strings.SplitN(key[len(dir):], "/", 2)
 				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
-					s3Object.Name = splitN[0] + "/"
+					s3Object.Name = splitN[0]
 				} else if len(splitN) == 1 {
 					if splitN[0] == ".keep" {
 						continue
