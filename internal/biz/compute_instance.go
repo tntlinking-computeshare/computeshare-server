@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
@@ -117,6 +118,13 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
+	var dockerComposeDecode string
+	if cic.DockerCompose != "" {
+		data, err := base64.StdEncoding.DecodeString(cic.DockerCompose)
+		if err != nil {
+			dockerComposeDecode = string(data)
+		}
+	}
 	instance := &ComputeInstance{
 		Owner:          claim.UserID,
 		Name:           cic.Name,
@@ -129,6 +137,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Status:         consts.InstanceStatusCreating,
 		VncIP:          gw.InternalIP,
 		VncPort:        gp.Port,
+		DockerCompose:  dockerComposeDecode,
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)
