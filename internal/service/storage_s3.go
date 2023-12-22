@@ -39,22 +39,23 @@ func (s *StorageS3Service) CreateS3Key(ctx context.Context, req *pb.CreateS3KeyR
 		Message: SUCCESS,
 	}, nil
 }
-func (s *StorageS3Service) GetUserS3User(ctx context.Context, req *pb.GetS3UserRequest) (*pb.GetS3UserReply, error) {
+func (s *StorageS3Service) GetUserS3UserList(ctx context.Context, req *pb.GetUserS3UserListRequest) (*pb.GetUserS3UserListReply, error) {
 	claim, ok := global.FromContext(ctx)
 	if !ok {
 		return nil, errors.New("unauthorized")
 	}
 	userId := claim.GetUserId()
-	users, err := s.uc.GetUserS3User(ctx, userId)
+	users, err := s.uc.GetUserS3UserList(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.GetS3UserReply{
+	return &pb.GetUserS3UserListReply{
 		Code:    200,
 		Message: SUCCESS,
 		Data: lo.Map(users, func(item *biz.S3User, _ int) *pb.S3User {
 			return &pb.S3User{
+				Id:         item.ID.String(),
 				AccessKey:  utils.StringKeyDesensitization(item.AccessKey),
 				SecretKey:  utils.StringKeyDesensitization(item.SecretKey),
 				CreateTime: item.CreateTime.UnixMilli(),
@@ -63,6 +64,31 @@ func (s *StorageS3Service) GetUserS3User(ctx context.Context, req *pb.GetS3UserR
 			}
 		}),
 	}, nil
+}
+func (s *StorageS3Service) GetUserS3User(ctx context.Context, req *pb.GetUserS3UserRequest) (*pb.GetUserS3UserReply, error) {
+	s3Users, err := s.uc.GetUserS3User(ctx, req.GetId(), req.GetCountryCallCoding(), req.GetTelephoneNumber(), req.GetValidateCode())
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetUserS3UserReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.S3User{
+			Id:         s3Users.ID.String(),
+			AccessKey:  s3Users.AccessKey,
+			SecretKey:  s3Users.SecretKey,
+			CreateTime: s3Users.CreateTime.UnixMilli(),
+			UpdateTime: s3Users.CreateTime.UnixMilli(),
+			Endpoint:   s3Users.Endpoint,
+		},
+	}, nil
+}
+func (s *StorageS3Service) DeleteUserS3User(ctx context.Context, req *pb.DeleteUserS3UserRequest) (*pb.DeleteUserS3UserReply, error) {
+	err := s.uc.DeleteUserS3User(ctx, req.GetId(), req.GetCountryCallCoding(), req.GetTelephoneNumber(), req.GetValidateCode())
+	return &pb.DeleteUserS3UserReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *StorageS3Service) CreateBucket(ctx context.Context, req *pb.CreateBucketRequest) (*pb.CreateBucketReply, error) {
 	claim, ok := global.FromContext(ctx)
@@ -195,6 +221,18 @@ func (s *StorageS3Service) S3StorageMkdir(ctx context.Context, req *pb.S3Storage
 		Message: SUCCESS,
 		Data:    req.DirName,
 	}, nil
+}
+func (s *StorageS3Service) S3StorageDeleteMkdir(ctx context.Context, req *pb.S3StorageDeleteMkdirRequest) (*pb.S3StorageDeleteMkdirReply, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	err := s.uc.S3StorageDeleteMkdir(ctx, userId, req.BucketName, req.DirName)
+	return &pb.S3StorageDeleteMkdirReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }
 func (s *StorageS3Service) S3StorageDownload(ctx context.Context, req *pb.S3StorageDownloadRequest) (*pb.S3StorageDownloadReply, error) {
 	claim, ok := global.FromContext(ctx)

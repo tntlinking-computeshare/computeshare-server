@@ -2,6 +2,8 @@ package data
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -12,6 +14,10 @@ import (
 	"github.com/samber/lo"
 	"time"
 )
+
+func likeKey(telephone string) string {
+	return fmt.Sprintf("telephone:%s", telephone)
+}
 
 func NewS3UserRepo(data *Data, logger log.Logger) biz.S3UserRepo {
 
@@ -26,22 +32,56 @@ type s3UserRepoImpl struct {
 	log  *log.Helper
 }
 
-func (r *s3UserRepoImpl) CreateS3User(ctx context.Context, user *biz.S3User) (*biz.S3User, error) {
-	entity, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID)).First(ctx)
-	if err == nil && entity != nil {
-		entity.FkUserID = user.FkUserID
-		entity.AccessKey = user.AccessKey
-		entity.SecretKey = user.SecretKey
-		entity.CreateTime = user.CreateTime
-		entity.UpdateTime = user.UpdateTime
-		err := r.data.getS3UserClient(ctx).UpdateOne(entity).Exec(ctx)
-		return r.toBiz(entity, 0), err
-	}
+func (r *s3UserRepoImpl) SetValidateCode(ctx context.Context, entity biz.User, vCode string) error {
+	_, err := r.data.rdb.Set(ctx, likeKey(entity.GetFullTelephone()), vCode, time.Minute*10).Result()
+	return err
+}
 
-	entity, err = r.data.getS3UserClient(ctx).Create().
+func (r *s3UserRepoImpl) GetValidateCode(ctx context.Context, telephone string) (string, error) {
+	get := r.data.rdb.Get(ctx, likeKey(telephone))
+	return get.Result()
+}
+func (r *s3UserRepoImpl) DeleteValidateCode(ctx context.Context, user biz.User) {
+	// 删除使用过的验证码
+	_, _ = r.data.rdb.Del(ctx, likeKey(user.GetFullTelephone())).Result()
+}
+func (r *s3UserRepoImpl) GetS3User(ctx context.Context, id uuid.UUID) (*biz.S3User, error) {
+	first, err := r.data.getS3UserClient(ctx).Query().Where(s3user.ID(id)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return r.toBiz(first, 0), err
+}
+func (r *s3UserRepoImpl) DeleteS3User(ctx context.Context, id uuid.UUID) error {
+	first, err := r.data.getS3UserClient(ctx).Query().Where(s3user.ID(id)).First(ctx)
+	if err == nil {
+		return r.data.getS3UserClient(ctx).DeleteOne(first).Exec(ctx)
+	}
+	log.Log(log.LevelInfo, "DeleteS3User", id.String()+"不存在于DB")
+	return err
+}
+func (r *s3UserRepoImpl) CreateS3User(ctx context.Context, user *biz.S3User) (*biz.S3User, error) {
+	if int8(consts.PlatformCreation) == user.Type {
+		entity, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserID(user.FkUserID), s3user.Type(int8(consts.PlatformCreation))).First(ctx)
+		if err == nil && entity != nil {
+			//entity.FkUserID = user.FkUserID
+			//entity.AccessKey = user.AccessKey
+			//entity.SecretKey = user.SecretKey
+			//entity.CreateTime = user.CreateTime
+			//entity.UpdateTime = user.UpdateTime
+			//entity.Type = user.Type
+			//err := r.data.getS3UserClient(ctx).UpdateOne(entity).Exec(ctx)
+			//return r.toBiz(entity, 0), err
+			return nil, errors.New("已经存在Platforms3User")
+		}
+	}
+	entity, err := r.data.getS3UserClient(ctx).Create().
 		SetFkUserID(user.FkUserID).
 		SetAccessKey(user.AccessKey).
 		SetSecretKey(user.SecretKey).
+		SetCreateTime(time.Now()).
+		SetUpdateTime(time.Now()).
+		SetType(user.Type).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -75,7 +115,7 @@ func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, buc
 		return r.data.getS3BucketClient(ctx).DeleteOne(first).Exec(ctx)
 	}
 	log.Log(log.LevelInfo, "DeleteBucketInDB", bucketName+"不存在于DB")
-	return nil
+	return err
 }
 func (r *s3UserRepoImpl) ListBucket(ctx context.Context, userId uuid.UUID) ([]*biz.S3Bucket, error) {
 	buckets, err := r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId)).All(ctx)

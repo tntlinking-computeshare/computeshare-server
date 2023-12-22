@@ -15,10 +15,6 @@ import (
 	"time"
 )
 
-func likeKey(telephone string) string {
-	return fmt.Sprintf("telephone_login:%s", telephone)
-}
-
 func likeResendVerificationKey(telephone string) string {
 	return fmt.Sprintf("telephone_send:%s", telephone)
 }

@@ -22,10 +22,13 @@ const _ = http.SupportPackageIsVersion1
 const OperationStorageS3CreateBucket = "/api.server.compute.v1.StorageS3/CreateBucket"
 const OperationStorageS3CreateS3Key = "/api.server.compute.v1.StorageS3/CreateS3Key"
 const OperationStorageS3DeleteBucket = "/api.server.compute.v1.StorageS3/DeleteBucket"
+const OperationStorageS3DeleteUserS3User = "/api.server.compute.v1.StorageS3/DeleteUserS3User"
 const OperationStorageS3EmptyBucket = "/api.server.compute.v1.StorageS3/EmptyBucket"
 const OperationStorageS3GetUserS3User = "/api.server.compute.v1.StorageS3/GetUserS3User"
+const OperationStorageS3GetUserS3UserList = "/api.server.compute.v1.StorageS3/GetUserS3UserList"
 const OperationStorageS3ListBucket = "/api.server.compute.v1.StorageS3/ListBucket"
 const OperationStorageS3S3StorageDelete = "/api.server.compute.v1.StorageS3/S3StorageDelete"
+const OperationStorageS3S3StorageDeleteMkdir = "/api.server.compute.v1.StorageS3/S3StorageDeleteMkdir"
 const OperationStorageS3S3StorageDownload = "/api.server.compute.v1.StorageS3/S3StorageDownload"
 const OperationStorageS3S3StorageInBucketList = "/api.server.compute.v1.StorageS3/S3StorageInBucketList"
 const OperationStorageS3S3StorageMkdir = "/api.server.compute.v1.StorageS3/S3StorageMkdir"
@@ -35,10 +38,13 @@ type StorageS3HTTPServer interface {
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error)
 	CreateS3Key(context.Context, *CreateS3KeyRequest) (*CreateS3KeyReply, error)
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketReply, error)
+	DeleteUserS3User(context.Context, *DeleteUserS3UserRequest) (*DeleteUserS3UserReply, error)
 	EmptyBucket(context.Context, *EmptyBucketRequest) (*EmptyBucketReply, error)
-	GetUserS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error)
+	GetUserS3User(context.Context, *GetUserS3UserRequest) (*GetUserS3UserReply, error)
+	GetUserS3UserList(context.Context, *GetUserS3UserListRequest) (*GetUserS3UserListReply, error)
 	ListBucket(context.Context, *ListBucketRequest) (*ListBucketReply, error)
 	S3StorageDelete(context.Context, *S3StorageDeleteRequest) (*S3StorageDeleteReply, error)
+	S3StorageDeleteMkdir(context.Context, *S3StorageDeleteMkdirRequest) (*S3StorageDeleteMkdirReply, error)
 	S3StorageDownload(context.Context, *S3StorageDownloadRequest) (*S3StorageDownloadReply, error)
 	S3StorageInBucketList(context.Context, *S3StorageInBucketListRequest) (*S3StorageInBucketListReply, error)
 	S3StorageMkdir(context.Context, *S3StorageMkdirRequest) (*S3StorageMkdirReply, error)
@@ -48,7 +54,9 @@ type StorageS3HTTPServer interface {
 func RegisterStorageS3HTTPServer(s *http.Server, srv StorageS3HTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/s3user/create/key", _StorageS3_CreateS3Key0_HTTP_Handler(srv))
-	r.GET("/v1/s3user", _StorageS3_GetUserS3User0_HTTP_Handler(srv))
+	r.GET("/v1/s3user", _StorageS3_GetUserS3UserList0_HTTP_Handler(srv))
+	r.GET("/v1/s3user/{id}", _StorageS3_GetUserS3User0_HTTP_Handler(srv))
+	r.DELETE("/v1/s3user/{id}", _StorageS3_DeleteUserS3User0_HTTP_Handler(srv))
 	r.POST("/v1/s3bucket", _StorageS3_CreateBucket0_HTTP_Handler(srv))
 	r.DELETE("/v1/s3bucket/{bucketName}", _StorageS3_DeleteBucket0_HTTP_Handler(srv))
 	r.DELETE("/v1/s3bucket/{bucketName}/empty", _StorageS3_EmptyBucket0_HTTP_Handler(srv))
@@ -56,6 +64,7 @@ func RegisterStorageS3HTTPServer(s *http.Server, srv StorageS3HTTPServer) {
 	r.GET("/v1/s3bucket/{bucketName}/objects", _StorageS3_S3StorageInBucketList0_HTTP_Handler(srv))
 	r.POST("/v1/storage/{bucketName}/objects/upload/ersatz", _StorageS3_S3StorageUploadFile0_HTTP_Handler(srv))
 	r.POST("/v1/storage/{bucketName}/mkdir", _StorageS3_S3StorageMkdir0_HTTP_Handler(srv))
+	r.DELETE("/v1/storage/{bucketName}/mkdir", _StorageS3_S3StorageDeleteMkdir0_HTTP_Handler(srv))
 	r.GET("/v1/storage/{bucketName}/objects/download/ersatz", _StorageS3_S3StorageDownload0_HTTP_Handler(srv))
 	r.DELETE("/v1/storage/{bucketName}/objects/delete", _StorageS3_S3StorageDelete0_HTTP_Handler(srv))
 }
@@ -82,21 +91,65 @@ func _StorageS3_CreateS3Key0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http
 	}
 }
 
-func _StorageS3_GetUserS3User0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
+func _StorageS3_GetUserS3UserList0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetS3UserRequest
+		var in GetUserS3UserListRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationStorageS3GetUserS3User)
+		http.SetOperation(ctx, OperationStorageS3GetUserS3UserList)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetUserS3User(ctx, req.(*GetS3UserRequest))
+			return srv.GetUserS3UserList(ctx, req.(*GetUserS3UserListRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*GetS3UserReply)
+		reply := out.(*GetUserS3UserListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _StorageS3_GetUserS3User0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserS3UserRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationStorageS3GetUserS3User)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserS3User(ctx, req.(*GetUserS3UserRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserS3UserReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _StorageS3_DeleteUserS3User0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteUserS3UserRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationStorageS3DeleteUserS3User)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteUserS3User(ctx, req.(*DeleteUserS3UserRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteUserS3UserReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -258,6 +311,28 @@ func _StorageS3_S3StorageMkdir0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx h
 	}
 }
 
+func _StorageS3_S3StorageDeleteMkdir0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in S3StorageDeleteMkdirRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationStorageS3S3StorageDeleteMkdir)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.S3StorageDeleteMkdir(ctx, req.(*S3StorageDeleteMkdirRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*S3StorageDeleteMkdirReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _StorageS3_S3StorageDownload0_HTTP_Handler(srv StorageS3HTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in S3StorageDownloadRequest
@@ -306,10 +381,13 @@ type StorageS3HTTPClient interface {
 	CreateBucket(ctx context.Context, req *CreateBucketRequest, opts ...http.CallOption) (rsp *CreateBucketReply, err error)
 	CreateS3Key(ctx context.Context, req *CreateS3KeyRequest, opts ...http.CallOption) (rsp *CreateS3KeyReply, err error)
 	DeleteBucket(ctx context.Context, req *DeleteBucketRequest, opts ...http.CallOption) (rsp *DeleteBucketReply, err error)
+	DeleteUserS3User(ctx context.Context, req *DeleteUserS3UserRequest, opts ...http.CallOption) (rsp *DeleteUserS3UserReply, err error)
 	EmptyBucket(ctx context.Context, req *EmptyBucketRequest, opts ...http.CallOption) (rsp *EmptyBucketReply, err error)
-	GetUserS3User(ctx context.Context, req *GetS3UserRequest, opts ...http.CallOption) (rsp *GetS3UserReply, err error)
+	GetUserS3User(ctx context.Context, req *GetUserS3UserRequest, opts ...http.CallOption) (rsp *GetUserS3UserReply, err error)
+	GetUserS3UserList(ctx context.Context, req *GetUserS3UserListRequest, opts ...http.CallOption) (rsp *GetUserS3UserListReply, err error)
 	ListBucket(ctx context.Context, req *ListBucketRequest, opts ...http.CallOption) (rsp *ListBucketReply, err error)
 	S3StorageDelete(ctx context.Context, req *S3StorageDeleteRequest, opts ...http.CallOption) (rsp *S3StorageDeleteReply, err error)
+	S3StorageDeleteMkdir(ctx context.Context, req *S3StorageDeleteMkdirRequest, opts ...http.CallOption) (rsp *S3StorageDeleteMkdirReply, err error)
 	S3StorageDownload(ctx context.Context, req *S3StorageDownloadRequest, opts ...http.CallOption) (rsp *S3StorageDownloadReply, err error)
 	S3StorageInBucketList(ctx context.Context, req *S3StorageInBucketListRequest, opts ...http.CallOption) (rsp *S3StorageInBucketListReply, err error)
 	S3StorageMkdir(ctx context.Context, req *S3StorageMkdirRequest, opts ...http.CallOption) (rsp *S3StorageMkdirReply, err error)
@@ -363,6 +441,19 @@ func (c *StorageS3HTTPClientImpl) DeleteBucket(ctx context.Context, in *DeleteBu
 	return &out, err
 }
 
+func (c *StorageS3HTTPClientImpl) DeleteUserS3User(ctx context.Context, in *DeleteUserS3UserRequest, opts ...http.CallOption) (*DeleteUserS3UserReply, error) {
+	var out DeleteUserS3UserReply
+	pattern := "/v1/s3user/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationStorageS3DeleteUserS3User))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *StorageS3HTTPClientImpl) EmptyBucket(ctx context.Context, in *EmptyBucketRequest, opts ...http.CallOption) (*EmptyBucketReply, error) {
 	var out EmptyBucketReply
 	pattern := "/v1/s3bucket/{bucketName}/empty"
@@ -376,11 +467,24 @@ func (c *StorageS3HTTPClientImpl) EmptyBucket(ctx context.Context, in *EmptyBuck
 	return &out, err
 }
 
-func (c *StorageS3HTTPClientImpl) GetUserS3User(ctx context.Context, in *GetS3UserRequest, opts ...http.CallOption) (*GetS3UserReply, error) {
-	var out GetS3UserReply
-	pattern := "/v1/s3user"
+func (c *StorageS3HTTPClientImpl) GetUserS3User(ctx context.Context, in *GetUserS3UserRequest, opts ...http.CallOption) (*GetUserS3UserReply, error) {
+	var out GetUserS3UserReply
+	pattern := "/v1/s3user/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationStorageS3GetUserS3User))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *StorageS3HTTPClientImpl) GetUserS3UserList(ctx context.Context, in *GetUserS3UserListRequest, opts ...http.CallOption) (*GetUserS3UserListReply, error) {
+	var out GetUserS3UserListReply
+	pattern := "/v1/s3user"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationStorageS3GetUserS3UserList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -407,6 +511,19 @@ func (c *StorageS3HTTPClientImpl) S3StorageDelete(ctx context.Context, in *S3Sto
 	pattern := "/v1/storage/{bucketName}/objects/delete"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationStorageS3S3StorageDelete))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *StorageS3HTTPClientImpl) S3StorageDeleteMkdir(ctx context.Context, in *S3StorageDeleteMkdirRequest, opts ...http.CallOption) (*S3StorageDeleteMkdirReply, error) {
+	var out S3StorageDeleteMkdirReply
+	pattern := "/v1/storage/{bucketName}/mkdir"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationStorageS3S3StorageDeleteMkdir))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {

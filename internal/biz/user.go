@@ -58,9 +58,9 @@ type UserRepo interface {
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	SetValidateCode(ctx context.Context, entity User, vCode string) error
 	GetValidateCode(ctx context.Context, telephone string) (string, error)
+	DeleteValidateCode(ctx context.Context, user User)
 	SetResendVerification(ctx context.Context, telephoneNumber string) error
 	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
-	DeleteValidateCode(ctx context.Context, user User)
 	FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*User, error)
 }
 
@@ -200,8 +200,8 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	return tokenHeader.SignedString(uc.key)
 }
 
-func (uc *UserUsercase) VerifyCode(ctx context.Context, telephoneNumber, validateCode string) error {
-	code, err := uc.repo.GetValidateCode(ctx, telephoneNumber)
+func (uc *UserUsercase) VerifyCode(ctx context.Context, user User, validateCode string) error {
+	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 	if err != nil {
 		return err
 	}
