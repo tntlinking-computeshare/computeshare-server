@@ -121,10 +121,6 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 
-### 删除虚拟机
-DELETE  http://127.0.0.1:8000/v1/instance/{{instanceId}}
-Content-Type: application/json
-Authorization: Bearer {{ access_token }}
 
 
 ### 查询虚拟机
@@ -299,3 +295,10 @@ Authorization: Bearer {{ access_token }}
     }
   ]
 }
+
+
+
+### 删除虚拟机
+DELETE  https://api.computeshare.newtouch.com/v1/instance/0a618e99-79e4-4f3a-b73b-2ca457073bc4
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
