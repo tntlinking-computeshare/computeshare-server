@@ -275,3 +275,27 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
+
+### 流程测试
+POST https://api.computeshare.newtouch.com/v1/instance-process
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "instance": {
+    "specId": 1,
+    "imageId": 1,
+    "duration": 1,
+    "name": "mohaijiang-process1",
+    "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
+    "password": "Abcd1234",
+    "dockerCompose": "c2VydmljZXM6CiAgcHJveHk6CiAgICBpbWFnZTogbmdpbngKICAgIHBvcnRzOgogICAgICAtIDgwOjgw"
+  },
+  "networkMapping": [
+    {
+      "name": "nginx",
+      "protocol": "TCP",
+      "computerPort": 80
+    }
+  ]
+}
