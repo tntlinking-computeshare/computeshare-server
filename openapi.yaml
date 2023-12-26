@@ -11,6 +11,21 @@ paths:
             tags:
                 - StorageS3
             operationId: StorageS3_ListBucket
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: name
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -110,6 +125,20 @@ paths:
                   in: query
                   schema:
                     type: string
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
@@ -277,6 +306,10 @@ paths:
                   schema:
                     type: string
                 - name: dirName
+                  in: query
+                  schema:
+                    type: string
+                - name: prefix
                   in: query
                   schema:
                     type: string
@@ -470,9 +503,7 @@ components:
                 message:
                     type: string
                 data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
+                    $ref: '#/components/schemas/ListBucketReply_Data'
         ListBucketReply_BucketVo:
             type: object
             properties:
@@ -483,6 +514,22 @@ components:
                 createdTime:
                     type: integer
                     format: int64
+        ListBucketReply_Data:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
+                total:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
         S3Object:
             type: object
             properties:
@@ -500,6 +547,8 @@ components:
                 lastModify:
                     type: integer
                     format: int64
+                prefix:
+                    type: string
         S3StorageDeleteMkdirReply:
             type: object
             properties:
@@ -543,9 +592,23 @@ components:
                 message:
                     type: string
                 data:
+                    $ref: '#/components/schemas/S3StorageInBucketListReply_Data'
+        S3StorageInBucketListReply_Data:
+            type: object
+            properties:
+                list:
                     type: array
                     items:
                         $ref: '#/components/schemas/S3Object'
+                total:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
         S3StorageMkdirReply:
             type: object
             properties:
@@ -562,6 +625,8 @@ components:
                 bucketName:
                     type: string
                 dirName:
+                    type: string
+                prefix:
                     type: string
         S3StorageUploadFileReply:
             type: object

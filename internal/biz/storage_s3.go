@@ -61,6 +61,7 @@ type S3UserRepo interface {
 	CreateBucket(ctx context.Context, user *S3User, bucket string) (*S3Bucket, error)
 	DeleteBucket(ctx context.Context, user *S3User, bucketName string) error
 	ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error)
+	BucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error)
 }
 
 type StorageS3UseCase struct {
@@ -310,14 +311,18 @@ func (c *StorageS3UseCase) EmptyBucket(ctx context.Context, userId uuid.UUID, bu
 	return nil
 }
 
+func (c *StorageS3UseCase) ListBucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error) {
+	return c.repo.BucketPage(ctx, userId, name, page, size)
+}
+
 func (c *StorageS3UseCase) ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error) {
 	return c.repo.ListBucket(ctx, userId)
 }
 
-func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix string) ([]*pb.S3Object, error) {
+func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix, name string, page, size int32) ([]*pb.S3Object, int, error) {
 	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	config := &aws.Config{
 		Region:           aws.String(c.dispose.S3.Region),
@@ -327,15 +332,15 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 	}
 	session, err := session.NewSession(config)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	s3Client := s3.New(session)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: aws.String(prefix)})
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	var s3ObjectList []*pb.S3Object
 	for _, object := range resp.Contents {
@@ -347,7 +352,7 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 		}
 		if prefix == "" {
 			splitN := strings.SplitN(key, "/", 2)
-			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
+			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
 				s3Object.Name = splitN[0]
 			} else if len(splitN) == 1 {
 				if splitN[0] == ".keep" {
@@ -364,9 +369,10 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 			}
 		} else {
 			dir := prefix + "/"
+			s3Object.Prefix = prefix
 			if key[:len(dir)] == dir {
 				splitN := strings.SplitN(key[len(dir):], "/", 2)
-				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
+				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
 					s3Object.Name = splitN[0]
 				} else if len(splitN) == 1 {
 					if splitN[0] == ".keep" {
@@ -383,18 +389,18 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 				}
 			}
 		}
-		s3ObjectList = append(s3ObjectList, &s3Object)
-	}
-	return s3ObjectList, nil
-}
-
-func containsDir(slice []*pb.S3Object, target string) bool {
-	for _, s := range slice {
-		if s.Name == target {
-			return true
+		if name == "" {
+			s3ObjectList = append(s3ObjectList, &s3Object)
+		} else {
+			if strings.Contains(s3Object.Name, name) {
+				s3ObjectList = append(s3ObjectList, &s3Object)
+			} else {
+				continue
+			}
 		}
 	}
-	return false
+	s3ObjectPage, count := listToPage(s3ObjectList, int(page), int(size))
+	return s3ObjectPage, count, nil
 }
 
 func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.UUID, bucketName, key string, fileByte []byte) (*s3.PutObjectOutput, error) {
@@ -427,7 +433,7 @@ func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.
 	return putObject, nil
 }
 
-func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID, bucketName, dirName string) error {
+func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID, bucketName, prefix, dirName string) error {
 	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
 	if err != nil {
 		return err
@@ -446,10 +452,16 @@ func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID,
 	if err != nil {
 		return err
 	}
+	var prefixDirName string
+	if prefix != "" {
+		prefixDirName = prefix + "/" + dirName
+	} else {
+		prefixDirName = dirName
+	}
 	_, err = s3Client.PutObjectWithContext(context.Background(), &s3.PutObjectInput{
 		Body:   bytes.NewReader([]byte("")),
 		Bucket: aws.String(bucketName),
-		Key:    aws.String(dirName + "/.keep"),
+		Key:    aws.String(prefixDirName + "/.keep"),
 	})
 	if err != nil {
 		return err
@@ -457,7 +469,7 @@ func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID,
 	return nil
 }
 
-func (c *StorageS3UseCase) S3StorageDeleteMkdir(ctx context.Context, userId uuid.UUID, bucketName, dirName string) error {
+func (c *StorageS3UseCase) S3StorageDeleteMkdir(ctx context.Context, userId uuid.UUID, bucketName, prefix, dirName string) error {
 	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
 	if err != nil {
 		return err
@@ -476,7 +488,13 @@ func (c *StorageS3UseCase) S3StorageDeleteMkdir(ctx context.Context, userId uuid
 	if err != nil {
 		return err
 	}
-	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: aws.String(dirName)})
+	var prefixDirName string
+	if prefix != "" {
+		prefixDirName = prefix + "/" + dirName
+	} else {
+		prefixDirName = dirName
+	}
+	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: aws.String(prefixDirName)})
 	if len(resp.Contents) < 1 {
 		return nil
 	}
@@ -635,4 +653,29 @@ func (c *StorageS3UseCase) S3UserConfigure(cli *client.Client, cmd string) error
 	}
 	log.Log(log.LevelInfo, "s3.configure", "success")
 	return nil
+}
+
+func listToPage(list []*pb.S3Object, page, size int) ([]*pb.S3Object, int) {
+	startIdx := (page - 1) * size
+	endIdx := startIdx + size
+
+	// 避免索引越界
+	if startIdx >= len(list) {
+		return nil, len(list)
+	}
+
+	if endIdx > len(list) {
+		endIdx = len(list)
+	}
+
+	return list[startIdx:endIdx], len(list)
+}
+
+func containsDir(slice []*pb.S3Object, target string) bool {
+	for _, s := range slice {
+		if s.Name == target {
+			return true
+		}
+	}
+	return false
 }

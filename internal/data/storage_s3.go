@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"errors"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
@@ -130,6 +131,36 @@ func (r *s3UserRepoImpl) ListBucket(ctx context.Context, userId uuid.UUID) ([]*b
 		return nil, err
 	}
 	return lo.Map(buckets, r.toBucketBiz), err
+}
+func (r *s3UserRepoImpl) BucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*biz.S3Bucket, int, error) {
+	var buckets []*ent.S3Bucket
+	var err error
+	var offset int32
+	var count int
+	if page <= 1 {
+		offset = 0
+	} else {
+		offset = (page - 1) * size
+	}
+	if name != "" {
+		count, err = r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId), s3bucket.BucketNameContains(name)).Count(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+		buckets, err = r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId), s3bucket.BucketNameContains(name)).Order(s3bucket.ByCreatedTime(sql.OrderDesc())).
+			Offset(int(offset)).Limit(int(size)).All(ctx)
+	} else {
+		count, err = r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId)).Count(ctx)
+		if err != nil {
+			return nil, 0, err
+		}
+		buckets, err = r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId)).
+			Order(s3bucket.ByCreatedTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+	}
+	if err != nil {
+		return nil, 0, err
+	}
+	return lo.Map(buckets, r.toBucketBiz), count, err
 }
 
 func (r *s3UserRepoImpl) toBiz(item *ent.S3User, _ int) *biz.S3User {
