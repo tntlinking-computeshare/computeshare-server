@@ -57,6 +57,13 @@ service User {
 		};
 	}
 
+	rpc LoginWithClient(LoginWithClientRequest) returns (LoginReply){
+		option (google.api.http) = {
+			post: "/v1/user/loginWithClient"
+			body: "*"
+		};
+	}
+
 	rpc LoginWithValidateCode(LoginWithValidateCodeRequest) returns (LoginReply) {
 		option (google.api.http) = {
 			post: "/v1/user/login_by_vc"
@@ -81,6 +88,11 @@ message LoginRequest {
 	string country_call_coding = 1;
 	string telephone_number = 2;
 	string password = 3;
+}
+
+message LoginWithClientRequest {
+	string username = 1 ;
+	string password =2 ;
 }
 
 message LoginWithValidateCodeRequest {

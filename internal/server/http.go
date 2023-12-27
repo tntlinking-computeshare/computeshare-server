@@ -31,6 +31,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 
 	whiteList := make(map[string]struct{})
 	whiteList["/api.server.system.v1.User/Login"] = struct{}{}
+	whiteList["/api.server.system.v1.User/LoginWithClient"] = struct{}{}
 	whiteList["/api.server.system.v1.User/LoginWithValidateCode"] = struct{}{}
 	whiteList["/api.server.system.v1.User/VerifyCode"] = struct{}{}
 	whiteList["/api.server.system.v1.User/SendValidateCode"] = struct{}{}

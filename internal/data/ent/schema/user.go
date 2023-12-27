@@ -17,12 +17,13 @@ type User struct {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New),
+		field.String("username").Unique().MaxLen(50).Comment("用户名"),
 		field.String("country_call_coding").NotEmpty().MaxLen(8),
 		field.String("telephone_number").NotEmpty().MaxLen(50),
 		field.String("password").NotEmpty(),
 		field.Time("create_date").Default(time.Now),
 		field.Time("last_login_date").Default(time.Now),
-		field.String("name").NotEmpty().Comment("用户名"),
+		field.String("name").NotEmpty().Comment("名字"),
 		field.String("icon").Comment("头像地址"),
 		field.Bool("pwd_config").Comment("是否配置过密码").Default(false),
 	}

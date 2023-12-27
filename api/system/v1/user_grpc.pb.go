@@ -26,6 +26,7 @@ const (
 	User_GetUser_FullMethodName               = "/api.server.system.v1.User/GetUser"
 	User_ListUser_FullMethodName              = "/api.server.system.v1.User/ListUser"
 	User_Login_FullMethodName                 = "/api.server.system.v1.User/Login"
+	User_LoginWithClient_FullMethodName       = "/api.server.system.v1.User/LoginWithClient"
 	User_LoginWithValidateCode_FullMethodName = "/api.server.system.v1.User/LoginWithValidateCode"
 	User_SendValidateCode_FullMethodName      = "/api.server.system.v1.User/SendValidateCode"
 	User_VerifyCode_FullMethodName            = "/api.server.system.v1.User/VerifyCode"
@@ -48,6 +49,7 @@ type UserClient interface {
 	//
 	// {{import "tables.md"}}
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
+	LoginWithClient(ctx context.Context, in *LoginWithClientRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	LoginWithValidateCode(ctx context.Context, in *LoginWithValidateCodeRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	SendValidateCode(ctx context.Context, in *SendValidateCodeRequest, opts ...grpc.CallOption) (*SendValidateCodeReply, error)
 	VerifyCode(ctx context.Context, in *VerifyCodeRequest, opts ...grpc.CallOption) (*VerifyCodeReply, error)
@@ -124,6 +126,15 @@ func (c *userClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 	return out, nil
 }
 
+func (c *userClient) LoginWithClient(ctx context.Context, in *LoginWithClientRequest, opts ...grpc.CallOption) (*LoginReply, error) {
+	out := new(LoginReply)
+	err := c.cc.Invoke(ctx, User_LoginWithClient_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) LoginWithValidateCode(ctx context.Context, in *LoginWithValidateCodeRequest, opts ...grpc.CallOption) (*LoginReply, error) {
 	out := new(LoginReply)
 	err := c.cc.Invoke(ctx, User_LoginWithValidateCode_FullMethodName, in, out, opts...)
@@ -168,6 +179,7 @@ type UserServer interface {
 	//
 	// {{import "tables.md"}}
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	LoginWithClient(context.Context, *LoginWithClientRequest) (*LoginReply, error)
 	LoginWithValidateCode(context.Context, *LoginWithValidateCodeRequest) (*LoginReply, error)
 	SendValidateCode(context.Context, *SendValidateCodeRequest) (*SendValidateCodeReply, error)
 	VerifyCode(context.Context, *VerifyCodeRequest) (*VerifyCodeReply, error)
@@ -198,6 +210,9 @@ func (UnimplementedUserServer) ListUser(context.Context, *ListUserRequest) (*Lis
 }
 func (UnimplementedUserServer) Login(context.Context, *LoginRequest) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedUserServer) LoginWithClient(context.Context, *LoginWithClientRequest) (*LoginReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginWithClient not implemented")
 }
 func (UnimplementedUserServer) LoginWithValidateCode(context.Context, *LoginWithValidateCodeRequest) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginWithValidateCode not implemented")
@@ -347,6 +362,24 @@ func _User_Login_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_LoginWithClient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginWithClientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).LoginWithClient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_LoginWithClient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).LoginWithClient(ctx, req.(*LoginWithClientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_LoginWithValidateCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginWithValidateCodeRequest)
 	if err := dec(in); err != nil {
@@ -435,6 +468,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _User_Login_Handler,
+		},
+		{
+			MethodName: "LoginWithClient",
+			Handler:    _User_LoginWithClient_Handler,
 		},
 		{
 			MethodName: "LoginWithValidateCode",

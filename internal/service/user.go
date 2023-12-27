@@ -150,6 +150,18 @@ func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 		},
 	}, err
 }
+
+func (s *UserService) LoginWithClient(ctx context.Context, req *pb.LoginWithClientRequest) (*pb.LoginReply, error) {
+	token, err := s.uc.LoginWithClient(ctx, req.GetUsername(), req.GetPassword())
+	return &pb.LoginReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.LoginReply_Data{
+			Token: token,
+		},
+	}, err
+}
+
 func (s *UserService) LoginWithValidateCode(ctx context.Context, req *pb.LoginWithValidateCodeRequest) (*pb.LoginReply, error) {
 	token, err := s.uc.LoginWithValidateCode(ctx, &biz.User{
 		CountryCallCoding: req.GetCountryCallCoding(),

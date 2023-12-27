@@ -398,8 +398,12 @@ func init() {
 	task.DefaultID = taskDescID.Default.(func() uuid.UUID)
 	userFields := schema.User{}.Fields()
 	_ = userFields
+	// userDescUsername is the schema descriptor for username field.
+	userDescUsername := userFields[1].Descriptor()
+	// user.UsernameValidator is a validator for the "username" field. It is called by the builders before save.
+	user.UsernameValidator = userDescUsername.Validators[0].(func(string) error)
 	// userDescCountryCallCoding is the schema descriptor for country_call_coding field.
-	userDescCountryCallCoding := userFields[1].Descriptor()
+	userDescCountryCallCoding := userFields[2].Descriptor()
 	// user.CountryCallCodingValidator is a validator for the "country_call_coding" field. It is called by the builders before save.
 	user.CountryCallCodingValidator = func() func(string) error {
 		validators := userDescCountryCallCoding.Validators
@@ -417,7 +421,7 @@ func init() {
 		}
 	}()
 	// userDescTelephoneNumber is the schema descriptor for telephone_number field.
-	userDescTelephoneNumber := userFields[2].Descriptor()
+	userDescTelephoneNumber := userFields[3].Descriptor()
 	// user.TelephoneNumberValidator is a validator for the "telephone_number" field. It is called by the builders before save.
 	user.TelephoneNumberValidator = func() func(string) error {
 		validators := userDescTelephoneNumber.Validators
@@ -435,23 +439,23 @@ func init() {
 		}
 	}()
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[3].Descriptor()
+	userDescPassword := userFields[4].Descriptor()
 	// user.PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	user.PasswordValidator = userDescPassword.Validators[0].(func(string) error)
 	// userDescCreateDate is the schema descriptor for create_date field.
-	userDescCreateDate := userFields[4].Descriptor()
+	userDescCreateDate := userFields[5].Descriptor()
 	// user.DefaultCreateDate holds the default value on creation for the create_date field.
 	user.DefaultCreateDate = userDescCreateDate.Default.(func() time.Time)
 	// userDescLastLoginDate is the schema descriptor for last_login_date field.
-	userDescLastLoginDate := userFields[5].Descriptor()
+	userDescLastLoginDate := userFields[6].Descriptor()
 	// user.DefaultLastLoginDate holds the default value on creation for the last_login_date field.
 	user.DefaultLastLoginDate = userDescLastLoginDate.Default.(func() time.Time)
 	// userDescName is the schema descriptor for name field.
-	userDescName := userFields[6].Descriptor()
+	userDescName := userFields[7].Descriptor()
 	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	user.NameValidator = userDescName.Validators[0].(func(string) error)
 	// userDescPwdConfig is the schema descriptor for pwd_config field.
-	userDescPwdConfig := userFields[8].Descriptor()
+	userDescPwdConfig := userFields[9].Descriptor()
 	// user.DefaultPwdConfig holds the default value on creation for the pwd_config field.
 	user.DefaultPwdConfig = userDescPwdConfig.Default.(bool)
 	// userDescID is the schema descriptor for id field.
