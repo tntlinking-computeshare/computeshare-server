@@ -343,6 +343,29 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 		return nil, 0, err
 	}
 	var s3ObjectList []*pb.S3Object
+	dirNameSizeMap := make(map[string]int64)
+	dirNameTimeMap := make(map[string]int64)
+	for _, object := range resp.Contents {
+		key := *object.Key
+		if prefix != "" {
+			key = key[len(prefix)+1:]
+		}
+		splitN := strings.SplitN(key, "/", 2)
+		if len(splitN) <= 1 {
+			continue
+		}
+		dirName := splitN[0]
+		size, existsSize := dirNameSizeMap[dirName]
+		if existsSize {
+			dirNameSizeMap[dirName] = size + *object.Size
+		} else {
+			dirNameSizeMap[dirName] = *object.Size
+		}
+		time, existsTime := dirNameTimeMap[dirName]
+		if !existsTime || time > object.LastModified.UnixMilli() {
+			dirNameTimeMap[dirName] = object.LastModified.UnixMilli()
+		}
+	}
 	for _, object := range resp.Contents {
 		var s3Object pb.S3Object
 		key := *object.Key
@@ -354,6 +377,8 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 			splitN := strings.SplitN(key, "/", 2)
 			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
 				s3Object.Name = splitN[0]
+				s3Object.LastModify = dirNameTimeMap[s3Object.Name]
+				s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
 			} else if len(splitN) == 1 {
 				if splitN[0] == ".keep" {
 					continue
@@ -374,6 +399,8 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 				splitN := strings.SplitN(key[len(dir):], "/", 2)
 				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
 					s3Object.Name = splitN[0]
+					s3Object.LastModify = dirNameTimeMap[s3Object.Name]
+					s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
 				} else if len(splitN) == 1 {
 					if splitN[0] == ".keep" {
 						continue
