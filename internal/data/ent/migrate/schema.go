@@ -333,6 +333,7 @@ var (
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "username", Type: field.TypeString, Unique: true, Size: 50},
 		{Name: "country_call_coding", Type: field.TypeString, Size: 8},
 		{Name: "telephone_number", Type: field.TypeString, Size: 50},
 		{Name: "password", Type: field.TypeString},
@@ -356,7 +357,7 @@ var (
 			{
 				Name:    "user_country_call_coding_telephone_number",
 				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[1], UsersColumns[2]},
+				Columns: []*schema.Column{UsersColumns[2], UsersColumns[3]},
 			},
 		},
 	}

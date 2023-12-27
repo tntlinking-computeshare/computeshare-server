@@ -176,6 +176,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/user/loginWithClient:
+        post:
+            tags:
+                - User
+            operationId: User_LoginWithClient
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginWithClientRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/user/login_by_vc:
         post:
             tags:
@@ -327,6 +351,13 @@ components:
                 countryCallCoding:
                     type: string
                 telephoneNumber:
+                    type: string
+                password:
+                    type: string
+        LoginWithClientRequest:
+            type: object
+            properties:
+                username:
                     type: string
                 password:
                     type: string

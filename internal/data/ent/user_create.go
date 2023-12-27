@@ -21,6 +21,12 @@ type UserCreate struct {
 	hooks    []Hook
 }
 
+// SetUsername sets the "username" field.
+func (uc *UserCreate) SetUsername(s string) *UserCreate {
+	uc.mutation.SetUsername(s)
+	return uc
+}
+
 // SetCountryCallCoding sets the "country_call_coding" field.
 func (uc *UserCreate) SetCountryCallCoding(s string) *UserCreate {
 	uc.mutation.SetCountryCallCoding(s)
@@ -162,6 +168,14 @@ func (uc *UserCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
+	if _, ok := uc.mutation.Username(); !ok {
+		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "User.username"`)}
+	}
+	if v, ok := uc.mutation.Username(); ok {
+		if err := user.UsernameValidator(v); err != nil {
+			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
+		}
+	}
 	if _, ok := uc.mutation.CountryCallCoding(); !ok {
 		return &ValidationError{Name: "country_call_coding", err: errors.New(`ent: missing required field "User.country_call_coding"`)}
 	}
@@ -240,6 +254,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if id, ok := uc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := uc.mutation.Username(); ok {
+		_spec.SetField(user.FieldUsername, field.TypeString, value)
+		_node.Username = value
 	}
 	if value, ok := uc.mutation.CountryCallCoding(); ok {
 		_spec.SetField(user.FieldCountryCallCoding, field.TypeString, value)

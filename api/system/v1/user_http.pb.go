@@ -23,6 +23,7 @@ const OperationUserCreateUser = "/api.server.system.v1.User/CreateUser"
 const OperationUserGetUser = "/api.server.system.v1.User/GetUser"
 const OperationUserListUser = "/api.server.system.v1.User/ListUser"
 const OperationUserLogin = "/api.server.system.v1.User/Login"
+const OperationUserLoginWithClient = "/api.server.system.v1.User/LoginWithClient"
 const OperationUserLoginWithValidateCode = "/api.server.system.v1.User/LoginWithValidateCode"
 const OperationUserSendValidateCode = "/api.server.system.v1.User/SendValidateCode"
 const OperationUserUpdateUser = "/api.server.system.v1.User/UpdateUser"
@@ -41,6 +42,7 @@ type UserHTTPServer interface {
 	//
 	// {{import "tables.md"}}
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	LoginWithClient(context.Context, *LoginWithClientRequest) (*LoginReply, error)
 	LoginWithValidateCode(context.Context, *LoginWithValidateCodeRequest) (*LoginReply, error)
 	SendValidateCode(context.Context, *SendValidateCodeRequest) (*SendValidateCodeReply, error)
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
@@ -58,6 +60,7 @@ func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r.GET("/v1/user", _User_GetUser0_HTTP_Handler(srv))
 	r.GET("/v1/system/user", _User_ListUser0_HTTP_Handler(srv))
 	r.POST("/v1/user/login", _User_Login0_HTTP_Handler(srv))
+	r.POST("/v1/user/loginWithClient", _User_LoginWithClient0_HTTP_Handler(srv))
 	r.POST("/v1/user/login_by_vc", _User_LoginWithValidateCode0_HTTP_Handler(srv))
 	r.POST("/v1/sms/send", _User_SendValidateCode0_HTTP_Handler(srv))
 	r.POST("/v1/sms/code/verify", _User_VerifyCode0_HTTP_Handler(srv))
@@ -211,6 +214,28 @@ func _User_Login0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error 
 	}
 }
 
+func _User_LoginWithClient0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in LoginWithClientRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserLoginWithClient)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.LoginWithClient(ctx, req.(*LoginWithClientRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*LoginReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _User_LoginWithValidateCode0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LoginWithValidateCodeRequest
@@ -282,6 +307,7 @@ type UserHTTPClient interface {
 	GetUser(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
 	ListUser(ctx context.Context, req *ListUserRequest, opts ...http.CallOption) (rsp *ListUserReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
+	LoginWithClient(ctx context.Context, req *LoginWithClientRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
 	LoginWithValidateCode(ctx context.Context, req *LoginWithValidateCodeRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
 	SendValidateCode(ctx context.Context, req *SendValidateCodeRequest, opts ...http.CallOption) (rsp *SendValidateCodeReply, err error)
 	UpdateUser(ctx context.Context, req *UpdateUserRequest, opts ...http.CallOption) (rsp *UpdateUserReply, err error)
@@ -342,6 +368,19 @@ func (c *UserHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts .
 	pattern := "/v1/user/login"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserLogin))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *UserHTTPClientImpl) LoginWithClient(ctx context.Context, in *LoginWithClientRequest, opts ...http.CallOption) (*LoginReply, error) {
+	var out LoginReply
+	pattern := "/v1/user/loginWithClient"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserLoginWithClient))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

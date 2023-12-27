@@ -299,6 +299,16 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/0a618e99-79e4-4f3a-b73b-2ca457073bc4
+DELETE  https://api.computeshare.newtouch.com/v1/instance/3ee29892-49e9-4104-bf44-d8164eb6799e
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
+
+
+### 登录
+POST http://127.0.0.1:8000/v1/user/loginWithClient
+Content-Type: application/json
+
+{
+  "username": "+8615001747213",
+  "password": "Abcd1234"
+}

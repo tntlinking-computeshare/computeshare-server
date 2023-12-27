@@ -14,6 +14,8 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldUsername holds the string denoting the username field in the database.
+	FieldUsername = "username"
 	// FieldCountryCallCoding holds the string denoting the country_call_coding field in the database.
 	FieldCountryCallCoding = "country_call_coding"
 	// FieldTelephoneNumber holds the string denoting the telephone_number field in the database.
@@ -37,6 +39,7 @@ const (
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
+	FieldUsername,
 	FieldCountryCallCoding,
 	FieldTelephoneNumber,
 	FieldPassword,
@@ -58,6 +61,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// UsernameValidator is a validator for the "username" field. It is called by the builders before save.
+	UsernameValidator func(string) error
 	// CountryCallCodingValidator is a validator for the "country_call_coding" field. It is called by the builders before save.
 	CountryCallCodingValidator func(string) error
 	// TelephoneNumberValidator is a validator for the "telephone_number" field. It is called by the builders before save.
@@ -82,6 +87,11 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByUsername orders the results by the username field.
+func ByUsername(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUsername, opts...).ToFunc()
 }
 
 // ByCountryCallCoding orders the results by the country_call_coding field.

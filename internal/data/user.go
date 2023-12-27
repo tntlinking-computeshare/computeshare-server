@@ -61,12 +61,14 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 
 	if user.Name == "" {
 		user.Name = user.GetFullTelephone()
+		user.Username = user.GetFullTelephone()
 	}
 
 	if err == nil && code == user.ValidateCode {
 		encodePassword := md5.Sum([]byte(user.Password))
 		result, err := ur.data.getUserClient(ctx).
 			Create().
+			SetUsername(user.Username).
 			SetCountryCallCoding(user.CountryCallCoding).
 			SetTelephoneNumber(user.TelephoneNumber).
 			SetPassword(hex.EncodeToString(encodePassword[:])).
@@ -99,6 +101,7 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 	_, err = p.Update().
 		SetIcon(user.Icon).
 		SetName(user.Name).
+		SetUsername(user.Username).
 		Save(ctx)
 	return err
 }
@@ -175,6 +178,7 @@ func (ur *userRepo) DeleteValidateCode(ctx context.Context, user biz.User) {
 func (ur *userRepo) toBiz(p *ent.User, _ int) *biz.User {
 	return &biz.User{
 		ID:                p.ID,
+		Username:          p.Username,
 		CountryCallCoding: p.CountryCallCoding,
 		TelephoneNumber:   p.TelephoneNumber,
 		Password:          p.Password,
@@ -184,4 +188,13 @@ func (ur *userRepo) toBiz(p *ent.User, _ int) *biz.User {
 		Icon:              p.Icon,
 		PwdConfig:         p.PwdConfig,
 	}
+}
+
+func (ur *userRepo) FindByUsername(ctx context.Context, username string) (*biz.User, error) {
+	entity, err := ur.data.getUserClient(ctx).Query().Where(user.Username(username)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return ur.toBiz(entity, 0), err
 }

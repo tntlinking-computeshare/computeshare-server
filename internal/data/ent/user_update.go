@@ -28,6 +28,12 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return uu
 }
 
+// SetUsername sets the "username" field.
+func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
+	uu.mutation.SetUsername(s)
+	return uu
+}
+
 // SetCountryCallCoding sets the "country_call_coding" field.
 func (uu *UserUpdate) SetCountryCallCoding(s string) *UserUpdate {
 	uu.mutation.SetCountryCallCoding(s)
@@ -134,6 +140,11 @@ func (uu *UserUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (uu *UserUpdate) check() error {
+	if v, ok := uu.mutation.Username(); ok {
+		if err := user.UsernameValidator(v); err != nil {
+			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
+		}
+	}
 	if v, ok := uu.mutation.CountryCallCoding(); ok {
 		if err := user.CountryCallCodingValidator(v); err != nil {
 			return &ValidationError{Name: "country_call_coding", err: fmt.Errorf(`ent: validator failed for field "User.country_call_coding": %w`, err)}
@@ -168,6 +179,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := uu.mutation.Username(); ok {
+		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.CountryCallCoding(); ok {
 		_spec.SetField(user.FieldCountryCallCoding, field.TypeString, value)
@@ -211,6 +225,12 @@ type UserUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *UserMutation
+}
+
+// SetUsername sets the "username" field.
+func (uuo *UserUpdateOne) SetUsername(s string) *UserUpdateOne {
+	uuo.mutation.SetUsername(s)
+	return uuo
 }
 
 // SetCountryCallCoding sets the "country_call_coding" field.
@@ -332,6 +352,11 @@ func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (uuo *UserUpdateOne) check() error {
+	if v, ok := uuo.mutation.Username(); ok {
+		if err := user.UsernameValidator(v); err != nil {
+			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
+		}
+	}
 	if v, ok := uuo.mutation.CountryCallCoding(); ok {
 		if err := user.CountryCallCodingValidator(v); err != nil {
 			return &ValidationError{Name: "country_call_coding", err: fmt.Errorf(`ent: validator failed for field "User.country_call_coding": %w`, err)}
@@ -383,6 +408,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := uuo.mutation.Username(); ok {
+		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.CountryCallCoding(); ok {
 		_spec.SetField(user.FieldCountryCallCoding, field.TypeString, value)

@@ -25,6 +25,8 @@ import (
 
 type User struct {
 	ID uuid.UUID `json:"id,omitempty"`
+	// 登录名
+	Username string `json:"username"`
 	// CountryCallCoding holds the value of the "country_call_coding" field.
 	CountryCallCoding string `json:"country_call_coding,omitempty"`
 	// TelephoneNumber holds the value of the "telephone_number" field.
@@ -62,6 +64,7 @@ type UserRepo interface {
 	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
 	DeleteValidateCode(ctx context.Context, user User)
 	FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*User, error)
+	FindByUsername(ctx context.Context, username string) (*User, error)
 }
 
 type UserUsercase struct {
@@ -282,4 +285,25 @@ func (uc *UserUsercase) SendMessageFromDh3t(phone string, vCode string) (err err
 		return fmt.Errorf(string(responseBody))
 	}
 
+}
+
+func (uc *UserUsercase) LoginWithClient(ctx context.Context, username, password string) (string, error) {
+	u, err := uc.repo.FindByUsername(ctx, username)
+	if err != nil {
+		return "", err
+	}
+
+	encodedPassword := md5.Sum([]byte(password))
+	if hex.EncodeToString(encodedPassword[:]) != u.Password {
+		return "", errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
+	}
+
+	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{
+		UserID: u.ID.String(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(20, 0, 0)),
+		},
+	})
+
+	return tokenHeader.SignedString(uc.key)
 }

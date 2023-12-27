@@ -18,6 +18,8 @@ type User struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// 用户名
+	Username string `json:"username,omitempty"`
 	// CountryCallCoding holds the value of the "country_call_coding" field.
 	CountryCallCoding string `json:"country_call_coding,omitempty"`
 	// TelephoneNumber holds the value of the "telephone_number" field.
@@ -28,7 +30,7 @@ type User struct {
 	CreateDate time.Time `json:"create_date,omitempty"`
 	// LastLoginDate holds the value of the "last_login_date" field.
 	LastLoginDate time.Time `json:"last_login_date,omitempty"`
-	// 用户名
+	// 名字
 	Name string `json:"name,omitempty"`
 	// 头像地址
 	Icon string `json:"icon,omitempty"`
@@ -44,7 +46,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldPwdConfig:
 			values[i] = new(sql.NullBool)
-		case user.FieldCountryCallCoding, user.FieldTelephoneNumber, user.FieldPassword, user.FieldName, user.FieldIcon:
+		case user.FieldUsername, user.FieldCountryCallCoding, user.FieldTelephoneNumber, user.FieldPassword, user.FieldName, user.FieldIcon:
 			values[i] = new(sql.NullString)
 		case user.FieldCreateDate, user.FieldLastLoginDate:
 			values[i] = new(sql.NullTime)
@@ -70,6 +72,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				u.ID = *value
+			}
+		case user.FieldUsername:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field username", values[i])
+			} else if value.Valid {
+				u.Username = value.String
 			}
 		case user.FieldCountryCallCoding:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -155,6 +163,9 @@ func (u *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
+	builder.WriteString("username=")
+	builder.WriteString(u.Username)
+	builder.WriteString(", ")
 	builder.WriteString("country_call_coding=")
 	builder.WriteString(u.CountryCallCoding)
 	builder.WriteString(", ")
