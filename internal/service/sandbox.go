@@ -7,22 +7,22 @@ import (
 	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
 )
 
-type ProcessService struct {
-	pb.UnimplementedProcessServer
+type SandboxService struct {
+	pb.UnimplementedSandboxServer
 	cis *ComputeInstanceService
 	nms *NetworkMappingService
 	log *log.Helper
 }
 
-func NewProcessService(cis *ComputeInstanceService, nms *NetworkMappingService, logger log.Logger) *ProcessService {
-	return &ProcessService{
+func NewSandboxService(cis *ComputeInstanceService, nms *NetworkMappingService, logger log.Logger) *SandboxService {
+	return &SandboxService{
 		cis: cis,
 		nms: nms,
 		log: log.NewHelper(logger),
 	}
 }
 
-func (s *ProcessService) CreateInstanceProcess(ctx context.Context, req *pb.CreateInstanceProcessRequest) (*pb.CreateInstanceProcessReply, error) {
+func (s *SandboxService) CreateInstanceProcess(ctx context.Context, req *pb.CreateSandboxRequest) (*pb.CreateSandboxReply, error) {
 
 	s.log.Info("通过配置流程创建虚拟机")
 	s.log.Info("开始创建虚拟机")
@@ -41,7 +41,7 @@ func (s *ProcessService) CreateInstanceProcess(ctx context.Context, req *pb.Crea
 		}
 		s.log.Info("创建的网络映射id:", networkMappingReply.NetworkMapping.Id)
 	}
-	return &pb.CreateInstanceProcessReply{
+	return &pb.CreateSandboxReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, nil

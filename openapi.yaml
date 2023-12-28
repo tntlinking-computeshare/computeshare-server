@@ -3,19 +3,19 @@
 
 openapi: 3.0.3
 info:
-    title: User API
+    title: Sandbox API
     version: 0.0.1
 paths:
-    /v1/sms/code/verify:
+    /v1/sandbox:
         post:
             tags:
-                - User
-            operationId: User_VerifyCode
+                - Sandbox
+            operationId: Sandbox_CreateSandbox
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/VerifyCodeRequest'
+                            $ref: '#/components/schemas/CreateSandboxRequest'
                 required: true
             responses:
                 "200":
@@ -23,249 +23,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/VerifyCodeReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/sms/send:
-        post:
-            tags:
-                - User
-            operationId: User_SendValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/SendValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/SendValidateCodeReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/system/user:
-        get:
-            tags:
-                - User
-            operationId: User_ListUser
-            parameters:
-                - name: countryCallCoding
-                  in: query
-                  schema:
-                    type: string
-                - name: telephoneNumber
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user:
-        get:
-            tags:
-                - User
-            operationId: User_GetUser
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-        post:
-            tags:
-                - User
-            operationId: User_CreateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CreateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CreateUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/login:
-        post:
-            tags:
-                - User
-            description: |-
-                Login
-
-                 {{.MethodDescriptorProto.Name}} is a call with the method(s) {{$first := true}}{{range .Bindings}}{{if $first}}{{$first = false}}{{else}}, {{end}}{{.HTTPMethod}}{{end}} within the "{{.Service.Name}}" service.
-                 It takes in "{{.RequestType.Name}}" and returns a "{{.ResponseType.Name}}".
-
-                 {{import "tables.md"}}
-            operationId: User_Login
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/loginWithClient:
-        post:
-            tags:
-                - User
-            operationId: User_LoginWithClient
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginWithClientRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/login_by_vc:
-        post:
-            tags:
-                - User
-            operationId: User_LoginWithValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginWithValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/password:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserPassword
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserPasswordRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserPasswordReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/telephone:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserTelephone
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserTelephoneRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserTelephoneReply'
+                                $ref: '#/components/schemas/CreateSandboxReply'
                 default:
                     description: Default error response
                     content:
@@ -274,33 +32,39 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateUserReply:
+        CreateInstanceRequest:
             type: object
             properties:
-                code:
+                specId:
                     type: integer
                     format: int32
-                message:
+                imageId:
+                    type: integer
+                    format: int32
+                duration:
+                    type: integer
+                    format: int32
+                name:
                     type: string
-                data:
-                    $ref: '#/components/schemas/CreateUserReply_Data'
-        CreateUserReply_Data:
-            type: object
-            properties:
-                id:
-                    type: string
-        CreateUserRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
+                publicKey:
                     type: string
                 password:
                     type: string
-                validateCode:
+                dockerCompose:
                     type: string
-        GetUserReply:
+        CreateNetworkMappingRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                protocol:
+                    type: string
+                computerId:
+                    type: string
+                computerPort:
+                    type: integer
+                    format: int32
+        CreateSandboxReply:
             type: object
             properties:
                 code:
@@ -309,7 +73,21 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/UserReply'
+                    $ref: '#/components/schemas/CreateSandboxReply_CreateInstanceProcessReply_Data'
+        CreateSandboxReply_CreateInstanceProcessReply_Data:
+            type: object
+            properties:
+                instanceId:
+                    type: string
+        CreateSandboxRequest:
+            type: object
+            properties:
+                instance:
+                    $ref: '#/components/schemas/CreateInstanceRequest'
+                networkMapping:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateNetworkMappingRequest'
         GoogleProtobufAny:
             type: object
             properties:
@@ -318,73 +96,6 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        ListUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/UserReply'
-        LoginReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/LoginReply_Data'
-        LoginReply_Data:
-            type: object
-            properties:
-                token:
-                    type: string
-        LoginRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                password:
-                    type: string
-        LoginWithClientRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-        LoginWithValidateCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        SendValidateCodeReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        SendValidateCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
         Status:
             type: object
             properties:
@@ -401,90 +112,5 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        UpdateUserPasswordReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserPasswordRequest:
-            type: object
-            properties:
-                oldPassword:
-                    type: string
-                newPassword:
-                    type: string
-        UpdateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                icon:
-                    type: string
-        UpdateUserTelephoneReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserTelephoneRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        UserReply:
-            type: object
-            properties:
-                id:
-                    type: string
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                createDate:
-                    type: integer
-                    format: int64
-                lastLoginDate:
-                    type: integer
-                    format: int64
-                name:
-                    type: string
-                icon:
-                    type: string
-                pwdConfig:
-                    type: boolean
-        VerifyCodeReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        VerifyCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
 tags:
-    - name: User
+    - name: Sandbox
