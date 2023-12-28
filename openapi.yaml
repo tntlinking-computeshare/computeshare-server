@@ -3,63 +3,208 @@
 
 openapi: 3.0.3
 info:
-    title: User API
+    title: StorageS3 API
     version: 0.0.1
 paths:
-    /v1/sms/code/verify:
-        post:
-            tags:
-                - User
-            operationId: User_VerifyCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/VerifyCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/VerifyCodeReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/sms/send:
-        post:
-            tags:
-                - User
-            operationId: User_SendValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/SendValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/SendValidateCodeReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/system/user:
+    /v1/s3bucket:
         get:
             tags:
-                - User
-            operationId: User_ListUser
+                - StorageS3
+            operationId: StorageS3_ListBucket
             parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_CreateBucket
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateBucketRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_DeleteBucket
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}/empty:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_EmptyBucket
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/EmptyBucketReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3bucket/{bucketName}/objects:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageInBucketList
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: prefix
+                  in: query
+                  schema:
+                    type: string
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageInBucketListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_GetUserS3UserList
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetUserS3UserListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user/create/key:
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_CreateS3Key
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateS3KeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateS3KeyReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/s3user/{id}:
+        get:
+            tags:
+                - StorageS3
+            operationId: StorageS3_GetUserS3User
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
                 - name: countryCallCoding
                   in: query
                   schema:
@@ -68,69 +213,191 @@ paths:
                   in: query
                   schema:
                     type: string
+                - name: validateCode
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ListUserReply'
+                                $ref: '#/components/schemas/GetUserS3UserReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/user:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_DeleteUserS3User
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: countryCallCoding
+                  in: query
+                  schema:
+                    type: string
+                - name: telephoneNumber
+                  in: query
+                  schema:
+                    type: string
+                - name: validateCode
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteUserS3UserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/mkdir:
+        post:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageMkdir
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/S3StorageMkdirRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageMkdirReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDeleteMkdir
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: dirName
+                  in: query
+                  schema:
+                    type: string
+                - name: prefix
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDeleteMkdirReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/delete:
+        delete:
+            tags:
+                - StorageS3
+            operationId: StorageS3_S3StorageDelete
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/S3StorageDeleteReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/download/ersatz:
         get:
             tags:
-                - User
-            operationId: User_GetUser
+                - StorageS3
+            operationId: StorageS3_S3StorageDownload
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetUserReply'
+                                $ref: '#/components/schemas/S3StorageDownloadReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+    /v1/storage/{bucketName}/objects/upload/ersatz:
         post:
             tags:
-                - User
-            operationId: User_CreateUser
+                - StorageS3
+            operationId: StorageS3_S3StorageUploadFile
+            parameters:
+                - name: bucketName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateUserRequest'
+                            $ref: '#/components/schemas/S3StorageUploadFileRequest'
                 required: true
             responses:
                 "200":
@@ -138,134 +405,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateUserReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/login:
-        post:
-            tags:
-                - User
-            description: |-
-                Login
-
-                 {{.MethodDescriptorProto.Name}} is a call with the method(s) {{$first := true}}{{range .Bindings}}{{if $first}}{{$first = false}}{{else}}, {{end}}{{.HTTPMethod}}{{end}} within the "{{.Service.Name}}" service.
-                 It takes in "{{.RequestType.Name}}" and returns a "{{.ResponseType.Name}}".
-
-                 {{import "tables.md"}}
-            operationId: User_Login
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/loginWithClient:
-        post:
-            tags:
-                - User
-            operationId: User_LoginWithClient
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginWithClientRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/login_by_vc:
-        post:
-            tags:
-                - User
-            operationId: User_LoginWithValidateCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginWithValidateCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/password:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserPassword
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserPasswordRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserPasswordReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/user/telephone:
-        put:
-            tags:
-                - User
-            operationId: User_UpdateUserTelephone
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateUserTelephoneRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UpdateUserTelephoneReply'
+                                $ref: '#/components/schemas/S3StorageUploadFileReply'
                 default:
                     description: Default error response
                     content:
@@ -274,7 +414,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CreateUserReply:
+        CreateBucketReply:
             type: object
             properties:
                 code:
@@ -283,24 +423,13 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CreateUserReply_Data'
-        CreateUserReply_Data:
+                    type: string
+        CreateBucketRequest:
             type: object
             properties:
-                id:
+                bucketName:
                     type: string
-        CreateUserRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                password:
-                    type: string
-                validateCode:
-                    type: string
-        GetUserReply:
+        CreateS3KeyReply:
             type: object
             properties:
                 code:
@@ -308,17 +437,34 @@ components:
                     format: int32
                 message:
                     type: string
-                data:
-                    $ref: '#/components/schemas/UserReply'
-        GoogleProtobufAny:
+        CreateS3KeyRequest:
+            type: object
+            properties: {}
+        DeleteBucketReply:
             type: object
             properties:
-                '@type':
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
-                    description: The type of the serialized message.
-            additionalProperties: true
-            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        ListUserReply:
+        DeleteUserS3UserReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        EmptyBucketReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        GetUserS3UserListReply:
             type: object
             properties:
                 code:
@@ -329,8 +475,8 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/UserReply'
-        LoginReply:
+                        $ref: '#/components/schemas/S3User'
+        GetUserS3UserReply:
             type: object
             properties:
                 code:
@@ -339,38 +485,16 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/LoginReply_Data'
-        LoginReply_Data:
+                    $ref: '#/components/schemas/S3User'
+        GoogleProtobufAny:
             type: object
             properties:
-                token:
+                '@type':
                     type: string
-        LoginRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                password:
-                    type: string
-        LoginWithClientRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-        LoginWithValidateCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        SendValidateCodeReply:
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ListBucketReply:
             type: object
             properties:
                 code:
@@ -378,12 +502,170 @@ components:
                     format: int32
                 message:
                     type: string
-        SendValidateCodeRequest:
+                data:
+                    $ref: '#/components/schemas/ListBucketReply_Data'
+        ListBucketReply_BucketVo:
             type: object
             properties:
-                countryCallCoding:
+                id:
                     type: string
-                telephoneNumber:
+                bucket:
+                    type: string
+                createdTime:
+                    type: integer
+                    format: int64
+        ListBucketReply_Data:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListBucketReply_BucketVo'
+                total:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+        S3Object:
+            type: object
+            properties:
+                etag:
+                    type: string
+                name:
+                    type: string
+                s3Url:
+                    type: string
+                url:
+                    type: string
+                size:
+                    type: integer
+                    format: int32
+                lastModify:
+                    type: integer
+                    format: int64
+                prefix:
+                    type: string
+        S3StorageDeleteMkdirReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        S3StorageDeleteReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        S3StorageDownloadReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3StorageDownloadReply_Data'
+        S3StorageDownloadReply_Data:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                name:
+                    type: string
+        S3StorageInBucketListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3StorageInBucketListReply_Data'
+        S3StorageInBucketListReply_Data:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/S3Object'
+                total:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+        S3StorageMkdirReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: string
+        S3StorageMkdirRequest:
+            type: object
+            properties:
+                bucketName:
+                    type: string
+                dirName:
+                    type: string
+                prefix:
+                    type: string
+        S3StorageUploadFileReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/S3Object'
+        S3StorageUploadFileRequest:
+            type: object
+            properties:
+                body:
+                    type: string
+                    format: bytes
+                prefix:
+                    type: string
+                fileName:
+                    type: string
+                bucketName:
+                    type: string
+        S3User:
+            type: object
+            properties:
+                id:
+                    type: string
+                accessKey:
+                    type: string
+                secretKey:
+                    type: string
+                createTime:
+                    type: integer
+                    format: int64
+                updateTime:
+                    type: integer
+                    format: int64
+                endpoint:
                     type: string
         Status:
             type: object
@@ -401,90 +683,5 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        UpdateUserPasswordReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserPasswordRequest:
-            type: object
-            properties:
-                oldPassword:
-                    type: string
-                newPassword:
-                    type: string
-        UpdateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                icon:
-                    type: string
-        UpdateUserTelephoneReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        UpdateUserTelephoneRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
-        UserReply:
-            type: object
-            properties:
-                id:
-                    type: string
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                createDate:
-                    type: integer
-                    format: int64
-                lastLoginDate:
-                    type: integer
-                    format: int64
-                name:
-                    type: string
-                icon:
-                    type: string
-                pwdConfig:
-                    type: boolean
-        VerifyCodeReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        VerifyCodeRequest:
-            type: object
-            properties:
-                countryCallCoding:
-                    type: string
-                telephoneNumber:
-                    type: string
-                validateCode:
-                    type: string
 tags:
-    - name: User
+    - name: StorageS3

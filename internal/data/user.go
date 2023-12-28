@@ -15,10 +15,6 @@ import (
 	"time"
 )
 
-func likeKey(telephone string) string {
-	return fmt.Sprintf("telephone_login:%s", telephone)
-}
-
 func likeResendVerificationKey(telephone string) string {
 	return fmt.Sprintf("telephone_send:%s", telephone)
 }
@@ -60,7 +56,7 @@ func (ur *userRepo) CreateUser(ctx context.Context, user *biz.User) error {
 	code, err := ur.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if user.Name == "" {
-		user.Name = user.GetFullTelephone()
+		user.Name = user.TelephoneNumber
 		user.Username = user.GetFullTelephone()
 	}
 
@@ -101,7 +97,6 @@ func (ur *userRepo) UpdateUser(ctx context.Context, id uuid.UUID, user *biz.User
 	_, err = p.Update().
 		SetIcon(user.Icon).
 		SetName(user.Name).
-		SetUsername(user.Username).
 		Save(ctx)
 	return err
 }

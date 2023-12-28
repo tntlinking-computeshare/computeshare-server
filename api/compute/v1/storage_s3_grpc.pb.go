@@ -20,7 +20,9 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	StorageS3_CreateS3Key_FullMethodName           = "/api.server.compute.v1.StorageS3/CreateS3Key"
+	StorageS3_GetUserS3UserList_FullMethodName     = "/api.server.compute.v1.StorageS3/GetUserS3UserList"
 	StorageS3_GetUserS3User_FullMethodName         = "/api.server.compute.v1.StorageS3/GetUserS3User"
+	StorageS3_DeleteUserS3User_FullMethodName      = "/api.server.compute.v1.StorageS3/DeleteUserS3User"
 	StorageS3_CreateBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/CreateBucket"
 	StorageS3_DeleteBucket_FullMethodName          = "/api.server.compute.v1.StorageS3/DeleteBucket"
 	StorageS3_EmptyBucket_FullMethodName           = "/api.server.compute.v1.StorageS3/EmptyBucket"
@@ -28,6 +30,7 @@ const (
 	StorageS3_S3StorageInBucketList_FullMethodName = "/api.server.compute.v1.StorageS3/S3StorageInBucketList"
 	StorageS3_S3StorageUploadFile_FullMethodName   = "/api.server.compute.v1.StorageS3/S3StorageUploadFile"
 	StorageS3_S3StorageMkdir_FullMethodName        = "/api.server.compute.v1.StorageS3/S3StorageMkdir"
+	StorageS3_S3StorageDeleteMkdir_FullMethodName  = "/api.server.compute.v1.StorageS3/S3StorageDeleteMkdir"
 	StorageS3_S3StorageDownload_FullMethodName     = "/api.server.compute.v1.StorageS3/S3StorageDownload"
 	StorageS3_S3StorageDelete_FullMethodName       = "/api.server.compute.v1.StorageS3/S3StorageDelete"
 )
@@ -37,7 +40,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StorageS3Client interface {
 	CreateS3Key(ctx context.Context, in *CreateS3KeyRequest, opts ...grpc.CallOption) (*CreateS3KeyReply, error)
-	GetUserS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error)
+	GetUserS3UserList(ctx context.Context, in *GetUserS3UserListRequest, opts ...grpc.CallOption) (*GetUserS3UserListReply, error)
+	GetUserS3User(ctx context.Context, in *GetUserS3UserRequest, opts ...grpc.CallOption) (*GetUserS3UserReply, error)
+	DeleteUserS3User(ctx context.Context, in *DeleteUserS3UserRequest, opts ...grpc.CallOption) (*DeleteUserS3UserReply, error)
 	CreateBucket(ctx context.Context, in *CreateBucketRequest, opts ...grpc.CallOption) (*CreateBucketReply, error)
 	DeleteBucket(ctx context.Context, in *DeleteBucketRequest, opts ...grpc.CallOption) (*DeleteBucketReply, error)
 	EmptyBucket(ctx context.Context, in *EmptyBucketRequest, opts ...grpc.CallOption) (*EmptyBucketReply, error)
@@ -45,6 +50,7 @@ type StorageS3Client interface {
 	S3StorageInBucketList(ctx context.Context, in *S3StorageInBucketListRequest, opts ...grpc.CallOption) (*S3StorageInBucketListReply, error)
 	S3StorageUploadFile(ctx context.Context, in *S3StorageUploadFileRequest, opts ...grpc.CallOption) (*S3StorageUploadFileReply, error)
 	S3StorageMkdir(ctx context.Context, in *S3StorageMkdirRequest, opts ...grpc.CallOption) (*S3StorageMkdirReply, error)
+	S3StorageDeleteMkdir(ctx context.Context, in *S3StorageDeleteMkdirRequest, opts ...grpc.CallOption) (*S3StorageDeleteMkdirReply, error)
 	S3StorageDownload(ctx context.Context, in *S3StorageDownloadRequest, opts ...grpc.CallOption) (*S3StorageDownloadReply, error)
 	S3StorageDelete(ctx context.Context, in *S3StorageDeleteRequest, opts ...grpc.CallOption) (*S3StorageDeleteReply, error)
 }
@@ -66,9 +72,27 @@ func (c *storageS3Client) CreateS3Key(ctx context.Context, in *CreateS3KeyReques
 	return out, nil
 }
 
-func (c *storageS3Client) GetUserS3User(ctx context.Context, in *GetS3UserRequest, opts ...grpc.CallOption) (*GetS3UserReply, error) {
-	out := new(GetS3UserReply)
+func (c *storageS3Client) GetUserS3UserList(ctx context.Context, in *GetUserS3UserListRequest, opts ...grpc.CallOption) (*GetUserS3UserListReply, error) {
+	out := new(GetUserS3UserListReply)
+	err := c.cc.Invoke(ctx, StorageS3_GetUserS3UserList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) GetUserS3User(ctx context.Context, in *GetUserS3UserRequest, opts ...grpc.CallOption) (*GetUserS3UserReply, error) {
+	out := new(GetUserS3UserReply)
 	err := c.cc.Invoke(ctx, StorageS3_GetUserS3User_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageS3Client) DeleteUserS3User(ctx context.Context, in *DeleteUserS3UserRequest, opts ...grpc.CallOption) (*DeleteUserS3UserReply, error) {
+	out := new(DeleteUserS3UserReply)
+	err := c.cc.Invoke(ctx, StorageS3_DeleteUserS3User_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,6 +162,15 @@ func (c *storageS3Client) S3StorageMkdir(ctx context.Context, in *S3StorageMkdir
 	return out, nil
 }
 
+func (c *storageS3Client) S3StorageDeleteMkdir(ctx context.Context, in *S3StorageDeleteMkdirRequest, opts ...grpc.CallOption) (*S3StorageDeleteMkdirReply, error) {
+	out := new(S3StorageDeleteMkdirReply)
+	err := c.cc.Invoke(ctx, StorageS3_S3StorageDeleteMkdir_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *storageS3Client) S3StorageDownload(ctx context.Context, in *S3StorageDownloadRequest, opts ...grpc.CallOption) (*S3StorageDownloadReply, error) {
 	out := new(S3StorageDownloadReply)
 	err := c.cc.Invoke(ctx, StorageS3_S3StorageDownload_FullMethodName, in, out, opts...)
@@ -161,7 +194,9 @@ func (c *storageS3Client) S3StorageDelete(ctx context.Context, in *S3StorageDele
 // for forward compatibility
 type StorageS3Server interface {
 	CreateS3Key(context.Context, *CreateS3KeyRequest) (*CreateS3KeyReply, error)
-	GetUserS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error)
+	GetUserS3UserList(context.Context, *GetUserS3UserListRequest) (*GetUserS3UserListReply, error)
+	GetUserS3User(context.Context, *GetUserS3UserRequest) (*GetUserS3UserReply, error)
+	DeleteUserS3User(context.Context, *DeleteUserS3UserRequest) (*DeleteUserS3UserReply, error)
 	CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error)
 	DeleteBucket(context.Context, *DeleteBucketRequest) (*DeleteBucketReply, error)
 	EmptyBucket(context.Context, *EmptyBucketRequest) (*EmptyBucketReply, error)
@@ -169,6 +204,7 @@ type StorageS3Server interface {
 	S3StorageInBucketList(context.Context, *S3StorageInBucketListRequest) (*S3StorageInBucketListReply, error)
 	S3StorageUploadFile(context.Context, *S3StorageUploadFileRequest) (*S3StorageUploadFileReply, error)
 	S3StorageMkdir(context.Context, *S3StorageMkdirRequest) (*S3StorageMkdirReply, error)
+	S3StorageDeleteMkdir(context.Context, *S3StorageDeleteMkdirRequest) (*S3StorageDeleteMkdirReply, error)
 	S3StorageDownload(context.Context, *S3StorageDownloadRequest) (*S3StorageDownloadReply, error)
 	S3StorageDelete(context.Context, *S3StorageDeleteRequest) (*S3StorageDeleteReply, error)
 	mustEmbedUnimplementedStorageS3Server()
@@ -181,8 +217,14 @@ type UnimplementedStorageS3Server struct {
 func (UnimplementedStorageS3Server) CreateS3Key(context.Context, *CreateS3KeyRequest) (*CreateS3KeyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateS3Key not implemented")
 }
-func (UnimplementedStorageS3Server) GetUserS3User(context.Context, *GetS3UserRequest) (*GetS3UserReply, error) {
+func (UnimplementedStorageS3Server) GetUserS3UserList(context.Context, *GetUserS3UserListRequest) (*GetUserS3UserListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserS3UserList not implemented")
+}
+func (UnimplementedStorageS3Server) GetUserS3User(context.Context, *GetUserS3UserRequest) (*GetUserS3UserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserS3User not implemented")
+}
+func (UnimplementedStorageS3Server) DeleteUserS3User(context.Context, *DeleteUserS3UserRequest) (*DeleteUserS3UserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserS3User not implemented")
 }
 func (UnimplementedStorageS3Server) CreateBucket(context.Context, *CreateBucketRequest) (*CreateBucketReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBucket not implemented")
@@ -204,6 +246,9 @@ func (UnimplementedStorageS3Server) S3StorageUploadFile(context.Context, *S3Stor
 }
 func (UnimplementedStorageS3Server) S3StorageMkdir(context.Context, *S3StorageMkdirRequest) (*S3StorageMkdirReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method S3StorageMkdir not implemented")
+}
+func (UnimplementedStorageS3Server) S3StorageDeleteMkdir(context.Context, *S3StorageDeleteMkdirRequest) (*S3StorageDeleteMkdirReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method S3StorageDeleteMkdir not implemented")
 }
 func (UnimplementedStorageS3Server) S3StorageDownload(context.Context, *S3StorageDownloadRequest) (*S3StorageDownloadReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method S3StorageDownload not implemented")
@@ -242,8 +287,26 @@ func _StorageS3_CreateS3Key_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StorageS3_GetUserS3UserList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserS3UserListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).GetUserS3UserList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_GetUserS3UserList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).GetUserS3UserList(ctx, req.(*GetUserS3UserListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _StorageS3_GetUserS3User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetS3UserRequest)
+	in := new(GetUserS3UserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -255,7 +318,25 @@ func _StorageS3_GetUserS3User_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: StorageS3_GetUserS3User_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageS3Server).GetUserS3User(ctx, req.(*GetS3UserRequest))
+		return srv.(StorageS3Server).GetUserS3User(ctx, req.(*GetUserS3UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageS3_DeleteUserS3User_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserS3UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).DeleteUserS3User(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_DeleteUserS3User_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).DeleteUserS3User(ctx, req.(*DeleteUserS3UserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -386,6 +467,24 @@ func _StorageS3_S3StorageMkdir_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StorageS3_S3StorageDeleteMkdir_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(S3StorageDeleteMkdirRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageS3Server).S3StorageDeleteMkdir(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageS3_S3StorageDeleteMkdir_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageS3Server).S3StorageDeleteMkdir(ctx, req.(*S3StorageDeleteMkdirRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _StorageS3_S3StorageDownload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(S3StorageDownloadRequest)
 	if err := dec(in); err != nil {
@@ -434,8 +533,16 @@ var StorageS3_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StorageS3_CreateS3Key_Handler,
 		},
 		{
+			MethodName: "GetUserS3UserList",
+			Handler:    _StorageS3_GetUserS3UserList_Handler,
+		},
+		{
 			MethodName: "GetUserS3User",
 			Handler:    _StorageS3_GetUserS3User_Handler,
+		},
+		{
+			MethodName: "DeleteUserS3User",
+			Handler:    _StorageS3_DeleteUserS3User_Handler,
 		},
 		{
 			MethodName: "CreateBucket",
@@ -464,6 +571,10 @@ var StorageS3_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "S3StorageMkdir",
 			Handler:    _StorageS3_S3StorageMkdir_Handler,
+		},
+		{
+			MethodName: "S3StorageDeleteMkdir",
+			Handler:    _StorageS3_S3StorageDeleteMkdir_Handler,
 		},
 		{
 			MethodName: "S3StorageDownload",

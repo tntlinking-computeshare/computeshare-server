@@ -60,9 +60,9 @@ type UserRepo interface {
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	SetValidateCode(ctx context.Context, entity User, vCode string) error
 	GetValidateCode(ctx context.Context, telephone string) (string, error)
+	DeleteValidateCode(ctx context.Context, user User)
 	SetResendVerification(ctx context.Context, telephoneNumber string) error
 	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
-	DeleteValidateCode(ctx context.Context, user User)
 	FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*User, error)
 	FindByUsername(ctx context.Context, username string) (*User, error)
 }
@@ -151,12 +151,12 @@ func (uc *UserUsercase) GetValidateCode(ctx context.Context, user User) (string,
 func (uc *UserUsercase) Login(ctx context.Context, user *User) (string, error) {
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
 	if err != nil {
-		return "", errors.New(400, "USER_NOT_FOUND", "telephone or password does not match")
+		return "", errors.New(400, "USER_NOT_FOUND", "用户不存在")
 	}
 
 	encodedPassword := md5.Sum([]byte(user.Password))
 	if hex.EncodeToString(encodedPassword[:]) != u.Password {
-		return "", errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
+		return "", errors.New(400, "PASSWORD_ERROR", "密码错误")
 	}
 
 	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{
@@ -173,7 +173,7 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if err != nil || code != user.ValidateCode {
-		return "", errors.New(400, "USER_NOT_FOUND", "telephone or password does not match")
+		return "", errors.New(400, "USER_NOT_FOUND", "用户不存在")
 	}
 
 	u, err := uc.repo.FindUserByFullTelephone(ctx, user.CountryCallCoding, user.TelephoneNumber)
@@ -203,8 +203,8 @@ func (uc *UserUsercase) LoginWithValidateCode(ctx context.Context, user *User) (
 	return tokenHeader.SignedString(uc.key)
 }
 
-func (uc *UserUsercase) VerifyCode(ctx context.Context, telephoneNumber, validateCode string) error {
-	code, err := uc.repo.GetValidateCode(ctx, telephoneNumber)
+func (uc *UserUsercase) VerifyCode(ctx context.Context, user User, validateCode string) error {
+	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 	if err != nil {
 		return err
 	}
@@ -224,7 +224,7 @@ func (uc *UserUsercase) UpdateUserPassword(ctx context.Context, id uuid.UUID, ol
 	if u.PwdConfig == true {
 		encodedPassword := md5.Sum([]byte(oldPassword))
 		if hex.EncodeToString(encodedPassword[:]) != u.Password {
-			return errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
+			return errors.New(400, "PASSWORD_ERROR", "密码错误")
 		}
 	}
 
@@ -241,7 +241,7 @@ func (uc *UserUsercase) UpdateUserTelephone(ctx context.Context, id uuid.UUID, u
 	code, err := uc.repo.GetValidateCode(ctx, user.GetFullTelephone())
 
 	if err != nil || code != user.ValidateCode {
-		return errors.New(400, "VALIDATE_CODE_ERROR", "telephone or password does not match")
+		return errors.New(400, "VALIDATE_CODE_ERROR", "验证码校验失败")
 	}
 
 	return uc.repo.UpdateUserTelephone(ctx, id, user)
@@ -295,7 +295,7 @@ func (uc *UserUsercase) LoginWithClient(ctx context.Context, username, password 
 
 	encodedPassword := md5.Sum([]byte(password))
 	if hex.EncodeToString(encodedPassword[:]) != u.Password {
-		return "", errors.New(400, "PASSWORD_ERROR", "telephone or password does not match")
+		return "", errors.New(400, "PASSWORD_ERROR", "密码错误")
 	}
 
 	tokenHeader := jwt.NewWithClaims(jwt.SigningMethodHS256, &global.ComputeServerClaim{

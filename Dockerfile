@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /src/bin /app
 COPY openapi.yaml /app/
+ENV TZ=Asia/Shanghai
 
 WORKDIR /app
 

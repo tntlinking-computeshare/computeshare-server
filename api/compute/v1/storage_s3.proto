@@ -15,9 +15,19 @@ service StorageS3 {
 			body: "*"
 		};
 	}
-	rpc GetUserS3User(GetS3UserRequest) returns (GetS3UserReply){
+	rpc GetUserS3UserList(GetUserS3UserListRequest) returns (GetUserS3UserListReply){
 		option (google.api.http) = {
 			get: "/v1/s3user"
+		};
+	};
+	rpc GetUserS3User(GetUserS3UserRequest) returns (GetUserS3UserReply){
+		option (google.api.http) = {
+			get: "/v1/s3user/{id}"
+		};
+	};
+	rpc DeleteUserS3User(DeleteUserS3UserRequest) returns (DeleteUserS3UserReply){
+		option (google.api.http) = {
+			delete: "/v1/s3user/{id}"
 		};
 	};
 	rpc CreateBucket (CreateBucketRequest) returns (CreateBucketReply){
@@ -63,6 +73,12 @@ service StorageS3 {
 		};
 	};
 
+	rpc S3StorageDeleteMkdir (S3StorageDeleteMkdirRequest) returns (S3StorageDeleteMkdirReply){
+		option (google.api.http) = {
+			delete: "/v1/storage/{bucketName}/mkdir",
+		};
+	};
+
 	rpc S3StorageDownload (S3StorageDownloadRequest) returns (S3StorageDownloadReply){
 		option (google.api.http) = {
 			get: "/v1/storage/{bucketName}/objects/download/ersatz",
@@ -77,6 +93,7 @@ service StorageS3 {
 
 }
 
+
 message CreateS3KeyRequest{}
 message CreateS3KeyReply{
 	int32 code = 1;
@@ -84,18 +101,42 @@ message CreateS3KeyReply{
 }
 
 message S3User {
-	string accessKey = 1;
-	string secretKey  = 2;
-	int64 createTime  = 3;
-	int64 updateTime  = 4;
-	string endpoint = 5;
+	string id = 1;
+	string accessKey = 2;
+	string secretKey  = 3;
+	int64 createTime  = 4;
+	int64 updateTime  = 5;
+	string endpoint = 6;
 }
 
-message GetS3UserRequest {}
-message GetS3UserReply {
+message GetUserS3UserListRequest {}
+message GetUserS3UserListReply {
 	int32 code = 1;
 	string message = 2;
 	repeated S3User data = 3;
+}
+
+message GetUserS3UserRequest {
+	string id = 1;
+	string countryCallCoding = 2;
+	string telephoneNumber = 3;
+	string validateCode = 4;
+}
+message GetUserS3UserReply {
+	int32 code = 1;
+	string message = 2;
+	S3User data = 3;
+}
+
+message DeleteUserS3UserRequest {
+	string id = 1;
+	string countryCallCoding = 2;
+	string telephoneNumber = 3;
+	string validateCode = 4;
+}
+message DeleteUserS3UserReply {
+	int32 code = 1;
+	string message = 2;
 }
 
 message CreateBucketRequest {
@@ -124,18 +165,25 @@ message EmptyBucketReply {
 }
 
 message ListBucketRequest {
-
+	int32 page = 1;
+	int32 size = 2;
+	string name = 3;
 }
-
 message ListBucketReply {
 	message BucketVo {
-		string id = 1;
+		string id  = 1;
 		string bucket = 2;
 		int64 createdTime = 3;
 	}
+	message Data {
+		repeated BucketVo list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
 	int32 code = 1;
 	string message = 2;
-	repeated BucketVo data = 3;
+	Data data = 3;
 }
 
 message S3Object {
@@ -145,26 +193,47 @@ message S3Object {
 	string url = 5;
 	int32 size = 6;
 	int64 last_modify = 7;
+	string prefix = 8;
 }
 
 message S3StorageInBucketListRequest {
 	string bucketName = 1;
 	string prefix = 2;
+	string name = 3;
+	int32 page = 4;
+	int32 size = 5;
 }
 message S3StorageInBucketListReply {
+	message Data {
+		repeated S3Object list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
 	int32 code = 1;
 	string message = 2;
-	repeated S3Object data = 3;
+	Data data = 3;
 }
 
 message S3StorageMkdirRequest {
 	string bucketName = 1;
 	string dirName = 2;
+	string prefix = 3;
 }
 message S3StorageMkdirReply{
 	int32 code = 1;
 	string message = 2;
 	string data = 3;
+}
+
+message S3StorageDeleteMkdirRequest {
+	string bucketName = 1;
+	string dirName = 2;
+	string prefix = 3;
+}
+message S3StorageDeleteMkdirReply{
+	int32 code = 1;
+	string message = 2;
 }
 
 message S3StorageUploadFileRequest {

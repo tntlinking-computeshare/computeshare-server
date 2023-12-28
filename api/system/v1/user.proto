@@ -198,9 +198,9 @@ message SendValidateCodeReply {
 }
 
 message VerifyCodeRequest {
-	string country_call_coding = 1;
-	string telephone_number = 2;
-	string validate_code = 3;
+	string countryCallCoding = 1;
+	string telephoneNumber = 2;
+	string validateCode = 3;
 }
 
 message VerifyCodeReply {
