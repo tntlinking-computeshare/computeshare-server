@@ -125,6 +125,13 @@ func (r *s3UserRepoImpl) DeleteBucket(ctx context.Context, user *biz.S3User, buc
 	log.Log(log.LevelInfo, "DeleteBucketInDB", bucketName+"不存在于DB")
 	return err
 }
+func (r *s3UserRepoImpl) GetBucket(ctx context.Context, userId uuid.UUID, bucketName string) (*biz.S3Bucket, error) {
+	s3Bucket, err := r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId), s3bucket.BucketName(bucketName)).First(ctx)
+	if err == nil {
+		return r.toBucketBiz(s3Bucket, 0), err
+	}
+	return nil, err
+}
 func (r *s3UserRepoImpl) ListBucket(ctx context.Context, userId uuid.UUID) ([]*biz.S3Bucket, error) {
 	buckets, err := r.data.getS3BucketClient(ctx).Query().Where(s3bucket.FkUserID(userId)).All(ctx)
 	if err != nil {

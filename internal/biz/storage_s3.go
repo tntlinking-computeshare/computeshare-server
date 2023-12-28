@@ -58,7 +58,8 @@ type S3UserRepo interface {
 	DeleteS3User(ctx context.Context, id uuid.UUID) error
 	GetUserS3User(ctx context.Context, userId uuid.UUID) ([]*S3User, error)
 	GetPlatformS3User(ctx context.Context, userId uuid.UUID) (*S3User, error)
-	CreateBucket(ctx context.Context, user *S3User, bucket string) (*S3Bucket, error)
+	CreateBucket(ctx context.Context, user *S3User, bucketName string) (*S3Bucket, error)
+	GetBucket(ctx context.Context, userId uuid.UUID, bucketName string) (*S3Bucket, error)
 	DeleteBucket(ctx context.Context, user *S3User, bucketName string) error
 	ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error)
 	BucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error)
@@ -186,7 +187,11 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 			return nil, err
 		}
 	}
-
+	//查询桶是不是存在
+	getBucket, err := c.repo.GetBucket(ctx, userId, bucket)
+	if err == nil && getBucket != nil {
+		return nil, errors.New("该存储桶名称已存在！")
+	}
 	s3Bucket, err := c.repo.CreateBucket(ctx, platformS3User, bucket)
 	if err != nil {
 		return nil, err
@@ -455,6 +460,7 @@ func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.
 		Key:    aws.String(key),
 	})
 	if err != nil {
+		log.Log(log.LevelError, "PutObjectWithContext", err)
 		return nil, err
 	}
 	return putObject, nil
