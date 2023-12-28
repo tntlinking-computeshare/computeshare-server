@@ -54,7 +54,7 @@ type S3UserRepo interface {
 	DeleteValidateCode(ctx context.Context, user User)
 	CreateS3User(ctx context.Context, user *S3User) (*S3User, error)
 	GetS3User(ctx context.Context, id uuid.UUID) (*S3User, error)
-	GetS3UserType(ctx context.Context, id uuid.UUID, creator int8) (*S3User, error)
+	GetS3UserType(ctx context.Context, id uuid.UUID, creator int8) ([]*S3User, error)
 	DeleteS3User(ctx context.Context, id uuid.UUID) error
 	GetUserS3User(ctx context.Context, userId uuid.UUID) ([]*S3User, error)
 	GetPlatformS3User(ctx context.Context, userId uuid.UUID) (*S3User, error)
@@ -111,7 +111,7 @@ func (c *StorageS3UseCase) createS3User(ctx context.Context, userId uuid.UUID, c
 
 func (c *StorageS3UseCase) CreateS3Key(ctx context.Context, userId uuid.UUID) error {
 	s3user, _ := c.repo.GetS3UserType(ctx, userId, int8(consts.UserCreation))
-	if s3user != nil {
+	if len(s3user) > 0 {
 		return errors.New("当前只能创建一对密钥")
 	}
 	_, err := c.createS3User(ctx, userId, int8(consts.UserCreation))
