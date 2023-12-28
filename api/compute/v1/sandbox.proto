@@ -10,21 +10,21 @@ option go_package = "github.com/mohaijiang/computeshare-server/api/compute/v1;v1
 option java_multiple_files = true;
 option java_package = "api.compute.v1";
 
-service Process {
-	rpc CreateInstanceProcess(CreateInstanceProcessRequest) returns(CreateInstanceProcessReply) {
+service Sandbox {
+	rpc CreateSandbox(CreateSandboxRequest) returns(CreateSandboxReply) {
 		option (google.api.http) = {
-			post: "/v1/instance-process",
+			post: "/v1/sandbox",
 			body: "*",
 		};
 	}
 }
 
-message CreateInstanceProcessRequest{
+message CreateSandboxRequest{
 	api.server.compute.v1.CreateInstanceRequest instance = 1;
 	repeated api.server.network_mapping.v1.CreateNetworkMappingRequest networkMapping = 2;
 }
 
-message CreateInstanceProcessReply {
+message CreateSandboxReply {
 	int32 code = 1;
 	string message = 2;
 	CreateInstanceProcessReply_Data data = 3;

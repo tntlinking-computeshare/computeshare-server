@@ -272,7 +272,7 @@ Authorization: Bearer {{ access_token }}
 
 {"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
 
-### 流程测试
+### 沙盒流程测试
 POST https://api.computeshare.newtouch.com/v1/instance-process
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
@@ -305,10 +305,19 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 登录
-POST http://127.0.0.1:8000/v1/user/loginWithClient
+POST https://computeshare.newtouch.com/api/v1/user/loginWithClient
 Content-Type: application/json
 
 {
   "username": "+8615001747213",
   "password": "Abcd1234"
+}
+
+###
+POST https://computeshare.newtouch.com/api/v1/user/loginWithClient
+Content-Type: application/json
+
+{
+"username": "+861300xxxxxxx",
+"password": "somePassword"
 }
