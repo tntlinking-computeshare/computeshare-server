@@ -129,7 +129,9 @@ func toUserReply(user *biz.User, _ int) *pb.UserReply {
 		CountryCallCoding: user.CountryCallCoding,
 		TelephoneNumber:   user.TelephoneNumber,
 		CreateDate:        user.CreateDate.UnixMilli(),
+		Name:              user.Name,
 		LastLoginDate:     user.LastLoginDate.UnixMilli(),
+		Icon:              user.Icon,
 		PwdConfig:         user.PwdConfig,
 	}
 }
@@ -185,7 +187,10 @@ func (s *UserService) SendValidateCode(ctx context.Context, req *pb.SendValidate
 	}, err
 }
 func (s *UserService) VerifyCode(ctx context.Context, req *pb.VerifyCodeRequest) (*pb.VerifyCodeReply, error) {
-	err := s.uc.VerifyCode(ctx, req.GetTelephoneNumber(), req.GetValidateCode())
+	err := s.uc.VerifyCode(ctx, biz.User{
+		CountryCallCoding: req.CountryCallCoding,
+		TelephoneNumber:   req.TelephoneNumber,
+	}, req.GetValidateCode())
 	return &pb.VerifyCodeReply{
 		Code:    200,
 		Message: SUCCESS,

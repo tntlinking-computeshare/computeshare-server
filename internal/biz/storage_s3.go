@@ -3,6 +3,7 @@ package biz
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -48,12 +49,20 @@ type S3Bucket struct {
 }
 
 type S3UserRepo interface {
+	SetValidateCode(ctx context.Context, entity User, vCode string) error
+	GetValidateCode(ctx context.Context, telephone string) (string, error)
+	DeleteValidateCode(ctx context.Context, user User)
 	CreateS3User(ctx context.Context, user *S3User) (*S3User, error)
+	GetS3User(ctx context.Context, id uuid.UUID) (*S3User, error)
+	GetS3UserType(ctx context.Context, id uuid.UUID, creator int8) (*S3User, error)
+	DeleteS3User(ctx context.Context, id uuid.UUID) error
 	GetUserS3User(ctx context.Context, userId uuid.UUID) ([]*S3User, error)
 	GetPlatformS3User(ctx context.Context, userId uuid.UUID) (*S3User, error)
-	CreateBucket(ctx context.Context, user *S3User, bucket string) (*S3Bucket, error)
+	CreateBucket(ctx context.Context, user *S3User, bucketName string) (*S3Bucket, error)
+	GetBucket(ctx context.Context, userId uuid.UUID, bucketName string) (*S3Bucket, error)
 	DeleteBucket(ctx context.Context, user *S3User, bucketName string) error
 	ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error)
+	BucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error)
 }
 
 type StorageS3UseCase struct {
@@ -101,12 +110,69 @@ func (c *StorageS3UseCase) createS3User(ctx context.Context, userId uuid.UUID, c
 }
 
 func (c *StorageS3UseCase) CreateS3Key(ctx context.Context, userId uuid.UUID) error {
+	s3user, _ := c.repo.GetS3UserType(ctx, userId, int8(consts.UserCreation))
+	if s3user != nil {
+		return errors.New("当前只能创建一对密钥")
+	}
 	_, err := c.createS3User(ctx, userId, int8(consts.UserCreation))
+	if err != nil {
+		return err
+	}
+	err = c.RefreshUserS3UserPermissions(ctx, userId)
 	return err
 }
 
-func (c *StorageS3UseCase) GetUserS3User(ctx context.Context, userId uuid.UUID) ([]*S3User, error) {
+func (c *StorageS3UseCase) GetUserS3UserList(ctx context.Context, userId uuid.UUID) ([]*S3User, error) {
 	return c.repo.GetUserS3User(ctx, userId)
+}
+
+func (c *StorageS3UseCase) GetUserS3User(ctx context.Context, id string, countryCallCoding, telephoneNumber, validateCode string) (*S3User, error) {
+	code, err := c.repo.GetValidateCode(ctx, strings.Join([]string{countryCallCoding, telephoneNumber}, ""))
+	if err != nil || code != validateCode {
+		return nil, errors.New("VALIDATE_CODE_ERROR")
+	}
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return nil, err
+	}
+	return c.repo.GetS3User(ctx, uuid)
+}
+
+func (c *StorageS3UseCase) DeleteUserS3User(ctx context.Context, id string, countryCallCoding, telephoneNumber, validateCode string) error {
+	code, err := c.repo.GetValidateCode(ctx, strings.Join([]string{countryCallCoding, telephoneNumber}, ""))
+	if err != nil || code != validateCode {
+		return errors.New("VALIDATE_CODE_ERROR")
+	}
+
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return err
+	}
+	user, err := c.repo.GetS3User(ctx, uuid)
+	if err != nil {
+		return err
+	}
+	s3Buckets, err := c.ListBucket(ctx, user.FkUserID)
+	if err != nil {
+		return err
+	}
+
+	buckets := lo.Reduce(s3Buckets, func(agg string, item *S3Bucket, index int) string {
+		if agg == "" {
+			return item.BucketName
+		}
+		return strings.Join([]string{agg, item.BucketName}, ",")
+	}, "")
+	// 创建Docker客户端
+	cli, err := client.NewClientWithOpts(client.WithHost(c.dispose.S3.TargetDockerHost))
+	if err != nil {
+		return err
+	}
+	action := "Read,Write,List,Tagging"
+	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=%s -delete -apply" | weed shell`,
+		user.AccessKey, user.SecretKey, buckets, user.ID.String(), action)
+	c.S3UserConfigure(cli, cmd)
+	return c.repo.DeleteS3User(ctx, uuid)
 }
 
 func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, bucket string) (*S3Bucket, error) {
@@ -121,7 +187,11 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 			return nil, err
 		}
 	}
-
+	//查询桶是不是存在
+	getBucket, err := c.repo.GetBucket(ctx, userId, bucket)
+	if err == nil && getBucket != nil {
+		return nil, errors.New("该存储桶名称已存在！")
+	}
 	s3Bucket, err := c.repo.CreateBucket(ctx, platformS3User, bucket)
 	if err != nil {
 		return nil, err
@@ -138,56 +208,16 @@ func (c *StorageS3UseCase) CreateBucket(ctx context.Context, userId uuid.UUID, b
 		return strings.Join([]string{agg, item.BucketName}, ",")
 	}, "")
 
+	action := "Read,Write,List,Tagging,Admin"
 	// 创建Docker客户端
 	cli, err := client.NewClientWithOpts(client.WithHost(c.dispose.S3.TargetDockerHost))
-
-	// 构建命令
-	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=Read,Write,List,Tagging,Admin -apply " | weed shell`,
-		platformS3User.AccessKey, platformS3User.SecretKey, buckets, platformS3User.FkUserID)
-
-	// 准备执行命令
-	cmdArgs := []string{"sh", "-c", cmd}
-
-	// 创建容器执行命令的配置
-	execConfig := types.ExecConfig{
-		Cmd:          cmdArgs,
-		AttachStdout: true,
-		AttachStderr: true,
-	}
-
-	// 创建容器执行命令的请求
-	execResp, err := cli.ContainerExecCreate(context.Background(), c.dispose.S3.TargetDockerContainerName, execConfig)
+	cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=%s -apply " | weed shell`,
+		platformS3User.AccessKey, platformS3User.SecretKey, buckets, platformS3User.FkUserID.String(), action)
+	err = c.S3UserConfigure(cli, cmd)
 	if err != nil {
-		fmt.Printf("无法创建容器执行命令: %v\n", err)
 		return nil, err
 	}
 
-	// 执行命令
-	resp, err := cli.ContainerExecAttach(context.Background(), execResp.ID, types.ExecStartCheck{})
-	if err != nil {
-		fmt.Printf("无法执行容器命令: %v\n", err)
-		return nil, err
-	}
-	defer resp.Close()
-
-	// 输出命令的标准输出和标准错误
-	_, err = io.Copy(os.Stdout, resp.Reader)
-	if err != nil {
-		fmt.Printf("无法输出命令的标准输出和标准错误: %v\n", err)
-		return nil, err
-	}
-	// 等待命令完成
-	status, err := cli.ContainerExecInspect(context.Background(), execResp.ID)
-	if err != nil {
-		fmt.Printf("无法检查命令状态: %v\n", err)
-		return nil, err
-	}
-
-	if status.ExitCode != 0 {
-		fmt.Printf("命令执行失败，退出码: %d\n", status.ExitCode)
-		return nil, err
-	}
-	log.Log(log.LevelInfo, "s3.configure", "success")
 	config := &aws.Config{
 		Region:           aws.String(c.dispose.S3.Region),
 		Endpoint:         aws.String(c.dispose.S3.Endpoint),
@@ -286,14 +316,18 @@ func (c *StorageS3UseCase) EmptyBucket(ctx context.Context, userId uuid.UUID, bu
 	return nil
 }
 
+func (c *StorageS3UseCase) ListBucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error) {
+	return c.repo.BucketPage(ctx, userId, name, page, size)
+}
+
 func (c *StorageS3UseCase) ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error) {
 	return c.repo.ListBucket(ctx, userId)
 }
 
-func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix string) ([]*pb.S3Object, error) {
+func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uuid.UUID, bucketName, prefix, name string, page, size int32) ([]*pb.S3Object, int, error) {
 	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	config := &aws.Config{
 		Region:           aws.String(c.dispose.S3.Region),
@@ -303,32 +337,57 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 	}
 	session, err := session.NewSession(config)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	s3Client := s3.New(session)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: &prefix})
+	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: aws.String(prefix)})
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	var s3ObjectList []*pb.S3Object
+	dirNameSizeMap := make(map[string]int64)
+	dirNameTimeMap := make(map[string]int64)
+	for _, object := range resp.Contents {
+		key := *object.Key
+		if prefix != "" {
+			key = key[len(prefix)+1:]
+		}
+		splitN := strings.SplitN(key, "/", 2)
+		if len(splitN) <= 1 {
+			continue
+		}
+		dirName := splitN[0]
+		size, existsSize := dirNameSizeMap[dirName]
+		if existsSize {
+			dirNameSizeMap[dirName] = size + *object.Size
+		} else {
+			dirNameSizeMap[dirName] = *object.Size
+		}
+		time, existsTime := dirNameTimeMap[dirName]
+		if !existsTime || time > object.LastModified.UnixMilli() {
+			dirNameTimeMap[dirName] = object.LastModified.UnixMilli()
+		}
+	}
 	for _, object := range resp.Contents {
 		var s3Object pb.S3Object
 		key := *object.Key
-		if strings.Contains(key, ".keep") {
-			continue
-		}
 		eTag := *object.ETag
 		if strings.Contains(eTag, "\"") {
 			eTag = eTag[1 : len(eTag)-1]
 		}
 		if prefix == "" {
 			splitN := strings.SplitN(key, "/", 2)
-			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
-				s3Object.Name = splitN[0] + "/"
+			if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
+				s3Object.Name = splitN[0]
+				s3Object.LastModify = dirNameTimeMap[s3Object.Name]
+				s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
 			} else if len(splitN) == 1 {
+				if splitN[0] == ".keep" {
+					continue
+				}
 				s3Object.Etag = eTag
 				s3Object.LastModify = object.LastModified.UnixMilli()
 				s3Object.Size = int32(*object.Size)
@@ -340,11 +399,17 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 			}
 		} else {
 			dir := prefix + "/"
+			s3Object.Prefix = prefix
 			if key[:len(dir)] == dir {
 				splitN := strings.SplitN(key[len(dir):], "/", 2)
-				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]+"/") {
-					s3Object.Name = splitN[0] + "/"
+				if len(splitN) > 1 && !containsDir(s3ObjectList, splitN[0]) {
+					s3Object.Name = splitN[0]
+					s3Object.LastModify = dirNameTimeMap[s3Object.Name]
+					s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
 				} else if len(splitN) == 1 {
+					if splitN[0] == ".keep" {
+						continue
+					}
 					s3Object.Etag = eTag
 					s3Object.LastModify = object.LastModified.UnixMilli()
 					s3Object.Size = int32(*object.Size)
@@ -356,18 +421,18 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 				}
 			}
 		}
-		s3ObjectList = append(s3ObjectList, &s3Object)
-	}
-	return s3ObjectList, nil
-}
-
-func containsDir(slice []*pb.S3Object, target string) bool {
-	for _, s := range slice {
-		if s.Name == target {
-			return true
+		if name == "" {
+			s3ObjectList = append(s3ObjectList, &s3Object)
+		} else {
+			if strings.Contains(s3Object.Name, name) {
+				s3ObjectList = append(s3ObjectList, &s3Object)
+			} else {
+				continue
+			}
 		}
 	}
-	return false
+	s3ObjectPage, count := listToPage(s3ObjectList, int(page), int(size))
+	return s3ObjectPage, count, nil
 }
 
 func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.UUID, bucketName, key string, fileByte []byte) (*s3.PutObjectOutput, error) {
@@ -395,12 +460,13 @@ func (c *StorageS3UseCase) S3StorageUploadFile(ctx context.Context, userId uuid.
 		Key:    aws.String(key),
 	})
 	if err != nil {
+		log.Log(log.LevelError, "PutObjectWithContext", err)
 		return nil, err
 	}
 	return putObject, nil
 }
 
-func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID, bucketName, dirName string) error {
+func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID, bucketName, prefix, dirName string) error {
 	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
 	if err != nil {
 		return err
@@ -419,11 +485,66 @@ func (c *StorageS3UseCase) S3StorageMkdir(ctx context.Context, userId uuid.UUID,
 	if err != nil {
 		return err
 	}
+	var prefixDirName string
+	if prefix != "" {
+		prefixDirName = prefix + "/" + dirName
+	} else {
+		prefixDirName = dirName
+	}
 	_, err = s3Client.PutObjectWithContext(context.Background(), &s3.PutObjectInput{
 		Body:   bytes.NewReader([]byte("")),
 		Bucket: aws.String(bucketName),
-		Key:    aws.String(dirName + "/.keep"),
+		Key:    aws.String(prefixDirName + "/.keep"),
 	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *StorageS3UseCase) S3StorageDeleteMkdir(ctx context.Context, userId uuid.UUID, bucketName, prefix, dirName string) error {
+	platformS3User, err := c.repo.GetPlatformS3User(ctx, userId)
+	if err != nil {
+		return err
+	}
+	config := &aws.Config{
+		Region:           aws.String(c.dispose.S3.Region),
+		Endpoint:         aws.String(c.dispose.S3.Endpoint),
+		Credentials:      credentials.NewStaticCredentials(platformS3User.AccessKey, platformS3User.SecretKey, ""),
+		S3ForcePathStyle: aws.Bool(true), //virtual-host style方式，不要修改
+	}
+	session, err := session.NewSession(config)
+	if err != nil {
+		return err
+	}
+	s3Client := s3.New(session)
+	if err != nil {
+		return err
+	}
+	var prefixDirName string
+	if prefix != "" {
+		prefixDirName = prefix + "/" + dirName
+	} else {
+		prefixDirName = dirName
+	}
+	resp, err := s3Client.ListObjects(&s3.ListObjectsInput{Bucket: aws.String(bucketName), Prefix: aws.String(prefixDirName)})
+	if len(resp.Contents) < 1 {
+		return nil
+	}
+	var ObjectIdentifierList []*s3.ObjectIdentifier
+	for _, content := range resp.Contents {
+		var ObjectIdentifier s3.ObjectIdentifier
+		ObjectIdentifier.Key = content.Key
+		ObjectIdentifierList = append(ObjectIdentifierList, &ObjectIdentifier)
+	}
+	deleteObjectsInput := &s3.DeleteObjectsInput{
+		Bucket: aws.String(bucketName),
+		Delete: &s3.Delete{
+			Objects: ObjectIdentifierList,
+			Quiet:   aws.Bool(false),
+		},
+	}
+	_, err = s3Client.DeleteObjects(deleteObjectsInput)
 	if err != nil {
 		return err
 	}
@@ -487,4 +608,107 @@ func (c *StorageS3UseCase) S3StorageDelete(ctx context.Context, userId uuid.UUID
 		return err
 	}
 	return nil
+}
+
+func (c *StorageS3UseCase) RefreshUserS3UserPermissions(ctx context.Context, userId uuid.UUID) error {
+	userS3User, err := c.repo.GetUserS3User(ctx, userId)
+	if err != nil {
+		return err
+	}
+	s3Buckets, err := c.ListBucket(ctx, userId)
+	if err != nil {
+		return err
+	}
+
+	buckets := lo.Reduce(s3Buckets, func(agg string, item *S3Bucket, index int) string {
+		if agg == "" {
+			return item.BucketName
+		}
+		return strings.Join([]string{agg, item.BucketName}, ",")
+	}, "")
+	action := "Read,Write,List,Tagging"
+	// 创建Docker客户端
+	cli, err := client.NewClientWithOpts(client.WithHost(c.dispose.S3.TargetDockerHost))
+	if err != nil {
+		return err
+	}
+	for _, user := range userS3User {
+		// 构建命令
+		cmd := fmt.Sprintf(`echo "s3.configure -access_key=%s -secret_key=%s -buckets=%s -user=%s -actions=%s -apply " | weed shell`,
+			user.AccessKey, user.SecretKey, buckets, user.ID.String(), action)
+		c.S3UserConfigure(cli, cmd)
+	}
+	return nil
+}
+
+func (c *StorageS3UseCase) S3UserConfigure(cli *client.Client, cmd string) error {
+	// 准备执行命令
+	cmdArgs := []string{"sh", "-c", cmd}
+
+	// 创建容器执行命令的配置
+	execConfig := types.ExecConfig{
+		Cmd:          cmdArgs,
+		AttachStdout: true,
+		AttachStderr: true,
+	}
+
+	// 创建容器执行命令的请求
+	execResp, err := cli.ContainerExecCreate(context.Background(), c.dispose.S3.TargetDockerContainerName, execConfig)
+	if err != nil {
+		log.Log(log.LevelError, "无法创建容器执行命令", err)
+		return err
+	}
+
+	// 执行命令
+	resp, err := cli.ContainerExecAttach(context.Background(), execResp.ID, types.ExecStartCheck{})
+	if err != nil {
+		log.Log(log.LevelError, "无法执行容器命令", err)
+		return err
+	}
+	defer resp.Close()
+
+	// 输出命令的标准输出和标准错误
+	_, err = io.Copy(os.Stdout, resp.Reader)
+	if err != nil {
+		log.Log(log.LevelError, "无法输出命令的标准输出和标准错误", err)
+		return err
+	}
+	// 等待命令完成
+	status, err := cli.ContainerExecInspect(context.Background(), execResp.ID)
+	if err != nil {
+		log.Log(log.LevelError, "无法检查命令状态", err)
+		return err
+	}
+
+	if status.ExitCode != 0 {
+		log.Log(log.LevelError, "命令执行失败，退出码", status.ExitCode)
+		return err
+	}
+	log.Log(log.LevelInfo, "s3.configure", "success")
+	return nil
+}
+
+func listToPage(list []*pb.S3Object, page, size int) ([]*pb.S3Object, int) {
+	startIdx := (page - 1) * size
+	endIdx := startIdx + size
+
+	// 避免索引越界
+	if startIdx >= len(list) {
+		return nil, len(list)
+	}
+
+	if endIdx > len(list) {
+		endIdx = len(list)
+	}
+
+	return list[startIdx:endIdx], len(list)
+}
+
+func containsDir(slice []*pb.S3Object, target string) bool {
+	for _, s := range slice {
+		if s.Name == target {
+			return true
+		}
+	}
+	return false
 }
