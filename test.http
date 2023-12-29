@@ -273,7 +273,7 @@ Authorization: Bearer {{ access_token }}
 {"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
 
 ### 沙盒流程测试
-POST https://api.computeshare.newtouch.com/v1/instance-process
+POST https://api.computeshare.newtouch.com/v1/sandbox
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -299,7 +299,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/c3c4af46-b833-42eb-afbd-3eebc7b994e0
+DELETE  https://api.computeshare.newtouch.com/v1/instance/b89b52f9-df96-404f-8583-362ea1a3ddb3
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

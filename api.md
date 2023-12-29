@@ -68,7 +68,7 @@ Authorization: Bearer {{ access_token }}
     "duration": 1,
     "name": "mohaijiang-process1",
     "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
-    "password": "Abcd1234",
+    "password": "somePassword",
     "dockerCompose": "c2VydmljZXM6CiAgcHJveHk6CiAgICBpbWFnZTogbmdpbngKICAgIHBvcnRzOgogICAgICAtIDgwOjgw"
   },
   "networkMapping": [
@@ -97,11 +97,34 @@ Authorization: Bearer {{ access_token }}
   * computerPort: 内网映射出的端口
 #### Response
 成功响应：
-```
+
+``` json
 {
   "code": 200,
   "message": "success",
   "data": {
-    "token": "someToken"
+    "instanceId": "f62ef8f1-7ccd-4557-a504-e74d2c1977b5",
+    "networkMappings": [
+      {
+        "id": "e3f50b6d-7293-4b80-ac60-cbe3bd50659b",
+        "name": "nginx",
+        "computerPort": 80,
+        "serverIp": "61.172.179.73",
+        "serverPort": 41071
+      }
+    ]
   }
 }
+```
+
+参数说明：
+* code: 状态码，成功默认200
+* message: 通用响应信息，成功显示success, 失败显示失败原因
+* data：创建沙箱主要响应内容
+  * instanceId： 创建的虚拟机ID ,后续可以用此id对虚拟机进行开机、关机、删除等操作
+  * networkMappings： 网络映射列表
+    * id： 网络映射id
+    * name: 网络映射名
+    * computerPort: 虚拟机暴露的端口
+    * serverIp： 映射的公网ip
+    * serverPort： 映射的公网端口
