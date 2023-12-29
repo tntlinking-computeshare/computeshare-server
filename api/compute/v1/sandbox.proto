@@ -27,15 +27,17 @@ message CreateSandboxRequest{
 message CreateSandboxReply {
 	int32 code = 1;
 	string message = 2;
-	CreateInstanceProcessReply_Data data = 3;
+	CreateSandboxReply_Data data = 3;
 
-	message CreateInstanceProcessReply_Data {
+	message CreateSandboxReply_Data {
 		string instanceId = 1;
+		repeated CreateSandbox_NetworkMapping network_mappings = 2;
 	}
-	message CreateInstanceProcessReply_NetworkMapping {
+	message CreateSandbox_NetworkMapping {
 		string id = 1;
-		int32 computer_port = 2;
-		string server_ip = 3;
-		int32 server_port = 4;
+		string name = 2;
+		int32 computer_port = 3;
+		string server_ip = 4;
+		int32 server_port = 5;
 	}
 }

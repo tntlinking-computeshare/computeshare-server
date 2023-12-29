@@ -282,7 +282,7 @@ Authorization: Bearer {{ access_token }}
     "specId": 1,
     "imageId": 1,
     "duration": 1,
-    "name": "mohaijiang-process1",
+    "name": "mohaijiang-sandbox1",
     "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
     "password": "Abcd1234",
     "dockerCompose": "c2VydmljZXM6CiAgcHJveHk6CiAgICBpbWFnZTogbmdpbngKICAgIHBvcnRzOgogICAgICAtIDgwOjgw"
@@ -299,7 +299,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/3ee29892-49e9-4104-bf44-d8164eb6799e
+DELETE  https://api.computeshare.newtouch.com/v1/instance/c3c4af46-b833-42eb-afbd-3eebc7b994e0
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

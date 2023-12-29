@@ -86,7 +86,7 @@ Authorization: Bearer {{ access_token }}
 * instance: 资源实例配置
   * specId: 资源规格，1：2c4g, 2:4c8g
   * imageId: 镜像id: 1: ubuntu:20.04
-  * duration: 资源有效期(天)
+  * duration: 资源有效期(月)
   * name: 资源名
   * publicKey: 用户登录公钥
   * password: 用户密码
