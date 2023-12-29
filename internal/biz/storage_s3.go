@@ -384,6 +384,8 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 				s3Object.Name = splitN[0]
 				s3Object.LastModify = dirNameTimeMap[s3Object.Name]
 				s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
+				s3Object.S3Url = c.dispose.S3.S3UrlPrefix + bucketName + "/" + s3Object.Name
+				s3Object.Url = c.dispose.S3.UrlPrefix + bucketName + "/" + s3Object.Name
 			} else if len(splitN) == 1 {
 				if splitN[0] == ".keep" {
 					continue
@@ -406,6 +408,8 @@ func (c *StorageS3UseCase) S3StorageInBucketList(ctx context.Context, userId uui
 					s3Object.Name = splitN[0]
 					s3Object.LastModify = dirNameTimeMap[s3Object.Name]
 					s3Object.Size = int32(dirNameSizeMap[s3Object.Name])
+					s3Object.S3Url = c.dispose.S3.S3UrlPrefix + bucketName + "/" + dir + s3Object.Name
+					s3Object.Url = c.dispose.S3.UrlPrefix + bucketName + "/" + dir + s3Object.Name
 				} else if len(splitN) == 1 {
 					if splitN[0] == ".keep" {
 						continue
