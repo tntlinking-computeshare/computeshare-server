@@ -339,3 +339,62 @@ func (uc *ComputeInstanceUsercase) Reboot(ctx context.Context, instanceId uuid.U
 
 	return nil
 }
+
+func (uc *ComputeInstanceUsercase) Recreate(ctx context.Context, instanceId uuid.UUID, param *ComputeInstanceCreate) error {
+	instance, err := uc.Get(ctx, instanceId)
+	if err != nil {
+		return err
+	}
+
+	computeImage, err := uc.imageRepo.Get(ctx, param.ImageId)
+	if err != nil {
+		return err
+	}
+	instance.Image = fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag)
+	instance.DockerCompose = param.DockerCompose
+
+	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
+
+	if err != nil {
+		uc.log.Error("重建虚拟机指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	gateways, err := uc.gatewayRepo.ListGateway(ctx)
+
+	if err != nil {
+		uc.log.Error("重建虚拟机指令失败")
+		uc.log.Error(err)
+		return err
+	}
+
+	var g *Gateway
+	for _, ga := range gateways {
+		if ga.InternalIP == instance.VncIP {
+			g = ga
+		}
+	}
+	if g == nil {
+		uc.log.Error("重建虚拟机指令失败")
+		uc.log.Error(err)
+		return errors.New(400, "RECREATE_FAIL", "Gateway cannot found")
+	}
+
+	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_RECREATE, func() InstanceCreateParam {
+		return InstanceCreateParam{
+			DockerCompose:  param.DockerCompose,
+			Password:       param.Password,
+			PublicKey:      param.PublicKey,
+			GatewayIP:      g.IP,
+			GatewayPort:    g.Port,
+			VncConnectIP:   instance.VncIP,
+			VncConnectPort: instance.VncPort,
+		}
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

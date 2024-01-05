@@ -202,6 +202,27 @@ func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.Ge
 	}, nil
 }
 
+func (s *ComputeInstanceService) ReCreateInstance(ctx context.Context, req *pb.RecreateInstanceRequest) (*pb.CommonReply, error) {
+	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.uc.Recreate(ctx, instanceId, &biz.ComputeInstanceCreate{
+		ImageId:       req.ImageId,
+		PublicKey:     req.PublicKey,
+		Password:      req.Password,
+		DockerCompose: req.DockerCompose,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CommonReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
+}
+
 func (s *ComputeInstanceService) GetInstanceVncURL(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceVncURLReply, error) {
 	return &pb.GetInstanceVncURLReply{
 		Code:    200,

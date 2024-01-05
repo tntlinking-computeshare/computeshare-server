@@ -42,7 +42,7 @@ type Task struct {
 func (task *Task) GetTaskParam() (any, error) {
 	switch task.Cmd {
 	case queue.TaskCmd_VM_CREATE, queue.TaskCmd_VM_DELETE, queue.TaskCmd_VM_START,
-		queue.TaskCmd_VM_SHUTDOWN, queue.TaskCmd_VM_RESTART, queue.TaskCmd_VM_VNC_CONNECT:
+		queue.TaskCmd_VM_SHUTDOWN, queue.TaskCmd_VM_RESTART, queue.TaskCmd_VM_RECREATE:
 		var vo queue.ComputeInstanceTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
 		return &vo, err
@@ -175,6 +175,14 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 				return err
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRestarting)
+		case queue.TaskCmd_VM_RECREATE:
+			{
+				instanceId, err := getInstanceId(param)
+				if err != nil {
+					return err
+				}
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusReCreating)
+			}
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_PROXY_DELETE,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
@@ -240,6 +248,12 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosed)
 			}
 		case queue.TaskCmd_VM_RESTART:
+			instanceId, err := getInstanceId(param)
+			if err != nil {
+				return err
+			}
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+		case queue.TaskCmd_VM_RECREATE:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
