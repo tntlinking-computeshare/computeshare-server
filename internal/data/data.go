@@ -42,6 +42,8 @@ var ProviderSet = wire.NewSet(
 	NewS3UserRepo,
 	NewStorageProviderRepo,
 	NewCycleRepo,
+	NewCycleOrderRepo,
+	NewCycleTransactionRepo,
 )
 
 // Data .
@@ -196,6 +198,22 @@ func (d *Data) getCycle(ctx context.Context) *ent.CycleClient {
 		return tx.Cycle
 	}
 	return d.db.Cycle
+}
+
+func (d *Data) getCycleOrder(ctx context.Context) *ent.CycleOrderClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.CycleOrder
+	}
+	return d.db.CycleOrder
+}
+
+func (d *Data) getCycleTransaction(ctx context.Context) *ent.CycleTransactionClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.CycleTransaction
+	}
+	return d.db.CycleTransaction
 }
 
 // NewData .

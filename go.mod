@@ -9,6 +9,7 @@ require (
 	github.com/fatedier/frp v0.52.3
 	github.com/go-kratos/kratos/v2 v2.7.2
 	github.com/go-kratos/swagger-api v1.0.1
+	github.com/go-pay/gopay v1.5.98
 	github.com/go-redis/redis/extra/redisotel v0.3.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.1
@@ -20,6 +21,7 @@ require (
 	github.com/ipfs/go-ipfs-files v0.0.9
 	github.com/mohaijiang/computeshare-client v0.0.5
 	github.com/samber/lo v1.38.1
+	github.com/shopspring/decimal v1.3.1
 	github.com/tj/assert v0.0.3
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
@@ -64,7 +66,6 @@ require (
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
-	github.com/go-pay/gopay v1.5.98 // indirect
 	github.com/go-playground/assert/v2 v2.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/go-redis/redis/extra/rediscmd v0.2.0 // indirect
@@ -122,7 +123,6 @@ require (
 	github.com/quic-go/qtls-go1-20 v0.3.1 // indirect
 	github.com/quic-go/quic-go v0.37.4 // indirect
 	github.com/rakyll/statik v0.1.7 // indirect
-	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spacemonkeygo/spacelog v0.0.0-20180420211403-2296661a0572 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

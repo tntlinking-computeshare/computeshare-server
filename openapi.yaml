@@ -78,6 +78,64 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/cycle/transaction:
+        get:
+            tags:
+                - Order
+            operationId: Order_CycleTransactionList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleTransactionListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/order:
+        get:
+            tags:
+                - Order
+            operationId: Order_OrderList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OrderListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
         AlipayPayNotifyReply:
@@ -160,6 +218,47 @@ components:
                 authAppId:
                     type: string
             description: https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
+        CycleTransactionInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                operation:
+                    type: string
+                symbol:
+                    type: string
+                cycle:
+                    type: number
+                    format: float
+                operationTime:
+                    type: integer
+                    format: int64
+        CycleTransactionListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/CycleTransactionPage'
+        CycleTransactionPage:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CycleTransactionInfo'
         GoogleProtobufAny:
             type: object
             properties:
@@ -168,6 +267,51 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        OrderInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                orderNo:
+                    type: string
+                productName:
+                    type: string
+                productDesc:
+                    type: string
+                symbol:
+                    type: string
+                cycle:
+                    type: number
+                    format: float
+                createTime:
+                    type: integer
+                    format: int64
+        OrderListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/OrderPage'
+        OrderPage:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/OrderInfo'
         RechargeCycleByAlipayReply:
             type: object
             properties:
