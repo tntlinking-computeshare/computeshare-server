@@ -64,6 +64,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
+	github.com/go-pay/gopay v1.5.98 // indirect
 	github.com/go-playground/assert/v2 v2.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/go-redis/redis/extra/rediscmd v0.2.0 // indirect

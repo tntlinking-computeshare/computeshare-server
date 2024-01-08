@@ -10,6 +10,12 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleredeemcode"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerenewal"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycletransaction"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
@@ -100,6 +106,92 @@ func init() {
 	computespecDescMemory := computespecFields[2].Descriptor()
 	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
 	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
+	cycleFields := schema.Cycle{}.Fields()
+	_ = cycleFields
+	// cycleDescID is the schema descriptor for id field.
+	cycleDescID := cycleFields[0].Descriptor()
+	// cycle.DefaultID holds the default value on creation for the id field.
+	cycle.DefaultID = cycleDescID.Default.(func() uuid.UUID)
+	cycleorderFields := schema.CycleOrder{}.Fields()
+	_ = cycleorderFields
+	// cycleorderDescOrderNo is the schema descriptor for order_no field.
+	cycleorderDescOrderNo := cycleorderFields[2].Descriptor()
+	// cycleorder.OrderNoValidator is a validator for the "order_no" field. It is called by the builders before save.
+	cycleorder.OrderNoValidator = func() func(string) error {
+		validators := cycleorderDescOrderNo.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(order_no string) error {
+			for _, fn := range fns {
+				if err := fn(order_no); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// cycleorderDescProductName is the schema descriptor for product_name field.
+	cycleorderDescProductName := cycleorderFields[3].Descriptor()
+	// cycleorder.ProductNameValidator is a validator for the "product_name" field. It is called by the builders before save.
+	cycleorder.ProductNameValidator = cycleorderDescProductName.Validators[0].(func(string) error)
+	// cycleorderDescProductDesc is the schema descriptor for product_desc field.
+	cycleorderDescProductDesc := cycleorderFields[4].Descriptor()
+	// cycleorder.ProductDescValidator is a validator for the "product_desc" field. It is called by the builders before save.
+	cycleorder.ProductDescValidator = cycleorderDescProductDesc.Validators[0].(func(string) error)
+	// cycleorderDescSymbol is the schema descriptor for symbol field.
+	cycleorderDescSymbol := cycleorderFields[5].Descriptor()
+	// cycleorder.SymbolValidator is a validator for the "symbol" field. It is called by the builders before save.
+	cycleorder.SymbolValidator = cycleorderDescSymbol.Validators[0].(func(string) error)
+	// cycleorderDescID is the schema descriptor for id field.
+	cycleorderDescID := cycleorderFields[0].Descriptor()
+	// cycleorder.DefaultID holds the default value on creation for the id field.
+	cycleorder.DefaultID = cycleorderDescID.Default.(func() uuid.UUID)
+	cyclerechargeFields := schema.CycleRecharge{}.Fields()
+	_ = cyclerechargeFields
+	// cyclerechargeDescID is the schema descriptor for id field.
+	cyclerechargeDescID := cyclerechargeFields[0].Descriptor()
+	// cyclerecharge.DefaultID holds the default value on creation for the id field.
+	cyclerecharge.DefaultID = cyclerechargeDescID.Default.(func() uuid.UUID)
+	cycleredeemcodeFields := schema.CycleRedeemCode{}.Fields()
+	_ = cycleredeemcodeFields
+	// cycleredeemcodeDescID is the schema descriptor for id field.
+	cycleredeemcodeDescID := cycleredeemcodeFields[0].Descriptor()
+	// cycleredeemcode.DefaultID holds the default value on creation for the id field.
+	cycleredeemcode.DefaultID = cycleredeemcodeDescID.Default.(func() uuid.UUID)
+	cyclerenewalFields := schema.CycleRenewal{}.Fields()
+	_ = cyclerenewalFields
+	// cyclerenewalDescResourceType is the schema descriptor for resource_type field.
+	cyclerenewalDescResourceType := cyclerenewalFields[3].Descriptor()
+	// cyclerenewal.ResourceTypeValidator is a validator for the "resource_type" field. It is called by the builders before save.
+	cyclerenewal.ResourceTypeValidator = cyclerenewalDescResourceType.Validators[0].(func(int) error)
+	// cyclerenewalDescProductName is the schema descriptor for product_name field.
+	cyclerenewalDescProductName := cyclerenewalFields[4].Descriptor()
+	// cyclerenewal.ProductNameValidator is a validator for the "product_name" field. It is called by the builders before save.
+	cyclerenewal.ProductNameValidator = cyclerenewalDescProductName.Validators[0].(func(string) error)
+	// cyclerenewalDescProductDesc is the schema descriptor for product_desc field.
+	cyclerenewalDescProductDesc := cyclerenewalFields[5].Descriptor()
+	// cyclerenewal.ProductDescValidator is a validator for the "product_desc" field. It is called by the builders before save.
+	cyclerenewal.ProductDescValidator = cyclerenewalDescProductDesc.Validators[0].(func(string) error)
+	// cyclerenewalDescID is the schema descriptor for id field.
+	cyclerenewalDescID := cyclerenewalFields[0].Descriptor()
+	// cyclerenewal.DefaultID holds the default value on creation for the id field.
+	cyclerenewal.DefaultID = cyclerenewalDescID.Default.(func() uuid.UUID)
+	cycletransactionFields := schema.CycleTransaction{}.Fields()
+	_ = cycletransactionFields
+	// cycletransactionDescOperation is the schema descriptor for operation field.
+	cycletransactionDescOperation := cycletransactionFields[5].Descriptor()
+	// cycletransaction.OperationValidator is a validator for the "operation" field. It is called by the builders before save.
+	cycletransaction.OperationValidator = cycletransactionDescOperation.Validators[0].(func(string) error)
+	// cycletransactionDescSymbol is the schema descriptor for symbol field.
+	cycletransactionDescSymbol := cycletransactionFields[6].Descriptor()
+	// cycletransaction.SymbolValidator is a validator for the "symbol" field. It is called by the builders before save.
+	cycletransaction.SymbolValidator = cycletransactionDescSymbol.Validators[0].(func(string) error)
+	// cycletransactionDescID is the schema descriptor for id field.
+	cycletransactionDescID := cycletransactionFields[0].Descriptor()
+	// cycletransaction.DefaultID holds the default value on creation for the id field.
+	cycletransaction.DefaultID = cycletransactionDescID.Default.(func() uuid.UUID)
 	domainbindingFields := schema.DomainBinding{}.Fields()
 	_ = domainbindingFields
 	// domainbindingDescName is the schema descriptor for name field.
