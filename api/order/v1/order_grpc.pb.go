@@ -24,6 +24,7 @@ const (
 	Order_RechargeCycleByRedeemCode_FullMethodName = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
 	Order_OrderList_FullMethodName                 = "/api.server.order.v1.Order/OrderList"
 	Order_CycleTransactionList_FullMethodName      = "/api.server.order.v1.Order/CycleTransactionList"
+	Order_CycleReychargeList_FullMethodName        = "/api.server.order.v1.Order/CycleReychargeList"
 )
 
 // OrderClient is the client API for Order service.
@@ -35,6 +36,7 @@ type OrderClient interface {
 	RechargeCycleByRedeemCode(ctx context.Context, in *RechargeCycleByRedeemCodeRequest, opts ...grpc.CallOption) (*RechargeCycleByRedeemCodeReply, error)
 	OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error)
 	CycleTransactionList(ctx context.Context, in *CycleTransactionListRequest, opts ...grpc.CallOption) (*CycleTransactionListReply, error)
+	CycleReychargeList(ctx context.Context, in *CycleRenewListRequest, opts ...grpc.CallOption) (*CycleRenewListReply, error)
 }
 
 type orderClient struct {
@@ -90,6 +92,15 @@ func (c *orderClient) CycleTransactionList(ctx context.Context, in *CycleTransac
 	return out, nil
 }
 
+func (c *orderClient) CycleReychargeList(ctx context.Context, in *CycleRenewListRequest, opts ...grpc.CallOption) (*CycleRenewListReply, error) {
+	out := new(CycleRenewListReply)
+	err := c.cc.Invoke(ctx, Order_CycleReychargeList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type OrderServer interface {
 	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
+	CycleReychargeList(context.Context, *CycleRenewListRequest) (*CycleRenewListReply, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedOrderServer) OrderList(context.Context, *OrderListRequest) (*
 }
 func (UnimplementedOrderServer) CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CycleTransactionList not implemented")
+}
+func (UnimplementedOrderServer) CycleReychargeList(context.Context, *CycleRenewListRequest) (*CycleRenewListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleReychargeList not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -224,6 +239,24 @@ func _Order_CycleTransactionList_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_CycleReychargeList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleReychargeList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleReychargeList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleReychargeList(ctx, req.(*CycleRenewListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CycleTransactionList",
 			Handler:    _Order_CycleTransactionList_Handler,
+		},
+		{
+			MethodName: "CycleReychargeList",
+			Handler:    _Order_CycleReychargeList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
