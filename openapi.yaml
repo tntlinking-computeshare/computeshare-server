@@ -30,6 +30,54 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/cycle/recharge:
+        post:
+            tags:
+                - Order
+            operationId: Order_RechargeCycleByAlipay
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RechargeCycleByAlipayRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RechargeCycleByAlipayReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/redeem:
+        post:
+            tags:
+                - Order
+            operationId: Order_RechargeCycleByRedeemCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RechargeCycleByRedeemCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RechargeCycleByRedeemCodeReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/cycle/transaction:
         get:
             tags:
@@ -264,6 +312,42 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/OrderInfo'
+        RechargeCycleByAlipayReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                url:
+                    type: string
+        RechargeCycleByAlipayRequest:
+            type: object
+            properties:
+                rechargeChannel:
+                    type: integer
+                    format: int32
+                cycle:
+                    type: number
+                    format: float
+                amount:
+                    type: number
+                    format: float
+        RechargeCycleByRedeemCodeReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        RechargeCycleByRedeemCodeRequest:
+            type: object
+            properties:
+                redeemCode:
+                    type: integer
+                    format: int32
         Status:
             type: object
             properties:
