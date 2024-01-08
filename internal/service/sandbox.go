@@ -22,7 +22,7 @@ func NewSandboxService(cis *ComputeInstanceService, nms *NetworkMappingService, 
 	}
 }
 
-func (s *SandboxService) CreateInstanceProcess(ctx context.Context, req *pb.CreateSandboxRequest) (*pb.CreateSandboxReply, error) {
+func (s *SandboxService) CreateSandbox(ctx context.Context, req *pb.CreateSandboxRequest) (*pb.CreateSandboxReply, error) {
 
 	s.log.Info("通过配置流程创建虚拟机")
 	s.log.Info("开始创建虚拟机")

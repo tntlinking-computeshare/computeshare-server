@@ -27,6 +27,7 @@ const OperationComputeInstanceList = "/api.server.compute.v1.ComputeInstance/Lis
 const OperationComputeInstanceListComputeImage = "/api.server.compute.v1.ComputeInstance/ListComputeImage"
 const OperationComputeInstanceListComputeInstanceDuration = "/api.server.compute.v1.ComputeInstance/ListComputeInstanceDuration"
 const OperationComputeInstanceListComputeSpec = "/api.server.compute.v1.ComputeInstance/ListComputeSpec"
+const OperationComputeInstanceReCreateInstance = "/api.server.compute.v1.ComputeInstance/ReCreateInstance"
 const OperationComputeInstanceRestartInstance = "/api.server.compute.v1.ComputeInstance/RestartInstance"
 const OperationComputeInstanceStartInstance = "/api.server.compute.v1.ComputeInstance/StartInstance"
 const OperationComputeInstanceStopInstance = "/api.server.compute.v1.ComputeInstance/StopInstance"
@@ -48,6 +49,8 @@ type ComputeInstanceHTTPServer interface {
 	ListComputeInstanceDuration(context.Context, *ListComputeDurationRequest) (*ListComputeDurationReply, error)
 	// ListComputeSpec 查询规格
 	ListComputeSpec(context.Context, *ListComputeSpecRequest) (*ListComputeSpecReply, error)
+	// ReCreateInstance 重建实例
+	ReCreateInstance(context.Context, *RecreateInstanceRequest) (*CommonReply, error)
 	// RestartInstance 重启实例
 	RestartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error)
 	// StartInstance启动实例
@@ -68,6 +71,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.PUT("/v1/instance/{id}/stop", _ComputeInstance_StopInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/restart", _ComputeInstance_RestartInstance0_HTTP_Handler(srv))
+	r.PUT("/v1/instance/{id}/recreate", _ComputeInstance_ReCreateInstance0_HTTP_Handler(srv))
 	r.GET("/v1/instance/{id}/vnc", _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv))
 }
 
@@ -288,6 +292,31 @@ func _ComputeInstance_RestartInstance0_HTTP_Handler(srv ComputeInstanceHTTPServe
 	}
 }
 
+func _ComputeInstance_ReCreateInstance0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RecreateInstanceRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationComputeInstanceReCreateInstance)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ReCreateInstance(ctx, req.(*RecreateInstanceRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CommonReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetInstanceRequest
@@ -319,6 +348,7 @@ type ComputeInstanceHTTPClient interface {
 	ListComputeImage(ctx context.Context, req *ListComputeImageRequest, opts ...http.CallOption) (rsp *ListComputeImageReply, err error)
 	ListComputeInstanceDuration(ctx context.Context, req *ListComputeDurationRequest, opts ...http.CallOption) (rsp *ListComputeDurationReply, err error)
 	ListComputeSpec(ctx context.Context, req *ListComputeSpecRequest, opts ...http.CallOption) (rsp *ListComputeSpecReply, err error)
+	ReCreateInstance(ctx context.Context, req *RecreateInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	RestartInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	StartInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	StopInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
@@ -430,6 +460,19 @@ func (c *ComputeInstanceHTTPClientImpl) ListComputeSpec(ctx context.Context, in 
 	opts = append(opts, http.Operation(OperationComputeInstanceListComputeSpec))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ComputeInstanceHTTPClientImpl) ReCreateInstance(ctx context.Context, in *RecreateInstanceRequest, opts ...http.CallOption) (*CommonReply, error) {
+	var out CommonReply
+	pattern := "/v1/instance/{id}/recreate"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationComputeInstanceReCreateInstance))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

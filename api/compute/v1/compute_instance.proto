@@ -83,14 +83,20 @@ service ComputeInstance {
 		};
 	}
 
+	// 重建实例
+	rpc ReCreateInstance(RecreateInstanceRequest) returns (CommonReply) {
+		option (google.api.http) = {
+			put: "/v1/instance/{id}/recreate",
+			body: "*",
+		};
+	}
+
 	// 获取vnc 地址
 	rpc GetInstanceVncURL(GetInstanceRequest) returns (GetInstanceVncURLReply) {
 		option (google.api.http) = {
 			get: "/v1/instance/{id}/vnc",
 		};
 	}
-
-
 }
 
 message ListComputeSpecRequest {
@@ -152,6 +158,14 @@ message CreateInstanceRequest {
 	string docker_compose = 7;
 }
 
+message RecreateInstanceRequest {
+	string id = 1;
+	int32 image_id = 2;
+	string public_key = 3;
+	string password = 4;
+	string docker_compose = 5;
+}
+
 message PortBinding {
 	string listen_port = 1;
 	string target_port = 2;
@@ -190,8 +204,8 @@ message Instance {
 
 message InstanceStats {
 	string id = 1;
-	uint64 cpu_usage = 2;
-	uint64 memory_usage = 3;
+	float cpu_usage = 2;
+	float memory_usage = 3;
 	int64 StatsTime = 4;
 }
 

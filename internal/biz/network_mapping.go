@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 	"time"
 
@@ -101,13 +102,14 @@ type GatewayPortRepo interface {
 }
 
 type NetworkMappingUseCase struct {
-	repo              NetworkMappingRepo
-	gatewayRepo       GatewayRepo
-	gatewayPortRepo   GatewayPortRepo
-	taskRepo          TaskRepo
-	ciu               *ComputeInstanceUsercase
-	domainBindingRepo DomainBindingRepository
-	log               *log.Helper
+	repo                NetworkMappingRepo
+	gatewayRepo         GatewayRepo
+	gatewayPortRepo     GatewayPortRepo
+	computeInstanceRepo ComputeInstanceRepo
+	taskRepo            TaskRepo
+	ciu                 *ComputeInstanceUsercase
+	domainBindingRepo   DomainBindingRepository
+	log                 *log.Helper
 }
 
 func NewNetworkMappingUseCase(repo NetworkMappingRepo,
@@ -115,20 +117,30 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	gatewayPortRepo GatewayPortRepo,
 	taskRepo TaskRepo,
 	domainBindingRepo DomainBindingRepository,
+	computeInstanceRepo ComputeInstanceRepo,
 	ciu *ComputeInstanceUsercase,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
-		repo:              repo,
-		gatewayRepo:       gatewayRepo,
-		gatewayPortRepo:   gatewayPortRepo,
-		ciu:               ciu,
-		taskRepo:          taskRepo,
-		domainBindingRepo: domainBindingRepo,
-		log:               log.NewHelper(logger),
+		repo:                repo,
+		gatewayRepo:         gatewayRepo,
+		gatewayPortRepo:     gatewayPortRepo,
+		ciu:                 ciu,
+		taskRepo:            taskRepo,
+		domainBindingRepo:   domainBindingRepo,
+		computeInstanceRepo: computeInstanceRepo,
+		log:                 log.NewHelper(logger),
 	}
 }
 
 func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *NetworkMappingCreate) (*NetworkMapping, error) {
+
+	computeInstance, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
+	if err != nil {
+		return nil, errors.New("compute instance cannot found")
+	}
+	if computeInstance.Status != consts.InstanceStatusRunning {
+		return nil, errors.New("compute instance must be running")
+	}
 
 	// 查看当前 gatewayID
 	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)

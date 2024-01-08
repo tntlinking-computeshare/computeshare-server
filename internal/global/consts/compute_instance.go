@@ -21,4 +21,6 @@ const (
 	InstanceStatusDeleted
 	// InstanceStatusExpire 实例已过期
 	InstanceStatusExpire
+	// InstanceStatusReCreating 实例重建中
+	InstanceStatusReCreating
 )
