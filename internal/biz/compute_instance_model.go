@@ -47,7 +47,9 @@ type ComputeInstance struct {
 	Memory string `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
-	Port  string `json:"port,omitempty"`
+	// 镜像id
+	ImageId int32  `json:"omitempty"`
+	Port    string `json:"port,omitempty"`
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期

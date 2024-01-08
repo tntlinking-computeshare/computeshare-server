@@ -200,6 +200,7 @@ message Instance {
 	string containerId = 9;
 	string command = 10;
 	string agent_id = 11;
+	int32 image_id = 12;
 }
 
 message InstanceStats {

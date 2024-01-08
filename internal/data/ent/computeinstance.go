@@ -29,6 +29,8 @@ type ComputeInstance struct {
 	Memory string `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
+	// 镜像id
+	ImageID int32 `json:"image_id,omitempty"`
 	// 容器端口
 	Port string `json:"port,omitempty"`
 	// ExpirationTime holds the value of the "expiration_time" field.
@@ -53,7 +55,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computeinstance.FieldStatus, computeinstance.FieldVncPort:
+		case computeinstance.FieldImageID, computeinstance.FieldStatus, computeinstance.FieldVncPort:
 			values[i] = new(sql.NullInt64)
 		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
 			values[i] = new(sql.NullString)
@@ -111,6 +113,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field image", values[i])
 			} else if value.Valid {
 				ci.Image = value.String
+			}
+		case computeinstance.FieldImageID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field image_id", values[i])
+			} else if value.Valid {
+				ci.ImageID = int32(value.Int64)
 			}
 		case computeinstance.FieldPort:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -210,6 +218,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("image=")
 	builder.WriteString(ci.Image)
+	builder.WriteString(", ")
+	builder.WriteString("image_id=")
+	builder.WriteString(fmt.Sprintf("%v", ci.ImageID))
 	builder.WriteString(", ")
 	builder.WriteString("port=")
 	builder.WriteString(ci.Port)

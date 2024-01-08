@@ -22,6 +22,7 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.String("core").NotEmpty(),
 		field.String("memory").NotEmpty(),
 		field.String("image").NotEmpty(),
+		field.Int32("image_id").Comment("镜像id"),
 		field.String("port").Optional().Comment("容器端口"),
 		field.Time("expiration_time"),
 		field.Int8("status").GoType(consts.InstanceStatus(0)).Comment("0: 启动中,1:运行中,2:连接中断, 3:过期"),
