@@ -4847,6 +4847,7 @@ type CycleMutation struct {
 	cycle         *float64
 	addcycle      *float64
 	create_time   *time.Time
+	update_time   *time.Time
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Cycle, error)
@@ -5085,6 +5086,42 @@ func (m *CycleMutation) ResetCreateTime() {
 	m.create_time = nil
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (m *CycleMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *CycleMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the Cycle entity.
+// If the Cycle object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CycleMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *CycleMutation) ResetUpdateTime() {
+	m.update_time = nil
+}
+
 // Where appends a list predicates to the CycleMutation builder.
 func (m *CycleMutation) Where(ps ...predicate.Cycle) {
 	m.predicates = append(m.predicates, ps...)
@@ -5119,7 +5156,7 @@ func (m *CycleMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CycleMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.fk_user_id != nil {
 		fields = append(fields, cycle.FieldFkUserID)
 	}
@@ -5128,6 +5165,9 @@ func (m *CycleMutation) Fields() []string {
 	}
 	if m.create_time != nil {
 		fields = append(fields, cycle.FieldCreateTime)
+	}
+	if m.update_time != nil {
+		fields = append(fields, cycle.FieldUpdateTime)
 	}
 	return fields
 }
@@ -5143,6 +5183,8 @@ func (m *CycleMutation) Field(name string) (ent.Value, bool) {
 		return m.Cycle()
 	case cycle.FieldCreateTime:
 		return m.CreateTime()
+	case cycle.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -5158,6 +5200,8 @@ func (m *CycleMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldCycle(ctx)
 	case cycle.FieldCreateTime:
 		return m.OldCreateTime(ctx)
+	case cycle.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown Cycle field %s", name)
 }
@@ -5187,6 +5231,13 @@ func (m *CycleMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateTime(v)
+		return nil
+	case cycle.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Cycle field %s", name)
@@ -5260,6 +5311,9 @@ func (m *CycleMutation) ResetField(name string) error {
 		return nil
 	case cycle.FieldCreateTime:
 		m.ResetCreateTime()
+		return nil
+	case cycle.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown Cycle field %s", name)

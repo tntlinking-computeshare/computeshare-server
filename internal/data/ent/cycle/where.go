@@ -70,6 +70,11 @@ func CreateTime(v time.Time) predicate.Cycle {
 	return predicate.Cycle(sql.FieldEQ(FieldCreateTime, v))
 }
 
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldEQ(FieldUpdateTime, v))
+}
+
 // FkUserIDEQ applies the EQ predicate on the "fk_user_id" field.
 func FkUserIDEQ(v uuid.UUID) predicate.Cycle {
 	return predicate.Cycle(sql.FieldEQ(FieldFkUserID, v))
@@ -188,6 +193,46 @@ func CreateTimeLT(v time.Time) predicate.Cycle {
 // CreateTimeLTE applies the LTE predicate on the "create_time" field.
 func CreateTimeLTE(v time.Time) predicate.Cycle {
 	return predicate.Cycle(sql.FieldLTE(FieldCreateTime, v))
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldNEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldNotIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldGT(FieldUpdateTime, v))
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldGTE(FieldUpdateTime, v))
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldLT(FieldUpdateTime, v))
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.Cycle {
+	return predicate.Cycle(sql.FieldLTE(FieldUpdateTime, v))
 }
 
 // And groups predicates with the AND operator between them.

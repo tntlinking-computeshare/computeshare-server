@@ -23,7 +23,9 @@ type Cycle struct {
 	// Cycle holds the value of the "cycle" field.
 	Cycle float64 `json:"cycle,omitempty"`
 	// CreateTime holds the value of the "create_time" field.
-	CreateTime   time.Time `json:"create_time,omitempty"`
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// UpdateTime holds the value of the "update_time" field.
+	UpdateTime   time.Time `json:"update_time,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -34,7 +36,7 @@ func (*Cycle) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case cycle.FieldCycle:
 			values[i] = new(sql.NullFloat64)
-		case cycle.FieldCreateTime:
+		case cycle.FieldCreateTime, cycle.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
 		case cycle.FieldID, cycle.FieldFkUserID:
 			values[i] = new(uuid.UUID)
@@ -76,6 +78,12 @@ func (c *Cycle) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
 				c.CreateTime = value.Time
+			}
+		case cycle.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				c.UpdateTime = value.Time
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -121,6 +129,9 @@ func (c *Cycle) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
 	builder.WriteString(c.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(c.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

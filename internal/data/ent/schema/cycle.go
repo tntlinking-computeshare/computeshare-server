@@ -21,6 +21,7 @@ func (Cycle) Fields() []ent.Field {
 			dialect.MySQL: "decimal(10,2)",
 		}),
 		field.Time("create_time"),
+		field.Time("update_time"),
 	}
 }
 
