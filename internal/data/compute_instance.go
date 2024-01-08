@@ -123,24 +123,15 @@ func stateKey(id uuid.UUID) string {
 	return fmt.Sprintf("compute_instance:stats:%s", id.String())
 }
 
-func (crs *computeInstanceRepo) SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance *biz.ComputeInstanceRds) error {
+func (r *computeInstanceRepo) SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance []*biz.ComputeInstanceRds) error {
 	key := stateKey(id)
-	err := crs.data.rdb.RPush(ctx, key, rdbInstance).Err()
+	_, _ = r.data.rdb.Del(ctx, key).Result()
+	err := r.data.rdb.RPush(ctx, key, rdbInstance).Err()
 	if err != nil {
 		return err
 	}
-	length, err := crs.data.rdb.LLen(ctx, key).Result()
-	if err != nil {
-		return err
-	}
-
-	extraSize := length - 10
-
-	if extraSize > 0 {
-		crs.data.rdb.LPop(ctx, key)
-	}
-
-	return nil
+	_, err = r.data.rdb.SetEX(ctx, r.instanceExKey(id), false, time.Minute*10).Result()
+	return err
 
 }
 func (crs *computeInstanceRepo) GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*biz.ComputeInstanceRds, error) {
@@ -172,4 +163,16 @@ func (csr *computeInstanceRepo) ListExpiration(ctx context.Context) ([]*biz.Comp
 	}
 
 	return lo.Map(list, csr.toBiz), err
+}
+
+func (csr *computeInstanceRepo) IfNeedSyncInstanceStats(ctx context.Context, id uuid.UUID) bool {
+	b, err := csr.data.rdb.Get(ctx, csr.instanceExKey(id)).Bool()
+	if err != nil {
+		return true
+	}
+	return b
+}
+
+func (crs *computeInstanceRepo) instanceExKey(id uuid.UUID) string {
+	return fmt.Sprintf("instance_stats_ex_%s", id.String())
 }

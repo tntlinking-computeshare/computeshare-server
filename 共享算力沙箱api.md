@@ -1,6 +1,8 @@
 # 共享算力API接口
 
 ```
+首先到官网进行用户注册，拥有用户名密码
+
 接口地址：https://computeshare.newtouch.com/api
 授权认证：
   使用http header的标准Authorization认证
@@ -57,7 +59,7 @@ Content-Type: application/json
 
 ```shell
 ### 沙盒流程测试
-POST https://api.computeshare.newtouch.com/v1/sandbox
+POST https://computeshare.newtouch.com/api/v1/sandbox
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

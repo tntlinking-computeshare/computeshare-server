@@ -299,7 +299,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/b89b52f9-df96-404f-8583-362ea1a3ddb3
+DELETE  https://api.computeshare.newtouch.com/v1/instance/c49608e3-235b-4232-b10b-4676ae76ef34
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -320,4 +320,13 @@ Content-Type: application/json
 {
 "username": "+861300xxxxxxx",
 "password": "somePassword"
+}
+
+###
+POST https://computeshare.newtouch.com/api/v1/storage_provider
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "agentId": "52540dea-9944-4805-941f-01dacbf96ab6"
 }

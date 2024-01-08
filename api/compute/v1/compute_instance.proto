@@ -204,8 +204,8 @@ message Instance {
 
 message InstanceStats {
 	string id = 1;
-	uint64 cpu_usage = 2;
-	uint64 memory_usage = 3;
+	float cpu_usage = 2;
+	float memory_usage = 3;
 	int64 StatsTime = 4;
 }
 
