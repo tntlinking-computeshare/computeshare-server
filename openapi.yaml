@@ -11,7 +11,67 @@ paths:
             tags:
                 - Order
             operationId: Order_AlipayPayNotify
-
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AlipayPayNotifyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AlipayPayNotifyReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/recharge:
+        post:
+            tags:
+                - Order
+            operationId: Order_RechargeCycleByAlipay
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RechargeCycleByAlipayRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RechargeCycleByAlipayReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/redeem:
+        post:
+            tags:
+                - Order
+            operationId: Order_RechargeCycleByRedeemCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RechargeCycleByRedeemCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RechargeCycleByRedeemCodeReply'
                 default:
                     description: Default error response
                     content:
@@ -21,6 +81,22 @@ paths:
 components:
     schemas:
         AlipayPayNotifyReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        AlipayPayNotifyRequest:
+            type: object
+            properties:
+                notifyTime:
+                    type: string
+                notifyType:
+                    type: string
+                notifyId:
+                    type: string
                 appId:
                     type: string
                 charset:
@@ -87,17 +163,47 @@ components:
         GoogleProtobufAny:
             type: object
             properties:
-                id:
+                '@type':
                     type: string
-                imageId:
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        RechargeCycleByAlipayReply:
+            type: object
+            properties:
+                code:
                     type: integer
                     format: int32
-                publicKey:
+                message:
                     type: string
-                password:
+                url:
                     type: string
-                dockerCompose:
+        RechargeCycleByAlipayRequest:
+            type: object
+            properties:
+                rechargeChannel:
+                    type: integer
+                    format: int32
+                cycle:
+                    type: number
+                    format: float
+                amount:
+                    type: number
+                    format: float
+        RechargeCycleByRedeemCodeReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
+        RechargeCycleByRedeemCodeRequest:
+            type: object
+            properties:
+                redeemCode:
+                    type: integer
+                    format: int32
         Status:
             type: object
             properties:
