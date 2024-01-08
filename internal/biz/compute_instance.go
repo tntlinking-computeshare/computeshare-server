@@ -408,6 +408,7 @@ func (uc *ComputeInstanceUsercase) Recreate(ctx context.Context, instanceId uuid
 
 func (uc *ComputeInstanceUsercase) GetInstanceStats(ctx context.Context, instanceId uuid.UUID) ([]*ComputeInstanceRds, error) {
 	go func() {
+		ctx, _ := context.WithTimeout(context.Background(), time.Second*10)
 		need := uc.instanceRepo.IfNeedSyncInstanceStats(ctx, instanceId)
 		if need {
 			data, err := uc.GetLast24HInstanceStats(ctx, instanceId.String())
@@ -415,7 +416,8 @@ func (uc *ComputeInstanceUsercase) GetInstanceStats(ctx context.Context, instanc
 				uc.log.Debug("GetLast24HInstanceStats Err: ", err.Error())
 				return
 			}
-			_ = uc.instanceRepo.SaveInstanceStats(ctx, instanceId, data)
+			err = uc.instanceRepo.SaveInstanceStats(ctx, instanceId, data)
+			uc.log.Error(err)
 		}
 	}()
 	return uc.instanceRepo.GetInstanceStats(ctx, instanceId)
@@ -434,10 +436,6 @@ func (uc *ComputeInstanceUsercase) GetLast24HInstanceStats(_ context.Context, in
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(len(cpuData.Data.Result[0].Values))
-	fmt.Println(cpuData)
-	fmt.Println(len(memoryData.Data.Result[0].Values))
-	fmt.Println(memoryData)
 
 	m := make(map[float64]*ComputeInstanceRds)
 
@@ -446,13 +444,14 @@ func (uc *ComputeInstanceUsercase) GetLast24HInstanceStats(_ context.Context, in
 		statsTime := time.UnixMilli(int64(timestamp * 1000))
 		value := v[1].(string)
 		cpuUsage, err := strconv.ParseFloat(value, 32)
-		if err != nil {
+		if value == "NaN" || err != nil {
 			cpuUsage = 0
 		}
 		m[timestamp] = &ComputeInstanceRds{
-			ID:        uuid.New().String(),
-			CpuUsage:  float32(cpuUsage),
-			StatsTime: statsTime,
+			ID:          uuid.New().String(),
+			CpuUsage:    float32(cpuUsage),
+			MemoryUsage: 0,
+			StatsTime:   statsTime,
 		}
 	}
 
@@ -460,7 +459,7 @@ func (uc *ComputeInstanceUsercase) GetLast24HInstanceStats(_ context.Context, in
 		timestamp := v[0].(float64)
 		value := v[1].(string)
 		memoryUsage, err := strconv.ParseFloat(value, 32)
-		if err != nil {
+		if value == "NaN" || err != nil {
 			memoryUsage = 0
 		}
 		if cis, ok := m[timestamp]; ok {
@@ -468,6 +467,7 @@ func (uc *ComputeInstanceUsercase) GetLast24HInstanceStats(_ context.Context, in
 		} else {
 			m[timestamp] = &ComputeInstanceRds{
 				ID:          uuid.New().String(),
+				CpuUsage:    0,
 				MemoryUsage: float32(memoryUsage),
 				StatsTime:   time.UnixMilli(int64(timestamp * 1000)),
 			}

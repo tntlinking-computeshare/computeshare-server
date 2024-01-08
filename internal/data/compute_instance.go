@@ -123,14 +123,17 @@ func stateKey(id uuid.UUID) string {
 	return fmt.Sprintf("compute_instance:stats:%s", id.String())
 }
 
-func (r *computeInstanceRepo) SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstance []*biz.ComputeInstanceRds) error {
+func (r *computeInstanceRepo) SaveInstanceStats(ctx context.Context, id uuid.UUID, rdbInstances []*biz.ComputeInstanceRds) error {
 	key := stateKey(id)
 	_, _ = r.data.rdb.Del(ctx, key).Result()
-	err := r.data.rdb.RPush(ctx, key, rdbInstance).Err()
-	if err != nil {
-		return err
+	for _, v := range rdbInstances {
+		err := r.data.rdb.RPush(ctx, key, v).Err()
+		if err != nil {
+			return err
+		}
 	}
-	_, err = r.data.rdb.SetEX(ctx, r.instanceExKey(id), false, time.Minute*10).Result()
+
+	_, err := r.data.rdb.SetEX(ctx, r.instanceExKey(id), false, time.Minute*10).Result()
 	return err
 
 }
