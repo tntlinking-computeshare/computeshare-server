@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Order_AlipayPayNotify_FullMethodName = "/api.server.order.v1.Order/AlipayPayNotify"
+	Order_AlipayPayNotify_FullMethodName      = "/api.server.order.v1.Order/AlipayPayNotify"
+	Order_OrderList_FullMethodName            = "/api.server.order.v1.Order/OrderList"
+	Order_CycleTransactionList_FullMethodName = "/api.server.order.v1.Order/CycleTransactionList"
 )
 
 // OrderClient is the client API for Order service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderClient interface {
 	AlipayPayNotify(ctx context.Context, in *AlipayPayNotifyRequest, opts ...grpc.CallOption) (*AlipayPayNotifyReply, error)
+	OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error)
+	CycleTransactionList(ctx context.Context, in *CycleTransactionListRequest, opts ...grpc.CallOption) (*CycleTransactionListReply, error)
 }
 
 type orderClient struct {
@@ -46,11 +50,31 @@ func (c *orderClient) AlipayPayNotify(ctx context.Context, in *AlipayPayNotifyRe
 	return out, nil
 }
 
+func (c *orderClient) OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error) {
+	out := new(OrderListReply)
+	err := c.cc.Invoke(ctx, Order_OrderList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) CycleTransactionList(ctx context.Context, in *CycleTransactionListRequest, opts ...grpc.CallOption) (*CycleTransactionListReply, error) {
+	out := new(CycleTransactionListReply)
+	err := c.cc.Invoke(ctx, Order_CycleTransactionList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
 type OrderServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
+	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
+	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -60,6 +84,12 @@ type UnimplementedOrderServer struct {
 
 func (UnimplementedOrderServer) AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AlipayPayNotify not implemented")
+}
+func (UnimplementedOrderServer) OrderList(context.Context, *OrderListRequest) (*OrderListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OrderList not implemented")
+}
+func (UnimplementedOrderServer) CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleTransactionList not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -92,6 +122,42 @@ func _Order_AlipayPayNotify_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_OrderList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrderListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).OrderList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_OrderList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).OrderList(ctx, req.(*OrderListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_CycleTransactionList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleTransactionListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleTransactionList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleTransactionList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleTransactionList(ctx, req.(*CycleTransactionListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +168,14 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AlipayPayNotify",
 			Handler:    _Order_AlipayPayNotify_Handler,
+		},
+		{
+			MethodName: "OrderList",
+			Handler:    _Order_OrderList_Handler,
+		},
+		{
+			MethodName: "CycleTransactionList",
+			Handler:    _Order_CycleTransactionList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

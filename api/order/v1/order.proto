@@ -15,6 +15,18 @@ service Order {
 			body: "*"
 		};
 	};
+
+	rpc OrderList(OrderListRequest) returns (OrderListReply){
+		option (google.api.http) = {
+			get: "/v1/order",
+		};
+	}
+
+	rpc CycleTransactionList(CycleTransactionListRequest) returns (CycleTransactionListReply){
+		option (google.api.http) = {
+			get: "/v1/cycle/transaction",
+		};
+	}
 }
 
 // https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
@@ -58,4 +70,57 @@ message AlipayPayNotifyRequest {
 message AlipayPayNotifyReply {
 	int32 code = 1;
 	string message = 2;
+}
+
+message OrderListRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+message OrderListReply{
+	int32 code = 1;
+	string message = 2;
+	OrderPage data = 3;
+}
+
+message OrderPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated OrderInfo data = 4;
+}
+
+message OrderInfo {
+	string id = 1;
+	string order_no = 2;
+	string product_name = 3;
+	string product_desc = 4;
+	string symbol = 5;
+	float cycle = 6;
+	int64 create_time = 7;
+}
+
+message CycleTransactionListRequest{
+	int32 page = 1;
+	int32 size = 2;
+}
+
+message CycleTransactionListReply{
+	int32 code = 1;
+	string message = 2;
+	CycleTransactionPage data = 3;
+}
+
+message CycleTransactionPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated CycleTransactionInfo data = 4;
+}
+
+message CycleTransactionInfo {
+	string id = 1;
+	string operation = 2;
+	string symbol = 3;
+	float cycle = 4;
+	int64 operation_time = 5;
 }

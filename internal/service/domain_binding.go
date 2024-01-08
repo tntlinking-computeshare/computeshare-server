@@ -98,8 +98,8 @@ func (s *DomainBindingService) ListDomainBinding(ctx context.Context, req *pb.Li
 		Code:    200,
 		Message: SUCCESS,
 		Data: &pb.DomainBindingPageResponse{
-			Page:  page.PageNum,
-			Size:  page.PageSize,
+			Page:  page.Page,
+			Size:  page.Size,
 			Total: page.Total,
 			List:  page.Data,
 		},

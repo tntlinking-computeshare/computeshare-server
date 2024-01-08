@@ -53,10 +53,10 @@ func (r *domainRepositoryImpl) PageQuery(ctx context.Context, userId, networkMap
 	}
 
 	return &global.Page[*biz.DomainBinding]{
-		PageSize: size,
-		Total:    int64(total),
-		PageNum:  page,
-		Data:     lo.Map(list, r.toBiz),
+		Size:  size,
+		Total: int64(total),
+		Page:  page,
+		Data:  lo.Map(list, r.toBiz),
 	}, nil
 }
 
