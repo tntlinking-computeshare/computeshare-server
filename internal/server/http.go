@@ -20,6 +20,7 @@ import (
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
 	networkmappingV1 "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
+	orderv1 "github.com/mohaijiang/computeshare-server/api/order/v1"
 	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
@@ -40,6 +41,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.server.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
 	whiteList["/api.server.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
 	whiteList["/api.server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
+	whiteList["/api.server.order.v1.Order/AlipayPayNotify"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
@@ -91,6 +93,7 @@ func NewHTTPServer(c *conf.Server,
 	domainBindingService *service.DomainBindingService,
 	storageProviderService *service.StorageProviderService,
 	processService *service.SandboxService,
+	orderService *service.OrderService,
 	job *service.CronJob,
 	data *data.Data,
 	logger log.Logger) *http.Server {
@@ -138,6 +141,7 @@ func NewHTTPServer(c *conf.Server,
 	networkmappingV1.RegisterNetworkMappingHTTPServer(srv, networkMappingService)
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
 	networkmappingV1.RegisterDomainBindingHTTPServer(srv, domainBindingService)
+	orderv1.RegisterOrderHTTPServer(srv, orderService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))

@@ -14,12 +14,26 @@ type Tx struct {
 	config
 	// Agent is the client for interacting with the Agent builders.
 	Agent *AgentClient
+	// AlipayOrderRollback is the client for interacting with the AlipayOrderRollback builders.
+	AlipayOrderRollback *AlipayOrderRollbackClient
 	// ComputeImage is the client for interacting with the ComputeImage builders.
 	ComputeImage *ComputeImageClient
 	// ComputeInstance is the client for interacting with the ComputeInstance builders.
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// Cycle is the client for interacting with the Cycle builders.
+	Cycle *CycleClient
+	// CycleOrder is the client for interacting with the CycleOrder builders.
+	CycleOrder *CycleOrderClient
+	// CycleRecharge is the client for interacting with the CycleRecharge builders.
+	CycleRecharge *CycleRechargeClient
+	// CycleRedeemCode is the client for interacting with the CycleRedeemCode builders.
+	CycleRedeemCode *CycleRedeemCodeClient
+	// CycleRenewal is the client for interacting with the CycleRenewal builders.
+	CycleRenewal *CycleRenewalClient
+	// CycleTransaction is the client for interacting with the CycleTransaction builders.
+	CycleTransaction *CycleTransactionClient
 	// DomainBinding is the client for interacting with the DomainBinding builders.
 	DomainBinding *DomainBindingClient
 	// Employee is the client for interacting with the Employee builders.
@@ -178,9 +192,16 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.Agent = NewAgentClient(tx.config)
+	tx.AlipayOrderRollback = NewAlipayOrderRollbackClient(tx.config)
 	tx.ComputeImage = NewComputeImageClient(tx.config)
 	tx.ComputeInstance = NewComputeInstanceClient(tx.config)
 	tx.ComputeSpec = NewComputeSpecClient(tx.config)
+	tx.Cycle = NewCycleClient(tx.config)
+	tx.CycleOrder = NewCycleOrderClient(tx.config)
+	tx.CycleRecharge = NewCycleRechargeClient(tx.config)
+	tx.CycleRedeemCode = NewCycleRedeemCodeClient(tx.config)
+	tx.CycleRenewal = NewCycleRenewalClient(tx.config)
+	tx.CycleTransaction = NewCycleTransactionClient(tx.config)
 	tx.DomainBinding = NewDomainBindingClient(tx.config)
 	tx.Employee = NewEmployeeClient(tx.config)
 	tx.Gateway = NewGatewayClient(tx.config)

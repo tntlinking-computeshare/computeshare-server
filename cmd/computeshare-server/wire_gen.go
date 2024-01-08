@@ -78,8 +78,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	domainBindingService := service.NewDomainBindingService(domainBindingUseCase, networkMappingUseCase)
 	storageProviderService := service.NewStorageProviderService(storageProviderUseCase)
 	sandboxService := service.NewSandboxService(computeInstanceService, networkMappingService, logger)
+	orderService := service.NewOrderService(logger)
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, cronJob, dataData, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, cronJob, dataData, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

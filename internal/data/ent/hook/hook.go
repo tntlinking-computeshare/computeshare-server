@@ -21,6 +21,18 @@ func (f AgentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AgentMutation", m)
 }
 
+// The AlipayOrderRollbackFunc type is an adapter to allow the use of ordinary
+// function as AlipayOrderRollback mutator.
+type AlipayOrderRollbackFunc func(context.Context, *ent.AlipayOrderRollbackMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AlipayOrderRollbackFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AlipayOrderRollbackMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AlipayOrderRollbackMutation", m)
+}
+
 // The ComputeImageFunc type is an adapter to allow the use of ordinary
 // function as ComputeImage mutator.
 type ComputeImageFunc func(context.Context, *ent.ComputeImageMutation) (ent.Value, error)
@@ -55,6 +67,78 @@ func (f ComputeSpecFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeSpecMutation", m)
+}
+
+// The CycleFunc type is an adapter to allow the use of ordinary
+// function as Cycle mutator.
+type CycleFunc func(context.Context, *ent.CycleMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleMutation", m)
+}
+
+// The CycleOrderFunc type is an adapter to allow the use of ordinary
+// function as CycleOrder mutator.
+type CycleOrderFunc func(context.Context, *ent.CycleOrderMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleOrderFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleOrderMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleOrderMutation", m)
+}
+
+// The CycleRechargeFunc type is an adapter to allow the use of ordinary
+// function as CycleRecharge mutator.
+type CycleRechargeFunc func(context.Context, *ent.CycleRechargeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleRechargeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleRechargeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleRechargeMutation", m)
+}
+
+// The CycleRedeemCodeFunc type is an adapter to allow the use of ordinary
+// function as CycleRedeemCode mutator.
+type CycleRedeemCodeFunc func(context.Context, *ent.CycleRedeemCodeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleRedeemCodeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleRedeemCodeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleRedeemCodeMutation", m)
+}
+
+// The CycleRenewalFunc type is an adapter to allow the use of ordinary
+// function as CycleRenewal mutator.
+type CycleRenewalFunc func(context.Context, *ent.CycleRenewalMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleRenewalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleRenewalMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleRenewalMutation", m)
+}
+
+// The CycleTransactionFunc type is an adapter to allow the use of ordinary
+// function as CycleTransaction mutator.
+type CycleTransactionFunc func(context.Context, *ent.CycleTransactionMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CycleTransactionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CycleTransactionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CycleTransactionMutation", m)
 }
 
 // The DomainBindingFunc type is an adapter to allow the use of ordinary
