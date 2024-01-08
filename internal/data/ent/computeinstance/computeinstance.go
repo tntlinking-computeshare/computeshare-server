@@ -22,6 +22,8 @@ const (
 	FieldMemory = "memory"
 	// FieldImage holds the string denoting the image field in the database.
 	FieldImage = "image"
+	// FieldImageID holds the string denoting the image_id field in the database.
+	FieldImageID = "image_id"
 	// FieldPort holds the string denoting the port field in the database.
 	FieldPort = "port"
 	// FieldExpirationTime holds the string denoting the expiration_time field in the database.
@@ -50,6 +52,7 @@ var Columns = []string{
 	FieldCore,
 	FieldMemory,
 	FieldImage,
+	FieldImageID,
 	FieldPort,
 	FieldExpirationTime,
 	FieldStatus,
@@ -116,6 +119,11 @@ func ByMemory(opts ...sql.OrderTermOption) OrderOption {
 // ByImage orders the results by the image field.
 func ByImage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImage, opts...).ToFunc()
+}
+
+// ByImageID orders the results by the image_id field.
+func ByImageID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImageID, opts...).ToFunc()
 }
 
 // ByPort orders the results by the port field.

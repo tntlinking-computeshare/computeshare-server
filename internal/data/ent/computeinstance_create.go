@@ -52,6 +52,12 @@ func (cic *ComputeInstanceCreate) SetImage(s string) *ComputeInstanceCreate {
 	return cic
 }
 
+// SetImageID sets the "image_id" field.
+func (cic *ComputeInstanceCreate) SetImageID(i int32) *ComputeInstanceCreate {
+	cic.mutation.SetImageID(i)
+	return cic
+}
+
 // SetPort sets the "port" field.
 func (cic *ComputeInstanceCreate) SetPort(s string) *ComputeInstanceCreate {
 	cic.mutation.SetPort(s)
@@ -221,6 +227,9 @@ func (cic *ComputeInstanceCreate) check() error {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
 		}
 	}
+	if _, ok := cic.mutation.ImageID(); !ok {
+		return &ValidationError{Name: "image_id", err: errors.New(`ent: missing required field "ComputeInstance.image_id"`)}
+	}
 	if _, ok := cic.mutation.ExpirationTime(); !ok {
 		return &ValidationError{Name: "expiration_time", err: errors.New(`ent: missing required field "ComputeInstance.expiration_time"`)}
 	}
@@ -290,6 +299,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 		_node.Image = value
+	}
+	if value, ok := cic.mutation.ImageID(); ok {
+		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
+		_node.ImageID = value
 	}
 	if value, ok := cic.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)

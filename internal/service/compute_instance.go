@@ -164,6 +164,7 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 		ImageName:      p.Image,
 		Core:           p.Core,
 		Memory:         p.Memory,
+		ImageId:        p.ImageId,
 		Stats: lo.Map(p.Stats, func(item *biz.ComputeInstanceRds, _ int) *pb.InstanceStats {
 			if item == nil {
 				return nil
@@ -192,6 +193,27 @@ func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.Ge
 		return nil, err
 	}
 	err = s.uc.Reboot(ctx, instanceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CommonReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
+}
+
+func (s *ComputeInstanceService) ReCreateInstance(ctx context.Context, req *pb.RecreateInstanceRequest) (*pb.CommonReply, error) {
+	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.uc.Recreate(ctx, instanceId, &biz.ComputeInstanceCreate{
+		ImageId:       req.ImageId,
+		PublicKey:     req.PublicKey,
+		Password:      req.Password,
+		DockerCompose: req.DockerCompose,
+	})
 	if err != nil {
 		return nil, err
 	}

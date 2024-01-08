@@ -11,19 +11,7 @@ paths:
             tags:
                 - Order
             operationId: Order_AlipayPayNotify
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/AlipayPayNotifyRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/AlipayPayNotifyReply'
+
                 default:
                     description: Default error response
                     content:
@@ -33,22 +21,6 @@ paths:
 components:
     schemas:
         AlipayPayNotifyReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        AlipayPayNotifyRequest:
-            type: object
-            properties:
-                notifyTime:
-                    type: string
-                notifyType:
-                    type: string
-                notifyId:
-                    type: string
                 appId:
                     type: string
                 charset:
@@ -115,11 +87,17 @@ components:
         GoogleProtobufAny:
             type: object
             properties:
-                '@type':
+                id:
                     type: string
-                    description: The type of the serialized message.
-            additionalProperties: true
-            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+                imageId:
+                    type: integer
+                    format: int32
+                publicKey:
+                    type: string
+                password:
+                    type: string
+                dockerCompose:
+                    type: string
         Status:
             type: object
             properties:

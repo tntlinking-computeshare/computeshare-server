@@ -59,6 +59,19 @@ func (ciu *ComputeInstanceUpdate) SetImage(s string) *ComputeInstanceUpdate {
 	return ciu
 }
 
+// SetImageID sets the "image_id" field.
+func (ciu *ComputeInstanceUpdate) SetImageID(i int32) *ComputeInstanceUpdate {
+	ciu.mutation.ResetImageID()
+	ciu.mutation.SetImageID(i)
+	return ciu
+}
+
+// AddImageID adds i to the "image_id" field.
+func (ciu *ComputeInstanceUpdate) AddImageID(i int32) *ComputeInstanceUpdate {
+	ciu.mutation.AddImageID(i)
+	return ciu
+}
+
 // SetPort sets the "port" field.
 func (ciu *ComputeInstanceUpdate) SetPort(s string) *ComputeInstanceUpdate {
 	ciu.mutation.SetPort(s)
@@ -252,6 +265,12 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	if value, ok := ciu.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
+	if value, ok := ciu.mutation.ImageID(); ok {
+		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
+	}
+	if value, ok := ciu.mutation.AddedImageID(); ok {
+		_spec.AddField(computeinstance.FieldImageID, field.TypeInt32, value)
+	}
 	if value, ok := ciu.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
 	}
@@ -338,6 +357,19 @@ func (ciuo *ComputeInstanceUpdateOne) SetMemory(s string) *ComputeInstanceUpdate
 // SetImage sets the "image" field.
 func (ciuo *ComputeInstanceUpdateOne) SetImage(s string) *ComputeInstanceUpdateOne {
 	ciuo.mutation.SetImage(s)
+	return ciuo
+}
+
+// SetImageID sets the "image_id" field.
+func (ciuo *ComputeInstanceUpdateOne) SetImageID(i int32) *ComputeInstanceUpdateOne {
+	ciuo.mutation.ResetImageID()
+	ciuo.mutation.SetImageID(i)
+	return ciuo
+}
+
+// AddImageID adds i to the "image_id" field.
+func (ciuo *ComputeInstanceUpdateOne) AddImageID(i int32) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddImageID(i)
 	return ciuo
 }
 
@@ -563,6 +595,12 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if value, ok := ciuo.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
+	}
+	if value, ok := ciuo.mutation.ImageID(); ok {
+		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
+	}
+	if value, ok := ciuo.mutation.AddedImageID(); ok {
+		_spec.AddField(computeinstance.FieldImageID, field.TypeInt32, value)
 	}
 	if value, ok := ciuo.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)

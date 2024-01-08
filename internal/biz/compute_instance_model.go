@@ -47,7 +47,9 @@ type ComputeInstance struct {
 	Memory string `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
-	Port  string `json:"port,omitempty"`
+	// 镜像id
+	ImageId int32  `json:"omitempty"`
+	Port    string `json:"port,omitempty"`
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
@@ -110,8 +112,8 @@ func (c *ComputeImage) GetImageTag() string {
 
 type ComputeInstanceRds struct {
 	ID          string    `json:"id"`
-	CpuUsage    uint64    `json:"cpuUsage"`
-	MemoryUsage uint64    `json:"memoryUsage"`
+	CpuUsage    float32   `json:"cpuUsage"`
+	MemoryUsage float32   `json:"memoryUsage"`
 	StatsTime   time.Time `json:"statsTime"`
 }
 
@@ -121,7 +123,6 @@ func (m *ComputeInstanceRds) MarshalBinary() (data []byte, err error) {
 
 func (m *ComputeInstanceRds) UnmarshalBinary(data []byte) error {
 	return json.Unmarshal(data, m)
-
 }
 
 type InstanceCreateParam struct {
@@ -132,4 +133,23 @@ type InstanceCreateParam struct {
 	VncConnectIP   string
 	VncConnectPort int32
 	DockerCompose  string
+}
+
+type Metric struct {
+	Instance string `json:"instance"`
+}
+
+type Result struct {
+	Metric Metric          `json:"metric"`
+	Values [][]interface{} `json:"values"`
+}
+
+type PrometheusQueryResult struct {
+	Status string `json:"status"`
+	Data   Data   `json:"data"`
+}
+
+type Data struct {
+	ResultType string   `json:"resultType"`
+	Result     []Result `json:"result"`
 }

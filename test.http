@@ -273,7 +273,7 @@ Authorization: Bearer {{ access_token }}
 {"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
 
 ### 沙盒流程测试
-POST https://api.computeshare.newtouch.com/v1/instance-process
+POST https://api.computeshare.newtouch.com/v1/sandbox
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -299,7 +299,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/c3c4af46-b833-42eb-afbd-3eebc7b994e0
+DELETE  https://api.computeshare.newtouch.com/v1/instance/c49608e3-235b-4232-b10b-4676ae76ef34
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -320,4 +320,13 @@ Content-Type: application/json
 {
 "username": "+861300xxxxxxx",
 "password": "somePassword"
+}
+
+###
+POST https://computeshare.newtouch.com/api/v1/storage_provider
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "agentId": "52540dea-9944-4805-941f-01dacbf96ab6"
 }

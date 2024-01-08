@@ -3353,6 +3353,8 @@ type ComputeInstanceMutation struct {
 	core            *string
 	memory          *string
 	image           *string
+	image_id        *int32
+	addimage_id     *int32
 	port            *string
 	expiration_time *time.Time
 	status          *consts.InstanceStatus
@@ -3651,6 +3653,62 @@ func (m *ComputeInstanceMutation) OldImage(ctx context.Context) (v string, err e
 // ResetImage resets all changes to the "image" field.
 func (m *ComputeInstanceMutation) ResetImage() {
 	m.image = nil
+}
+
+// SetImageID sets the "image_id" field.
+func (m *ComputeInstanceMutation) SetImageID(i int32) {
+	m.image_id = &i
+	m.addimage_id = nil
+}
+
+// ImageID returns the value of the "image_id" field in the mutation.
+func (m *ComputeInstanceMutation) ImageID() (r int32, exists bool) {
+	v := m.image_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImageID returns the old "image_id" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldImageID(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldImageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldImageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImageID: %w", err)
+	}
+	return oldValue.ImageID, nil
+}
+
+// AddImageID adds i to the "image_id" field.
+func (m *ComputeInstanceMutation) AddImageID(i int32) {
+	if m.addimage_id != nil {
+		*m.addimage_id += i
+	} else {
+		m.addimage_id = &i
+	}
+}
+
+// AddedImageID returns the value that was added to the "image_id" field in this mutation.
+func (m *ComputeInstanceMutation) AddedImageID() (r int32, exists bool) {
+	v := m.addimage_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetImageID resets all changes to the "image_id" field.
+func (m *ComputeInstanceMutation) ResetImageID() {
+	m.image_id = nil
+	m.addimage_id = nil
 }
 
 // SetPort sets the "port" field.
@@ -4054,7 +4112,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 14)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -4069,6 +4127,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	}
 	if m.image != nil {
 		fields = append(fields, computeinstance.FieldImage)
+	}
+	if m.image_id != nil {
+		fields = append(fields, computeinstance.FieldImageID)
 	}
 	if m.port != nil {
 		fields = append(fields, computeinstance.FieldPort)
@@ -4112,6 +4173,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.Memory()
 	case computeinstance.FieldImage:
 		return m.Image()
+	case computeinstance.FieldImageID:
+		return m.ImageID()
 	case computeinstance.FieldPort:
 		return m.Port()
 	case computeinstance.FieldExpirationTime:
@@ -4147,6 +4210,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldMemory(ctx)
 	case computeinstance.FieldImage:
 		return m.OldImage(ctx)
+	case computeinstance.FieldImageID:
+		return m.OldImageID(ctx)
 	case computeinstance.FieldPort:
 		return m.OldPort(ctx)
 	case computeinstance.FieldExpirationTime:
@@ -4206,6 +4271,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImage(v)
+		return nil
+	case computeinstance.FieldImageID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImageID(v)
 		return nil
 	case computeinstance.FieldPort:
 		v, ok := value.(string)
@@ -4271,6 +4343,9 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ComputeInstanceMutation) AddedFields() []string {
 	var fields []string
+	if m.addimage_id != nil {
+		fields = append(fields, computeinstance.FieldImageID)
+	}
 	if m.addstatus != nil {
 		fields = append(fields, computeinstance.FieldStatus)
 	}
@@ -4285,6 +4360,8 @@ func (m *ComputeInstanceMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case computeinstance.FieldImageID:
+		return m.AddedImageID()
 	case computeinstance.FieldStatus:
 		return m.AddedStatus()
 	case computeinstance.FieldVncPort:
@@ -4298,6 +4375,13 @@ func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case computeinstance.FieldImageID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddImageID(v)
+		return nil
 	case computeinstance.FieldStatus:
 		v, ok := value.(consts.InstanceStatus)
 		if !ok {
@@ -4374,6 +4458,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldImage:
 		m.ResetImage()
+		return nil
+	case computeinstance.FieldImageID:
+		m.ResetImageID()
 		return nil
 	case computeinstance.FieldPort:
 		m.ResetPort()

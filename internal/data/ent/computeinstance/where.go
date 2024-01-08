@@ -81,6 +81,11 @@ func Image(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldImage, v))
 }
 
+// ImageID applies equality check predicate on the "image_id" field. It's identical to ImageIDEQ.
+func ImageID(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldImageID, v))
+}
+
 // Port applies equality check predicate on the "port" field. It's identical to PortEQ.
 func Port(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldPort, v))
@@ -445,6 +450,46 @@ func ImageEqualFold(v string) predicate.ComputeInstance {
 // ImageContainsFold applies the ContainsFold predicate on the "image" field.
 func ImageContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldImage, v))
+}
+
+// ImageIDEQ applies the EQ predicate on the "image_id" field.
+func ImageIDEQ(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldImageID, v))
+}
+
+// ImageIDNEQ applies the NEQ predicate on the "image_id" field.
+func ImageIDNEQ(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldImageID, v))
+}
+
+// ImageIDIn applies the In predicate on the "image_id" field.
+func ImageIDIn(vs ...int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldImageID, vs...))
+}
+
+// ImageIDNotIn applies the NotIn predicate on the "image_id" field.
+func ImageIDNotIn(vs ...int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldImageID, vs...))
+}
+
+// ImageIDGT applies the GT predicate on the "image_id" field.
+func ImageIDGT(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldImageID, v))
+}
+
+// ImageIDGTE applies the GTE predicate on the "image_id" field.
+func ImageIDGTE(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldImageID, v))
+}
+
+// ImageIDLT applies the LT predicate on the "image_id" field.
+func ImageIDLT(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldImageID, v))
+}
+
+// ImageIDLTE applies the LTE predicate on the "image_id" field.
+func ImageIDLTE(v int32) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldImageID, v))
 }
 
 // PortEQ applies the EQ predicate on the "port" field.
