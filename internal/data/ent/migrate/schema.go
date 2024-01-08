@@ -155,6 +155,7 @@ var (
 		{Name: "fk_user_id", Type: field.TypeUUID},
 		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
 		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 	}
 	// CyclesTable holds the schema information for the "cycles" table.
 	CyclesTable = &schema.Table{

@@ -54,6 +54,12 @@ func (cu *CycleUpdate) SetCreateTime(t time.Time) *CycleUpdate {
 	return cu
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (cu *CycleUpdate) SetUpdateTime(t time.Time) *CycleUpdate {
+	cu.mutation.SetUpdateTime(t)
+	return cu
+}
+
 // Mutation returns the CycleMutation object of the builder.
 func (cu *CycleUpdate) Mutation() *CycleMutation {
 	return cu.mutation
@@ -107,6 +113,9 @@ func (cu *CycleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
 	}
+	if value, ok := cu.mutation.UpdateTime(); ok {
+		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycle.Label}
@@ -149,6 +158,12 @@ func (cuo *CycleUpdateOne) AddCycle(f float64) *CycleUpdateOne {
 // SetCreateTime sets the "create_time" field.
 func (cuo *CycleUpdateOne) SetCreateTime(t time.Time) *CycleUpdateOne {
 	cuo.mutation.SetCreateTime(t)
+	return cuo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (cuo *CycleUpdateOne) SetUpdateTime(t time.Time) *CycleUpdateOne {
+	cuo.mutation.SetUpdateTime(t)
 	return cuo
 }
 
@@ -234,6 +249,9 @@ func (cuo *CycleUpdateOne) sqlSave(ctx context.Context) (_node *Cycle, err error
 	}
 	if value, ok := cuo.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
+	}
+	if value, ok := cuo.mutation.UpdateTime(); ok {
+		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
 	}
 	_node = &Cycle{config: cuo.config}
 	_spec.Assign = _node.assignValues

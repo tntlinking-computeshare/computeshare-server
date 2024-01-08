@@ -39,6 +39,12 @@ func (cc *CycleCreate) SetCreateTime(t time.Time) *CycleCreate {
 	return cc
 }
 
+// SetUpdateTime sets the "update_time" field.
+func (cc *CycleCreate) SetUpdateTime(t time.Time) *CycleCreate {
+	cc.mutation.SetUpdateTime(t)
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CycleCreate) SetID(u uuid.UUID) *CycleCreate {
 	cc.mutation.SetID(u)
@@ -105,6 +111,9 @@ func (cc *CycleCreate) check() error {
 	if _, ok := cc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Cycle.create_time"`)}
 	}
+	if _, ok := cc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Cycle.update_time"`)}
+	}
 	return nil
 }
 
@@ -151,6 +160,10 @@ func (cc *CycleCreate) createSpec() (*Cycle, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
+	}
+	if value, ok := cc.mutation.UpdateTime(); ok {
+		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

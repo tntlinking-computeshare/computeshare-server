@@ -64,7 +64,7 @@ type AlipayOrderRollback struct {
 	RefundFee string `json:"refund_fee,omitempty"`
 	// 订单标题
 	Subject string `json:"subject,omitempty"`
-	// 订单标题
+	// 订单的备注、描述、明细等。对应请求时的 body 参数，原样通知回来
 	Body string `json:"body,omitempty"`
 	// 交易创建时间
 	GmtCreate string `json:"gmt_create,omitempty"`

@@ -41,6 +41,7 @@ var ProviderSet = wire.NewSet(
 	NewDomainBindingRepository,
 	NewS3UserRepo,
 	NewStorageProviderRepo,
+	NewCycleRepo,
 )
 
 // Data .
@@ -187,6 +188,14 @@ func (d *Data) getAgent(ctx context.Context) *ent.AgentClient {
 		return tx.Agent
 	}
 	return d.db.Agent
+}
+
+func (d *Data) getCycle(ctx context.Context) *ent.CycleClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.Cycle
+	}
+	return d.db.Cycle
 }
 
 // NewData .
