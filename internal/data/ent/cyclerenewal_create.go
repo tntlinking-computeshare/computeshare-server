@@ -51,6 +51,12 @@ func (crc *CycleRenewalCreate) SetProductDesc(s string) *CycleRenewalCreate {
 	return crc
 }
 
+// SetState sets the "state" field.
+func (crc *CycleRenewalCreate) SetState(i int8) *CycleRenewalCreate {
+	crc.mutation.SetState(i)
+	return crc
+}
+
 // SetExtendDay sets the "extend_day" field.
 func (crc *CycleRenewalCreate) SetExtendDay(i int8) *CycleRenewalCreate {
 	crc.mutation.SetExtendDay(i)
@@ -69,9 +75,25 @@ func (crc *CycleRenewalCreate) SetDueTime(t time.Time) *CycleRenewalCreate {
 	return crc
 }
 
+// SetNillableDueTime sets the "due_time" field if the given value is not nil.
+func (crc *CycleRenewalCreate) SetNillableDueTime(t *time.Time) *CycleRenewalCreate {
+	if t != nil {
+		crc.SetDueTime(*t)
+	}
+	return crc
+}
+
 // SetRenewalTime sets the "renewal_time" field.
 func (crc *CycleRenewalCreate) SetRenewalTime(t time.Time) *CycleRenewalCreate {
 	crc.mutation.SetRenewalTime(t)
+	return crc
+}
+
+// SetNillableRenewalTime sets the "renewal_time" field if the given value is not nil.
+func (crc *CycleRenewalCreate) SetNillableRenewalTime(t *time.Time) *CycleRenewalCreate {
+	if t != nil {
+		crc.SetRenewalTime(*t)
+	}
 	return crc
 }
 
@@ -168,17 +190,14 @@ func (crc *CycleRenewalCreate) check() error {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_desc": %w`, err)}
 		}
 	}
+	if _, ok := crc.mutation.State(); !ok {
+		return &ValidationError{Name: "state", err: errors.New(`ent: missing required field "CycleRenewal.state"`)}
+	}
 	if _, ok := crc.mutation.ExtendDay(); !ok {
 		return &ValidationError{Name: "extend_day", err: errors.New(`ent: missing required field "CycleRenewal.extend_day"`)}
 	}
 	if _, ok := crc.mutation.ExtendPrice(); !ok {
 		return &ValidationError{Name: "extend_price", err: errors.New(`ent: missing required field "CycleRenewal.extend_price"`)}
-	}
-	if _, ok := crc.mutation.DueTime(); !ok {
-		return &ValidationError{Name: "due_time", err: errors.New(`ent: missing required field "CycleRenewal.due_time"`)}
-	}
-	if _, ok := crc.mutation.RenewalTime(); !ok {
-		return &ValidationError{Name: "renewal_time", err: errors.New(`ent: missing required field "CycleRenewal.renewal_time"`)}
 	}
 	if _, ok := crc.mutation.AutoRenewal(); !ok {
 		return &ValidationError{Name: "auto_renewal", err: errors.New(`ent: missing required field "CycleRenewal.auto_renewal"`)}
@@ -238,6 +257,10 @@ func (crc *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 		_node.ProductDesc = value
 	}
+	if value, ok := crc.mutation.State(); ok {
+		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
+		_node.State = value
+	}
 	if value, ok := crc.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 		_node.ExtendDay = value
@@ -248,11 +271,11 @@ func (crc *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec
 	}
 	if value, ok := crc.mutation.DueTime(); ok {
 		_spec.SetField(cyclerenewal.FieldDueTime, field.TypeTime, value)
-		_node.DueTime = value
+		_node.DueTime = &value
 	}
 	if value, ok := crc.mutation.RenewalTime(); ok {
 		_spec.SetField(cyclerenewal.FieldRenewalTime, field.TypeTime, value)
-		_node.RenewalTime = value
+		_node.RenewalTime = &value
 	}
 	if value, ok := crc.mutation.AutoRenewal(); ok {
 		_spec.SetField(cyclerenewal.FieldAutoRenewal, field.TypeBool, value)

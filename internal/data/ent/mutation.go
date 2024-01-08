@@ -7770,6 +7770,8 @@ type CycleRenewalMutation struct {
 	addresource_type *int
 	product_name     *string
 	product_desc     *string
+	state            *int8
+	addstate         *int8
 	extend_day       *int8
 	addextend_day    *int8
 	extend_price     *float64
@@ -8087,6 +8089,62 @@ func (m *CycleRenewalMutation) ResetProductDesc() {
 	m.product_desc = nil
 }
 
+// SetState sets the "state" field.
+func (m *CycleRenewalMutation) SetState(i int8) {
+	m.state = &i
+	m.addstate = nil
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *CycleRenewalMutation) State() (r int8, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the CycleRenewal entity.
+// If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CycleRenewalMutation) OldState(ctx context.Context) (v int8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// AddState adds i to the "state" field.
+func (m *CycleRenewalMutation) AddState(i int8) {
+	if m.addstate != nil {
+		*m.addstate += i
+	} else {
+		m.addstate = &i
+	}
+}
+
+// AddedState returns the value that was added to the "state" field in this mutation.
+func (m *CycleRenewalMutation) AddedState() (r int8, exists bool) {
+	v := m.addstate
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *CycleRenewalMutation) ResetState() {
+	m.state = nil
+	m.addstate = nil
+}
+
 // SetExtendDay sets the "extend_day" field.
 func (m *CycleRenewalMutation) SetExtendDay(i int8) {
 	m.extend_day = &i
@@ -8216,7 +8274,7 @@ func (m *CycleRenewalMutation) DueTime() (r time.Time, exists bool) {
 // OldDueTime returns the old "due_time" field's value of the CycleRenewal entity.
 // If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v time.Time, err error) {
+func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v *time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDueTime is only allowed on UpdateOne operations")
 	}
@@ -8230,9 +8288,22 @@ func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v time.Time, err
 	return oldValue.DueTime, nil
 }
 
+// ClearDueTime clears the value of the "due_time" field.
+func (m *CycleRenewalMutation) ClearDueTime() {
+	m.due_time = nil
+	m.clearedFields[cyclerenewal.FieldDueTime] = struct{}{}
+}
+
+// DueTimeCleared returns if the "due_time" field was cleared in this mutation.
+func (m *CycleRenewalMutation) DueTimeCleared() bool {
+	_, ok := m.clearedFields[cyclerenewal.FieldDueTime]
+	return ok
+}
+
 // ResetDueTime resets all changes to the "due_time" field.
 func (m *CycleRenewalMutation) ResetDueTime() {
 	m.due_time = nil
+	delete(m.clearedFields, cyclerenewal.FieldDueTime)
 }
 
 // SetRenewalTime sets the "renewal_time" field.
@@ -8252,7 +8323,7 @@ func (m *CycleRenewalMutation) RenewalTime() (r time.Time, exists bool) {
 // OldRenewalTime returns the old "renewal_time" field's value of the CycleRenewal entity.
 // If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v time.Time, err error) {
+func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v *time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRenewalTime is only allowed on UpdateOne operations")
 	}
@@ -8266,9 +8337,22 @@ func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v time.Time,
 	return oldValue.RenewalTime, nil
 }
 
+// ClearRenewalTime clears the value of the "renewal_time" field.
+func (m *CycleRenewalMutation) ClearRenewalTime() {
+	m.renewal_time = nil
+	m.clearedFields[cyclerenewal.FieldRenewalTime] = struct{}{}
+}
+
+// RenewalTimeCleared returns if the "renewal_time" field was cleared in this mutation.
+func (m *CycleRenewalMutation) RenewalTimeCleared() bool {
+	_, ok := m.clearedFields[cyclerenewal.FieldRenewalTime]
+	return ok
+}
+
 // ResetRenewalTime resets all changes to the "renewal_time" field.
 func (m *CycleRenewalMutation) ResetRenewalTime() {
 	m.renewal_time = nil
+	delete(m.clearedFields, cyclerenewal.FieldRenewalTime)
 }
 
 // SetAutoRenewal sets the "auto_renewal" field.
@@ -8341,7 +8425,7 @@ func (m *CycleRenewalMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CycleRenewalMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.fk_user_id != nil {
 		fields = append(fields, cyclerenewal.FieldFkUserID)
 	}
@@ -8356,6 +8440,9 @@ func (m *CycleRenewalMutation) Fields() []string {
 	}
 	if m.product_desc != nil {
 		fields = append(fields, cyclerenewal.FieldProductDesc)
+	}
+	if m.state != nil {
+		fields = append(fields, cyclerenewal.FieldState)
 	}
 	if m.extend_day != nil {
 		fields = append(fields, cyclerenewal.FieldExtendDay)
@@ -8390,6 +8477,8 @@ func (m *CycleRenewalMutation) Field(name string) (ent.Value, bool) {
 		return m.ProductName()
 	case cyclerenewal.FieldProductDesc:
 		return m.ProductDesc()
+	case cyclerenewal.FieldState:
+		return m.State()
 	case cyclerenewal.FieldExtendDay:
 		return m.ExtendDay()
 	case cyclerenewal.FieldExtendPrice:
@@ -8419,6 +8508,8 @@ func (m *CycleRenewalMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldProductName(ctx)
 	case cyclerenewal.FieldProductDesc:
 		return m.OldProductDesc(ctx)
+	case cyclerenewal.FieldState:
+		return m.OldState(ctx)
 	case cyclerenewal.FieldExtendDay:
 		return m.OldExtendDay(ctx)
 	case cyclerenewal.FieldExtendPrice:
@@ -8473,6 +8564,13 @@ func (m *CycleRenewalMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProductDesc(v)
 		return nil
+	case cyclerenewal.FieldState:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
 	case cyclerenewal.FieldExtendDay:
 		v, ok := value.(int8)
 		if !ok {
@@ -8519,6 +8617,9 @@ func (m *CycleRenewalMutation) AddedFields() []string {
 	if m.addresource_type != nil {
 		fields = append(fields, cyclerenewal.FieldResourceType)
 	}
+	if m.addstate != nil {
+		fields = append(fields, cyclerenewal.FieldState)
+	}
 	if m.addextend_day != nil {
 		fields = append(fields, cyclerenewal.FieldExtendDay)
 	}
@@ -8535,6 +8636,8 @@ func (m *CycleRenewalMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case cyclerenewal.FieldResourceType:
 		return m.AddedResourceType()
+	case cyclerenewal.FieldState:
+		return m.AddedState()
 	case cyclerenewal.FieldExtendDay:
 		return m.AddedExtendDay()
 	case cyclerenewal.FieldExtendPrice:
@@ -8554,6 +8657,13 @@ func (m *CycleRenewalMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddResourceType(v)
+		return nil
+	case cyclerenewal.FieldState:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddState(v)
 		return nil
 	case cyclerenewal.FieldExtendDay:
 		v, ok := value.(int8)
@@ -8576,7 +8686,14 @@ func (m *CycleRenewalMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CycleRenewalMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(cyclerenewal.FieldDueTime) {
+		fields = append(fields, cyclerenewal.FieldDueTime)
+	}
+	if m.FieldCleared(cyclerenewal.FieldRenewalTime) {
+		fields = append(fields, cyclerenewal.FieldRenewalTime)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -8589,6 +8706,14 @@ func (m *CycleRenewalMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CycleRenewalMutation) ClearField(name string) error {
+	switch name {
+	case cyclerenewal.FieldDueTime:
+		m.ClearDueTime()
+		return nil
+	case cyclerenewal.FieldRenewalTime:
+		m.ClearRenewalTime()
+		return nil
+	}
 	return fmt.Errorf("unknown CycleRenewal nullable field %s", name)
 }
 
@@ -8610,6 +8735,9 @@ func (m *CycleRenewalMutation) ResetField(name string) error {
 		return nil
 	case cyclerenewal.FieldProductDesc:
 		m.ResetProductDesc()
+		return nil
+	case cyclerenewal.FieldState:
+		m.ResetState()
 		return nil
 	case cyclerenewal.FieldExtendDay:
 		m.ResetExtendDay()

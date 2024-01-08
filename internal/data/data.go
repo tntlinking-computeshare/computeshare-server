@@ -44,6 +44,7 @@ var ProviderSet = wire.NewSet(
 	NewCycleRepo,
 	NewCycleOrderRepo,
 	NewCycleTransactionRepo,
+	NewCycleRenewalRepo,
 )
 
 // Data .
@@ -214,6 +215,14 @@ func (d *Data) getCycleTransaction(ctx context.Context) *ent.CycleTransactionCli
 		return tx.CycleTransaction
 	}
 	return d.db.CycleTransaction
+}
+
+func (d *Data) getCycleRenewal(ctx context.Context) *ent.CycleRenewalClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.CycleRenewal
+	}
+	return d.db.CycleRenewal
 }
 
 // NewData .

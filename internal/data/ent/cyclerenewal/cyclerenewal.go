@@ -22,6 +22,8 @@ const (
 	FieldProductName = "product_name"
 	// FieldProductDesc holds the string denoting the product_desc field in the database.
 	FieldProductDesc = "product_desc"
+	// FieldState holds the string denoting the state field in the database.
+	FieldState = "state"
 	// FieldExtendDay holds the string denoting the extend_day field in the database.
 	FieldExtendDay = "extend_day"
 	// FieldExtendPrice holds the string denoting the extend_price field in the database.
@@ -44,6 +46,7 @@ var Columns = []string{
 	FieldResourceType,
 	FieldProductName,
 	FieldProductDesc,
+	FieldState,
 	FieldExtendDay,
 	FieldExtendPrice,
 	FieldDueTime,
@@ -103,6 +106,11 @@ func ByProductName(opts ...sql.OrderTermOption) OrderOption {
 // ByProductDesc orders the results by the product_desc field.
 func ByProductDesc(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProductDesc, opts...).ToFunc()
+}
+
+// ByState orders the results by the state field.
+func ByState(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldState, opts...).ToFunc()
 }
 
 // ByExtendDay orders the results by the extend_day field.

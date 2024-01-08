@@ -82,7 +82,7 @@ paths:
         get:
             tags:
                 - Order
-            operationId: Order_CycleReychargeList
+            operationId: Order_CycleRenewalList
             parameters:
                 - name: page
                   in: query
@@ -100,7 +100,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CycleRenewListReply'
+                                $ref: '#/components/schemas/CycleRenewalListReply'
                 default:
                     description: Default error response
                     content:
@@ -247,7 +247,7 @@ components:
                 authAppId:
                     type: string
             description: https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
-        CycleRenewInfo:
+        CycleRenewalInfo:
             type: object
             properties:
                 id:
@@ -256,16 +256,14 @@ components:
                     type: string
                 productDesc:
                     type: string
-                status:
+                state:
                     type: integer
                     format: int32
                 dueTime:
-                    type: integer
-                    format: int64
+                    type: string
                 renewalTime:
-                    type: integer
-                    format: int64
-        CycleRenewListReply:
+                    type: string
+        CycleRenewalListReply:
             type: object
             properties:
                 code:
@@ -274,8 +272,8 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CycleRenewPage'
-        CycleRenewPage:
+                    $ref: '#/components/schemas/CycleRenewalPage'
+        CycleRenewalPage:
             type: object
             properties:
                 total:
@@ -290,7 +288,7 @@ components:
                 data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/CycleRenewInfo'
+                        $ref: '#/components/schemas/CycleRenewalInfo'
         CycleTransactionInfo:
             type: object
             properties:

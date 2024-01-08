@@ -80,6 +80,11 @@ func ProductDesc(v string) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldEQ(FieldProductDesc, v))
 }
 
+// State applies equality check predicate on the "state" field. It's identical to StateEQ.
+func State(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldEQ(FieldState, v))
+}
+
 // ExtendDay applies equality check predicate on the "extend_day" field. It's identical to ExtendDayEQ.
 func ExtendDay(v int8) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldEQ(FieldExtendDay, v))
@@ -355,6 +360,46 @@ func ProductDescContainsFold(v string) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldContainsFold(FieldProductDesc, v))
 }
 
+// StateEQ applies the EQ predicate on the "state" field.
+func StateEQ(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldEQ(FieldState, v))
+}
+
+// StateNEQ applies the NEQ predicate on the "state" field.
+func StateNEQ(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNEQ(FieldState, v))
+}
+
+// StateIn applies the In predicate on the "state" field.
+func StateIn(vs ...int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldIn(FieldState, vs...))
+}
+
+// StateNotIn applies the NotIn predicate on the "state" field.
+func StateNotIn(vs ...int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNotIn(FieldState, vs...))
+}
+
+// StateGT applies the GT predicate on the "state" field.
+func StateGT(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldGT(FieldState, v))
+}
+
+// StateGTE applies the GTE predicate on the "state" field.
+func StateGTE(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldGTE(FieldState, v))
+}
+
+// StateLT applies the LT predicate on the "state" field.
+func StateLT(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldLT(FieldState, v))
+}
+
+// StateLTE applies the LTE predicate on the "state" field.
+func StateLTE(v int8) predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldLTE(FieldState, v))
+}
+
 // ExtendDayEQ applies the EQ predicate on the "extend_day" field.
 func ExtendDayEQ(v int8) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldEQ(FieldExtendDay, v))
@@ -475,6 +520,16 @@ func DueTimeLTE(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldLTE(FieldDueTime, v))
 }
 
+// DueTimeIsNil applies the IsNil predicate on the "due_time" field.
+func DueTimeIsNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldIsNull(FieldDueTime))
+}
+
+// DueTimeNotNil applies the NotNil predicate on the "due_time" field.
+func DueTimeNotNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNotNull(FieldDueTime))
+}
+
 // RenewalTimeEQ applies the EQ predicate on the "renewal_time" field.
 func RenewalTimeEQ(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldEQ(FieldRenewalTime, v))
@@ -513,6 +568,16 @@ func RenewalTimeLT(v time.Time) predicate.CycleRenewal {
 // RenewalTimeLTE applies the LTE predicate on the "renewal_time" field.
 func RenewalTimeLTE(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldLTE(FieldRenewalTime, v))
+}
+
+// RenewalTimeIsNil applies the IsNil predicate on the "renewal_time" field.
+func RenewalTimeIsNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldIsNull(FieldRenewalTime))
+}
+
+// RenewalTimeNotNil applies the NotNil predicate on the "renewal_time" field.
+func RenewalTimeNotNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNotNull(FieldRenewalTime))
 }
 
 // AutoRenewalEQ applies the EQ predicate on the "auto_renewal" field.
