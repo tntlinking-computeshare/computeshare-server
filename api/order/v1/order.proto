@@ -15,6 +15,18 @@ service Order {
 			body: "*"
 		};
 	};
+	rpc RechargeCycleByAlipay (RechargeCycleByAlipayRequest) returns (RechargeCycleByAlipayReply){
+		option (google.api.http) = {
+			post: "/v1/cycle/recharge",
+			body: "*"
+		};
+	};
+	rpc RechargeCycleByRedeemCode (RechargeCycleByRedeemCodeRequest) returns (RechargeCycleByRedeemCodeReply){
+		option (google.api.http) = {
+			post: "/v1/cycle/redeem",
+			body: "*"
+		};
+	};
 
 	rpc OrderList(OrderListRequest) returns (OrderListReply){
 		option (google.api.http) = {
@@ -74,6 +86,27 @@ message AlipayPayNotifyRequest {
 }
 
 message AlipayPayNotifyReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message RechargeCycleByAlipayRequest {
+	int32 rechargeChannel = 1;
+	float cycle = 2;
+	float amount = 3;
+}
+
+message RechargeCycleByAlipayReply {
+	int32 code = 1;
+	string message = 2;
+	string url = 3;
+}
+
+message RechargeCycleByRedeemCodeRequest {
+	int32 redeemCode = 1;
+}
+
+message RechargeCycleByRedeemCodeReply {
 	int32 code = 1;
 	string message = 2;
 }

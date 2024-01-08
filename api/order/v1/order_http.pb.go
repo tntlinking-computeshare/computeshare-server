@@ -23,17 +23,23 @@ const OperationOrderAlipayPayNotify = "/api.server.order.v1.Order/AlipayPayNotif
 const OperationOrderCycleReychargeList = "/api.server.order.v1.Order/CycleReychargeList"
 const OperationOrderCycleTransactionList = "/api.server.order.v1.Order/CycleTransactionList"
 const OperationOrderOrderList = "/api.server.order.v1.Order/OrderList"
+const OperationOrderRechargeCycleByAlipay = "/api.server.order.v1.Order/RechargeCycleByAlipay"
+const OperationOrderRechargeCycleByRedeemCode = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
 
 type OrderHTTPServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
 	CycleReychargeList(context.Context, *CycleRenewListRequest) (*CycleRenewListReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
+	RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error)
+	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
 }
 
 func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/alipay/pay/notify", _Order_AlipayPayNotify0_HTTP_Handler(srv))
+	r.POST("/v1/cycle/recharge", _Order_RechargeCycleByAlipay0_HTTP_Handler(srv))
+	r.POST("/v1/cycle/redeem", _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv))
 	r.GET("/v1/order", _Order_OrderList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/transaction", _Order_CycleTransactionList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/renew", _Order_CycleReychargeList0_HTTP_Handler(srv))
@@ -57,6 +63,50 @@ func _Order_AlipayPayNotify0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Con
 			return err
 		}
 		reply := out.(*AlipayPayNotifyReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Order_RechargeCycleByAlipay0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RechargeCycleByAlipayRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderRechargeCycleByAlipay)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RechargeCycleByAlipay(ctx, req.(*RechargeCycleByAlipayRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RechargeCycleByAlipayReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RechargeCycleByRedeemCodeRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderRechargeCycleByRedeemCode)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RechargeCycleByRedeemCode(ctx, req.(*RechargeCycleByRedeemCodeRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*RechargeCycleByRedeemCodeReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -123,6 +173,8 @@ type OrderHTTPClient interface {
 	CycleReychargeList(ctx context.Context, req *CycleRenewListRequest, opts ...http.CallOption) (rsp *CycleRenewListReply, err error)
 	CycleTransactionList(ctx context.Context, req *CycleTransactionListRequest, opts ...http.CallOption) (rsp *CycleTransactionListReply, err error)
 	OrderList(ctx context.Context, req *OrderListRequest, opts ...http.CallOption) (rsp *OrderListReply, err error)
+	RechargeCycleByAlipay(ctx context.Context, req *RechargeCycleByAlipayRequest, opts ...http.CallOption) (rsp *RechargeCycleByAlipayReply, err error)
+	RechargeCycleByRedeemCode(ctx context.Context, req *RechargeCycleByRedeemCodeRequest, opts ...http.CallOption) (rsp *RechargeCycleByRedeemCodeReply, err error)
 }
 
 type OrderHTTPClientImpl struct {
@@ -179,6 +231,32 @@ func (c *OrderHTTPClientImpl) OrderList(ctx context.Context, in *OrderListReques
 	opts = append(opts, http.Operation(OperationOrderOrderList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) RechargeCycleByAlipay(ctx context.Context, in *RechargeCycleByAlipayRequest, opts ...http.CallOption) (*RechargeCycleByAlipayReply, error) {
+	var out RechargeCycleByAlipayReply
+	pattern := "/v1/cycle/recharge"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderRechargeCycleByAlipay))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) RechargeCycleByRedeemCode(ctx context.Context, in *RechargeCycleByRedeemCodeRequest, opts ...http.CallOption) (*RechargeCycleByRedeemCodeReply, error) {
+	var out RechargeCycleByRedeemCodeReply
+	pattern := "/v1/cycle/redeem"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderRechargeCycleByRedeemCode))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

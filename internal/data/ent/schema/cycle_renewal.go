@@ -21,6 +21,7 @@ func (CycleRenewal) Fields() []ent.Field {
 		field.Int("resource_type").Max(1).Comment("资源类型"),
 		field.String("product_name").MaxLen(50).Comment("产品名字"),
 		field.String("product_desc").MaxLen(200).Comment("产品描述"),
+		field.Int8("state").Comment("状态"),
 		field.Int8("extend_day").Comment("延长时间"),
 		field.Float("extend_price").SchemaType(map[string]string{
 			dialect.MySQL: "decimal(10,2)",
