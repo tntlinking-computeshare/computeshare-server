@@ -95,6 +95,7 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 		Core:           item.Core,
 		Memory:         item.Memory,
 		Image:          item.Image,
+		ImageId:        item.ImageID,
 		Port:           item.Port,
 		ExpirationTime: item.ExpirationTime,
 		Status:         item.Status,

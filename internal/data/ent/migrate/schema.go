@@ -64,6 +64,7 @@ var (
 		{Name: "core", Type: field.TypeString},
 		{Name: "memory", Type: field.TypeString},
 		{Name: "image", Type: field.TypeString},
+		{Name: "image_id", Type: field.TypeInt32},
 		{Name: "port", Type: field.TypeString, Nullable: true},
 		{Name: "expiration_time", Type: field.TypeTime},
 		{Name: "status", Type: field.TypeInt8},

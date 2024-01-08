@@ -446,6 +446,9 @@ components:
                     type: string
                 agentId:
                     type: string
+                imageId:
+                    type: integer
+                    format: int32
         InstanceStats:
             type: object
             properties:

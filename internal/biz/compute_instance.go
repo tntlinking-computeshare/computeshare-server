@@ -139,6 +139,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Memory:         computeSpec.Memory,
 		Port:           fmt.Sprintf("%d", computeImage.Port),
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
+		ImageId:        computeImage.ID,
 		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
 		AgentId:        agent.ID.String(),
 		Status:         consts.InstanceStatusCreating,
