@@ -20,11 +20,13 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationOrderAlipayPayNotify = "/api.server.order.v1.Order/AlipayPayNotify"
+const OperationOrderCycleReychargeList = "/api.server.order.v1.Order/CycleReychargeList"
 const OperationOrderCycleTransactionList = "/api.server.order.v1.Order/CycleTransactionList"
 const OperationOrderOrderList = "/api.server.order.v1.Order/OrderList"
 
 type OrderHTTPServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
+	CycleReychargeList(context.Context, *CycleRenewListRequest) (*CycleRenewListReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 }
@@ -34,6 +36,7 @@ func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r.POST("/v1/alipay/pay/notify", _Order_AlipayPayNotify0_HTTP_Handler(srv))
 	r.GET("/v1/order", _Order_OrderList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/transaction", _Order_CycleTransactionList0_HTTP_Handler(srv))
+	r.GET("/v1/cycle/renew", _Order_CycleReychargeList0_HTTP_Handler(srv))
 }
 
 func _Order_AlipayPayNotify0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
@@ -96,8 +99,28 @@ func _Order_CycleTransactionList0_HTTP_Handler(srv OrderHTTPServer) func(ctx htt
 	}
 }
 
+func _Order_CycleReychargeList0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CycleRenewListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderCycleReychargeList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CycleReychargeList(ctx, req.(*CycleRenewListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CycleRenewListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type OrderHTTPClient interface {
 	AlipayPayNotify(ctx context.Context, req *AlipayPayNotifyRequest, opts ...http.CallOption) (rsp *AlipayPayNotifyReply, err error)
+	CycleReychargeList(ctx context.Context, req *CycleRenewListRequest, opts ...http.CallOption) (rsp *CycleRenewListReply, err error)
 	CycleTransactionList(ctx context.Context, req *CycleTransactionListRequest, opts ...http.CallOption) (rsp *CycleTransactionListReply, err error)
 	OrderList(ctx context.Context, req *OrderListRequest, opts ...http.CallOption) (rsp *OrderListReply, err error)
 }
@@ -117,6 +140,19 @@ func (c *OrderHTTPClientImpl) AlipayPayNotify(ctx context.Context, in *AlipayPay
 	opts = append(opts, http.Operation(OperationOrderAlipayPayNotify))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) CycleReychargeList(ctx context.Context, in *CycleRenewListRequest, opts ...http.CallOption) (*CycleRenewListReply, error) {
+	var out CycleRenewListReply
+	pattern := "/v1/cycle/renew"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationOrderCycleReychargeList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

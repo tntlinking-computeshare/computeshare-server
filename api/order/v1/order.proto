@@ -27,6 +27,12 @@ service Order {
 			get: "/v1/cycle/transaction",
 		};
 	}
+
+	rpc CycleReychargeList(CycleRenewListRequest) returns (CycleRenewListReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renew",
+		};
+	}
 }
 
 // https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
@@ -123,4 +129,31 @@ message CycleTransactionInfo {
 	string symbol = 3;
 	float cycle = 4;
 	int64 operation_time = 5;
+}
+
+message CycleRenewListRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+
+message CycleRenewListReply {
+	int32 code = 1;
+	string message = 2;
+	CycleRenewPage data = 3;
+}
+
+message CycleRenewPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated CycleRenewInfo data = 4;
+}
+
+message CycleRenewInfo {
+	string id = 1;
+	string product_name = 2;
+	string product_desc = 3;
+	int32 status = 4;
+	int64 due_time = 5;
+	int64 renewal_time = 6;
 }
