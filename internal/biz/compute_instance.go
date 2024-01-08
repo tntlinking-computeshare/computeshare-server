@@ -439,6 +439,10 @@ func (uc *ComputeInstanceUsercase) GetLast24HInstanceStats(_ context.Context, in
 
 	m := make(map[float64]*ComputeInstanceRds)
 
+	if len(cpuData.Data.Result) == 0 || len(memoryData.Data.Result) == 0 {
+		return []*ComputeInstanceRds{}, nil
+	}
+
 	for _, v := range cpuData.Data.Result[0].Values {
 		timestamp := v[0].(float64)
 		statsTime := time.UnixMilli(int64(timestamp * 1000))
