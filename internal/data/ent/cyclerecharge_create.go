@@ -40,8 +40,8 @@ func (crc *CycleRechargeCreate) SetAlipayTradeNo(s string) *CycleRechargeCreate 
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (crc *CycleRechargeCreate) SetRechargeChannel(s string) *CycleRechargeCreate {
-	crc.mutation.SetRechargeChannel(s)
+func (crc *CycleRechargeCreate) SetRechargeChannel(i int) *CycleRechargeCreate {
+	crc.mutation.SetRechargeChannel(i)
 	return crc
 }
 
@@ -225,7 +225,7 @@ func (crc *CycleRechargeCreate) createSpec() (*CycleRecharge, *sqlgraph.CreateSp
 		_node.AlipayTradeNo = value
 	}
 	if value, ok := crc.mutation.RechargeChannel(); ok {
-		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeString, value)
+		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 		_node.RechargeChannel = value
 	}
 	if value, ok := crc.mutation.RedeemCode(); ok {

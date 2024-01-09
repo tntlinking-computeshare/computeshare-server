@@ -2,6 +2,7 @@ package biz
 
 import (
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 	"time"
 )
 
@@ -45,4 +46,31 @@ type CycleTransaction struct {
 	Balance float64 `json:"balance,omitempty"`
 	// 操作时间
 	OperationTime time.Time `json:"operation_time,omitempty"`
+}
+
+type CycleRecharge struct {
+	// ID of the ent.
+	ID uuid.UUID `json:"id,omitempty"`
+	// 用户id
+	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
+	// 商家订单号
+	OutTradeNo string `json:"out_trade_no,omitempty"`
+	// 支付宝订单号
+	AlipayTradeNo string `json:"alipay_trade_no,omitempty"`
+	// 充值渠道
+	RechargeChannel int `json:"recharge_channel,omitempty"`
+	// 兑换码
+	RedeemCode string `json:"redeem_code,omitempty"`
+	// 状态
+	State string `json:"state,omitempty"`
+	// 支付的钱
+	PayAmount decimal.Decimal `json:"pay_amount,omitempty"`
+	// 收到的钱
+	TotalAmount decimal.Decimal `json:"total_amount,omitempty"`
+	// 购买的周期
+	BuyCycle decimal.Decimal `json:"buy_cycle,omitempty"`
+	// 创建时间
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// 创建时间
+	UpdateTime time.Time `json:"update_time,omitempty"`
 }

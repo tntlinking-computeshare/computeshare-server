@@ -6149,27 +6149,28 @@ func (m *CycleOrderMutation) ResetEdge(name string) error {
 // CycleRechargeMutation represents an operation that mutates the CycleRecharge nodes in the graph.
 type CycleRechargeMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	fk_user_id       *uuid.UUID
-	out_trade_no     *string
-	alipay_trade_no  *string
-	recharge_channel *string
-	redeem_code      *string
-	state            *string
-	pay_amount       *float64
-	addpay_amount    *float64
-	total_amount     *float64
-	addtotal_amount  *float64
-	buy_cycle        *float64
-	addbuy_cycle     *float64
-	create_time      *time.Time
-	update_time      *time.Time
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*CycleRecharge, error)
-	predicates       []predicate.CycleRecharge
+	op                  Op
+	typ                 string
+	id                  *uuid.UUID
+	fk_user_id          *uuid.UUID
+	out_trade_no        *string
+	alipay_trade_no     *string
+	recharge_channel    *int
+	addrecharge_channel *int
+	redeem_code         *string
+	state               *string
+	pay_amount          *float64
+	addpay_amount       *float64
+	total_amount        *float64
+	addtotal_amount     *float64
+	buy_cycle           *float64
+	addbuy_cycle        *float64
+	create_time         *time.Time
+	update_time         *time.Time
+	clearedFields       map[string]struct{}
+	done                bool
+	oldValue            func(context.Context) (*CycleRecharge, error)
+	predicates          []predicate.CycleRecharge
 }
 
 var _ ent.Mutation = (*CycleRechargeMutation)(nil)
@@ -6385,12 +6386,13 @@ func (m *CycleRechargeMutation) ResetAlipayTradeNo() {
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (m *CycleRechargeMutation) SetRechargeChannel(s string) {
-	m.recharge_channel = &s
+func (m *CycleRechargeMutation) SetRechargeChannel(i int) {
+	m.recharge_channel = &i
+	m.addrecharge_channel = nil
 }
 
 // RechargeChannel returns the value of the "recharge_channel" field in the mutation.
-func (m *CycleRechargeMutation) RechargeChannel() (r string, exists bool) {
+func (m *CycleRechargeMutation) RechargeChannel() (r int, exists bool) {
 	v := m.recharge_channel
 	if v == nil {
 		return
@@ -6401,7 +6403,7 @@ func (m *CycleRechargeMutation) RechargeChannel() (r string, exists bool) {
 // OldRechargeChannel returns the old "recharge_channel" field's value of the CycleRecharge entity.
 // If the CycleRecharge object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CycleRechargeMutation) OldRechargeChannel(ctx context.Context) (v string, err error) {
+func (m *CycleRechargeMutation) OldRechargeChannel(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRechargeChannel is only allowed on UpdateOne operations")
 	}
@@ -6415,9 +6417,28 @@ func (m *CycleRechargeMutation) OldRechargeChannel(ctx context.Context) (v strin
 	return oldValue.RechargeChannel, nil
 }
 
+// AddRechargeChannel adds i to the "recharge_channel" field.
+func (m *CycleRechargeMutation) AddRechargeChannel(i int) {
+	if m.addrecharge_channel != nil {
+		*m.addrecharge_channel += i
+	} else {
+		m.addrecharge_channel = &i
+	}
+}
+
+// AddedRechargeChannel returns the value that was added to the "recharge_channel" field in this mutation.
+func (m *CycleRechargeMutation) AddedRechargeChannel() (r int, exists bool) {
+	v := m.addrecharge_channel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetRechargeChannel resets all changes to the "recharge_channel" field.
 func (m *CycleRechargeMutation) ResetRechargeChannel() {
 	m.recharge_channel = nil
+	m.addrecharge_channel = nil
 }
 
 // SetRedeemCode sets the "redeem_code" field.
@@ -6892,7 +6913,7 @@ func (m *CycleRechargeMutation) SetField(name string, value ent.Value) error {
 		m.SetAlipayTradeNo(v)
 		return nil
 	case cyclerecharge.FieldRechargeChannel:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6955,6 +6976,9 @@ func (m *CycleRechargeMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *CycleRechargeMutation) AddedFields() []string {
 	var fields []string
+	if m.addrecharge_channel != nil {
+		fields = append(fields, cyclerecharge.FieldRechargeChannel)
+	}
 	if m.addpay_amount != nil {
 		fields = append(fields, cyclerecharge.FieldPayAmount)
 	}
@@ -6972,6 +6996,8 @@ func (m *CycleRechargeMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CycleRechargeMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case cyclerecharge.FieldRechargeChannel:
+		return m.AddedRechargeChannel()
 	case cyclerecharge.FieldPayAmount:
 		return m.AddedPayAmount()
 	case cyclerecharge.FieldTotalAmount:
@@ -6987,6 +7013,13 @@ func (m *CycleRechargeMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CycleRechargeMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case cyclerecharge.FieldRechargeChannel:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRechargeChannel(v)
+		return nil
 	case cyclerecharge.FieldPayAmount:
 		v, ok := value.(float64)
 		if !ok {
@@ -7770,6 +7803,8 @@ type CycleRenewalMutation struct {
 	addresource_type *int
 	product_name     *string
 	product_desc     *string
+	state            *int8
+	addstate         *int8
 	extend_day       *int8
 	addextend_day    *int8
 	extend_price     *float64
@@ -8087,6 +8122,62 @@ func (m *CycleRenewalMutation) ResetProductDesc() {
 	m.product_desc = nil
 }
 
+// SetState sets the "state" field.
+func (m *CycleRenewalMutation) SetState(i int8) {
+	m.state = &i
+	m.addstate = nil
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *CycleRenewalMutation) State() (r int8, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the CycleRenewal entity.
+// If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CycleRenewalMutation) OldState(ctx context.Context) (v int8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// AddState adds i to the "state" field.
+func (m *CycleRenewalMutation) AddState(i int8) {
+	if m.addstate != nil {
+		*m.addstate += i
+	} else {
+		m.addstate = &i
+	}
+}
+
+// AddedState returns the value that was added to the "state" field in this mutation.
+func (m *CycleRenewalMutation) AddedState() (r int8, exists bool) {
+	v := m.addstate
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *CycleRenewalMutation) ResetState() {
+	m.state = nil
+	m.addstate = nil
+}
+
 // SetExtendDay sets the "extend_day" field.
 func (m *CycleRenewalMutation) SetExtendDay(i int8) {
 	m.extend_day = &i
@@ -8341,7 +8432,7 @@ func (m *CycleRenewalMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CycleRenewalMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.fk_user_id != nil {
 		fields = append(fields, cyclerenewal.FieldFkUserID)
 	}
@@ -8356,6 +8447,9 @@ func (m *CycleRenewalMutation) Fields() []string {
 	}
 	if m.product_desc != nil {
 		fields = append(fields, cyclerenewal.FieldProductDesc)
+	}
+	if m.state != nil {
+		fields = append(fields, cyclerenewal.FieldState)
 	}
 	if m.extend_day != nil {
 		fields = append(fields, cyclerenewal.FieldExtendDay)
@@ -8390,6 +8484,8 @@ func (m *CycleRenewalMutation) Field(name string) (ent.Value, bool) {
 		return m.ProductName()
 	case cyclerenewal.FieldProductDesc:
 		return m.ProductDesc()
+	case cyclerenewal.FieldState:
+		return m.State()
 	case cyclerenewal.FieldExtendDay:
 		return m.ExtendDay()
 	case cyclerenewal.FieldExtendPrice:
@@ -8419,6 +8515,8 @@ func (m *CycleRenewalMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldProductName(ctx)
 	case cyclerenewal.FieldProductDesc:
 		return m.OldProductDesc(ctx)
+	case cyclerenewal.FieldState:
+		return m.OldState(ctx)
 	case cyclerenewal.FieldExtendDay:
 		return m.OldExtendDay(ctx)
 	case cyclerenewal.FieldExtendPrice:
@@ -8473,6 +8571,13 @@ func (m *CycleRenewalMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetProductDesc(v)
 		return nil
+	case cyclerenewal.FieldState:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
 	case cyclerenewal.FieldExtendDay:
 		v, ok := value.(int8)
 		if !ok {
@@ -8519,6 +8624,9 @@ func (m *CycleRenewalMutation) AddedFields() []string {
 	if m.addresource_type != nil {
 		fields = append(fields, cyclerenewal.FieldResourceType)
 	}
+	if m.addstate != nil {
+		fields = append(fields, cyclerenewal.FieldState)
+	}
 	if m.addextend_day != nil {
 		fields = append(fields, cyclerenewal.FieldExtendDay)
 	}
@@ -8535,6 +8643,8 @@ func (m *CycleRenewalMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case cyclerenewal.FieldResourceType:
 		return m.AddedResourceType()
+	case cyclerenewal.FieldState:
+		return m.AddedState()
 	case cyclerenewal.FieldExtendDay:
 		return m.AddedExtendDay()
 	case cyclerenewal.FieldExtendPrice:
@@ -8554,6 +8664,13 @@ func (m *CycleRenewalMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddResourceType(v)
+		return nil
+	case cyclerenewal.FieldState:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddState(v)
 		return nil
 	case cyclerenewal.FieldExtendDay:
 		v, ok := value.(int8)
@@ -8610,6 +8727,9 @@ func (m *CycleRenewalMutation) ResetField(name string) error {
 		return nil
 	case cyclerenewal.FieldProductDesc:
 		m.ResetProductDesc()
+		return nil
+	case cyclerenewal.FieldState:
+		m.ResetState()
 		return nil
 	case cyclerenewal.FieldExtendDay:
 		m.ResetExtendDay()

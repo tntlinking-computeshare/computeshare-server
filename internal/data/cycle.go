@@ -36,11 +36,10 @@ func (c *cycleRepo) toBiz(p *ent.Cycle, _ int) *biz.Cycle {
 	if p == nil {
 		return nil
 	}
-	cycle := decimal.NewFromFloat(p.Cycle)
 	return &biz.Cycle{
 		ID:         p.ID,
 		FkUserId:   p.FkUserID,
-		Cycle:      cycle,
+		Cycle:      decimal.NewFromFloat(p.Cycle),
 		CreateTime: p.CreateTime,
 		UpdateTime: p.UpdateTime,
 	}

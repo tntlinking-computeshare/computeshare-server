@@ -48,8 +48,15 @@ func (cru *CycleRechargeUpdate) SetAlipayTradeNo(s string) *CycleRechargeUpdate 
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (cru *CycleRechargeUpdate) SetRechargeChannel(s string) *CycleRechargeUpdate {
-	cru.mutation.SetRechargeChannel(s)
+func (cru *CycleRechargeUpdate) SetRechargeChannel(i int) *CycleRechargeUpdate {
+	cru.mutation.ResetRechargeChannel()
+	cru.mutation.SetRechargeChannel(i)
+	return cru
+}
+
+// AddRechargeChannel adds i to the "recharge_channel" field.
+func (cru *CycleRechargeUpdate) AddRechargeChannel(i int) *CycleRechargeUpdate {
+	cru.mutation.AddRechargeChannel(i)
 	return cru
 }
 
@@ -167,7 +174,10 @@ func (cru *CycleRechargeUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		_spec.SetField(cyclerecharge.FieldAlipayTradeNo, field.TypeString, value)
 	}
 	if value, ok := cru.mutation.RechargeChannel(); ok {
-		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeString, value)
+		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
+	}
+	if value, ok := cru.mutation.AddedRechargeChannel(); ok {
+		_spec.AddField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
 	if value, ok := cru.mutation.RedeemCode(); ok {
 		_spec.SetField(cyclerecharge.FieldRedeemCode, field.TypeString, value)
@@ -238,8 +248,15 @@ func (cruo *CycleRechargeUpdateOne) SetAlipayTradeNo(s string) *CycleRechargeUpd
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (cruo *CycleRechargeUpdateOne) SetRechargeChannel(s string) *CycleRechargeUpdateOne {
-	cruo.mutation.SetRechargeChannel(s)
+func (cruo *CycleRechargeUpdateOne) SetRechargeChannel(i int) *CycleRechargeUpdateOne {
+	cruo.mutation.ResetRechargeChannel()
+	cruo.mutation.SetRechargeChannel(i)
+	return cruo
+}
+
+// AddRechargeChannel adds i to the "recharge_channel" field.
+func (cruo *CycleRechargeUpdateOne) AddRechargeChannel(i int) *CycleRechargeUpdateOne {
+	cruo.mutation.AddRechargeChannel(i)
 	return cruo
 }
 
@@ -387,7 +404,10 @@ func (cruo *CycleRechargeUpdateOne) sqlSave(ctx context.Context) (_node *CycleRe
 		_spec.SetField(cyclerecharge.FieldAlipayTradeNo, field.TypeString, value)
 	}
 	if value, ok := cruo.mutation.RechargeChannel(); ok {
-		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeString, value)
+		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
+	}
+	if value, ok := cruo.mutation.AddedRechargeChannel(); ok {
+		_spec.AddField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
 	if value, ok := cruo.mutation.RedeemCode(); ok {
 		_spec.SetField(cyclerecharge.FieldRedeemCode, field.TypeString, value)

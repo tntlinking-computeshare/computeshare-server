@@ -66,6 +66,19 @@ func (cru *CycleRenewalUpdate) SetProductDesc(s string) *CycleRenewalUpdate {
 	return cru
 }
 
+// SetState sets the "state" field.
+func (cru *CycleRenewalUpdate) SetState(i int8) *CycleRenewalUpdate {
+	cru.mutation.ResetState()
+	cru.mutation.SetState(i)
+	return cru
+}
+
+// AddState adds i to the "state" field.
+func (cru *CycleRenewalUpdate) AddState(i int8) *CycleRenewalUpdate {
+	cru.mutation.AddState(i)
+	return cru
+}
+
 // SetExtendDay sets the "extend_day" field.
 func (cru *CycleRenewalUpdate) SetExtendDay(i int8) *CycleRenewalUpdate {
 	cru.mutation.ResetExtendDay()
@@ -192,6 +205,12 @@ func (cru *CycleRenewalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cru.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 	}
+	if value, ok := cru.mutation.State(); ok {
+		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
+	}
+	if value, ok := cru.mutation.AddedState(); ok {
+		_spec.AddField(cyclerenewal.FieldState, field.TypeInt8, value)
+	}
 	if value, ok := cru.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 	}
@@ -267,6 +286,19 @@ func (cruo *CycleRenewalUpdateOne) SetProductName(s string) *CycleRenewalUpdateO
 // SetProductDesc sets the "product_desc" field.
 func (cruo *CycleRenewalUpdateOne) SetProductDesc(s string) *CycleRenewalUpdateOne {
 	cruo.mutation.SetProductDesc(s)
+	return cruo
+}
+
+// SetState sets the "state" field.
+func (cruo *CycleRenewalUpdateOne) SetState(i int8) *CycleRenewalUpdateOne {
+	cruo.mutation.ResetState()
+	cruo.mutation.SetState(i)
+	return cruo
+}
+
+// AddState adds i to the "state" field.
+func (cruo *CycleRenewalUpdateOne) AddState(i int8) *CycleRenewalUpdateOne {
+	cruo.mutation.AddState(i)
 	return cruo
 }
 
@@ -425,6 +457,12 @@ func (cruo *CycleRenewalUpdateOne) sqlSave(ctx context.Context) (_node *CycleRen
 	}
 	if value, ok := cruo.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
+	}
+	if value, ok := cruo.mutation.State(); ok {
+		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
+	}
+	if value, ok := cruo.mutation.AddedState(); ok {
+		_spec.AddField(cyclerenewal.FieldState, field.TypeInt8, value)
 	}
 	if value, ok := cruo.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)

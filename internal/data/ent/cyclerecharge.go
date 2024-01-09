@@ -25,7 +25,7 @@ type CycleRecharge struct {
 	// 支付宝订单号
 	AlipayTradeNo string `json:"alipay_trade_no,omitempty"`
 	// 充值渠道
-	RechargeChannel string `json:"recharge_channel,omitempty"`
+	RechargeChannel int `json:"recharge_channel,omitempty"`
 	// 兑换码
 	RedeemCode string `json:"redeem_code,omitempty"`
 	// 状态
@@ -50,7 +50,9 @@ func (*CycleRecharge) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case cyclerecharge.FieldPayAmount, cyclerecharge.FieldTotalAmount, cyclerecharge.FieldBuyCycle:
 			values[i] = new(sql.NullFloat64)
-		case cyclerecharge.FieldOutTradeNo, cyclerecharge.FieldAlipayTradeNo, cyclerecharge.FieldRechargeChannel, cyclerecharge.FieldRedeemCode, cyclerecharge.FieldState:
+		case cyclerecharge.FieldRechargeChannel:
+			values[i] = new(sql.NullInt64)
+		case cyclerecharge.FieldOutTradeNo, cyclerecharge.FieldAlipayTradeNo, cyclerecharge.FieldRedeemCode, cyclerecharge.FieldState:
 			values[i] = new(sql.NullString)
 		case cyclerecharge.FieldCreateTime, cyclerecharge.FieldUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -96,10 +98,10 @@ func (cr *CycleRecharge) assignValues(columns []string, values []any) error {
 				cr.AlipayTradeNo = value.String
 			}
 		case cyclerecharge.FieldRechargeChannel:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field recharge_channel", values[i])
 			} else if value.Valid {
-				cr.RechargeChannel = value.String
+				cr.RechargeChannel = int(value.Int64)
 			}
 		case cyclerecharge.FieldRedeemCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -189,7 +191,7 @@ func (cr *CycleRecharge) String() string {
 	builder.WriteString(cr.AlipayTradeNo)
 	builder.WriteString(", ")
 	builder.WriteString("recharge_channel=")
-	builder.WriteString(cr.RechargeChannel)
+	builder.WriteString(fmt.Sprintf("%v", cr.RechargeChannel))
 	builder.WriteString(", ")
 	builder.WriteString("redeem_code=")
 	builder.WriteString(cr.RedeemCode)

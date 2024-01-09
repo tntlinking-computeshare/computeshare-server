@@ -51,6 +51,12 @@ func (crc *CycleRenewalCreate) SetProductDesc(s string) *CycleRenewalCreate {
 	return crc
 }
 
+// SetState sets the "state" field.
+func (crc *CycleRenewalCreate) SetState(i int8) *CycleRenewalCreate {
+	crc.mutation.SetState(i)
+	return crc
+}
+
 // SetExtendDay sets the "extend_day" field.
 func (crc *CycleRenewalCreate) SetExtendDay(i int8) *CycleRenewalCreate {
 	crc.mutation.SetExtendDay(i)
@@ -168,6 +174,9 @@ func (crc *CycleRenewalCreate) check() error {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_desc": %w`, err)}
 		}
 	}
+	if _, ok := crc.mutation.State(); !ok {
+		return &ValidationError{Name: "state", err: errors.New(`ent: missing required field "CycleRenewal.state"`)}
+	}
 	if _, ok := crc.mutation.ExtendDay(); !ok {
 		return &ValidationError{Name: "extend_day", err: errors.New(`ent: missing required field "CycleRenewal.extend_day"`)}
 	}
@@ -237,6 +246,10 @@ func (crc *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec
 	if value, ok := crc.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 		_node.ProductDesc = value
+	}
+	if value, ok := crc.mutation.State(); ok {
+		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
+		_node.State = value
 	}
 	if value, ok := crc.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)

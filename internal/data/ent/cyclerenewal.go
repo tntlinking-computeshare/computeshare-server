@@ -28,6 +28,8 @@ type CycleRenewal struct {
 	ProductName string `json:"product_name,omitempty"`
 	// 产品描述
 	ProductDesc string `json:"product_desc,omitempty"`
+	// 状态
+	State int8 `json:"state,omitempty"`
 	// 延长时间
 	ExtendDay int8 `json:"extend_day,omitempty"`
 	// 额外的价格
@@ -50,7 +52,7 @@ func (*CycleRenewal) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case cyclerenewal.FieldExtendPrice:
 			values[i] = new(sql.NullFloat64)
-		case cyclerenewal.FieldResourceType, cyclerenewal.FieldExtendDay:
+		case cyclerenewal.FieldResourceType, cyclerenewal.FieldState, cyclerenewal.FieldExtendDay:
 			values[i] = new(sql.NullInt64)
 		case cyclerenewal.FieldProductName, cyclerenewal.FieldProductDesc:
 			values[i] = new(sql.NullString)
@@ -108,6 +110,12 @@ func (cr *CycleRenewal) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field product_desc", values[i])
 			} else if value.Valid {
 				cr.ProductDesc = value.String
+			}
+		case cyclerenewal.FieldState:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field state", values[i])
+			} else if value.Valid {
+				cr.State = int8(value.Int64)
 			}
 		case cyclerenewal.FieldExtendDay:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -189,6 +197,9 @@ func (cr *CycleRenewal) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("product_desc=")
 	builder.WriteString(cr.ProductDesc)
+	builder.WriteString(", ")
+	builder.WriteString("state=")
+	builder.WriteString(fmt.Sprintf("%v", cr.State))
 	builder.WriteString(", ")
 	builder.WriteString("extend_day=")
 	builder.WriteString(fmt.Sprintf("%v", cr.ExtendDay))

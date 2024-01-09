@@ -93,7 +93,12 @@ message RechargeCycleByAlipayRequest {
 message RechargeCycleByAlipayReply {
 	int32 code = 1;
 	string message = 2;
-	string url = 3;
+	Pay data = 3;
+	message Pay {
+		string outTradeNo = 1;
+		string url = 2;
+	}
+
 }
 
 message RechargeCycleByRedeemCodeRequest {

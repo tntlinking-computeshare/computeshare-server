@@ -71,7 +71,7 @@ func AlipayTradeNo(v string) predicate.CycleRecharge {
 }
 
 // RechargeChannel applies equality check predicate on the "recharge_channel" field. It's identical to RechargeChannelEQ.
-func RechargeChannel(v string) predicate.CycleRecharge {
+func RechargeChannel(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldEQ(FieldRechargeChannel, v))
 }
 
@@ -281,68 +281,43 @@ func AlipayTradeNoContainsFold(v string) predicate.CycleRecharge {
 }
 
 // RechargeChannelEQ applies the EQ predicate on the "recharge_channel" field.
-func RechargeChannelEQ(v string) predicate.CycleRecharge {
+func RechargeChannelEQ(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldEQ(FieldRechargeChannel, v))
 }
 
 // RechargeChannelNEQ applies the NEQ predicate on the "recharge_channel" field.
-func RechargeChannelNEQ(v string) predicate.CycleRecharge {
+func RechargeChannelNEQ(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldNEQ(FieldRechargeChannel, v))
 }
 
 // RechargeChannelIn applies the In predicate on the "recharge_channel" field.
-func RechargeChannelIn(vs ...string) predicate.CycleRecharge {
+func RechargeChannelIn(vs ...int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldIn(FieldRechargeChannel, vs...))
 }
 
 // RechargeChannelNotIn applies the NotIn predicate on the "recharge_channel" field.
-func RechargeChannelNotIn(vs ...string) predicate.CycleRecharge {
+func RechargeChannelNotIn(vs ...int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldNotIn(FieldRechargeChannel, vs...))
 }
 
 // RechargeChannelGT applies the GT predicate on the "recharge_channel" field.
-func RechargeChannelGT(v string) predicate.CycleRecharge {
+func RechargeChannelGT(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldGT(FieldRechargeChannel, v))
 }
 
 // RechargeChannelGTE applies the GTE predicate on the "recharge_channel" field.
-func RechargeChannelGTE(v string) predicate.CycleRecharge {
+func RechargeChannelGTE(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldGTE(FieldRechargeChannel, v))
 }
 
 // RechargeChannelLT applies the LT predicate on the "recharge_channel" field.
-func RechargeChannelLT(v string) predicate.CycleRecharge {
+func RechargeChannelLT(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldLT(FieldRechargeChannel, v))
 }
 
 // RechargeChannelLTE applies the LTE predicate on the "recharge_channel" field.
-func RechargeChannelLTE(v string) predicate.CycleRecharge {
+func RechargeChannelLTE(v int) predicate.CycleRecharge {
 	return predicate.CycleRecharge(sql.FieldLTE(FieldRechargeChannel, v))
-}
-
-// RechargeChannelContains applies the Contains predicate on the "recharge_channel" field.
-func RechargeChannelContains(v string) predicate.CycleRecharge {
-	return predicate.CycleRecharge(sql.FieldContains(FieldRechargeChannel, v))
-}
-
-// RechargeChannelHasPrefix applies the HasPrefix predicate on the "recharge_channel" field.
-func RechargeChannelHasPrefix(v string) predicate.CycleRecharge {
-	return predicate.CycleRecharge(sql.FieldHasPrefix(FieldRechargeChannel, v))
-}
-
-// RechargeChannelHasSuffix applies the HasSuffix predicate on the "recharge_channel" field.
-func RechargeChannelHasSuffix(v string) predicate.CycleRecharge {
-	return predicate.CycleRecharge(sql.FieldHasSuffix(FieldRechargeChannel, v))
-}
-
-// RechargeChannelEqualFold applies the EqualFold predicate on the "recharge_channel" field.
-func RechargeChannelEqualFold(v string) predicate.CycleRecharge {
-	return predicate.CycleRecharge(sql.FieldEqualFold(FieldRechargeChannel, v))
-}
-
-// RechargeChannelContainsFold applies the ContainsFold predicate on the "recharge_channel" field.
-func RechargeChannelContainsFold(v string) predicate.CycleRecharge {
-	return predicate.CycleRecharge(sql.FieldContainsFold(FieldRechargeChannel, v))
 }
 
 // RedeemCodeEQ applies the EQ predicate on the "redeem_code" field.

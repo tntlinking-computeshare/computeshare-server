@@ -320,6 +320,13 @@ components:
                     format: int32
                 message:
                     type: string
+                data:
+                    $ref: '#/components/schemas/RechargeCycleByAlipayReply_Pay'
+        RechargeCycleByAlipayReply_Pay:
+            type: object
+            properties:
+                outTradeNo:
+                    type: string
                 url:
                     type: string
         RechargeCycleByAlipayRequest:

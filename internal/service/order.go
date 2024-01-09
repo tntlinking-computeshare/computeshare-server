@@ -2,8 +2,11 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 
 	pb "github.com/mohaijiang/computeshare-server/api/order/v1"
@@ -27,7 +30,7 @@ func NewOrderService(logger log.Logger,
 	}
 }
 
-func (s *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
+func (o *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
 	if req.TradeStatus == "WAIT_BUYER_PAY" {
 		log.Log(log.LevelInfo, "交易创建，等待买家付款。")
 		log.Log(log.LevelInfo, req)
@@ -50,8 +53,43 @@ func (s *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNot
 	}, nil
 }
 
-func (s *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) (*pb.OrderListReply, error) {
-	pageData, err := s.orderUseCase.OrderList(ctx, req.Page, req.Size)
+func (o *OrderService) RechargeCycleByAlipay(ctx context.Context, req *pb.RechargeCycleByAlipayRequest) (*pb.RechargeCycleByAlipayReply, error) {
+	var outTradeNo string
+	var url string
+	var err error
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	if req.RechargeChannel == int32(consts.Alipay) {
+		outTradeNo, url, err = o.orderUseCase.RechargeCycleByAlipay(ctx, userId, float64(req.Cycle), float64(req.Amount))
+	} else {
+		return nil, errors.New("不支持的支付方式")
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &pb.RechargeCycleByAlipayReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.RechargeCycleByAlipayReply_Pay{
+			OutTradeNo: outTradeNo,
+			Url:        url,
+		},
+	}, nil
+}
+
+func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.RechargeCycleByRedeemCodeRequest) (*pb.RechargeCycleByRedeemCodeReply, error) {
+
+	return &pb.RechargeCycleByRedeemCodeReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
+}
+
+func (o *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) (*pb.OrderListReply, error) {
+	pageData, err := o.orderUseCase.OrderList(ctx, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -63,12 +101,12 @@ func (s *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) 
 			Total: pageData.Total,
 			Page:  pageData.Page,
 			Size:  pageData.Size,
-			Data:  lo.Map(pageData.Data, s.toBiz),
+			Data:  lo.Map(pageData.Data, o.toBiz),
 		},
 	}, err
 }
 
-func (s *OrderService) toBiz(item *biz.CycleOrder, _ int) *pb.OrderInfo {
+func (o *OrderService) toBiz(item *biz.CycleOrder, _ int) *pb.OrderInfo {
 	if item == nil {
 		return nil
 	}
@@ -84,8 +122,8 @@ func (s *OrderService) toBiz(item *biz.CycleOrder, _ int) *pb.OrderInfo {
 	}
 }
 
-func (s *OrderService) CycleTransactionList(ctx context.Context, req *pb.CycleTransactionListRequest) (*pb.CycleTransactionListReply, error) {
-	pageData, err := s.cycleTransactionUseCase.PageByUser(ctx, req.Page, req.Size)
+func (o *OrderService) CycleTransactionList(ctx context.Context, req *pb.CycleTransactionListRequest) (*pb.CycleTransactionListReply, error) {
+	pageData, err := o.cycleTransactionUseCase.PageByUser(ctx, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -97,12 +135,12 @@ func (s *OrderService) CycleTransactionList(ctx context.Context, req *pb.CycleTr
 			Total: pageData.Total,
 			Page:  pageData.Page,
 			Size:  pageData.Size,
-			Data:  lo.Map(pageData.Data, s.toCycleTransactionBiz),
+			Data:  lo.Map(pageData.Data, o.toCycleTransactionBiz),
 		},
 	}, err
 }
 
-func (s *OrderService) toCycleTransactionBiz(item *biz.CycleTransaction, _ int) *pb.CycleTransactionInfo {
+func (o *OrderService) toCycleTransactionBiz(item *biz.CycleTransaction, _ int) *pb.CycleTransactionInfo {
 
 	if item == nil {
 		return nil
