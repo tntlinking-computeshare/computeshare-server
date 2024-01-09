@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"time"
 )
 
@@ -87,7 +88,7 @@ func (c *CronJob) syncContainerOverdue() {
 	}
 }
 
-func (c *CronJob) syncRenewalOrder() {
+func (c *CronJob) syncRenewalOrder(db *ent.Client) {
 	// 获取当前时间
 	currentTime := time.Now()
 
@@ -109,7 +110,7 @@ func (c *CronJob) syncRenewalOrder() {
 			// 在这里执行你的定时任务逻辑
 			fmt.Println("执行定时任务：每日23点")
 
-			c.cycleRenewalUseCase.DailyCheck()
+			c.cycleRenewalUseCase.DailyCheck(db)
 
 			// 重新计算下一个 23:00 的时间差
 			nextTime = nextTime.Add(24 * time.Hour)

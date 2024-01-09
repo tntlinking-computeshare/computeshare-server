@@ -85,7 +85,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	cycleTransactionRepo := data.NewCycleTransactionRepo(dataData, logger)
 	cycleTransactionUseCase := biz.NewCycleTransactionUseCase(logger, cycleTransactionRepo)
 	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
-	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo, dataData)
+	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo)
 	orderService := service.NewOrderService(logger, orderUseCase, cycleTransactionUseCase, cycleRenewalUseCase)
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, cycleRenewalUseCase, logger)
 	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, cronJob, dataData, logger)

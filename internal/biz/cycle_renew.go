@@ -6,7 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	global2 "github.com/mohaijiang/computeshare-server/api/global"
-	"github.com/mohaijiang/computeshare-server/internal/data"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/shopspring/decimal"
 	"time"
@@ -27,7 +27,6 @@ type CycleRenewalUseCase struct {
 	cycleOrderRepo       CycleOrderRepo
 	cycleTransactionRepo CycleTransactionRepo
 	computeInstanceRepo  ComputeInstanceRepo
-	data                 *data.Data
 }
 
 func NewCycleRenewalUseCase(
@@ -37,7 +36,6 @@ func NewCycleRenewalUseCase(
 	cycleOrderRepo CycleOrderRepo,
 	cycleTransactionRepo CycleTransactionRepo,
 	computeInstanceRepo ComputeInstanceRepo,
-	data *data.Data,
 ) *CycleRenewalUseCase {
 	return &CycleRenewalUseCase{
 		log:                  log.NewHelper(logger),
@@ -46,7 +44,6 @@ func NewCycleRenewalUseCase(
 		cycleOrderRepo:       cycleOrderRepo,
 		cycleTransactionRepo: cycleTransactionRepo,
 		computeInstanceRepo:  computeInstanceRepo,
-		data:                 data,
 	}
 }
 
@@ -219,7 +216,7 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	return err
 }
 
-func (c *CycleRenewalUseCase) DailyCheck() {
+func (c *CycleRenewalUseCase) DailyCheck(db *ent.Client) {
 	ctx := context.Background()
 	//查询当天应当续费续费
 	list, err := c.repo.QueryDailyRenew(ctx)
@@ -230,14 +227,14 @@ func (c *CycleRenewalUseCase) DailyCheck() {
 
 	for _, renewal := range list {
 		// 开启事物
-		tx, _ := c.data.GetDB().Tx(ctx)
+		tx, _ := db.Tx(ctx)
 		tctx := context.WithValue(ctx, "tx", tx)
 		err := c.ManualRenew(tctx, renewal.ID)
 		if err != nil {
 			// 如何回滚，续费失败，延长续费时间
 			_ = tx.Rollback()
 			rollbackCtx := context.Background()
-			tx, _ = c.data.GetDB().Tx(rollbackCtx)
+			tx, _ = db.Tx(rollbackCtx)
 			rctx := context.WithValue(ctx, "tx", tx)
 			newRenewDate := renewal.RenewalTime.AddDate(0, 0, 1)
 			renewal.RenewalTime = &newRenewDate
