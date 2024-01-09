@@ -25,7 +25,15 @@ import (
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
 	grpcServer := server.NewGRPCServer(confServer, logger)
-	dataData, cleanup, err := data.NewData(confData, logger)
+	client, err := data.NewDB(confData, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	redisClient, err := data.NewRDB(confData)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, cleanup, err := data.NewData(client, redisClient, logger)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -87,7 +95,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
 	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo)
 	orderService := service.NewOrderService(logger, orderUseCase, cycleTransactionUseCase, cycleRenewalUseCase)
-	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, cycleRenewalUseCase, logger)
+	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, cycleRenewalUseCase, client, logger)
 	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, cronJob, dataData, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {

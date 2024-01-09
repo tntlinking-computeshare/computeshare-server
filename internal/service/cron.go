@@ -12,6 +12,7 @@ type CronJob struct {
 	computeInstanceUC   *biz.ComputeInstanceUsercase
 	agentUsecase        *biz.AgentUsecase
 	cycleRenewalUseCase *biz.CycleRenewalUseCase
+	db                  *ent.Client
 	log                 *log.Helper
 }
 
@@ -19,12 +20,14 @@ func NewCronJob(
 	computeInstanceUsercase *biz.ComputeInstanceUsercase,
 	agentUsecase *biz.AgentUsecase,
 	cycleRenewalUseCase *biz.CycleRenewalUseCase,
+	db *ent.Client,
 	logger log.Logger,
 ) *CronJob {
 	return &CronJob{
 		computeInstanceUC:   computeInstanceUsercase,
 		agentUsecase:        agentUsecase,
 		cycleRenewalUseCase: cycleRenewalUseCase,
+		db:                  db,
 		log:                 log.NewHelper(logger),
 	}
 }
@@ -36,6 +39,8 @@ func (c *CronJob) StartJob() {
 	//go c.syncAgentStatusTask()
 	// 同步虚拟机过期
 	go c.syncContainerOverdue()
+	// 每日同步续费管理
+	go c.syncRenewalOrder(c.db)
 
 }
 

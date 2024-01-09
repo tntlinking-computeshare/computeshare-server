@@ -25,6 +25,8 @@ import (
 
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
+	NewDB,
+	NewRDB,
 	NewData,
 	NewAgentRepo,
 	NewUserRepo,
@@ -234,15 +236,14 @@ func (d *Data) getCycleRenewal(ctx context.Context) *ent.CycleRenewalClient {
 	return d.db.CycleRenewal
 }
 
-// NewData .
-func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
-	log := log.NewHelper(logger)
+func NewDB(conf *conf.Data, logger log.Logger) (*ent.Client, error) {
+	lg := log.NewHelper(logger)
 	drv, err := sql.Open(
 		conf.Database.Driver,
 		conf.Database.Source,
 	)
 	sqlDrv := dialect.DebugWithContext(drv, func(ctx context.Context, i ...interface{}) {
-		log.WithContext(ctx).Info(i...)
+		lg.WithContext(ctx).Info(i...)
 		tracer := otel.Tracer("ent.")
 		kind := trace.SpanKindServer
 		_, span := tracer.Start(ctx,
@@ -256,14 +257,18 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	})
 	client := ent.NewClient(ent.Driver(sqlDrv))
 	if err != nil {
-		log.Errorf("failed opening connection to sqlite: %v", err)
-		return nil, nil, err
+		lg.Errorf("failed opening connection to sqlite: %v", err)
+		return nil, err
 	}
 	// Run the auto migration tool.
 	if err := client.Schema.Create(context.Background()); err != nil {
-		log.Errorf("failed creating schema resources: %v", err)
-		return nil, nil, err
+		lg.Errorf("failed creating schema resources: %v", err)
+		return nil, err
 	}
+	return client, nil
+}
+
+func NewRDB(conf *conf.Data) (*redis.Client, error) {
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         conf.Redis.Addr,
@@ -274,17 +279,24 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 		ReadTimeout:  conf.Redis.ReadTimeout.AsDuration(),
 	})
 	rdb.AddHook(redisotel.TracingHook{})
+
+	return rdb, nil
+}
+
+// NewData .
+func NewData(db *ent.Client, rdb *redis.Client, logger log.Logger) (*Data, func(), error) {
+	lg := log.NewHelper(logger)
 	d := &Data{
-		db:  client,
+		db:  db,
 		rdb: rdb,
 	}
 	return d, func() {
-		log.Info("message", "closing the data resources")
+		lg.Info("message", "closing the data resources")
 		if err := d.db.Close(); err != nil {
-			log.Error(err)
+			lg.Error(err)
 		}
 		if err := d.rdb.Close(); err != nil {
-			log.Error(err)
+			lg.Error(err)
 		}
 	}, nil
 }
