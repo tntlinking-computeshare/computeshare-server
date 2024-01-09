@@ -40,9 +40,36 @@ service Order {
 		};
 	}
 
+	rpc CycleRenewalInfo(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renewal/{id}",
+		};
+	}
+
 	rpc CycleRenewalList(CycleRenewalListRequest) returns (CycleRenewalListReply) {
 		option (google.api.http) = {
-			get: "/v1/cycle/renew",
+			get: "/v1/cycle/renewal",
+		};
+	}
+
+	rpc CycleRenewalOpen(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/open",
+			body: "*"
+		};
+	}
+
+	rpc CycleRenewalClose(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/close",
+			body: "*"
+		};
+	}
+
+	rpc ManualRenew(ManualRenewRequest) returns (ManualRenewReply ) {
+		option (google.api.http) = {
+			post: "/v1/cycle/renewal/{id}/manual-renew",
+			body: "*"
 		};
 	}
 }
@@ -190,3 +217,29 @@ message CycleRenewalInfo {
 	string due_time = 5;
 	string renewal_time = 6;
 }
+
+message CycleRenewalGetReply{
+	int32 code = 1;
+	string message = 2;
+	CycleRenewalInfo data = 3;
+}
+
+message CycleRenewalGetRequest {
+	string id = 1;
+}
+
+message CycleRenewalBaseReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message ManualRenewRequest {
+	string id = 1;
+}
+
+message ManualRenewReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+

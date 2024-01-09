@@ -25,22 +25,30 @@ func NewCycleRepo(data *Data, logger log.Logger) biz.CycleRepo {
 }
 
 func (c *cycleRepo) FindByUserID(ctx context.Context, userId uuid.UUID) (*biz.Cycle, error) {
-	cycle, err := c.data.getCycle(ctx).Query().Where(cycle.FkUserID(userId)).First(ctx)
+	entity, err := c.data.getCycle(ctx).Query().Where(cycle.FkUserID(userId)).First(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return c.toBiz(cycle, 0), nil
+	return c.toBiz(entity, 0), nil
+}
+
+func (c *cycleRepo) Update(ctx context.Context, entity *biz.Cycle) error {
+	tx := c.data.getCycle(ctx)
+	balance, _ := entity.Cycle.Float64()
+	return tx.UpdateOneID(entity.ID).
+		SetCycle(balance).
+		SetUpdateTime(entity.UpdateTime).Exec(ctx)
 }
 
 func (c *cycleRepo) toBiz(p *ent.Cycle, _ int) *biz.Cycle {
 	if p == nil {
 		return nil
 	}
-	cycle := decimal.NewFromFloat(p.Cycle)
+	balance := decimal.NewFromFloat(p.Cycle)
 	return &biz.Cycle{
 		ID:         p.ID,
 		FkUserId:   p.FkUserID,
-		Cycle:      cycle,
+		Cycle:      balance,
 		CreateTime: p.CreateTime,
 		UpdateTime: p.UpdateTime,
 	}

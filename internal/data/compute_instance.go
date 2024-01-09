@@ -81,6 +81,7 @@ func (crs *computeInstanceRepo) Update(ctx context.Context, id uuid.UUID, instan
 		SetStatus(instance.Status).
 		SetAgentID(instance.AgentId).
 		SetContainerID(instance.ContainerID).
+		SetExpirationTime(instance.ExpirationTime).
 		Exec(ctx)
 }
 

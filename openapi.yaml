@@ -78,7 +78,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/cycle/renew:
+    /v1/cycle/renewal:
         get:
             tags:
                 - Order
@@ -101,6 +101,120 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CycleRenewalListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}:
+        get:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalInfo
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalGetReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/close:
+        put:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalClose
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CycleRenewalGetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalBaseReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/manual-renew:
+        post:
+            tags:
+                - Order
+            operationId: Order_ManualRenew
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ManualRenewRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ManualRenewReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/open:
+        put:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalOpen
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CycleRenewalGetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalBaseReply'
                 default:
                     description: Default error response
                     content:
@@ -247,6 +361,29 @@ components:
                 authAppId:
                     type: string
             description: https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
+        CycleRenewalBaseReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        CycleRenewalGetReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/CycleRenewalInfo'
+        CycleRenewalGetRequest:
+            type: object
+            properties:
+                id:
+                    type: string
         CycleRenewalInfo:
             type: object
             properties:
@@ -338,6 +475,21 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        ManualRenewReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: string
+        ManualRenewRequest:
+            type: object
+            properties:
+                id:
+                    type: string
         OrderInfo:
             type: object
             properties:

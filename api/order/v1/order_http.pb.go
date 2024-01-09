@@ -20,16 +20,24 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationOrderAlipayPayNotify = "/api.server.order.v1.Order/AlipayPayNotify"
+const OperationOrderCycleRenewalClose = "/api.server.order.v1.Order/CycleRenewalClose"
+const OperationOrderCycleRenewalInfo = "/api.server.order.v1.Order/CycleRenewalInfo"
 const OperationOrderCycleRenewalList = "/api.server.order.v1.Order/CycleRenewalList"
+const OperationOrderCycleRenewalOpen = "/api.server.order.v1.Order/CycleRenewalOpen"
 const OperationOrderCycleTransactionList = "/api.server.order.v1.Order/CycleTransactionList"
+const OperationOrderManualRenew = "/api.server.order.v1.Order/ManualRenew"
 const OperationOrderOrderList = "/api.server.order.v1.Order/OrderList"
 const OperationOrderRechargeCycleByAlipay = "/api.server.order.v1.Order/RechargeCycleByAlipay"
 const OperationOrderRechargeCycleByRedeemCode = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
 
 type OrderHTTPServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
+	CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
+	CycleRenewalInfo(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error)
 	CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error)
+	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
+	ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error)
 	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
@@ -42,7 +50,11 @@ func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r.POST("/v1/cycle/redeem", _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv))
 	r.GET("/v1/order", _Order_OrderList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/transaction", _Order_CycleTransactionList0_HTTP_Handler(srv))
-	r.GET("/v1/cycle/renew", _Order_CycleRenewalList0_HTTP_Handler(srv))
+	r.GET("/v1/cycle/renewal/{id}", _Order_CycleRenewalInfo0_HTTP_Handler(srv))
+	r.GET("/v1/cycle/renewal", _Order_CycleRenewalList0_HTTP_Handler(srv))
+	r.PUT("/v1/cycle/renewal/{id}/open", _Order_CycleRenewalOpen0_HTTP_Handler(srv))
+	r.PUT("/v1/cycle/renewal/{id}/close", _Order_CycleRenewalClose0_HTTP_Handler(srv))
+	r.POST("/v1/cycle/renewal/{id}/manual-renew", _Order_ManualRenew0_HTTP_Handler(srv))
 }
 
 func _Order_AlipayPayNotify0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
@@ -149,6 +161,28 @@ func _Order_CycleTransactionList0_HTTP_Handler(srv OrderHTTPServer) func(ctx htt
 	}
 }
 
+func _Order_CycleRenewalInfo0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CycleRenewalGetRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderCycleRenewalInfo)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CycleRenewalInfo(ctx, req.(*CycleRenewalGetRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CycleRenewalGetReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _Order_CycleRenewalList0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CycleRenewalListRequest
@@ -168,10 +202,89 @@ func _Order_CycleRenewalList0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Co
 	}
 }
 
+func _Order_CycleRenewalOpen0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CycleRenewalGetRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderCycleRenewalOpen)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CycleRenewalOpen(ctx, req.(*CycleRenewalGetRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CycleRenewalBaseReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Order_CycleRenewalClose0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CycleRenewalGetRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderCycleRenewalClose)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CycleRenewalClose(ctx, req.(*CycleRenewalGetRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CycleRenewalBaseReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Order_ManualRenew0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ManualRenewRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderManualRenew)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ManualRenew(ctx, req.(*ManualRenewRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ManualRenewReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type OrderHTTPClient interface {
 	AlipayPayNotify(ctx context.Context, req *AlipayPayNotifyRequest, opts ...http.CallOption) (rsp *AlipayPayNotifyReply, err error)
+	CycleRenewalClose(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
+	CycleRenewalInfo(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalGetReply, err error)
 	CycleRenewalList(ctx context.Context, req *CycleRenewalListRequest, opts ...http.CallOption) (rsp *CycleRenewalListReply, err error)
+	CycleRenewalOpen(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
 	CycleTransactionList(ctx context.Context, req *CycleTransactionListRequest, opts ...http.CallOption) (rsp *CycleTransactionListReply, err error)
+	ManualRenew(ctx context.Context, req *ManualRenewRequest, opts ...http.CallOption) (rsp *ManualRenewReply, err error)
 	OrderList(ctx context.Context, req *OrderListRequest, opts ...http.CallOption) (rsp *OrderListReply, err error)
 	RechargeCycleByAlipay(ctx context.Context, req *RechargeCycleByAlipayRequest, opts ...http.CallOption) (rsp *RechargeCycleByAlipayReply, err error)
 	RechargeCycleByRedeemCode(ctx context.Context, req *RechargeCycleByRedeemCodeRequest, opts ...http.CallOption) (rsp *RechargeCycleByRedeemCodeReply, err error)
@@ -198,13 +311,52 @@ func (c *OrderHTTPClientImpl) AlipayPayNotify(ctx context.Context, in *AlipayPay
 	return &out, err
 }
 
+func (c *OrderHTTPClientImpl) CycleRenewalClose(ctx context.Context, in *CycleRenewalGetRequest, opts ...http.CallOption) (*CycleRenewalBaseReply, error) {
+	var out CycleRenewalBaseReply
+	pattern := "/v1/cycle/renewal/{id}/close"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderCycleRenewalClose))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) CycleRenewalInfo(ctx context.Context, in *CycleRenewalGetRequest, opts ...http.CallOption) (*CycleRenewalGetReply, error) {
+	var out CycleRenewalGetReply
+	pattern := "/v1/cycle/renewal/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationOrderCycleRenewalInfo))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *OrderHTTPClientImpl) CycleRenewalList(ctx context.Context, in *CycleRenewalListRequest, opts ...http.CallOption) (*CycleRenewalListReply, error) {
 	var out CycleRenewalListReply
-	pattern := "/v1/cycle/renew"
+	pattern := "/v1/cycle/renewal"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationOrderCycleRenewalList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) CycleRenewalOpen(ctx context.Context, in *CycleRenewalGetRequest, opts ...http.CallOption) (*CycleRenewalBaseReply, error) {
+	var out CycleRenewalBaseReply
+	pattern := "/v1/cycle/renewal/{id}/open"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderCycleRenewalOpen))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -218,6 +370,19 @@ func (c *OrderHTTPClientImpl) CycleTransactionList(ctx context.Context, in *Cycl
 	opts = append(opts, http.Operation(OperationOrderCycleTransactionList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) ManualRenew(ctx context.Context, in *ManualRenewRequest, opts ...http.CallOption) (*ManualRenewReply, error) {
+	var out ManualRenewReply
+	pattern := "/v1/cycle/renewal/{id}/manual-renew"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderManualRenew))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

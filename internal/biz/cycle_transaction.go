@@ -11,6 +11,7 @@ import (
 
 type CycleTransactionRepo interface {
 	PageByUserId(ctx context.Context, userId uuid.UUID, page, size int) (*global2.Page[*CycleTransaction], error)
+	Create(ctx context.Context, transaction *CycleTransaction) (*CycleTransaction, error)
 }
 
 type CycleTransactionUseCase struct {
