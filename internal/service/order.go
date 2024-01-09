@@ -4,10 +4,12 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
+	"strconv"
 
 	pb "github.com/mohaijiang/computeshare-server/api/order/v1"
 )
@@ -17,20 +19,23 @@ type OrderService struct {
 	log                     *log.Helper
 	orderUseCase            *biz.OrderUseCase
 	cycleTransactionUseCase *biz.CycleTransactionUseCase
+	cycleRenewalUseCase     *biz.CycleRenewalUseCase
 }
 
 func NewOrderService(logger log.Logger,
 	orderUseCase *biz.OrderUseCase,
 	cycleTransactionUseCase *biz.CycleTransactionUseCase,
+	cycleRenewalUseCase *biz.CycleRenewalUseCase,
 ) *OrderService {
 	return &OrderService{
 		log:                     log.NewHelper(logger),
 		orderUseCase:            orderUseCase,
 		cycleTransactionUseCase: cycleTransactionUseCase,
+		cycleRenewalUseCase:     cycleRenewalUseCase,
 	}
 }
 
-func (o *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
+func (s *OrderService) AlipayPayNotify(_ context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
 	if req.TradeStatus == "WAIT_BUYER_PAY" {
 		log.Log(log.LevelInfo, "交易创建，等待买家付款。")
 		log.Log(log.LevelInfo, req)
@@ -153,4 +158,95 @@ func (o *OrderService) toCycleTransactionBiz(item *biz.CycleTransaction, _ int) 
 		Cycle:         float32(item.Cycle),
 		OperationTime: item.OperationTime.UnixMilli(),
 	}
+}
+
+func (s *OrderService) CycleRenewalList(ctx context.Context, req *pb.CycleRenewalListRequest) (*pb.CycleRenewalListReply, error) {
+	pageData, err := s.cycleRenewalUseCase.PageByUser(ctx, req.Page, req.Size)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CycleRenewalListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data: &pb.CycleRenewalPage{
+			Total: pageData.Total,
+			Page:  pageData.Page,
+			Size:  pageData.Size,
+			Data:  lo.Map(pageData.Data, s.toCycleRenewalBiz),
+		},
+	}, err
+}
+
+func (s *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.CycleRenewalInfo {
+	if item == nil {
+		return nil
+	}
+
+	dueTime := ""
+	if item.DueTime != nil {
+		dueTime = strconv.Itoa(int(item.DueTime.UnixMilli()))
+	}
+	renewTime := ""
+	if item.RenewalTime != nil {
+		renewTime = strconv.Itoa(int(item.RenewalTime.UnixMilli()))
+	}
+	return &pb.CycleRenewalInfo{
+		Id:          item.ID.String(),
+		ProductName: item.ProductName,
+		ProductDesc: item.ProductDesc,
+		State:       int32(item.State),
+		DueTime:     dueTime,
+		RenewalTime: renewTime,
+	}
+}
+
+func (s *OrderService) CycleRenewalOpen(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
+	renewalId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.cycleRenewalUseCase.OpenRenewal(ctx, renewalId)
+	return &pb.CycleRenewalBaseReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
+}
+
+func (s *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
+
+	renewalId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.cycleRenewalUseCase.CloseRenewal(ctx, renewalId)
+	return &pb.CycleRenewalBaseReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
+}
+
+func (s *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
+	renewalId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	renewal, err := s.cycleRenewalUseCase.Get(ctx, renewalId)
+	return &pb.CycleRenewalGetReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    s.toCycleRenewalBiz(renewal, 0),
+	}, err
+}
+
+func (s *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewRequest) (*pb.ManualRenewReply, error) {
+	renewalId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.cycleRenewalUseCase.ManualRenew(ctx, renewalId)
+	return &pb.ManualRenewReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
 }

@@ -26,8 +26,8 @@ func (CycleRenewal) Fields() []ent.Field {
 		field.Float("extend_price").SchemaType(map[string]string{
 			dialect.MySQL: "decimal(10,2)",
 		}).Comment("额外的价格"),
-		field.Time("due_time").Comment("到期时间"),
-		field.Time("renewal_time").Comment("续费时间"),
+		field.Time("due_time").Optional().Nillable().Comment("到期时间"),
+		field.Time("renewal_time").Optional().Nillable().Comment("续费时间"),
 		field.Bool("auto_renewal").Comment("自动续费"),
 	}
 }

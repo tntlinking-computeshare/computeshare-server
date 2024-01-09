@@ -145,11 +145,11 @@ type Result struct {
 }
 
 type PrometheusQueryResult struct {
-	Status string `json:"status"`
-	Data   Data   `json:"data"`
+	Status string              `json:"status"`
+	Data   PrometheusQueryData `json:"data"`
 }
 
-type Data struct {
+type PrometheusQueryData struct {
 	ResultType string   `json:"resultType"`
 	Result     []Result `json:"result"`
 }

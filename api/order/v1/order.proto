@@ -39,6 +39,39 @@ service Order {
 			get: "/v1/cycle/transaction",
 		};
 	}
+
+	rpc CycleRenewalInfo(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renewal/{id}",
+		};
+	}
+
+	rpc CycleRenewalList(CycleRenewalListRequest) returns (CycleRenewalListReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renewal",
+		};
+	}
+
+	rpc CycleRenewalOpen(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/open",
+			body: "*"
+		};
+	}
+
+	rpc CycleRenewalClose(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/close",
+			body: "*"
+		};
+	}
+
+	rpc ManualRenew(ManualRenewRequest) returns (ManualRenewReply ) {
+		option (google.api.http) = {
+			post: "/v1/cycle/renewal/{id}/manual-renew",
+			body: "*"
+		};
+	}
 }
 
 // https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
@@ -162,3 +195,56 @@ message CycleTransactionInfo {
 	float cycle = 4;
 	int64 operation_time = 5;
 }
+
+message CycleRenewalListRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+
+message CycleRenewalListReply {
+	int32 code = 1;
+	string message = 2;
+	CycleRenewalPage data = 3;
+}
+
+message CycleRenewalPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated CycleRenewalInfo data = 4;
+}
+
+message CycleRenewalInfo {
+	string id = 1;
+	string product_name = 2;
+	string product_desc = 3;
+	int32 state = 4;
+	string due_time = 5;
+	string renewal_time = 6;
+}
+
+message CycleRenewalGetReply{
+	int32 code = 1;
+	string message = 2;
+	CycleRenewalInfo data = 3;
+}
+
+message CycleRenewalGetRequest {
+	string id = 1;
+}
+
+message CycleRenewalBaseReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message ManualRenewRequest {
+	string id = 1;
+}
+
+message ManualRenewReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+

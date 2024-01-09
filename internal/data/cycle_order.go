@@ -68,3 +68,28 @@ func (r *cycleOrderRepo) toBiz(item *ent.CycleOrder, _ int) *biz.CycleOrder {
 		CreateTime:  item.CreateTime,
 	}
 }
+
+func (r *cycleOrderRepo) CheckOrderNoExists(ctx context.Context, orderNo string) bool {
+	tx := r.data.getCycleOrder(ctx)
+	exist, err := tx.Query().Where(cycleorder.OrderNo(orderNo)).Exist(ctx)
+	if err != nil {
+		return false
+	}
+
+	return exist
+}
+
+func (r *cycleOrderRepo) Create(ctx context.Context, order *biz.CycleOrder) (*biz.CycleOrder, error) {
+	tx := r.data.getCycleOrder(ctx)
+	entity, err := tx.Create().
+		SetFkUserID(order.FkUserID).
+		SetOrderNo(order.OrderNo).
+		SetProductName(order.ProductName).
+		SetProductDesc(order.ProductDesc).
+		SetSymbol(order.Symbol).
+		SetCycle(order.Cycle).
+		SetCreateTime(order.CreateTime).
+		Save(ctx)
+
+	return r.toBiz(entity, 0), err
+}

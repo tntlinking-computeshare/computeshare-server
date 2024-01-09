@@ -228,8 +228,8 @@ var (
 		{Name: "state", Type: field.TypeInt8},
 		{Name: "extend_day", Type: field.TypeInt8},
 		{Name: "extend_price", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
-		{Name: "due_time", Type: field.TypeTime},
-		{Name: "renewal_time", Type: field.TypeTime},
+		{Name: "due_time", Type: field.TypeTime, Nullable: true},
+		{Name: "renewal_time", Type: field.TypeTime, Nullable: true},
 		{Name: "auto_renewal", Type: field.TypeBool},
 	}
 	// CycleRenewalsTable holds the schema information for the "cycle_renewals" table.

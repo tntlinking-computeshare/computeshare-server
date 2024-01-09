@@ -520,6 +520,16 @@ func DueTimeLTE(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldLTE(FieldDueTime, v))
 }
 
+// DueTimeIsNil applies the IsNil predicate on the "due_time" field.
+func DueTimeIsNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldIsNull(FieldDueTime))
+}
+
+// DueTimeNotNil applies the NotNil predicate on the "due_time" field.
+func DueTimeNotNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNotNull(FieldDueTime))
+}
+
 // RenewalTimeEQ applies the EQ predicate on the "renewal_time" field.
 func RenewalTimeEQ(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldEQ(FieldRenewalTime, v))
@@ -558,6 +568,16 @@ func RenewalTimeLT(v time.Time) predicate.CycleRenewal {
 // RenewalTimeLTE applies the LTE predicate on the "renewal_time" field.
 func RenewalTimeLTE(v time.Time) predicate.CycleRenewal {
 	return predicate.CycleRenewal(sql.FieldLTE(FieldRenewalTime, v))
+}
+
+// RenewalTimeIsNil applies the IsNil predicate on the "renewal_time" field.
+func RenewalTimeIsNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldIsNull(FieldRenewalTime))
+}
+
+// RenewalTimeNotNil applies the NotNil predicate on the "renewal_time" field.
+func RenewalTimeNotNil() predicate.CycleRenewal {
+	return predicate.CycleRenewal(sql.FieldNotNull(FieldRenewalTime))
 }
 
 // AutoRenewalEQ applies the EQ predicate on the "auto_renewal" field.

@@ -35,9 +35,9 @@ type CycleRenewal struct {
 	// 额外的价格
 	ExtendPrice float64 `json:"extend_price,omitempty"`
 	// 到期时间
-	DueTime time.Time `json:"due_time,omitempty"`
+	DueTime *time.Time `json:"due_time,omitempty"`
 	// 续费时间
-	RenewalTime time.Time `json:"renewal_time,omitempty"`
+	RenewalTime *time.Time `json:"renewal_time,omitempty"`
 	// 自动续费
 	AutoRenewal  bool `json:"auto_renewal,omitempty"`
 	selectValues sql.SelectValues
@@ -133,13 +133,15 @@ func (cr *CycleRenewal) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_time", values[i])
 			} else if value.Valid {
-				cr.DueTime = value.Time
+				cr.DueTime = new(time.Time)
+				*cr.DueTime = value.Time
 			}
 		case cyclerenewal.FieldRenewalTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field renewal_time", values[i])
 			} else if value.Valid {
-				cr.RenewalTime = value.Time
+				cr.RenewalTime = new(time.Time)
+				*cr.RenewalTime = value.Time
 			}
 		case cyclerenewal.FieldAutoRenewal:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -207,11 +209,15 @@ func (cr *CycleRenewal) String() string {
 	builder.WriteString("extend_price=")
 	builder.WriteString(fmt.Sprintf("%v", cr.ExtendPrice))
 	builder.WriteString(", ")
-	builder.WriteString("due_time=")
-	builder.WriteString(cr.DueTime.Format(time.ANSIC))
+	if v := cr.DueTime; v != nil {
+		builder.WriteString("due_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("renewal_time=")
-	builder.WriteString(cr.RenewalTime.Format(time.ANSIC))
+	if v := cr.RenewalTime; v != nil {
+		builder.WriteString("renewal_time=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("auto_renewal=")
 	builder.WriteString(fmt.Sprintf("%v", cr.AutoRenewal))

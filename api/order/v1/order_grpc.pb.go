@@ -24,6 +24,11 @@ const (
 	Order_RechargeCycleByRedeemCode_FullMethodName = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
 	Order_OrderList_FullMethodName                 = "/api.server.order.v1.Order/OrderList"
 	Order_CycleTransactionList_FullMethodName      = "/api.server.order.v1.Order/CycleTransactionList"
+	Order_CycleRenewalInfo_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalInfo"
+	Order_CycleRenewalList_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalList"
+	Order_CycleRenewalOpen_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalOpen"
+	Order_CycleRenewalClose_FullMethodName         = "/api.server.order.v1.Order/CycleRenewalClose"
+	Order_ManualRenew_FullMethodName               = "/api.server.order.v1.Order/ManualRenew"
 )
 
 // OrderClient is the client API for Order service.
@@ -35,6 +40,11 @@ type OrderClient interface {
 	RechargeCycleByRedeemCode(ctx context.Context, in *RechargeCycleByRedeemCodeRequest, opts ...grpc.CallOption) (*RechargeCycleByRedeemCodeReply, error)
 	OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error)
 	CycleTransactionList(ctx context.Context, in *CycleTransactionListRequest, opts ...grpc.CallOption) (*CycleTransactionListReply, error)
+	CycleRenewalInfo(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalGetReply, error)
+	CycleRenewalList(ctx context.Context, in *CycleRenewalListRequest, opts ...grpc.CallOption) (*CycleRenewalListReply, error)
+	CycleRenewalOpen(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
+	CycleRenewalClose(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
+	ManualRenew(ctx context.Context, in *ManualRenewRequest, opts ...grpc.CallOption) (*ManualRenewReply, error)
 }
 
 type orderClient struct {
@@ -90,6 +100,51 @@ func (c *orderClient) CycleTransactionList(ctx context.Context, in *CycleTransac
 	return out, nil
 }
 
+func (c *orderClient) CycleRenewalInfo(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalGetReply, error) {
+	out := new(CycleRenewalGetReply)
+	err := c.cc.Invoke(ctx, Order_CycleRenewalInfo_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) CycleRenewalList(ctx context.Context, in *CycleRenewalListRequest, opts ...grpc.CallOption) (*CycleRenewalListReply, error) {
+	out := new(CycleRenewalListReply)
+	err := c.cc.Invoke(ctx, Order_CycleRenewalList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) CycleRenewalOpen(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error) {
+	out := new(CycleRenewalBaseReply)
+	err := c.cc.Invoke(ctx, Order_CycleRenewalOpen_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) CycleRenewalClose(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error) {
+	out := new(CycleRenewalBaseReply)
+	err := c.cc.Invoke(ctx, Order_CycleRenewalClose_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) ManualRenew(ctx context.Context, in *ManualRenewRequest, opts ...grpc.CallOption) (*ManualRenewReply, error) {
+	out := new(ManualRenewReply)
+	err := c.cc.Invoke(ctx, Order_ManualRenew_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
@@ -99,6 +154,11 @@ type OrderServer interface {
 	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
+	CycleRenewalInfo(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error)
+	CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error)
+	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
+	CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
+	ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -120,6 +180,21 @@ func (UnimplementedOrderServer) OrderList(context.Context, *OrderListRequest) (*
 }
 func (UnimplementedOrderServer) CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CycleTransactionList not implemented")
+}
+func (UnimplementedOrderServer) CycleRenewalInfo(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalInfo not implemented")
+}
+func (UnimplementedOrderServer) CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalList not implemented")
+}
+func (UnimplementedOrderServer) CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalOpen not implemented")
+}
+func (UnimplementedOrderServer) CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalClose not implemented")
+}
+func (UnimplementedOrderServer) ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ManualRenew not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -224,6 +299,96 @@ func _Order_CycleTransactionList_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_CycleRenewalInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleRenewalInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleRenewalInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleRenewalInfo(ctx, req.(*CycleRenewalGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_CycleRenewalList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleRenewalList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleRenewalList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleRenewalList(ctx, req.(*CycleRenewalListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_CycleRenewalOpen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleRenewalOpen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleRenewalOpen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleRenewalOpen(ctx, req.(*CycleRenewalGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_CycleRenewalClose_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CycleRenewalClose(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CycleRenewalClose_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CycleRenewalClose(ctx, req.(*CycleRenewalGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_ManualRenew_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ManualRenewRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).ManualRenew(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_ManualRenew_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).ManualRenew(ctx, req.(*ManualRenewRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +415,26 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CycleTransactionList",
 			Handler:    _Order_CycleTransactionList_Handler,
+		},
+		{
+			MethodName: "CycleRenewalInfo",
+			Handler:    _Order_CycleRenewalInfo_Handler,
+		},
+		{
+			MethodName: "CycleRenewalList",
+			Handler:    _Order_CycleRenewalList_Handler,
+		},
+		{
+			MethodName: "CycleRenewalOpen",
+			Handler:    _Order_CycleRenewalOpen_Handler,
+		},
+		{
+			MethodName: "CycleRenewalClose",
+			Handler:    _Order_CycleRenewalClose_Handler,
+		},
+		{
+			MethodName: "ManualRenew",
+			Handler:    _Order_ManualRenew_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

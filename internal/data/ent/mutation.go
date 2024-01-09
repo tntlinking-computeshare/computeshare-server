@@ -8307,7 +8307,7 @@ func (m *CycleRenewalMutation) DueTime() (r time.Time, exists bool) {
 // OldDueTime returns the old "due_time" field's value of the CycleRenewal entity.
 // If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v time.Time, err error) {
+func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v *time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDueTime is only allowed on UpdateOne operations")
 	}
@@ -8321,9 +8321,22 @@ func (m *CycleRenewalMutation) OldDueTime(ctx context.Context) (v time.Time, err
 	return oldValue.DueTime, nil
 }
 
+// ClearDueTime clears the value of the "due_time" field.
+func (m *CycleRenewalMutation) ClearDueTime() {
+	m.due_time = nil
+	m.clearedFields[cyclerenewal.FieldDueTime] = struct{}{}
+}
+
+// DueTimeCleared returns if the "due_time" field was cleared in this mutation.
+func (m *CycleRenewalMutation) DueTimeCleared() bool {
+	_, ok := m.clearedFields[cyclerenewal.FieldDueTime]
+	return ok
+}
+
 // ResetDueTime resets all changes to the "due_time" field.
 func (m *CycleRenewalMutation) ResetDueTime() {
 	m.due_time = nil
+	delete(m.clearedFields, cyclerenewal.FieldDueTime)
 }
 
 // SetRenewalTime sets the "renewal_time" field.
@@ -8343,7 +8356,7 @@ func (m *CycleRenewalMutation) RenewalTime() (r time.Time, exists bool) {
 // OldRenewalTime returns the old "renewal_time" field's value of the CycleRenewal entity.
 // If the CycleRenewal object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v time.Time, err error) {
+func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v *time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRenewalTime is only allowed on UpdateOne operations")
 	}
@@ -8357,9 +8370,22 @@ func (m *CycleRenewalMutation) OldRenewalTime(ctx context.Context) (v time.Time,
 	return oldValue.RenewalTime, nil
 }
 
+// ClearRenewalTime clears the value of the "renewal_time" field.
+func (m *CycleRenewalMutation) ClearRenewalTime() {
+	m.renewal_time = nil
+	m.clearedFields[cyclerenewal.FieldRenewalTime] = struct{}{}
+}
+
+// RenewalTimeCleared returns if the "renewal_time" field was cleared in this mutation.
+func (m *CycleRenewalMutation) RenewalTimeCleared() bool {
+	_, ok := m.clearedFields[cyclerenewal.FieldRenewalTime]
+	return ok
+}
+
 // ResetRenewalTime resets all changes to the "renewal_time" field.
 func (m *CycleRenewalMutation) ResetRenewalTime() {
 	m.renewal_time = nil
+	delete(m.clearedFields, cyclerenewal.FieldRenewalTime)
 }
 
 // SetAutoRenewal sets the "auto_renewal" field.
@@ -8693,7 +8719,14 @@ func (m *CycleRenewalMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CycleRenewalMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(cyclerenewal.FieldDueTime) {
+		fields = append(fields, cyclerenewal.FieldDueTime)
+	}
+	if m.FieldCleared(cyclerenewal.FieldRenewalTime) {
+		fields = append(fields, cyclerenewal.FieldRenewalTime)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -8706,6 +8739,14 @@ func (m *CycleRenewalMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CycleRenewalMutation) ClearField(name string) error {
+	switch name {
+	case cyclerenewal.FieldDueTime:
+		m.ClearDueTime()
+		return nil
+	case cyclerenewal.FieldRenewalTime:
+		m.ClearRenewalTime()
+		return nil
+	}
 	return fmt.Errorf("unknown CycleRenewal nullable field %s", name)
 }
 

@@ -77,3 +77,23 @@ func (c *cycleTransactionRepo) toBiz(item *ent.CycleTransaction, _ int) *biz.Cyc
 		OperationTime: item.OperationTime,
 	}
 }
+
+func (c *cycleTransactionRepo) Create(ctx context.Context, ct *biz.CycleTransaction) (*biz.CycleTransaction, error) {
+	tx := c.data.getCycleTransaction(ctx)
+
+	entity, err := tx.Create().
+		SetFkCycleID(ct.FkCycleID).
+		SetFkUserID(ct.FkUserID).
+		SetFkCycleOrderID(ct.FkCycleOrderID).
+		SetFkCycleRechargeID(ct.FkCycleRechargeID).
+		SetOperation(ct.Operation).
+		SetSymbol(ct.Symbol).
+		SetCycle(ct.Cycle).
+		SetBalance(ct.Balance).
+		SetOperationTime(ct.OperationTime).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return c.toBiz(entity, 0), nil
+}
