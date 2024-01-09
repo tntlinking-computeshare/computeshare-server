@@ -111,7 +111,7 @@ paths:
         get:
             tags:
                 - Order
-            operationId: Order_CycleRenewalInfo
+            operationId: Order_CycleRenewalDetail
             parameters:
                 - name: id
                   in: path
@@ -369,6 +369,39 @@ components:
                     format: int32
                 message:
                     type: string
+        CycleRenewalDetailInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                productName:
+                    type: string
+                productDesc:
+                    type: string
+                state:
+                    type: integer
+                    format: int32
+                dueTime:
+                    type: string
+                renewalTime:
+                    type: string
+                instanceId:
+                    type: string
+                instanceName:
+                    type: string
+                instanceSpec:
+                    type: string
+                image:
+                    type: string
+                extendPrice:
+                    type: number
+                    format: float
+                extendDay:
+                    type: integer
+                    format: int64
+                balance:
+                    type: number
+                    format: float
         CycleRenewalGetReply:
             type: object
             properties:
@@ -378,7 +411,7 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CycleRenewalInfo'
+                    $ref: '#/components/schemas/CycleRenewalDetailInfo'
         CycleRenewalGetRequest:
             type: object
             properties:

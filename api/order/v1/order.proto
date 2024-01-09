@@ -40,7 +40,7 @@ service Order {
 		};
 	}
 
-	rpc CycleRenewalInfo(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
+	rpc CycleRenewalDetail(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
 		option (google.api.http) = {
 			get: "/v1/cycle/renewal/{id}",
 		};
@@ -223,10 +223,26 @@ message CycleRenewalInfo {
 	string renewal_time = 6;
 }
 
+message CycleRenewalDetailInfo {
+	string id = 1;
+	string product_name = 2;
+	string product_desc = 3;
+	int32 state = 4;
+	string due_time = 5;
+	string renewal_time = 6;
+	string instance_id = 7;
+	string instance_name = 8;
+	string instance_spec = 9;
+	string image = 10;
+	float extend_price = 11;
+	int64 extend_day = 12;
+	float balance = 13;
+}
+
 message CycleRenewalGetReply{
 	int32 code = 1;
 	string message = 2;
-	CycleRenewalInfo data = 3;
+	CycleRenewalDetailInfo data = 3;
 }
 
 message CycleRenewalGetRequest {

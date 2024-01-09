@@ -21,7 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationOrderAlipayPayNotify = "/api.server.order.v1.Order/AlipayPayNotify"
 const OperationOrderCycleRenewalClose = "/api.server.order.v1.Order/CycleRenewalClose"
-const OperationOrderCycleRenewalInfo = "/api.server.order.v1.Order/CycleRenewalInfo"
+const OperationOrderCycleRenewalDetail = "/api.server.order.v1.Order/CycleRenewalDetail"
 const OperationOrderCycleRenewalList = "/api.server.order.v1.Order/CycleRenewalList"
 const OperationOrderCycleRenewalOpen = "/api.server.order.v1.Order/CycleRenewalOpen"
 const OperationOrderCycleTransactionList = "/api.server.order.v1.Order/CycleTransactionList"
@@ -33,7 +33,7 @@ const OperationOrderRechargeCycleByRedeemCode = "/api.server.order.v1.Order/Rech
 type OrderHTTPServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
 	CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
-	CycleRenewalInfo(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error)
+	CycleRenewalDetail(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error)
 	CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error)
 	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
@@ -50,7 +50,7 @@ func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r.POST("/v1/cycle/redeem", _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv))
 	r.GET("/v1/order", _Order_OrderList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/transaction", _Order_CycleTransactionList0_HTTP_Handler(srv))
-	r.GET("/v1/cycle/renewal/{id}", _Order_CycleRenewalInfo0_HTTP_Handler(srv))
+	r.GET("/v1/cycle/renewal/{id}", _Order_CycleRenewalDetail0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/renewal", _Order_CycleRenewalList0_HTTP_Handler(srv))
 	r.PUT("/v1/cycle/renewal/{id}/open", _Order_CycleRenewalOpen0_HTTP_Handler(srv))
 	r.PUT("/v1/cycle/renewal/{id}/close", _Order_CycleRenewalClose0_HTTP_Handler(srv))
@@ -161,7 +161,7 @@ func _Order_CycleTransactionList0_HTTP_Handler(srv OrderHTTPServer) func(ctx htt
 	}
 }
 
-func _Order_CycleRenewalInfo0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+func _Order_CycleRenewalDetail0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CycleRenewalGetRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -170,9 +170,9 @@ func _Order_CycleRenewalInfo0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Co
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationOrderCycleRenewalInfo)
+		http.SetOperation(ctx, OperationOrderCycleRenewalDetail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CycleRenewalInfo(ctx, req.(*CycleRenewalGetRequest))
+			return srv.CycleRenewalDetail(ctx, req.(*CycleRenewalGetRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -280,7 +280,7 @@ func _Order_ManualRenew0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context
 type OrderHTTPClient interface {
 	AlipayPayNotify(ctx context.Context, req *AlipayPayNotifyRequest, opts ...http.CallOption) (rsp *AlipayPayNotifyReply, err error)
 	CycleRenewalClose(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
-	CycleRenewalInfo(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalGetReply, err error)
+	CycleRenewalDetail(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalGetReply, err error)
 	CycleRenewalList(ctx context.Context, req *CycleRenewalListRequest, opts ...http.CallOption) (rsp *CycleRenewalListReply, err error)
 	CycleRenewalOpen(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
 	CycleTransactionList(ctx context.Context, req *CycleTransactionListRequest, opts ...http.CallOption) (rsp *CycleTransactionListReply, err error)
@@ -324,11 +324,11 @@ func (c *OrderHTTPClientImpl) CycleRenewalClose(ctx context.Context, in *CycleRe
 	return &out, err
 }
 
-func (c *OrderHTTPClientImpl) CycleRenewalInfo(ctx context.Context, in *CycleRenewalGetRequest, opts ...http.CallOption) (*CycleRenewalGetReply, error) {
+func (c *OrderHTTPClientImpl) CycleRenewalDetail(ctx context.Context, in *CycleRenewalGetRequest, opts ...http.CallOption) (*CycleRenewalGetReply, error) {
 	var out CycleRenewalGetReply
 	pattern := "/v1/cycle/renewal/{id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationOrderCycleRenewalInfo))
+	opts = append(opts, http.Operation(OperationOrderCycleRenewalDetail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

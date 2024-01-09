@@ -226,16 +226,38 @@ func (s *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenew
 	}, err
 }
 
-func (s *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
+func (s *OrderService) CycleRenewalDetail(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
-	renewal, err := s.cycleRenewalUseCase.Get(ctx, renewalId)
+	detail, err := s.cycleRenewalUseCase.Detail(ctx, renewalId)
+	dueTime := ""
+	if detail.DueTime != nil {
+		dueTime = strconv.Itoa(int(detail.DueTime.UnixMilli()))
+	}
+	renewalTime := ""
+	if detail.RenewalTime != nil {
+		renewalTime = strconv.Itoa(int(detail.RenewalTime.UnixMilli()))
+	}
 	return &pb.CycleRenewalGetReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data:    s.toCycleRenewalBiz(renewal, 0),
+		Data: &pb.CycleRenewalDetailInfo{
+			Id:           detail.ID.String(),
+			ProductName:  detail.ProductName,
+			ProductDesc:  detail.ProductDesc,
+			State:        int32(detail.State),
+			DueTime:      dueTime,
+			RenewalTime:  renewalTime,
+			InstanceId:   detail.InstanceId.String(),
+			InstanceName: detail.InstanceName,
+			InstanceSpec: detail.InstanceSpec,
+			Image:        detail.Image,
+			ExtendPrice:  float32(detail.ExtendPrice),
+			ExtendDay:    int64(detail.ExtendDay),
+			Balance:      detail.Balance,
+		},
 	}, err
 }
 
