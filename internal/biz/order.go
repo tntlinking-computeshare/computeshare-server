@@ -140,7 +140,7 @@ func (o *OrderUseCase) RechargeCycleByAlipay(ctx context.Context, userId uuid.UU
 	}
 	// 初始化 BodyMap
 	bm := make(gopay.BodyMap)
-	bm.Set("subject", "共享算力Cycle购买"). // 标题
+	bm.Set("subject", consts.PayCycles). // 标题
 						Set("out_trade_no", recharge.OutTradeNo).     // 订单号，支付成功后会返回
 						Set("total_amount", recharge.PayAmount).      // 订单金额
 						Set("timeout_express", consts.AlipayPayTime). // 支付超时时间
