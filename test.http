@@ -92,6 +92,11 @@ Content-Type: application/json
 }
 
 
+### 查询余额
+GET http://127.0.0.1:8000/v1/cycle/balance
+Authorization: Bearer {{ access_token }}
+
+
 ### 创建虚拟机
 POST  http://127.0.0.1:8000/v1/instance
 Content-Type: application/json
@@ -100,7 +105,6 @@ Authorization: Bearer {{ access_token }}
 {
   "specId": 1,
   "imageId": 1,
-  "duration": 1,
   "name": "my-vm",
   "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
   "password":  "Abcd12345"
@@ -330,3 +334,10 @@ Authorization: Bearer {{ access_token }}
 {
   "agentId": "52540dea-9944-4805-941f-01dacbf96ab6"
 }
+
+### 关闭续费
+PUT http://127.0.0.1:8000/v1/cycle/renewal/9fd54051-251d-4e86-a037-3d2586d1f7ae/open
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{}

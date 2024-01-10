@@ -17,7 +17,7 @@ func (CycleOrder) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
-		field.String("order_no").MinLen(36).MaxLen(36).Comment("订单编号"),
+		field.String("order_no").MinLen(16).MaxLen(36).Comment("订单编号"),
 		field.String("product_name").MaxLen(50).Comment("产品名字"),
 		field.String("product_desc").MaxLen(200).Comment("产品描述"),
 		field.String("symbol").MaxLen(1).Comment("symbol"),

@@ -76,7 +76,26 @@ func (c *CycleRenewalUseCase) OpenRenewal(ctx context.Context, renewalId uuid.UU
 		return errors.New(400, "unauthorized", "unauthorized")
 	}
 
+	instance, err := c.computeInstanceRepo.Get(ctx, renewal.ResourceID)
+	if err != nil {
+		return err
+	}
 	renewal.AutoRenewal = true
+
+	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
+	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
+
+	// 获取当前时间
+	currentTime := time.Now()
+
+	// 将当前时间设置为当天的 23 点整
+	zeroTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 0, 0, 0, currentTime.Location())
+
+	if zeroTime.After(renewalTime) {
+		renewal.RenewalTime = &zeroTime
+	} else {
+		renewal.RenewalTime = &renewalTime
+	}
 
 	return c.repo.Update(ctx, renewalId, renewal)
 
@@ -101,7 +120,7 @@ func (c *CycleRenewalUseCase) CloseRenewal(ctx context.Context, renewalId uuid.U
 	}
 
 	renewal.AutoRenewal = false
-
+	renewal.RenewalTime = nil
 	return c.repo.Update(ctx, renewalId, renewal)
 }
 

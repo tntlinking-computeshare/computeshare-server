@@ -118,7 +118,7 @@ func (r *cycleRenewalRepo) Create(ctx context.Context, renewal *biz.CycleRenewal
 
 func (r *cycleRenewalRepo) Update(ctx context.Context, id uuid.UUID, renewal *biz.CycleRenewal) error {
 	tx := r.data.getCycleRenewal(ctx)
-	update := tx.UpdateOneID(id).
+	return tx.UpdateOneID(id).
 		SetFkUserID(renewal.FkUserID).
 		SetResourceID(renewal.ResourceID).
 		SetResourceType(renewal.ResourceType).
@@ -127,16 +127,9 @@ func (r *cycleRenewalRepo) Update(ctx context.Context, id uuid.UUID, renewal *bi
 		SetState(renewal.State).
 		SetExtendDay(renewal.ExtendDay).
 		SetExtendPrice(renewal.ExtendPrice).
-		SetAutoRenewal(renewal.AutoRenewal)
-
-	if renewal.DueTime != nil {
-		update.SetDueTime(*renewal.DueTime)
-	}
-	if renewal.RenewalTime != nil {
-		update.SetRenewalTime(*renewal.RenewalTime)
-	}
-
-	return update.Exec(ctx)
+		SetAutoRenewal(renewal.AutoRenewal).
+		SetNillableRenewalTime(renewal.RenewalTime).
+		SetNillableDueTime(renewal.DueTime).Exec(ctx)
 }
 
 func (r *cycleRenewalRepo) QueryDailyRenew(ctx context.Context) ([]*biz.CycleRenewal, error) {

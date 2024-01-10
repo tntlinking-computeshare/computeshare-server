@@ -307,8 +307,8 @@ func NewOrderNo() string {
 	// 设置随机数种子
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	// 生成0到9999之间的随机数
-	randomNumber := r.Intn(10000)
+	randomNumber := r.Intn(100000000)
 	// 格式化为字符串，并补足到4位长度
-	formattedNumber := fmt.Sprintf("%04d", randomNumber)
-	return fmt.Sprintf("%s0000%s", time.Now().Format("20060102"), formattedNumber)
+	formattedNumber := fmt.Sprintf("%08d", randomNumber)
+	return fmt.Sprintf("%s%s", time.Now().Format("20060102"), formattedNumber)
 }

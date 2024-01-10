@@ -55,6 +55,7 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetCore(in.Core).
 		SetMemory(in.Memory).
 		SetImage(in.Image).
+		SetImageID(in.ImageId).
 		SetExpirationTime(in.ExpirationTime).
 		SetStatus(in.Status).
 		SetPort(in.Port).

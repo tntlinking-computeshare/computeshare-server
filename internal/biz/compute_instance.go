@@ -161,7 +161,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		OrderNo:     orderNo,
 		FkUserID:    userId,
 		ProductName: "租用云服务器",
-		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d 天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
+		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
 		Symbol:      "-",
 		Cycle:       float64(specPrice.Price),
 		CreateTime:  time.Now(),
@@ -238,7 +238,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
-	//TODO: 创建续费管理
+	// 创建续费管理
 	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
 	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
 
