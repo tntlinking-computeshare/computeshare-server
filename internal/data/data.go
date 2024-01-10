@@ -254,6 +254,14 @@ func (d *Data) getAlipayOrderRollback(ctx context.Context) *ent.AlipayOrderRollb
 	return d.db.AlipayOrderRollback
 }
 
+func (d *Data) getComputeSpecPrice(ctx context.Context) *ent.ComputeSpecPriceClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.ComputeSpecPrice
+	}
+	return d.db.ComputeSpecPrice
+}
+
 func NewDB(conf *conf.Data, logger log.Logger) (*ent.Client, error) {
 	lg := log.NewHelper(logger)
 	drv, err := sql.Open(

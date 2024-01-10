@@ -58,15 +58,17 @@ func (s *ComputeInstanceService) ListComputeImage(ctx context.Context, req *pb.L
 		}),
 	}, err
 }
-func (s *ComputeInstanceService) ListComputeInstanceDuration(ctx context.Context, req *pb.ListComputeDurationRequest) (*pb.ListComputeDurationReply, error) {
-	return &pb.ListComputeDurationReply{
+func (s *ComputeInstanceService) ListComputeSpecPrice(ctx context.Context, req *pb.ListComputeSpecPriceRequest) (*pb.ListComputeSpecPriceReply, error) {
+	price, err := s.uc.GetComputeSpecPrice(ctx, req.SpecId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ListComputeSpecPriceReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data: []*pb.ComputeDuration{
-			{
-				Name:     "一个月",
-				Duration: 1,
-			},
+		Data: &pb.ComputeSpecPrice{
+			Day:   price.Day,
+			Cycle: price.Price,
 		},
 	}, nil
 }
@@ -74,7 +76,6 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 	instance, err := s.uc.Create(ctx, &biz.ComputeInstanceCreate{
 		SpecId:        req.GetSpecId(),
 		ImageId:       req.GetImageId(),
-		Duration:      req.Duration,
 		Name:          req.Name,
 		PublicKey:     req.PublicKey,
 		Password:      req.Password,
@@ -229,5 +230,18 @@ func (s *ComputeInstanceService) GetInstanceVncURL(ctx context.Context, req *pb.
 		Code:    200,
 		Message: SUCCESS,
 		Data:    fmt.Sprintf("%s/vnc_lite.html?host=%s&instanceId=%s", s.dispose.Domain.VncHost, s.dispose.Domain.ApiHost, req.GetId()),
+	}, nil
+}
+
+func (s *ComputeInstanceService) RenameInstance(ctx context.Context, req *pb.RenameInstanceRequest) (*pb.CommonReply, error) {
+	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.uc.Rename(ctx, instanceId, req.Name)
+
+	return &pb.CommonReply{
+		Code:    200,
+		Message: SUCCESS,
 	}, nil
 }

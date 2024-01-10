@@ -20,6 +20,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
@@ -56,6 +57,8 @@ type Client struct {
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// ComputeSpecPrice is the client for interacting with the ComputeSpecPrice builders.
+	ComputeSpecPrice *ComputeSpecPriceClient
 	// Cycle is the client for interacting with the Cycle builders.
 	Cycle *CycleClient
 	// CycleOrder is the client for interacting with the CycleOrder builders.
@@ -112,6 +115,7 @@ func (c *Client) init() {
 	c.ComputeImage = NewComputeImageClient(c.config)
 	c.ComputeInstance = NewComputeInstanceClient(c.config)
 	c.ComputeSpec = NewComputeSpecClient(c.config)
+	c.ComputeSpecPrice = NewComputeSpecPriceClient(c.config)
 	c.Cycle = NewCycleClient(c.config)
 	c.CycleOrder = NewCycleOrderClient(c.config)
 	c.CycleRecharge = NewCycleRechargeClient(c.config)
@@ -218,6 +222,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		ComputeSpecPrice:      NewComputeSpecPriceClient(cfg),
 		Cycle:                 NewCycleClient(cfg),
 		CycleOrder:            NewCycleOrderClient(cfg),
 		CycleRecharge:         NewCycleRechargeClient(cfg),
@@ -261,6 +266,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		ComputeSpecPrice:      NewComputeSpecPriceClient(cfg),
 		Cycle:                 NewCycleClient(cfg),
 		CycleOrder:            NewCycleOrderClient(cfg),
 		CycleRecharge:         NewCycleRechargeClient(cfg),
@@ -310,10 +316,11 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Agent, c.AlipayOrderRollback, c.ComputeImage, c.ComputeInstance,
-		c.ComputeSpec, c.Cycle, c.CycleOrder, c.CycleRecharge, c.CycleRedeemCode,
-		c.CycleRenewal, c.CycleTransaction, c.DomainBinding, c.Employee, c.Gateway,
-		c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task, c.User,
+		c.ComputeSpec, c.ComputeSpecPrice, c.Cycle, c.CycleOrder, c.CycleRecharge,
+		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
+		c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -324,10 +331,11 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Agent, c.AlipayOrderRollback, c.ComputeImage, c.ComputeInstance,
-		c.ComputeSpec, c.Cycle, c.CycleOrder, c.CycleRecharge, c.CycleRedeemCode,
-		c.CycleRenewal, c.CycleTransaction, c.DomainBinding, c.Employee, c.Gateway,
-		c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User, c.Script,
-		c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task, c.User,
+		c.ComputeSpec, c.ComputeSpecPrice, c.Cycle, c.CycleOrder, c.CycleRecharge,
+		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
+		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
+		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
+		c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -346,6 +354,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ComputeInstance.mutate(ctx, m)
 	case *ComputeSpecMutation:
 		return c.ComputeSpec.mutate(ctx, m)
+	case *ComputeSpecPriceMutation:
+		return c.ComputeSpecPrice.mutate(ctx, m)
 	case *CycleMutation:
 		return c.Cycle.mutate(ctx, m)
 	case *CycleOrderMutation:
@@ -976,6 +986,124 @@ func (c *ComputeSpecClient) mutate(ctx context.Context, m *ComputeSpecMutation) 
 		return (&ComputeSpecDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ComputeSpec mutation op: %q", m.Op())
+	}
+}
+
+// ComputeSpecPriceClient is a client for the ComputeSpecPrice schema.
+type ComputeSpecPriceClient struct {
+	config
+}
+
+// NewComputeSpecPriceClient returns a client for the ComputeSpecPrice from the given config.
+func NewComputeSpecPriceClient(c config) *ComputeSpecPriceClient {
+	return &ComputeSpecPriceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `computespecprice.Hooks(f(g(h())))`.
+func (c *ComputeSpecPriceClient) Use(hooks ...Hook) {
+	c.hooks.ComputeSpecPrice = append(c.hooks.ComputeSpecPrice, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `computespecprice.Intercept(f(g(h())))`.
+func (c *ComputeSpecPriceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ComputeSpecPrice = append(c.inters.ComputeSpecPrice, interceptors...)
+}
+
+// Create returns a builder for creating a ComputeSpecPrice entity.
+func (c *ComputeSpecPriceClient) Create() *ComputeSpecPriceCreate {
+	mutation := newComputeSpecPriceMutation(c.config, OpCreate)
+	return &ComputeSpecPriceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ComputeSpecPrice entities.
+func (c *ComputeSpecPriceClient) CreateBulk(builders ...*ComputeSpecPriceCreate) *ComputeSpecPriceCreateBulk {
+	return &ComputeSpecPriceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Update() *ComputeSpecPriceUpdate {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdate)
+	return &ComputeSpecPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ComputeSpecPriceClient) UpdateOne(csp *ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPrice(csp))
+	return &ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ComputeSpecPriceClient) UpdateOneID(id int32) *ComputeSpecPriceUpdateOne {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPriceID(id))
+	return &ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Delete() *ComputeSpecPriceDelete {
+	mutation := newComputeSpecPriceMutation(c.config, OpDelete)
+	return &ComputeSpecPriceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ComputeSpecPriceClient) DeleteOne(csp *ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
+	return c.DeleteOneID(csp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ComputeSpecPriceClient) DeleteOneID(id int32) *ComputeSpecPriceDeleteOne {
+	builder := c.Delete().Where(computespecprice.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ComputeSpecPriceDeleteOne{builder}
+}
+
+// Query returns a query builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Query() *ComputeSpecPriceQuery {
+	return &ComputeSpecPriceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeComputeSpecPrice},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ComputeSpecPrice entity by its id.
+func (c *ComputeSpecPriceClient) Get(ctx context.Context, id int32) (*ComputeSpecPrice, error) {
+	return c.Query().Where(computespecprice.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ComputeSpecPriceClient) GetX(ctx context.Context, id int32) *ComputeSpecPrice {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ComputeSpecPriceClient) Hooks() []Hook {
+	return c.hooks.ComputeSpecPrice
+}
+
+// Interceptors returns the client interceptors.
+func (c *ComputeSpecPriceClient) Interceptors() []Interceptor {
+	return c.inters.ComputeSpecPrice
+}
+
+func (c *ComputeSpecPriceClient) mutate(ctx context.Context, m *ComputeSpecPriceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ComputeSpecPriceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ComputeSpecPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ComputeSpecPriceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ComputeSpecPrice mutation op: %q", m.Op())
 	}
 }
 
@@ -3256,17 +3384,17 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec, Cycle,
-		CycleOrder, CycleRecharge, CycleRedeemCode, CycleRenewal, CycleTransaction,
-		DomainBinding, Employee, Gateway, GatewayPort, NetworkMapping, S3Bucket,
-		S3User, Script, ScriptExecutionRecord, Storage, StorageProvider, Task,
-		User []ent.Hook
+		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec,
+		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
+		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
+		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
+		StorageProvider, Task, User []ent.Hook
 	}
 	inters struct {
-		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec, Cycle,
-		CycleOrder, CycleRecharge, CycleRedeemCode, CycleRenewal, CycleTransaction,
-		DomainBinding, Employee, Gateway, GatewayPort, NetworkMapping, S3Bucket,
-		S3User, Script, ScriptExecutionRecord, Storage, StorageProvider, Task,
-		User []ent.Interceptor
+		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec,
+		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
+		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
+		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
+		StorageProvider, Task, User []ent.Interceptor
 	}
 )

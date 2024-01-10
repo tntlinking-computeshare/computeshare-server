@@ -90,6 +90,20 @@ func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.Re
 	}, err
 }
 
+func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBalanceRequest) (*pb.GetCycleBalanceReply, error) {
+	//claim, ok := global.FromContext(ctx)
+	//if !ok {
+	//	return nil, errors.New("unauthorized")
+	//}
+	//userId := claim.GetUserId()
+	//redeemCycle, err := o.orderUseCase.GetCycleBalance(ctx, userId)
+	return &pb.GetCycleBalanceReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    "",
+	}, nil
+}
+
 func (o *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) (*pb.OrderListReply, error) {
 	pageData, err := o.orderUseCase.OrderList(ctx, req.Page, req.Size)
 	if err != nil {
@@ -228,11 +242,33 @@ func (o *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewa
 	if err != nil {
 		return nil, err
 	}
-	renewal, err := o.cycleRenewalUseCase.Get(ctx, renewalId)
+	detail, err := o.cycleRenewalUseCase.Detail(ctx, renewalId)
+	dueTime := ""
+	if detail.DueTime != nil {
+		dueTime = strconv.Itoa(int(detail.DueTime.UnixMilli()))
+	}
+	renewalTime := ""
+	if detail.RenewalTime != nil {
+		renewalTime = strconv.Itoa(int(detail.RenewalTime.UnixMilli()))
+	}
 	return &pb.CycleRenewalGetReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data:    o.toCycleRenewalBiz(renewal, 0),
+		Data: &pb.CycleRenewalDetailInfo{
+			Id:           detail.ID.String(),
+			ProductName:  detail.ProductName,
+			ProductDesc:  detail.ProductDesc,
+			State:        int32(detail.State),
+			DueTime:      dueTime,
+			RenewalTime:  renewalTime,
+			InstanceId:   detail.InstanceId.String(),
+			InstanceName: detail.InstanceName,
+			InstanceSpec: detail.InstanceSpec,
+			Image:        detail.Image,
+			ExtendPrice:  float32(detail.ExtendPrice),
+			ExtendDay:    int64(detail.ExtendDay),
+			Balance:      detail.Balance,
+		},
 	}, err
 }
 

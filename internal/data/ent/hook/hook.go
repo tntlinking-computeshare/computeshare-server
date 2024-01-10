@@ -69,6 +69,18 @@ func (f ComputeSpecFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value,
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeSpecMutation", m)
 }
 
+// The ComputeSpecPriceFunc type is an adapter to allow the use of ordinary
+// function as ComputeSpecPrice mutator.
+type ComputeSpecPriceFunc func(context.Context, *ent.ComputeSpecPriceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ComputeSpecPriceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ComputeSpecPriceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ComputeSpecPriceMutation", m)
+}
+
 // The CycleFunc type is an adapter to allow the use of ordinary
 // function as Cycle mutator.
 type CycleFunc func(context.Context, *ent.CycleMutation) (ent.Value, error)

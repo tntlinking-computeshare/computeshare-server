@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
@@ -108,6 +109,53 @@ func (c *CycleRenewalUseCase) Get(ctx context.Context, renewalId uuid.UUID) (*Cy
 	return c.repo.GetById(ctx, renewalId)
 }
 
+func (c *CycleRenewalUseCase) Detail(ctx context.Context, renewalId uuid.UUID) (*CycleRenewalDetail, error) {
+
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New(400, "unauthorized", "unauthorized")
+	}
+
+	userId := claim.GetUserId()
+
+	renewal, err := c.repo.GetById(ctx, renewalId)
+	if err != nil {
+		return nil, err
+	}
+
+	cycle, err := c.cycleRepo.FindByUserID(ctx, userId)
+	if err != nil {
+		return nil, err
+	}
+	balance, _ := cycle.Cycle.Float64()
+
+	instance, err := c.computeInstanceRepo.Get(ctx, renewal.ResourceID)
+	if err != nil {
+		return nil, err
+	}
+
+	detail := &CycleRenewalDetail{
+		ID:           renewal.ID,
+		FkUserID:     renewal.FkUserID,
+		ResourceID:   renewal.ResourceID,
+		ResourceType: renewal.ResourceType,
+		ProductName:  renewal.ProductName,
+		ProductDesc:  renewal.ProductDesc,
+		State:        renewal.State,
+		ExtendDay:    renewal.ExtendDay,
+		ExtendPrice:  renewal.ExtendPrice,
+		DueTime:      renewal.DueTime,
+		RenewalTime:  renewal.RenewalTime,
+		AutoRenewal:  renewal.AutoRenewal,
+		InstanceId:   instance.ID,
+		InstanceName: instance.Name,
+		InstanceSpec: fmt.Sprintf("%s核 %sGB", instance.Core, instance.Memory),
+		Image:        instance.Image,
+		Balance:      float32(balance),
+	}
+	return detail, nil
+}
+
 func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UUID) error {
 
 	claim, ok := global.FromContext(ctx)
@@ -177,6 +225,9 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	}
 
 	cycleTransaction, err = c.cycleTransactionRepo.Create(ctx, cycleTransaction)
+	if err != nil {
+		return err
+	}
 
 	// 记录余额变动
 	cycle.Cycle = cycle.Cycle.Sub(extendPrice)

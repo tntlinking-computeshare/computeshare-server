@@ -78,6 +78,7 @@ func (crs *computeInstanceRepo) Delete(ctx context.Context, id uuid.UUID) error 
 
 func (crs *computeInstanceRepo) Update(ctx context.Context, id uuid.UUID, instance *biz.ComputeInstance) error {
 	return crs.data.getComputeInstance(ctx).UpdateOneID(id).
+		SetName(instance.Name).
 		SetStatus(instance.Status).
 		SetAgentID(instance.AgentId).
 		SetContainerID(instance.ContainerID).
