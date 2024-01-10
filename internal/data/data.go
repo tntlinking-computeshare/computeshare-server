@@ -48,6 +48,8 @@ var ProviderSet = wire.NewSet(
 	NewCycleTransactionRepo,
 	NewCycleRechargeRepo,
 	NewCycleRenewalRepo,
+	NewCycleRedeemCodeRepo,
+	NewAlipayOrderRollbackRepo,
 )
 
 // Data .
@@ -234,6 +236,22 @@ func (d *Data) getCycleRenewal(ctx context.Context) *ent.CycleRenewalClient {
 		return tx.CycleRenewal
 	}
 	return d.db.CycleRenewal
+}
+
+func (d *Data) getCycleRedeemCode(ctx context.Context) *ent.CycleRedeemCodeClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.CycleRedeemCode
+	}
+	return d.db.CycleRedeemCode
+}
+
+func (d *Data) getAlipayOrderRollback(ctx context.Context) *ent.AlipayOrderRollbackClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.AlipayOrderRollback
+	}
+	return d.db.AlipayOrderRollback
 }
 
 func (d *Data) getComputeSpecPrice(ctx context.Context) *ent.ComputeSpecPriceClient {

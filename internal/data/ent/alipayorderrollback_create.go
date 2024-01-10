@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -187,6 +188,18 @@ func (aorc *AlipayOrderRollbackCreate) SetGmtClose(s string) *AlipayOrderRollbac
 	return aorc
 }
 
+// SetCreateTime sets the "create_time" field.
+func (aorc *AlipayOrderRollbackCreate) SetCreateTime(t time.Time) *AlipayOrderRollbackCreate {
+	aorc.mutation.SetCreateTime(t)
+	return aorc
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (aorc *AlipayOrderRollbackCreate) SetUpdateTime(t time.Time) *AlipayOrderRollbackCreate {
+	aorc.mutation.SetUpdateTime(t)
+	return aorc
+}
+
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
 func (aorc *AlipayOrderRollbackCreate) Mutation() *AlipayOrderRollbackMutation {
 	return aorc.mutation
@@ -304,6 +317,12 @@ func (aorc *AlipayOrderRollbackCreate) check() error {
 	}
 	if _, ok := aorc.mutation.GmtClose(); !ok {
 		return &ValidationError{Name: "gmt_close", err: errors.New(`ent: missing required field "AlipayOrderRollback.gmt_close"`)}
+	}
+	if _, ok := aorc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "AlipayOrderRollback.create_time"`)}
+	}
+	if _, ok := aorc.mutation.UpdateTime(); !ok {
+		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "AlipayOrderRollback.update_time"`)}
 	}
 	return nil
 }
@@ -442,6 +461,14 @@ func (aorc *AlipayOrderRollbackCreate) createSpec() (*AlipayOrderRollback, *sqlg
 	if value, ok := aorc.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
 		_node.GmtClose = value
+	}
+	if value, ok := aorc.mutation.CreateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
+	}
+	if value, ok := aorc.mutation.UpdateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
+		_node.UpdateTime = value
 	}
 	return _node, _spec
 }

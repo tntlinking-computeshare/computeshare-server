@@ -38,7 +38,7 @@ type CycleRecharge struct {
 	BuyCycle float64 `json:"buy_cycle,omitempty"`
 	// 创建时间
 	CreateTime time.Time `json:"create_time,omitempty"`
-	// 创建时间
+	// 更新时间
 	UpdateTime   time.Time `json:"update_time,omitempty"`
 	selectValues sql.SelectValues
 }

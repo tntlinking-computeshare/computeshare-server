@@ -25,6 +25,7 @@ const OperationOrderCycleRenewalDetail = "/api.server.order.v1.Order/CycleRenewa
 const OperationOrderCycleRenewalList = "/api.server.order.v1.Order/CycleRenewalList"
 const OperationOrderCycleRenewalOpen = "/api.server.order.v1.Order/CycleRenewalOpen"
 const OperationOrderCycleTransactionList = "/api.server.order.v1.Order/CycleTransactionList"
+const OperationOrderGetCycleBalance = "/api.server.order.v1.Order/GetCycleBalance"
 const OperationOrderManualRenew = "/api.server.order.v1.Order/ManualRenew"
 const OperationOrderOrderList = "/api.server.order.v1.Order/OrderList"
 const OperationOrderRechargeCycleByAlipay = "/api.server.order.v1.Order/RechargeCycleByAlipay"
@@ -37,6 +38,7 @@ type OrderHTTPServer interface {
 	CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error)
 	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
+	GetCycleBalance(context.Context, *GetCycleBalanceRequest) (*GetCycleBalanceReply, error)
 	ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error)
@@ -48,6 +50,7 @@ func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r.POST("/v1/alipay/pay/notify", _Order_AlipayPayNotify0_HTTP_Handler(srv))
 	r.POST("/v1/cycle/recharge", _Order_RechargeCycleByAlipay0_HTTP_Handler(srv))
 	r.POST("/v1/cycle/redeem", _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv))
+	r.GET("/v1/cycle/balance", _Order_GetCycleBalance0_HTTP_Handler(srv))
 	r.GET("/v1/order", _Order_OrderList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/transaction", _Order_CycleTransactionList0_HTTP_Handler(srv))
 	r.GET("/v1/cycle/renewal/{id}", _Order_CycleRenewalDetail0_HTTP_Handler(srv))
@@ -119,6 +122,25 @@ func _Order_RechargeCycleByRedeemCode0_HTTP_Handler(srv OrderHTTPServer) func(ct
 			return err
 		}
 		reply := out.(*RechargeCycleByRedeemCodeReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Order_GetCycleBalance0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetCycleBalanceRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderGetCycleBalance)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetCycleBalance(ctx, req.(*GetCycleBalanceRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetCycleBalanceReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -284,6 +306,7 @@ type OrderHTTPClient interface {
 	CycleRenewalList(ctx context.Context, req *CycleRenewalListRequest, opts ...http.CallOption) (rsp *CycleRenewalListReply, err error)
 	CycleRenewalOpen(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
 	CycleTransactionList(ctx context.Context, req *CycleTransactionListRequest, opts ...http.CallOption) (rsp *CycleTransactionListReply, err error)
+	GetCycleBalance(ctx context.Context, req *GetCycleBalanceRequest, opts ...http.CallOption) (rsp *GetCycleBalanceReply, err error)
 	ManualRenew(ctx context.Context, req *ManualRenewRequest, opts ...http.CallOption) (rsp *ManualRenewReply, err error)
 	OrderList(ctx context.Context, req *OrderListRequest, opts ...http.CallOption) (rsp *OrderListReply, err error)
 	RechargeCycleByAlipay(ctx context.Context, req *RechargeCycleByAlipayRequest, opts ...http.CallOption) (rsp *RechargeCycleByAlipayReply, err error)
@@ -368,6 +391,19 @@ func (c *OrderHTTPClientImpl) CycleTransactionList(ctx context.Context, in *Cycl
 	pattern := "/v1/cycle/transaction"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationOrderCycleTransactionList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) GetCycleBalance(ctx context.Context, in *GetCycleBalanceRequest, opts ...http.CallOption) (*GetCycleBalanceReply, error) {
+	var out GetCycleBalanceReply
+	pattern := "/v1/cycle/balance"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationOrderGetCycleBalance))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

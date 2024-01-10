@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
@@ -35,22 +36,12 @@ func NewOrderService(logger log.Logger,
 	}
 }
 
-func (s *OrderService) AlipayPayNotify(_ context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
-	if req.TradeStatus == "WAIT_BUYER_PAY" {
-		log.Log(log.LevelInfo, "交易创建，等待买家付款。")
-		log.Log(log.LevelInfo, req)
-	} else if req.TradeStatus == "TRADE_CLOSED" {
-		log.Log(log.LevelInfo, "未付款交易超时关闭，或支付完成后全额退款。")
-		log.Log(log.LevelInfo, req)
-	} else if req.TradeStatus == "TRADE_SUCCESS" {
-		log.Log(log.LevelInfo, "交易支付成功。")
-		log.Log(log.LevelInfo, req)
-	} else if req.TradeStatus == "TRADE_FINISHED" {
-		log.Log(log.LevelInfo, "交易结束，不可退款。")
-		log.Log(log.LevelInfo, req)
-	} else {
-		log.Log(log.LevelInfo, "未知的交易状态"+req.TradeStatus)
-		log.Log(log.LevelInfo, req)
+func (o *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
+	var alipayOrderRollback biz.AlipayOrderRollback
+	copier.Copy(alipayOrderRollback, req)
+	err := o.orderUseCase.AlipayPayNotify(ctx, alipayOrderRollback)
+	if err != nil {
+		return nil, err
 	}
 	return &pb.AlipayPayNotifyReply{
 		Code:    200,
@@ -86,10 +77,30 @@ func (o *OrderService) RechargeCycleByAlipay(ctx context.Context, req *pb.Rechar
 }
 
 func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.RechargeCycleByRedeemCodeRequest) (*pb.RechargeCycleByRedeemCodeReply, error) {
-
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	redeemCycle, err := o.orderUseCase.RechargeCycleByRedeemCode(ctx, userId, req.RedeemCode)
 	return &pb.RechargeCycleByRedeemCodeReply{
 		Code:    200,
 		Message: SUCCESS,
+		Data:    redeemCycle,
+	}, err
+}
+
+func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBalanceRequest) (*pb.GetCycleBalanceReply, error) {
+	//claim, ok := global.FromContext(ctx)
+	//if !ok {
+	//	return nil, errors.New("unauthorized")
+	//}
+	//userId := claim.GetUserId()
+	//redeemCycle, err := o.orderUseCase.GetCycleBalance(ctx, userId)
+	return &pb.GetCycleBalanceReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    "",
 	}, nil
 }
 
@@ -160,8 +171,8 @@ func (o *OrderService) toCycleTransactionBiz(item *biz.CycleTransaction, _ int) 
 	}
 }
 
-func (s *OrderService) CycleRenewalList(ctx context.Context, req *pb.CycleRenewalListRequest) (*pb.CycleRenewalListReply, error) {
-	pageData, err := s.cycleRenewalUseCase.PageByUser(ctx, req.Page, req.Size)
+func (o *OrderService) CycleRenewalList(ctx context.Context, req *pb.CycleRenewalListRequest) (*pb.CycleRenewalListReply, error) {
+	pageData, err := o.cycleRenewalUseCase.PageByUser(ctx, req.Page, req.Size)
 	if err != nil {
 		return nil, err
 	}
@@ -173,12 +184,12 @@ func (s *OrderService) CycleRenewalList(ctx context.Context, req *pb.CycleRenewa
 			Total: pageData.Total,
 			Page:  pageData.Page,
 			Size:  pageData.Size,
-			Data:  lo.Map(pageData.Data, s.toCycleRenewalBiz),
+			Data:  lo.Map(pageData.Data, o.toCycleRenewalBiz),
 		},
 	}, err
 }
 
-func (s *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.CycleRenewalInfo {
+func (o *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.CycleRenewalInfo {
 	if item == nil {
 		return nil
 	}
@@ -201,37 +212,37 @@ func (s *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.Cycl
 	}
 }
 
-func (s *OrderService) CycleRenewalOpen(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
+func (o *OrderService) CycleRenewalOpen(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
-	err = s.cycleRenewalUseCase.OpenRenewal(ctx, renewalId)
+	err = o.cycleRenewalUseCase.OpenRenewal(ctx, renewalId)
 	return &pb.CycleRenewalBaseReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, err
 }
 
-func (s *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
+func (o *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
 
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
-	err = s.cycleRenewalUseCase.CloseRenewal(ctx, renewalId)
+	err = o.cycleRenewalUseCase.CloseRenewal(ctx, renewalId)
 	return &pb.CycleRenewalBaseReply{
 		Code:    200,
 		Message: SUCCESS,
 	}, err
 }
 
-func (s *OrderService) CycleRenewalDetail(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
+func (o *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
-	detail, err := s.cycleRenewalUseCase.Detail(ctx, renewalId)
+	detail, err := o.cycleRenewalUseCase.Detail(ctx, renewalId)
 	dueTime := ""
 	if detail.DueTime != nil {
 		dueTime = strconv.Itoa(int(detail.DueTime.UnixMilli()))
@@ -261,12 +272,12 @@ func (s *OrderService) CycleRenewalDetail(ctx context.Context, req *pb.CycleRene
 	}, err
 }
 
-func (s *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewRequest) (*pb.ManualRenewReply, error) {
+func (o *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewRequest) (*pb.ManualRenewReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
 	}
-	err = s.cycleRenewalUseCase.ManualRenew(ctx, renewalId)
+	err = o.cycleRenewalUseCase.ManualRenew(ctx, renewalId)
 	return &pb.ManualRenewReply{
 		Code:    200,
 		Message: SUCCESS,

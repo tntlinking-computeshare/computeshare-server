@@ -6,6 +6,7 @@ const (
 	Alipay PaymentMethod = iota + 1
 	Wechat
 	BankCard
+	RedemptionCode
 )
 
 type PayOrderState string
@@ -47,4 +48,20 @@ const (
 	RenewalState_IN_SERVICE RenewalState = iota
 	// RenewalState_STOP 已停止
 	RenewalState_STOP
+)
+
+type Operation string
+
+const (
+	RentingFileStorage       Operation = "租用文件存储"
+	RentingCloudServers      Operation = "租用云服务器"
+	RedemptionCodeRedemption Operation = "兑换码兑换"
+	AlipayRecharge           Operation = "支付宝充值"
+)
+
+type OrderSymbol string
+
+const (
+	Recharge    OrderSymbol = "+"
+	Consumption OrderSymbol = "-"
 )

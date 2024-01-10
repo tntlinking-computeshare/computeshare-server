@@ -3,6 +3,8 @@
 package alipayorderrollback
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -190,6 +192,16 @@ func GmtPayment(v string) predicate.AlipayOrderRollback {
 // GmtClose applies equality check predicate on the "gmt_close" field. It's identical to GmtCloseEQ.
 func GmtClose(v string) predicate.AlipayOrderRollback {
 	return predicate.AlipayOrderRollback(sql.FieldEQ(FieldGmtClose, v))
+}
+
+// CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
+func CreateTime(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// UpdateTime applies equality check predicate on the "update_time" field. It's identical to UpdateTimeEQ.
+func UpdateTime(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldEQ(FieldUpdateTime, v))
 }
 
 // NotifyIDEQ applies the EQ predicate on the "notify_id" field.
@@ -2010,6 +2022,86 @@ func GmtCloseEqualFold(v string) predicate.AlipayOrderRollback {
 // GmtCloseContainsFold applies the ContainsFold predicate on the "gmt_close" field.
 func GmtCloseContainsFold(v string) predicate.AlipayOrderRollback {
 	return predicate.AlipayOrderRollback(sql.FieldContainsFold(FieldGmtClose, v))
+}
+
+// CreateTimeEQ applies the EQ predicate on the "create_time" field.
+func CreateTimeEQ(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// CreateTimeNEQ applies the NEQ predicate on the "create_time" field.
+func CreateTimeNEQ(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldNEQ(FieldCreateTime, v))
+}
+
+// CreateTimeIn applies the In predicate on the "create_time" field.
+func CreateTimeIn(vs ...time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeNotIn applies the NotIn predicate on the "create_time" field.
+func CreateTimeNotIn(vs ...time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldNotIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeGT applies the GT predicate on the "create_time" field.
+func CreateTimeGT(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldGT(FieldCreateTime, v))
+}
+
+// CreateTimeGTE applies the GTE predicate on the "create_time" field.
+func CreateTimeGTE(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldGTE(FieldCreateTime, v))
+}
+
+// CreateTimeLT applies the LT predicate on the "create_time" field.
+func CreateTimeLT(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldLT(FieldCreateTime, v))
+}
+
+// CreateTimeLTE applies the LTE predicate on the "create_time" field.
+func CreateTimeLTE(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldLTE(FieldCreateTime, v))
+}
+
+// UpdateTimeEQ applies the EQ predicate on the "update_time" field.
+func UpdateTimeEQ(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeNEQ applies the NEQ predicate on the "update_time" field.
+func UpdateTimeNEQ(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldNEQ(FieldUpdateTime, v))
+}
+
+// UpdateTimeIn applies the In predicate on the "update_time" field.
+func UpdateTimeIn(vs ...time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeNotIn applies the NotIn predicate on the "update_time" field.
+func UpdateTimeNotIn(vs ...time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldNotIn(FieldUpdateTime, vs...))
+}
+
+// UpdateTimeGT applies the GT predicate on the "update_time" field.
+func UpdateTimeGT(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldGT(FieldUpdateTime, v))
+}
+
+// UpdateTimeGTE applies the GTE predicate on the "update_time" field.
+func UpdateTimeGTE(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldGTE(FieldUpdateTime, v))
+}
+
+// UpdateTimeLT applies the LT predicate on the "update_time" field.
+func UpdateTimeLT(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldLT(FieldUpdateTime, v))
+}
+
+// UpdateTimeLTE applies the LTE predicate on the "update_time" field.
+func UpdateTimeLTE(v time.Time) predicate.AlipayOrderRollback {
+	return predicate.AlipayOrderRollback(sql.FieldLTE(FieldUpdateTime, v))
 }
 
 // And groups predicates with the AND operator between them.

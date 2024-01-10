@@ -1010,6 +1010,8 @@ type AlipayOrderRollbackMutation struct {
 	gmt_create          *string
 	gmt_payment         *string
 	gmt_close           *string
+	create_time         *time.Time
+	update_time         *time.Time
 	clearedFields       map[string]struct{}
 	done                bool
 	oldValue            func(context.Context) (*AlipayOrderRollback, error)
@@ -2122,6 +2124,78 @@ func (m *AlipayOrderRollbackMutation) ResetGmtClose() {
 	m.gmt_close = nil
 }
 
+// SetCreateTime sets the "create_time" field.
+func (m *AlipayOrderRollbackMutation) SetCreateTime(t time.Time) {
+	m.create_time = &t
+}
+
+// CreateTime returns the value of the "create_time" field in the mutation.
+func (m *AlipayOrderRollbackMutation) CreateTime() (r time.Time, exists bool) {
+	v := m.create_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateTime returns the old "create_time" field's value of the AlipayOrderRollback entity.
+// If the AlipayOrderRollback object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AlipayOrderRollbackMutation) OldCreateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateTime: %w", err)
+	}
+	return oldValue.CreateTime, nil
+}
+
+// ResetCreateTime resets all changes to the "create_time" field.
+func (m *AlipayOrderRollbackMutation) ResetCreateTime() {
+	m.create_time = nil
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (m *AlipayOrderRollbackMutation) SetUpdateTime(t time.Time) {
+	m.update_time = &t
+}
+
+// UpdateTime returns the value of the "update_time" field in the mutation.
+func (m *AlipayOrderRollbackMutation) UpdateTime() (r time.Time, exists bool) {
+	v := m.update_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateTime returns the old "update_time" field's value of the AlipayOrderRollback entity.
+// If the AlipayOrderRollback object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AlipayOrderRollbackMutation) OldUpdateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateTime: %w", err)
+	}
+	return oldValue.UpdateTime, nil
+}
+
+// ResetUpdateTime resets all changes to the "update_time" field.
+func (m *AlipayOrderRollbackMutation) ResetUpdateTime() {
+	m.update_time = nil
+}
+
 // Where appends a list predicates to the AlipayOrderRollbackMutation builder.
 func (m *AlipayOrderRollbackMutation) Where(ps ...predicate.AlipayOrderRollback) {
 	m.predicates = append(m.predicates, ps...)
@@ -2156,7 +2230,7 @@ func (m *AlipayOrderRollbackMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AlipayOrderRollbackMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 30)
 	if m.notify_id != nil {
 		fields = append(fields, alipayorderrollback.FieldNotifyID)
 	}
@@ -2241,6 +2315,12 @@ func (m *AlipayOrderRollbackMutation) Fields() []string {
 	if m.gmt_close != nil {
 		fields = append(fields, alipayorderrollback.FieldGmtClose)
 	}
+	if m.create_time != nil {
+		fields = append(fields, alipayorderrollback.FieldCreateTime)
+	}
+	if m.update_time != nil {
+		fields = append(fields, alipayorderrollback.FieldUpdateTime)
+	}
 	return fields
 }
 
@@ -2305,6 +2385,10 @@ func (m *AlipayOrderRollbackMutation) Field(name string) (ent.Value, bool) {
 		return m.GmtPayment()
 	case alipayorderrollback.FieldGmtClose:
 		return m.GmtClose()
+	case alipayorderrollback.FieldCreateTime:
+		return m.CreateTime()
+	case alipayorderrollback.FieldUpdateTime:
+		return m.UpdateTime()
 	}
 	return nil, false
 }
@@ -2370,6 +2454,10 @@ func (m *AlipayOrderRollbackMutation) OldField(ctx context.Context, name string)
 		return m.OldGmtPayment(ctx)
 	case alipayorderrollback.FieldGmtClose:
 		return m.OldGmtClose(ctx)
+	case alipayorderrollback.FieldCreateTime:
+		return m.OldCreateTime(ctx)
+	case alipayorderrollback.FieldUpdateTime:
+		return m.OldUpdateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown AlipayOrderRollback field %s", name)
 }
@@ -2575,6 +2663,20 @@ func (m *AlipayOrderRollbackMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetGmtClose(v)
 		return nil
+	case alipayorderrollback.FieldCreateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateTime(v)
+		return nil
+	case alipayorderrollback.FieldUpdateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateTime(v)
+		return nil
 	}
 	return fmt.Errorf("unknown AlipayOrderRollback field %s", name)
 }
@@ -2707,6 +2809,12 @@ func (m *AlipayOrderRollbackMutation) ResetField(name string) error {
 		return nil
 	case alipayorderrollback.FieldGmtClose:
 		m.ResetGmtClose()
+		return nil
+	case alipayorderrollback.FieldCreateTime:
+		m.ResetCreateTime()
+		return nil
+	case alipayorderrollback.FieldUpdateTime:
+		m.ResetUpdateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown AlipayOrderRollback field %s", name)
