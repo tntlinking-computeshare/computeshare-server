@@ -73,6 +73,7 @@ type TaskUseCase struct {
 	networkMappingRepo     NetworkMappingRepo
 	computeInstanceRepo    ComputeInstanceRepo
 	storageProviderUseCase *StorageProviderUseCase
+	cycleRenewalRepo       CycleRenewalRepo
 	log                    *log.Helper
 }
 
@@ -80,12 +81,14 @@ func NewTaskUseCase(repo TaskRepo,
 	networkMappingRepo NetworkMappingRepo,
 	computeInstanceRepo ComputeInstanceRepo,
 	storageProviderUseCase *StorageProviderUseCase,
+	cycleRenewalRepo CycleRenewalRepo,
 	logger log.Logger) *TaskUseCase {
 	return &TaskUseCase{
 		repo:                   repo,
 		networkMappingRepo:     networkMappingRepo,
 		computeInstanceRepo:    computeInstanceRepo,
 		storageProviderUseCase: storageProviderUseCase,
+		cycleRenewalRepo:       cycleRenewalRepo,
 		log:                    log.NewHelper(logger),
 	}
 }
@@ -229,6 +232,13 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleted)
 			_ = m.computeInstanceRepo.Delete(ctx, instanceId)
+			renewal, err := m.cycleRenewalRepo.QueryByResourceId(ctx, instanceId)
+			if err != nil {
+				renewal.State = int8(consts.RenewalState_STOP)
+				renewal.RenewalTime = nil
+				renewal.DueTime = nil
+				_ = m.cycleRenewalRepo.Update(ctx, renewal.ID, renewal)
+			}
 		case queue.TaskCmd_VM_START:
 			instanceId, err := getInstanceId(param)
 			if err != nil {

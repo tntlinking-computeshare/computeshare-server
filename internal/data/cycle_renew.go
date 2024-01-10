@@ -144,3 +144,9 @@ func (r *cycleRenewalRepo) QueryDailyRenew(ctx context.Context) ([]*biz.CycleRen
 
 	return lo.Map(list, r.toBiz), err
 }
+
+func (r *cycleRenewalRepo) QueryByResourceId(ctx context.Context, resourceId uuid.UUID) (*biz.CycleRenewal, error) {
+	tx := r.data.getCycleRenewal(ctx)
+	entity, err := tx.Query().Where(cyclerenewal.ResourceID(resourceId)).First(ctx)
+	return r.toBiz(entity, 0), err
+}

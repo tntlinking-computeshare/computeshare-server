@@ -9,6 +9,7 @@ import (
 	global2 "github.com/mohaijiang/computeshare-server/api/global"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/shopspring/decimal"
 	"time"
 )
@@ -19,6 +20,7 @@ type CycleRenewalRepo interface {
 	Update(ctx context.Context, id uuid.UUID, renewal *CycleRenewal) error
 	PageByUserId(ctx context.Context, id uuid.UUID, page, size int) (*global2.Page[*CycleRenewal], error)
 	QueryDailyRenew(ctx context.Context) ([]*CycleRenewal, error)
+	QueryByResourceId(ctx context.Context, instanceId uuid.UUID) (*CycleRenewal, error)
 }
 
 type CycleRenewalUseCase struct {
@@ -187,19 +189,23 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	renewal, err := c.repo.GetById(ctx, renewalId)
 
 	if err != nil {
-		return errors.New(400, "not_found", "renewal not exists")
+		return errors.New(400, "not_found", "续费内容不存在")
+	}
+
+	if renewal.State == int8(consts.RenewalState_STOP) {
+		return errors.New(400, "cannot_renew", "已停服,无法续费")
 	}
 
 	cycle, err := c.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {
-		return errors.New(400, "not_found", "cycle not exists")
+		return errors.New(400, "not_found", "余额不足")
 	}
 
 	// 判断余额
 	extendPrice := decimal.NewFromFloat(renewal.ExtendPrice)
 
 	if cycle.Cycle.LessThan(extendPrice) {
-		return errors.New(400, "insufficient balance", "Insufficient balance")
+		return errors.New(400, "insufficient balance", "余额不足")
 	}
 
 	var orderNo string
