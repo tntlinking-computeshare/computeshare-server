@@ -38,7 +38,7 @@ func NewOrderService(logger log.Logger,
 
 func (o *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
 	var alipayOrderRollback biz.AlipayOrderRollback
-	copier.Copy(alipayOrderRollback, req)
+	copier.Copy(&alipayOrderRollback, &req)
 	err := o.orderUseCase.AlipayPayNotify(ctx, alipayOrderRollback)
 	if err != nil {
 		return nil, err
@@ -101,6 +101,19 @@ func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBala
 		Code:    200,
 		Message: SUCCESS,
 		Data:    redeemCycle,
+	}, err
+}
+
+func (o *OrderService) GetRechargeState(ctx context.Context, req *pb.GetRechargeStateRequest) (*pb.GetRechargeStateReply, error) {
+	_, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	state, err := o.orderUseCase.GetRechargeState(ctx, req.GetOutTradeNo())
+	return &pb.GetRechargeStateReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    state,
 	}, err
 }
 

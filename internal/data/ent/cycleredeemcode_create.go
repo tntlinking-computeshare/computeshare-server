@@ -27,6 +27,14 @@ func (crcc *CycleRedeemCodeCreate) SetFkUserID(u uuid.UUID) *CycleRedeemCodeCrea
 	return crcc
 }
 
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (crcc *CycleRedeemCodeCreate) SetNillableFkUserID(u *uuid.UUID) *CycleRedeemCodeCreate {
+	if u != nil {
+		crcc.SetFkUserID(*u)
+	}
+	return crcc
+}
+
 // SetRedeemCode sets the "redeem_code" field.
 func (crcc *CycleRedeemCodeCreate) SetRedeemCode(s string) *CycleRedeemCodeCreate {
 	crcc.mutation.SetRedeemCode(s)
@@ -114,9 +122,6 @@ func (crcc *CycleRedeemCodeCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (crcc *CycleRedeemCodeCreate) check() error {
-	if _, ok := crcc.mutation.FkUserID(); !ok {
-		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "CycleRedeemCode.fk_user_id"`)}
-	}
 	if _, ok := crcc.mutation.RedeemCode(); !ok {
 		return &ValidationError{Name: "redeem_code", err: errors.New(`ent: missing required field "CycleRedeemCode.redeem_code"`)}
 	}

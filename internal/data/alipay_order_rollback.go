@@ -34,7 +34,7 @@ func (a *alipayOrderRollbackRepo) SaveAlipayOrderRollback(ctx context.Context, r
 	orderRollback, err := a.data.getAlipayOrderRollback(ctx).Query().Where(alipayorderrollback.OutTradeNo(rollback.OutTradeNo)).First(ctx)
 	if err == nil && orderRollback != nil {
 		err := a.data.getAlipayOrderRollback(ctx).UpdateOne(orderRollback).SetNotifyID(rollback.NotifyID).SetNotifyTime(rollback.NotifyType).
-			SetNotifyTime(rollback.NotifyTime).SetCharset(rollback.Charset).SetVersion(rollback.Version).SetSignType(rollback.SignType).
+			SetNotifyType(rollback.NotifyType).SetCharset(rollback.Charset).SetVersion(rollback.Version).SetSignType(rollback.SignType).
 			SetSign(rollback.Sign).SetFundBillList(rollback.FundBillList).SetReceiptAmount(rollback.ReceiptAmount).SetInvoiceAmount(rollback.InvoiceAmount).
 			SetBuyerPayAmount(rollback.BuyerPayAmount).SetPointAmount(rollback.PointAmount).SetVoucherDetailList(rollback.VoucherDetailList).
 			SetPassbackParams(rollback.PassbackParams).SetTradeNo(rollback.TradeNo).SetAppID(rollback.AppID).SetOutTradeNo(rollback.OutTradeNo).
@@ -44,9 +44,9 @@ func (a *alipayOrderRollbackRepo) SaveAlipayOrderRollback(ctx context.Context, r
 		if err != nil {
 			return nil, err
 		}
-	} else if err != nil && orderRollback == nil {
+	} else if ent.IsNotFound(err) && orderRollback == nil {
 		err := a.data.getAlipayOrderRollback(ctx).Create().SetNotifyID(rollback.NotifyID).SetNotifyTime(rollback.NotifyType).
-			SetNotifyTime(rollback.NotifyTime).SetCharset(rollback.Charset).SetVersion(rollback.Version).SetSignType(rollback.SignType).
+			SetNotifyType(rollback.NotifyType).SetCharset(rollback.Charset).SetVersion(rollback.Version).SetSignType(rollback.SignType).
 			SetSign(rollback.Sign).SetFundBillList(rollback.FundBillList).SetReceiptAmount(rollback.ReceiptAmount).SetInvoiceAmount(rollback.InvoiceAmount).
 			SetBuyerPayAmount(rollback.BuyerPayAmount).SetPointAmount(rollback.PointAmount).SetVoucherDetailList(rollback.VoucherDetailList).
 			SetPassbackParams(rollback.PassbackParams).SetTradeNo(rollback.TradeNo).SetAppID(rollback.AppID).SetOutTradeNo(rollback.OutTradeNo).

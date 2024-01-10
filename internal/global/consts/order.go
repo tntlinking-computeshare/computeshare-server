@@ -21,7 +21,7 @@ const (
 type OrderSubject string
 
 const (
-	PayCycles OrderSubject = "购买Cycles"
+	PayCycles OrderSubject = "共享算力Cycle购买"
 )
 
 type OrderPayTime string
