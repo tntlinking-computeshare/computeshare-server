@@ -39,9 +39,10 @@ func (c *cycleRechargeRepo) CreateCycleRecharge(ctx context.Context, bizCycleRec
 	}
 	payAmount, _ := bizCycleRecharge.PayAmount.Round(2).Float64()
 	buyCycle, _ := bizCycleRecharge.BuyCycle.Round(2).Float64()
+	totalAmount, _ := bizCycleRecharge.TotalAmount.Round(2).Float64()
 	recharge, err := c.data.getCycleRecharge(ctx).Create().SetFkUserID(bizCycleRecharge.FkUserID).SetOutTradeNo(bizCycleRecharge.OutTradeNo).
-		SetRechargeChannel(bizCycleRecharge.RechargeChannel).SetRedeemCode(bizCycleRecharge.RedeemCode).
-		SetState(string(consts.WaitBuyerPay)).SetPayAmount(payAmount).SetBuyCycle(buyCycle).SetCreateTime(time.Now()).
+		SetAlipayTradeNo(bizCycleRecharge.AlipayTradeNo).SetRechargeChannel(bizCycleRecharge.RechargeChannel).SetRedeemCode(bizCycleRecharge.RedeemCode).
+		SetState(string(consts.WaitBuyerPay)).SetPayAmount(payAmount).SetBuyCycle(buyCycle).SetTotalAmount(totalAmount).SetCreateTime(time.Now()).
 		SetUpdateTime(time.Now()).Save(ctx)
 	if err != nil {
 		return nil, err

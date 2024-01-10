@@ -16,7 +16,7 @@ type CycleRedeemCode struct {
 func (CycleRedeemCode) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
-		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
+		field.UUID("fk_user_id", uuid.UUID{}).Optional().Comment("用户id"),
 		field.String("redeem_code").Unique().Comment("兑换码"),
 		field.Float("cycle").SchemaType(map[string]string{
 			dialect.MySQL: "decimal(10,2)",

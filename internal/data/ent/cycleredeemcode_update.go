@@ -35,6 +35,20 @@ func (crcu *CycleRedeemCodeUpdate) SetFkUserID(u uuid.UUID) *CycleRedeemCodeUpda
 	return crcu
 }
 
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (crcu *CycleRedeemCodeUpdate) SetNillableFkUserID(u *uuid.UUID) *CycleRedeemCodeUpdate {
+	if u != nil {
+		crcu.SetFkUserID(*u)
+	}
+	return crcu
+}
+
+// ClearFkUserID clears the value of the "fk_user_id" field.
+func (crcu *CycleRedeemCodeUpdate) ClearFkUserID() *CycleRedeemCodeUpdate {
+	crcu.mutation.ClearFkUserID()
+	return crcu
+}
+
 // SetRedeemCode sets the "redeem_code" field.
 func (crcu *CycleRedeemCodeUpdate) SetRedeemCode(s string) *CycleRedeemCodeUpdate {
 	crcu.mutation.SetRedeemCode(s)
@@ -116,6 +130,9 @@ func (crcu *CycleRedeemCodeUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := crcu.mutation.FkUserID(); ok {
 		_spec.SetField(cycleredeemcode.FieldFkUserID, field.TypeUUID, value)
 	}
+	if crcu.mutation.FkUserIDCleared() {
+		_spec.ClearField(cycleredeemcode.FieldFkUserID, field.TypeUUID)
+	}
 	if value, ok := crcu.mutation.RedeemCode(); ok {
 		_spec.SetField(cycleredeemcode.FieldRedeemCode, field.TypeString, value)
 	}
@@ -157,6 +174,20 @@ type CycleRedeemCodeUpdateOne struct {
 // SetFkUserID sets the "fk_user_id" field.
 func (crcuo *CycleRedeemCodeUpdateOne) SetFkUserID(u uuid.UUID) *CycleRedeemCodeUpdateOne {
 	crcuo.mutation.SetFkUserID(u)
+	return crcuo
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (crcuo *CycleRedeemCodeUpdateOne) SetNillableFkUserID(u *uuid.UUID) *CycleRedeemCodeUpdateOne {
+	if u != nil {
+		crcuo.SetFkUserID(*u)
+	}
+	return crcuo
+}
+
+// ClearFkUserID clears the value of the "fk_user_id" field.
+func (crcuo *CycleRedeemCodeUpdateOne) ClearFkUserID() *CycleRedeemCodeUpdateOne {
+	crcuo.mutation.ClearFkUserID()
 	return crcuo
 }
 
@@ -270,6 +301,9 @@ func (crcuo *CycleRedeemCodeUpdateOne) sqlSave(ctx context.Context) (_node *Cycl
 	}
 	if value, ok := crcuo.mutation.FkUserID(); ok {
 		_spec.SetField(cycleredeemcode.FieldFkUserID, field.TypeUUID, value)
+	}
+	if crcuo.mutation.FkUserIDCleared() {
+		_spec.ClearField(cycleredeemcode.FieldFkUserID, field.TypeUUID)
 	}
 	if value, ok := crcuo.mutation.RedeemCode(); ok {
 		_spec.SetField(cycleredeemcode.FieldRedeemCode, field.TypeString, value)

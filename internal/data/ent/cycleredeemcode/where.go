@@ -125,6 +125,16 @@ func FkUserIDLTE(v uuid.UUID) predicate.CycleRedeemCode {
 	return predicate.CycleRedeemCode(sql.FieldLTE(FieldFkUserID, v))
 }
 
+// FkUserIDIsNil applies the IsNil predicate on the "fk_user_id" field.
+func FkUserIDIsNil() predicate.CycleRedeemCode {
+	return predicate.CycleRedeemCode(sql.FieldIsNull(FieldFkUserID))
+}
+
+// FkUserIDNotNil applies the NotNil predicate on the "fk_user_id" field.
+func FkUserIDNotNil() predicate.CycleRedeemCode {
+	return predicate.CycleRedeemCode(sql.FieldNotNull(FieldFkUserID))
+}
+
 // RedeemCodeEQ applies the EQ predicate on the "redeem_code" field.
 func RedeemCodeEQ(v string) predicate.CycleRedeemCode {
 	return predicate.CycleRedeemCode(sql.FieldEQ(FieldRedeemCode, v))

@@ -93,13 +93,18 @@ func NewOrderUseCase(cycleRepo CycleRepo,
 }
 
 func (o *OrderUseCase) RechargeCycleByAlipay(ctx context.Context, userId uuid.UUID, cycle, amount float64) (outTradeNo string, url string, err error) {
+	amountDecimal := decimal.NewFromFloat(amount).Round(2)
+	cycleDecimal := decimal.NewFromFloat(cycle).Round(2)
+	if !amountDecimal.Mul(decimal.NewFromFloat(1000.00)).Round(2).Equal(cycleDecimal) {
+		return "", "", errors.New(400, "Amount_Error", "充值比例不正确")
+	}
 	outTradeNo = utils.GetOutTradeNo()
 	cycleRecharge := CycleRecharge{
 		FkUserID:        userId,
 		OutTradeNo:      outTradeNo,
 		RechargeChannel: int(consts.Alipay),
-		PayAmount:       decimal.NewFromFloat(amount),
-		BuyCycle:        decimal.NewFromFloat(cycle),
+		PayAmount:       amountDecimal,
+		BuyCycle:        cycleDecimal,
 	}
 	recharge, err := o.cycleRechargeRepo.CreateCycleRecharge(ctx, &cycleRecharge)
 	if err != nil {
@@ -281,7 +286,15 @@ func (o *OrderUseCase) RechargeCycleByRedeemCode(ctx context.Context, userId uui
 		log.Log(log.LevelInfo, "o.cycleRepo.Update", err)
 		return "", err
 	}
-	return cycleRedeemCode.Cycle.String(), nil
+	cycleRedeemCode.State = true
+	cycleRedeemCode.FkUserID = userId
+	cycleRedeemCode.UseTime = time.Now()
+	err = o.cycleRedeemCodeRepo.Update(ctx, cycleRedeemCode)
+	if err != nil {
+		log.Log(log.LevelInfo, "o.cycleRedeemCodeRepo.Update", err)
+		return "", err
+	}
+	return cycleRedeemCode.Cycle.StringFixed(2), nil
 }
 
 func (o *OrderUseCase) GetCycleBalance(ctx context.Context, userId uuid.UUID) (redeemCycle string, err error) {
@@ -289,7 +302,7 @@ func (o *OrderUseCase) GetCycleBalance(ctx context.Context, userId uuid.UUID) (r
 	if err != nil {
 		return "", err
 	}
-	return cycle.Cycle.String(), nil
+	return cycle.Cycle.StringFixed(2), nil
 }
 
 func (o *OrderUseCase) OrderList(ctx context.Context, page, size int32) (*global2.Page[*CycleOrder], error) {

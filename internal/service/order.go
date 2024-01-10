@@ -38,7 +38,7 @@ func NewOrderService(logger log.Logger,
 
 func (o *OrderService) AlipayPayNotify(ctx context.Context, req *pb.AlipayPayNotifyRequest) (*pb.AlipayPayNotifyReply, error) {
 	var alipayOrderRollback biz.AlipayOrderRollback
-	copier.Copy(alipayOrderRollback, req)
+	copier.Copy(&alipayOrderRollback, &req)
 	err := o.orderUseCase.AlipayPayNotify(ctx, alipayOrderRollback)
 	if err != nil {
 		return nil, err

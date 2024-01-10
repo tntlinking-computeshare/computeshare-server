@@ -7959,9 +7959,22 @@ func (m *CycleRedeemCodeMutation) OldFkUserID(ctx context.Context) (v uuid.UUID,
 	return oldValue.FkUserID, nil
 }
 
+// ClearFkUserID clears the value of the "fk_user_id" field.
+func (m *CycleRedeemCodeMutation) ClearFkUserID() {
+	m.fk_user_id = nil
+	m.clearedFields[cycleredeemcode.FieldFkUserID] = struct{}{}
+}
+
+// FkUserIDCleared returns if the "fk_user_id" field was cleared in this mutation.
+func (m *CycleRedeemCodeMutation) FkUserIDCleared() bool {
+	_, ok := m.clearedFields[cycleredeemcode.FieldFkUserID]
+	return ok
+}
+
 // ResetFkUserID resets all changes to the "fk_user_id" field.
 func (m *CycleRedeemCodeMutation) ResetFkUserID() {
 	m.fk_user_id = nil
+	delete(m.clearedFields, cycleredeemcode.FieldFkUserID)
 }
 
 // SetRedeemCode sets the "redeem_code" field.
@@ -8353,7 +8366,11 @@ func (m *CycleRedeemCodeMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CycleRedeemCodeMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(cycleredeemcode.FieldFkUserID) {
+		fields = append(fields, cycleredeemcode.FieldFkUserID)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -8366,6 +8383,11 @@ func (m *CycleRedeemCodeMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CycleRedeemCodeMutation) ClearField(name string) error {
+	switch name {
+	case cycleredeemcode.FieldFkUserID:
+		m.ClearFkUserID()
+		return nil
+	}
 	return fmt.Errorf("unknown CycleRedeemCode nullable field %s", name)
 }
 

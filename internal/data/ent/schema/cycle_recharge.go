@@ -19,8 +19,8 @@ func (CycleRecharge) Fields() []ent.Field {
 		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
 		field.String("out_trade_no").Unique().Comment("商家订单号"),
 		field.String("alipay_trade_no").Comment("支付宝订单号"),
-		field.Int("recharge_channel").Unique().Comment("充值渠道"),
-		field.String("redeem_code").Unique().Comment("兑换码"),
+		field.Int("recharge_channel").Comment("充值渠道"),
+		field.String("redeem_code").Comment("兑换码"),
 		field.String("state").Comment("状态"),
 		field.Float("pay_amount").SchemaType(map[string]string{
 			dialect.MySQL: "decimal(10,2)",
