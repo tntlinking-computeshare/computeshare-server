@@ -72,6 +72,29 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/cycle/recharge/state:
+        get:
+            tags:
+                - Order
+            operationId: Order_GetRechargeState
+            parameters:
+                - name: outTradeNo
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRechargeStateReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/cycle/redeem:
         post:
             tags:
@@ -519,6 +542,16 @@ components:
                     items:
                         $ref: '#/components/schemas/CycleTransactionInfo'
         GetCycleBalanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: string
+        GetRechargeStateReply:
             type: object
             properties:
                 code:

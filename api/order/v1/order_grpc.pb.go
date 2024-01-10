@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Order_AlipayPayNotify_FullMethodName           = "/api.server.order.v1.Order/AlipayPayNotify"
 	Order_RechargeCycleByAlipay_FullMethodName     = "/api.server.order.v1.Order/RechargeCycleByAlipay"
+	Order_GetRechargeState_FullMethodName          = "/api.server.order.v1.Order/GetRechargeState"
 	Order_RechargeCycleByRedeemCode_FullMethodName = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
 	Order_GetCycleBalance_FullMethodName           = "/api.server.order.v1.Order/GetCycleBalance"
 	Order_OrderList_FullMethodName                 = "/api.server.order.v1.Order/OrderList"
@@ -38,6 +39,7 @@ const (
 type OrderClient interface {
 	AlipayPayNotify(ctx context.Context, in *AlipayPayNotifyRequest, opts ...grpc.CallOption) (*AlipayPayNotifyReply, error)
 	RechargeCycleByAlipay(ctx context.Context, in *RechargeCycleByAlipayRequest, opts ...grpc.CallOption) (*RechargeCycleByAlipayReply, error)
+	GetRechargeState(ctx context.Context, in *GetRechargeStateRequest, opts ...grpc.CallOption) (*GetRechargeStateReply, error)
 	RechargeCycleByRedeemCode(ctx context.Context, in *RechargeCycleByRedeemCodeRequest, opts ...grpc.CallOption) (*RechargeCycleByRedeemCodeReply, error)
 	GetCycleBalance(ctx context.Context, in *GetCycleBalanceRequest, opts ...grpc.CallOption) (*GetCycleBalanceReply, error)
 	OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error)
@@ -69,6 +71,15 @@ func (c *orderClient) AlipayPayNotify(ctx context.Context, in *AlipayPayNotifyRe
 func (c *orderClient) RechargeCycleByAlipay(ctx context.Context, in *RechargeCycleByAlipayRequest, opts ...grpc.CallOption) (*RechargeCycleByAlipayReply, error) {
 	out := new(RechargeCycleByAlipayReply)
 	err := c.cc.Invoke(ctx, Order_RechargeCycleByAlipay_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) GetRechargeState(ctx context.Context, in *GetRechargeStateRequest, opts ...grpc.CallOption) (*GetRechargeStateReply, error) {
+	out := new(GetRechargeStateReply)
+	err := c.cc.Invoke(ctx, Order_GetRechargeState_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -162,6 +173,7 @@ func (c *orderClient) ManualRenew(ctx context.Context, in *ManualRenewRequest, o
 type OrderServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
 	RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error)
+	GetRechargeState(context.Context, *GetRechargeStateRequest) (*GetRechargeStateReply, error)
 	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
 	GetCycleBalance(context.Context, *GetCycleBalanceRequest) (*GetCycleBalanceReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
@@ -183,6 +195,9 @@ func (UnimplementedOrderServer) AlipayPayNotify(context.Context, *AlipayPayNotif
 }
 func (UnimplementedOrderServer) RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RechargeCycleByAlipay not implemented")
+}
+func (UnimplementedOrderServer) GetRechargeState(context.Context, *GetRechargeStateRequest) (*GetRechargeStateReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRechargeState not implemented")
 }
 func (UnimplementedOrderServer) RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RechargeCycleByRedeemCode not implemented")
@@ -256,6 +271,24 @@ func _Order_RechargeCycleByAlipay_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderServer).RechargeCycleByAlipay(ctx, req.(*RechargeCycleByAlipayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_GetRechargeState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRechargeStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).GetRechargeState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_GetRechargeState_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).GetRechargeState(ctx, req.(*GetRechargeStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -436,6 +469,10 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RechargeCycleByAlipay",
 			Handler:    _Order_RechargeCycleByAlipay_Handler,
+		},
+		{
+			MethodName: "GetRechargeState",
+			Handler:    _Order_GetRechargeState_Handler,
 		},
 		{
 			MethodName: "RechargeCycleByRedeemCode",

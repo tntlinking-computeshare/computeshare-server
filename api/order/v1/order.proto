@@ -21,6 +21,11 @@ service Order {
 			body: "*"
 		};
 	};
+	rpc GetRechargeState (GetRechargeStateRequest) returns (GetRechargeStateReply){
+		option (google.api.http) = {
+			get: "/v1/cycle/recharge/state",
+		};
+	};
 	rpc RechargeCycleByRedeemCode (RechargeCycleByRedeemCodeRequest) returns (RechargeCycleByRedeemCodeReply){
 		option (google.api.http) = {
 			post: "/v1/cycle/redeem",
@@ -128,7 +133,6 @@ message RechargeCycleByAlipayRequest {
 	float cycle = 2;
 	float amount = 3;
 }
-
 message RechargeCycleByAlipayReply {
 	int32 code = 1;
 	string message = 2;
@@ -138,6 +142,15 @@ message RechargeCycleByAlipayReply {
 		string url = 2;
 	}
 
+}
+
+message GetRechargeStateRequest {
+	string outTradeNo = 1;
+}
+message GetRechargeStateReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
 }
 
 message RechargeCycleByRedeemCodeRequest {

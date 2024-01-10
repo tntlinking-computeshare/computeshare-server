@@ -297,6 +297,14 @@ func (o *OrderUseCase) RechargeCycleByRedeemCode(ctx context.Context, userId uui
 	return cycleRedeemCode.Cycle.StringFixed(2), nil
 }
 
+func (o *OrderUseCase) GetRechargeState(ctx context.Context, outTradeNo string) (state string, err error) {
+	cycleRecharge, err := o.cycleRechargeRepo.FindByOutTradeNo(ctx, outTradeNo)
+	if err != nil {
+		return "", err
+	}
+	return cycleRecharge.State, nil
+}
+
 func (o *OrderUseCase) GetCycleBalance(ctx context.Context, userId uuid.UUID) (redeemCycle string, err error) {
 	cycle, err := o.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {

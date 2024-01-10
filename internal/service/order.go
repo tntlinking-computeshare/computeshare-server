@@ -104,6 +104,19 @@ func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBala
 	}, err
 }
 
+func (o *OrderService) GetRechargeState(ctx context.Context, req *pb.GetRechargeStateRequest) (*pb.GetRechargeStateReply, error) {
+	_, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	state, err := o.orderUseCase.GetRechargeState(ctx, req.GetOutTradeNo())
+	return &pb.GetRechargeStateReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    state,
+	}, err
+}
+
 func (o *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) (*pb.OrderListReply, error) {
 	pageData, err := o.orderUseCase.OrderList(ctx, req.Page, req.Size)
 	if err != nil {
