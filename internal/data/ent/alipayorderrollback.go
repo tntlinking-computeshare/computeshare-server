@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -71,7 +72,11 @@ type AlipayOrderRollback struct {
 	// 交易付款时间
 	GmtPayment string `json:"gmt_payment,omitempty"`
 	// 交易关闭时间
-	GmtClose     string `json:"gmt_close,omitempty"`
+	GmtClose string `json:"gmt_close,omitempty"`
+	// 创建时间
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// 更新时间
+	UpdateTime   time.Time `json:"update_time,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -84,6 +89,8 @@ func (*AlipayOrderRollback) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case alipayorderrollback.FieldNotifyID, alipayorderrollback.FieldNotifyType, alipayorderrollback.FieldNotifyTime, alipayorderrollback.FieldCharset, alipayorderrollback.FieldVersion, alipayorderrollback.FieldSignType, alipayorderrollback.FieldSign, alipayorderrollback.FieldFundBillList, alipayorderrollback.FieldReceiptAmount, alipayorderrollback.FieldInvoiceAmount, alipayorderrollback.FieldBuyerPayAmount, alipayorderrollback.FieldPointAmount, alipayorderrollback.FieldVoucherDetailList, alipayorderrollback.FieldPassbackParams, alipayorderrollback.FieldTradeNo, alipayorderrollback.FieldAppID, alipayorderrollback.FieldOutTradeNo, alipayorderrollback.FieldOutBizNo, alipayorderrollback.FieldBuyerID, alipayorderrollback.FieldSellerID, alipayorderrollback.FieldTradeStatus, alipayorderrollback.FieldTotalAmount, alipayorderrollback.FieldRefundFee, alipayorderrollback.FieldSubject, alipayorderrollback.FieldBody, alipayorderrollback.FieldGmtCreate, alipayorderrollback.FieldGmtPayment, alipayorderrollback.FieldGmtClose:
 			values[i] = new(sql.NullString)
+		case alipayorderrollback.FieldCreateTime, alipayorderrollback.FieldUpdateTime:
+			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -273,6 +280,18 @@ func (aor *AlipayOrderRollback) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				aor.GmtClose = value.String
 			}
+		case alipayorderrollback.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				aor.CreateTime = value.Time
+			}
+		case alipayorderrollback.FieldUpdateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field update_time", values[i])
+			} else if value.Valid {
+				aor.UpdateTime = value.Time
+			}
 		default:
 			aor.selectValues.Set(columns[i], values[i])
 		}
@@ -392,6 +411,12 @@ func (aor *AlipayOrderRollback) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("gmt_close=")
 	builder.WriteString(aor.GmtClose)
+	builder.WriteString(", ")
+	builder.WriteString("create_time=")
+	builder.WriteString(aor.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("update_time=")
+	builder.WriteString(aor.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

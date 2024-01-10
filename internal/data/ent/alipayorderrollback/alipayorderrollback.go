@@ -67,6 +67,10 @@ const (
 	FieldGmtPayment = "gmt_payment"
 	// FieldGmtClose holds the string denoting the gmt_close field in the database.
 	FieldGmtClose = "gmt_close"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
+	// FieldUpdateTime holds the string denoting the update_time field in the database.
+	FieldUpdateTime = "update_time"
 	// Table holds the table name of the alipayorderrollback in the database.
 	Table = "alipay_order_rollbacks"
 )
@@ -102,6 +106,8 @@ var Columns = []string{
 	FieldGmtCreate,
 	FieldGmtPayment,
 	FieldGmtClose,
+	FieldCreateTime,
+	FieldUpdateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -260,4 +266,14 @@ func ByGmtPayment(opts ...sql.OrderTermOption) OrderOption {
 // ByGmtClose orders the results by the gmt_close field.
 func ByGmtClose(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGmtClose, opts...).ToFunc()
+}
+
+// ByCreateTime orders the results by the create_time field.
+func ByCreateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateTime, opts...).ToFunc()
+}
+
+// ByUpdateTime orders the results by the update_time field.
+func ByUpdateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdateTime, opts...).ToFunc()
 }

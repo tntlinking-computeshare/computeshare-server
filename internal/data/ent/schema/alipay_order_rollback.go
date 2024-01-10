@@ -41,6 +41,8 @@ func (AlipayOrderRollback) Fields() []ent.Field {
 		field.String("gmt_create").Comment("交易创建时间"),
 		field.String("gmt_payment").Comment("交易付款时间"),
 		field.String("gmt_close").Comment("交易关闭时间"),
+		field.Time("create_time").Comment("创建时间"),
+		field.Time("update_time").Comment("更新时间"),
 	}
 }
 

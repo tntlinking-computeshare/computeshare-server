@@ -572,12 +572,13 @@ components:
                     format: int32
                 message:
                     type: string
+                data:
+                    type: string
         RechargeCycleByRedeemCodeRequest:
             type: object
             properties:
                 redeemCode:
-                    type: integer
-                    format: int32
+                    type: string
         Status:
             type: object
             properties:

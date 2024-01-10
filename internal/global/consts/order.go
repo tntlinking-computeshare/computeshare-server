@@ -6,6 +6,7 @@ const (
 	Alipay PaymentMethod = iota + 1
 	Wechat
 	BankCard
+	RedemptionCode
 )
 
 type PayOrderState string
@@ -27,4 +28,20 @@ type OrderPayTime string
 
 const (
 	AlipayPayTime OrderPayTime = "5m"
+)
+
+type Operation string
+
+const (
+	RentingFileStorage       Operation = "租用文件存储"
+	RentingCloudServers      Operation = "租用云服务器"
+	RedemptionCodeRedemption Operation = "兑换码兑换"
+	AlipayRecharge           Operation = "支付宝充值"
+)
+
+type OrderSymbol string
+
+const (
+	Recharge    OrderSymbol = "+"
+	Consumption OrderSymbol = "-"
 )

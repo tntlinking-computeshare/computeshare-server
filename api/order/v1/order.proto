@@ -135,12 +135,13 @@ message RechargeCycleByAlipayReply {
 }
 
 message RechargeCycleByRedeemCodeRequest {
-	int32 redeemCode = 1;
+	string redeemCode = 1;
 }
 
 message RechargeCycleByRedeemCodeReply {
 	int32 code = 1;
 	string message = 2;
+	string data = 3;
 }
 
 message OrderListRequest {

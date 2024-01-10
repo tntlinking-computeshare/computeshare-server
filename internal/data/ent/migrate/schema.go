@@ -65,6 +65,8 @@ var (
 		{Name: "gmt_create", Type: field.TypeString},
 		{Name: "gmt_payment", Type: field.TypeString},
 		{Name: "gmt_close", Type: field.TypeString},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
 	}
 	// AlipayOrderRollbacksTable holds the schema information for the "alipay_order_rollbacks" table.
 	AlipayOrderRollbacksTable = &schema.Table{
@@ -185,7 +187,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "fk_user_id", Type: field.TypeUUID},
 		{Name: "out_trade_no", Type: field.TypeString, Unique: true},
-		{Name: "alipay_trade_no", Type: field.TypeString, Unique: true},
+		{Name: "alipay_trade_no", Type: field.TypeString},
 		{Name: "recharge_channel", Type: field.TypeInt, Unique: true},
 		{Name: "redeem_code", Type: field.TypeString, Unique: true},
 		{Name: "state", Type: field.TypeString},

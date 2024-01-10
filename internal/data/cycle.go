@@ -7,6 +7,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/shopspring/decimal"
+	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -26,7 +27,12 @@ func NewCycleRepo(data *Data, logger log.Logger) biz.CycleRepo {
 
 func (c *cycleRepo) FindByUserID(ctx context.Context, userId uuid.UUID) (*biz.Cycle, error) {
 	entity, err := c.data.getCycle(ctx).Query().Where(cycle.FkUserID(userId)).First(ctx)
-	if err != nil {
+	if ent.IsNotFound(err) && entity == nil {
+		entity, err = c.data.getCycle(ctx).Create().SetFkUserID(userId).SetCycle(0.00).SetCreateTime(time.Now()).Save(ctx)
+		if err != nil {
+			return nil, err
+		}
+	} else if err != nil {
 		return nil, err
 	}
 	return c.toBiz(entity, 0), nil

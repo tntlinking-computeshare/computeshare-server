@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -195,6 +196,18 @@ func (aoru *AlipayOrderRollbackUpdate) SetGmtClose(s string) *AlipayOrderRollbac
 	return aoru
 }
 
+// SetCreateTime sets the "create_time" field.
+func (aoru *AlipayOrderRollbackUpdate) SetCreateTime(t time.Time) *AlipayOrderRollbackUpdate {
+	aoru.mutation.SetCreateTime(t)
+	return aoru
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (aoru *AlipayOrderRollbackUpdate) SetUpdateTime(t time.Time) *AlipayOrderRollbackUpdate {
+	aoru.mutation.SetUpdateTime(t)
+	return aoru
+}
+
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
 func (aoru *AlipayOrderRollbackUpdate) Mutation() *AlipayOrderRollbackMutation {
 	return aoru.mutation
@@ -319,6 +332,12 @@ func (aoru *AlipayOrderRollbackUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if value, ok := aoru.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
+	}
+	if value, ok := aoru.mutation.CreateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
+	}
+	if value, ok := aoru.mutation.UpdateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, aoru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -508,6 +527,18 @@ func (aoruo *AlipayOrderRollbackUpdateOne) SetGmtClose(s string) *AlipayOrderRol
 	return aoruo
 }
 
+// SetCreateTime sets the "create_time" field.
+func (aoruo *AlipayOrderRollbackUpdateOne) SetCreateTime(t time.Time) *AlipayOrderRollbackUpdateOne {
+	aoruo.mutation.SetCreateTime(t)
+	return aoruo
+}
+
+// SetUpdateTime sets the "update_time" field.
+func (aoruo *AlipayOrderRollbackUpdateOne) SetUpdateTime(t time.Time) *AlipayOrderRollbackUpdateOne {
+	aoruo.mutation.SetUpdateTime(t)
+	return aoruo
+}
+
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
 func (aoruo *AlipayOrderRollbackUpdateOne) Mutation() *AlipayOrderRollbackMutation {
 	return aoruo.mutation
@@ -662,6 +693,12 @@ func (aoruo *AlipayOrderRollbackUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if value, ok := aoruo.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
+	}
+	if value, ok := aoruo.mutation.CreateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
+	}
+	if value, ok := aoruo.mutation.UpdateTime(); ok {
+		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
 	}
 	_node = &AlipayOrderRollback{config: aoruo.config}
 	_spec.Assign = _node.assignValues
