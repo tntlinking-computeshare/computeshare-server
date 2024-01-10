@@ -28,7 +28,8 @@ func NewCycleRepo(data *Data, logger log.Logger) biz.CycleRepo {
 func (c *cycleRepo) FindByUserID(ctx context.Context, userId uuid.UUID) (*biz.Cycle, error) {
 	entity, err := c.data.getCycle(ctx).Query().Where(cycle.FkUserID(userId)).First(ctx)
 	if ent.IsNotFound(err) && entity == nil {
-		entity, err = c.data.getCycle(ctx).Create().SetFkUserID(userId).SetCycle(0.00).SetCreateTime(time.Now()).Save(ctx)
+		entity, err = c.data.getCycle(ctx).Create().SetFkUserID(userId).SetCycle(0.00).SetCreateTime(time.Now()).
+			SetUpdateTime(time.Now()).Save(ctx)
 		if err != nil {
 			return nil, err
 		}
