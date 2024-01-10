@@ -17,6 +17,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
@@ -54,6 +55,7 @@ const (
 	TypeComputeImage          = "ComputeImage"
 	TypeComputeInstance       = "ComputeInstance"
 	TypeComputeSpec           = "ComputeSpec"
+	TypeComputeSpecPrice      = "ComputeSpecPrice"
 	TypeCycle                 = "Cycle"
 	TypeCycleOrder            = "CycleOrder"
 	TypeCycleRecharge         = "CycleRecharge"
@@ -4922,6 +4924,548 @@ func (m *ComputeSpecMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ComputeSpecMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ComputeSpec edge %s", name)
+}
+
+// ComputeSpecPriceMutation represents an operation that mutates the ComputeSpecPrice nodes in the graph.
+type ComputeSpecPriceMutation struct {
+	config
+	op                    Op
+	typ                   string
+	id                    *int32
+	fk_compute_spec_id    *int32
+	addfk_compute_spec_id *int32
+	day                   *int32
+	addday                *int32
+	price                 *float32
+	addprice              *float32
+	clearedFields         map[string]struct{}
+	done                  bool
+	oldValue              func(context.Context) (*ComputeSpecPrice, error)
+	predicates            []predicate.ComputeSpecPrice
+}
+
+var _ ent.Mutation = (*ComputeSpecPriceMutation)(nil)
+
+// computespecpriceOption allows management of the mutation configuration using functional options.
+type computespecpriceOption func(*ComputeSpecPriceMutation)
+
+// newComputeSpecPriceMutation creates new mutation for the ComputeSpecPrice entity.
+func newComputeSpecPriceMutation(c config, op Op, opts ...computespecpriceOption) *ComputeSpecPriceMutation {
+	m := &ComputeSpecPriceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeComputeSpecPrice,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withComputeSpecPriceID sets the ID field of the mutation.
+func withComputeSpecPriceID(id int32) computespecpriceOption {
+	return func(m *ComputeSpecPriceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ComputeSpecPrice
+		)
+		m.oldValue = func(ctx context.Context) (*ComputeSpecPrice, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ComputeSpecPrice.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withComputeSpecPrice sets the old ComputeSpecPrice of the mutation.
+func withComputeSpecPrice(node *ComputeSpecPrice) computespecpriceOption {
+	return func(m *ComputeSpecPriceMutation) {
+		m.oldValue = func(context.Context) (*ComputeSpecPrice, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ComputeSpecPriceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ComputeSpecPriceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ComputeSpecPrice entities.
+func (m *ComputeSpecPriceMutation) SetID(id int32) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ComputeSpecPriceMutation) ID() (id int32, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ComputeSpecPriceMutation) IDs(ctx context.Context) ([]int32, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int32{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ComputeSpecPrice.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetFkComputeSpecID sets the "fk_compute_spec_id" field.
+func (m *ComputeSpecPriceMutation) SetFkComputeSpecID(i int32) {
+	m.fk_compute_spec_id = &i
+	m.addfk_compute_spec_id = nil
+}
+
+// FkComputeSpecID returns the value of the "fk_compute_spec_id" field in the mutation.
+func (m *ComputeSpecPriceMutation) FkComputeSpecID() (r int32, exists bool) {
+	v := m.fk_compute_spec_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFkComputeSpecID returns the old "fk_compute_spec_id" field's value of the ComputeSpecPrice entity.
+// If the ComputeSpecPrice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeSpecPriceMutation) OldFkComputeSpecID(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFkComputeSpecID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFkComputeSpecID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFkComputeSpecID: %w", err)
+	}
+	return oldValue.FkComputeSpecID, nil
+}
+
+// AddFkComputeSpecID adds i to the "fk_compute_spec_id" field.
+func (m *ComputeSpecPriceMutation) AddFkComputeSpecID(i int32) {
+	if m.addfk_compute_spec_id != nil {
+		*m.addfk_compute_spec_id += i
+	} else {
+		m.addfk_compute_spec_id = &i
+	}
+}
+
+// AddedFkComputeSpecID returns the value that was added to the "fk_compute_spec_id" field in this mutation.
+func (m *ComputeSpecPriceMutation) AddedFkComputeSpecID() (r int32, exists bool) {
+	v := m.addfk_compute_spec_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFkComputeSpecID resets all changes to the "fk_compute_spec_id" field.
+func (m *ComputeSpecPriceMutation) ResetFkComputeSpecID() {
+	m.fk_compute_spec_id = nil
+	m.addfk_compute_spec_id = nil
+}
+
+// SetDay sets the "day" field.
+func (m *ComputeSpecPriceMutation) SetDay(i int32) {
+	m.day = &i
+	m.addday = nil
+}
+
+// Day returns the value of the "day" field in the mutation.
+func (m *ComputeSpecPriceMutation) Day() (r int32, exists bool) {
+	v := m.day
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDay returns the old "day" field's value of the ComputeSpecPrice entity.
+// If the ComputeSpecPrice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeSpecPriceMutation) OldDay(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDay is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDay requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDay: %w", err)
+	}
+	return oldValue.Day, nil
+}
+
+// AddDay adds i to the "day" field.
+func (m *ComputeSpecPriceMutation) AddDay(i int32) {
+	if m.addday != nil {
+		*m.addday += i
+	} else {
+		m.addday = &i
+	}
+}
+
+// AddedDay returns the value that was added to the "day" field in this mutation.
+func (m *ComputeSpecPriceMutation) AddedDay() (r int32, exists bool) {
+	v := m.addday
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDay resets all changes to the "day" field.
+func (m *ComputeSpecPriceMutation) ResetDay() {
+	m.day = nil
+	m.addday = nil
+}
+
+// SetPrice sets the "price" field.
+func (m *ComputeSpecPriceMutation) SetPrice(f float32) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the value of the "price" field in the mutation.
+func (m *ComputeSpecPriceMutation) Price() (r float32, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old "price" field's value of the ComputeSpecPrice entity.
+// If the ComputeSpecPrice object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeSpecPriceMutation) OldPrice(ctx context.Context) (v float32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to the "price" field.
+func (m *ComputeSpecPriceMutation) AddPrice(f float32) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the "price" field in this mutation.
+func (m *ComputeSpecPriceMutation) AddedPrice() (r float32, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice resets all changes to the "price" field.
+func (m *ComputeSpecPriceMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// Where appends a list predicates to the ComputeSpecPriceMutation builder.
+func (m *ComputeSpecPriceMutation) Where(ps ...predicate.ComputeSpecPrice) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ComputeSpecPriceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ComputeSpecPriceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ComputeSpecPrice, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ComputeSpecPriceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ComputeSpecPriceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ComputeSpecPrice).
+func (m *ComputeSpecPriceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ComputeSpecPriceMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.fk_compute_spec_id != nil {
+		fields = append(fields, computespecprice.FieldFkComputeSpecID)
+	}
+	if m.day != nil {
+		fields = append(fields, computespecprice.FieldDay)
+	}
+	if m.price != nil {
+		fields = append(fields, computespecprice.FieldPrice)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ComputeSpecPriceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		return m.FkComputeSpecID()
+	case computespecprice.FieldDay:
+		return m.Day()
+	case computespecprice.FieldPrice:
+		return m.Price()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ComputeSpecPriceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		return m.OldFkComputeSpecID(ctx)
+	case computespecprice.FieldDay:
+		return m.OldDay(ctx)
+	case computespecprice.FieldPrice:
+		return m.OldPrice(ctx)
+	}
+	return nil, fmt.Errorf("unknown ComputeSpecPrice field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeSpecPriceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFkComputeSpecID(v)
+		return nil
+	case computespecprice.FieldDay:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDay(v)
+		return nil
+	case computespecprice.FieldPrice:
+		v, ok := value.(float32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeSpecPrice field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ComputeSpecPriceMutation) AddedFields() []string {
+	var fields []string
+	if m.addfk_compute_spec_id != nil {
+		fields = append(fields, computespecprice.FieldFkComputeSpecID)
+	}
+	if m.addday != nil {
+		fields = append(fields, computespecprice.FieldDay)
+	}
+	if m.addprice != nil {
+		fields = append(fields, computespecprice.FieldPrice)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ComputeSpecPriceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		return m.AddedFkComputeSpecID()
+	case computespecprice.FieldDay:
+		return m.AddedDay()
+	case computespecprice.FieldPrice:
+		return m.AddedPrice()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ComputeSpecPriceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFkComputeSpecID(v)
+		return nil
+	case computespecprice.FieldDay:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDay(v)
+		return nil
+	case computespecprice.FieldPrice:
+		v, ok := value.(float32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeSpecPrice numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ComputeSpecPriceMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ComputeSpecPriceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ComputeSpecPriceMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ComputeSpecPrice nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ComputeSpecPriceMutation) ResetField(name string) error {
+	switch name {
+	case computespecprice.FieldFkComputeSpecID:
+		m.ResetFkComputeSpecID()
+		return nil
+	case computespecprice.FieldDay:
+		m.ResetDay()
+		return nil
+	case computespecprice.FieldPrice:
+		m.ResetPrice()
+		return nil
+	}
+	return fmt.Errorf("unknown ComputeSpecPrice field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ComputeSpecPriceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ComputeSpecPriceMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ComputeSpecPriceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ComputeSpecPriceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ComputeSpecPriceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ComputeSpecPriceMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ComputeSpecPriceMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ComputeSpecPrice unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ComputeSpecPriceMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ComputeSpecPrice edge %s", name)
 }
 
 // CycleMutation represents an operation that mutates the Cycle nodes in the graph.

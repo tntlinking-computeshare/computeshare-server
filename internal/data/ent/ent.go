@@ -17,6 +17,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
@@ -101,6 +102,7 @@ func checkColumn(table, column string) error {
 			computeimage.Table:          computeimage.ValidColumn,
 			computeinstance.Table:       computeinstance.ValidColumn,
 			computespec.Table:           computespec.ValidColumn,
+			computespecprice.Table:      computespecprice.ValidColumn,
 			cycle.Table:                 cycle.ValidColumn,
 			cycleorder.Table:            cycleorder.ValidColumn,
 			cyclerecharge.Table:         cyclerecharge.ValidColumn,

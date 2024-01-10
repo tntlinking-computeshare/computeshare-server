@@ -23,10 +23,10 @@ service ComputeInstance {
 		};
 	}
 
-	// 查询到期时间
-	rpc ListComputeInstanceDuration(ListComputeDurationRequest) returns (ListComputeDurationReply){
+	// 查询资源规格价格
+	rpc ListComputeSpecPrice(ListComputeSpecPriceRequest) returns (ListComputeSpecPriceReply){
 		option (google.api.http) = {
-			get: "/v1/compute/duration",
+			get: "/v1/compute/spec/price",
 		};
 	}
 
@@ -91,6 +91,14 @@ service ComputeInstance {
 		};
 	}
 
+	// 重命名实例
+	rpc RenameInstance(RenameInstanceRequest) returns (CommonReply) {
+		option (google.api.http) = {
+			put: "/v1/instance/{id}/rename",
+			body: "*",
+		};
+	}
+
 	// 获取vnc 地址
 	rpc GetInstanceVncURL(GetInstanceRequest) returns (GetInstanceVncURLReply) {
 		option (google.api.http) = {
@@ -133,29 +141,28 @@ message ComputeSpec {
 	string memory = 3;
 }
 
-message ListComputeDurationRequest {
-
+message ListComputeSpecPriceRequest {
+	int32 spec_id = 1;
 }
 
-message ListComputeDurationReply {
+message ListComputeSpecPriceReply {
 	int32 code = 1;
 	string message = 2;
-	repeated ComputeDuration data = 3;
+	ComputeSpecPrice data = 3;
 }
 
-message ComputeDuration {
-	string name = 1;
-	int32 duration = 2;
+message ComputeSpecPrice {
+	int32 day = 1;
+	float cycle =2;
 }
 
 message CreateInstanceRequest {
 	int32 spec_id = 1;
 	int32 image_id = 2;
-	int32 duration = 3;
-	string name = 4;
-	string public_key = 5;
-	string password = 6;
-	string docker_compose = 7;
+	string name = 3;
+	string public_key = 4;
+	string password = 5;
+	string docker_compose = 6;
 }
 
 message RecreateInstanceRequest {
@@ -234,3 +241,7 @@ message GetInstanceVncURLReply {
 	string data = 3;
 }
 
+message RenameInstanceRequest {
+	string id = 1;
+	string name = 2;
+}

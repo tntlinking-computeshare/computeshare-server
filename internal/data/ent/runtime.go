@@ -10,6 +10,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
@@ -106,6 +107,16 @@ func init() {
 	computespecDescMemory := computespecFields[2].Descriptor()
 	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
 	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
+	computespecpriceFields := schema.ComputeSpecPrice{}.Fields()
+	_ = computespecpriceFields
+	// computespecpriceDescDay is the schema descriptor for day field.
+	computespecpriceDescDay := computespecpriceFields[2].Descriptor()
+	// computespecprice.DefaultDay holds the default value on creation for the day field.
+	computespecprice.DefaultDay = computespecpriceDescDay.Default.(int32)
+	// computespecpriceDescPrice is the schema descriptor for price field.
+	computespecpriceDescPrice := computespecpriceFields[3].Descriptor()
+	// computespecprice.DefaultPrice holds the default value on creation for the price field.
+	computespecprice.DefaultPrice = computespecpriceDescPrice.Default.(float32)
 	cycleFields := schema.Cycle{}.Fields()
 	_ = cycleFields
 	// cycleDescID is the schema descriptor for id field.

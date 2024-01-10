@@ -225,6 +225,9 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	}
 
 	cycleTransaction, err = c.cycleTransactionRepo.Create(ctx, cycleTransaction)
+	if err != nil {
+		return err
+	}
 
 	// 记录余额变动
 	cycle.Cycle = cycle.Cycle.Sub(extendPrice)

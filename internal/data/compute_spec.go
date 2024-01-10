@@ -5,6 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/samber/lo"
 )
 
@@ -42,4 +43,19 @@ func (csr *computeSpecRepo) Get(ctx context.Context, id int32) (*biz.ComputeSpec
 		return nil, err
 	}
 	return csr.toBiz(entity, 0), nil
+}
+
+func (r *computeSpecRepo) GetSpecPrice(ctx context.Context, id int32) (*biz.ComputeSpecPrice, error) {
+	entity, err := r.data.getComputeSpecPrice(ctx).Query().Where(computespecprice.FkComputeSpecID(id)).First(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &biz.ComputeSpecPrice{
+		ID:              entity.ID,
+		FkComputeSpecID: entity.FkComputeSpecID,
+		Day:             entity.Day,
+		Price:           entity.Price,
+	}, nil
+
 }

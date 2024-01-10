@@ -22,6 +22,8 @@ type Tx struct {
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// ComputeSpecPrice is the client for interacting with the ComputeSpecPrice builders.
+	ComputeSpecPrice *ComputeSpecPriceClient
 	// Cycle is the client for interacting with the Cycle builders.
 	Cycle *CycleClient
 	// CycleOrder is the client for interacting with the CycleOrder builders.
@@ -196,6 +198,7 @@ func (tx *Tx) init() {
 	tx.ComputeImage = NewComputeImageClient(tx.config)
 	tx.ComputeInstance = NewComputeInstanceClient(tx.config)
 	tx.ComputeSpec = NewComputeSpecClient(tx.config)
+	tx.ComputeSpecPrice = NewComputeSpecPriceClient(tx.config)
 	tx.Cycle = NewCycleClient(tx.config)
 	tx.CycleOrder = NewCycleOrderClient(tx.config)
 	tx.CycleRecharge = NewCycleRechargeClient(tx.config)

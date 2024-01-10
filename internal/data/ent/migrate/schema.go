@@ -149,6 +149,26 @@ var (
 			},
 		},
 	}
+	// ComputeSpecPricesColumns holds the columns for the "compute_spec_prices" table.
+	ComputeSpecPricesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "fk_compute_spec_id", Type: field.TypeInt32, Unique: true},
+		{Name: "day", Type: field.TypeInt32, Default: 30},
+		{Name: "price", Type: field.TypeFloat32, Default: 50000},
+	}
+	// ComputeSpecPricesTable holds the schema information for the "compute_spec_prices" table.
+	ComputeSpecPricesTable = &schema.Table{
+		Name:       "compute_spec_prices",
+		Columns:    ComputeSpecPricesColumns,
+		PrimaryKey: []*schema.Column{ComputeSpecPricesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "computespecprice_id",
+				Unique:  true,
+				Columns: []*schema.Column{ComputeSpecPricesColumns[0]},
+			},
+		},
+	}
 	// CyclesColumns holds the columns for the "cycles" table.
 	CyclesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -515,6 +535,7 @@ var (
 		ComputeImagesTable,
 		ComputeInstancesTable,
 		ComputeSpecsTable,
+		ComputeSpecPricesTable,
 		CyclesTable,
 		CycleOrdersTable,
 		CycleRechargesTable,

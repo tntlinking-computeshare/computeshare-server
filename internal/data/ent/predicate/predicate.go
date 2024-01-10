@@ -21,6 +21,9 @@ type ComputeInstance func(*sql.Selector)
 // ComputeSpec is the predicate function for computespec builders.
 type ComputeSpec func(*sql.Selector)
 
+// ComputeSpecPrice is the predicate function for computespecprice builders.
+type ComputeSpecPrice func(*sql.Selector)
+
 // Cycle is the predicate function for cycle builders.
 type Cycle func(*sql.Selector)
 
