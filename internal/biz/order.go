@@ -284,6 +284,14 @@ func (o *OrderUseCase) RechargeCycleByRedeemCode(ctx context.Context, userId uui
 	return cycleRedeemCode.Cycle.String(), nil
 }
 
+func (o *OrderUseCase) GetCycleBalance(ctx context.Context, userId uuid.UUID) (redeemCycle string, err error) {
+	cycle, err := o.cycleRepo.FindByUserID(ctx, userId)
+	if err != nil {
+		return "", err
+	}
+	return cycle.Cycle.String(), nil
+}
+
 func (o *OrderUseCase) OrderList(ctx context.Context, page, size int32) (*global2.Page[*CycleOrder], error) {
 	claim, ok := global.FromContext(ctx)
 	if !ok {

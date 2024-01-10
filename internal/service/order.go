@@ -91,17 +91,17 @@ func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.Re
 }
 
 func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBalanceRequest) (*pb.GetCycleBalanceReply, error) {
-	//claim, ok := global.FromContext(ctx)
-	//if !ok {
-	//	return nil, errors.New("unauthorized")
-	//}
-	//userId := claim.GetUserId()
-	//redeemCycle, err := o.orderUseCase.GetCycleBalance(ctx, userId)
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorized")
+	}
+	userId := claim.GetUserId()
+	redeemCycle, err := o.orderUseCase.GetCycleBalance(ctx, userId)
 	return &pb.GetCycleBalanceReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data:    "",
-	}, nil
+		Data:    redeemCycle,
+	}, err
 }
 
 func (o *OrderService) OrderList(ctx context.Context, req *pb.OrderListRequest) (*pb.OrderListReply, error) {
