@@ -45,3 +45,11 @@ dispose:
   domain:
     vnc_host: https://vnc.computeshare.newtouch.com
     api_host: api.computeshare.newtouch.com
+  alipay:
+    app_id:
+    alipay_public_cert_path:
+    alipay_root_cert_path:
+    app_public_cert_path:
+    app_private_key:
+    pay_return_url:
+    pay_notify_url:

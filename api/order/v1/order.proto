@@ -1,0 +1,294 @@
+syntax = "proto3";
+
+package api.server.order.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/order/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.order.v1";
+
+service Order {
+	rpc AlipayPayNotify (AlipayPayNotifyRequest) returns (AlipayPayNotifyReply){
+		option (google.api.http) = {
+			post: "/v1/alipay/pay/notify",
+			body: "*"
+		};
+	};
+	rpc RechargeCycleByAlipay (RechargeCycleByAlipayRequest) returns (RechargeCycleByAlipayReply){
+		option (google.api.http) = {
+			post: "/v1/cycle/recharge",
+			body: "*"
+		};
+	};
+	rpc GetRechargeState (GetRechargeStateRequest) returns (GetRechargeStateReply){
+		option (google.api.http) = {
+			get: "/v1/cycle/recharge/state",
+		};
+	};
+	rpc RechargeCycleByRedeemCode (RechargeCycleByRedeemCodeRequest) returns (RechargeCycleByRedeemCodeReply){
+		option (google.api.http) = {
+			post: "/v1/cycle/redeem",
+			body: "*"
+		};
+	};
+
+	rpc GetCycleBalance (GetCycleBalanceRequest) returns (GetCycleBalanceReply){
+		option (google.api.http) = {
+			get: "/v1/cycle/balance",
+		};
+	};
+
+	rpc OrderList(OrderListRequest) returns (OrderListReply){
+		option (google.api.http) = {
+			get: "/v1/order",
+		};
+	}
+
+	rpc CycleTransactionList(CycleTransactionListRequest) returns (CycleTransactionListReply){
+		option (google.api.http) = {
+			get: "/v1/cycle/transaction",
+		};
+	}
+
+	rpc CycleRenewalDetail(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renewal/{id}",
+		};
+	}
+
+	rpc CycleRenewalList(CycleRenewalListRequest) returns (CycleRenewalListReply) {
+		option (google.api.http) = {
+			get: "/v1/cycle/renewal",
+		};
+	}
+
+	rpc CycleRenewalOpen(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/open",
+			body: "*"
+		};
+	}
+
+	rpc CycleRenewalClose(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			put: "/v1/cycle/renewal/{id}/close",
+			body: "*"
+		};
+	}
+
+	rpc ManualRenew(ManualRenewRequest) returns (ManualRenewReply ) {
+		option (google.api.http) = {
+			post: "/v1/cycle/renewal/{id}/manual-renew",
+			body: "*"
+		};
+	}
+}
+
+// https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
+message AlipayPayNotifyRequest {
+	string notify_time =1;
+	string notify_type =2;
+	string notify_id =3;
+	string app_id =4;
+	string charset =5;
+	string version =6;
+	string sign_type =7;
+	string sign =8;
+	string trade_no =9;
+	string out_trade_no =10;
+	string out_biz_no =11;
+	string buyer_id =12;
+	string buyer_logon_id =13;
+	string seller_id =14;
+	string seller_email =15;
+	string trade_status =16;
+	string total_amount =17;
+	string receipt_amount =18;
+	string invoice_amount =19;
+	string buyer_pay_amount =20;
+	string point_amount =21;
+	string refund_fee =22;
+	string subject =23;
+	string body =24;
+	string gmt_create =25;
+	string gmt_payment =26;
+	string gmt_refund =27;
+	string gmt_close =28;
+	string fund_bill_list =29;
+	string passback_params =30;
+	string voucher_detail_list =31;
+	string method =32;
+	string timestamp =33;
+	string auth_app_id =34;
+}
+
+message AlipayPayNotifyReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message RechargeCycleByAlipayRequest {
+	int32 rechargeChannel = 1;
+	float cycle = 2;
+	float amount = 3;
+}
+message RechargeCycleByAlipayReply {
+	int32 code = 1;
+	string message = 2;
+	Pay data = 3;
+	message Pay {
+		string outTradeNo = 1;
+		string url = 2;
+	}
+
+}
+
+message GetRechargeStateRequest {
+	string outTradeNo = 1;
+}
+message GetRechargeStateReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
+message RechargeCycleByRedeemCodeRequest {
+	string redeemCode = 1;
+}
+
+message RechargeCycleByRedeemCodeReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
+message GetCycleBalanceRequest {}
+
+message GetCycleBalanceReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
+message OrderListRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+message OrderListReply{
+	int32 code = 1;
+	string message = 2;
+	OrderPage data = 3;
+}
+
+message OrderPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated OrderInfo data = 4;
+}
+
+message OrderInfo {
+	string id = 1;
+	string order_no = 2;
+	string product_name = 3;
+	string product_desc = 4;
+	string symbol = 5;
+	float cycle = 6;
+	int64 create_time = 7;
+}
+
+message CycleTransactionListRequest{
+	int32 page = 1;
+	int32 size = 2;
+}
+
+message CycleTransactionListReply{
+	int32 code = 1;
+	string message = 2;
+	CycleTransactionPage data = 3;
+}
+
+message CycleTransactionPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated CycleTransactionInfo data = 4;
+}
+
+message CycleTransactionInfo {
+	string id = 1;
+	string operation = 2;
+	string symbol = 3;
+	float cycle = 4;
+	int64 operation_time = 5;
+}
+
+message CycleRenewalListRequest {
+	int32 page = 1;
+	int32 size = 2;
+}
+
+message CycleRenewalListReply {
+	int32 code = 1;
+	string message = 2;
+	CycleRenewalPage data = 3;
+}
+
+message CycleRenewalPage {
+	int64 total = 1;
+	int32 page = 2;
+	int32 size = 3;
+	repeated CycleRenewalInfo data = 4;
+}
+
+message CycleRenewalInfo {
+	string id = 1;
+	string product_name = 2;
+	string product_desc = 3;
+	int32 state = 4;
+	string due_time = 5;
+	string renewal_time = 6;
+}
+
+message CycleRenewalDetailInfo {
+	string id = 1;
+	string product_name = 2;
+	string product_desc = 3;
+	int32 state = 4;
+	string due_time = 5;
+	string renewal_time = 6;
+	string instance_id = 7;
+	string instance_name = 8;
+	string instance_spec = 9;
+	string image = 10;
+	float extend_price = 11;
+	int64 extend_day = 12;
+	float balance = 13;
+}
+
+message CycleRenewalGetReply{
+	int32 code = 1;
+	string message = 2;
+	CycleRenewalDetailInfo data = 3;
+}
+
+message CycleRenewalGetRequest {
+	string id = 1;
+}
+
+message CycleRenewalBaseReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message ManualRenewRequest {
+	string id = 1;
+}
+
+message ManualRenewReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+

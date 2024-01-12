@@ -12,6 +12,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
+	"github.com/shopspring/decimal"
 	"io"
 	"net/http"
 	"net/url"
@@ -23,6 +24,7 @@ import (
 type ComputeSpecRepo interface {
 	List(ctx context.Context) ([]*ComputeSpec, error)
 	Get(ctx context.Context, id int32) (*ComputeSpec, error)
+	GetSpecPrice(ctx context.Context, id int32) (*ComputeSpecPrice, error)
 }
 
 type ComputeInstanceRepo interface {
@@ -47,16 +49,19 @@ type ComputeImageRepo interface {
 }
 
 type ComputeInstanceUsercase struct {
-	specRepo           ComputeSpecRepo
-	instanceRepo       ComputeInstanceRepo
-	imageRepo          ComputeImageRepo
-	agentRepo          AgentRepo
-	taskRepo           TaskRepo
-	gatewayRepo        GatewayRepo
-	gatewayPortRepo    GatewayPortRepo
-	networkMappingRepo NetworkMappingRepo
-	p2pClient          *P2pClient
-	log                *log.Helper
+	specRepo             ComputeSpecRepo
+	instanceRepo         ComputeInstanceRepo
+	imageRepo            ComputeImageRepo
+	agentRepo            AgentRepo
+	taskRepo             TaskRepo
+	gatewayRepo          GatewayRepo
+	gatewayPortRepo      GatewayPortRepo
+	networkMappingRepo   NetworkMappingRepo
+	cycleRepo            CycleRepo
+	cycleOrderRepo       CycleOrderRepo
+	cycleTransactionRepo CycleTransactionRepo
+	cycleRenewalRepo     CycleRenewalRepo
+	log                  *log.Helper
 }
 
 func NewComputeInstanceUsercase(
@@ -68,22 +73,34 @@ func NewComputeInstanceUsercase(
 	gatewayRepo GatewayRepo,
 	gatewayPortRepo GatewayPortRepo,
 	networkMappingRepo NetworkMappingRepo,
+	cycleRepo CycleRepo,
+	cycleOrderRepo CycleOrderRepo,
+	cycleTransactionRepo CycleTransactionRepo,
+	cycleRenewalRepo CycleRenewalRepo,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
-		specRepo:           specRepo,
-		instanceRepo:       instanceRepo,
-		imageRepo:          imageRepo,
-		agentRepo:          agentRepo,
-		taskRepo:           taskRepo,
-		gatewayRepo:        gatewayRepo,
-		gatewayPortRepo:    gatewayPortRepo,
-		networkMappingRepo: networkMappingRepo,
-		log:                log.NewHelper(logger),
+		specRepo:             specRepo,
+		instanceRepo:         instanceRepo,
+		imageRepo:            imageRepo,
+		agentRepo:            agentRepo,
+		taskRepo:             taskRepo,
+		gatewayRepo:          gatewayRepo,
+		gatewayPortRepo:      gatewayPortRepo,
+		networkMappingRepo:   networkMappingRepo,
+		cycleRepo:            cycleRepo,
+		cycleOrderRepo:       cycleOrderRepo,
+		cycleTransactionRepo: cycleTransactionRepo,
+		cycleRenewalRepo:     cycleRenewalRepo,
+		log:                  log.NewHelper(logger),
 	}
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeSpec(ctx context.Context) ([]*ComputeSpec, error) {
 	return uc.specRepo.List(ctx)
+}
+
+func (uc *ComputeInstanceUsercase) GetComputeSpecPrice(ctx context.Context, specId int32) (*ComputeSpecPrice, error) {
+	return uc.specRepo.GetSpecPrice(ctx, specId)
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeImage(ctx context.Context) ([]*ComputeImage, error) {
@@ -97,11 +114,78 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, errors.New(400, "unauthorized", "无权限")
 	}
 
+	userId := claim.GetUserId()
+
 	computeSpec, err := uc.specRepo.Get(ctx, cic.SpecId)
 	if err != nil {
 		return nil, err
 	}
+
 	computeImage, err := uc.imageRepo.Get(ctx, cic.ImageId)
+	if err != nil {
+		return nil, err
+	}
+
+	// 校验余额
+	specPrice, err := uc.specRepo.GetSpecPrice(ctx, cic.SpecId)
+
+	cycle, err := uc.cycleRepo.FindByUserID(ctx, userId)
+	if err != nil {
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
+	}
+	if cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
+	}
+
+	// 扣余额
+	cycle.Cycle = cycle.Cycle.Sub(decimal.NewFromFloat32(specPrice.Price))
+	cycle.UpdateTime = time.Now()
+	err = uc.cycleRepo.Update(ctx, cycle)
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建订单
+	var orderNo string
+	// 判断订单号不重复
+	var exists bool
+	for {
+		orderNo = NewOrderNo()
+		exists = uc.cycleOrderRepo.CheckOrderNoExists(ctx, orderNo)
+		if !exists {
+			break
+		}
+	}
+
+	cycleOrder := &CycleOrder{
+		OrderNo:     orderNo,
+		FkUserID:    userId,
+		ProductName: "租用云服务器",
+		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
+		Symbol:      "-",
+		Cycle:       float64(specPrice.Price),
+		CreateTime:  time.Now(),
+	}
+	cycleOrder, err = uc.cycleOrderRepo.Create(ctx, cycleOrder)
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建交易流水
+	balance, _ := cycle.Cycle.Float64()
+	cycleTransaction := &CycleTransaction{
+		FkCycleID:         cycle.ID,
+		FkUserID:          userId,
+		FkCycleOrderID:    cycleOrder.ID,
+		FkCycleRechargeID: uuid.Nil,
+		Operation:         cycleOrder.ProductName,
+		Symbol:            cycleOrder.Symbol,
+		Cycle:             cycleOrder.Cycle,
+		Balance:           balance,
+		OperationTime:     time.Now(),
+	}
+
+	cycleTransaction, err = uc.cycleTransactionRepo.Create(ctx, cycleTransaction)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +224,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Port:           fmt.Sprintf("%d", computeImage.Port),
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
 		ImageId:        computeImage.ID,
-		ExpirationTime: time.Now().AddDate(0, int(cic.Duration), 0),
+		ExpirationTime: time.Now().AddDate(0, 0, int(specPrice.Day)),
 		AgentId:        agent.ID.String(),
 		Status:         consts.InstanceStatusCreating,
 		VncIP:          gw.InternalIP,
@@ -149,6 +233,32 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建续费管理
+	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
+	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
+
+	fmt.Println("=============")
+	fmt.Println("instanceId:", instance.ID.String())
+	fmt.Println("=============")
+
+	renewal := &CycleRenewal{
+		FkUserID:     userId,
+		ResourceID:   instance.ID,
+		ResourceType: int(consts.RenewalResourceType_Resource),
+		ProductName:  cycleOrder.ProductName,
+		ProductDesc:  cycleOrder.ProductDesc,
+		State:        int8(consts.RenewalState_IN_SERVICE),
+		ExtendDay:    int8(specPrice.Day),
+		ExtendPrice:  float64(specPrice.Price),
+		DueTime:      &instance.ExpirationTime,
+		RenewalTime:  &renewalTime,
+		AutoRenewal:  true,
+	}
+	renewal, err = uc.cycleRenewalRepo.Create(ctx, renewal)
 	if err != nil {
 		return nil, err
 	}
@@ -528,4 +638,16 @@ func (uc *ComputeInstanceUsercase) PrometheusQuery(expr string, step int, from, 
 		return nil, err
 	}
 	return &queryResult, err
+}
+
+func (uc *ComputeInstanceUsercase) Rename(ctx context.Context, id uuid.UUID, name string) error {
+	instance, err := uc.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	instance.Name = name
+
+	return uc.instanceRepo.Update(ctx, id, instance)
+
 }

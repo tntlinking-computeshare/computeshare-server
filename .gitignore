@@ -40,3 +40,5 @@ bin/
 /configs/config_test.yaml
 deploy_abing.sh
 configs/config.yaml
+
+configs/alipay/*

@@ -13,9 +13,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/alipayorderrollback"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleredeemcode"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerenewal"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycletransaction"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
@@ -90,9 +98,17 @@ func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			agent.Table:                 agent.ValidColumn,
+			alipayorderrollback.Table:   alipayorderrollback.ValidColumn,
 			computeimage.Table:          computeimage.ValidColumn,
 			computeinstance.Table:       computeinstance.ValidColumn,
 			computespec.Table:           computespec.ValidColumn,
+			computespecprice.Table:      computespecprice.ValidColumn,
+			cycle.Table:                 cycle.ValidColumn,
+			cycleorder.Table:            cycleorder.ValidColumn,
+			cyclerecharge.Table:         cyclerecharge.ValidColumn,
+			cycleredeemcode.Table:       cycleredeemcode.ValidColumn,
+			cyclerenewal.Table:          cyclerenewal.ValidColumn,
+			cycletransaction.Table:      cycletransaction.ValidColumn,
 			domainbinding.Table:         domainbinding.ValidColumn,
 			employee.Table:              employee.ValidColumn,
 			gateway.Table:               gateway.ValidColumn,

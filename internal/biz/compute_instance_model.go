@@ -18,6 +18,17 @@ type ComputeSpec struct {
 	Memory string `json:"memory,omitempty"`
 }
 
+type ComputeSpecPrice struct {
+	// ID of the ent.
+	ID int32 `json:"id,omitempty"`
+	// 资源规格id
+	FkComputeSpecID int32 `json:"fkComputeSpecId,omitempty"`
+	// 天数
+	Day int32 `json:"day,omitempty"`
+	// 此天数的价格
+	Price float32 `json:"price,omitempty"`
+}
+
 func (c *ComputeSpec) GetCore() int64 {
 	core, err := strconv.Atoi(c.Core)
 	if err != nil {
@@ -85,7 +96,6 @@ func (i *ComputeInstance) GetMemory() int64 {
 type ComputeInstanceCreate struct {
 	SpecId        int32
 	ImageId       int32
-	Duration      int32
 	Name          string
 	PublicKey     string
 	Password      string
@@ -145,11 +155,11 @@ type Result struct {
 }
 
 type PrometheusQueryResult struct {
-	Status string `json:"status"`
-	Data   Data   `json:"data"`
+	Status string              `json:"status"`
+	Data   PrometheusQueryData `json:"data"`
 }
 
-type Data struct {
+type PrometheusQueryData struct {
 	ResultType string   `json:"resultType"`
 	Result     []Result `json:"result"`
 }

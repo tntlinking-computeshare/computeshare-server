@@ -9,6 +9,9 @@ import (
 // Agent is the predicate function for agent builders.
 type Agent func(*sql.Selector)
 
+// AlipayOrderRollback is the predicate function for alipayorderrollback builders.
+type AlipayOrderRollback func(*sql.Selector)
+
 // ComputeImage is the predicate function for computeimage builders.
 type ComputeImage func(*sql.Selector)
 
@@ -17,6 +20,27 @@ type ComputeInstance func(*sql.Selector)
 
 // ComputeSpec is the predicate function for computespec builders.
 type ComputeSpec func(*sql.Selector)
+
+// ComputeSpecPrice is the predicate function for computespecprice builders.
+type ComputeSpecPrice func(*sql.Selector)
+
+// Cycle is the predicate function for cycle builders.
+type Cycle func(*sql.Selector)
+
+// CycleOrder is the predicate function for cycleorder builders.
+type CycleOrder func(*sql.Selector)
+
+// CycleRecharge is the predicate function for cyclerecharge builders.
+type CycleRecharge func(*sql.Selector)
+
+// CycleRedeemCode is the predicate function for cycleredeemcode builders.
+type CycleRedeemCode func(*sql.Selector)
+
+// CycleRenewal is the predicate function for cyclerenewal builders.
+type CycleRenewal func(*sql.Selector)
+
+// CycleTransaction is the predicate function for cycletransaction builders.
+type CycleTransaction func(*sql.Selector)
 
 // DomainBinding is the predicate function for domainbinding builders.
 type DomainBinding func(*sql.Selector)

@@ -25,7 +25,15 @@ import (
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose, auth *conf.Auth, logger log.Logger) (*kratos.App, func(), error) {
 	grpcServer := server.NewGRPCServer(confServer, logger)
-	dataData, cleanup, err := data.NewData(confData, logger)
+	client, err := data.NewDB(confData, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	redisClient, err := data.NewRDB(confData)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, cleanup, err := data.NewData(client, redisClient, logger)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -41,10 +49,14 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	domainBindingRepository := data.NewDomainBindingRepository(dataData, logger)
 	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
 	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, networkMappingRepo, logger)
+	cycleRepo := data.NewCycleRepo(dataData, logger)
+	cycleOrderRepo := data.NewCycleOrderRepo(dataData, logger)
+	cycleTransactionRepo := data.NewCycleTransactionRepo(dataData, logger)
+	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, networkMappingRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, cycleRenewalRepo, logger)
 	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceRepo, computeInstanceUsercase, logger)
 	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
-	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, logger)
+	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, cycleRenewalRepo, logger)
 	queueTaskService := service.NewQueueTaskService(taskUseCase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
 	storagecase := biz.NewStorageUsecase(storageRepo, logger)
@@ -78,8 +90,15 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	domainBindingService := service.NewDomainBindingService(domainBindingUseCase, networkMappingUseCase)
 	storageProviderService := service.NewStorageProviderService(storageProviderUseCase)
 	sandboxService := service.NewSandboxService(computeInstanceService, networkMappingService, logger)
-	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, cronJob, dataData, logger)
+	cycleRechargeRepo := data.NewCycleRechargeRepo(dataData, logger)
+	alipayOrderRollbackRepo := data.NewAlipayOrderRollbackRepo(dataData, logger)
+	cycleRedeemCodeRepo := data.NewCycleRedeemCodeRepo(dataData, logger)
+	orderUseCase := biz.NewOrderUseCase(cycleRepo, cycleOrderRepo, cycleRechargeRepo, alipayOrderRollbackRepo, cycleTransactionRepo, cycleRedeemCodeRepo, logger, dispose)
+	cycleTransactionUseCase := biz.NewCycleTransactionUseCase(logger, cycleTransactionRepo)
+	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo)
+	orderService := service.NewOrderService(logger, orderUseCase, cycleTransactionUseCase, cycleRenewalUseCase)
+	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, cycleRenewalUseCase, client, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, cronJob, dataData, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

@@ -16,9 +16,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/alipayorderrollback"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleredeemcode"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerenewal"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycletransaction"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/employee"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
@@ -41,12 +49,28 @@ type Client struct {
 	Schema *migrate.Schema
 	// Agent is the client for interacting with the Agent builders.
 	Agent *AgentClient
+	// AlipayOrderRollback is the client for interacting with the AlipayOrderRollback builders.
+	AlipayOrderRollback *AlipayOrderRollbackClient
 	// ComputeImage is the client for interacting with the ComputeImage builders.
 	ComputeImage *ComputeImageClient
 	// ComputeInstance is the client for interacting with the ComputeInstance builders.
 	ComputeInstance *ComputeInstanceClient
 	// ComputeSpec is the client for interacting with the ComputeSpec builders.
 	ComputeSpec *ComputeSpecClient
+	// ComputeSpecPrice is the client for interacting with the ComputeSpecPrice builders.
+	ComputeSpecPrice *ComputeSpecPriceClient
+	// Cycle is the client for interacting with the Cycle builders.
+	Cycle *CycleClient
+	// CycleOrder is the client for interacting with the CycleOrder builders.
+	CycleOrder *CycleOrderClient
+	// CycleRecharge is the client for interacting with the CycleRecharge builders.
+	CycleRecharge *CycleRechargeClient
+	// CycleRedeemCode is the client for interacting with the CycleRedeemCode builders.
+	CycleRedeemCode *CycleRedeemCodeClient
+	// CycleRenewal is the client for interacting with the CycleRenewal builders.
+	CycleRenewal *CycleRenewalClient
+	// CycleTransaction is the client for interacting with the CycleTransaction builders.
+	CycleTransaction *CycleTransactionClient
 	// DomainBinding is the client for interacting with the DomainBinding builders.
 	DomainBinding *DomainBindingClient
 	// Employee is the client for interacting with the Employee builders.
@@ -87,9 +111,17 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.Agent = NewAgentClient(c.config)
+	c.AlipayOrderRollback = NewAlipayOrderRollbackClient(c.config)
 	c.ComputeImage = NewComputeImageClient(c.config)
 	c.ComputeInstance = NewComputeInstanceClient(c.config)
 	c.ComputeSpec = NewComputeSpecClient(c.config)
+	c.ComputeSpecPrice = NewComputeSpecPriceClient(c.config)
+	c.Cycle = NewCycleClient(c.config)
+	c.CycleOrder = NewCycleOrderClient(c.config)
+	c.CycleRecharge = NewCycleRechargeClient(c.config)
+	c.CycleRedeemCode = NewCycleRedeemCodeClient(c.config)
+	c.CycleRenewal = NewCycleRenewalClient(c.config)
+	c.CycleTransaction = NewCycleTransactionClient(c.config)
 	c.DomainBinding = NewDomainBindingClient(c.config)
 	c.Employee = NewEmployeeClient(c.config)
 	c.Gateway = NewGatewayClient(c.config)
@@ -186,9 +218,17 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                   ctx,
 		config:                cfg,
 		Agent:                 NewAgentClient(cfg),
+		AlipayOrderRollback:   NewAlipayOrderRollbackClient(cfg),
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		ComputeSpecPrice:      NewComputeSpecPriceClient(cfg),
+		Cycle:                 NewCycleClient(cfg),
+		CycleOrder:            NewCycleOrderClient(cfg),
+		CycleRecharge:         NewCycleRechargeClient(cfg),
+		CycleRedeemCode:       NewCycleRedeemCodeClient(cfg),
+		CycleRenewal:          NewCycleRenewalClient(cfg),
+		CycleTransaction:      NewCycleTransactionClient(cfg),
 		DomainBinding:         NewDomainBindingClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
@@ -222,9 +262,17 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                   ctx,
 		config:                cfg,
 		Agent:                 NewAgentClient(cfg),
+		AlipayOrderRollback:   NewAlipayOrderRollbackClient(cfg),
 		ComputeImage:          NewComputeImageClient(cfg),
 		ComputeInstance:       NewComputeInstanceClient(cfg),
 		ComputeSpec:           NewComputeSpecClient(cfg),
+		ComputeSpecPrice:      NewComputeSpecPriceClient(cfg),
+		Cycle:                 NewCycleClient(cfg),
+		CycleOrder:            NewCycleOrderClient(cfg),
+		CycleRecharge:         NewCycleRechargeClient(cfg),
+		CycleRedeemCode:       NewCycleRedeemCodeClient(cfg),
+		CycleRenewal:          NewCycleRenewalClient(cfg),
+		CycleTransaction:      NewCycleTransactionClient(cfg),
 		DomainBinding:         NewDomainBindingClient(cfg),
 		Employee:              NewEmployeeClient(cfg),
 		Gateway:               NewGatewayClient(cfg),
@@ -267,7 +315,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
+		c.Agent, c.AlipayOrderRollback, c.ComputeImage, c.ComputeInstance,
+		c.ComputeSpec, c.ComputeSpecPrice, c.Cycle, c.CycleOrder, c.CycleRecharge,
+		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
 		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
 		c.User,
@@ -280,7 +330,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Agent, c.ComputeImage, c.ComputeInstance, c.ComputeSpec, c.DomainBinding,
+		c.Agent, c.AlipayOrderRollback, c.ComputeImage, c.ComputeInstance,
+		c.ComputeSpec, c.ComputeSpecPrice, c.Cycle, c.CycleOrder, c.CycleRecharge,
+		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
 		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
 		c.User,
@@ -294,12 +346,28 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *AgentMutation:
 		return c.Agent.mutate(ctx, m)
+	case *AlipayOrderRollbackMutation:
+		return c.AlipayOrderRollback.mutate(ctx, m)
 	case *ComputeImageMutation:
 		return c.ComputeImage.mutate(ctx, m)
 	case *ComputeInstanceMutation:
 		return c.ComputeInstance.mutate(ctx, m)
 	case *ComputeSpecMutation:
 		return c.ComputeSpec.mutate(ctx, m)
+	case *ComputeSpecPriceMutation:
+		return c.ComputeSpecPrice.mutate(ctx, m)
+	case *CycleMutation:
+		return c.Cycle.mutate(ctx, m)
+	case *CycleOrderMutation:
+		return c.CycleOrder.mutate(ctx, m)
+	case *CycleRechargeMutation:
+		return c.CycleRecharge.mutate(ctx, m)
+	case *CycleRedeemCodeMutation:
+		return c.CycleRedeemCode.mutate(ctx, m)
+	case *CycleRenewalMutation:
+		return c.CycleRenewal.mutate(ctx, m)
+	case *CycleTransactionMutation:
+		return c.CycleTransaction.mutate(ctx, m)
 	case *DomainBindingMutation:
 		return c.DomainBinding.mutate(ctx, m)
 	case *EmployeeMutation:
@@ -446,6 +514,124 @@ func (c *AgentClient) mutate(ctx context.Context, m *AgentMutation) (Value, erro
 		return (&AgentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Agent mutation op: %q", m.Op())
+	}
+}
+
+// AlipayOrderRollbackClient is a client for the AlipayOrderRollback schema.
+type AlipayOrderRollbackClient struct {
+	config
+}
+
+// NewAlipayOrderRollbackClient returns a client for the AlipayOrderRollback from the given config.
+func NewAlipayOrderRollbackClient(c config) *AlipayOrderRollbackClient {
+	return &AlipayOrderRollbackClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `alipayorderrollback.Hooks(f(g(h())))`.
+func (c *AlipayOrderRollbackClient) Use(hooks ...Hook) {
+	c.hooks.AlipayOrderRollback = append(c.hooks.AlipayOrderRollback, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `alipayorderrollback.Intercept(f(g(h())))`.
+func (c *AlipayOrderRollbackClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AlipayOrderRollback = append(c.inters.AlipayOrderRollback, interceptors...)
+}
+
+// Create returns a builder for creating a AlipayOrderRollback entity.
+func (c *AlipayOrderRollbackClient) Create() *AlipayOrderRollbackCreate {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpCreate)
+	return &AlipayOrderRollbackCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AlipayOrderRollback entities.
+func (c *AlipayOrderRollbackClient) CreateBulk(builders ...*AlipayOrderRollbackCreate) *AlipayOrderRollbackCreateBulk {
+	return &AlipayOrderRollbackCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AlipayOrderRollback.
+func (c *AlipayOrderRollbackClient) Update() *AlipayOrderRollbackUpdate {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdate)
+	return &AlipayOrderRollbackUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AlipayOrderRollbackClient) UpdateOne(aor *AlipayOrderRollback) *AlipayOrderRollbackUpdateOne {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdateOne, withAlipayOrderRollback(aor))
+	return &AlipayOrderRollbackUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AlipayOrderRollbackClient) UpdateOneID(id int) *AlipayOrderRollbackUpdateOne {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdateOne, withAlipayOrderRollbackID(id))
+	return &AlipayOrderRollbackUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AlipayOrderRollback.
+func (c *AlipayOrderRollbackClient) Delete() *AlipayOrderRollbackDelete {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpDelete)
+	return &AlipayOrderRollbackDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AlipayOrderRollbackClient) DeleteOne(aor *AlipayOrderRollback) *AlipayOrderRollbackDeleteOne {
+	return c.DeleteOneID(aor.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AlipayOrderRollbackClient) DeleteOneID(id int) *AlipayOrderRollbackDeleteOne {
+	builder := c.Delete().Where(alipayorderrollback.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AlipayOrderRollbackDeleteOne{builder}
+}
+
+// Query returns a query builder for AlipayOrderRollback.
+func (c *AlipayOrderRollbackClient) Query() *AlipayOrderRollbackQuery {
+	return &AlipayOrderRollbackQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAlipayOrderRollback},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AlipayOrderRollback entity by its id.
+func (c *AlipayOrderRollbackClient) Get(ctx context.Context, id int) (*AlipayOrderRollback, error) {
+	return c.Query().Where(alipayorderrollback.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AlipayOrderRollbackClient) GetX(ctx context.Context, id int) *AlipayOrderRollback {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AlipayOrderRollbackClient) Hooks() []Hook {
+	return c.hooks.AlipayOrderRollback
+}
+
+// Interceptors returns the client interceptors.
+func (c *AlipayOrderRollbackClient) Interceptors() []Interceptor {
+	return c.inters.AlipayOrderRollback
+}
+
+func (c *AlipayOrderRollbackClient) mutate(ctx context.Context, m *AlipayOrderRollbackMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AlipayOrderRollbackCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AlipayOrderRollbackUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AlipayOrderRollbackUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AlipayOrderRollbackDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown AlipayOrderRollback mutation op: %q", m.Op())
 	}
 }
 
@@ -800,6 +986,832 @@ func (c *ComputeSpecClient) mutate(ctx context.Context, m *ComputeSpecMutation) 
 		return (&ComputeSpecDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ComputeSpec mutation op: %q", m.Op())
+	}
+}
+
+// ComputeSpecPriceClient is a client for the ComputeSpecPrice schema.
+type ComputeSpecPriceClient struct {
+	config
+}
+
+// NewComputeSpecPriceClient returns a client for the ComputeSpecPrice from the given config.
+func NewComputeSpecPriceClient(c config) *ComputeSpecPriceClient {
+	return &ComputeSpecPriceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `computespecprice.Hooks(f(g(h())))`.
+func (c *ComputeSpecPriceClient) Use(hooks ...Hook) {
+	c.hooks.ComputeSpecPrice = append(c.hooks.ComputeSpecPrice, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `computespecprice.Intercept(f(g(h())))`.
+func (c *ComputeSpecPriceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ComputeSpecPrice = append(c.inters.ComputeSpecPrice, interceptors...)
+}
+
+// Create returns a builder for creating a ComputeSpecPrice entity.
+func (c *ComputeSpecPriceClient) Create() *ComputeSpecPriceCreate {
+	mutation := newComputeSpecPriceMutation(c.config, OpCreate)
+	return &ComputeSpecPriceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ComputeSpecPrice entities.
+func (c *ComputeSpecPriceClient) CreateBulk(builders ...*ComputeSpecPriceCreate) *ComputeSpecPriceCreateBulk {
+	return &ComputeSpecPriceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Update() *ComputeSpecPriceUpdate {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdate)
+	return &ComputeSpecPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ComputeSpecPriceClient) UpdateOne(csp *ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPrice(csp))
+	return &ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ComputeSpecPriceClient) UpdateOneID(id int32) *ComputeSpecPriceUpdateOne {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPriceID(id))
+	return &ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Delete() *ComputeSpecPriceDelete {
+	mutation := newComputeSpecPriceMutation(c.config, OpDelete)
+	return &ComputeSpecPriceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ComputeSpecPriceClient) DeleteOne(csp *ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
+	return c.DeleteOneID(csp.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ComputeSpecPriceClient) DeleteOneID(id int32) *ComputeSpecPriceDeleteOne {
+	builder := c.Delete().Where(computespecprice.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ComputeSpecPriceDeleteOne{builder}
+}
+
+// Query returns a query builder for ComputeSpecPrice.
+func (c *ComputeSpecPriceClient) Query() *ComputeSpecPriceQuery {
+	return &ComputeSpecPriceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeComputeSpecPrice},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ComputeSpecPrice entity by its id.
+func (c *ComputeSpecPriceClient) Get(ctx context.Context, id int32) (*ComputeSpecPrice, error) {
+	return c.Query().Where(computespecprice.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ComputeSpecPriceClient) GetX(ctx context.Context, id int32) *ComputeSpecPrice {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ComputeSpecPriceClient) Hooks() []Hook {
+	return c.hooks.ComputeSpecPrice
+}
+
+// Interceptors returns the client interceptors.
+func (c *ComputeSpecPriceClient) Interceptors() []Interceptor {
+	return c.inters.ComputeSpecPrice
+}
+
+func (c *ComputeSpecPriceClient) mutate(ctx context.Context, m *ComputeSpecPriceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ComputeSpecPriceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ComputeSpecPriceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ComputeSpecPriceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ComputeSpecPrice mutation op: %q", m.Op())
+	}
+}
+
+// CycleClient is a client for the Cycle schema.
+type CycleClient struct {
+	config
+}
+
+// NewCycleClient returns a client for the Cycle from the given config.
+func NewCycleClient(c config) *CycleClient {
+	return &CycleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cycle.Hooks(f(g(h())))`.
+func (c *CycleClient) Use(hooks ...Hook) {
+	c.hooks.Cycle = append(c.hooks.Cycle, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cycle.Intercept(f(g(h())))`.
+func (c *CycleClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Cycle = append(c.inters.Cycle, interceptors...)
+}
+
+// Create returns a builder for creating a Cycle entity.
+func (c *CycleClient) Create() *CycleCreate {
+	mutation := newCycleMutation(c.config, OpCreate)
+	return &CycleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Cycle entities.
+func (c *CycleClient) CreateBulk(builders ...*CycleCreate) *CycleCreateBulk {
+	return &CycleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Cycle.
+func (c *CycleClient) Update() *CycleUpdate {
+	mutation := newCycleMutation(c.config, OpUpdate)
+	return &CycleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleClient) UpdateOne(cy *Cycle) *CycleUpdateOne {
+	mutation := newCycleMutation(c.config, OpUpdateOne, withCycle(cy))
+	return &CycleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleClient) UpdateOneID(id uuid.UUID) *CycleUpdateOne {
+	mutation := newCycleMutation(c.config, OpUpdateOne, withCycleID(id))
+	return &CycleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Cycle.
+func (c *CycleClient) Delete() *CycleDelete {
+	mutation := newCycleMutation(c.config, OpDelete)
+	return &CycleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleClient) DeleteOne(cy *Cycle) *CycleDeleteOne {
+	return c.DeleteOneID(cy.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleClient) DeleteOneID(id uuid.UUID) *CycleDeleteOne {
+	builder := c.Delete().Where(cycle.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleDeleteOne{builder}
+}
+
+// Query returns a query builder for Cycle.
+func (c *CycleClient) Query() *CycleQuery {
+	return &CycleQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycle},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Cycle entity by its id.
+func (c *CycleClient) Get(ctx context.Context, id uuid.UUID) (*Cycle, error) {
+	return c.Query().Where(cycle.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleClient) GetX(ctx context.Context, id uuid.UUID) *Cycle {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleClient) Hooks() []Hook {
+	return c.hooks.Cycle
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleClient) Interceptors() []Interceptor {
+	return c.inters.Cycle
+}
+
+func (c *CycleClient) mutate(ctx context.Context, m *CycleMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Cycle mutation op: %q", m.Op())
+	}
+}
+
+// CycleOrderClient is a client for the CycleOrder schema.
+type CycleOrderClient struct {
+	config
+}
+
+// NewCycleOrderClient returns a client for the CycleOrder from the given config.
+func NewCycleOrderClient(c config) *CycleOrderClient {
+	return &CycleOrderClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cycleorder.Hooks(f(g(h())))`.
+func (c *CycleOrderClient) Use(hooks ...Hook) {
+	c.hooks.CycleOrder = append(c.hooks.CycleOrder, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cycleorder.Intercept(f(g(h())))`.
+func (c *CycleOrderClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CycleOrder = append(c.inters.CycleOrder, interceptors...)
+}
+
+// Create returns a builder for creating a CycleOrder entity.
+func (c *CycleOrderClient) Create() *CycleOrderCreate {
+	mutation := newCycleOrderMutation(c.config, OpCreate)
+	return &CycleOrderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CycleOrder entities.
+func (c *CycleOrderClient) CreateBulk(builders ...*CycleOrderCreate) *CycleOrderCreateBulk {
+	return &CycleOrderCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CycleOrder.
+func (c *CycleOrderClient) Update() *CycleOrderUpdate {
+	mutation := newCycleOrderMutation(c.config, OpUpdate)
+	return &CycleOrderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleOrderClient) UpdateOne(co *CycleOrder) *CycleOrderUpdateOne {
+	mutation := newCycleOrderMutation(c.config, OpUpdateOne, withCycleOrder(co))
+	return &CycleOrderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleOrderClient) UpdateOneID(id uuid.UUID) *CycleOrderUpdateOne {
+	mutation := newCycleOrderMutation(c.config, OpUpdateOne, withCycleOrderID(id))
+	return &CycleOrderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CycleOrder.
+func (c *CycleOrderClient) Delete() *CycleOrderDelete {
+	mutation := newCycleOrderMutation(c.config, OpDelete)
+	return &CycleOrderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleOrderClient) DeleteOne(co *CycleOrder) *CycleOrderDeleteOne {
+	return c.DeleteOneID(co.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleOrderClient) DeleteOneID(id uuid.UUID) *CycleOrderDeleteOne {
+	builder := c.Delete().Where(cycleorder.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleOrderDeleteOne{builder}
+}
+
+// Query returns a query builder for CycleOrder.
+func (c *CycleOrderClient) Query() *CycleOrderQuery {
+	return &CycleOrderQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycleOrder},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CycleOrder entity by its id.
+func (c *CycleOrderClient) Get(ctx context.Context, id uuid.UUID) (*CycleOrder, error) {
+	return c.Query().Where(cycleorder.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleOrderClient) GetX(ctx context.Context, id uuid.UUID) *CycleOrder {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleOrderClient) Hooks() []Hook {
+	return c.hooks.CycleOrder
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleOrderClient) Interceptors() []Interceptor {
+	return c.inters.CycleOrder
+}
+
+func (c *CycleOrderClient) mutate(ctx context.Context, m *CycleOrderMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleOrderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleOrderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleOrderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleOrderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CycleOrder mutation op: %q", m.Op())
+	}
+}
+
+// CycleRechargeClient is a client for the CycleRecharge schema.
+type CycleRechargeClient struct {
+	config
+}
+
+// NewCycleRechargeClient returns a client for the CycleRecharge from the given config.
+func NewCycleRechargeClient(c config) *CycleRechargeClient {
+	return &CycleRechargeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cyclerecharge.Hooks(f(g(h())))`.
+func (c *CycleRechargeClient) Use(hooks ...Hook) {
+	c.hooks.CycleRecharge = append(c.hooks.CycleRecharge, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cyclerecharge.Intercept(f(g(h())))`.
+func (c *CycleRechargeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CycleRecharge = append(c.inters.CycleRecharge, interceptors...)
+}
+
+// Create returns a builder for creating a CycleRecharge entity.
+func (c *CycleRechargeClient) Create() *CycleRechargeCreate {
+	mutation := newCycleRechargeMutation(c.config, OpCreate)
+	return &CycleRechargeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CycleRecharge entities.
+func (c *CycleRechargeClient) CreateBulk(builders ...*CycleRechargeCreate) *CycleRechargeCreateBulk {
+	return &CycleRechargeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CycleRecharge.
+func (c *CycleRechargeClient) Update() *CycleRechargeUpdate {
+	mutation := newCycleRechargeMutation(c.config, OpUpdate)
+	return &CycleRechargeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleRechargeClient) UpdateOne(cr *CycleRecharge) *CycleRechargeUpdateOne {
+	mutation := newCycleRechargeMutation(c.config, OpUpdateOne, withCycleRecharge(cr))
+	return &CycleRechargeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleRechargeClient) UpdateOneID(id uuid.UUID) *CycleRechargeUpdateOne {
+	mutation := newCycleRechargeMutation(c.config, OpUpdateOne, withCycleRechargeID(id))
+	return &CycleRechargeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CycleRecharge.
+func (c *CycleRechargeClient) Delete() *CycleRechargeDelete {
+	mutation := newCycleRechargeMutation(c.config, OpDelete)
+	return &CycleRechargeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleRechargeClient) DeleteOne(cr *CycleRecharge) *CycleRechargeDeleteOne {
+	return c.DeleteOneID(cr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleRechargeClient) DeleteOneID(id uuid.UUID) *CycleRechargeDeleteOne {
+	builder := c.Delete().Where(cyclerecharge.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleRechargeDeleteOne{builder}
+}
+
+// Query returns a query builder for CycleRecharge.
+func (c *CycleRechargeClient) Query() *CycleRechargeQuery {
+	return &CycleRechargeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycleRecharge},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CycleRecharge entity by its id.
+func (c *CycleRechargeClient) Get(ctx context.Context, id uuid.UUID) (*CycleRecharge, error) {
+	return c.Query().Where(cyclerecharge.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleRechargeClient) GetX(ctx context.Context, id uuid.UUID) *CycleRecharge {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleRechargeClient) Hooks() []Hook {
+	return c.hooks.CycleRecharge
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleRechargeClient) Interceptors() []Interceptor {
+	return c.inters.CycleRecharge
+}
+
+func (c *CycleRechargeClient) mutate(ctx context.Context, m *CycleRechargeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleRechargeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleRechargeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleRechargeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleRechargeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CycleRecharge mutation op: %q", m.Op())
+	}
+}
+
+// CycleRedeemCodeClient is a client for the CycleRedeemCode schema.
+type CycleRedeemCodeClient struct {
+	config
+}
+
+// NewCycleRedeemCodeClient returns a client for the CycleRedeemCode from the given config.
+func NewCycleRedeemCodeClient(c config) *CycleRedeemCodeClient {
+	return &CycleRedeemCodeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cycleredeemcode.Hooks(f(g(h())))`.
+func (c *CycleRedeemCodeClient) Use(hooks ...Hook) {
+	c.hooks.CycleRedeemCode = append(c.hooks.CycleRedeemCode, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cycleredeemcode.Intercept(f(g(h())))`.
+func (c *CycleRedeemCodeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CycleRedeemCode = append(c.inters.CycleRedeemCode, interceptors...)
+}
+
+// Create returns a builder for creating a CycleRedeemCode entity.
+func (c *CycleRedeemCodeClient) Create() *CycleRedeemCodeCreate {
+	mutation := newCycleRedeemCodeMutation(c.config, OpCreate)
+	return &CycleRedeemCodeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CycleRedeemCode entities.
+func (c *CycleRedeemCodeClient) CreateBulk(builders ...*CycleRedeemCodeCreate) *CycleRedeemCodeCreateBulk {
+	return &CycleRedeemCodeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CycleRedeemCode.
+func (c *CycleRedeemCodeClient) Update() *CycleRedeemCodeUpdate {
+	mutation := newCycleRedeemCodeMutation(c.config, OpUpdate)
+	return &CycleRedeemCodeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleRedeemCodeClient) UpdateOne(crc *CycleRedeemCode) *CycleRedeemCodeUpdateOne {
+	mutation := newCycleRedeemCodeMutation(c.config, OpUpdateOne, withCycleRedeemCode(crc))
+	return &CycleRedeemCodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleRedeemCodeClient) UpdateOneID(id uuid.UUID) *CycleRedeemCodeUpdateOne {
+	mutation := newCycleRedeemCodeMutation(c.config, OpUpdateOne, withCycleRedeemCodeID(id))
+	return &CycleRedeemCodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CycleRedeemCode.
+func (c *CycleRedeemCodeClient) Delete() *CycleRedeemCodeDelete {
+	mutation := newCycleRedeemCodeMutation(c.config, OpDelete)
+	return &CycleRedeemCodeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleRedeemCodeClient) DeleteOne(crc *CycleRedeemCode) *CycleRedeemCodeDeleteOne {
+	return c.DeleteOneID(crc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleRedeemCodeClient) DeleteOneID(id uuid.UUID) *CycleRedeemCodeDeleteOne {
+	builder := c.Delete().Where(cycleredeemcode.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleRedeemCodeDeleteOne{builder}
+}
+
+// Query returns a query builder for CycleRedeemCode.
+func (c *CycleRedeemCodeClient) Query() *CycleRedeemCodeQuery {
+	return &CycleRedeemCodeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycleRedeemCode},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CycleRedeemCode entity by its id.
+func (c *CycleRedeemCodeClient) Get(ctx context.Context, id uuid.UUID) (*CycleRedeemCode, error) {
+	return c.Query().Where(cycleredeemcode.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleRedeemCodeClient) GetX(ctx context.Context, id uuid.UUID) *CycleRedeemCode {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleRedeemCodeClient) Hooks() []Hook {
+	return c.hooks.CycleRedeemCode
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleRedeemCodeClient) Interceptors() []Interceptor {
+	return c.inters.CycleRedeemCode
+}
+
+func (c *CycleRedeemCodeClient) mutate(ctx context.Context, m *CycleRedeemCodeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleRedeemCodeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleRedeemCodeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleRedeemCodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleRedeemCodeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CycleRedeemCode mutation op: %q", m.Op())
+	}
+}
+
+// CycleRenewalClient is a client for the CycleRenewal schema.
+type CycleRenewalClient struct {
+	config
+}
+
+// NewCycleRenewalClient returns a client for the CycleRenewal from the given config.
+func NewCycleRenewalClient(c config) *CycleRenewalClient {
+	return &CycleRenewalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cyclerenewal.Hooks(f(g(h())))`.
+func (c *CycleRenewalClient) Use(hooks ...Hook) {
+	c.hooks.CycleRenewal = append(c.hooks.CycleRenewal, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cyclerenewal.Intercept(f(g(h())))`.
+func (c *CycleRenewalClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CycleRenewal = append(c.inters.CycleRenewal, interceptors...)
+}
+
+// Create returns a builder for creating a CycleRenewal entity.
+func (c *CycleRenewalClient) Create() *CycleRenewalCreate {
+	mutation := newCycleRenewalMutation(c.config, OpCreate)
+	return &CycleRenewalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CycleRenewal entities.
+func (c *CycleRenewalClient) CreateBulk(builders ...*CycleRenewalCreate) *CycleRenewalCreateBulk {
+	return &CycleRenewalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CycleRenewal.
+func (c *CycleRenewalClient) Update() *CycleRenewalUpdate {
+	mutation := newCycleRenewalMutation(c.config, OpUpdate)
+	return &CycleRenewalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleRenewalClient) UpdateOne(cr *CycleRenewal) *CycleRenewalUpdateOne {
+	mutation := newCycleRenewalMutation(c.config, OpUpdateOne, withCycleRenewal(cr))
+	return &CycleRenewalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleRenewalClient) UpdateOneID(id uuid.UUID) *CycleRenewalUpdateOne {
+	mutation := newCycleRenewalMutation(c.config, OpUpdateOne, withCycleRenewalID(id))
+	return &CycleRenewalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CycleRenewal.
+func (c *CycleRenewalClient) Delete() *CycleRenewalDelete {
+	mutation := newCycleRenewalMutation(c.config, OpDelete)
+	return &CycleRenewalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleRenewalClient) DeleteOne(cr *CycleRenewal) *CycleRenewalDeleteOne {
+	return c.DeleteOneID(cr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleRenewalClient) DeleteOneID(id uuid.UUID) *CycleRenewalDeleteOne {
+	builder := c.Delete().Where(cyclerenewal.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleRenewalDeleteOne{builder}
+}
+
+// Query returns a query builder for CycleRenewal.
+func (c *CycleRenewalClient) Query() *CycleRenewalQuery {
+	return &CycleRenewalQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycleRenewal},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CycleRenewal entity by its id.
+func (c *CycleRenewalClient) Get(ctx context.Context, id uuid.UUID) (*CycleRenewal, error) {
+	return c.Query().Where(cyclerenewal.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleRenewalClient) GetX(ctx context.Context, id uuid.UUID) *CycleRenewal {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleRenewalClient) Hooks() []Hook {
+	return c.hooks.CycleRenewal
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleRenewalClient) Interceptors() []Interceptor {
+	return c.inters.CycleRenewal
+}
+
+func (c *CycleRenewalClient) mutate(ctx context.Context, m *CycleRenewalMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleRenewalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleRenewalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleRenewalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleRenewalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CycleRenewal mutation op: %q", m.Op())
+	}
+}
+
+// CycleTransactionClient is a client for the CycleTransaction schema.
+type CycleTransactionClient struct {
+	config
+}
+
+// NewCycleTransactionClient returns a client for the CycleTransaction from the given config.
+func NewCycleTransactionClient(c config) *CycleTransactionClient {
+	return &CycleTransactionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `cycletransaction.Hooks(f(g(h())))`.
+func (c *CycleTransactionClient) Use(hooks ...Hook) {
+	c.hooks.CycleTransaction = append(c.hooks.CycleTransaction, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cycletransaction.Intercept(f(g(h())))`.
+func (c *CycleTransactionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CycleTransaction = append(c.inters.CycleTransaction, interceptors...)
+}
+
+// Create returns a builder for creating a CycleTransaction entity.
+func (c *CycleTransactionClient) Create() *CycleTransactionCreate {
+	mutation := newCycleTransactionMutation(c.config, OpCreate)
+	return &CycleTransactionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CycleTransaction entities.
+func (c *CycleTransactionClient) CreateBulk(builders ...*CycleTransactionCreate) *CycleTransactionCreateBulk {
+	return &CycleTransactionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CycleTransaction.
+func (c *CycleTransactionClient) Update() *CycleTransactionUpdate {
+	mutation := newCycleTransactionMutation(c.config, OpUpdate)
+	return &CycleTransactionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CycleTransactionClient) UpdateOne(ct *CycleTransaction) *CycleTransactionUpdateOne {
+	mutation := newCycleTransactionMutation(c.config, OpUpdateOne, withCycleTransaction(ct))
+	return &CycleTransactionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CycleTransactionClient) UpdateOneID(id uuid.UUID) *CycleTransactionUpdateOne {
+	mutation := newCycleTransactionMutation(c.config, OpUpdateOne, withCycleTransactionID(id))
+	return &CycleTransactionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CycleTransaction.
+func (c *CycleTransactionClient) Delete() *CycleTransactionDelete {
+	mutation := newCycleTransactionMutation(c.config, OpDelete)
+	return &CycleTransactionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CycleTransactionClient) DeleteOne(ct *CycleTransaction) *CycleTransactionDeleteOne {
+	return c.DeleteOneID(ct.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CycleTransactionClient) DeleteOneID(id uuid.UUID) *CycleTransactionDeleteOne {
+	builder := c.Delete().Where(cycletransaction.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CycleTransactionDeleteOne{builder}
+}
+
+// Query returns a query builder for CycleTransaction.
+func (c *CycleTransactionClient) Query() *CycleTransactionQuery {
+	return &CycleTransactionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCycleTransaction},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CycleTransaction entity by its id.
+func (c *CycleTransactionClient) Get(ctx context.Context, id uuid.UUID) (*CycleTransaction, error) {
+	return c.Query().Where(cycletransaction.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CycleTransactionClient) GetX(ctx context.Context, id uuid.UUID) *CycleTransaction {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *CycleTransactionClient) Hooks() []Hook {
+	return c.hooks.CycleTransaction
+}
+
+// Interceptors returns the client interceptors.
+func (c *CycleTransactionClient) Interceptors() []Interceptor {
+	return c.inters.CycleTransaction
+}
+
+func (c *CycleTransactionClient) mutate(ctx context.Context, m *CycleTransactionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CycleTransactionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CycleTransactionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CycleTransactionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CycleTransactionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CycleTransaction mutation op: %q", m.Op())
 	}
 }
 
@@ -2372,13 +3384,17 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
-		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
-		ScriptExecutionRecord, Storage, StorageProvider, Task, User []ent.Hook
+		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec,
+		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
+		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
+		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
+		StorageProvider, Task, User []ent.Hook
 	}
 	inters struct {
-		Agent, ComputeImage, ComputeInstance, ComputeSpec, DomainBinding, Employee,
-		Gateway, GatewayPort, NetworkMapping, S3Bucket, S3User, Script,
-		ScriptExecutionRecord, Storage, StorageProvider, Task, User []ent.Interceptor
+		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec,
+		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
+		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
+		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
+		StorageProvider, Task, User []ent.Interceptor
 	}
 )

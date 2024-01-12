@@ -3,95 +3,19 @@
 
 openapi: 3.0.3
 info:
-    title: ComputeInstance API
+    title: Order API
     version: 0.0.1
 paths:
-    /v1/compute/duration:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询到期时间
-            operationId: ComputeInstance_ListComputeInstanceDuration
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeDurationReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/compute/image:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询镜像
-            operationId: ComputeInstance_ListComputeImage
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeImageReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/compute/spec:
-        get:
-            tags:
-                - ComputeInstance
-            description: 查询规格
-            operationId: ComputeInstance_ListComputeSpec
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListComputeSpecReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance:
-        get:
-            tags:
-                - ComputeInstance
-            description: 实例列表
-            operationId: ComputeInstance_List
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ListInstanceReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+    /v1/alipay/pay/notify:
         post:
             tags:
-                - ComputeInstance
-            description: 创建实例
-            operationId: ComputeInstance_Create
+                - Order
+            operationId: Order_AlipayPayNotify
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CreateInstanceRequest'
+                            $ref: '#/components/schemas/AlipayPayNotifyRequest'
                 required: true
             responses:
                 "200":
@@ -99,79 +23,41 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CreateInstanceReply'
+                                $ref: '#/components/schemas/AlipayPayNotifyReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/instance/{id}:
+    /v1/cycle/balance:
         get:
             tags:
-                - ComputeInstance
-            description: 获取实例详情
-            operationId: ComputeInstance_Get
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Order
+            operationId: Order_GetCycleBalance
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetInstanceReply'
+                                $ref: '#/components/schemas/GetCycleBalanceReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-        delete:
+    /v1/cycle/recharge:
+        post:
             tags:
-                - ComputeInstance
-            description: 删除实例
-            operationId: ComputeInstance_Delete
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/recreate:
-        put:
-            tags:
-                - ComputeInstance
-            description: 重建实例
-            operationId: ComputeInstance_ReCreateInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Order
+            operationId: Order_RechargeCycleByAlipay
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/RecreateInstanceRequest'
+                            $ref: '#/components/schemas/RechargeCycleByAlipayRequest'
                 required: true
             responses:
                 "200":
@@ -179,112 +65,94 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonReply'
+                                $ref: '#/components/schemas/RechargeCycleByAlipayReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/restart:
-        put:
-            tags:
-                - ComputeInstance
-            description: 重启实例
-            operationId: ComputeInstance_RestartInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/GetInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/start:
-        put:
-            tags:
-                - ComputeInstance
-            description: 启动实例
-            operationId: ComputeInstance_StartInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/GetInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/stop:
-        put:
-            tags:
-                - ComputeInstance
-            description: 停止实例
-            operationId: ComputeInstance_StopInstance
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/GetInstanceRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/instance/{id}/vnc:
+    /v1/cycle/recharge/state:
         get:
             tags:
-                - ComputeInstance
-            description: 获取vnc 地址
-            operationId: ComputeInstance_GetInstanceVncURL
+                - Order
+            operationId: Order_GetRechargeState
+            parameters:
+                - name: outTradeNo
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRechargeStateReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/redeem:
+        post:
+            tags:
+                - Order
+            operationId: Order_RechargeCycleByRedeemCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RechargeCycleByRedeemCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RechargeCycleByRedeemCodeReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal:
+        get:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}:
+        get:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalDetail
             parameters:
                 - name: id
                   in: path
@@ -297,7 +165,155 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetInstanceVncURLReply'
+                                $ref: '#/components/schemas/CycleRenewalGetReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/close:
+        put:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalClose
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CycleRenewalGetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalBaseReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/manual-renew:
+        post:
+            tags:
+                - Order
+            operationId: Order_ManualRenew
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ManualRenewRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ManualRenewReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/renewal/{id}/open:
+        put:
+            tags:
+                - Order
+            operationId: Order_CycleRenewalOpen
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CycleRenewalGetRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleRenewalBaseReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/cycle/transaction:
+        get:
+            tags:
+                - Order
+            operationId: Order_CycleTransactionList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CycleTransactionListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/order:
+        get:
+            tags:
+                - Order
+            operationId: Order_OrderList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/OrderListReply'
                 default:
                     description: Default error response
                     content:
@@ -306,7 +322,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        CommonReply:
+        AlipayPayNotifyReply:
             type: object
             properties:
                 code:
@@ -314,40 +330,120 @@ components:
                     format: int32
                 message:
                     type: string
-        ComputeDuration:
+        AlipayPayNotifyRequest:
             type: object
             properties:
-                name:
+                notifyTime:
                     type: string
-                duration:
+                notifyType:
+                    type: string
+                notifyId:
+                    type: string
+                appId:
+                    type: string
+                charset:
+                    type: string
+                version:
+                    type: string
+                signType:
+                    type: string
+                sign:
+                    type: string
+                tradeNo:
+                    type: string
+                outTradeNo:
+                    type: string
+                outBizNo:
+                    type: string
+                buyerId:
+                    type: string
+                buyerLogonId:
+                    type: string
+                sellerId:
+                    type: string
+                sellerEmail:
+                    type: string
+                tradeStatus:
+                    type: string
+                totalAmount:
+                    type: string
+                receiptAmount:
+                    type: string
+                invoiceAmount:
+                    type: string
+                buyerPayAmount:
+                    type: string
+                pointAmount:
+                    type: string
+                refundFee:
+                    type: string
+                subject:
+                    type: string
+                body:
+                    type: string
+                gmtCreate:
+                    type: string
+                gmtPayment:
+                    type: string
+                gmtRefund:
+                    type: string
+                gmtClose:
+                    type: string
+                fundBillList:
+                    type: string
+                passbackParams:
+                    type: string
+                voucherDetailList:
+                    type: string
+                method:
+                    type: string
+                timestamp:
+                    type: string
+                authAppId:
+                    type: string
+            description: https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
+        CycleRenewalBaseReply:
+            type: object
+            properties:
+                code:
                     type: integer
                     format: int32
-        ComputeImage:
+                message:
+                    type: string
+        CycleRenewalDetailInfo:
             type: object
             properties:
                 id:
+                    type: string
+                productName:
+                    type: string
+                productDesc:
+                    type: string
+                state:
                     type: integer
                     format: int32
-                name:
+                dueTime:
+                    type: string
+                renewalTime:
+                    type: string
+                instanceId:
+                    type: string
+                instanceName:
+                    type: string
+                instanceSpec:
                     type: string
                 image:
                     type: string
-                tag:
-                    type: string
-                port:
+                extendPrice:
+                    type: number
+                    format: float
+                extendDay:
                     type: integer
-                    format: int32
-        ComputeSpec:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                core:
-                    type: string
-                memory:
-                    type: string
-        CreateInstanceReply:
+                    format: int64
+                balance:
+                    type: number
+                    format: float
+        CycleRenewalGetReply:
             type: object
             properties:
                 code:
@@ -356,35 +452,29 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CreateInstanceReply_Data'
-        CreateInstanceReply_Data:
+                    $ref: '#/components/schemas/CycleRenewalDetailInfo'
+        CycleRenewalGetRequest:
             type: object
             properties:
                 id:
                     type: string
-                name:
-                    type: string
-        CreateInstanceRequest:
+        CycleRenewalInfo:
             type: object
             properties:
-                specId:
+                id:
+                    type: string
+                productName:
+                    type: string
+                productDesc:
+                    type: string
+                state:
                     type: integer
                     format: int32
-                imageId:
-                    type: integer
-                    format: int32
-                duration:
-                    type: integer
-                    format: int32
-                name:
+                dueTime:
                     type: string
-                publicKey:
+                renewalTime:
                     type: string
-                password:
-                    type: string
-                dockerCompose:
-                    type: string
-        GetInstanceReply:
+        CycleRenewalListReply:
             type: object
             properties:
                 code:
@@ -393,13 +483,75 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/Instance'
-        GetInstanceRequest:
+                    $ref: '#/components/schemas/CycleRenewalPage'
+        CycleRenewalPage:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CycleRenewalInfo'
+        CycleTransactionInfo:
             type: object
             properties:
                 id:
                     type: string
-        GetInstanceVncURLReply:
+                operation:
+                    type: string
+                symbol:
+                    type: string
+                cycle:
+                    type: number
+                    format: float
+                operationTime:
+                    type: integer
+                    format: int64
+        CycleTransactionListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/CycleTransactionPage'
+        CycleTransactionPage:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CycleTransactionInfo'
+        GetCycleBalanceReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: string
+        GetRechargeStateReply:
             type: object
             properties:
                 code:
@@ -417,53 +569,41 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        Instance:
+        ManualRenewReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                data:
+                    type: string
+        ManualRenewRequest:
             type: object
             properties:
                 id:
                     type: string
-                name:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-                expirationTime:
-                    type: integer
-                    format: int64
-                imageName:
-                    type: string
-                core:
-                    type: string
-                memory:
-                    type: string
-                stats:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/InstanceStats'
-                containerId:
-                    type: string
-                command:
-                    type: string
-                agentId:
-                    type: string
-                imageId:
-                    type: integer
-                    format: int32
-        InstanceStats:
+        OrderInfo:
             type: object
             properties:
                 id:
                     type: string
-                cpuUsage:
+                orderNo:
+                    type: string
+                productName:
+                    type: string
+                productDesc:
+                    type: string
+                symbol:
+                    type: string
+                cycle:
                     type: number
                     format: float
-                memoryUsage:
-                    type: number
-                    format: float
-                StatsTime:
+                createTime:
                     type: integer
                     format: int64
-        ListComputeDurationReply:
+        OrderListReply:
             type: object
             properties:
                 code:
@@ -472,10 +612,24 @@ components:
                 message:
                     type: string
                 data:
+                    $ref: '#/components/schemas/OrderPage'
+        OrderPage:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                page:
+                    type: integer
+                    format: int32
+                size:
+                    type: integer
+                    format: int32
+                data:
                     type: array
                     items:
-                        $ref: '#/components/schemas/ComputeDuration'
-        ListComputeImageReply:
+                        $ref: '#/components/schemas/OrderInfo'
+        RechargeCycleByAlipayReply:
             type: object
             properties:
                 code:
@@ -484,10 +638,27 @@ components:
                 message:
                     type: string
                 data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ComputeImage'
-        ListComputeSpecReply:
+                    $ref: '#/components/schemas/RechargeCycleByAlipayReply_Pay'
+        RechargeCycleByAlipayReply_Pay:
+            type: object
+            properties:
+                outTradeNo:
+                    type: string
+                url:
+                    type: string
+        RechargeCycleByAlipayRequest:
+            type: object
+            properties:
+                rechargeChannel:
+                    type: integer
+                    format: int32
+                cycle:
+                    type: number
+                    format: float
+                amount:
+                    type: number
+                    format: float
+        RechargeCycleByRedeemCodeReply:
             type: object
             properties:
                 code:
@@ -496,34 +667,11 @@ components:
                 message:
                     type: string
                 data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/ComputeSpec'
-        ListInstanceReply:
+                    type: string
+        RechargeCycleByRedeemCodeRequest:
             type: object
             properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Instance'
-        RecreateInstanceRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                imageId:
-                    type: integer
-                    format: int32
-                publicKey:
-                    type: string
-                password:
-                    type: string
-                dockerCompose:
+                redeemCode:
                     type: string
         Status:
             type: object
@@ -542,4 +690,4 @@ components:
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
 tags:
-    - name: ComputeInstance
+    - name: Order

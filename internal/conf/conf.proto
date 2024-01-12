@@ -64,6 +64,7 @@ message Dispose{
   S3 s3 = 1;
   Dh3t dh3t = 2;
   Domain domain = 3;
+  Alipay alipay = 4;
 
   message S3{
     string target_docker_host = 1;
@@ -84,5 +85,15 @@ message Dispose{
   message Domain {
     string vnc_host = 1;
     string api_host = 2;
+  }
+
+  message Alipay {
+    string app_id = 1;
+    string alipay_public_cert_path = 2;
+    string alipay_root_cert_path = 3;
+    string app_public_cert_path = 4;
+    string app_private_key = 5;
+    string pay_return_url = 6;
+    string pay_notify_url = 7;
   }
 }

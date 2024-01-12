@@ -19,18 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ComputeInstance_ListComputeSpec_FullMethodName             = "/api.server.compute.v1.ComputeInstance/ListComputeSpec"
-	ComputeInstance_ListComputeImage_FullMethodName            = "/api.server.compute.v1.ComputeInstance/ListComputeImage"
-	ComputeInstance_ListComputeInstanceDuration_FullMethodName = "/api.server.compute.v1.ComputeInstance/ListComputeInstanceDuration"
-	ComputeInstance_Create_FullMethodName                      = "/api.server.compute.v1.ComputeInstance/Create"
-	ComputeInstance_Delete_FullMethodName                      = "/api.server.compute.v1.ComputeInstance/Delete"
-	ComputeInstance_Get_FullMethodName                         = "/api.server.compute.v1.ComputeInstance/Get"
-	ComputeInstance_List_FullMethodName                        = "/api.server.compute.v1.ComputeInstance/List"
-	ComputeInstance_StopInstance_FullMethodName                = "/api.server.compute.v1.ComputeInstance/StopInstance"
-	ComputeInstance_StartInstance_FullMethodName               = "/api.server.compute.v1.ComputeInstance/StartInstance"
-	ComputeInstance_RestartInstance_FullMethodName             = "/api.server.compute.v1.ComputeInstance/RestartInstance"
-	ComputeInstance_ReCreateInstance_FullMethodName            = "/api.server.compute.v1.ComputeInstance/ReCreateInstance"
-	ComputeInstance_GetInstanceVncURL_FullMethodName           = "/api.server.compute.v1.ComputeInstance/GetInstanceVncURL"
+	ComputeInstance_ListComputeSpec_FullMethodName      = "/api.server.compute.v1.ComputeInstance/ListComputeSpec"
+	ComputeInstance_ListComputeImage_FullMethodName     = "/api.server.compute.v1.ComputeInstance/ListComputeImage"
+	ComputeInstance_ListComputeSpecPrice_FullMethodName = "/api.server.compute.v1.ComputeInstance/ListComputeSpecPrice"
+	ComputeInstance_Create_FullMethodName               = "/api.server.compute.v1.ComputeInstance/Create"
+	ComputeInstance_Delete_FullMethodName               = "/api.server.compute.v1.ComputeInstance/Delete"
+	ComputeInstance_Get_FullMethodName                  = "/api.server.compute.v1.ComputeInstance/Get"
+	ComputeInstance_List_FullMethodName                 = "/api.server.compute.v1.ComputeInstance/List"
+	ComputeInstance_StopInstance_FullMethodName         = "/api.server.compute.v1.ComputeInstance/StopInstance"
+	ComputeInstance_StartInstance_FullMethodName        = "/api.server.compute.v1.ComputeInstance/StartInstance"
+	ComputeInstance_RestartInstance_FullMethodName      = "/api.server.compute.v1.ComputeInstance/RestartInstance"
+	ComputeInstance_ReCreateInstance_FullMethodName     = "/api.server.compute.v1.ComputeInstance/ReCreateInstance"
+	ComputeInstance_RenameInstance_FullMethodName       = "/api.server.compute.v1.ComputeInstance/RenameInstance"
+	ComputeInstance_GetInstanceVncURL_FullMethodName    = "/api.server.compute.v1.ComputeInstance/GetInstanceVncURL"
 )
 
 // ComputeInstanceClient is the client API for ComputeInstance service.
@@ -41,8 +42,8 @@ type ComputeInstanceClient interface {
 	ListComputeSpec(ctx context.Context, in *ListComputeSpecRequest, opts ...grpc.CallOption) (*ListComputeSpecReply, error)
 	// 查询镜像
 	ListComputeImage(ctx context.Context, in *ListComputeImageRequest, opts ...grpc.CallOption) (*ListComputeImageReply, error)
-	// 查询到期时间
-	ListComputeInstanceDuration(ctx context.Context, in *ListComputeDurationRequest, opts ...grpc.CallOption) (*ListComputeDurationReply, error)
+	// 查询资源规格价格
+	ListComputeSpecPrice(ctx context.Context, in *ListComputeSpecPriceRequest, opts ...grpc.CallOption) (*ListComputeSpecPriceReply, error)
 	// 创建实例
 	Create(ctx context.Context, in *CreateInstanceRequest, opts ...grpc.CallOption) (*CreateInstanceReply, error)
 	// 删除实例
@@ -59,6 +60,8 @@ type ComputeInstanceClient interface {
 	RestartInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error)
 	// 重建实例
 	ReCreateInstance(ctx context.Context, in *RecreateInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error)
+	// 重命名实例
+	RenameInstance(ctx context.Context, in *RenameInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error)
 	// 获取vnc 地址
 	GetInstanceVncURL(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceVncURLReply, error)
 }
@@ -89,9 +92,9 @@ func (c *computeInstanceClient) ListComputeImage(ctx context.Context, in *ListCo
 	return out, nil
 }
 
-func (c *computeInstanceClient) ListComputeInstanceDuration(ctx context.Context, in *ListComputeDurationRequest, opts ...grpc.CallOption) (*ListComputeDurationReply, error) {
-	out := new(ListComputeDurationReply)
-	err := c.cc.Invoke(ctx, ComputeInstance_ListComputeInstanceDuration_FullMethodName, in, out, opts...)
+func (c *computeInstanceClient) ListComputeSpecPrice(ctx context.Context, in *ListComputeSpecPriceRequest, opts ...grpc.CallOption) (*ListComputeSpecPriceReply, error) {
+	out := new(ListComputeSpecPriceReply)
+	err := c.cc.Invoke(ctx, ComputeInstance_ListComputeSpecPrice_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -170,6 +173,15 @@ func (c *computeInstanceClient) ReCreateInstance(ctx context.Context, in *Recrea
 	return out, nil
 }
 
+func (c *computeInstanceClient) RenameInstance(ctx context.Context, in *RenameInstanceRequest, opts ...grpc.CallOption) (*CommonReply, error) {
+	out := new(CommonReply)
+	err := c.cc.Invoke(ctx, ComputeInstance_RenameInstance_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *computeInstanceClient) GetInstanceVncURL(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceVncURLReply, error) {
 	out := new(GetInstanceVncURLReply)
 	err := c.cc.Invoke(ctx, ComputeInstance_GetInstanceVncURL_FullMethodName, in, out, opts...)
@@ -187,8 +199,8 @@ type ComputeInstanceServer interface {
 	ListComputeSpec(context.Context, *ListComputeSpecRequest) (*ListComputeSpecReply, error)
 	// 查询镜像
 	ListComputeImage(context.Context, *ListComputeImageRequest) (*ListComputeImageReply, error)
-	// 查询到期时间
-	ListComputeInstanceDuration(context.Context, *ListComputeDurationRequest) (*ListComputeDurationReply, error)
+	// 查询资源规格价格
+	ListComputeSpecPrice(context.Context, *ListComputeSpecPriceRequest) (*ListComputeSpecPriceReply, error)
 	// 创建实例
 	Create(context.Context, *CreateInstanceRequest) (*CreateInstanceReply, error)
 	// 删除实例
@@ -205,6 +217,8 @@ type ComputeInstanceServer interface {
 	RestartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error)
 	// 重建实例
 	ReCreateInstance(context.Context, *RecreateInstanceRequest) (*CommonReply, error)
+	// 重命名实例
+	RenameInstance(context.Context, *RenameInstanceRequest) (*CommonReply, error)
 	// 获取vnc 地址
 	GetInstanceVncURL(context.Context, *GetInstanceRequest) (*GetInstanceVncURLReply, error)
 	mustEmbedUnimplementedComputeInstanceServer()
@@ -220,8 +234,8 @@ func (UnimplementedComputeInstanceServer) ListComputeSpec(context.Context, *List
 func (UnimplementedComputeInstanceServer) ListComputeImage(context.Context, *ListComputeImageRequest) (*ListComputeImageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListComputeImage not implemented")
 }
-func (UnimplementedComputeInstanceServer) ListComputeInstanceDuration(context.Context, *ListComputeDurationRequest) (*ListComputeDurationReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListComputeInstanceDuration not implemented")
+func (UnimplementedComputeInstanceServer) ListComputeSpecPrice(context.Context, *ListComputeSpecPriceRequest) (*ListComputeSpecPriceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListComputeSpecPrice not implemented")
 }
 func (UnimplementedComputeInstanceServer) Create(context.Context, *CreateInstanceRequest) (*CreateInstanceReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
@@ -246,6 +260,9 @@ func (UnimplementedComputeInstanceServer) RestartInstance(context.Context, *GetI
 }
 func (UnimplementedComputeInstanceServer) ReCreateInstance(context.Context, *RecreateInstanceRequest) (*CommonReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReCreateInstance not implemented")
+}
+func (UnimplementedComputeInstanceServer) RenameInstance(context.Context, *RenameInstanceRequest) (*CommonReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenameInstance not implemented")
 }
 func (UnimplementedComputeInstanceServer) GetInstanceVncURL(context.Context, *GetInstanceRequest) (*GetInstanceVncURLReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInstanceVncURL not implemented")
@@ -299,20 +316,20 @@ func _ComputeInstance_ListComputeImage_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ComputeInstance_ListComputeInstanceDuration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListComputeDurationRequest)
+func _ComputeInstance_ListComputeSpecPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListComputeSpecPriceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ComputeInstanceServer).ListComputeInstanceDuration(ctx, in)
+		return srv.(ComputeInstanceServer).ListComputeSpecPrice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ComputeInstance_ListComputeInstanceDuration_FullMethodName,
+		FullMethod: ComputeInstance_ListComputeSpecPrice_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ComputeInstanceServer).ListComputeInstanceDuration(ctx, req.(*ListComputeDurationRequest))
+		return srv.(ComputeInstanceServer).ListComputeSpecPrice(ctx, req.(*ListComputeSpecPriceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -461,6 +478,24 @@ func _ComputeInstance_ReCreateInstance_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ComputeInstance_RenameInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RenameInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ComputeInstanceServer).RenameInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ComputeInstance_RenameInstance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ComputeInstanceServer).RenameInstance(ctx, req.(*RenameInstanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ComputeInstance_GetInstanceVncURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetInstanceRequest)
 	if err := dec(in); err != nil {
@@ -495,8 +530,8 @@ var ComputeInstance_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ComputeInstance_ListComputeImage_Handler,
 		},
 		{
-			MethodName: "ListComputeInstanceDuration",
-			Handler:    _ComputeInstance_ListComputeInstanceDuration_Handler,
+			MethodName: "ListComputeSpecPrice",
+			Handler:    _ComputeInstance_ListComputeSpecPrice_Handler,
 		},
 		{
 			MethodName: "Create",
@@ -529,6 +564,10 @@ var ComputeInstance_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ReCreateInstance",
 			Handler:    _ComputeInstance_ReCreateInstance_Handler,
+		},
+		{
+			MethodName: "RenameInstance",
+			Handler:    _ComputeInstance_RenameInstance_Handler,
 		},
 		{
 			MethodName: "GetInstanceVncURL",

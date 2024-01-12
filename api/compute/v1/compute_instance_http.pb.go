@@ -25,9 +25,10 @@ const OperationComputeInstanceGet = "/api.server.compute.v1.ComputeInstance/Get"
 const OperationComputeInstanceGetInstanceVncURL = "/api.server.compute.v1.ComputeInstance/GetInstanceVncURL"
 const OperationComputeInstanceList = "/api.server.compute.v1.ComputeInstance/List"
 const OperationComputeInstanceListComputeImage = "/api.server.compute.v1.ComputeInstance/ListComputeImage"
-const OperationComputeInstanceListComputeInstanceDuration = "/api.server.compute.v1.ComputeInstance/ListComputeInstanceDuration"
 const OperationComputeInstanceListComputeSpec = "/api.server.compute.v1.ComputeInstance/ListComputeSpec"
+const OperationComputeInstanceListComputeSpecPrice = "/api.server.compute.v1.ComputeInstance/ListComputeSpecPrice"
 const OperationComputeInstanceReCreateInstance = "/api.server.compute.v1.ComputeInstance/ReCreateInstance"
+const OperationComputeInstanceRenameInstance = "/api.server.compute.v1.ComputeInstance/RenameInstance"
 const OperationComputeInstanceRestartInstance = "/api.server.compute.v1.ComputeInstance/RestartInstance"
 const OperationComputeInstanceStartInstance = "/api.server.compute.v1.ComputeInstance/StartInstance"
 const OperationComputeInstanceStopInstance = "/api.server.compute.v1.ComputeInstance/StopInstance"
@@ -45,12 +46,14 @@ type ComputeInstanceHTTPServer interface {
 	List(context.Context, *ListInstanceRequest) (*ListInstanceReply, error)
 	// ListComputeImage 查询镜像
 	ListComputeImage(context.Context, *ListComputeImageRequest) (*ListComputeImageReply, error)
-	// ListComputeInstanceDuration 查询到期时间
-	ListComputeInstanceDuration(context.Context, *ListComputeDurationRequest) (*ListComputeDurationReply, error)
 	// ListComputeSpec 查询规格
 	ListComputeSpec(context.Context, *ListComputeSpecRequest) (*ListComputeSpecReply, error)
+	// ListComputeSpecPrice 查询资源规格价格
+	ListComputeSpecPrice(context.Context, *ListComputeSpecPriceRequest) (*ListComputeSpecPriceReply, error)
 	// ReCreateInstance 重建实例
 	ReCreateInstance(context.Context, *RecreateInstanceRequest) (*CommonReply, error)
+	// RenameInstance 重命名实例
+	RenameInstance(context.Context, *RenameInstanceRequest) (*CommonReply, error)
 	// RestartInstance 重启实例
 	RestartInstance(context.Context, *GetInstanceRequest) (*CommonReply, error)
 	// StartInstance启动实例
@@ -63,7 +66,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r := s.Route("/")
 	r.GET("/v1/compute/spec", _ComputeInstance_ListComputeSpec0_HTTP_Handler(srv))
 	r.GET("/v1/compute/image", _ComputeInstance_ListComputeImage0_HTTP_Handler(srv))
-	r.GET("/v1/compute/duration", _ComputeInstance_ListComputeInstanceDuration0_HTTP_Handler(srv))
+	r.GET("/v1/compute/spec/price", _ComputeInstance_ListComputeSpecPrice0_HTTP_Handler(srv))
 	r.POST("/v1/instance", _ComputeInstance_Create0_HTTP_Handler(srv))
 	r.DELETE("/v1/instance/{id}", _ComputeInstance_Delete0_HTTP_Handler(srv))
 	r.GET("/v1/instance/{id}", _ComputeInstance_Get0_HTTP_Handler(srv))
@@ -72,6 +75,7 @@ func RegisterComputeInstanceHTTPServer(s *http.Server, srv ComputeInstanceHTTPSe
 	r.PUT("/v1/instance/{id}/start", _ComputeInstance_StartInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/restart", _ComputeInstance_RestartInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/instance/{id}/recreate", _ComputeInstance_ReCreateInstance0_HTTP_Handler(srv))
+	r.PUT("/v1/instance/{id}/rename", _ComputeInstance_RenameInstance0_HTTP_Handler(srv))
 	r.GET("/v1/instance/{id}/vnc", _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv))
 }
 
@@ -113,21 +117,21 @@ func _ComputeInstance_ListComputeImage0_HTTP_Handler(srv ComputeInstanceHTTPServ
 	}
 }
 
-func _ComputeInstance_ListComputeInstanceDuration0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
+func _ComputeInstance_ListComputeSpecPrice0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ListComputeDurationRequest
+		var in ListComputeSpecPriceRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationComputeInstanceListComputeInstanceDuration)
+		http.SetOperation(ctx, OperationComputeInstanceListComputeSpecPrice)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListComputeInstanceDuration(ctx, req.(*ListComputeDurationRequest))
+			return srv.ListComputeSpecPrice(ctx, req.(*ListComputeSpecPriceRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ListComputeDurationReply)
+		reply := out.(*ListComputeSpecPriceReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -317,6 +321,31 @@ func _ComputeInstance_ReCreateInstance0_HTTP_Handler(srv ComputeInstanceHTTPServ
 	}
 }
 
+func _ComputeInstance_RenameInstance0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in RenameInstanceRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationComputeInstanceRenameInstance)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RenameInstance(ctx, req.(*RenameInstanceRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CommonReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _ComputeInstance_GetInstanceVncURL0_HTTP_Handler(srv ComputeInstanceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetInstanceRequest
@@ -346,9 +375,10 @@ type ComputeInstanceHTTPClient interface {
 	GetInstanceVncURL(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *GetInstanceVncURLReply, err error)
 	List(ctx context.Context, req *ListInstanceRequest, opts ...http.CallOption) (rsp *ListInstanceReply, err error)
 	ListComputeImage(ctx context.Context, req *ListComputeImageRequest, opts ...http.CallOption) (rsp *ListComputeImageReply, err error)
-	ListComputeInstanceDuration(ctx context.Context, req *ListComputeDurationRequest, opts ...http.CallOption) (rsp *ListComputeDurationReply, err error)
 	ListComputeSpec(ctx context.Context, req *ListComputeSpecRequest, opts ...http.CallOption) (rsp *ListComputeSpecReply, err error)
+	ListComputeSpecPrice(ctx context.Context, req *ListComputeSpecPriceRequest, opts ...http.CallOption) (rsp *ListComputeSpecPriceReply, err error)
 	ReCreateInstance(ctx context.Context, req *RecreateInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
+	RenameInstance(ctx context.Context, req *RenameInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	RestartInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	StartInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
 	StopInstance(ctx context.Context, req *GetInstanceRequest, opts ...http.CallOption) (rsp *CommonReply, err error)
@@ -440,19 +470,6 @@ func (c *ComputeInstanceHTTPClientImpl) ListComputeImage(ctx context.Context, in
 	return &out, err
 }
 
-func (c *ComputeInstanceHTTPClientImpl) ListComputeInstanceDuration(ctx context.Context, in *ListComputeDurationRequest, opts ...http.CallOption) (*ListComputeDurationReply, error) {
-	var out ListComputeDurationReply
-	pattern := "/v1/compute/duration"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationComputeInstanceListComputeInstanceDuration))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
 func (c *ComputeInstanceHTTPClientImpl) ListComputeSpec(ctx context.Context, in *ListComputeSpecRequest, opts ...http.CallOption) (*ListComputeSpecReply, error) {
 	var out ListComputeSpecReply
 	pattern := "/v1/compute/spec"
@@ -466,11 +483,37 @@ func (c *ComputeInstanceHTTPClientImpl) ListComputeSpec(ctx context.Context, in 
 	return &out, err
 }
 
+func (c *ComputeInstanceHTTPClientImpl) ListComputeSpecPrice(ctx context.Context, in *ListComputeSpecPriceRequest, opts ...http.CallOption) (*ListComputeSpecPriceReply, error) {
+	var out ListComputeSpecPriceReply
+	pattern := "/v1/compute/spec/price"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationComputeInstanceListComputeSpecPrice))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *ComputeInstanceHTTPClientImpl) ReCreateInstance(ctx context.Context, in *RecreateInstanceRequest, opts ...http.CallOption) (*CommonReply, error) {
 	var out CommonReply
 	pattern := "/v1/instance/{id}/recreate"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationComputeInstanceReCreateInstance))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ComputeInstanceHTTPClientImpl) RenameInstance(ctx context.Context, in *RenameInstanceRequest, opts ...http.CallOption) (*CommonReply, error) {
+	var out CommonReply
+	pattern := "/v1/instance/{id}/rename"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationComputeInstanceRenameInstance))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {

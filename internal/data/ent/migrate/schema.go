@@ -34,6 +34,46 @@ var (
 			},
 		},
 	}
+	// AlipayOrderRollbacksColumns holds the columns for the "alipay_order_rollbacks" table.
+	AlipayOrderRollbacksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "notify_id", Type: field.TypeString, Unique: true},
+		{Name: "notify_type", Type: field.TypeString},
+		{Name: "notify_time", Type: field.TypeString},
+		{Name: "charset", Type: field.TypeString},
+		{Name: "version", Type: field.TypeString},
+		{Name: "sign_type", Type: field.TypeString},
+		{Name: "sign", Type: field.TypeString, Size: 2147483647},
+		{Name: "fund_bill_list", Type: field.TypeString, Size: 2147483647},
+		{Name: "receipt_amount", Type: field.TypeString},
+		{Name: "invoice_amount", Type: field.TypeString},
+		{Name: "buyer_pay_amount", Type: field.TypeString},
+		{Name: "point_amount", Type: field.TypeString},
+		{Name: "voucher_detail_list", Type: field.TypeString, Size: 2147483647},
+		{Name: "passback_params", Type: field.TypeString, Size: 2147483647},
+		{Name: "trade_no", Type: field.TypeString, Unique: true},
+		{Name: "app_id", Type: field.TypeString},
+		{Name: "out_trade_no", Type: field.TypeString, Unique: true},
+		{Name: "out_biz_no", Type: field.TypeString},
+		{Name: "buyer_id", Type: field.TypeString},
+		{Name: "seller_id", Type: field.TypeString},
+		{Name: "trade_status", Type: field.TypeString},
+		{Name: "total_amount", Type: field.TypeString},
+		{Name: "refund_fee", Type: field.TypeString},
+		{Name: "subject", Type: field.TypeString},
+		{Name: "body", Type: field.TypeString},
+		{Name: "gmt_create", Type: field.TypeString},
+		{Name: "gmt_payment", Type: field.TypeString},
+		{Name: "gmt_close", Type: field.TypeString},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+	}
+	// AlipayOrderRollbacksTable holds the schema information for the "alipay_order_rollbacks" table.
+	AlipayOrderRollbacksTable = &schema.Table{
+		Name:       "alipay_order_rollbacks",
+		Columns:    AlipayOrderRollbacksColumns,
+		PrimaryKey: []*schema.Column{AlipayOrderRollbacksColumns[0]},
+	}
 	// ComputeImagesColumns holds the columns for the "compute_images" table.
 	ComputeImagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt32, Increment: true},
@@ -110,6 +150,134 @@ var (
 				Columns: []*schema.Column{ComputeSpecsColumns[0]},
 			},
 		},
+	}
+	// ComputeSpecPricesColumns holds the columns for the "compute_spec_prices" table.
+	ComputeSpecPricesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt32, Increment: true},
+		{Name: "fk_compute_spec_id", Type: field.TypeInt32, Unique: true},
+		{Name: "day", Type: field.TypeInt32, Default: 30},
+		{Name: "price", Type: field.TypeFloat32, Default: 50000},
+	}
+	// ComputeSpecPricesTable holds the schema information for the "compute_spec_prices" table.
+	ComputeSpecPricesTable = &schema.Table{
+		Name:       "compute_spec_prices",
+		Columns:    ComputeSpecPricesColumns,
+		PrimaryKey: []*schema.Column{ComputeSpecPricesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "computespecprice_id",
+				Unique:  true,
+				Columns: []*schema.Column{ComputeSpecPricesColumns[0]},
+			},
+		},
+	}
+	// CyclesColumns holds the columns for the "cycles" table.
+	CyclesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+	}
+	// CyclesTable holds the schema information for the "cycles" table.
+	CyclesTable = &schema.Table{
+		Name:       "cycles",
+		Columns:    CyclesColumns,
+		PrimaryKey: []*schema.Column{CyclesColumns[0]},
+	}
+	// CycleOrdersColumns holds the columns for the "cycle_orders" table.
+	CycleOrdersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "order_no", Type: field.TypeString, Size: 36},
+		{Name: "product_name", Type: field.TypeString, Size: 50},
+		{Name: "product_desc", Type: field.TypeString, Size: 200},
+		{Name: "symbol", Type: field.TypeString, Size: 1},
+		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "create_time", Type: field.TypeTime},
+	}
+	// CycleOrdersTable holds the schema information for the "cycle_orders" table.
+	CycleOrdersTable = &schema.Table{
+		Name:       "cycle_orders",
+		Columns:    CycleOrdersColumns,
+		PrimaryKey: []*schema.Column{CycleOrdersColumns[0]},
+	}
+	// CycleRechargesColumns holds the columns for the "cycle_recharges" table.
+	CycleRechargesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "out_trade_no", Type: field.TypeString, Unique: true},
+		{Name: "alipay_trade_no", Type: field.TypeString},
+		{Name: "recharge_channel", Type: field.TypeInt},
+		{Name: "redeem_code", Type: field.TypeString},
+		{Name: "state", Type: field.TypeString},
+		{Name: "pay_amount", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "total_amount", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "buy_cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "update_time", Type: field.TypeTime},
+	}
+	// CycleRechargesTable holds the schema information for the "cycle_recharges" table.
+	CycleRechargesTable = &schema.Table{
+		Name:       "cycle_recharges",
+		Columns:    CycleRechargesColumns,
+		PrimaryKey: []*schema.Column{CycleRechargesColumns[0]},
+	}
+	// CycleRedeemCodesColumns holds the columns for the "cycle_redeem_codes" table.
+	CycleRedeemCodesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "redeem_code", Type: field.TypeString, Unique: true},
+		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "state", Type: field.TypeBool},
+		{Name: "create_time", Type: field.TypeTime},
+		{Name: "use_time", Type: field.TypeTime},
+	}
+	// CycleRedeemCodesTable holds the schema information for the "cycle_redeem_codes" table.
+	CycleRedeemCodesTable = &schema.Table{
+		Name:       "cycle_redeem_codes",
+		Columns:    CycleRedeemCodesColumns,
+		PrimaryKey: []*schema.Column{CycleRedeemCodesColumns[0]},
+	}
+	// CycleRenewalsColumns holds the columns for the "cycle_renewals" table.
+	CycleRenewalsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "resource_id", Type: field.TypeUUID},
+		{Name: "resource_type", Type: field.TypeInt},
+		{Name: "product_name", Type: field.TypeString, Size: 50},
+		{Name: "product_desc", Type: field.TypeString, Size: 200},
+		{Name: "state", Type: field.TypeInt8},
+		{Name: "extend_day", Type: field.TypeInt8},
+		{Name: "extend_price", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "due_time", Type: field.TypeTime, Nullable: true},
+		{Name: "renewal_time", Type: field.TypeTime, Nullable: true},
+		{Name: "auto_renewal", Type: field.TypeBool},
+	}
+	// CycleRenewalsTable holds the schema information for the "cycle_renewals" table.
+	CycleRenewalsTable = &schema.Table{
+		Name:       "cycle_renewals",
+		Columns:    CycleRenewalsColumns,
+		PrimaryKey: []*schema.Column{CycleRenewalsColumns[0]},
+	}
+	// CycleTransactionsColumns holds the columns for the "cycle_transactions" table.
+	CycleTransactionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fk_cycle_id", Type: field.TypeUUID},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "fk_cycle_order_id", Type: field.TypeUUID},
+		{Name: "fk_cycle_recharge_id", Type: field.TypeUUID},
+		{Name: "operation", Type: field.TypeString, Size: 40},
+		{Name: "symbol", Type: field.TypeString, Size: 1},
+		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "balance", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "operation_time", Type: field.TypeTime},
+	}
+	// CycleTransactionsTable holds the schema information for the "cycle_transactions" table.
+	CycleTransactionsTable = &schema.Table{
+		Name:       "cycle_transactions",
+		Columns:    CycleTransactionsColumns,
+		PrimaryKey: []*schema.Column{CycleTransactionsColumns[0]},
 	}
 	// DomainBindingsColumns holds the columns for the "domain_bindings" table.
 	DomainBindingsColumns = []*schema.Column{
@@ -365,9 +533,17 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
+		AlipayOrderRollbacksTable,
 		ComputeImagesTable,
 		ComputeInstancesTable,
 		ComputeSpecsTable,
+		ComputeSpecPricesTable,
+		CyclesTable,
+		CycleOrdersTable,
+		CycleRechargesTable,
+		CycleRedeemCodesTable,
+		CycleRenewalsTable,
+		CycleTransactionsTable,
 		DomainBindingsTable,
 		EmployeesTable,
 		GatewaysTable,

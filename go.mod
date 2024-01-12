@@ -9,6 +9,7 @@ require (
 	github.com/fatedier/frp v0.52.3
 	github.com/go-kratos/kratos/v2 v2.7.2
 	github.com/go-kratos/swagger-api v1.0.1
+	github.com/go-pay/gopay v1.5.98
 	github.com/go-redis/redis/extra/redisotel v0.3.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.1
@@ -20,6 +21,7 @@ require (
 	github.com/ipfs/go-ipfs-files v0.0.9
 	github.com/mohaijiang/computeshare-client v0.0.5
 	github.com/samber/lo v1.38.1
+	github.com/shopspring/decimal v1.3.1
 	github.com/tj/assert v0.0.3
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
@@ -83,6 +85,7 @@ require (
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/ipfs/go-cid v0.0.7 // indirect
+	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect

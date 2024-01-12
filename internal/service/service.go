@@ -21,6 +21,7 @@ var ProviderSet = wire.NewSet(
 	NewStorageS3Service,
 	NewStorageProviderService,
 	NewSandboxService,
+	NewOrderService,
 )
 
 func NewIpfShell(c *conf.Data) *shell.Shell {
