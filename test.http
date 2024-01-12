@@ -97,18 +97,6 @@ GET http://127.0.0.1:8000/v1/cycle/balance
 Authorization: Bearer {{ access_token }}
 
 
-### 创建虚拟机
-POST  http://127.0.0.1:8000/v1/instance
-Content-Type: application/json
-Authorization: Bearer {{ access_token }}
-
-{
-  "specId": 1,
-  "imageId": 1,
-  "name": "my-vm",
-  "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
-  "password":  "Abcd12345"
-}
 
 ### 关闭虚拟机
 PUT  http://127.0.0.1:8000/v1/instance/{{instanceId}}/stop
@@ -180,11 +168,6 @@ Content-Type: application/json
   "agentId":"2e07eb09-b2c7-4929-b1b4-207e1a2ca9de",
   "status":1
 }
-
-### 获取VNC CONSOLE
-GET http://127.0.0.1:8000/v1/instance/{{ instanceId }}/console
-Content-Type: application/json
-Authorization: Bearer {{ access_token }}
 
 
 ### 查询网络映射
@@ -303,37 +286,10 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/c49608e3-235b-4232-b10b-4676ae76ef34
+DELETE  https://api.computeshare.newtouch.com/v1/instance/fa10407a-8d6c-4b52-b5d2-e1d1423b13f3
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
-
-### 登录
-POST https://computeshare.newtouch.com/api/v1/user/loginWithClient
-Content-Type: application/json
-
-{
-  "username": "+8615001747213",
-  "password": "Abcd1234"
-}
-
-###
-POST https://computeshare.newtouch.com/api/v1/user/loginWithClient
-Content-Type: application/json
-
-{
-"username": "+861300xxxxxxx",
-"password": "somePassword"
-}
-
-###
-POST https://computeshare.newtouch.com/api/v1/storage_provider
-Content-Type: application/json
-Authorization: Bearer {{ access_token }}
-
-{
-  "agentId": "52540dea-9944-4805-941f-01dacbf96ab6"
-}
 
 ### 关闭续费
 PUT http://127.0.0.1:8000/v1/cycle/renewal/9fd54051-251d-4e86-a037-3d2586d1f7ae/open
@@ -341,3 +297,20 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {}
+
+### 查询余额
+GET http://127.0.0.1:8000/v1/cycle/balance
+Authorization: Bearer {{ access_token }}
+
+### 创建虚拟机
+POST  http://127.0.0.1:8000/v1/instance
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "specId": 1,
+  "imageId": 1,
+  "name": "my-vm",
+  "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
+  "password":  "Abcd12345"
+}

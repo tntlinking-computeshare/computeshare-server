@@ -177,14 +177,7 @@ func (c *CycleRenewalUseCase) Detail(ctx context.Context, renewalId uuid.UUID) (
 	return detail, nil
 }
 
-func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UUID) error {
-
-	claim, ok := global.FromContext(ctx)
-	if !ok {
-		return errors.New(400, "unauthorized", "unauthorized")
-	}
-
-	userId := claim.GetUserId()
+func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UUID, userId uuid.UUID) error {
 
 	renewal, err := c.repo.GetById(ctx, renewalId)
 
@@ -198,14 +191,14 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 
 	cycle, err := c.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {
-		return errors.New(400, "not_found", "余额不足")
+		return errors.New(400, "not_found", "Cycle不足，请先充值再试！")
 	}
 
 	// 判断余额
 	extendPrice := decimal.NewFromFloat(renewal.ExtendPrice)
 
 	if cycle.Cycle.LessThan(extendPrice) {
-		return errors.New(400, "insufficient balance", "余额不足")
+		return errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 
 	var orderNo string
@@ -305,7 +298,7 @@ func (c *CycleRenewalUseCase) DailyCheck(db *ent.Client) {
 		// 开启事物
 		tx, _ := db.Tx(ctx)
 		tctx := context.WithValue(ctx, "tx", tx)
-		err := c.ManualRenew(tctx, renewal.ID)
+		err := c.ManualRenew(tctx, renewal.ID, renewal.FkUserID)
 		if err != nil {
 			// 如何回滚，续费失败，延长续费时间
 			_ = tx.Rollback()

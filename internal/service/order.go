@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
@@ -55,13 +55,13 @@ func (o *OrderService) RechargeCycleByAlipay(ctx context.Context, req *pb.Rechar
 	var err error
 	claim, ok := global.FromContext(ctx)
 	if !ok {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New(400, "unauthorized", "未认证")
 	}
 	userId := claim.GetUserId()
 	if req.RechargeChannel == int32(consts.Alipay) {
 		outTradeNo, url, err = o.orderUseCase.RechargeCycleByAlipay(ctx, userId, float64(req.Cycle), float64(req.Amount))
 	} else {
-		return nil, errors.New("不支持的支付方式")
+		return nil, errors.New(400, "un_support_pay_method", "不支持的支付方式")
 	}
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func (o *OrderService) RechargeCycleByAlipay(ctx context.Context, req *pb.Rechar
 func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.RechargeCycleByRedeemCodeRequest) (*pb.RechargeCycleByRedeemCodeReply, error) {
 	claim, ok := global.FromContext(ctx)
 	if !ok {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New(400, "unauthorized", "未认证")
 	}
 	userId := claim.GetUserId()
 	redeemCycle, err := o.orderUseCase.RechargeCycleByRedeemCode(ctx, userId, req.RedeemCode)
@@ -93,7 +93,7 @@ func (o *OrderService) RechargeCycleByRedeemCode(ctx context.Context, req *pb.Re
 func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBalanceRequest) (*pb.GetCycleBalanceReply, error) {
 	claim, ok := global.FromContext(ctx)
 	if !ok {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New(400, "unauthorized", "未认证")
 	}
 	userId := claim.GetUserId()
 	redeemCycle, err := o.orderUseCase.GetCycleBalance(ctx, userId)
@@ -107,7 +107,7 @@ func (o *OrderService) GetCycleBalance(ctx context.Context, req *pb.GetCycleBala
 func (o *OrderService) GetRechargeState(ctx context.Context, req *pb.GetRechargeStateRequest) (*pb.GetRechargeStateReply, error) {
 	_, ok := global.FromContext(ctx)
 	if !ok {
-		return nil, errors.New("unauthorized")
+		return nil, errors.New(400, "unauthorized", "未认证")
 	}
 	state, err := o.orderUseCase.GetRechargeState(ctx, req.GetOutTradeNo())
 	return &pb.GetRechargeStateReply{
@@ -290,7 +290,15 @@ func (o *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewReque
 	if err != nil {
 		return nil, err
 	}
-	err = o.cycleRenewalUseCase.ManualRenew(ctx, renewalId)
+
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New(400, "unauthorized", "unauthorized")
+	}
+
+	userId := claim.GetUserId()
+
+	err = o.cycleRenewalUseCase.ManualRenew(ctx, renewalId, userId)
 	return &pb.ManualRenewReply{
 		Code:    200,
 		Message: SUCCESS,

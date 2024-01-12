@@ -131,10 +131,10 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 
 	cycle, err := uc.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 	if cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
-		return nil, errors.New(400, "insufficient balance", "余额不足")
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 
 	// 扣余额
@@ -172,7 +172,6 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	}
 
 	// 创建交易流水
-
 	balance, _ := cycle.Cycle.Float64()
 	cycleTransaction := &CycleTransaction{
 		FkCycleID:         cycle.ID,
@@ -241,6 +240,10 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	// 创建续费管理
 	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
 	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
+
+	fmt.Println("=============")
+	fmt.Println("instanceId:", instance.ID.String())
+	fmt.Println("=============")
 
 	renewal := &CycleRenewal{
 		FkUserID:     userId,

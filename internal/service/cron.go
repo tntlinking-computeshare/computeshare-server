@@ -104,6 +104,7 @@ func (c *CronJob) syncRenewalOrder(db *ent.Client) {
 		nextTime = nextTime.Add(24 * time.Hour)
 	}
 	timeUntilNext := nextTime.Sub(currentTime)
+	fmt.Println(timeUntilNext)
 
 	// 创建定时器
 	timer := time.NewTimer(timeUntilNext)
