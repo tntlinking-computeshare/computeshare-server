@@ -29,6 +29,15 @@ spec:
           volumeMounts:
             - mountPath: /data/conf
               name: config
+            - mountPath: /app/alipay/alipayPublicCert.crt
+              subPath: alipayPublicCert.crt
+              name: alipay-public-cert-crt
+            - mountPath: /app/alipay/alipayRootCert.crt
+              subPath: alipayRootCert.crt
+              name: alipay-root-cert-crt
+            - mountPath: /app/alipay/appPublicCert.crt
+              subPath: appPublicCert.crt
+              name: app-public-cert-crt
       volumes:
         - name: config
           configMap:
@@ -38,4 +47,22 @@ spec:
             items:
               - key: "config.yaml"
                 path: "config.yaml"
+        - name: alipay-public-cert-crt
+          configMap:
+            name: abing-alipay.crt
+            items:
+              - key: "alipayPublicCert.crt"
+                path: "alipayPublicCert.crt"
+        - name: alipay-root-cert-crt
+          configMap:
+            name: abing-alipay.crt
+            items:
+              - key: "alipayRootCert.crt"
+                path: "alipayRootCert.crt"
+        - name: app-public-cert-crt
+          configMap:
+            name: abing-alipay.crt
+            items:
+              - key: "appPublicCert.crt"
+                path: "appPublicCert.crt"
 ---
