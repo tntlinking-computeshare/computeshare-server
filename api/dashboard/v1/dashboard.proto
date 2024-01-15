@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package api.dashboard.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/dashboard/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.dashboard.v1";
+
+service Dashboard {
+
+	rpc Providers (ProviderListRequest) returns (ProviderListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/providers",
+			body: "*"
+		};
+	};
+}
+
+message ProviderListRequest {
+
+}
+
+message ProviderListReply {
+
+}
