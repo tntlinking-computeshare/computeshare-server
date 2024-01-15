@@ -160,7 +160,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	cycleOrder := &CycleOrder{
 		OrderNo:     orderNo,
 		FkUserID:    userId,
-		ProductName: "租用云服务器",
+		ProductName: consts.RentingCloudServers,
 		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
 		Symbol:      "-",
 		Cycle:       float64(specPrice.Price),
