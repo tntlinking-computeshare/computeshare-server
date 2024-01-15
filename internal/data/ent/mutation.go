@@ -8172,9 +8172,22 @@ func (m *CycleRedeemCodeMutation) OldUseTime(ctx context.Context) (v time.Time, 
 	return oldValue.UseTime, nil
 }
 
+// ClearUseTime clears the value of the "use_time" field.
+func (m *CycleRedeemCodeMutation) ClearUseTime() {
+	m.use_time = nil
+	m.clearedFields[cycleredeemcode.FieldUseTime] = struct{}{}
+}
+
+// UseTimeCleared returns if the "use_time" field was cleared in this mutation.
+func (m *CycleRedeemCodeMutation) UseTimeCleared() bool {
+	_, ok := m.clearedFields[cycleredeemcode.FieldUseTime]
+	return ok
+}
+
 // ResetUseTime resets all changes to the "use_time" field.
 func (m *CycleRedeemCodeMutation) ResetUseTime() {
 	m.use_time = nil
+	delete(m.clearedFields, cycleredeemcode.FieldUseTime)
 }
 
 // Where appends a list predicates to the CycleRedeemCodeMutation builder.
@@ -8370,6 +8383,9 @@ func (m *CycleRedeemCodeMutation) ClearedFields() []string {
 	if m.FieldCleared(cycleredeemcode.FieldFkUserID) {
 		fields = append(fields, cycleredeemcode.FieldFkUserID)
 	}
+	if m.FieldCleared(cycleredeemcode.FieldUseTime) {
+		fields = append(fields, cycleredeemcode.FieldUseTime)
+	}
 	return fields
 }
 
@@ -8386,6 +8402,9 @@ func (m *CycleRedeemCodeMutation) ClearField(name string) error {
 	switch name {
 	case cycleredeemcode.FieldFkUserID:
 		m.ClearFkUserID()
+		return nil
+	case cycleredeemcode.FieldUseTime:
+		m.ClearUseTime()
 		return nil
 	}
 	return fmt.Errorf("unknown CycleRedeemCode nullable field %s", name)

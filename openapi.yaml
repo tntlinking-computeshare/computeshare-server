@@ -3,127 +3,14 @@
 
 openapi: 3.0.3
 info:
-    title: Order API
+    title: DomainBinding API
     version: 0.0.1
 paths:
-    /v1/alipay/pay/notify:
-        post:
-            tags:
-                - Order
-            operationId: Order_AlipayPayNotify
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/AlipayPayNotifyRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/AlipayPayNotifyReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/balance:
+    /v1/domain-binding:
         get:
             tags:
-                - Order
-            operationId: Order_GetCycleBalance
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetCycleBalanceReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/recharge:
-        post:
-            tags:
-                - Order
-            operationId: Order_RechargeCycleByAlipay
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/RechargeCycleByAlipayRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/RechargeCycleByAlipayReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/recharge/state:
-        get:
-            tags:
-                - Order
-            operationId: Order_GetRechargeState
-            parameters:
-                - name: outTradeNo
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/GetRechargeStateReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/redeem:
-        post:
-            tags:
-                - Order
-            operationId: Order_RechargeCycleByRedeemCode
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/RechargeCycleByRedeemCodeRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/RechargeCycleByRedeemCodeReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/renewal:
-        get:
-            tags:
-                - Order
-            operationId: Order_CycleRenewalList
+                - DomainBinding
+            operationId: DomainBinding_ListDomainBinding
             parameters:
                 - name: page
                   in: query
@@ -135,24 +22,78 @@ paths:
                   schema:
                     type: integer
                     format: int32
+                - name: networkMappingId
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CycleRenewalListReply'
+                                $ref: '#/components/schemas/ListDomainBindingReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/cycle/renewal/{id}:
+        post:
+            tags:
+                - DomainBinding
+            operationId: DomainBinding_CreateDomainBinding
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateDomainBindingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateDomainBindingReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/domain-binding/nslookup:
         get:
             tags:
-                - Order
-            operationId: Order_CycleRenewalDetail
+                - DomainBinding
+            operationId: DomainBinding_NsLookup
+            parameters:
+                - name: domain
+                  in: query
+                  schema:
+                    type: string
+                - name: networkMappingId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/NsLookupReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/domain-binding/{id}:
+        get:
+            tags:
+                - DomainBinding
+            operationId: DomainBinding_GetDomainBinding
             parameters:
                 - name: id
                   in: path
@@ -165,18 +106,17 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CycleRenewalGetReply'
+                                $ref: '#/components/schemas/GetDomainBindingReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/cycle/renewal/{id}/close:
         put:
             tags:
-                - Order
-            operationId: Order_CycleRenewalClose
+                - DomainBinding
+            operationId: DomainBinding_UpdateDomainBinding
             parameters:
                 - name: id
                   in: path
@@ -187,7 +127,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CycleRenewalGetRequest'
+                            $ref: '#/components/schemas/UpdateDomainBindingRequest'
                 required: true
             responses:
                 "200":
@@ -195,125 +135,30 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CycleRenewalBaseReply'
+                                $ref: '#/components/schemas/UpdateDomainBindingReply'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /v1/cycle/renewal/{id}/manual-renew:
-        post:
+        delete:
             tags:
-                - Order
-            operationId: Order_ManualRenew
+                - DomainBinding
+            operationId: DomainBinding_DeleteDomainBinding
             parameters:
                 - name: id
                   in: path
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/ManualRenewRequest'
-                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ManualRenewReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/renewal/{id}/open:
-        put:
-            tags:
-                - Order
-            operationId: Order_CycleRenewalOpen
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CycleRenewalGetRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CycleRenewalBaseReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/cycle/transaction:
-        get:
-            tags:
-                - Order
-            operationId: Order_CycleTransactionList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CycleTransactionListReply'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /v1/order:
-        get:
-            tags:
-                - Order
-            operationId: Order_OrderList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/OrderListReply'
+                                $ref: '#/components/schemas/DeleteDomainBindingReply'
                 default:
                     description: Default error response
                     content:
@@ -322,128 +167,7 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
-        AlipayPayNotifyReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        AlipayPayNotifyRequest:
-            type: object
-            properties:
-                notifyTime:
-                    type: string
-                notifyType:
-                    type: string
-                notifyId:
-                    type: string
-                appId:
-                    type: string
-                charset:
-                    type: string
-                version:
-                    type: string
-                signType:
-                    type: string
-                sign:
-                    type: string
-                tradeNo:
-                    type: string
-                outTradeNo:
-                    type: string
-                outBizNo:
-                    type: string
-                buyerId:
-                    type: string
-                buyerLogonId:
-                    type: string
-                sellerId:
-                    type: string
-                sellerEmail:
-                    type: string
-                tradeStatus:
-                    type: string
-                totalAmount:
-                    type: string
-                receiptAmount:
-                    type: string
-                invoiceAmount:
-                    type: string
-                buyerPayAmount:
-                    type: string
-                pointAmount:
-                    type: string
-                refundFee:
-                    type: string
-                subject:
-                    type: string
-                body:
-                    type: string
-                gmtCreate:
-                    type: string
-                gmtPayment:
-                    type: string
-                gmtRefund:
-                    type: string
-                gmtClose:
-                    type: string
-                fundBillList:
-                    type: string
-                passbackParams:
-                    type: string
-                voucherDetailList:
-                    type: string
-                method:
-                    type: string
-                timestamp:
-                    type: string
-                authAppId:
-                    type: string
-            description: https://opendocs.alipay.com/open/203/105286#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%8F%82%E6%95%B0
-        CycleRenewalBaseReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-        CycleRenewalDetailInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                productName:
-                    type: string
-                productDesc:
-                    type: string
-                state:
-                    type: integer
-                    format: int32
-                dueTime:
-                    type: string
-                renewalTime:
-                    type: string
-                instanceId:
-                    type: string
-                instanceName:
-                    type: string
-                instanceSpec:
-                    type: string
-                image:
-                    type: string
-                extendPrice:
-                    type: number
-                    format: float
-                extendDay:
-                    type: integer
-                    format: int64
-                balance:
-                    type: number
-                    format: float
-        CycleRenewalGetReply:
+        CreateDomainBindingReply:
             type: object
             properties:
                 code:
@@ -452,29 +176,17 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CycleRenewalDetailInfo'
-        CycleRenewalGetRequest:
+                    type: string
+        CreateDomainBindingRequest:
             type: object
             properties:
-                id:
+                networkMappingId:
                     type: string
-        CycleRenewalInfo:
-            type: object
-            properties:
-                id:
+                name:
                     type: string
-                productName:
+                domain:
                     type: string
-                productDesc:
-                    type: string
-                state:
-                    type: integer
-                    format: int32
-                dueTime:
-                    type: string
-                renewalTime:
-                    type: string
-        CycleRenewalListReply:
+        DeleteDomainBindingReply:
             type: object
             properties:
                 code:
@@ -482,11 +194,13 @@ components:
                     format: int32
                 message:
                     type: string
-                data:
-                    $ref: '#/components/schemas/CycleRenewalPage'
-        CycleRenewalPage:
+        DomainBindingPageResponse:
             type: object
             properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DomainBindingVO'
                 total:
                     type: integer
                     format: int64
@@ -496,26 +210,26 @@ components:
                 size:
                     type: integer
                     format: int32
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CycleRenewalInfo'
-        CycleTransactionInfo:
+        DomainBindingVO:
             type: object
             properties:
                 id:
                     type: string
-                operation:
+                computeInstanceId:
                     type: string
-                symbol:
+                networkMappingId:
                     type: string
-                cycle:
-                    type: number
-                    format: float
-                operationTime:
+                name:
+                    type: string
+                domain:
+                    type: string
+                gatewayPort:
+                    type: integer
+                    format: int32
+                createTime:
                     type: integer
                     format: int64
-        CycleTransactionListReply:
+        GetDomainBindingReply:
             type: object
             properties:
                 code:
@@ -524,43 +238,7 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/CycleTransactionPage'
-        CycleTransactionPage:
-            type: object
-            properties:
-                total:
-                    type: integer
-                    format: int64
-                page:
-                    type: integer
-                    format: int32
-                size:
-                    type: integer
-                    format: int32
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CycleTransactionInfo'
-        GetCycleBalanceReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: string
-        GetRechargeStateReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: string
+                    $ref: '#/components/schemas/DomainBindingVO'
         GoogleProtobufAny:
             type: object
             properties:
@@ -569,7 +247,7 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        ManualRenewReply:
+        ListDomainBindingReply:
             type: object
             properties:
                 code:
@@ -578,32 +256,8 @@ components:
                 message:
                     type: string
                 data:
-                    type: string
-        ManualRenewRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-        OrderInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                orderNo:
-                    type: string
-                productName:
-                    type: string
-                productDesc:
-                    type: string
-                symbol:
-                    type: string
-                cycle:
-                    type: number
-                    format: float
-                createTime:
-                    type: integer
-                    format: int64
-        OrderListReply:
+                    $ref: '#/components/schemas/DomainBindingPageResponse'
+        NsLookupReply:
             type: object
             properties:
                 code:
@@ -612,67 +266,7 @@ components:
                 message:
                     type: string
                 data:
-                    $ref: '#/components/schemas/OrderPage'
-        OrderPage:
-            type: object
-            properties:
-                total:
-                    type: integer
-                    format: int64
-                page:
-                    type: integer
-                    format: int32
-                size:
-                    type: integer
-                    format: int32
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/OrderInfo'
-        RechargeCycleByAlipayReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    $ref: '#/components/schemas/RechargeCycleByAlipayReply_Pay'
-        RechargeCycleByAlipayReply_Pay:
-            type: object
-            properties:
-                outTradeNo:
-                    type: string
-                url:
-                    type: string
-        RechargeCycleByAlipayRequest:
-            type: object
-            properties:
-                rechargeChannel:
-                    type: integer
-                    format: int32
-                cycle:
-                    type: number
-                    format: float
-                amount:
-                    type: number
-                    format: float
-        RechargeCycleByRedeemCodeReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                data:
-                    type: string
-        RechargeCycleByRedeemCodeRequest:
-            type: object
-            properties:
-                redeemCode:
-                    type: string
+                    type: boolean
         Status:
             type: object
             properties:
@@ -689,5 +283,24 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateDomainBindingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+        UpdateDomainBindingRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                networkMappingId:
+                    type: string
+                name:
+                    type: string
+                domain:
+                    type: string
 tags:
-    - name: Order
+    - name: DomainBinding
