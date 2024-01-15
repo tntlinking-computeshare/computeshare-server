@@ -235,7 +235,7 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 		FkUserID:          userId,
 		FkCycleOrderID:    cycleOrder.ID,
 		FkCycleRechargeID: uuid.Nil,
-		Operation:         consts.RentingCloudServers,
+		Operation:         string(consts.RentingCloudServers),
 		Symbol:            cycleOrder.Symbol,
 		Cycle:             cycleOrder.Cycle,
 		Balance:           balance,

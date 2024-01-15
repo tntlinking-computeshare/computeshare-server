@@ -222,6 +222,7 @@ func (o *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.Cycl
 		State:       int32(item.State),
 		DueTime:     dueTime,
 		RenewalTime: renewTime,
+		AutoRenew:   item.AutoRenewal,
 	}
 }
 
