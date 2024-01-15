@@ -330,6 +330,16 @@ func UseTimeLTE(v time.Time) predicate.CycleRedeemCode {
 	return predicate.CycleRedeemCode(sql.FieldLTE(FieldUseTime, v))
 }
 
+// UseTimeIsNil applies the IsNil predicate on the "use_time" field.
+func UseTimeIsNil() predicate.CycleRedeemCode {
+	return predicate.CycleRedeemCode(sql.FieldIsNull(FieldUseTime))
+}
+
+// UseTimeNotNil applies the NotNil predicate on the "use_time" field.
+func UseTimeNotNil() predicate.CycleRedeemCode {
+	return predicate.CycleRedeemCode(sql.FieldNotNull(FieldUseTime))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.CycleRedeemCode) predicate.CycleRedeemCode {
 	return predicate.CycleRedeemCode(func(s *sql.Selector) {

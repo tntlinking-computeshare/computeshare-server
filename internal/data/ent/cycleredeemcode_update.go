@@ -86,6 +86,20 @@ func (crcu *CycleRedeemCodeUpdate) SetUseTime(t time.Time) *CycleRedeemCodeUpdat
 	return crcu
 }
 
+// SetNillableUseTime sets the "use_time" field if the given value is not nil.
+func (crcu *CycleRedeemCodeUpdate) SetNillableUseTime(t *time.Time) *CycleRedeemCodeUpdate {
+	if t != nil {
+		crcu.SetUseTime(*t)
+	}
+	return crcu
+}
+
+// ClearUseTime clears the value of the "use_time" field.
+func (crcu *CycleRedeemCodeUpdate) ClearUseTime() *CycleRedeemCodeUpdate {
+	crcu.mutation.ClearUseTime()
+	return crcu
+}
+
 // Mutation returns the CycleRedeemCodeMutation object of the builder.
 func (crcu *CycleRedeemCodeUpdate) Mutation() *CycleRedeemCodeMutation {
 	return crcu.mutation
@@ -150,6 +164,9 @@ func (crcu *CycleRedeemCodeUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if value, ok := crcu.mutation.UseTime(); ok {
 		_spec.SetField(cycleredeemcode.FieldUseTime, field.TypeTime, value)
+	}
+	if crcu.mutation.UseTimeCleared() {
+		_spec.ClearField(cycleredeemcode.FieldUseTime, field.TypeTime)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, crcu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -225,6 +242,20 @@ func (crcuo *CycleRedeemCodeUpdateOne) SetCreateTime(t time.Time) *CycleRedeemCo
 // SetUseTime sets the "use_time" field.
 func (crcuo *CycleRedeemCodeUpdateOne) SetUseTime(t time.Time) *CycleRedeemCodeUpdateOne {
 	crcuo.mutation.SetUseTime(t)
+	return crcuo
+}
+
+// SetNillableUseTime sets the "use_time" field if the given value is not nil.
+func (crcuo *CycleRedeemCodeUpdateOne) SetNillableUseTime(t *time.Time) *CycleRedeemCodeUpdateOne {
+	if t != nil {
+		crcuo.SetUseTime(*t)
+	}
+	return crcuo
+}
+
+// ClearUseTime clears the value of the "use_time" field.
+func (crcuo *CycleRedeemCodeUpdateOne) ClearUseTime() *CycleRedeemCodeUpdateOne {
+	crcuo.mutation.ClearUseTime()
 	return crcuo
 }
 
@@ -322,6 +353,9 @@ func (crcuo *CycleRedeemCodeUpdateOne) sqlSave(ctx context.Context) (_node *Cycl
 	}
 	if value, ok := crcuo.mutation.UseTime(); ok {
 		_spec.SetField(cycleredeemcode.FieldUseTime, field.TypeTime, value)
+	}
+	if crcuo.mutation.UseTimeCleared() {
+		_spec.ClearField(cycleredeemcode.FieldUseTime, field.TypeTime)
 	}
 	_node = &CycleRedeemCode{config: crcuo.config}
 	_spec.Assign = _node.assignValues
