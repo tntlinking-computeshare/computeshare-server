@@ -41,7 +41,7 @@ func (c *cycleRedeemCodeRepo) Update(ctx context.Context, cycleRedeemCode *biz.C
 	return tx.UpdateOneID(first.ID).SetFkUserID(cycleRedeemCode.FkUserID).
 		SetState(cycleRedeemCode.State).SetUseTime(time.Now()).Exec(ctx)
 }
-func (c *cycleRedeemCodeRepo) CountCycleRecoveryTotal(ctx context.Context) (decimal.Decimal, error) {
+func (c *cycleRedeemCodeRepo) CountCycleGrantTotal(ctx context.Context) (decimal.Decimal, error) {
 	cycleSum, err := c.data.getCycleRedeemCode(ctx).Query().Aggregate(ent.Sum(cycleredeemcode.FieldCycle)).Float64(ctx)
 	if err == nil {
 		return decimal.NewFromFloat(cycleSum), nil

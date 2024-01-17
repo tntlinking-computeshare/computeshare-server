@@ -53,7 +53,7 @@ type CycleOrderRepo interface {
 type CycleRedeemCodeRepo interface {
 	FindByRedeemCode(context.Context, string) (*CycleRedeemCode, error)
 	Update(ctx context.Context, cycleRedeemCode *CycleRedeemCode) error
-	CountCycleRecoveryTotal(ctx context.Context) (decimal.Decimal, error)
+	CountCycleGrantTotal(ctx context.Context) (decimal.Decimal, error)
 	CountCycleUseTotal(ctx context.Context) (decimal.Decimal, error)
 }
 

@@ -112,16 +112,16 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 
 func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCountReply_CyclesCount, err error) {
 	var cyclesCount pb.CyclesCountReply_CyclesCount
-	countCycleRecoveryTotal, err := d.cycleRedeemCodeRepo.CountCycleRecoveryTotal(ctx)
+	countCycleRecoveryTotal, err := d.cycleRedeemCodeRepo.CountCycleGrantTotal(ctx)
 	if err != nil {
 		return nil, err
 	}
-	cyclesCount.RecoveryTotal = countCycleRecoveryTotal.StringFixed(2)
+	cyclesCount.GrantTotal = countCycleRecoveryTotal.StringFixed(2)
 	countCycleUseTotal, err := d.cycleRedeemCodeRepo.CountCycleUseTotal(ctx)
 	if err != nil {
 		return nil, err
 	}
-	cyclesCount.GrantVouchersTotal = countCycleUseTotal.StringFixed(2)
+	cyclesCount.RecoveryTotal = countCycleUseTotal.StringFixed(2)
 	countRechargeCycle, err := d.cycleRechargeRepo.CountRechargeCycle(ctx)
 	if err != nil {
 		return nil, err
