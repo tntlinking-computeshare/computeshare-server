@@ -111,23 +111,24 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 }
 
 func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCountReply_CyclesCount, err error) {
+	var cyclesCount pb.CyclesCountReply_CyclesCount
 	countCycleRecoveryTotal, err := d.cycleRedeemCodeRepo.CountCycleRecoveryTotal(ctx)
 	if err != nil {
 		return nil, err
 	}
 	recoveryTotal, _ := countCycleRecoveryTotal.Round(2).Float64()
-	count.RecoveryTotal = float32(recoveryTotal)
+	cyclesCount.RecoveryTotal = float32(recoveryTotal)
 	countCycleUseTotal, err := d.cycleRedeemCodeRepo.CountCycleUseTotal(ctx)
 	if err != nil {
 		return nil, err
 	}
 	useTotal, _ := countCycleUseTotal.Round(2).Float64()
-	count.GrantVouchersTotal = float32(useTotal)
+	cyclesCount.GrantVouchersTotal = float32(useTotal)
 	countRechargeCycle, err := d.cycleRechargeRepo.CountRechargeCycle(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rechargeCycle, _ := countRechargeCycle.Round(2).Float64()
-	count.RechargedTotal = float32(rechargeCycle)
-	return count, nil
+	cyclesCount.RechargedTotal = float32(rechargeCycle)
+	return &cyclesCount, nil
 }
