@@ -9,6 +9,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cyclerecharge"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/shopspring/decimal"
+	"strings"
 	"time"
 )
 
@@ -60,9 +61,17 @@ func (c *cycleRechargeRepo) UpdateCycleRecharge(ctx context.Context, bizCycleRec
 		SetState(bizCycleRecharge.State).SetTotalAmount(totalAmount).SetUpdateTime(time.Now()).Exec(ctx)
 }
 func (c *cycleRechargeRepo) CountRechargeCycle(ctx context.Context) (decimal.Decimal, error) {
-	cycleSum, err := c.data.getCycleRecharge(ctx).Query().Where(cyclerecharge.AlipayTradeNoEQ(""), cyclerecharge.StateIn(string(consts.TradeSuccess), string(consts.TradeFinished))).
+	cycleSum, err := c.data.getCycleRecharge(ctx).Query().Where(cyclerecharge.AlipayTradeNoNEQ(""), cyclerecharge.StateIn(string(consts.TradeSuccess), string(consts.TradeFinished))).
 		Aggregate(ent.Sum(cyclerecharge.FieldBuyCycle)).Float64(ctx)
-	return decimal.NewFromFloat(cycleSum), err
+	if err == nil {
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	if err != nil && strings.Contains(err.Error(), "converting NULL to float64 is unsupported") {
+		cycleSum = 0.00
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	return decimal.Decimal{}, err
+
 }
 
 func (c *cycleRechargeRepo) toBiz(p *ent.CycleRecharge, _ int) *biz.CycleRecharge {

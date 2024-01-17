@@ -27,13 +27,13 @@ service Dashboard {
 			get: "/v1/dashboard/storages/count",
 		};
 	};
-	//Provider列表 类型，总数，规格，是否存活
+	//Provider列表 类型，规格，是否存活
 	rpc ProvidersList (ProvidersListRequest) returns (ProvidersListReply){
 		option (google.api.http) = {
 			get: "/v1/dashboard/providers/list",
 		};
 	};
-	//Gateway列表 总端口数 已用端口数
+	//Gateway列表 总端口数 已用端口数内网 外网
 	rpc GatewaysList (GatewaysListRequest) returns (GatewaysListReply){
 		option (google.api.http) = {
 			get: "/v1/dashboard/gateways/list",
@@ -114,10 +114,10 @@ message CyclesCountReply {
 	string message = 2;
 	CyclesCount data = 3;
 	message CyclesCount {
-		float grantTotal = 1;
-		float recoveryTotal = 2;
-		float grantVouchersTotal = 3;
-		float rechargedTotal = 4;
+		string grantTotal = 1;
+		string recoveryTotal = 2;
+		string grantVouchersTotal = 3;
+		string rechargedTotal = 4;
 	}
 }
 

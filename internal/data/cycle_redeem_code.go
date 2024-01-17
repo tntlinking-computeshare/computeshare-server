@@ -7,6 +7,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleredeemcode"
 	"github.com/shopspring/decimal"
+	"strings"
 	"time"
 )
 
@@ -42,12 +43,26 @@ func (c *cycleRedeemCodeRepo) Update(ctx context.Context, cycleRedeemCode *biz.C
 }
 func (c *cycleRedeemCodeRepo) CountCycleRecoveryTotal(ctx context.Context) (decimal.Decimal, error) {
 	cycleSum, err := c.data.getCycleRedeemCode(ctx).Query().Aggregate(ent.Sum(cycleredeemcode.FieldCycle)).Float64(ctx)
-	return decimal.NewFromFloat(cycleSum), err
+	if err == nil {
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	if err != nil && strings.Contains(err.Error(), "converting NULL to float64 is unsupported") {
+		cycleSum = 0.00
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	return decimal.Decimal{}, err
 }
 
 func (c *cycleRedeemCodeRepo) CountCycleUseTotal(ctx context.Context) (decimal.Decimal, error) {
 	cycleSum, err := c.data.getCycleRedeemCode(ctx).Query().Where(cycleredeemcode.State(true)).Aggregate(ent.Sum(cycleredeemcode.FieldCycle)).Float64(ctx)
-	return decimal.NewFromFloat(cycleSum), err
+	if err == nil {
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	if err != nil && strings.Contains(err.Error(), "converting NULL to float64 is unsupported") {
+		cycleSum = 0.00
+		return decimal.NewFromFloat(cycleSum), nil
+	}
+	return decimal.Decimal{}, err
 }
 
 func (r *cycleRedeemCodeRepo) toBiz(p *ent.CycleRedeemCode, _ int) *biz.CycleRedeemCode {

@@ -116,19 +116,16 @@ func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCou
 	if err != nil {
 		return nil, err
 	}
-	recoveryTotal, _ := countCycleRecoveryTotal.Round(2).Float64()
-	cyclesCount.RecoveryTotal = float32(recoveryTotal)
+	cyclesCount.RecoveryTotal = countCycleRecoveryTotal.StringFixed(2)
 	countCycleUseTotal, err := d.cycleRedeemCodeRepo.CountCycleUseTotal(ctx)
 	if err != nil {
 		return nil, err
 	}
-	useTotal, _ := countCycleUseTotal.Round(2).Float64()
-	cyclesCount.GrantVouchersTotal = float32(useTotal)
+	cyclesCount.GrantVouchersTotal = countCycleUseTotal.StringFixed(2)
 	countRechargeCycle, err := d.cycleRechargeRepo.CountRechargeCycle(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rechargeCycle, _ := countRechargeCycle.Round(2).Float64()
-	cyclesCount.RechargedTotal = float32(rechargeCycle)
+	cyclesCount.RechargedTotal = countRechargeCycle.StringFixed(2)
 	return &cyclesCount, nil
 }

@@ -155,17 +155,13 @@ components:
             type: object
             properties:
                 grantTotal:
-                    type: number
-                    format: float
+                    type: string
                 recoveryTotal:
-                    type: number
-                    format: float
+                    type: string
                 grantVouchersTotal:
-                    type: number
-                    format: float
+                    type: string
                 rechargedTotal:
-                    type: number
-                    format: float
+                    type: string
         GatewaysCountReply:
             type: object
             properties:
