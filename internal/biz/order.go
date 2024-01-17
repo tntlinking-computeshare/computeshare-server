@@ -41,6 +41,7 @@ type CycleRechargeRepo interface {
 	FindByOutTradeNo(context.Context, string) (*CycleRecharge, error)
 	CreateCycleRecharge(context.Context, *CycleRecharge) (*CycleRecharge, error)
 	UpdateCycleRecharge(context.Context, *CycleRecharge) error
+	CountRechargeCycle(context.Context) (decimal.Decimal, error)
 }
 
 type CycleOrderRepo interface {
@@ -52,6 +53,8 @@ type CycleOrderRepo interface {
 type CycleRedeemCodeRepo interface {
 	FindByRedeemCode(context.Context, string) (*CycleRedeemCode, error)
 	Update(ctx context.Context, cycleRedeemCode *CycleRedeemCode) error
+	CountCycleRecoveryTotal(ctx context.Context) (decimal.Decimal, error)
+	CountCycleUseTotal(ctx context.Context) (decimal.Decimal, error)
 }
 
 type AlipayOrderRollbackRepo interface {

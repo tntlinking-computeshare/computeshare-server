@@ -19,4 +19,5 @@ var ProviderSet = wire.NewSet(
 	NewOrderUseCase,
 	NewCycleTransactionUseCase,
 	NewCycleRenewalUseCase,
+	NewDashboardUseCase,
 )

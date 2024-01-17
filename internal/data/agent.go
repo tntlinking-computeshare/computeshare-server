@@ -31,6 +31,14 @@ func (ar *agentRepo) ListAgent(ctx context.Context) ([]*biz.Agent, error) {
 	return lo.Map(ps, ar.toBiz), err
 }
 
+func (ar *agentRepo) CountAgent(ctx context.Context) (int, error) {
+	count, err := ar.data.getAgent(ctx).Query().Count(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count, err
+}
+
 func (ar *agentRepo) GetAgent(ctx context.Context, id uuid.UUID) (*biz.Agent, error) {
 	p, err := ar.data.getAgent(ctx).Get(ctx, id)
 	if err != nil {

@@ -74,6 +74,7 @@ type Gateway struct {
 
 type GatewayRepo interface {
 	ListGateway(ctx context.Context) ([]*Gateway, error)
+	CountGateway(ctx context.Context) (int, error)
 	GetGateway(ctx context.Context, id uuid.UUID) (*Gateway, error)
 	// FindInstanceSuitableGateway 查询实例需要链接到的gateway
 	// 1). 判断此实例有无配置端口映射，如果配置，直接使用此端口映射对应的gatewayId
@@ -94,7 +95,9 @@ type GatewayPortCount struct {
 }
 
 type GatewayPortRepo interface {
+	CountPublicGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
 	CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
+	CountGatewayPort(ctx context.Context) ([]*GatewayPortCount, error)
 	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*GatewayPort, error)
 	Update(ctx context.Context, gp *GatewayPort) error
 	GetGatewayPortByGatewayIdAndPort(ctx context.Context, id uuid.UUID, port int32) (*GatewayPort, error)
@@ -143,7 +146,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	}
 
 	// 查看当前 gatewayID
-	gpcList, err := m.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+	gpcList, err := m.gatewayPortRepo.CountPublicGatewayPortByIsUsed(ctx, false)
 	if err != nil {
 		return nil, err
 	}

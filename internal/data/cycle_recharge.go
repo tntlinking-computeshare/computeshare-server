@@ -59,6 +59,11 @@ func (c *cycleRechargeRepo) UpdateCycleRecharge(ctx context.Context, bizCycleRec
 	return c.data.getCycleRecharge(ctx).UpdateOne(cycleRecharge).SetAlipayTradeNo(bizCycleRecharge.AlipayTradeNo).
 		SetState(bizCycleRecharge.State).SetTotalAmount(totalAmount).SetUpdateTime(time.Now()).Exec(ctx)
 }
+func (c *cycleRechargeRepo) CountRechargeCycle(ctx context.Context) (decimal.Decimal, error) {
+	cycleSum, err := c.data.getCycleRecharge(ctx).Query().Where(cyclerecharge.AlipayTradeNoEQ(""), cyclerecharge.StateIn(string(consts.TradeSuccess), string(consts.TradeSuccess))).
+		Aggregate(ent.Sum(cyclerecharge.FieldBuyCycle)).Float64(ctx)
+	return decimal.NewFromFloat(cycleSum), err
+}
 
 func (c *cycleRechargeRepo) toBiz(p *ent.CycleRecharge, _ int) *biz.CycleRecharge {
 	if p == nil {

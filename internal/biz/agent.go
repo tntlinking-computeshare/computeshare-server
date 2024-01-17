@@ -32,6 +32,7 @@ type Agent struct {
 
 type AgentRepo interface {
 	ListAgent(ctx context.Context) ([]*Agent, error)
+	CountAgent(ctx context.Context) (int, error)
 	GetAgent(ctx context.Context, id uuid.UUID) (*Agent, error)
 	CreateAgent(ctx context.Context, agent *Agent) error
 	UpdateAgent(ctx context.Context, id uuid.UUID, agent *Agent) error
