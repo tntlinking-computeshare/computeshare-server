@@ -19,13 +19,13 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationDashboardCyclesCount = "/api.dashboard.v1.Dashboard/CyclesCount"
-const OperationDashboardGatewaysCount = "/api.dashboard.v1.Dashboard/GatewaysCount"
-const OperationDashboardGatewaysList = "/api.dashboard.v1.Dashboard/GatewaysList"
-const OperationDashboardProvidersCount = "/api.dashboard.v1.Dashboard/ProvidersCount"
-const OperationDashboardProvidersList = "/api.dashboard.v1.Dashboard/ProvidersList"
-const OperationDashboardSandboxCount = "/api.dashboard.v1.Dashboard/SandboxCount"
-const OperationDashboardStoragesCount = "/api.dashboard.v1.Dashboard/StoragesCount"
+const OperationDashboardCyclesCount = "/api.server.dashboard.v1.Dashboard/CyclesCount"
+const OperationDashboardGatewaysCount = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
+const OperationDashboardGatewaysList = "/api.server.dashboard.v1.Dashboard/GatewaysList"
+const OperationDashboardProvidersCount = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
+const OperationDashboardProvidersList = "/api.server.dashboard.v1.Dashboard/ProvidersList"
+const OperationDashboardSandboxCount = "/api.server.dashboard.v1.Dashboard/SandboxCount"
+const OperationDashboardStoragesCount = "/api.server.dashboard.v1.Dashboard/StoragesCount"
 
 type DashboardHTTPServer interface {
 	// CyclesCount已发放积分总数 回收积分总数 发放代金券总数 已充值总数

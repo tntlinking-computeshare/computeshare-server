@@ -5,6 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
+	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 type DashboardUseCase struct {
@@ -40,6 +41,24 @@ func (d *DashboardUseCase) ProvidersCount(ctx context.Context) (count int, err e
 		return 0, err
 	}
 	return countAgent, nil
+}
+
+func (d *DashboardUseCase) ProvidersList(ctx context.Context) (list []*pb.ProvidersListReply_ProvidersList, err error) {
+	agents, err := d.agentRepo.ListAgent(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for _, agent := range agents {
+		var providersList pb.ProvidersListReply_ProvidersList
+		providersList.Type = consts.Agent
+		providersList.Active = agent.Active
+		providersList.Mac = agent.MAC
+		providersList.Ip = agent.IP
+		providersList.TotalCpu = agent.TotalCPU
+		providersList.TotalMemory = agent.TotalMemory
+		list = append(list, &providersList)
+	}
+	return list, nil
 }
 
 func (d *DashboardUseCase) GatewaysCount(ctx context.Context) (count int, err error) {

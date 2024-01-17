@@ -40,7 +40,12 @@ func (d *DashboardService) StoragesCount(ctx context.Context, req *pb.StoragesCo
 	return &pb.StoragesCountReply{}, nil
 }
 func (d *DashboardService) ProvidersList(ctx context.Context, req *pb.ProvidersListRequest) (*pb.ProvidersListReply, error) {
-	return &pb.ProvidersListReply{}, nil
+	list, err := d.dashboardUseCase.ProvidersList(ctx)
+	return &pb.ProvidersListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    list,
+	}, err
 }
 func (d *DashboardService) GatewaysList(ctx context.Context, req *pb.GatewaysListRequest) (*pb.GatewaysListReply, error) {
 	list, err := d.dashboardUseCase.GatewaysList(ctx)

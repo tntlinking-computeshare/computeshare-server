@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Dashboard_ProvidersCount_FullMethodName = "/api.dashboard.v1.Dashboard/ProvidersCount"
-	Dashboard_GatewaysCount_FullMethodName  = "/api.dashboard.v1.Dashboard/GatewaysCount"
-	Dashboard_StoragesCount_FullMethodName  = "/api.dashboard.v1.Dashboard/StoragesCount"
-	Dashboard_ProvidersList_FullMethodName  = "/api.dashboard.v1.Dashboard/ProvidersList"
-	Dashboard_GatewaysList_FullMethodName   = "/api.dashboard.v1.Dashboard/GatewaysList"
-	Dashboard_CyclesCount_FullMethodName    = "/api.dashboard.v1.Dashboard/CyclesCount"
-	Dashboard_SandboxCount_FullMethodName   = "/api.dashboard.v1.Dashboard/SandboxCount"
+	Dashboard_ProvidersCount_FullMethodName = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
+	Dashboard_GatewaysCount_FullMethodName  = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
+	Dashboard_StoragesCount_FullMethodName  = "/api.server.dashboard.v1.Dashboard/StoragesCount"
+	Dashboard_ProvidersList_FullMethodName  = "/api.server.dashboard.v1.Dashboard/ProvidersList"
+	Dashboard_GatewaysList_FullMethodName   = "/api.server.dashboard.v1.Dashboard/GatewaysList"
+	Dashboard_CyclesCount_FullMethodName    = "/api.server.dashboard.v1.Dashboard/CyclesCount"
+	Dashboard_SandboxCount_FullMethodName   = "/api.server.dashboard.v1.Dashboard/SandboxCount"
 )
 
 // DashboardClient is the client API for Dashboard service.
@@ -308,7 +308,7 @@ func _Dashboard_SandboxCount_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Dashboard_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.dashboard.v1.Dashboard",
+	ServiceName: "api.server.dashboard.v1.Dashboard",
 	HandlerType: (*DashboardServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -233,8 +233,26 @@ components:
                 message:
                     type: string
                 data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ProvidersListReply_ProvidersList'
+        ProvidersListReply_ProvidersList:
+            type: object
+            properties:
+                type:
+                    type: string
+                mac:
+                    type: string
+                ip:
+                    type: string
+                totalCpu:
                     type: integer
                     format: int32
+                totalMemory:
+                    type: integer
+                    format: int32
+                active:
+                    type: boolean
         SandboxCountReply:
             type: object
             properties:
