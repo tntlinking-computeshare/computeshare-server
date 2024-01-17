@@ -251,7 +251,7 @@ func (o *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenew
 	}, err
 }
 
-func (o *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
+func (o *OrderService) CycleRenewalDetail(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err
