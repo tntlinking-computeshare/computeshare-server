@@ -161,7 +161,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		OrderNo:     orderNo,
 		FkUserID:    userId,
 		ProductName: string(consts.RentingCloudServers),
-		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
+		ProductDesc: fmt.Sprintf("%s | %d核%dGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
 		Symbol:      "-",
 		Cycle:       float64(specPrice.Price),
 		CreateTime:  time.Now(),

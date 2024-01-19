@@ -70,11 +70,58 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 	}
 
 	in.ID = entity.ID
+
+	crs.reCalculateAgentUsage(ctx, in.AgentId)
+
 	return err
 }
 
+func (crs *computeInstanceRepo) reCalculateAgentUsage(ctx context.Context, agentId string) {
+	var s []struct {
+		AgentId string `json:"agent_id"`
+		Core    int    `json:"core"`
+		Memory  int    `json:"memory"`
+	}
+
+	// 同时计算agent 剩余资源
+	err := crs.data.getComputeInstance(ctx).
+		Query().
+		Where(computeinstance.AgentIDEQ(agentId)).
+		GroupBy(computeinstance.FieldAgentID).Aggregate(ent.As(ent.Sum(computeinstance.FieldCore), "core"), ent.As(ent.Sum(computeinstance.FieldMemory), "memory")).Scan(ctx, &s)
+
+	if err != nil {
+		crs.log.Error("err: ", err)
+		return
+	}
+
+	if len(s) == 0 {
+		crs.log.Error("err: ", "查询agent使用情况失败，未能查询出")
+		return
+	}
+
+	usage := s[0]
+
+	agentUUID, _ := uuid.Parse(agentId)
+	err = crs.data.getAgent(ctx).UpdateOneID(agentUUID).SetOccupiedCPU(int32(usage.Core)).SetOccupiedMemory(int32(usage.Memory)).Exec(ctx)
+
+	if err != nil {
+		crs.log.Error("重算资源使用率错误: ", err)
+		return
+	}
+}
+
 func (crs *computeInstanceRepo) Delete(ctx context.Context, id uuid.UUID) error {
-	return crs.data.getComputeInstance(ctx).DeleteOneID(id).Exec(ctx)
+	instance, err := crs.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	err = crs.data.getComputeInstance(ctx).DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return err
+	}
+	agentId := instance.AgentId
+	crs.reCalculateAgentUsage(ctx, agentId)
+	return nil
 }
 
 func (crs *computeInstanceRepo) Update(ctx context.Context, id uuid.UUID, instance *biz.ComputeInstance) error {
