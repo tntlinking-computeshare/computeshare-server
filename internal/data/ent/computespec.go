@@ -16,10 +16,10 @@ type ComputeSpec struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int32 `json:"id,omitempty"`
-	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
-	// Memory holds the value of the "memory" field.
-	Memory       string `json:"memory,omitempty"`
+	// cpu核数
+	Core int `json:"core,omitempty"`
+	// 服务器内存G
+	Memory       int `json:"memory,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -28,10 +28,8 @@ func (*ComputeSpec) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computespec.FieldID:
+		case computespec.FieldID, computespec.FieldCore, computespec.FieldMemory:
 			values[i] = new(sql.NullInt64)
-		case computespec.FieldCore, computespec.FieldMemory:
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -54,16 +52,16 @@ func (cs *ComputeSpec) assignValues(columns []string, values []any) error {
 			}
 			cs.ID = int32(value.Int64)
 		case computespec.FieldCore:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field core", values[i])
 			} else if value.Valid {
-				cs.Core = value.String
+				cs.Core = int(value.Int64)
 			}
 		case computespec.FieldMemory:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field memory", values[i])
 			} else if value.Valid {
-				cs.Memory = value.String
+				cs.Memory = int(value.Int64)
 			}
 		default:
 			cs.selectValues.Set(columns[i], values[i])
@@ -102,10 +100,10 @@ func (cs *ComputeSpec) String() string {
 	builder.WriteString("ComputeSpec(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", cs.ID))
 	builder.WriteString("core=")
-	builder.WriteString(cs.Core)
+	builder.WriteString(fmt.Sprintf("%v", cs.Core))
 	builder.WriteString(", ")
 	builder.WriteString("memory=")
-	builder.WriteString(cs.Memory)
+	builder.WriteString(fmt.Sprintf("%v", cs.Memory))
 	builder.WriteByte(')')
 	return builder.String()
 }

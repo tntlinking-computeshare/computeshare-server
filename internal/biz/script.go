@@ -106,7 +106,7 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32, userId 
 		return nil, err
 	}
 	// 选择一个agent节点进行通信
-	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, "", "")
+	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, 1, 1)
 	if err != nil {
 		return nil, err
 	}

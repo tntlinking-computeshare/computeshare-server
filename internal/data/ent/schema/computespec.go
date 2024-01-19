@@ -15,8 +15,8 @@ type ComputeSpec struct {
 func (ComputeSpec) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id"),
-		field.String("core").NotEmpty(),
-		field.String("memory").NotEmpty(),
+		field.Int("core").Comment("cpu核数"),
+		field.Int("memory").Comment("服务器内存G"),
 	}
 }
 

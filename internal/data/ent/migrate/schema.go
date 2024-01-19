@@ -101,8 +101,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "owner", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
-		{Name: "core", Type: field.TypeString},
-		{Name: "memory", Type: field.TypeString},
+		{Name: "core", Type: field.TypeInt},
+		{Name: "memory", Type: field.TypeInt},
 		{Name: "image", Type: field.TypeString},
 		{Name: "image_id", Type: field.TypeInt32},
 		{Name: "port", Type: field.TypeString, Nullable: true},
@@ -135,8 +135,8 @@ var (
 	// ComputeSpecsColumns holds the columns for the "compute_specs" table.
 	ComputeSpecsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt32, Increment: true},
-		{Name: "core", Type: field.TypeString},
-		{Name: "memory", Type: field.TypeString},
+		{Name: "core", Type: field.TypeInt},
+		{Name: "memory", Type: field.TypeInt},
 	}
 	// ComputeSpecsTable holds the schema information for the "compute_specs" table.
 	ComputeSpecsTable = &schema.Table{

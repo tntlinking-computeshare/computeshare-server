@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -121,8 +122,28 @@ func (ar *agentRepo) toBiz(p *ent.Agent, _ int) *biz.Agent {
 	}
 }
 
-func (ar *agentRepo) FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*biz.Agent, error) {
+func (ar *agentRepo) FindOneActiveAgent(ctx context.Context, cpu int, memory int) (*biz.Agent, error) {
 
-	entity, err := ar.data.getAgent(ctx).Query().Where(agent.Active(true)).First(ctx)
-	return ar.toBiz(entity, 0), err
+	entitys, err := ar.data.getAgent(ctx).Query().
+		Where(agent.Active(true)).
+		All(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, entity := range entitys {
+		balanceCpu := entity.TotalCPU - entity.OccupiedCPU
+		if balanceCpu-int32(cpu) < 0 {
+			continue
+		}
+		balanceMemory := entity.TotalMemory - entity.OccupiedMemory
+		if balanceMemory-int32(memory) < 0 {
+			continue
+		}
+
+		return ar.toBiz(entity, 0), nil
+	}
+
+	return nil, errors.New(400, "RESOURCE_INSUFFICIENT", "计算资源不足，请联系管理员")
 }

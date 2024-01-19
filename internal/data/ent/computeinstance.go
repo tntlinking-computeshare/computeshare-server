@@ -23,10 +23,10 @@ type ComputeInstance struct {
 	Owner string `json:"owner,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
-	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
-	// Memory holds the value of the "memory" field.
-	Memory string `json:"memory,omitempty"`
+	// cpu核数
+	Core int `json:"core,omitempty"`
+	// 内存G
+	Memory int `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
 	// 镜像id
@@ -55,9 +55,9 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computeinstance.FieldImageID, computeinstance.FieldStatus, computeinstance.FieldVncPort:
+		case computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImageID, computeinstance.FieldStatus, computeinstance.FieldVncPort:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime:
 			values[i] = new(sql.NullTime)
@@ -97,16 +97,16 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 				ci.Name = value.String
 			}
 		case computeinstance.FieldCore:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field core", values[i])
 			} else if value.Valid {
-				ci.Core = value.String
+				ci.Core = int(value.Int64)
 			}
 		case computeinstance.FieldMemory:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field memory", values[i])
 			} else if value.Valid {
-				ci.Memory = value.String
+				ci.Memory = int(value.Int64)
 			}
 		case computeinstance.FieldImage:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -211,10 +211,10 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(ci.Name)
 	builder.WriteString(", ")
 	builder.WriteString("core=")
-	builder.WriteString(ci.Core)
+	builder.WriteString(fmt.Sprintf("%v", ci.Core))
 	builder.WriteString(", ")
 	builder.WriteString("memory=")
-	builder.WriteString(ci.Memory)
+	builder.WriteString(fmt.Sprintf("%v", ci.Memory))
 	builder.WriteString(", ")
 	builder.WriteString("image=")
 	builder.WriteString(ci.Image)

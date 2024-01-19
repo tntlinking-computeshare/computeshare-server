@@ -35,14 +35,14 @@ func (cic *ComputeInstanceCreate) SetName(s string) *ComputeInstanceCreate {
 }
 
 // SetCore sets the "core" field.
-func (cic *ComputeInstanceCreate) SetCore(s string) *ComputeInstanceCreate {
-	cic.mutation.SetCore(s)
+func (cic *ComputeInstanceCreate) SetCore(i int) *ComputeInstanceCreate {
+	cic.mutation.SetCore(i)
 	return cic
 }
 
 // SetMemory sets the "memory" field.
-func (cic *ComputeInstanceCreate) SetMemory(s string) *ComputeInstanceCreate {
-	cic.mutation.SetMemory(s)
+func (cic *ComputeInstanceCreate) SetMemory(i int) *ComputeInstanceCreate {
+	cic.mutation.SetMemory(i)
 	return cic
 }
 
@@ -206,18 +206,8 @@ func (cic *ComputeInstanceCreate) check() error {
 	if _, ok := cic.mutation.Core(); !ok {
 		return &ValidationError{Name: "core", err: errors.New(`ent: missing required field "ComputeInstance.core"`)}
 	}
-	if v, ok := cic.mutation.Core(); ok {
-		if err := computeinstance.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.core": %w`, err)}
-		}
-	}
 	if _, ok := cic.mutation.Memory(); !ok {
 		return &ValidationError{Name: "memory", err: errors.New(`ent: missing required field "ComputeInstance.memory"`)}
-	}
-	if v, ok := cic.mutation.Memory(); ok {
-		if err := computeinstance.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.memory": %w`, err)}
-		}
 	}
 	if _, ok := cic.mutation.Image(); !ok {
 		return &ValidationError{Name: "image", err: errors.New(`ent: missing required field "ComputeInstance.image"`)}
@@ -289,11 +279,11 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 		_node.Name = value
 	}
 	if value, ok := cic.mutation.Core(); ok {
-		_spec.SetField(computeinstance.FieldCore, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
 		_node.Core = value
 	}
 	if value, ok := cic.mutation.Memory(); ok {
-		_spec.SetField(computeinstance.FieldMemory, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
 		_node.Memory = value
 	}
 	if value, ok := cic.mutation.Image(); ok {

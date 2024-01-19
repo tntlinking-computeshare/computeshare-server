@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
-	"strconv"
 	"time"
 )
 
@@ -13,9 +12,9 @@ type ComputeSpec struct {
 	// ID of the ent.
 	ID int32 `json:"id,omitempty"`
 	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
+	Core int `json:"core,omitempty"`
 	// Memory holds the value of the "memory" field.
-	Memory string `json:"memory,omitempty"`
+	Memory int `json:"memory,omitempty"`
 }
 
 type ComputeSpecPrice struct {
@@ -30,19 +29,11 @@ type ComputeSpecPrice struct {
 }
 
 func (c *ComputeSpec) GetCore() int64 {
-	core, err := strconv.Atoi(c.Core)
-	if err != nil {
-		return 1
-	}
-	return int64(core)
+	return int64(c.Core)
 }
 
 func (c *ComputeSpec) GetMemory() int64 {
-	memory, err := strconv.Atoi(c.Memory)
-	if err != nil {
-		return 1024
-	}
-	return int64(memory)
+	return int64(c.Memory)
 }
 
 type ComputeInstance struct {
@@ -53,9 +44,9 @@ type ComputeInstance struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Core holds the value of the "core" field.
-	Core string `json:"core,omitempty"`
+	Core int `json:"core,omitempty"`
 	// Memory holds the value of the "memory" field.
-	Memory string `json:"memory,omitempty"`
+	Memory int `json:"memory,omitempty"`
 	// Image holds the value of the "image" field.
 	Image string `json:"image,omitempty"`
 	// 镜像id
@@ -78,19 +69,11 @@ type ComputeInstance struct {
 }
 
 func (i *ComputeInstance) GetCore() int64 {
-	core, err := strconv.Atoi(i.Core)
-	if err != nil {
-		return 0
-	}
-	return int64(core)
+	return int64(i.Core)
 }
 
 func (i *ComputeInstance) GetMemory() int64 {
-	memory, err := strconv.Atoi(i.Memory)
-	if err != nil {
-		return 0
-	}
-	return int64(memory)
+	return int64(i.Memory)
 }
 
 type ComputeInstanceCreate struct {

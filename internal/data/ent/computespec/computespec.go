@@ -36,13 +36,6 @@ func ValidColumn(column string) bool {
 	return false
 }
 
-var (
-	// CoreValidator is a validator for the "core" field. It is called by the builders before save.
-	CoreValidator func(string) error
-	// MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
-	MemoryValidator func(string) error
-)
-
 // OrderOption defines the ordering options for the ComputeSpec queries.
 type OrderOption func(*sql.Selector)
 

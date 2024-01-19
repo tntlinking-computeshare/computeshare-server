@@ -67,12 +67,12 @@ func Name(v string) predicate.ComputeInstance {
 }
 
 // Core applies equality check predicate on the "core" field. It's identical to CoreEQ.
-func Core(v string) predicate.ComputeInstance {
+func Core(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldCore, v))
 }
 
 // Memory applies equality check predicate on the "memory" field. It's identical to MemoryEQ.
-func Memory(v string) predicate.ComputeInstance {
+func Memory(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldMemory, v))
 }
 
@@ -258,133 +258,83 @@ func NameContainsFold(v string) predicate.ComputeInstance {
 }
 
 // CoreEQ applies the EQ predicate on the "core" field.
-func CoreEQ(v string) predicate.ComputeInstance {
+func CoreEQ(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldCore, v))
 }
 
 // CoreNEQ applies the NEQ predicate on the "core" field.
-func CoreNEQ(v string) predicate.ComputeInstance {
+func CoreNEQ(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldNEQ(FieldCore, v))
 }
 
 // CoreIn applies the In predicate on the "core" field.
-func CoreIn(vs ...string) predicate.ComputeInstance {
+func CoreIn(vs ...int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldIn(FieldCore, vs...))
 }
 
 // CoreNotIn applies the NotIn predicate on the "core" field.
-func CoreNotIn(vs ...string) predicate.ComputeInstance {
+func CoreNotIn(vs ...int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldNotIn(FieldCore, vs...))
 }
 
 // CoreGT applies the GT predicate on the "core" field.
-func CoreGT(v string) predicate.ComputeInstance {
+func CoreGT(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldGT(FieldCore, v))
 }
 
 // CoreGTE applies the GTE predicate on the "core" field.
-func CoreGTE(v string) predicate.ComputeInstance {
+func CoreGTE(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldGTE(FieldCore, v))
 }
 
 // CoreLT applies the LT predicate on the "core" field.
-func CoreLT(v string) predicate.ComputeInstance {
+func CoreLT(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLT(FieldCore, v))
 }
 
 // CoreLTE applies the LTE predicate on the "core" field.
-func CoreLTE(v string) predicate.ComputeInstance {
+func CoreLTE(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLTE(FieldCore, v))
 }
 
-// CoreContains applies the Contains predicate on the "core" field.
-func CoreContains(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContains(FieldCore, v))
-}
-
-// CoreHasPrefix applies the HasPrefix predicate on the "core" field.
-func CoreHasPrefix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldCore, v))
-}
-
-// CoreHasSuffix applies the HasSuffix predicate on the "core" field.
-func CoreHasSuffix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldCore, v))
-}
-
-// CoreEqualFold applies the EqualFold predicate on the "core" field.
-func CoreEqualFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEqualFold(FieldCore, v))
-}
-
-// CoreContainsFold applies the ContainsFold predicate on the "core" field.
-func CoreContainsFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContainsFold(FieldCore, v))
-}
-
 // MemoryEQ applies the EQ predicate on the "memory" field.
-func MemoryEQ(v string) predicate.ComputeInstance {
+func MemoryEQ(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldMemory, v))
 }
 
 // MemoryNEQ applies the NEQ predicate on the "memory" field.
-func MemoryNEQ(v string) predicate.ComputeInstance {
+func MemoryNEQ(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldNEQ(FieldMemory, v))
 }
 
 // MemoryIn applies the In predicate on the "memory" field.
-func MemoryIn(vs ...string) predicate.ComputeInstance {
+func MemoryIn(vs ...int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldIn(FieldMemory, vs...))
 }
 
 // MemoryNotIn applies the NotIn predicate on the "memory" field.
-func MemoryNotIn(vs ...string) predicate.ComputeInstance {
+func MemoryNotIn(vs ...int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldNotIn(FieldMemory, vs...))
 }
 
 // MemoryGT applies the GT predicate on the "memory" field.
-func MemoryGT(v string) predicate.ComputeInstance {
+func MemoryGT(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldGT(FieldMemory, v))
 }
 
 // MemoryGTE applies the GTE predicate on the "memory" field.
-func MemoryGTE(v string) predicate.ComputeInstance {
+func MemoryGTE(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldGTE(FieldMemory, v))
 }
 
 // MemoryLT applies the LT predicate on the "memory" field.
-func MemoryLT(v string) predicate.ComputeInstance {
+func MemoryLT(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLT(FieldMemory, v))
 }
 
 // MemoryLTE applies the LTE predicate on the "memory" field.
-func MemoryLTE(v string) predicate.ComputeInstance {
+func MemoryLTE(v int) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLTE(FieldMemory, v))
-}
-
-// MemoryContains applies the Contains predicate on the "memory" field.
-func MemoryContains(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContains(FieldMemory, v))
-}
-
-// MemoryHasPrefix applies the HasPrefix predicate on the "memory" field.
-func MemoryHasPrefix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldMemory, v))
-}
-
-// MemoryHasSuffix applies the HasSuffix predicate on the "memory" field.
-func MemoryHasSuffix(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldMemory, v))
-}
-
-// MemoryEqualFold applies the EqualFold predicate on the "memory" field.
-func MemoryEqualFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldEqualFold(FieldMemory, v))
-}
-
-// MemoryContainsFold applies the ContainsFold predicate on the "memory" field.
-func MemoryContainsFold(v string) predicate.ComputeInstance {
-	return predicate.ComputeInstance(sql.FieldContainsFold(FieldMemory, v))
 }
 
 // ImageEQ applies the EQ predicate on the "image" field.

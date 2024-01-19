@@ -11,6 +11,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	"strconv"
 )
 
 type ComputeInstanceService struct {
@@ -36,8 +37,8 @@ func (s *ComputeInstanceService) ListComputeSpec(ctx context.Context, req *pb.Li
 		Data: lo.Map(list, func(item *biz.ComputeSpec, _ int) *pb.ComputeSpec {
 			return &pb.ComputeSpec{
 				Id:     item.ID,
-				Core:   item.Core,
-				Memory: item.Memory,
+				Core:   strconv.Itoa(item.Core),
+				Memory: strconv.Itoa(item.Memory),
 			}
 		}),
 	}, err
@@ -163,8 +164,8 @@ func (s *ComputeInstanceService) toReply(p *biz.ComputeInstance, _ int) *pb.Inst
 		Status:         int32(p.Status),
 		ExpirationTime: p.ExpirationTime.UnixMilli(),
 		ImageName:      p.Image,
-		Core:           p.Core,
-		Memory:         p.Memory,
+		Core:           strconv.Itoa(p.Core),
+		Memory:         strconv.Itoa(p.Memory),
 		ImageId:        p.ImageId,
 		Stats: lo.Map(p.Stats, func(item *biz.ComputeInstanceRds, _ int) *pb.InstanceStats {
 			if item == nil {

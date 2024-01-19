@@ -28,14 +28,28 @@ func (csu *ComputeSpecUpdate) Where(ps ...predicate.ComputeSpec) *ComputeSpecUpd
 }
 
 // SetCore sets the "core" field.
-func (csu *ComputeSpecUpdate) SetCore(s string) *ComputeSpecUpdate {
-	csu.mutation.SetCore(s)
+func (csu *ComputeSpecUpdate) SetCore(i int) *ComputeSpecUpdate {
+	csu.mutation.ResetCore()
+	csu.mutation.SetCore(i)
+	return csu
+}
+
+// AddCore adds i to the "core" field.
+func (csu *ComputeSpecUpdate) AddCore(i int) *ComputeSpecUpdate {
+	csu.mutation.AddCore(i)
 	return csu
 }
 
 // SetMemory sets the "memory" field.
-func (csu *ComputeSpecUpdate) SetMemory(s string) *ComputeSpecUpdate {
-	csu.mutation.SetMemory(s)
+func (csu *ComputeSpecUpdate) SetMemory(i int) *ComputeSpecUpdate {
+	csu.mutation.ResetMemory()
+	csu.mutation.SetMemory(i)
+	return csu
+}
+
+// AddMemory adds i to the "memory" field.
+func (csu *ComputeSpecUpdate) AddMemory(i int) *ComputeSpecUpdate {
+	csu.mutation.AddMemory(i)
 	return csu
 }
 
@@ -71,25 +85,7 @@ func (csu *ComputeSpecUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (csu *ComputeSpecUpdate) check() error {
-	if v, ok := csu.mutation.Core(); ok {
-		if err := computespec.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.core": %w`, err)}
-		}
-	}
-	if v, ok := csu.mutation.Memory(); ok {
-		if err := computespec.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.memory": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (csu *ComputeSpecUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := csu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(computespec.Table, computespec.Columns, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
 	if ps := csu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -99,10 +95,16 @@ func (csu *ComputeSpecUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := csu.mutation.Core(); ok {
-		_spec.SetField(computespec.FieldCore, field.TypeString, value)
+		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
+	}
+	if value, ok := csu.mutation.AddedCore(); ok {
+		_spec.AddField(computespec.FieldCore, field.TypeInt, value)
 	}
 	if value, ok := csu.mutation.Memory(); ok {
-		_spec.SetField(computespec.FieldMemory, field.TypeString, value)
+		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
+	}
+	if value, ok := csu.mutation.AddedMemory(); ok {
+		_spec.AddField(computespec.FieldMemory, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, csu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -125,14 +127,28 @@ type ComputeSpecUpdateOne struct {
 }
 
 // SetCore sets the "core" field.
-func (csuo *ComputeSpecUpdateOne) SetCore(s string) *ComputeSpecUpdateOne {
-	csuo.mutation.SetCore(s)
+func (csuo *ComputeSpecUpdateOne) SetCore(i int) *ComputeSpecUpdateOne {
+	csuo.mutation.ResetCore()
+	csuo.mutation.SetCore(i)
+	return csuo
+}
+
+// AddCore adds i to the "core" field.
+func (csuo *ComputeSpecUpdateOne) AddCore(i int) *ComputeSpecUpdateOne {
+	csuo.mutation.AddCore(i)
 	return csuo
 }
 
 // SetMemory sets the "memory" field.
-func (csuo *ComputeSpecUpdateOne) SetMemory(s string) *ComputeSpecUpdateOne {
-	csuo.mutation.SetMemory(s)
+func (csuo *ComputeSpecUpdateOne) SetMemory(i int) *ComputeSpecUpdateOne {
+	csuo.mutation.ResetMemory()
+	csuo.mutation.SetMemory(i)
+	return csuo
+}
+
+// AddMemory adds i to the "memory" field.
+func (csuo *ComputeSpecUpdateOne) AddMemory(i int) *ComputeSpecUpdateOne {
+	csuo.mutation.AddMemory(i)
 	return csuo
 }
 
@@ -181,25 +197,7 @@ func (csuo *ComputeSpecUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (csuo *ComputeSpecUpdateOne) check() error {
-	if v, ok := csuo.mutation.Core(); ok {
-		if err := computespec.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.core": %w`, err)}
-		}
-	}
-	if v, ok := csuo.mutation.Memory(); ok {
-		if err := computespec.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.memory": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (csuo *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSpec, err error) {
-	if err := csuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(computespec.Table, computespec.Columns, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
 	id, ok := csuo.mutation.ID()
 	if !ok {
@@ -226,10 +224,16 @@ func (csuo *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSp
 		}
 	}
 	if value, ok := csuo.mutation.Core(); ok {
-		_spec.SetField(computespec.FieldCore, field.TypeString, value)
+		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
+	}
+	if value, ok := csuo.mutation.AddedCore(); ok {
+		_spec.AddField(computespec.FieldCore, field.TypeInt, value)
 	}
 	if value, ok := csuo.mutation.Memory(); ok {
-		_spec.SetField(computespec.FieldMemory, field.TypeString, value)
+		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
+	}
+	if value, ok := csuo.mutation.AddedMemory(); ok {
+		_spec.AddField(computespec.FieldMemory, field.TypeInt, value)
 	}
 	_node = &ComputeSpec{config: csuo.config}
 	_spec.Assign = _node.assignValues
