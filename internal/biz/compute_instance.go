@@ -61,7 +61,7 @@ type ComputeInstanceUsercase struct {
 	cycleOrderRepo        CycleOrderRepo
 	cycleTransactionRepo  CycleTransactionRepo
 	cycleRenewalRepo      CycleRenewalRepo
-	networkMappingUseCase NetworkMappingUseCase
+	networkMappingUseCase *NetworkMappingUseCase
 	log                   *log.Helper
 }
 
@@ -78,7 +78,7 @@ func NewComputeInstanceUsercase(
 	cycleOrderRepo CycleOrderRepo,
 	cycleTransactionRepo CycleTransactionRepo,
 	cycleRenewalRepo CycleRenewalRepo,
-	networkMappingUseCase NetworkMappingUseCase,
+	networkMappingUseCase *NetworkMappingUseCase,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:              specRepo,

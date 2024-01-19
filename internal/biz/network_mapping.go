@@ -111,9 +111,8 @@ type NetworkMappingUseCase struct {
 	gatewayPortRepo      GatewayPortRepo
 	computeInstanceRepo  ComputeInstanceRepo
 	taskRepo             TaskRepo
-	ciu                  *ComputeInstanceUsercase
 	domainBindingRepo    DomainBindingRepository
-	domainBindingUseCase DomainBindingUseCase
+	domainBindingUseCase *DomainBindingUseCase
 	log                  *log.Helper
 }
 
@@ -123,14 +122,12 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	taskRepo TaskRepo,
 	domainBindingRepo DomainBindingRepository,
 	computeInstanceRepo ComputeInstanceRepo,
-	ciu *ComputeInstanceUsercase,
-	domainBindingUseCase DomainBindingUseCase,
+	domainBindingUseCase *DomainBindingUseCase,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
 		repo:                 repo,
 		gatewayRepo:          gatewayRepo,
 		gatewayPortRepo:      gatewayPortRepo,
-		ciu:                  ciu,
 		taskRepo:             taskRepo,
 		domainBindingRepo:    domainBindingRepo,
 		domainBindingUseCase: domainBindingUseCase,
@@ -212,7 +209,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 	// 通过 computerID 得到 agentID
-	ci, err := m.ciu.Get(ctx, nmc.ComputerId)
+	ci, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +291,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 		return err
 	}
 
-	instance, err := m.ciu.Get(ctx, nwp.FkComputerID)
+	instance, err := m.computeInstanceRepo.Get(ctx, nwp.FkComputerID)
 	if err != nil {
 		return err
 	}
