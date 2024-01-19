@@ -176,3 +176,11 @@ func (repo *NetworkMappingRepo) GetNetworkMappingByPublicIpdAndPort(ctx context.
 	}
 	return repo.toBiz(first, 0), err
 }
+
+func (repo *NetworkMappingRepo) ListByComputeInstanceId(ctx context.Context, computeInstanceId uuid.UUID) ([]*biz.NetworkMapping, error) {
+	list, err := repo.data.getNetworkMapping(ctx).Query().Where(networkmapping.FkComputerID(computeInstanceId)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return lo.Map(list, repo.toBiz), nil
+}

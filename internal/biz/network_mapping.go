@@ -62,6 +62,7 @@ type NetworkMappingRepo interface {
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
 	GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*NetworkMapping, error)
+	ListByComputeInstanceId(ctx context.Context, computeInstanceId uuid.UUID) ([]*NetworkMapping, error)
 }
 
 type Gateway struct {
@@ -105,14 +106,15 @@ type GatewayPortRepo interface {
 }
 
 type NetworkMappingUseCase struct {
-	repo                NetworkMappingRepo
-	gatewayRepo         GatewayRepo
-	gatewayPortRepo     GatewayPortRepo
-	computeInstanceRepo ComputeInstanceRepo
-	taskRepo            TaskRepo
-	ciu                 *ComputeInstanceUsercase
-	domainBindingRepo   DomainBindingRepository
-	log                 *log.Helper
+	repo                 NetworkMappingRepo
+	gatewayRepo          GatewayRepo
+	gatewayPortRepo      GatewayPortRepo
+	computeInstanceRepo  ComputeInstanceRepo
+	taskRepo             TaskRepo
+	ciu                  *ComputeInstanceUsercase
+	domainBindingRepo    DomainBindingRepository
+	domainBindingUseCase DomainBindingUseCase
+	log                  *log.Helper
 }
 
 func NewNetworkMappingUseCase(repo NetworkMappingRepo,
@@ -122,16 +124,18 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	domainBindingRepo DomainBindingRepository,
 	computeInstanceRepo ComputeInstanceRepo,
 	ciu *ComputeInstanceUsercase,
+	domainBindingUseCase DomainBindingUseCase,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
-		repo:                repo,
-		gatewayRepo:         gatewayRepo,
-		gatewayPortRepo:     gatewayPortRepo,
-		ciu:                 ciu,
-		taskRepo:            taskRepo,
-		domainBindingRepo:   domainBindingRepo,
-		computeInstanceRepo: computeInstanceRepo,
-		log:                 log.NewHelper(logger),
+		repo:                 repo,
+		gatewayRepo:          gatewayRepo,
+		gatewayPortRepo:      gatewayPortRepo,
+		ciu:                  ciu,
+		taskRepo:             taskRepo,
+		domainBindingRepo:    domainBindingRepo,
+		domainBindingUseCase: domainBindingUseCase,
+		computeInstanceRepo:  computeInstanceRepo,
+		log:                  log.NewHelper(logger),
 	}
 }
 
@@ -256,6 +260,10 @@ func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, userId u
 	return m.repo.PageNetworkMappingByUserID(ctx, userId, page, size)
 }
 
+func (m *NetworkMappingUseCase) ListByComputeInstanceId(ctx context.Context, instanceId uuid.UUID) ([]*NetworkMapping, error) {
+	return m.repo.ListByComputeInstanceId(ctx, instanceId)
+}
+
 func (m *NetworkMappingUseCase) GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error) {
 	m.log.WithContext(ctx).Infof("GetNetorkMapping %s", id)
 	return m.repo.GetNetworkMapping(ctx, id)
@@ -276,7 +284,9 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	}
 
 	if len(domains) > 0 {
-		return errors.New("请先解绑域名")
+		for _, domain := range domains {
+			_ = m.domainBindingUseCase.DeleteDomainBinding(ctx, domain.ID, domain.UserID)
+		}
 	}
 
 	gp, err := m.gatewayPortRepo.GetGatewayPortByGatewayIdAndPort(ctx, nwp.FkGatewayID, nwp.GatewayPort)
