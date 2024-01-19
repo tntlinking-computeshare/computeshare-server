@@ -20,14 +20,14 @@ type ComputeSpecCreate struct {
 }
 
 // SetCore sets the "core" field.
-func (csc *ComputeSpecCreate) SetCore(s string) *ComputeSpecCreate {
-	csc.mutation.SetCore(s)
+func (csc *ComputeSpecCreate) SetCore(i int) *ComputeSpecCreate {
+	csc.mutation.SetCore(i)
 	return csc
 }
 
 // SetMemory sets the "memory" field.
-func (csc *ComputeSpecCreate) SetMemory(s string) *ComputeSpecCreate {
-	csc.mutation.SetMemory(s)
+func (csc *ComputeSpecCreate) SetMemory(i int) *ComputeSpecCreate {
+	csc.mutation.SetMemory(i)
 	return csc
 }
 
@@ -74,18 +74,8 @@ func (csc *ComputeSpecCreate) check() error {
 	if _, ok := csc.mutation.Core(); !ok {
 		return &ValidationError{Name: "core", err: errors.New(`ent: missing required field "ComputeSpec.core"`)}
 	}
-	if v, ok := csc.mutation.Core(); ok {
-		if err := computespec.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.core": %w`, err)}
-		}
-	}
 	if _, ok := csc.mutation.Memory(); !ok {
 		return &ValidationError{Name: "memory", err: errors.New(`ent: missing required field "ComputeSpec.memory"`)}
-	}
-	if v, ok := csc.mutation.Memory(); ok {
-		if err := computespec.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeSpec.memory": %w`, err)}
-		}
 	}
 	return nil
 }
@@ -120,11 +110,11 @@ func (csc *ComputeSpecCreate) createSpec() (*ComputeSpec, *sqlgraph.CreateSpec) 
 		_spec.ID.Value = id
 	}
 	if value, ok := csc.mutation.Core(); ok {
-		_spec.SetField(computespec.FieldCore, field.TypeString, value)
+		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
 		_node.Core = value
 	}
 	if value, ok := csc.mutation.Memory(); ok {
-		_spec.SetField(computespec.FieldMemory, field.TypeString, value)
+		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
 		_node.Memory = value
 	}
 	return _node, _spec

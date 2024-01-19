@@ -261,7 +261,7 @@ func (csq *ComputeSpecQuery) Clone() *ComputeSpecQuery {
 // Example:
 //
 //	var v []struct {
-//		Core string `json:"core,omitempty"`
+//		Core int `json:"core,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -284,7 +284,7 @@ func (csq *ComputeSpecQuery) GroupBy(field string, fields ...string) *ComputeSpe
 // Example:
 //
 //	var v []struct {
-//		Core string `json:"core,omitempty"`
+//		Core int `json:"core,omitempty"`
 //	}
 //
 //	client.ComputeSpec.Query().

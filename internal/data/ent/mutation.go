@@ -3460,8 +3460,10 @@ type ComputeInstanceMutation struct {
 	id              *uuid.UUID
 	owner           *string
 	name            *string
-	core            *string
-	memory          *string
+	core            *int
+	addcore         *int
+	memory          *int
+	addmemory       *int
 	image           *string
 	image_id        *int32
 	addimage_id     *int32
@@ -3658,12 +3660,13 @@ func (m *ComputeInstanceMutation) ResetName() {
 }
 
 // SetCore sets the "core" field.
-func (m *ComputeInstanceMutation) SetCore(s string) {
-	m.core = &s
+func (m *ComputeInstanceMutation) SetCore(i int) {
+	m.core = &i
+	m.addcore = nil
 }
 
 // Core returns the value of the "core" field in the mutation.
-func (m *ComputeInstanceMutation) Core() (r string, exists bool) {
+func (m *ComputeInstanceMutation) Core() (r int, exists bool) {
 	v := m.core
 	if v == nil {
 		return
@@ -3674,7 +3677,7 @@ func (m *ComputeInstanceMutation) Core() (r string, exists bool) {
 // OldCore returns the old "core" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldCore(ctx context.Context) (v string, err error) {
+func (m *ComputeInstanceMutation) OldCore(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCore is only allowed on UpdateOne operations")
 	}
@@ -3688,18 +3691,38 @@ func (m *ComputeInstanceMutation) OldCore(ctx context.Context) (v string, err er
 	return oldValue.Core, nil
 }
 
+// AddCore adds i to the "core" field.
+func (m *ComputeInstanceMutation) AddCore(i int) {
+	if m.addcore != nil {
+		*m.addcore += i
+	} else {
+		m.addcore = &i
+	}
+}
+
+// AddedCore returns the value that was added to the "core" field in this mutation.
+func (m *ComputeInstanceMutation) AddedCore() (r int, exists bool) {
+	v := m.addcore
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetCore resets all changes to the "core" field.
 func (m *ComputeInstanceMutation) ResetCore() {
 	m.core = nil
+	m.addcore = nil
 }
 
 // SetMemory sets the "memory" field.
-func (m *ComputeInstanceMutation) SetMemory(s string) {
-	m.memory = &s
+func (m *ComputeInstanceMutation) SetMemory(i int) {
+	m.memory = &i
+	m.addmemory = nil
 }
 
 // Memory returns the value of the "memory" field in the mutation.
-func (m *ComputeInstanceMutation) Memory() (r string, exists bool) {
+func (m *ComputeInstanceMutation) Memory() (r int, exists bool) {
 	v := m.memory
 	if v == nil {
 		return
@@ -3710,7 +3733,7 @@ func (m *ComputeInstanceMutation) Memory() (r string, exists bool) {
 // OldMemory returns the old "memory" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldMemory(ctx context.Context) (v string, err error) {
+func (m *ComputeInstanceMutation) OldMemory(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldMemory is only allowed on UpdateOne operations")
 	}
@@ -3724,9 +3747,28 @@ func (m *ComputeInstanceMutation) OldMemory(ctx context.Context) (v string, err 
 	return oldValue.Memory, nil
 }
 
+// AddMemory adds i to the "memory" field.
+func (m *ComputeInstanceMutation) AddMemory(i int) {
+	if m.addmemory != nil {
+		*m.addmemory += i
+	} else {
+		m.addmemory = &i
+	}
+}
+
+// AddedMemory returns the value that was added to the "memory" field in this mutation.
+func (m *ComputeInstanceMutation) AddedMemory() (r int, exists bool) {
+	v := m.addmemory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetMemory resets all changes to the "memory" field.
 func (m *ComputeInstanceMutation) ResetMemory() {
 	m.memory = nil
+	m.addmemory = nil
 }
 
 // SetImage sets the "image" field.
@@ -4362,14 +4404,14 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case computeinstance.FieldCore:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCore(v)
 		return nil
 	case computeinstance.FieldMemory:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4453,6 +4495,12 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ComputeInstanceMutation) AddedFields() []string {
 	var fields []string
+	if m.addcore != nil {
+		fields = append(fields, computeinstance.FieldCore)
+	}
+	if m.addmemory != nil {
+		fields = append(fields, computeinstance.FieldMemory)
+	}
 	if m.addimage_id != nil {
 		fields = append(fields, computeinstance.FieldImageID)
 	}
@@ -4470,6 +4518,10 @@ func (m *ComputeInstanceMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case computeinstance.FieldCore:
+		return m.AddedCore()
+	case computeinstance.FieldMemory:
+		return m.AddedMemory()
 	case computeinstance.FieldImageID:
 		return m.AddedImageID()
 	case computeinstance.FieldStatus:
@@ -4485,6 +4537,20 @@ func (m *ComputeInstanceMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case computeinstance.FieldCore:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCore(v)
+		return nil
+	case computeinstance.FieldMemory:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMemory(v)
+		return nil
 	case computeinstance.FieldImageID:
 		v, ok := value.(int32)
 		if !ok {
@@ -4654,8 +4720,10 @@ type ComputeSpecMutation struct {
 	op            Op
 	typ           string
 	id            *int32
-	core          *string
-	memory        *string
+	core          *int
+	addcore       *int
+	memory        *int
+	addmemory     *int
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeSpec, error)
@@ -4767,12 +4835,13 @@ func (m *ComputeSpecMutation) IDs(ctx context.Context) ([]int32, error) {
 }
 
 // SetCore sets the "core" field.
-func (m *ComputeSpecMutation) SetCore(s string) {
-	m.core = &s
+func (m *ComputeSpecMutation) SetCore(i int) {
+	m.core = &i
+	m.addcore = nil
 }
 
 // Core returns the value of the "core" field in the mutation.
-func (m *ComputeSpecMutation) Core() (r string, exists bool) {
+func (m *ComputeSpecMutation) Core() (r int, exists bool) {
 	v := m.core
 	if v == nil {
 		return
@@ -4783,7 +4852,7 @@ func (m *ComputeSpecMutation) Core() (r string, exists bool) {
 // OldCore returns the old "core" field's value of the ComputeSpec entity.
 // If the ComputeSpec object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeSpecMutation) OldCore(ctx context.Context) (v string, err error) {
+func (m *ComputeSpecMutation) OldCore(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCore is only allowed on UpdateOne operations")
 	}
@@ -4797,18 +4866,38 @@ func (m *ComputeSpecMutation) OldCore(ctx context.Context) (v string, err error)
 	return oldValue.Core, nil
 }
 
+// AddCore adds i to the "core" field.
+func (m *ComputeSpecMutation) AddCore(i int) {
+	if m.addcore != nil {
+		*m.addcore += i
+	} else {
+		m.addcore = &i
+	}
+}
+
+// AddedCore returns the value that was added to the "core" field in this mutation.
+func (m *ComputeSpecMutation) AddedCore() (r int, exists bool) {
+	v := m.addcore
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetCore resets all changes to the "core" field.
 func (m *ComputeSpecMutation) ResetCore() {
 	m.core = nil
+	m.addcore = nil
 }
 
 // SetMemory sets the "memory" field.
-func (m *ComputeSpecMutation) SetMemory(s string) {
-	m.memory = &s
+func (m *ComputeSpecMutation) SetMemory(i int) {
+	m.memory = &i
+	m.addmemory = nil
 }
 
 // Memory returns the value of the "memory" field in the mutation.
-func (m *ComputeSpecMutation) Memory() (r string, exists bool) {
+func (m *ComputeSpecMutation) Memory() (r int, exists bool) {
 	v := m.memory
 	if v == nil {
 		return
@@ -4819,7 +4908,7 @@ func (m *ComputeSpecMutation) Memory() (r string, exists bool) {
 // OldMemory returns the old "memory" field's value of the ComputeSpec entity.
 // If the ComputeSpec object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeSpecMutation) OldMemory(ctx context.Context) (v string, err error) {
+func (m *ComputeSpecMutation) OldMemory(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldMemory is only allowed on UpdateOne operations")
 	}
@@ -4833,9 +4922,28 @@ func (m *ComputeSpecMutation) OldMemory(ctx context.Context) (v string, err erro
 	return oldValue.Memory, nil
 }
 
+// AddMemory adds i to the "memory" field.
+func (m *ComputeSpecMutation) AddMemory(i int) {
+	if m.addmemory != nil {
+		*m.addmemory += i
+	} else {
+		m.addmemory = &i
+	}
+}
+
+// AddedMemory returns the value that was added to the "memory" field in this mutation.
+func (m *ComputeSpecMutation) AddedMemory() (r int, exists bool) {
+	v := m.addmemory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetMemory resets all changes to the "memory" field.
 func (m *ComputeSpecMutation) ResetMemory() {
 	m.memory = nil
+	m.addmemory = nil
 }
 
 // Where appends a list predicates to the ComputeSpecMutation builder.
@@ -4914,14 +5022,14 @@ func (m *ComputeSpecMutation) OldField(ctx context.Context, name string) (ent.Va
 func (m *ComputeSpecMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case computespec.FieldCore:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCore(v)
 		return nil
 	case computespec.FieldMemory:
-		v, ok := value.(string)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4934,13 +5042,26 @@ func (m *ComputeSpecMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ComputeSpecMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addcore != nil {
+		fields = append(fields, computespec.FieldCore)
+	}
+	if m.addmemory != nil {
+		fields = append(fields, computespec.FieldMemory)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ComputeSpecMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case computespec.FieldCore:
+		return m.AddedCore()
+	case computespec.FieldMemory:
+		return m.AddedMemory()
+	}
 	return nil, false
 }
 
@@ -4949,6 +5070,20 @@ func (m *ComputeSpecMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ComputeSpecMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case computespec.FieldCore:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCore(v)
+		return nil
+	case computespec.FieldMemory:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMemory(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeSpec numeric field %s", name)
 }

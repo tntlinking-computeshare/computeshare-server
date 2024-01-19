@@ -39,7 +39,7 @@ type AgentRepo interface {
 	UpdateAgentStatus(ctx context.Context, id uuid.UUID, status bool) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 	FindByMac(ctx context.Context, mac string) (*Agent, error)
-	FindOneActiveAgent(ctx context.Context, cpu string, memory string) (*Agent, error)
+	FindOneActiveAgent(ctx context.Context, cpu int, memory int) (*Agent, error)
 }
 
 type AgentUsecase struct {

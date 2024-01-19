@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
+	"strconv"
 
 	//"github.com/ipfs/go-ipfs/core"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -101,8 +102,8 @@ func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentI
 				Status:         int32(item.Status),
 				ExpirationTime: item.ExpirationTime.UnixMilli(),
 				ImageName:      item.Image,
-				Core:           item.Core,
-				Memory:         item.Memory,
+				Core:           strconv.Itoa(item.Core),
+				Memory:         strconv.Itoa(item.Memory),
 				ContainerId:    item.ContainerID,
 			}
 		}),

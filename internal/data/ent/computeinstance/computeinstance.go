@@ -78,10 +78,6 @@ var (
 	OwnerValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// CoreValidator is a validator for the "core" field. It is called by the builders before save.
-	CoreValidator func(string) error
-	// MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
-	MemoryValidator func(string) error
 	// ImageValidator is a validator for the "image" field. It is called by the builders before save.
 	ImageValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.

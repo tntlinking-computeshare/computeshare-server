@@ -42,14 +42,28 @@ func (ciu *ComputeInstanceUpdate) SetName(s string) *ComputeInstanceUpdate {
 }
 
 // SetCore sets the "core" field.
-func (ciu *ComputeInstanceUpdate) SetCore(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetCore(s)
+func (ciu *ComputeInstanceUpdate) SetCore(i int) *ComputeInstanceUpdate {
+	ciu.mutation.ResetCore()
+	ciu.mutation.SetCore(i)
+	return ciu
+}
+
+// AddCore adds i to the "core" field.
+func (ciu *ComputeInstanceUpdate) AddCore(i int) *ComputeInstanceUpdate {
+	ciu.mutation.AddCore(i)
 	return ciu
 }
 
 // SetMemory sets the "memory" field.
-func (ciu *ComputeInstanceUpdate) SetMemory(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetMemory(s)
+func (ciu *ComputeInstanceUpdate) SetMemory(i int) *ComputeInstanceUpdate {
+	ciu.mutation.ResetMemory()
+	ciu.mutation.SetMemory(i)
+	return ciu
+}
+
+// AddMemory adds i to the "memory" field.
+func (ciu *ComputeInstanceUpdate) AddMemory(i int) *ComputeInstanceUpdate {
+	ciu.mutation.AddMemory(i)
 	return ciu
 }
 
@@ -220,16 +234,6 @@ func (ciu *ComputeInstanceUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.name": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.Core(); ok {
-		if err := computeinstance.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.core": %w`, err)}
-		}
-	}
-	if v, ok := ciu.mutation.Memory(); ok {
-		if err := computeinstance.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.memory": %w`, err)}
-		}
-	}
 	if v, ok := ciu.mutation.Image(); ok {
 		if err := computeinstance.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
@@ -257,10 +261,16 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 		_spec.SetField(computeinstance.FieldName, field.TypeString, value)
 	}
 	if value, ok := ciu.mutation.Core(); ok {
-		_spec.SetField(computeinstance.FieldCore, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
+	}
+	if value, ok := ciu.mutation.AddedCore(); ok {
+		_spec.AddField(computeinstance.FieldCore, field.TypeInt, value)
 	}
 	if value, ok := ciu.mutation.Memory(); ok {
-		_spec.SetField(computeinstance.FieldMemory, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
+	}
+	if value, ok := ciu.mutation.AddedMemory(); ok {
+		_spec.AddField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
 	if value, ok := ciu.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
@@ -343,14 +353,28 @@ func (ciuo *ComputeInstanceUpdateOne) SetName(s string) *ComputeInstanceUpdateOn
 }
 
 // SetCore sets the "core" field.
-func (ciuo *ComputeInstanceUpdateOne) SetCore(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetCore(s)
+func (ciuo *ComputeInstanceUpdateOne) SetCore(i int) *ComputeInstanceUpdateOne {
+	ciuo.mutation.ResetCore()
+	ciuo.mutation.SetCore(i)
+	return ciuo
+}
+
+// AddCore adds i to the "core" field.
+func (ciuo *ComputeInstanceUpdateOne) AddCore(i int) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddCore(i)
 	return ciuo
 }
 
 // SetMemory sets the "memory" field.
-func (ciuo *ComputeInstanceUpdateOne) SetMemory(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetMemory(s)
+func (ciuo *ComputeInstanceUpdateOne) SetMemory(i int) *ComputeInstanceUpdateOne {
+	ciuo.mutation.ResetMemory()
+	ciuo.mutation.SetMemory(i)
+	return ciuo
+}
+
+// AddMemory adds i to the "memory" field.
+func (ciuo *ComputeInstanceUpdateOne) AddMemory(i int) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddMemory(i)
 	return ciuo
 }
 
@@ -534,16 +558,6 @@ func (ciuo *ComputeInstanceUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.name": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.Core(); ok {
-		if err := computeinstance.CoreValidator(v); err != nil {
-			return &ValidationError{Name: "core", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.core": %w`, err)}
-		}
-	}
-	if v, ok := ciuo.mutation.Memory(); ok {
-		if err := computeinstance.MemoryValidator(v); err != nil {
-			return &ValidationError{Name: "memory", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.memory": %w`, err)}
-		}
-	}
 	if v, ok := ciuo.mutation.Image(); ok {
 		if err := computeinstance.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
@@ -588,10 +602,16 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 		_spec.SetField(computeinstance.FieldName, field.TypeString, value)
 	}
 	if value, ok := ciuo.mutation.Core(); ok {
-		_spec.SetField(computeinstance.FieldCore, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
+	}
+	if value, ok := ciuo.mutation.AddedCore(); ok {
+		_spec.AddField(computeinstance.FieldCore, field.TypeInt, value)
 	}
 	if value, ok := ciuo.mutation.Memory(); ok {
-		_spec.SetField(computeinstance.FieldMemory, field.TypeString, value)
+		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
+	}
+	if value, ok := ciuo.mutation.AddedMemory(); ok {
+		_spec.AddField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
 	if value, ok := ciuo.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)

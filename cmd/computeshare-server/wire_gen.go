@@ -47,15 +47,14 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	gatewayPortRepo := data.NewGatewayPortRepo(dataData, logger)
 	gatewayRepo := data.NewGatewayRepo(dataData, gatewayPortRepo, logger)
 	domainBindingRepository := data.NewDomainBindingRepository(dataData, logger)
-	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
-	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
-	cycleRepo := data.NewCycleRepo(dataData, logger)
-	cycleOrderRepo := data.NewCycleOrderRepo(dataData, logger)
-	cycleTransactionRepo := data.NewCycleTransactionRepo(dataData, logger)
-	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
-	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, networkMappingRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, cycleRenewalRepo, logger)
-	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceRepo, computeInstanceUsercase, logger)
+	domainBindingUseCase, err := biz.NewDomainBindingUseCase(domainBindingRepository, networkMappingRepo, gatewayRepo, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceRepo, domainBindingUseCase, logger)
 	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
+	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
 	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, cycleRenewalRepo, logger)
 	queueTaskService := service.NewQueueTaskService(taskUseCase, logger)
 	storageRepo := data.NewStorageRepo(dataData, logger)
@@ -72,16 +71,17 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	storageS3Service := service.NewStorageS3Service(storageS3UseCase)
 	userUsercase := biz.NewUserUsecase(auth, userRepo, logger, dispose)
 	userService := service.NewUserService(userUsercase, logger)
+	computeSpecRepo := data.NewComputeSpecRepo(dataData, logger)
+	computeImageRepo := data.NewComputeImageRepo(dataData, logger)
+	cycleRepo := data.NewCycleRepo(dataData, logger)
+	cycleOrderRepo := data.NewCycleOrderRepo(dataData, logger)
+	cycleTransactionRepo := data.NewCycleTransactionRepo(dataData, logger)
+	computeInstanceUsercase := biz.NewComputeInstanceUsercase(computeSpecRepo, computeInstanceRepo, computeImageRepo, agentRepo, taskRepo, gatewayRepo, gatewayPortRepo, networkMappingRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, cycleRenewalRepo, networkMappingUseCase, logger)
 	computeInstanceService := service.NewComputeInstanceService(computeInstanceUsercase, dispose, logger)
 	scriptRepo := data.NewScriptRepo(dataData, logger)
 	scriptExecutionRecordRepo := data.NewScriptExecutionRecordRepo(dataData, logger)
 	scriptUseCase := biz.NewScriptUseCase(scriptRepo, scriptExecutionRecordRepo, agentRepo, logger)
 	computePowerService, err := service.NewComputePowerService(scriptUseCase, shell, logger)
-	if err != nil {
-		cleanup()
-		return nil, nil, err
-	}
-	domainBindingUseCase, err := biz.NewDomainBindingUseCase(domainBindingRepository, networkMappingRepo, gatewayRepo, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err

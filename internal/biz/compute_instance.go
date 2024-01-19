@@ -49,19 +49,20 @@ type ComputeImageRepo interface {
 }
 
 type ComputeInstanceUsercase struct {
-	specRepo             ComputeSpecRepo
-	instanceRepo         ComputeInstanceRepo
-	imageRepo            ComputeImageRepo
-	agentRepo            AgentRepo
-	taskRepo             TaskRepo
-	gatewayRepo          GatewayRepo
-	gatewayPortRepo      GatewayPortRepo
-	networkMappingRepo   NetworkMappingRepo
-	cycleRepo            CycleRepo
-	cycleOrderRepo       CycleOrderRepo
-	cycleTransactionRepo CycleTransactionRepo
-	cycleRenewalRepo     CycleRenewalRepo
-	log                  *log.Helper
+	specRepo              ComputeSpecRepo
+	instanceRepo          ComputeInstanceRepo
+	imageRepo             ComputeImageRepo
+	agentRepo             AgentRepo
+	taskRepo              TaskRepo
+	gatewayRepo           GatewayRepo
+	gatewayPortRepo       GatewayPortRepo
+	networkMappingRepo    NetworkMappingRepo
+	cycleRepo             CycleRepo
+	cycleOrderRepo        CycleOrderRepo
+	cycleTransactionRepo  CycleTransactionRepo
+	cycleRenewalRepo      CycleRenewalRepo
+	networkMappingUseCase *NetworkMappingUseCase
+	log                   *log.Helper
 }
 
 func NewComputeInstanceUsercase(
@@ -77,21 +78,23 @@ func NewComputeInstanceUsercase(
 	cycleOrderRepo CycleOrderRepo,
 	cycleTransactionRepo CycleTransactionRepo,
 	cycleRenewalRepo CycleRenewalRepo,
+	networkMappingUseCase *NetworkMappingUseCase,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
-		specRepo:             specRepo,
-		instanceRepo:         instanceRepo,
-		imageRepo:            imageRepo,
-		agentRepo:            agentRepo,
-		taskRepo:             taskRepo,
-		gatewayRepo:          gatewayRepo,
-		gatewayPortRepo:      gatewayPortRepo,
-		networkMappingRepo:   networkMappingRepo,
-		cycleRepo:            cycleRepo,
-		cycleOrderRepo:       cycleOrderRepo,
-		cycleTransactionRepo: cycleTransactionRepo,
-		cycleRenewalRepo:     cycleRenewalRepo,
-		log:                  log.NewHelper(logger),
+		specRepo:              specRepo,
+		instanceRepo:          instanceRepo,
+		imageRepo:             imageRepo,
+		agentRepo:             agentRepo,
+		taskRepo:              taskRepo,
+		gatewayRepo:           gatewayRepo,
+		gatewayPortRepo:       gatewayPortRepo,
+		networkMappingRepo:    networkMappingRepo,
+		cycleRepo:             cycleRepo,
+		cycleOrderRepo:        cycleOrderRepo,
+		cycleTransactionRepo:  cycleTransactionRepo,
+		cycleRenewalRepo:      cycleRenewalRepo,
+		networkMappingUseCase: networkMappingUseCase,
+		log:                   log.NewHelper(logger),
 	}
 }
 
@@ -161,7 +164,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		OrderNo:     orderNo,
 		FkUserID:    userId,
 		ProductName: string(consts.RentingCloudServers),
-		ProductDesc: fmt.Sprintf("%s | %s核%sGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
+		ProductDesc: fmt.Sprintf("%s | %d核%dGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
 		Symbol:      "-",
 		Cycle:       float64(specPrice.Price),
 		CreateTime:  time.Now(),
@@ -328,6 +331,13 @@ func (uc *ComputeInstanceUsercase) Delete(ctx context.Context, id uuid.UUID) err
 	instance, err := uc.Get(ctx, id)
 	if err != nil {
 		return err
+	}
+
+	mappings, _ := uc.networkMappingUseCase.ListByComputeInstanceId(ctx, id)
+	if len(mappings) > 0 {
+		for _, mapping := range mappings {
+			_ = uc.networkMappingUseCase.DeleteNetworkMapping(ctx, mapping.ID)
+		}
 	}
 
 	err = uc.SendTaskQueue(ctx, instance, queue.TaskCmd_VM_DELETE, nil)

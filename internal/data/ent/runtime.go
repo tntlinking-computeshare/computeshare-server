@@ -9,7 +9,6 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycleorder"
@@ -81,14 +80,6 @@ func init() {
 	computeinstanceDescName := computeinstanceFields[2].Descriptor()
 	// computeinstance.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	computeinstance.NameValidator = computeinstanceDescName.Validators[0].(func(string) error)
-	// computeinstanceDescCore is the schema descriptor for core field.
-	computeinstanceDescCore := computeinstanceFields[3].Descriptor()
-	// computeinstance.CoreValidator is a validator for the "core" field. It is called by the builders before save.
-	computeinstance.CoreValidator = computeinstanceDescCore.Validators[0].(func(string) error)
-	// computeinstanceDescMemory is the schema descriptor for memory field.
-	computeinstanceDescMemory := computeinstanceFields[4].Descriptor()
-	// computeinstance.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
-	computeinstance.MemoryValidator = computeinstanceDescMemory.Validators[0].(func(string) error)
 	// computeinstanceDescImage is the schema descriptor for image field.
 	computeinstanceDescImage := computeinstanceFields[5].Descriptor()
 	// computeinstance.ImageValidator is a validator for the "image" field. It is called by the builders before save.
@@ -97,16 +88,6 @@ func init() {
 	computeinstanceDescID := computeinstanceFields[0].Descriptor()
 	// computeinstance.DefaultID holds the default value on creation for the id field.
 	computeinstance.DefaultID = computeinstanceDescID.Default.(func() uuid.UUID)
-	computespecFields := schema.ComputeSpec{}.Fields()
-	_ = computespecFields
-	// computespecDescCore is the schema descriptor for core field.
-	computespecDescCore := computespecFields[1].Descriptor()
-	// computespec.CoreValidator is a validator for the "core" field. It is called by the builders before save.
-	computespec.CoreValidator = computespecDescCore.Validators[0].(func(string) error)
-	// computespecDescMemory is the schema descriptor for memory field.
-	computespecDescMemory := computespecFields[2].Descriptor()
-	// computespec.MemoryValidator is a validator for the "memory" field. It is called by the builders before save.
-	computespec.MemoryValidator = computespecDescMemory.Validators[0].(func(string) error)
 	computespecpriceFields := schema.ComputeSpecPrice{}.Fields()
 	_ = computespecpriceFields
 	// computespecpriceDescDay is the schema descriptor for day field.
