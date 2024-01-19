@@ -222,6 +222,7 @@ func (o *OrderService) toCycleRenewalBiz(item *biz.CycleRenewal, _ int) *pb.Cycl
 		State:       int32(item.State),
 		DueTime:     dueTime,
 		RenewalTime: renewTime,
+		AutoRenew:   item.AutoRenewal,
 	}
 }
 
@@ -250,7 +251,7 @@ func (o *OrderService) CycleRenewalClose(ctx context.Context, req *pb.CycleRenew
 	}, err
 }
 
-func (o *OrderService) CycleRenewalInfo(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
+func (o *OrderService) CycleRenewalDetail(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalGetReply, error) {
 	renewalId, err := uuid.Parse(req.Id)
 	if err != nil {
 		return nil, err

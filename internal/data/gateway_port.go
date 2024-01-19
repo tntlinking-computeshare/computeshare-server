@@ -23,11 +23,32 @@ func NewGatewayPortRepo(data *Data, logger log.Logger) biz.GatewayPortRepo {
 	}
 }
 
-func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
+func (repo *GatewayPortRepo) CountPublicGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
 	var counts []*biz.GatewayPortCount
 	err := repo.data.getGatewayPort(ctx).Query().
 		Select(gatewayport.FieldFkGatewayID).
 		Where(gatewayport.IsUse(isUsed), gatewayport.IsPublic(true)).
+		GroupBy(gatewayport.FieldFkGatewayID).
+		Aggregate(ent.Count()).
+		Scan(ctx, &counts)
+	return counts, err
+}
+
+func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
+	var counts []*biz.GatewayPortCount
+	err := repo.data.getGatewayPort(ctx).Query().
+		Select(gatewayport.FieldFkGatewayID).
+		Where(gatewayport.IsUse(isUsed)).
+		GroupBy(gatewayport.FieldFkGatewayID).
+		Aggregate(ent.Count()).
+		Scan(ctx, &counts)
+	return counts, err
+}
+
+func (repo *GatewayPortRepo) CountGatewayPort(ctx context.Context) ([]*biz.GatewayPortCount, error) {
+	var counts []*biz.GatewayPortCount
+	err := repo.data.getGatewayPort(ctx).Query().
+		Select(gatewayport.FieldFkGatewayID).
 		GroupBy(gatewayport.FieldFkGatewayID).
 		Aggregate(ent.Count()).
 		Scan(ctx, &counts)

@@ -314,3 +314,9 @@ Authorization: Bearer {{ access_token }}
   "publicKey":  "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2mLWYddGeahdk6i3muy72XDbppnG4LIDhyj/rSuzLstdVLI7mF7efkwCZgyYcYRJoIjNI5mnb17o7/qVWdgGSiMnSgiPcw4r0Dp1pghWXBEog3o7pI3gicY6//Y4+liqypBEDmBSJnDsMJqVARzFV0rjJLhYSCbYk99LPB1ZLj0mDvIY/1SjRR9bfPuW9Ht6QjkS9DEWIdTrJ0dAaGwJkc+a5pCVzcopq4ycvBVLEnEq4xCrhbNx/LrpYxytA7WXg6kUcN+4Me63QVPxUExcn14qXr5uYxo+ePkoBCNdbqFsm0Z1rxrEX8oGDHvAfsoCpQr/OV8J5WwO7i/QIOyK7 mohaijiang110@163.com",
   "password":  "Abcd12345"
 }
+
+###
+GET https://api.computeshare.newtouch.com/v1/cycle/renewal?page=1&size=10
+#GET http://127.0.0.1:8000/v1/cycle/renewal?page=1&size=10
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}

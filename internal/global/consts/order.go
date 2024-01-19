@@ -27,7 +27,7 @@ const (
 type OrderPayTime string
 
 const (
-	AlipayPayTime OrderPayTime = "5m"
+	AlipayPayTime OrderPayTime = "30m"
 )
 
 // RenewalResourceType 续费资源类型

@@ -23,7 +23,7 @@ func (CycleRedeemCode) Fields() []ent.Field {
 		}).Comment("兑换码对应的周期"),
 		field.Bool("state").Comment("状态"),
 		field.Time("create_time").Comment("创建时间"),
-		field.Time("use_time").Comment("使用"),
+		field.Time("use_time").Optional().Comment("使用"),
 	}
 }
 

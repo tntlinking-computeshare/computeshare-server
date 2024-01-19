@@ -249,6 +249,7 @@ message CycleRenewalInfo {
 	int32 state = 4;
 	string due_time = 5;
 	string renewal_time = 6;
+	bool auto_renew = 7;
 }
 
 message CycleRenewalDetailInfo {

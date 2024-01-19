@@ -97,8 +97,10 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	cycleTransactionUseCase := biz.NewCycleTransactionUseCase(logger, cycleTransactionRepo)
 	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo)
 	orderService := service.NewOrderService(logger, orderUseCase, cycleTransactionUseCase, cycleRenewalUseCase)
+	dashboardUseCase := biz.NewDashboardUseCase(agentRepo, gatewayRepo, gatewayPortRepo, cycleRedeemCodeRepo, cycleRechargeRepo, logger)
+	dashboardService := service.NewDashboardService(dashboardUseCase, logger)
 	cronJob := service.NewCronJob(computeInstanceUsercase, agentUsecase, cycleRenewalUseCase, client, logger)
-	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, cronJob, dataData, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, agentService, queueTaskService, storageService, storageS3Service, userService, computeInstanceService, computePowerService, networkMappingService, domainBindingService, storageProviderService, sandboxService, orderService, dashboardService, cronJob, dataData, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

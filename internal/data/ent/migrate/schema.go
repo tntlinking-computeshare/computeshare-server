@@ -231,7 +231,7 @@ var (
 		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
 		{Name: "state", Type: field.TypeBool},
 		{Name: "create_time", Type: field.TypeTime},
-		{Name: "use_time", Type: field.TypeTime},
+		{Name: "use_time", Type: field.TypeTime, Nullable: true},
 	}
 	// CycleRedeemCodesTable holds the schema information for the "cycle_redeem_codes" table.
 	CycleRedeemCodesTable = &schema.Table{

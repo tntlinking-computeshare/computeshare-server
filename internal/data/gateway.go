@@ -38,6 +38,13 @@ func (repo *GatewayRepo) ListGateway(ctx context.Context) ([]*biz.Gateway, error
 	}
 	return lo.Map(list, repo.toBiz), nil
 }
+func (repo *GatewayRepo) CountGateway(ctx context.Context) (int, error) {
+	count, err := repo.data.getGateway(ctx).Query().Count(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
 
 func (repo *GatewayRepo) toBiz(item *ent.Gateway, _ int) *biz.Gateway {
 	if item == nil {
@@ -59,7 +66,7 @@ func (repo *GatewayRepo) FindInstanceSuitableGateway(ctx context.Context, instan
 		return repo.GetGateway(ctx, networkMapping.FkGatewayID)
 	}
 
-	counts, err := repo.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, false)
+	counts, err := repo.gatewayPortRepo.CountPublicGatewayPortByIsUsed(ctx, false)
 	if err != nil {
 		return nil, err
 	}

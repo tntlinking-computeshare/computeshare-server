@@ -19,6 +19,7 @@ import (
 	jwt2 "github.com/golang-jwt/jwt/v4"
 	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
 	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	dashboardV1 "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
 	networkmappingV1 "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
 	orderv1 "github.com/mohaijiang/computeshare-server/api/order/v1"
 	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/queue/v1"
@@ -42,6 +43,14 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.server.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
 	whiteList["/api.server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
 	whiteList["/api.server.order.v1.Order/AlipayPayNotify"] = struct{}{}
+	//dashboard
+	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/StoragesCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersList"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysList"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/CyclesCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/SandboxCount"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
@@ -94,6 +103,7 @@ func NewHTTPServer(c *conf.Server,
 	storageProviderService *service.StorageProviderService,
 	processService *service.SandboxService,
 	orderService *service.OrderService,
+	dashboardService *service.DashboardService,
 	job *service.CronJob,
 	data *data.Data,
 	logger log.Logger) *http.Server {
@@ -142,6 +152,7 @@ func NewHTTPServer(c *conf.Server,
 	queueTaskV1.RegisterQueueTaskHTTPServer(srv, queueTaskService)
 	networkmappingV1.RegisterDomainBindingHTTPServer(srv, domainBindingService)
 	orderv1.RegisterOrderHTTPServer(srv, orderService)
+	dashboardV1.RegisterDashboardHTTPServer(srv, dashboardService)
 
 	srv.Route("/").POST("/v1/storage/upload", computeV1.Storage_UploadFile_Extend_HTTP_Handler(storageService))
 	srv.Route("/").POST("/v1/storage/download", computeV1.Storage_DownloadFile_Extend_HTTP_Handler(storageService))

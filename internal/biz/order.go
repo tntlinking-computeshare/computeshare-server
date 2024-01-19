@@ -41,6 +41,7 @@ type CycleRechargeRepo interface {
 	FindByOutTradeNo(context.Context, string) (*CycleRecharge, error)
 	CreateCycleRecharge(context.Context, *CycleRecharge) (*CycleRecharge, error)
 	UpdateCycleRecharge(context.Context, *CycleRecharge) error
+	CountRechargeCycle(context.Context) (decimal.Decimal, error)
 }
 
 type CycleOrderRepo interface {
@@ -52,6 +53,8 @@ type CycleOrderRepo interface {
 type CycleRedeemCodeRepo interface {
 	FindByRedeemCode(context.Context, string) (*CycleRedeemCode, error)
 	Update(ctx context.Context, cycleRedeemCode *CycleRedeemCode) error
+	CountCycleGrantTotal(ctx context.Context) (decimal.Decimal, error)
+	CountCycleUseTotal(ctx context.Context) (decimal.Decimal, error)
 }
 
 type AlipayOrderRollbackRepo interface {
@@ -125,10 +128,9 @@ func (o *OrderUseCase) RechargeCycleByAlipay(ctx context.Context, userId uuid.UU
 	// 设置支付宝请求 公共参数
 	// 注意：具体设置哪些参数，根据不同的方法而不同，此处列举出所有设置参数
 	client.SetLocation(alipay.LocationShanghai). // 设置时区，不设置或出错均为默认服务器时间
-							SetCharset(alipay.UTF8).                     // 设置字符编码，不设置默认 utf-8
-							SetSignType(alipay.RSA2).                    // 设置签名类型，不设置默认 RSA2
-							SetReturnUrl(o.dispose.Alipay.PayReturnUrl). // 设置返回URL，付款结束后跳转的url
-							SetNotifyUrl(o.dispose.Alipay.PayNotifyUrl)  // 设置异步通知URL
+							SetCharset(alipay.UTF8).                    // 设置字符编码，不设置默认 utf-8
+							SetSignType(alipay.RSA2).                   // 设置签名类型，不设置默认 RSA2
+							SetNotifyUrl(o.dispose.Alipay.PayNotifyUrl) // 设置异步通知URL
 
 	// 自动同步验签（只支持证书模式）
 	// 传入 alipayCertPublicKey_RSA2.crt 内容

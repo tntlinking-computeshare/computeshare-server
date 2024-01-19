@@ -65,6 +65,14 @@ func (crcc *CycleRedeemCodeCreate) SetUseTime(t time.Time) *CycleRedeemCodeCreat
 	return crcc
 }
 
+// SetNillableUseTime sets the "use_time" field if the given value is not nil.
+func (crcc *CycleRedeemCodeCreate) SetNillableUseTime(t *time.Time) *CycleRedeemCodeCreate {
+	if t != nil {
+		crcc.SetUseTime(*t)
+	}
+	return crcc
+}
+
 // SetID sets the "id" field.
 func (crcc *CycleRedeemCodeCreate) SetID(u uuid.UUID) *CycleRedeemCodeCreate {
 	crcc.mutation.SetID(u)
@@ -133,9 +141,6 @@ func (crcc *CycleRedeemCodeCreate) check() error {
 	}
 	if _, ok := crcc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "CycleRedeemCode.create_time"`)}
-	}
-	if _, ok := crcc.mutation.UseTime(); !ok {
-		return &ValidationError{Name: "use_time", err: errors.New(`ent: missing required field "CycleRedeemCode.use_time"`)}
 	}
 	return nil
 }
