@@ -48,7 +48,7 @@ paths:
         get:
             tags:
                 - Dashboard
-            description: Gateway列表 总端口数 已用端口数
+            description: Gateway列表 总端口数 已用端口数内网 外网
             operationId: Dashboard_GatewaysList
             responses:
                 "200":
@@ -86,7 +86,7 @@ paths:
         get:
             tags:
                 - Dashboard
-            description: Provider列表 类型，总数，规格，是否存活
+            description: Provider列表 类型，规格，是否存活
             operationId: Dashboard_ProvidersList
             responses:
                 "200":

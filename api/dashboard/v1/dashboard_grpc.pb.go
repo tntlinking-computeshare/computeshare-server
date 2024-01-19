@@ -38,9 +38,9 @@ type DashboardClient interface {
 	GatewaysCount(ctx context.Context, in *GatewaysCountRequest, opts ...grpc.CallOption) (*GatewaysCountReply, error)
 	// 存储总数 已使用总数
 	StoragesCount(ctx context.Context, in *StoragesCountRequest, opts ...grpc.CallOption) (*StoragesCountReply, error)
-	// Provider列表 类型，总数，规格，是否存活
+	// Provider列表 类型，规格，是否存活
 	ProvidersList(ctx context.Context, in *ProvidersListRequest, opts ...grpc.CallOption) (*ProvidersListReply, error)
-	// Gateway列表 总端口数 已用端口数
+	// Gateway列表 总端口数 已用端口数内网 外网
 	GatewaysList(ctx context.Context, in *GatewaysListRequest, opts ...grpc.CallOption) (*GatewaysListReply, error)
 	// 已发放积分总数 回收积分总数 发放代金券总数 已充值总数
 	CyclesCount(ctx context.Context, in *CyclesCountRequest, opts ...grpc.CallOption) (*CyclesCountReply, error)
@@ -129,9 +129,9 @@ type DashboardServer interface {
 	GatewaysCount(context.Context, *GatewaysCountRequest) (*GatewaysCountReply, error)
 	// 存储总数 已使用总数
 	StoragesCount(context.Context, *StoragesCountRequest) (*StoragesCountReply, error)
-	// Provider列表 类型，总数，规格，是否存活
+	// Provider列表 类型，规格，是否存活
 	ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error)
-	// Gateway列表 总端口数 已用端口数
+	// Gateway列表 总端口数 已用端口数内网 外网
 	GatewaysList(context.Context, *GatewaysListRequest) (*GatewaysListReply, error)
 	// 已发放积分总数 回收积分总数 发放代金券总数 已充值总数
 	CyclesCount(context.Context, *CyclesCountRequest) (*CyclesCountReply, error)

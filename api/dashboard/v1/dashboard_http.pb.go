@@ -32,11 +32,11 @@ type DashboardHTTPServer interface {
 	CyclesCount(context.Context, *CyclesCountRequest) (*CyclesCountReply, error)
 	// GatewaysCountGateway总数
 	GatewaysCount(context.Context, *GatewaysCountRequest) (*GatewaysCountReply, error)
-	// GatewaysListGateway列表 总端口数 已用端口数
+	// GatewaysListGateway列表 总端口数 已用端口数内网 外网
 	GatewaysList(context.Context, *GatewaysListRequest) (*GatewaysListReply, error)
 	// ProvidersCountProvider总数
 	ProvidersCount(context.Context, *ProvidersCountRequest) (*ProvidersCountReply, error)
-	// ProvidersListProvider列表 类型，总数，规格，是否存活
+	// ProvidersListProvider列表 类型，规格，是否存活
 	ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error)
 	// SandboxCount沙箱调用总数
 	SandboxCount(context.Context, *SandboxCountRequest) (*SandboxCountReply, error)
