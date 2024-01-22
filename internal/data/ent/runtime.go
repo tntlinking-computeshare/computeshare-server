@@ -136,6 +136,10 @@ func init() {
 	cycleorderDescSymbol := cycleorderFields[5].Descriptor()
 	// cycleorder.SymbolValidator is a validator for the "symbol" field. It is called by the builders before save.
 	cycleorder.SymbolValidator = cycleorderDescSymbol.Validators[0].(func(string) error)
+	// cycleorderDescResourceID is the schema descriptor for resource_id field.
+	cycleorderDescResourceID := cycleorderFields[7].Descriptor()
+	// cycleorder.ResourceIDValidator is a validator for the "resource_id" field. It is called by the builders before save.
+	cycleorder.ResourceIDValidator = cycleorderDescResourceID.Validators[0].(func(string) error)
 	// cycleorderDescID is the schema descriptor for id field.
 	cycleorderDescID := cycleorderFields[0].Descriptor()
 	// cycleorder.DefaultID holds the default value on creation for the id field.

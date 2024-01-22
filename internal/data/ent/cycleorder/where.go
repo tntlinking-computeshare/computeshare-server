@@ -85,6 +85,11 @@ func Cycle(v float64) predicate.CycleOrder {
 	return predicate.CycleOrder(sql.FieldEQ(FieldCycle, v))
 }
 
+// ResourceID applies equality check predicate on the "resource_id" field. It's identical to ResourceIDEQ.
+func ResourceID(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldEQ(FieldResourceID, v))
+}
+
 // CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
 func CreateTime(v time.Time) predicate.CycleOrder {
 	return predicate.CycleOrder(sql.FieldEQ(FieldCreateTime, v))
@@ -428,6 +433,81 @@ func CycleLT(v float64) predicate.CycleOrder {
 // CycleLTE applies the LTE predicate on the "cycle" field.
 func CycleLTE(v float64) predicate.CycleOrder {
 	return predicate.CycleOrder(sql.FieldLTE(FieldCycle, v))
+}
+
+// ResourceIDEQ applies the EQ predicate on the "resource_id" field.
+func ResourceIDEQ(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldEQ(FieldResourceID, v))
+}
+
+// ResourceIDNEQ applies the NEQ predicate on the "resource_id" field.
+func ResourceIDNEQ(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldNEQ(FieldResourceID, v))
+}
+
+// ResourceIDIn applies the In predicate on the "resource_id" field.
+func ResourceIDIn(vs ...string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldIn(FieldResourceID, vs...))
+}
+
+// ResourceIDNotIn applies the NotIn predicate on the "resource_id" field.
+func ResourceIDNotIn(vs ...string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldNotIn(FieldResourceID, vs...))
+}
+
+// ResourceIDGT applies the GT predicate on the "resource_id" field.
+func ResourceIDGT(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldGT(FieldResourceID, v))
+}
+
+// ResourceIDGTE applies the GTE predicate on the "resource_id" field.
+func ResourceIDGTE(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldGTE(FieldResourceID, v))
+}
+
+// ResourceIDLT applies the LT predicate on the "resource_id" field.
+func ResourceIDLT(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldLT(FieldResourceID, v))
+}
+
+// ResourceIDLTE applies the LTE predicate on the "resource_id" field.
+func ResourceIDLTE(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldLTE(FieldResourceID, v))
+}
+
+// ResourceIDContains applies the Contains predicate on the "resource_id" field.
+func ResourceIDContains(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldContains(FieldResourceID, v))
+}
+
+// ResourceIDHasPrefix applies the HasPrefix predicate on the "resource_id" field.
+func ResourceIDHasPrefix(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldHasPrefix(FieldResourceID, v))
+}
+
+// ResourceIDHasSuffix applies the HasSuffix predicate on the "resource_id" field.
+func ResourceIDHasSuffix(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldHasSuffix(FieldResourceID, v))
+}
+
+// ResourceIDIsNil applies the IsNil predicate on the "resource_id" field.
+func ResourceIDIsNil() predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldIsNull(FieldResourceID))
+}
+
+// ResourceIDNotNil applies the NotNil predicate on the "resource_id" field.
+func ResourceIDNotNil() predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldNotNull(FieldResourceID))
+}
+
+// ResourceIDEqualFold applies the EqualFold predicate on the "resource_id" field.
+func ResourceIDEqualFold(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldEqualFold(FieldResourceID, v))
+}
+
+// ResourceIDContainsFold applies the ContainsFold predicate on the "resource_id" field.
+func ResourceIDContainsFold(v string) predicate.CycleOrder {
+	return predicate.CycleOrder(sql.FieldContainsFold(FieldResourceID, v))
 }
 
 // CreateTimeEQ applies the EQ predicate on the "create_time" field.

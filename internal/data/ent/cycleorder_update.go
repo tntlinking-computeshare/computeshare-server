@@ -72,6 +72,26 @@ func (cou *CycleOrderUpdate) AddCycle(f float64) *CycleOrderUpdate {
 	return cou
 }
 
+// SetResourceID sets the "resource_id" field.
+func (cou *CycleOrderUpdate) SetResourceID(s string) *CycleOrderUpdate {
+	cou.mutation.SetResourceID(s)
+	return cou
+}
+
+// SetNillableResourceID sets the "resource_id" field if the given value is not nil.
+func (cou *CycleOrderUpdate) SetNillableResourceID(s *string) *CycleOrderUpdate {
+	if s != nil {
+		cou.SetResourceID(*s)
+	}
+	return cou
+}
+
+// ClearResourceID clears the value of the "resource_id" field.
+func (cou *CycleOrderUpdate) ClearResourceID() *CycleOrderUpdate {
+	cou.mutation.ClearResourceID()
+	return cou
+}
+
 // SetCreateTime sets the "create_time" field.
 func (cou *CycleOrderUpdate) SetCreateTime(t time.Time) *CycleOrderUpdate {
 	cou.mutation.SetCreateTime(t)
@@ -132,6 +152,11 @@ func (cou *CycleOrderUpdate) check() error {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.symbol": %w`, err)}
 		}
 	}
+	if v, ok := cou.mutation.ResourceID(); ok {
+		if err := cycleorder.ResourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -167,6 +192,12 @@ func (cou *CycleOrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := cou.mutation.AddedCycle(); ok {
 		_spec.AddField(cycleorder.FieldCycle, field.TypeFloat64, value)
+	}
+	if value, ok := cou.mutation.ResourceID(); ok {
+		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
+	}
+	if cou.mutation.ResourceIDCleared() {
+		_spec.ClearField(cycleorder.FieldResourceID, field.TypeString)
 	}
 	if value, ok := cou.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)
@@ -231,6 +262,26 @@ func (couo *CycleOrderUpdateOne) SetCycle(f float64) *CycleOrderUpdateOne {
 // AddCycle adds f to the "cycle" field.
 func (couo *CycleOrderUpdateOne) AddCycle(f float64) *CycleOrderUpdateOne {
 	couo.mutation.AddCycle(f)
+	return couo
+}
+
+// SetResourceID sets the "resource_id" field.
+func (couo *CycleOrderUpdateOne) SetResourceID(s string) *CycleOrderUpdateOne {
+	couo.mutation.SetResourceID(s)
+	return couo
+}
+
+// SetNillableResourceID sets the "resource_id" field if the given value is not nil.
+func (couo *CycleOrderUpdateOne) SetNillableResourceID(s *string) *CycleOrderUpdateOne {
+	if s != nil {
+		couo.SetResourceID(*s)
+	}
+	return couo
+}
+
+// ClearResourceID clears the value of the "resource_id" field.
+func (couo *CycleOrderUpdateOne) ClearResourceID() *CycleOrderUpdateOne {
+	couo.mutation.ClearResourceID()
 	return couo
 }
 
@@ -307,6 +358,11 @@ func (couo *CycleOrderUpdateOne) check() error {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.symbol": %w`, err)}
 		}
 	}
+	if v, ok := couo.mutation.ResourceID(); ok {
+		if err := cycleorder.ResourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -359,6 +415,12 @@ func (couo *CycleOrderUpdateOne) sqlSave(ctx context.Context) (_node *CycleOrder
 	}
 	if value, ok := couo.mutation.AddedCycle(); ok {
 		_spec.AddField(cycleorder.FieldCycle, field.TypeFloat64, value)
+	}
+	if value, ok := couo.mutation.ResourceID(); ok {
+		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
+	}
+	if couo.mutation.ResourceIDCleared() {
+		_spec.ClearField(cycleorder.FieldResourceID, field.TypeString)
 	}
 	if value, ok := couo.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)

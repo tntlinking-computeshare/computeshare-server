@@ -57,6 +57,20 @@ func (coc *CycleOrderCreate) SetCycle(f float64) *CycleOrderCreate {
 	return coc
 }
 
+// SetResourceID sets the "resource_id" field.
+func (coc *CycleOrderCreate) SetResourceID(s string) *CycleOrderCreate {
+	coc.mutation.SetResourceID(s)
+	return coc
+}
+
+// SetNillableResourceID sets the "resource_id" field if the given value is not nil.
+func (coc *CycleOrderCreate) SetNillableResourceID(s *string) *CycleOrderCreate {
+	if s != nil {
+		coc.SetResourceID(*s)
+	}
+	return coc
+}
+
 // SetCreateTime sets the "create_time" field.
 func (coc *CycleOrderCreate) SetCreateTime(t time.Time) *CycleOrderCreate {
 	coc.mutation.SetCreateTime(t)
@@ -158,6 +172,11 @@ func (coc *CycleOrderCreate) check() error {
 	if _, ok := coc.mutation.Cycle(); !ok {
 		return &ValidationError{Name: "cycle", err: errors.New(`ent: missing required field "CycleOrder.cycle"`)}
 	}
+	if v, ok := coc.mutation.ResourceID(); ok {
+		if err := cycleorder.ResourceIDValidator(v); err != nil {
+			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
+		}
+	}
 	if _, ok := coc.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "CycleOrder.create_time"`)}
 	}
@@ -219,6 +238,10 @@ func (coc *CycleOrderCreate) createSpec() (*CycleOrder, *sqlgraph.CreateSpec) {
 	if value, ok := coc.mutation.Cycle(); ok {
 		_spec.SetField(cycleorder.FieldCycle, field.TypeFloat64, value)
 		_node.Cycle = value
+	}
+	if value, ok := coc.mutation.ResourceID(); ok {
+		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
+		_node.ResourceID = &value
 	}
 	if value, ok := coc.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)

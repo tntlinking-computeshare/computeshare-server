@@ -89,6 +89,7 @@ func (r *cycleOrderRepo) Create(ctx context.Context, order *biz.CycleOrder) (*bi
 		SetSymbol(order.Symbol).
 		SetCycle(order.Cycle).
 		SetCreateTime(order.CreateTime).
+		SetNillableResourceID(order.ResourceId).
 		Save(ctx)
 
 	return r.toBiz(entity, 0), err

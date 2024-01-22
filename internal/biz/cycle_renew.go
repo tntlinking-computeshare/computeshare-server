@@ -212,6 +212,8 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 		}
 	}
 
+	resourceId := renewal.ResourceID.String()
+
 	// 创建订单
 	cycleOrder := &CycleOrder{
 		OrderNo:     orderNo,
@@ -220,6 +222,7 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 		ProductDesc: renewal.ProductDesc,
 		Symbol:      "-",
 		Cycle:       renewal.ExtendPrice,
+		ResourceId:  &resourceId,
 		CreateTime:  time.Now(),
 	}
 

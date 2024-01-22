@@ -129,72 +129,14 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		return nil, err
 	}
 
-	// 校验余额
-	specPrice, err := uc.specRepo.GetSpecPrice(ctx, cic.SpecId)
-
-	cycle, err := uc.cycleRepo.FindByUserID(ctx, userId)
-	if err != nil {
-		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
-	}
-	if cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
-		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
-	}
-
-	// 扣余额
-	cycle.Cycle = cycle.Cycle.Sub(decimal.NewFromFloat32(specPrice.Price))
-	cycle.UpdateTime = time.Now()
-	err = uc.cycleRepo.Update(ctx, cycle)
-	if err != nil {
-		return nil, err
-	}
-
-	// 创建订单
-	var orderNo string
-	// 判断订单号不重复
-	var exists bool
-	for {
-		orderNo = NewOrderNo()
-		exists = uc.cycleOrderRepo.CheckOrderNoExists(ctx, orderNo)
-		if !exists {
-			break
-		}
-	}
-
-	cycleOrder := &CycleOrder{
-		OrderNo:     orderNo,
-		FkUserID:    userId,
-		ProductName: string(consts.RentingCloudServers),
-		ProductDesc: fmt.Sprintf("%s | %d核%dGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
-		Symbol:      "-",
-		Cycle:       float64(specPrice.Price),
-		CreateTime:  time.Now(),
-	}
-	cycleOrder, err = uc.cycleOrderRepo.Create(ctx, cycleOrder)
-	if err != nil {
-		return nil, err
-	}
-
-	// 创建交易流水
-	balance, _ := cycle.Cycle.Float64()
-	cycleTransaction := &CycleTransaction{
-		FkCycleID:         cycle.ID,
-		FkUserID:          userId,
-		FkCycleOrderID:    cycleOrder.ID,
-		FkCycleRechargeID: uuid.Nil,
-		Operation:         cycleOrder.ProductName,
-		Symbol:            cycleOrder.Symbol,
-		Cycle:             cycleOrder.Cycle,
-		Balance:           balance,
-		OperationTime:     time.Now(),
-	}
-
-	cycleTransaction, err = uc.cycleTransactionRepo.Create(ctx, cycleTransaction)
-	if err != nil {
-		return nil, err
-	}
-
 	// 选择一个agent节点进行通信
 	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, computeSpec.Core, computeSpec.Memory)
+	if err != nil {
+		return nil, err
+	}
+
+	// 查询价格
+	specPrice, err := uc.specRepo.GetSpecPrice(ctx, cic.SpecId)
 	if err != nil {
 		return nil, err
 	}
@@ -247,6 +189,70 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	fmt.Println("=============")
 	fmt.Println("instanceId:", instance.ID.String())
 	fmt.Println("=============")
+
+	cycle, err := uc.cycleRepo.FindByUserID(ctx, userId)
+	if err != nil {
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
+	}
+	if cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
+		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
+	}
+
+	// 扣余额
+	cycle.Cycle = cycle.Cycle.Sub(decimal.NewFromFloat32(specPrice.Price))
+	cycle.UpdateTime = time.Now()
+	err = uc.cycleRepo.Update(ctx, cycle)
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建订单
+	var orderNo string
+	// 判断订单号不重复
+	var exists bool
+	for {
+		orderNo = NewOrderNo()
+		exists = uc.cycleOrderRepo.CheckOrderNoExists(ctx, orderNo)
+		if !exists {
+			break
+		}
+	}
+
+	resourceId := instance.ID.String()
+
+	cycleOrder := &CycleOrder{
+		OrderNo:     orderNo,
+		FkUserID:    userId,
+		ProductName: string(consts.RentingCloudServers),
+		ProductDesc: fmt.Sprintf("%s | %d核%dGB | %s | %d天", cic.Name, computeSpec.Core, computeSpec.Memory, computeImage.GetImageTag(), specPrice.Day),
+		Symbol:      "-",
+		Cycle:       float64(specPrice.Price),
+		ResourceId:  &resourceId,
+		CreateTime:  time.Now(),
+	}
+	cycleOrder, err = uc.cycleOrderRepo.Create(ctx, cycleOrder)
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建交易流水
+	balance, _ := cycle.Cycle.Float64()
+	cycleTransaction := &CycleTransaction{
+		FkCycleID:         cycle.ID,
+		FkUserID:          userId,
+		FkCycleOrderID:    cycleOrder.ID,
+		FkCycleRechargeID: uuid.Nil,
+		Operation:         cycleOrder.ProductName,
+		Symbol:            cycleOrder.Symbol,
+		Cycle:             cycleOrder.Cycle,
+		Balance:           balance,
+		OperationTime:     time.Now(),
+	}
+
+	cycleTransaction, err = uc.cycleTransactionRepo.Create(ctx, cycleTransaction)
+	if err != nil {
+		return nil, err
+	}
 
 	renewal := &CycleRenewal{
 		FkUserID:     userId,

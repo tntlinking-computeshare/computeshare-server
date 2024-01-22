@@ -6254,6 +6254,7 @@ type CycleOrderMutation struct {
 	symbol        *string
 	cycle         *float64
 	addcycle      *float64
+	resource_id   *string
 	create_time   *time.Time
 	clearedFields map[string]struct{}
 	done          bool
@@ -6601,6 +6602,55 @@ func (m *CycleOrderMutation) ResetCycle() {
 	m.addcycle = nil
 }
 
+// SetResourceID sets the "resource_id" field.
+func (m *CycleOrderMutation) SetResourceID(s string) {
+	m.resource_id = &s
+}
+
+// ResourceID returns the value of the "resource_id" field in the mutation.
+func (m *CycleOrderMutation) ResourceID() (r string, exists bool) {
+	v := m.resource_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldResourceID returns the old "resource_id" field's value of the CycleOrder entity.
+// If the CycleOrder object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CycleOrderMutation) OldResourceID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldResourceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldResourceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldResourceID: %w", err)
+	}
+	return oldValue.ResourceID, nil
+}
+
+// ClearResourceID clears the value of the "resource_id" field.
+func (m *CycleOrderMutation) ClearResourceID() {
+	m.resource_id = nil
+	m.clearedFields[cycleorder.FieldResourceID] = struct{}{}
+}
+
+// ResourceIDCleared returns if the "resource_id" field was cleared in this mutation.
+func (m *CycleOrderMutation) ResourceIDCleared() bool {
+	_, ok := m.clearedFields[cycleorder.FieldResourceID]
+	return ok
+}
+
+// ResetResourceID resets all changes to the "resource_id" field.
+func (m *CycleOrderMutation) ResetResourceID() {
+	m.resource_id = nil
+	delete(m.clearedFields, cycleorder.FieldResourceID)
+}
+
 // SetCreateTime sets the "create_time" field.
 func (m *CycleOrderMutation) SetCreateTime(t time.Time) {
 	m.create_time = &t
@@ -6671,7 +6721,7 @@ func (m *CycleOrderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CycleOrderMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.fk_user_id != nil {
 		fields = append(fields, cycleorder.FieldFkUserID)
 	}
@@ -6689,6 +6739,9 @@ func (m *CycleOrderMutation) Fields() []string {
 	}
 	if m.cycle != nil {
 		fields = append(fields, cycleorder.FieldCycle)
+	}
+	if m.resource_id != nil {
+		fields = append(fields, cycleorder.FieldResourceID)
 	}
 	if m.create_time != nil {
 		fields = append(fields, cycleorder.FieldCreateTime)
@@ -6713,6 +6766,8 @@ func (m *CycleOrderMutation) Field(name string) (ent.Value, bool) {
 		return m.Symbol()
 	case cycleorder.FieldCycle:
 		return m.Cycle()
+	case cycleorder.FieldResourceID:
+		return m.ResourceID()
 	case cycleorder.FieldCreateTime:
 		return m.CreateTime()
 	}
@@ -6736,6 +6791,8 @@ func (m *CycleOrderMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSymbol(ctx)
 	case cycleorder.FieldCycle:
 		return m.OldCycle(ctx)
+	case cycleorder.FieldResourceID:
+		return m.OldResourceID(ctx)
 	case cycleorder.FieldCreateTime:
 		return m.OldCreateTime(ctx)
 	}
@@ -6789,6 +6846,13 @@ func (m *CycleOrderMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCycle(v)
 		return nil
+	case cycleorder.FieldResourceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetResourceID(v)
+		return nil
 	case cycleorder.FieldCreateTime:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -6840,7 +6904,11 @@ func (m *CycleOrderMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CycleOrderMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(cycleorder.FieldResourceID) {
+		fields = append(fields, cycleorder.FieldResourceID)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -6853,6 +6921,11 @@ func (m *CycleOrderMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CycleOrderMutation) ClearField(name string) error {
+	switch name {
+	case cycleorder.FieldResourceID:
+		m.ClearResourceID()
+		return nil
+	}
 	return fmt.Errorf("unknown CycleOrder nullable field %s", name)
 }
 
@@ -6877,6 +6950,9 @@ func (m *CycleOrderMutation) ResetField(name string) error {
 		return nil
 	case cycleorder.FieldCycle:
 		m.ResetCycle()
+		return nil
+	case cycleorder.FieldResourceID:
+		m.ResetResourceID()
 		return nil
 	case cycleorder.FieldCreateTime:
 		m.ResetCreateTime()
