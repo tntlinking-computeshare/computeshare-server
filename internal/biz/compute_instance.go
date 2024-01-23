@@ -445,7 +445,20 @@ func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
 
 		err := uc.instanceRepo.UpdateStatus(ctx, instance.ID, consts.InstanceStatusExpire)
 		if err != nil {
+			uc.log.Error("更新实例状态失败： ", err)
 			break
+		}
+
+		cycleRenew, err := uc.cycleRenewalRepo.QueryByResourceId(ctx, instance.ID)
+		if err != nil {
+			uc.log.Error("更新实例状态失败： ", err)
+			return
+		}
+		cycleRenew.State = int8(consts.RenewalState_STOP)
+		err = uc.cycleRenewalRepo.Update(ctx, cycleRenew.ID, cycleRenew)
+		if err != nil {
+			uc.log.Error("更新实例状态失败： ", err)
+			return
 		}
 	}
 }

@@ -170,7 +170,7 @@ func (c *CycleRenewalUseCase) Detail(ctx context.Context, renewalId uuid.UUID) (
 		AutoRenewal:  renewal.AutoRenewal,
 		InstanceId:   instance.ID,
 		InstanceName: instance.Name,
-		InstanceSpec: fmt.Sprintf("%s核 %sGB", instance.Core, instance.Memory),
+		InstanceSpec: fmt.Sprintf("%d核 %dGB", instance.Core, instance.Memory),
 		Image:        instance.Image,
 		Balance:      float32(balance),
 	}
