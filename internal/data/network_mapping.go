@@ -55,10 +55,7 @@ func (repo *NetworkMappingRepo) DeleteNetworkMapping(ctx context.Context, id uui
 }
 
 func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*biz.NetworkMapping, int32, error) {
-	count, err := repo.data.getNetworkMapping(ctx).Query().
-		Select(networkmapping.FieldID).
-		Where(networkmapping.FkUserID(userId), networkmapping.DeleteState(false)).
-		Count(ctx)
+	count, err := repo.CountNetworkMappingByUserId(ctx, userId)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -75,6 +72,14 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 		return nil, 0, err
 	}
 	return lo.Map(list, repo.toBiz), int32(count), nil
+}
+
+func (repo *NetworkMappingRepo) CountNetworkMappingByUserId(ctx context.Context, userId uuid.UUID) (int, error) {
+	count, err := repo.data.getNetworkMapping(ctx).Query().
+		Select(networkmapping.FieldID).
+		Where(networkmapping.FkUserID(userId), networkmapping.DeleteState(false)).
+		Count(ctx)
+	return count, err
 }
 
 func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {

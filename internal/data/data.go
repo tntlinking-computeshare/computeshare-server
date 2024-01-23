@@ -50,6 +50,7 @@ var ProviderSet = wire.NewSet(
 	NewCycleRenewalRepo,
 	NewCycleRedeemCodeRepo,
 	NewAlipayOrderRollbackRepo,
+	NewUserResourceLimitRepo,
 )
 
 // Data .
@@ -260,6 +261,14 @@ func (d *Data) getComputeSpecPrice(ctx context.Context) *ent.ComputeSpecPriceCli
 		return tx.ComputeSpecPrice
 	}
 	return d.db.ComputeSpecPrice
+}
+
+func (d *Data) GetUserResourceLimit(ctx context.Context) *ent.UserResourceLimitClient {
+	tx, ok := getTx(ctx)
+	if ok {
+		return tx.UserResourceLimit
+	}
+	return d.db.UserResourceLimit
 }
 
 func NewDB(conf *conf.Data, logger log.Logger) (*ent.Client, error) {

@@ -38,6 +38,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
@@ -75,6 +76,7 @@ const (
 	TypeStorageProvider       = "StorageProvider"
 	TypeTask                  = "Task"
 	TypeUser                  = "User"
+	TypeUserResourceLimit     = "UserResourceLimit"
 )
 
 // AgentMutation represents an operation that mutates the Agent nodes in the graph.
@@ -19399,4 +19401,600 @@ func (m *UserMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *UserMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown User edge %s", name)
+}
+
+// UserResourceLimitMutation represents an operation that mutates the UserResourceLimit nodes in the graph.
+type UserResourceLimitMutation struct {
+	config
+	op                     Op
+	typ                    string
+	id                     *uuid.UUID
+	fk_user_id             *uuid.UUID
+	max_cpu                *int32
+	addmax_cpu             *int32
+	max_memory             *int32
+	addmax_memory          *int32
+	max_network_mapping    *int32
+	addmax_network_mapping *int32
+	clearedFields          map[string]struct{}
+	done                   bool
+	oldValue               func(context.Context) (*UserResourceLimit, error)
+	predicates             []predicate.UserResourceLimit
+}
+
+var _ ent.Mutation = (*UserResourceLimitMutation)(nil)
+
+// userresourcelimitOption allows management of the mutation configuration using functional options.
+type userresourcelimitOption func(*UserResourceLimitMutation)
+
+// newUserResourceLimitMutation creates new mutation for the UserResourceLimit entity.
+func newUserResourceLimitMutation(c config, op Op, opts ...userresourcelimitOption) *UserResourceLimitMutation {
+	m := &UserResourceLimitMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeUserResourceLimit,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withUserResourceLimitID sets the ID field of the mutation.
+func withUserResourceLimitID(id uuid.UUID) userresourcelimitOption {
+	return func(m *UserResourceLimitMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *UserResourceLimit
+		)
+		m.oldValue = func(ctx context.Context) (*UserResourceLimit, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().UserResourceLimit.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withUserResourceLimit sets the old UserResourceLimit of the mutation.
+func withUserResourceLimit(node *UserResourceLimit) userresourcelimitOption {
+	return func(m *UserResourceLimitMutation) {
+		m.oldValue = func(context.Context) (*UserResourceLimit, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m UserResourceLimitMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m UserResourceLimitMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of UserResourceLimit entities.
+func (m *UserResourceLimitMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *UserResourceLimitMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *UserResourceLimitMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().UserResourceLimit.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetFkUserID sets the "fk_user_id" field.
+func (m *UserResourceLimitMutation) SetFkUserID(u uuid.UUID) {
+	m.fk_user_id = &u
+}
+
+// FkUserID returns the value of the "fk_user_id" field in the mutation.
+func (m *UserResourceLimitMutation) FkUserID() (r uuid.UUID, exists bool) {
+	v := m.fk_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFkUserID returns the old "fk_user_id" field's value of the UserResourceLimit entity.
+// If the UserResourceLimit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserResourceLimitMutation) OldFkUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFkUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFkUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFkUserID: %w", err)
+	}
+	return oldValue.FkUserID, nil
+}
+
+// ResetFkUserID resets all changes to the "fk_user_id" field.
+func (m *UserResourceLimitMutation) ResetFkUserID() {
+	m.fk_user_id = nil
+}
+
+// SetMaxCPU sets the "max_cpu" field.
+func (m *UserResourceLimitMutation) SetMaxCPU(i int32) {
+	m.max_cpu = &i
+	m.addmax_cpu = nil
+}
+
+// MaxCPU returns the value of the "max_cpu" field in the mutation.
+func (m *UserResourceLimitMutation) MaxCPU() (r int32, exists bool) {
+	v := m.max_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxCPU returns the old "max_cpu" field's value of the UserResourceLimit entity.
+// If the UserResourceLimit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserResourceLimitMutation) OldMaxCPU(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxCPU is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxCPU requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxCPU: %w", err)
+	}
+	return oldValue.MaxCPU, nil
+}
+
+// AddMaxCPU adds i to the "max_cpu" field.
+func (m *UserResourceLimitMutation) AddMaxCPU(i int32) {
+	if m.addmax_cpu != nil {
+		*m.addmax_cpu += i
+	} else {
+		m.addmax_cpu = &i
+	}
+}
+
+// AddedMaxCPU returns the value that was added to the "max_cpu" field in this mutation.
+func (m *UserResourceLimitMutation) AddedMaxCPU() (r int32, exists bool) {
+	v := m.addmax_cpu
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMaxCPU resets all changes to the "max_cpu" field.
+func (m *UserResourceLimitMutation) ResetMaxCPU() {
+	m.max_cpu = nil
+	m.addmax_cpu = nil
+}
+
+// SetMaxMemory sets the "max_memory" field.
+func (m *UserResourceLimitMutation) SetMaxMemory(i int32) {
+	m.max_memory = &i
+	m.addmax_memory = nil
+}
+
+// MaxMemory returns the value of the "max_memory" field in the mutation.
+func (m *UserResourceLimitMutation) MaxMemory() (r int32, exists bool) {
+	v := m.max_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxMemory returns the old "max_memory" field's value of the UserResourceLimit entity.
+// If the UserResourceLimit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserResourceLimitMutation) OldMaxMemory(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxMemory is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxMemory requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxMemory: %w", err)
+	}
+	return oldValue.MaxMemory, nil
+}
+
+// AddMaxMemory adds i to the "max_memory" field.
+func (m *UserResourceLimitMutation) AddMaxMemory(i int32) {
+	if m.addmax_memory != nil {
+		*m.addmax_memory += i
+	} else {
+		m.addmax_memory = &i
+	}
+}
+
+// AddedMaxMemory returns the value that was added to the "max_memory" field in this mutation.
+func (m *UserResourceLimitMutation) AddedMaxMemory() (r int32, exists bool) {
+	v := m.addmax_memory
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMaxMemory resets all changes to the "max_memory" field.
+func (m *UserResourceLimitMutation) ResetMaxMemory() {
+	m.max_memory = nil
+	m.addmax_memory = nil
+}
+
+// SetMaxNetworkMapping sets the "max_network_mapping" field.
+func (m *UserResourceLimitMutation) SetMaxNetworkMapping(i int32) {
+	m.max_network_mapping = &i
+	m.addmax_network_mapping = nil
+}
+
+// MaxNetworkMapping returns the value of the "max_network_mapping" field in the mutation.
+func (m *UserResourceLimitMutation) MaxNetworkMapping() (r int32, exists bool) {
+	v := m.max_network_mapping
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMaxNetworkMapping returns the old "max_network_mapping" field's value of the UserResourceLimit entity.
+// If the UserResourceLimit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserResourceLimitMutation) OldMaxNetworkMapping(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMaxNetworkMapping is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMaxNetworkMapping requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMaxNetworkMapping: %w", err)
+	}
+	return oldValue.MaxNetworkMapping, nil
+}
+
+// AddMaxNetworkMapping adds i to the "max_network_mapping" field.
+func (m *UserResourceLimitMutation) AddMaxNetworkMapping(i int32) {
+	if m.addmax_network_mapping != nil {
+		*m.addmax_network_mapping += i
+	} else {
+		m.addmax_network_mapping = &i
+	}
+}
+
+// AddedMaxNetworkMapping returns the value that was added to the "max_network_mapping" field in this mutation.
+func (m *UserResourceLimitMutation) AddedMaxNetworkMapping() (r int32, exists bool) {
+	v := m.addmax_network_mapping
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMaxNetworkMapping resets all changes to the "max_network_mapping" field.
+func (m *UserResourceLimitMutation) ResetMaxNetworkMapping() {
+	m.max_network_mapping = nil
+	m.addmax_network_mapping = nil
+}
+
+// Where appends a list predicates to the UserResourceLimitMutation builder.
+func (m *UserResourceLimitMutation) Where(ps ...predicate.UserResourceLimit) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the UserResourceLimitMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *UserResourceLimitMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.UserResourceLimit, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *UserResourceLimitMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *UserResourceLimitMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (UserResourceLimit).
+func (m *UserResourceLimitMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *UserResourceLimitMutation) Fields() []string {
+	fields := make([]string, 0, 4)
+	if m.fk_user_id != nil {
+		fields = append(fields, userresourcelimit.FieldFkUserID)
+	}
+	if m.max_cpu != nil {
+		fields = append(fields, userresourcelimit.FieldMaxCPU)
+	}
+	if m.max_memory != nil {
+		fields = append(fields, userresourcelimit.FieldMaxMemory)
+	}
+	if m.max_network_mapping != nil {
+		fields = append(fields, userresourcelimit.FieldMaxNetworkMapping)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *UserResourceLimitMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case userresourcelimit.FieldFkUserID:
+		return m.FkUserID()
+	case userresourcelimit.FieldMaxCPU:
+		return m.MaxCPU()
+	case userresourcelimit.FieldMaxMemory:
+		return m.MaxMemory()
+	case userresourcelimit.FieldMaxNetworkMapping:
+		return m.MaxNetworkMapping()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *UserResourceLimitMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case userresourcelimit.FieldFkUserID:
+		return m.OldFkUserID(ctx)
+	case userresourcelimit.FieldMaxCPU:
+		return m.OldMaxCPU(ctx)
+	case userresourcelimit.FieldMaxMemory:
+		return m.OldMaxMemory(ctx)
+	case userresourcelimit.FieldMaxNetworkMapping:
+		return m.OldMaxNetworkMapping(ctx)
+	}
+	return nil, fmt.Errorf("unknown UserResourceLimit field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserResourceLimitMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case userresourcelimit.FieldFkUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFkUserID(v)
+		return nil
+	case userresourcelimit.FieldMaxCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxCPU(v)
+		return nil
+	case userresourcelimit.FieldMaxMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxMemory(v)
+		return nil
+	case userresourcelimit.FieldMaxNetworkMapping:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMaxNetworkMapping(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UserResourceLimit field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *UserResourceLimitMutation) AddedFields() []string {
+	var fields []string
+	if m.addmax_cpu != nil {
+		fields = append(fields, userresourcelimit.FieldMaxCPU)
+	}
+	if m.addmax_memory != nil {
+		fields = append(fields, userresourcelimit.FieldMaxMemory)
+	}
+	if m.addmax_network_mapping != nil {
+		fields = append(fields, userresourcelimit.FieldMaxNetworkMapping)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *UserResourceLimitMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case userresourcelimit.FieldMaxCPU:
+		return m.AddedMaxCPU()
+	case userresourcelimit.FieldMaxMemory:
+		return m.AddedMaxMemory()
+	case userresourcelimit.FieldMaxNetworkMapping:
+		return m.AddedMaxNetworkMapping()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *UserResourceLimitMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case userresourcelimit.FieldMaxCPU:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxCPU(v)
+		return nil
+	case userresourcelimit.FieldMaxMemory:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxMemory(v)
+		return nil
+	case userresourcelimit.FieldMaxNetworkMapping:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMaxNetworkMapping(v)
+		return nil
+	}
+	return fmt.Errorf("unknown UserResourceLimit numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *UserResourceLimitMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *UserResourceLimitMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *UserResourceLimitMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown UserResourceLimit nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *UserResourceLimitMutation) ResetField(name string) error {
+	switch name {
+	case userresourcelimit.FieldFkUserID:
+		m.ResetFkUserID()
+		return nil
+	case userresourcelimit.FieldMaxCPU:
+		m.ResetMaxCPU()
+		return nil
+	case userresourcelimit.FieldMaxMemory:
+		m.ResetMaxMemory()
+		return nil
+	case userresourcelimit.FieldMaxNetworkMapping:
+		m.ResetMaxNetworkMapping()
+		return nil
+	}
+	return fmt.Errorf("unknown UserResourceLimit field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *UserResourceLimitMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *UserResourceLimitMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *UserResourceLimitMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *UserResourceLimitMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *UserResourceLimitMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *UserResourceLimitMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *UserResourceLimitMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown UserResourceLimit unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *UserResourceLimitMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown UserResourceLimit edge %s", name)
 }

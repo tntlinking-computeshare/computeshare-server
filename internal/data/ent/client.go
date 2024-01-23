@@ -40,6 +40,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
 )
 
 // Client is the client that holds all ent builders.
@@ -97,6 +98,8 @@ type Client struct {
 	Task *TaskClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserResourceLimit is the client for interacting with the UserResourceLimit builders.
+	UserResourceLimit *UserResourceLimitClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -135,6 +138,7 @@ func (c *Client) init() {
 	c.StorageProvider = NewStorageProviderClient(c.config)
 	c.Task = NewTaskClient(c.config)
 	c.User = NewUserClient(c.config)
+	c.UserResourceLimit = NewUserResourceLimitClient(c.config)
 }
 
 type (
@@ -242,6 +246,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		StorageProvider:       NewStorageProviderClient(cfg),
 		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
+		UserResourceLimit:     NewUserResourceLimitClient(cfg),
 	}, nil
 }
 
@@ -286,6 +291,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		StorageProvider:       NewStorageProviderClient(cfg),
 		Task:                  NewTaskClient(cfg),
 		User:                  NewUserClient(cfg),
+		UserResourceLimit:     NewUserResourceLimitClient(cfg),
 	}, nil
 }
 
@@ -320,7 +326,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
 		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
-		c.User,
+		c.User, c.UserResourceLimit,
 	} {
 		n.Use(hooks...)
 	}
@@ -335,7 +341,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CycleRedeemCode, c.CycleRenewal, c.CycleTransaction, c.DomainBinding,
 		c.Employee, c.Gateway, c.GatewayPort, c.NetworkMapping, c.S3Bucket, c.S3User,
 		c.Script, c.ScriptExecutionRecord, c.Storage, c.StorageProvider, c.Task,
-		c.User,
+		c.User, c.UserResourceLimit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -394,6 +400,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Task.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
+	case *UserResourceLimitMutation:
+		return c.UserResourceLimit.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -3381,6 +3389,124 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 	}
 }
 
+// UserResourceLimitClient is a client for the UserResourceLimit schema.
+type UserResourceLimitClient struct {
+	config
+}
+
+// NewUserResourceLimitClient returns a client for the UserResourceLimit from the given config.
+func NewUserResourceLimitClient(c config) *UserResourceLimitClient {
+	return &UserResourceLimitClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `userresourcelimit.Hooks(f(g(h())))`.
+func (c *UserResourceLimitClient) Use(hooks ...Hook) {
+	c.hooks.UserResourceLimit = append(c.hooks.UserResourceLimit, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `userresourcelimit.Intercept(f(g(h())))`.
+func (c *UserResourceLimitClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserResourceLimit = append(c.inters.UserResourceLimit, interceptors...)
+}
+
+// Create returns a builder for creating a UserResourceLimit entity.
+func (c *UserResourceLimitClient) Create() *UserResourceLimitCreate {
+	mutation := newUserResourceLimitMutation(c.config, OpCreate)
+	return &UserResourceLimitCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserResourceLimit entities.
+func (c *UserResourceLimitClient) CreateBulk(builders ...*UserResourceLimitCreate) *UserResourceLimitCreateBulk {
+	return &UserResourceLimitCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserResourceLimit.
+func (c *UserResourceLimitClient) Update() *UserResourceLimitUpdate {
+	mutation := newUserResourceLimitMutation(c.config, OpUpdate)
+	return &UserResourceLimitUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserResourceLimitClient) UpdateOne(url *UserResourceLimit) *UserResourceLimitUpdateOne {
+	mutation := newUserResourceLimitMutation(c.config, OpUpdateOne, withUserResourceLimit(url))
+	return &UserResourceLimitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserResourceLimitClient) UpdateOneID(id uuid.UUID) *UserResourceLimitUpdateOne {
+	mutation := newUserResourceLimitMutation(c.config, OpUpdateOne, withUserResourceLimitID(id))
+	return &UserResourceLimitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserResourceLimit.
+func (c *UserResourceLimitClient) Delete() *UserResourceLimitDelete {
+	mutation := newUserResourceLimitMutation(c.config, OpDelete)
+	return &UserResourceLimitDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserResourceLimitClient) DeleteOne(url *UserResourceLimit) *UserResourceLimitDeleteOne {
+	return c.DeleteOneID(url.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserResourceLimitClient) DeleteOneID(id uuid.UUID) *UserResourceLimitDeleteOne {
+	builder := c.Delete().Where(userresourcelimit.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserResourceLimitDeleteOne{builder}
+}
+
+// Query returns a query builder for UserResourceLimit.
+func (c *UserResourceLimitClient) Query() *UserResourceLimitQuery {
+	return &UserResourceLimitQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserResourceLimit},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserResourceLimit entity by its id.
+func (c *UserResourceLimitClient) Get(ctx context.Context, id uuid.UUID) (*UserResourceLimit, error) {
+	return c.Query().Where(userresourcelimit.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserResourceLimitClient) GetX(ctx context.Context, id uuid.UUID) *UserResourceLimit {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *UserResourceLimitClient) Hooks() []Hook {
+	return c.hooks.UserResourceLimit
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserResourceLimitClient) Interceptors() []Interceptor {
+	return c.inters.UserResourceLimit
+}
+
+func (c *UserResourceLimitClient) mutate(ctx context.Context, m *UserResourceLimitMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserResourceLimitCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserResourceLimitUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserResourceLimitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserResourceLimitDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserResourceLimit mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
@@ -3388,13 +3514,13 @@ type (
 		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
 		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
 		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
-		StorageProvider, Task, User []ent.Hook
+		StorageProvider, Task, User, UserResourceLimit []ent.Hook
 	}
 	inters struct {
 		Agent, AlipayOrderRollback, ComputeImage, ComputeInstance, ComputeSpec,
 		ComputeSpecPrice, Cycle, CycleOrder, CycleRecharge, CycleRedeemCode,
 		CycleRenewal, CycleTransaction, DomainBinding, Employee, Gateway, GatewayPort,
 		NetworkMapping, S3Bucket, S3User, Script, ScriptExecutionRecord, Storage,
-		StorageProvider, Task, User []ent.Interceptor
+		StorageProvider, Task, User, UserResourceLimit []ent.Interceptor
 	}
 )

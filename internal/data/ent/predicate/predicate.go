@@ -80,3 +80,6 @@ type Task func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
+
+// UserResourceLimit is the predicate function for userresourcelimit builders.
+type UserResourceLimit func(*sql.Selector)

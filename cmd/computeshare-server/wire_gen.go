@@ -52,7 +52,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 		cleanup()
 		return nil, nil, err
 	}
-	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceRepo, domainBindingUseCase, logger)
+	userResourceLimitRepo := data.NewUserResourceLimitRepo(dataData, logger)
+	networkMappingUseCase := biz.NewNetworkMappingUseCase(networkMappingRepo, gatewayRepo, gatewayPortRepo, taskRepo, domainBindingRepository, computeInstanceRepo, domainBindingUseCase, userResourceLimitRepo, logger)
 	storageProviderUseCase := biz.NewStorageProviderUseCase(logger, storageProviderRepo, agentRepo, gatewayPortRepo, networkMappingRepo, gatewayRepo, taskRepo, networkMappingUseCase)
 	cycleRenewalRepo := data.NewCycleRenewalRepo(dataData, logger)
 	taskUseCase := biz.NewTaskUseCase(taskRepo, networkMappingRepo, computeInstanceRepo, storageProviderUseCase, cycleRenewalRepo, logger)

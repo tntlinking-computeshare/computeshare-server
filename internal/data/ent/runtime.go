@@ -29,6 +29,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
@@ -550,4 +551,26 @@ func init() {
 	userDescID := userFields[0].Descriptor()
 	// user.DefaultID holds the default value on creation for the id field.
 	user.DefaultID = userDescID.Default.(func() uuid.UUID)
+	userresourcelimitFields := schema.UserResourceLimit{}.Fields()
+	_ = userresourcelimitFields
+	// userresourcelimitDescFkUserID is the schema descriptor for fk_user_id field.
+	userresourcelimitDescFkUserID := userresourcelimitFields[1].Descriptor()
+	// userresourcelimit.DefaultFkUserID holds the default value on creation for the fk_user_id field.
+	userresourcelimit.DefaultFkUserID = userresourcelimitDescFkUserID.Default.(func() uuid.UUID)
+	// userresourcelimitDescMaxCPU is the schema descriptor for max_cpu field.
+	userresourcelimitDescMaxCPU := userresourcelimitFields[2].Descriptor()
+	// userresourcelimit.DefaultMaxCPU holds the default value on creation for the max_cpu field.
+	userresourcelimit.DefaultMaxCPU = userresourcelimitDescMaxCPU.Default.(int32)
+	// userresourcelimitDescMaxMemory is the schema descriptor for max_memory field.
+	userresourcelimitDescMaxMemory := userresourcelimitFields[3].Descriptor()
+	// userresourcelimit.DefaultMaxMemory holds the default value on creation for the max_memory field.
+	userresourcelimit.DefaultMaxMemory = userresourcelimitDescMaxMemory.Default.(int32)
+	// userresourcelimitDescMaxNetworkMapping is the schema descriptor for max_network_mapping field.
+	userresourcelimitDescMaxNetworkMapping := userresourcelimitFields[4].Descriptor()
+	// userresourcelimit.DefaultMaxNetworkMapping holds the default value on creation for the max_network_mapping field.
+	userresourcelimit.DefaultMaxNetworkMapping = userresourcelimitDescMaxNetworkMapping.Default.(int32)
+	// userresourcelimitDescID is the schema descriptor for id field.
+	userresourcelimitDescID := userresourcelimitFields[0].Descriptor()
+	// userresourcelimit.DefaultID holds the default value on creation for the id field.
+	userresourcelimit.DefaultID = userresourcelimitDescID.Default.(func() uuid.UUID)
 }

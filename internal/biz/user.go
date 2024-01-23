@@ -46,6 +46,19 @@ type User struct {
 	PwdConfig bool
 }
 
+type UserResourceLimit struct {
+	// ID of the ent.
+	ID uuid.UUID `json:"id,omitempty"`
+	// 用户id
+	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
+	// MaxCPU holds the value of the "max_cpu" field.
+	MaxCPU int32 `json:"max_cpu,omitempty"`
+	// MaxMemory holds the value of the "max_memory" field.
+	MaxMemory int32 `json:"max_memory,omitempty"`
+	// MaxNetworkMapping holds the value of the "max_network_mapping" field.
+	MaxNetworkMapping int32 `json:"max_network_mapping,omitempty"`
+}
+
 func (u *User) GetFullTelephone() string {
 	return strings.Join([]string{u.CountryCallCoding, u.TelephoneNumber}, "")
 }
@@ -65,6 +78,11 @@ type UserRepo interface {
 	GetResendVerification(ctx context.Context, telephoneNumber string) (string, error)
 	FindUserByFullTelephone(ctx context.Context, countryCallCoding string, telephone string) (*User, error)
 	FindByUsername(ctx context.Context, username string) (*User, error)
+}
+
+type UserResourceLimitRepo interface {
+	GetByUserId(ctx context.Context, userId uuid.UUID) (*UserResourceLimit, error)
+	Update(ctx context.Context, id uuid.UUID, limit *UserResourceLimit) error
 }
 
 type UserUsercase struct {

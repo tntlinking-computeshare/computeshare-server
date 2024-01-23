@@ -223,7 +223,9 @@ message GetInstanceReply {
 	Instance data = 3;
 }
 
-message ListInstanceRequest {}
+message ListInstanceRequest {
+	optional int32 status = 1 ;
+}
 message ListInstanceReply {
 	int32 code = 1;
 	string message = 2;

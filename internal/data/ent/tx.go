@@ -62,6 +62,8 @@ type Tx struct {
 	Task *TaskClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
+	// UserResourceLimit is the client for interacting with the UserResourceLimit builders.
+	UserResourceLimit *UserResourceLimitClient
 
 	// lazily loaded.
 	client     *Client
@@ -218,6 +220,7 @@ func (tx *Tx) init() {
 	tx.StorageProvider = NewStorageProviderClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
 	tx.User = NewUserClient(tx.config)
+	tx.UserResourceLimit = NewUserResourceLimitClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

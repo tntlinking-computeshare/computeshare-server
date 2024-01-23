@@ -29,6 +29,7 @@ type ComputeSpecRepo interface {
 
 type ComputeInstanceRepo interface {
 	List(ctx context.Context, owner string) ([]*ComputeInstance, error)
+	ListByStatus(ctx context.Context, owner string, status consts.InstanceStatus) ([]*ComputeInstance, error)
 	ListByAgentId(ctx context.Context, agentId string) ([]*ComputeInstance, error)
 	ListAll(ctx context.Context) ([]*ComputeInstance, error)
 	Create(ctx context.Context, instance *ComputeInstance) error
@@ -359,6 +360,11 @@ func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owne
 	for _, ins := range list {
 		ins.Stats, _ = uc.GetInstanceStats(ctx, ins.ID)
 	}
+	return list, err
+}
+
+func (uc *ComputeInstanceUsercase) ListComputeInstanceByStatus(ctx context.Context, owner string, status int32) ([]*ComputeInstance, error) {
+	list, err := uc.instanceRepo.ListByStatus(ctx, owner, consts.InstanceStatus(status))
 	return list, err
 }
 

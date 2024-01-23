@@ -58,6 +58,7 @@ type NetworkMappingRepo interface {
 	GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error)
 	DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
+	CountNetworkMappingByUserId(ctx context.Context, userId uuid.UUID) (int, error)
 	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
@@ -113,6 +114,7 @@ type NetworkMappingUseCase struct {
 	taskRepo             TaskRepo
 	domainBindingRepo    DomainBindingRepository
 	domainBindingUseCase *DomainBindingUseCase
+	userResourceLimit    UserResourceLimitRepo
 	log                  *log.Helper
 }
 
@@ -123,6 +125,7 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	domainBindingRepo DomainBindingRepository,
 	computeInstanceRepo ComputeInstanceRepo,
 	domainBindingUseCase *DomainBindingUseCase,
+	userResourceLimit UserResourceLimitRepo,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
 		repo:                 repo,
@@ -137,6 +140,22 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 }
 
 func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *NetworkMappingCreate) (*NetworkMapping, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return nil, errors.New("unauthorize")
+	}
+	// 查看当前用户有无达到限额
+	countNetworkMapping, err := m.repo.CountNetworkMappingByUserId(ctx, claim.GetUserId())
+	if err != nil {
+		return nil, errors.New("count networkMapping fail")
+	}
+	userResourceLimit, err := m.userResourceLimit.GetByUserId(ctx, claim.GetUserId())
+	if err != nil {
+		return nil, errors.New("userResourceLimit not found")
+	}
+	if countNetworkMapping >= int(userResourceLimit.MaxNetworkMapping) {
+		return nil, errors.New("端口映射达到用户最大限制")
+	}
 
 	computeInstance, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
 	if err != nil {
@@ -168,11 +187,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, err
 	}
 	gatewayPort := gp.Port
-
-	claim, ok := global.FromContext(ctx)
-	if !ok {
-		return nil, errors.New("unauthorize")
-	}
 
 	g, err := m.gatewayRepo.GetGateway(ctx, gp.FkGatewayID)
 	if err != nil {

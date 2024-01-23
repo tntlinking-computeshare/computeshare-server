@@ -531,6 +531,20 @@ var (
 			},
 		},
 	}
+	// UserResourceLimitsColumns holds the columns for the "user_resource_limits" table.
+	UserResourceLimitsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "fk_user_id", Type: field.TypeUUID},
+		{Name: "max_cpu", Type: field.TypeInt32, Default: 20},
+		{Name: "max_memory", Type: field.TypeInt32, Default: 40},
+		{Name: "max_network_mapping", Type: field.TypeInt32, Default: 10},
+	}
+	// UserResourceLimitsTable holds the schema information for the "user_resource_limits" table.
+	UserResourceLimitsTable = &schema.Table{
+		Name:       "user_resource_limits",
+		Columns:    UserResourceLimitsColumns,
+		PrimaryKey: []*schema.Column{UserResourceLimitsColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AgentsTable,
@@ -558,6 +572,7 @@ var (
 		StorageProvidersTable,
 		TasksTable,
 		UsersTable,
+		UserResourceLimitsTable,
 	}
 )
 

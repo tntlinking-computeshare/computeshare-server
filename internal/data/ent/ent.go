@@ -37,6 +37,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/user"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -122,6 +123,7 @@ func checkColumn(table, column string) error {
 			storageprovider.Table:       storageprovider.ValidColumn,
 			task.Table:                  task.ValidColumn,
 			user.Table:                  user.ValidColumn,
+			userresourcelimit.Table:     userresourcelimit.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

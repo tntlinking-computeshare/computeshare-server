@@ -124,7 +124,14 @@ func (s *ComputeInstanceService) List(ctx context.Context, req *pb.ListInstanceR
 	if !ok {
 		return nil, errors.New("cannot get user id")
 	}
-	list, err := s.uc.ListComputeInstance(ctx, claim.UserID)
+	var list []*biz.ComputeInstance
+	var err error
+	if req.Status == nil {
+		list, err = s.uc.ListComputeInstance(ctx, claim.UserID)
+	} else {
+		list, err = s.uc.ListComputeInstanceByStatus(ctx, claim.UserID, req.GetStatus())
+	}
+
 	return &pb.ListInstanceReply{
 		Code:    200,
 		Message: SUCCESS,
