@@ -121,6 +121,11 @@ func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCou
 	if err != nil {
 		return nil, err
 	}
+	countCycleRedeemCodeTotal, err := d.cycleRedeemCodeRepo.CountCycleRedeemCodeTotal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	cyclesCount.GrantVouchersTotal = string(rune(countCycleRedeemCodeTotal))
 	cyclesCount.RecoveryTotal = countCycleUseTotal.StringFixed(2)
 	countRechargeCycle, err := d.cycleRechargeRepo.CountRechargeCycle(ctx)
 	if err != nil {
