@@ -264,17 +264,6 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 
 	gp.IsUse = true
 	err = m.gatewayPortRepo.Update(ctx, gp)
-
-	countNetworkMapping, err = m.repo.CountNetworkMappingByUserId(ctx, claim.GetUserId())
-	if err != nil {
-		return nil, errors.New("count networkMapping fail")
-	}
-	userResourceLimit.MaxNetworkMapping = int32(countNetworkMapping)
-
-	err = m.userResourceLimitRepo.Update(ctx, userResourceLimit.ID, userResourceLimit)
-	if err != nil {
-		return nil, errors.New("count networkMapping fail")
-	}
 	return &nwp, err
 }
 
@@ -369,21 +358,6 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 
 	if err != nil {
 		return err
-	}
-
-	countNetworkMapping, err := m.repo.CountNetworkMappingByUserId(ctx, nwp.UserId)
-	if err != nil {
-		return errors.New("count networkMapping fail")
-	}
-	userResourceLimit, err := m.userResourceLimitRepo.GetByUserId(ctx, nwp.UserId)
-	if err != nil {
-		return errors.New("count networkMapping fail")
-	}
-	userResourceLimit.MaxNetworkMapping = int32(countNetworkMapping)
-
-	err = m.userResourceLimitRepo.Update(ctx, userResourceLimit.ID, userResourceLimit)
-	if err != nil {
-		return errors.New("count networkMapping fail")
 	}
 
 	return nil

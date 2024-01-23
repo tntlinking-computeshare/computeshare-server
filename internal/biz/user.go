@@ -82,7 +82,6 @@ type UserRepo interface {
 
 type UserResourceLimitRepo interface {
 	GetByUserId(ctx context.Context, userId uuid.UUID) (*UserResourceLimit, error)
-	Update(ctx context.Context, id uuid.UUID, limit *UserResourceLimit) error
 }
 
 type UserUsercase struct {
