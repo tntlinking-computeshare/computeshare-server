@@ -65,6 +65,11 @@ func (c *cycleRedeemCodeRepo) CountCycleUseTotal(ctx context.Context) (decimal.D
 	return decimal.Decimal{}, err
 }
 
+func (c *cycleRedeemCodeRepo) CountCycleRedeemCodeTotal(ctx context.Context) (int, error) {
+	count, err := c.data.getCycleRedeemCode(ctx).Query().Count(ctx)
+	return count, err
+}
+
 func (r *cycleRedeemCodeRepo) toBiz(p *ent.CycleRedeemCode, _ int) *biz.CycleRedeemCode {
 	if p == nil {
 		return nil

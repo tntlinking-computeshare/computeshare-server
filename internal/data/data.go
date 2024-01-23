@@ -3,7 +3,6 @@ package data
 import (
 	"context"
 	"fmt"
-
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 
@@ -273,6 +272,7 @@ func (d *Data) GetUserResourceLimit(ctx context.Context) *ent.UserResourceLimitC
 
 func NewDB(conf *conf.Data, logger log.Logger) (*ent.Client, error) {
 	lg := log.NewHelper(logger)
+	fmt.Println("conf.Database.Source is", conf.Database.Source)
 	drv, err := sql.Open(
 		conf.Database.Driver,
 		conf.Database.Source,

@@ -55,6 +55,7 @@ type CycleRedeemCodeRepo interface {
 	Update(ctx context.Context, cycleRedeemCode *CycleRedeemCode) error
 	CountCycleGrantTotal(ctx context.Context) (decimal.Decimal, error)
 	CountCycleUseTotal(ctx context.Context) (decimal.Decimal, error)
+	CountCycleRedeemCodeTotal(ctx context.Context) (int, error)
 }
 
 type AlipayOrderRollbackRepo interface {
@@ -159,7 +160,6 @@ func (o *OrderUseCase) RechargeCycleByAlipay(ctx context.Context, userId uuid.UU
 		return "", "", err
 	}
 	return outTradeNo, alipayUrl, nil
-
 }
 
 func (o *OrderUseCase) AlipayPayNotify(ctx context.Context, alipayOrderRollback AlipayOrderRollback) (err error) {
@@ -296,7 +296,7 @@ func (o *OrderUseCase) RechargeCycleByRedeemCode(ctx context.Context, userId uui
 		log.Log(log.LevelInfo, "o.cycleRedeemCodeRepo.Update", err)
 		return "", err
 	}
-	return cycleRedeemCode.Cycle.StringFixed(2), nil
+	return cycleRedeemCode.Cycle.StringFixed(0), nil
 }
 
 func (o *OrderUseCase) GetRechargeState(ctx context.Context, outTradeNo string) (state string, err error) {
@@ -312,7 +312,7 @@ func (o *OrderUseCase) GetCycleBalance(ctx context.Context, userId uuid.UUID) (r
 	if err != nil {
 		return "", err
 	}
-	return cycle.Cycle.StringFixed(2), nil
+	return cycle.Cycle.StringFixed(0), nil
 }
 
 func (o *OrderUseCase) OrderList(ctx context.Context, page, size int32) (*global2.Page[*CycleOrder], error) {
