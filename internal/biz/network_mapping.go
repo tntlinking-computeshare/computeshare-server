@@ -107,15 +107,15 @@ type GatewayPortRepo interface {
 }
 
 type NetworkMappingUseCase struct {
-	repo                 NetworkMappingRepo
-	gatewayRepo          GatewayRepo
-	gatewayPortRepo      GatewayPortRepo
-	computeInstanceRepo  ComputeInstanceRepo
-	taskRepo             TaskRepo
-	domainBindingRepo    DomainBindingRepository
-	domainBindingUseCase *DomainBindingUseCase
-	userResourceLimit    UserResourceLimitRepo
-	log                  *log.Helper
+	repo                  NetworkMappingRepo
+	gatewayRepo           GatewayRepo
+	gatewayPortRepo       GatewayPortRepo
+	computeInstanceRepo   ComputeInstanceRepo
+	taskRepo              TaskRepo
+	domainBindingRepo     DomainBindingRepository
+	domainBindingUseCase  *DomainBindingUseCase
+	userResourceLimitRepo UserResourceLimitRepo
+	log                   *log.Helper
 }
 
 func NewNetworkMappingUseCase(repo NetworkMappingRepo,
@@ -125,17 +125,18 @@ func NewNetworkMappingUseCase(repo NetworkMappingRepo,
 	domainBindingRepo DomainBindingRepository,
 	computeInstanceRepo ComputeInstanceRepo,
 	domainBindingUseCase *DomainBindingUseCase,
-	userResourceLimit UserResourceLimitRepo,
+	userResourceLimitRepo UserResourceLimitRepo,
 	logger log.Logger) *NetworkMappingUseCase {
 	return &NetworkMappingUseCase{
-		repo:                 repo,
-		gatewayRepo:          gatewayRepo,
-		gatewayPortRepo:      gatewayPortRepo,
-		taskRepo:             taskRepo,
-		domainBindingRepo:    domainBindingRepo,
-		domainBindingUseCase: domainBindingUseCase,
-		computeInstanceRepo:  computeInstanceRepo,
-		log:                  log.NewHelper(logger),
+		repo:                  repo,
+		gatewayRepo:           gatewayRepo,
+		gatewayPortRepo:       gatewayPortRepo,
+		taskRepo:              taskRepo,
+		domainBindingRepo:     domainBindingRepo,
+		domainBindingUseCase:  domainBindingUseCase,
+		computeInstanceRepo:   computeInstanceRepo,
+		userResourceLimitRepo: userResourceLimitRepo,
+		log:                   log.NewHelper(logger),
 	}
 }
 
@@ -149,7 +150,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	if err != nil {
 		return nil, errors.New("count networkMapping fail")
 	}
-	userResourceLimit, err := m.userResourceLimit.GetByUserId(ctx, claim.GetUserId())
+	userResourceLimit, err := m.userResourceLimitRepo.GetByUserId(ctx, claim.GetUserId())
 	if err != nil {
 		return nil, errors.New("userResourceLimit not found")
 	}
@@ -263,6 +264,17 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 
 	gp.IsUse = true
 	err = m.gatewayPortRepo.Update(ctx, gp)
+
+	countNetworkMapping, err = m.repo.CountNetworkMappingByUserId(ctx, claim.GetUserId())
+	if err != nil {
+		return nil, errors.New("count networkMapping fail")
+	}
+	userResourceLimit.MaxNetworkMapping = int32(countNetworkMapping)
+
+	err = m.userResourceLimitRepo.Update(ctx, userResourceLimit.ID, userResourceLimit)
+	if err != nil {
+		return nil, errors.New("count networkMapping fail")
+	}
 	return &nwp, err
 }
 
@@ -353,8 +365,28 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	}
 
 	nwp.DeleteState = true
-	return m.repo.UpdateNetworkMapping(ctx, nwp)
+	err = m.repo.UpdateNetworkMapping(ctx, nwp)
 
+	if err != nil {
+		return err
+	}
+
+	countNetworkMapping, err := m.repo.CountNetworkMappingByUserId(ctx, nwp.UserId)
+	if err != nil {
+		return errors.New("count networkMapping fail")
+	}
+	userResourceLimit, err := m.userResourceLimitRepo.GetByUserId(ctx, nwp.UserId)
+	if err != nil {
+		return errors.New("count networkMapping fail")
+	}
+	userResourceLimit.MaxNetworkMapping = int32(countNetworkMapping)
+
+	err = m.userResourceLimitRepo.Update(ctx, userResourceLimit.ID, userResourceLimit)
+	if err != nil {
+		return errors.New("count networkMapping fail")
+	}
+
+	return nil
 }
 
 func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {
