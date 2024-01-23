@@ -30,6 +30,8 @@ type CycleOrder struct {
 	Symbol string `json:"symbol,omitempty"`
 	// Cycle holds the value of the "cycle" field.
 	Cycle float64 `json:"cycle,omitempty"`
+	// 资源id,可为空
+	ResourceID *string `json:"resource_id,omitempty"`
 	// CreateTime holds the value of the "create_time" field.
 	CreateTime   time.Time `json:"create_time,omitempty"`
 	selectValues sql.SelectValues
@@ -42,7 +44,7 @@ func (*CycleOrder) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case cycleorder.FieldCycle:
 			values[i] = new(sql.NullFloat64)
-		case cycleorder.FieldOrderNo, cycleorder.FieldProductName, cycleorder.FieldProductDesc, cycleorder.FieldSymbol:
+		case cycleorder.FieldOrderNo, cycleorder.FieldProductName, cycleorder.FieldProductDesc, cycleorder.FieldSymbol, cycleorder.FieldResourceID:
 			values[i] = new(sql.NullString)
 		case cycleorder.FieldCreateTime:
 			values[i] = new(sql.NullTime)
@@ -105,6 +107,13 @@ func (co *CycleOrder) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.Cycle = value.Float64
 			}
+		case cycleorder.FieldResourceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field resource_id", values[i])
+			} else if value.Valid {
+				co.ResourceID = new(string)
+				*co.ResourceID = value.String
+			}
 		case cycleorder.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
@@ -164,6 +173,11 @@ func (co *CycleOrder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("cycle=")
 	builder.WriteString(fmt.Sprintf("%v", co.Cycle))
+	builder.WriteString(", ")
+	if v := co.ResourceID; v != nil {
+		builder.WriteString("resource_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
 	builder.WriteString(co.CreateTime.Format(time.ANSIC))

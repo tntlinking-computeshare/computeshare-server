@@ -194,6 +194,7 @@ var (
 		{Name: "product_desc", Type: field.TypeString, Size: 200},
 		{Name: "symbol", Type: field.TypeString, Size: 1},
 		{Name: "cycle", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(10,2)"}},
+		{Name: "resource_id", Type: field.TypeString, Nullable: true, Size: 50},
 		{Name: "create_time", Type: field.TypeTime},
 	}
 	// CycleOrdersTable holds the schema information for the "cycle_orders" table.

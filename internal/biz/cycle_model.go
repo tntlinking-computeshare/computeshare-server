@@ -21,6 +21,8 @@ type CycleOrder struct {
 	Symbol string `json:"symbol,omitempty"`
 	// Cycle holds the value of the "cycle" field.
 	Cycle float64 `json:"cycle,omitempty"`
+	// ResourceId
+	ResourceId *string `json:"resourceId,omitempty"`
 	// CreateTime holds the value of the "create_time" field.
 	CreateTime time.Time `json:"createTime,omitempty"`
 }

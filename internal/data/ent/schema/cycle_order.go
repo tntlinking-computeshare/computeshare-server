@@ -24,6 +24,7 @@ func (CycleOrder) Fields() []ent.Field {
 		field.Float("cycle").SchemaType(map[string]string{
 			dialect.MySQL: "decimal(10,2)",
 		}),
+		field.String("resource_id").MaxLen(50).Optional().Nillable().Comment("资源id,可为空"),
 		field.Time("create_time"),
 	}
 }

@@ -24,6 +24,8 @@ const (
 	FieldSymbol = "symbol"
 	// FieldCycle holds the string denoting the cycle field in the database.
 	FieldCycle = "cycle"
+	// FieldResourceID holds the string denoting the resource_id field in the database.
+	FieldResourceID = "resource_id"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
 	// Table holds the table name of the cycleorder in the database.
@@ -39,6 +41,7 @@ var Columns = []string{
 	FieldProductDesc,
 	FieldSymbol,
 	FieldCycle,
+	FieldResourceID,
 	FieldCreateTime,
 }
 
@@ -61,6 +64,8 @@ var (
 	ProductDescValidator func(string) error
 	// SymbolValidator is a validator for the "symbol" field. It is called by the builders before save.
 	SymbolValidator func(string) error
+	// ResourceIDValidator is a validator for the "resource_id" field. It is called by the builders before save.
+	ResourceIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -101,6 +106,11 @@ func BySymbol(opts ...sql.OrderTermOption) OrderOption {
 // ByCycle orders the results by the cycle field.
 func ByCycle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCycle, opts...).ToFunc()
+}
+
+// ByResourceID orders the results by the resource_id field.
+func ByResourceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResourceID, opts...).ToFunc()
 }
 
 // ByCreateTime orders the results by the create_time field.
