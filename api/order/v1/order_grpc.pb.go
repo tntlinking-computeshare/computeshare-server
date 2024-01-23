@@ -31,6 +31,7 @@ const (
 	Order_CycleRenewalOpen_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalOpen"
 	Order_CycleRenewalClose_FullMethodName         = "/api.server.order.v1.Order/CycleRenewalClose"
 	Order_ManualRenew_FullMethodName               = "/api.server.order.v1.Order/ManualRenew"
+	Order_RenewDailyCheck_FullMethodName           = "/api.server.order.v1.Order/RenewDailyCheck"
 )
 
 // OrderClient is the client API for Order service.
@@ -49,6 +50,7 @@ type OrderClient interface {
 	CycleRenewalOpen(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
 	CycleRenewalClose(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
 	ManualRenew(ctx context.Context, in *ManualRenewRequest, opts ...grpc.CallOption) (*ManualRenewReply, error)
+	RenewDailyCheck(ctx context.Context, in *DailyCheckRequest, opts ...grpc.CallOption) (*DailyCheckReply, error)
 }
 
 type orderClient struct {
@@ -167,6 +169,15 @@ func (c *orderClient) ManualRenew(ctx context.Context, in *ManualRenewRequest, o
 	return out, nil
 }
 
+func (c *orderClient) RenewDailyCheck(ctx context.Context, in *DailyCheckRequest, opts ...grpc.CallOption) (*DailyCheckReply, error) {
+	out := new(DailyCheckReply)
+	err := c.cc.Invoke(ctx, Order_RenewDailyCheck_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
@@ -183,6 +194,7 @@ type OrderServer interface {
 	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error)
+	RenewDailyCheck(context.Context, *DailyCheckRequest) (*DailyCheckReply, error)
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -225,6 +237,9 @@ func (UnimplementedOrderServer) CycleRenewalClose(context.Context, *CycleRenewal
 }
 func (UnimplementedOrderServer) ManualRenew(context.Context, *ManualRenewRequest) (*ManualRenewReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ManualRenew not implemented")
+}
+func (UnimplementedOrderServer) RenewDailyCheck(context.Context, *DailyCheckRequest) (*DailyCheckReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RenewDailyCheck not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -455,6 +470,24 @@ func _Order_ManualRenew_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_RenewDailyCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DailyCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).RenewDailyCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_RenewDailyCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).RenewDailyCheck(ctx, req.(*DailyCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -509,6 +542,10 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ManualRenew",
 			Handler:    _Order_ManualRenew_Handler,
+		},
+		{
+			MethodName: "RenewDailyCheck",
+			Handler:    _Order_RenewDailyCheck_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

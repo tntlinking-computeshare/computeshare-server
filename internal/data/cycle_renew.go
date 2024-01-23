@@ -137,10 +137,10 @@ func (r *cycleRenewalRepo) QueryDailyRenew(ctx context.Context) ([]*biz.CycleRen
 
 	currentTime := time.Now()
 
-	// 将当前时间设置为当天的 0 点整
+	// 将当前时间设置为当天的 23 点整
 	zeroTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 0, 0, 0, currentTime.Location())
 
-	list, err := tx.Query().Where(cyclerenewal.AutoRenewalEQ(true), cyclerenewal.RenewalTime(zeroTime)).All(ctx)
+	list, err := tx.Query().Where(cyclerenewal.AutoRenewalEQ(true), cyclerenewal.RenewalTimeLTE(zeroTime)).All(ctx)
 
 	return lo.Map(list, r.toBiz), err
 }

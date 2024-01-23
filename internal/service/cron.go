@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
@@ -93,13 +94,46 @@ func (c *CronJob) syncContainerOverdue() {
 	}
 }
 
+func (c *CronJob) syncOverDueNotatification() {
+	// 获取当前时间
+	currentTime := time.Now()
+
+	// 计算距离下一个 23:00 的时间差
+	// 如果当前时间已经过了 23:00，则计算到明天 23:00 的时间差
+	nextTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 30, 0, 0, currentTime.Location())
+	if currentTime.After(nextTime) {
+		nextTime = nextTime.Add(24 * time.Hour)
+	}
+	timeUntilNext := nextTime.Sub(currentTime)
+	fmt.Println(timeUntilNext)
+
+	// 创建定时器
+	timer := time.NewTimer(timeUntilNext)
+
+	// 执行定时任务
+	for {
+		select {
+		case <-timer.C:
+			// 在这里执行你的定时任务逻辑
+			fmt.Println("资源定时过期校验：每日23:30")
+
+			c.computeInstanceUC.NotificationOverDue(context.Background())
+
+			// 重新计算下一个 23:00 的时间差
+			nextTime = nextTime.Add(24 * time.Hour)
+			timeUntilNext = nextTime.Sub(time.Now())
+			timer.Reset(timeUntilNext)
+		}
+	}
+}
+
 func (c *CronJob) syncRenewalOrder(db *ent.Client) {
 	// 获取当前时间
 	currentTime := time.Now()
 
 	// 计算距离下一个 23:00 的时间差
 	// 如果当前时间已经过了 23:00，则计算到明天 23:00 的时间差
-	nextTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 0, 0, 0, currentTime.Location())
+	nextTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 00, 0, 0, currentTime.Location())
 	if currentTime.After(nextTime) {
 		nextTime = nextTime.Add(24 * time.Hour)
 	}

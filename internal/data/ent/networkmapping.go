@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -36,7 +37,9 @@ type NetworkMapping struct {
 	// 用户id
 	FkUserID uuid.UUID `json:"fk_user_id,omitempty"`
 	// 删除状态
-	DeleteState  bool `json:"delete_state,omitempty"`
+	DeleteState bool `json:"delete_state,omitempty"`
+	// 创建时间
+	CreateTime   time.Time `json:"create_time,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -51,6 +54,8 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case networkmapping.FieldName, networkmapping.FieldProtocol, networkmapping.FieldGatewayIP:
 			values[i] = new(sql.NullString)
+		case networkmapping.FieldCreateTime:
+			values[i] = new(sql.NullTime)
 		case networkmapping.FieldID, networkmapping.FieldFkGatewayID, networkmapping.FieldFkComputerID, networkmapping.FieldFkUserID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -134,6 +139,12 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nm.DeleteState = value.Bool
 			}
+		case networkmapping.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				nm.CreateTime = value.Time
+			}
 		default:
 			nm.selectValues.Set(columns[i], values[i])
 		}
@@ -199,6 +210,9 @@ func (nm *NetworkMapping) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delete_state=")
 	builder.WriteString(fmt.Sprintf("%v", nm.DeleteState))
+	builder.WriteString(", ")
+	builder.WriteString("create_time=")
+	builder.WriteString(nm.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

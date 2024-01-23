@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
@@ -21,18 +22,21 @@ type OrderService struct {
 	orderUseCase            *biz.OrderUseCase
 	cycleTransactionUseCase *biz.CycleTransactionUseCase
 	cycleRenewalUseCase     *biz.CycleRenewalUseCase
+	db                      *ent.Client
 }
 
 func NewOrderService(logger log.Logger,
 	orderUseCase *biz.OrderUseCase,
 	cycleTransactionUseCase *biz.CycleTransactionUseCase,
 	cycleRenewalUseCase *biz.CycleRenewalUseCase,
+	db *ent.Client,
 ) *OrderService {
 	return &OrderService{
 		log:                     log.NewHelper(logger),
 		orderUseCase:            orderUseCase,
 		cycleTransactionUseCase: cycleTransactionUseCase,
 		cycleRenewalUseCase:     cycleRenewalUseCase,
+		db:                      db,
 	}
 }
 
@@ -304,4 +308,13 @@ func (o *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewReque
 		Code:    200,
 		Message: SUCCESS,
 	}, err
+}
+
+func (o *OrderService) RenewDailyCheck(_ context.Context, _ *pb.DailyCheckRequest) (*pb.DailyCheckReply, error) {
+	o.cycleRenewalUseCase.DailyCheck(o.db)
+
+	return &pb.DailyCheckReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, nil
 }

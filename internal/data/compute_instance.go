@@ -241,3 +241,18 @@ func (csr *computeInstanceRepo) IfNeedSyncInstanceStats(ctx context.Context, id 
 func (crs *computeInstanceRepo) instanceExKey(id uuid.UUID) string {
 	return fmt.Sprintf("instance_stats_ex_%s", id.String())
 }
+
+func (csr *computeInstanceRepo) ListByOrderDue3Day(ctx context.Context) []*biz.ComputeInstance {
+	currentTime := time.Now()
+	startTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location())
+	startTime = startTime.AddDate(0, 0, -4)
+	endTime := startTime.AddDate(0, 0, 1)
+	item, err := csr.data.getComputeInstance(ctx).Query().Where(
+		computeinstance.ExpirationTimeGT(startTime), computeinstance.ExpirationTimeLTE(endTime), computeinstance.StatusNotIn(consts.InstanceStatusExpire, consts.InstanceStatusDeleted, consts.InstanceStatusDeleting)).
+		All(ctx)
+
+	if err != nil {
+		return []*biz.ComputeInstance{}
+	}
+	return lo.Map(item, csr.toBiz)
+}

@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
 
 // NetworkMapping holds the schema definition for the NetworkMapping entity.
@@ -25,6 +26,7 @@ func (NetworkMapping) Fields() []ent.Field {
 		field.UUID("fk_computer_id", uuid.UUID{}).Comment("虚拟机实例ID"),
 		field.UUID("fk_user_id", uuid.UUID{}).Comment("用户id"),
 		field.Bool("delete_state").Default(false).Comment("删除状态"),
+		field.Time("create_time").Default(time.Now).Comment("创建时间"),
 	}
 }
 

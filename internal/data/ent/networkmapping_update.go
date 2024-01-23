@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -133,6 +134,20 @@ func (nmu *NetworkMappingUpdate) SetNillableDeleteState(b *bool) *NetworkMapping
 	return nmu
 }
 
+// SetCreateTime sets the "create_time" field.
+func (nmu *NetworkMappingUpdate) SetCreateTime(t time.Time) *NetworkMappingUpdate {
+	nmu.mutation.SetCreateTime(t)
+	return nmu
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (nmu *NetworkMappingUpdate) SetNillableCreateTime(t *time.Time) *NetworkMappingUpdate {
+	if t != nil {
+		nmu.SetCreateTime(*t)
+	}
+	return nmu
+}
+
 // Mutation returns the NetworkMappingMutation object of the builder.
 func (nmu *NetworkMappingUpdate) Mutation() *NetworkMappingMutation {
 	return nmu.mutation
@@ -230,6 +245,9 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if value, ok := nmu.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
+	}
+	if value, ok := nmu.mutation.CreateTime(); ok {
+		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, nmu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -352,6 +370,20 @@ func (nmuo *NetworkMappingUpdateOne) SetDeleteState(b bool) *NetworkMappingUpdat
 func (nmuo *NetworkMappingUpdateOne) SetNillableDeleteState(b *bool) *NetworkMappingUpdateOne {
 	if b != nil {
 		nmuo.SetDeleteState(*b)
+	}
+	return nmuo
+}
+
+// SetCreateTime sets the "create_time" field.
+func (nmuo *NetworkMappingUpdateOne) SetCreateTime(t time.Time) *NetworkMappingUpdateOne {
+	nmuo.mutation.SetCreateTime(t)
+	return nmuo
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (nmuo *NetworkMappingUpdateOne) SetNillableCreateTime(t *time.Time) *NetworkMappingUpdateOne {
+	if t != nil {
+		nmuo.SetCreateTime(*t)
 	}
 	return nmuo
 }
@@ -483,6 +515,9 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 	}
 	if value, ok := nmuo.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
+	}
+	if value, ok := nmuo.mutation.CreateTime(); ok {
+		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
 	}
 	_node = &NetworkMapping{config: nmuo.config}
 	_spec.Assign = _node.assignValues

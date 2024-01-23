@@ -31,6 +31,7 @@ const OperationOrderManualRenew = "/api.server.order.v1.Order/ManualRenew"
 const OperationOrderOrderList = "/api.server.order.v1.Order/OrderList"
 const OperationOrderRechargeCycleByAlipay = "/api.server.order.v1.Order/RechargeCycleByAlipay"
 const OperationOrderRechargeCycleByRedeemCode = "/api.server.order.v1.Order/RechargeCycleByRedeemCode"
+const OperationOrderRenewDailyCheck = "/api.server.order.v1.Order/RenewDailyCheck"
 
 type OrderHTTPServer interface {
 	AlipayPayNotify(context.Context, *AlipayPayNotifyRequest) (*AlipayPayNotifyReply, error)
@@ -45,6 +46,7 @@ type OrderHTTPServer interface {
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	RechargeCycleByAlipay(context.Context, *RechargeCycleByAlipayRequest) (*RechargeCycleByAlipayReply, error)
 	RechargeCycleByRedeemCode(context.Context, *RechargeCycleByRedeemCodeRequest) (*RechargeCycleByRedeemCodeReply, error)
+	RenewDailyCheck(context.Context, *DailyCheckRequest) (*DailyCheckReply, error)
 }
 
 func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
@@ -61,6 +63,7 @@ func RegisterOrderHTTPServer(s *http.Server, srv OrderHTTPServer) {
 	r.PUT("/v1/cycle/renewal/{id}/open", _Order_CycleRenewalOpen0_HTTP_Handler(srv))
 	r.PUT("/v1/cycle/renewal/{id}/close", _Order_CycleRenewalClose0_HTTP_Handler(srv))
 	r.POST("/v1/cycle/renewal/{id}/manual-renew", _Order_ManualRenew0_HTTP_Handler(srv))
+	r.POST("/v1/cycle/renewal/daily-check", _Order_RenewDailyCheck0_HTTP_Handler(srv))
 }
 
 func _Order_AlipayPayNotify0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
@@ -321,6 +324,28 @@ func _Order_ManualRenew0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context
 	}
 }
 
+func _Order_RenewDailyCheck0_HTTP_Handler(srv OrderHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DailyCheckRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationOrderRenewDailyCheck)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.RenewDailyCheck(ctx, req.(*DailyCheckRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DailyCheckReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type OrderHTTPClient interface {
 	AlipayPayNotify(ctx context.Context, req *AlipayPayNotifyRequest, opts ...http.CallOption) (rsp *AlipayPayNotifyReply, err error)
 	CycleRenewalClose(ctx context.Context, req *CycleRenewalGetRequest, opts ...http.CallOption) (rsp *CycleRenewalBaseReply, err error)
@@ -334,6 +359,7 @@ type OrderHTTPClient interface {
 	OrderList(ctx context.Context, req *OrderListRequest, opts ...http.CallOption) (rsp *OrderListReply, err error)
 	RechargeCycleByAlipay(ctx context.Context, req *RechargeCycleByAlipayRequest, opts ...http.CallOption) (rsp *RechargeCycleByAlipayReply, err error)
 	RechargeCycleByRedeemCode(ctx context.Context, req *RechargeCycleByRedeemCodeRequest, opts ...http.CallOption) (rsp *RechargeCycleByRedeemCodeReply, err error)
+	RenewDailyCheck(ctx context.Context, req *DailyCheckRequest, opts ...http.CallOption) (rsp *DailyCheckReply, err error)
 }
 
 type OrderHTTPClientImpl struct {
@@ -492,6 +518,19 @@ func (c *OrderHTTPClientImpl) RechargeCycleByRedeemCode(ctx context.Context, in 
 	pattern := "/v1/cycle/redeem"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationOrderRechargeCycleByRedeemCode))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *OrderHTTPClientImpl) RenewDailyCheck(ctx context.Context, in *DailyCheckRequest, opts ...http.CallOption) (*DailyCheckReply, error) {
+	var out DailyCheckReply
+	pattern := "/v1/cycle/renewal/daily-check"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationOrderRenewDailyCheck))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

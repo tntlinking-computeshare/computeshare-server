@@ -289,6 +289,10 @@ func init() {
 	networkmappingDescDeleteState := networkmappingFields[10].Descriptor()
 	// networkmapping.DefaultDeleteState holds the default value on creation for the delete_state field.
 	networkmapping.DefaultDeleteState = networkmappingDescDeleteState.Default.(bool)
+	// networkmappingDescCreateTime is the schema descriptor for create_time field.
+	networkmappingDescCreateTime := networkmappingFields[11].Descriptor()
+	// networkmapping.DefaultCreateTime holds the default value on creation for the create_time field.
+	networkmapping.DefaultCreateTime = networkmappingDescCreateTime.Default.(func() time.Time)
 	// networkmappingDescID is the schema descriptor for id field.
 	networkmappingDescID := networkmappingFields[0].Descriptor()
 	// networkmapping.DefaultID holds the default value on creation for the id field.

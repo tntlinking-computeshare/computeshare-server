@@ -3,6 +3,8 @@
 package networkmapping
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 )
@@ -32,6 +34,8 @@ const (
 	FieldFkUserID = "fk_user_id"
 	// FieldDeleteState holds the string denoting the delete_state field in the database.
 	FieldDeleteState = "delete_state"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
 	// Table holds the table name of the networkmapping in the database.
 	Table = "network_mappings"
 )
@@ -49,6 +53,7 @@ var Columns = []string{
 	FieldFkComputerID,
 	FieldFkUserID,
 	FieldDeleteState,
+	FieldCreateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -72,6 +77,8 @@ var (
 	DefaultStatus int
 	// DefaultDeleteState holds the default value on creation for the "delete_state" field.
 	DefaultDeleteState bool
+	// DefaultCreateTime holds the default value on creation for the "create_time" field.
+	DefaultCreateTime func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -132,4 +139,9 @@ func ByFkUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByDeleteState orders the results by the delete_state field.
 func ByDeleteState(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeleteState, opts...).ToFunc()
+}
+
+// ByCreateTime orders the results by the create_time field.
+func ByCreateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateTime, opts...).ToFunc()
 }

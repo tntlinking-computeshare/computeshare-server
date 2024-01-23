@@ -42,6 +42,7 @@ type ComputeInstanceRepo interface {
 	GetInstanceStats(ctx context.Context, id uuid.UUID) ([]*ComputeInstanceRds, error)
 	ListExpiration(ctx context.Context) ([]*ComputeInstance, error)
 	IfNeedSyncInstanceStats(ctx context.Context, id uuid.UUID) bool
+	ListByOrderDue3Day(ctx context.Context) []*ComputeInstance
 }
 
 type ComputeImageRepo interface {
@@ -63,6 +64,7 @@ type ComputeInstanceUsercase struct {
 	cycleTransactionRepo  CycleTransactionRepo
 	cycleRenewalRepo      CycleRenewalRepo
 	networkMappingUseCase *NetworkMappingUseCase
+	smsUseCase            *SmsUseCase
 	log                   *log.Helper
 }
 
@@ -80,6 +82,7 @@ func NewComputeInstanceUsercase(
 	cycleTransactionRepo CycleTransactionRepo,
 	cycleRenewalRepo CycleRenewalRepo,
 	networkMappingUseCase *NetworkMappingUseCase,
+	smsUseCase *SmsUseCase,
 	logger log.Logger) *ComputeInstanceUsercase {
 	return &ComputeInstanceUsercase{
 		specRepo:              specRepo,
@@ -95,6 +98,7 @@ func NewComputeInstanceUsercase(
 		cycleTransactionRepo:  cycleTransactionRepo,
 		cycleRenewalRepo:      cycleRenewalRepo,
 		networkMappingUseCase: networkMappingUseCase,
+		smsUseCase:            smsUseCase,
 		log:                   log.NewHelper(logger),
 	}
 }
@@ -192,10 +196,9 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	fmt.Println("=============")
 
 	cycle, err := uc.cycleRepo.FindByUserID(ctx, userId)
-	if err != nil {
-		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
-	}
-	if cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
+
+	if err != nil || cycle.Cycle.LessThan(decimal.NewFromFloat32(specPrice.Price)) {
+		_ = uc.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat32(specPrice.Price), userId)
 		return nil, errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 
@@ -294,6 +297,9 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	if err != nil {
 		return nil, err
 	}
+
+	// 发送扣款短信
+	_ = uc.smsUseCase.ChargingSuccess(instance.Name, decimal.NewFromFloat32(specPrice.Price), userId)
 
 	return instance, err
 }
@@ -684,5 +690,16 @@ func (uc *ComputeInstanceUsercase) Rename(ctx context.Context, id uuid.UUID, nam
 	instance.Name = name
 
 	return uc.instanceRepo.Update(ctx, id, instance)
+}
 
+func (uc *ComputeInstanceUsercase) NotificationOverDue(ctx context.Context) {
+	items := uc.instanceRepo.ListByOrderDue3Day(ctx)
+
+	for _, item := range items {
+		userId, err := uuid.Parse(item.Owner)
+		if err != nil {
+			continue
+		}
+		_ = uc.smsUseCase.ResourceBecomeDue(item.Name, userId)
+	}
 }

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -104,6 +105,20 @@ func (nmc *NetworkMappingCreate) SetNillableDeleteState(b *bool) *NetworkMapping
 	return nmc
 }
 
+// SetCreateTime sets the "create_time" field.
+func (nmc *NetworkMappingCreate) SetCreateTime(t time.Time) *NetworkMappingCreate {
+	nmc.mutation.SetCreateTime(t)
+	return nmc
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (nmc *NetworkMappingCreate) SetNillableCreateTime(t *time.Time) *NetworkMappingCreate {
+	if t != nil {
+		nmc.SetCreateTime(*t)
+	}
+	return nmc
+}
+
 // SetID sets the "id" field.
 func (nmc *NetworkMappingCreate) SetID(u uuid.UUID) *NetworkMappingCreate {
 	nmc.mutation.SetID(u)
@@ -165,6 +180,10 @@ func (nmc *NetworkMappingCreate) defaults() {
 		v := networkmapping.DefaultDeleteState
 		nmc.mutation.SetDeleteState(v)
 	}
+	if _, ok := nmc.mutation.CreateTime(); !ok {
+		v := networkmapping.DefaultCreateTime()
+		nmc.mutation.SetCreateTime(v)
+	}
 	if _, ok := nmc.mutation.ID(); !ok {
 		v := networkmapping.DefaultID()
 		nmc.mutation.SetID(v)
@@ -212,6 +231,9 @@ func (nmc *NetworkMappingCreate) check() error {
 	}
 	if _, ok := nmc.mutation.DeleteState(); !ok {
 		return &ValidationError{Name: "delete_state", err: errors.New(`ent: missing required field "NetworkMapping.delete_state"`)}
+	}
+	if _, ok := nmc.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "NetworkMapping.create_time"`)}
 	}
 	return nil
 }
@@ -287,6 +309,10 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 	if value, ok := nmc.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 		_node.DeleteState = value
+	}
+	if value, ok := nmc.mutation.CreateTime(); ok {
+		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
 	}
 	return _node, _spec
 }

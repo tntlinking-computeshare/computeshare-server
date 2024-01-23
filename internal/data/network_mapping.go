@@ -67,7 +67,7 @@ func (repo *NetworkMappingRepo) PageNetworkMappingByUserID(ctx context.Context, 
 	}
 	list, err := repo.data.getNetworkMapping(ctx).Query().
 		Where(networkmapping.FkUserID(userId), networkmapping.DeleteState(false)).
-		Order(networkmapping.ByComputerPort(sql.OrderAsc())).Offset(int(offset)).Limit(int(size)).All(ctx)
+		Order(networkmapping.ByCreateTime(sql.OrderDesc())).Offset(int(offset)).Limit(int(size)).All(ctx)
 	if err != nil {
 		return nil, 0, err
 	}

@@ -30,6 +30,7 @@ type CycleRenewalUseCase struct {
 	cycleOrderRepo       CycleOrderRepo
 	cycleTransactionRepo CycleTransactionRepo
 	computeInstanceRepo  ComputeInstanceRepo
+	smsUseCase           *SmsUseCase
 }
 
 func NewCycleRenewalUseCase(
@@ -39,6 +40,7 @@ func NewCycleRenewalUseCase(
 	cycleOrderRepo CycleOrderRepo,
 	cycleTransactionRepo CycleTransactionRepo,
 	computeInstanceRepo ComputeInstanceRepo,
+	smsUseCase *SmsUseCase,
 ) *CycleRenewalUseCase {
 	return &CycleRenewalUseCase{
 		log:                  log.NewHelper(logger),
@@ -47,6 +49,7 @@ func NewCycleRenewalUseCase(
 		cycleOrderRepo:       cycleOrderRepo,
 		cycleTransactionRepo: cycleTransactionRepo,
 		computeInstanceRepo:  computeInstanceRepo,
+		smsUseCase:           smsUseCase,
 	}
 }
 
@@ -185,12 +188,18 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 		return errors.New(400, "not_found", "续费内容不存在")
 	}
 
+	instance, err := c.computeInstanceRepo.Get(ctx, renewal.ResourceID)
+	if err != nil {
+		return err
+	}
+
 	if renewal.State == int8(consts.RenewalState_STOP) {
 		return errors.New(400, "cannot_renew", "已停服,无法续费")
 	}
 
 	cycle, err := c.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {
+		_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
 		return errors.New(400, "not_found", "Cycle不足，请先充值再试！")
 	}
 
@@ -198,6 +207,7 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	extendPrice := decimal.NewFromFloat(renewal.ExtendPrice)
 
 	if cycle.Cycle.LessThan(extendPrice) {
+		_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
 		return errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 
@@ -256,11 +266,6 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	err = c.cycleRepo.Update(ctx, cycle)
 
 	// 续费成功，延长虚拟机到期时间
-	instance, err := c.computeInstanceRepo.Get(ctx, renewal.ResourceID)
-	if err != nil {
-		return err
-	}
-
 	instance.ExpirationTime = instance.ExpirationTime.AddDate(0, 0, int(renewal.ExtendDay))
 	err = c.computeInstanceRepo.Update(ctx, instance.ID, instance)
 	if err != nil {
@@ -285,6 +290,10 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	}
 
 	err = c.repo.Update(ctx, renewalId, renewal)
+
+	// 发送扣款短信
+	_ = c.smsUseCase.ChargingSuccess(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
+
 	return err
 }
 

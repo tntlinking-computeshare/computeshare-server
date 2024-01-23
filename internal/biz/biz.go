@@ -20,4 +20,5 @@ var ProviderSet = wire.NewSet(
 	NewCycleTransactionUseCase,
 	NewCycleRenewalUseCase,
 	NewDashboardUseCase,
+	NewSmsUseCase,
 )
