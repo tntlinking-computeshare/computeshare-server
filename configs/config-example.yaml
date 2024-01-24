@@ -42,6 +42,9 @@ dispose:
     password:
     sendUrl:
     verificationCodeTemplateId:
+    deductions_but_insufficient_balance_template_id:
+    deductions_successful_template_id:
+    three_days_before_expiration_template_id:
   domain:
     vnc_host: https://vnc.computeshare.newtouch.com
     api_host: api.computeshare.newtouch.com
