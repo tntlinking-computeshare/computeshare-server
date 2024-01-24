@@ -80,6 +80,9 @@ message Dispose{
     string password = 2;
     string send_url = 3;
     string verification_code_template_id = 4;
+    string deductions_but_insufficient_balance_template_id = 5;
+    string deductions_successful_template_id = 6;
+    string three_days_before_expiration_template_id = 7;
   }
 
   message Domain {
