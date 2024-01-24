@@ -268,6 +268,63 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	return &nwp, err
 }
 
+func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, nmc *NetworkMappingCreate) (*NetworkMapping, error) {
+	nwp, err := m.repo.GetNetworkMapping(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if nwp.FkComputerID != nmc.ComputerId {
+		return nil, errors.New("暂不支持实例之间修改端口映射，请删除后新建")
+	}
+
+	nwp.Protocol = nmc.Protocol
+	nwp.ComputerPort = nmc.ComputerPort
+	nwp.Name = nmc.Name
+
+	err = m.repo.UpdateNetworkMapping(ctx, nwp)
+	if err != nil {
+		return nil, err
+	}
+
+	// 通过 computerID 得到 agentID
+	ci, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
+	if err != nil {
+		return nil, err
+	}
+
+	nptp := &queue.NatNetworkMappingTaskParamVO{
+		Id:           nwp.ID.String(),
+		Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
+		InstanceId:   nwp.FkComputerID.String(),
+		InstancePort: nwp.ComputerPort,
+		RemotePort:   nwp.GatewayPort,
+		GatewayId:    nwp.FkGatewayID.String(),
+		GatewayIp:    nwp.GatewayIP,
+		GatewayPort:  nwp.GatewayPort,
+		Protocol:     nmc.Protocol,
+	}
+
+	paramData, err := json.Marshal(nptp)
+	if err != nil {
+		return nil, err
+	}
+	param := string(paramData)
+	task := &Task{
+		AgentID: ci.AgentId,
+		//   NAT_PROXY_EDIT = 8; // nat 代理修改
+		Cmd: queue.TaskCmd_NAT_PROXY_EDIT,
+		// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+		Params: &param,
+		//   CREATED = 0; //创建
+		Status: queue.TaskStatus_CREATED,
+		// CreateTime holds the value of the "create_time" field.
+		CreateTime: time.Now(),
+	}
+	err = m.taskRepo.CreateTask(ctx, task)
+	return nwp, err
+}
+
 func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
 	m.log.WithContext(ctx).Infof("PageNetorkMapping %s %d %d", userId, page, size)
 	return m.repo.PageNetworkMappingByUserID(ctx, userId, page, size)
@@ -364,7 +421,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	return nil
 }
 
-func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {
+func (m *NetworkMappingUseCase) UpdateNetworkMappingStatus(ctx context.Context, id uuid.UUID, status int) error {
 	m.log.WithContext(ctx).Infof("UpdateNetworkMapping %s", id, status)
 	nm, err := m.repo.GetNetworkMapping(ctx, id)
 	if err != nil {

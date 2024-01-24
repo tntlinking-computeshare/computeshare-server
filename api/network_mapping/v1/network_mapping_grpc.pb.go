@@ -24,6 +24,7 @@ const (
 	NetworkMapping_NextNetworkMapping_FullMethodName   = "/api.server.network_mapping.v1.NetworkMapping/NextNetworkMapping"
 	NetworkMapping_GetNetworkMapping_FullMethodName    = "/api.server.network_mapping.v1.NetworkMapping/GetNetworkMapping"
 	NetworkMapping_DeleteNetworkMapping_FullMethodName = "/api.server.network_mapping.v1.NetworkMapping/DeleteNetworkMapping"
+	NetworkMapping_UpdateNetworkMapping_FullMethodName = "/api.server.network_mapping.v1.NetworkMapping/UpdateNetworkMapping"
 )
 
 // NetworkMappingClient is the client API for NetworkMapping service.
@@ -35,6 +36,7 @@ type NetworkMappingClient interface {
 	NextNetworkMapping(ctx context.Context, in *NextNetworkMappingRequest, opts ...grpc.CallOption) (*NextNetworkMappingReply, error)
 	GetNetworkMapping(ctx context.Context, in *GetNetworkMappingRequest, opts ...grpc.CallOption) (*GetNetworkMappingReply, error)
 	DeleteNetworkMapping(ctx context.Context, in *DeleteNetworkMappingRequest, opts ...grpc.CallOption) (*DeleteNetworkMappingReply, error)
+	UpdateNetworkMapping(ctx context.Context, in *UpdateNetworkMappingRequest, opts ...grpc.CallOption) (*UpdateNetworkMappingReply, error)
 }
 
 type networkMappingClient struct {
@@ -90,6 +92,15 @@ func (c *networkMappingClient) DeleteNetworkMapping(ctx context.Context, in *Del
 	return out, nil
 }
 
+func (c *networkMappingClient) UpdateNetworkMapping(ctx context.Context, in *UpdateNetworkMappingRequest, opts ...grpc.CallOption) (*UpdateNetworkMappingReply, error) {
+	out := new(UpdateNetworkMappingReply)
+	err := c.cc.Invoke(ctx, NetworkMapping_UpdateNetworkMapping_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NetworkMappingServer is the server API for NetworkMapping service.
 // All implementations must embed UnimplementedNetworkMappingServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type NetworkMappingServer interface {
 	NextNetworkMapping(context.Context, *NextNetworkMappingRequest) (*NextNetworkMappingReply, error)
 	GetNetworkMapping(context.Context, *GetNetworkMappingRequest) (*GetNetworkMappingReply, error)
 	DeleteNetworkMapping(context.Context, *DeleteNetworkMappingRequest) (*DeleteNetworkMappingReply, error)
+	UpdateNetworkMapping(context.Context, *UpdateNetworkMappingRequest) (*UpdateNetworkMappingReply, error)
 	mustEmbedUnimplementedNetworkMappingServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedNetworkMappingServer) GetNetworkMapping(context.Context, *Get
 }
 func (UnimplementedNetworkMappingServer) DeleteNetworkMapping(context.Context, *DeleteNetworkMappingRequest) (*DeleteNetworkMappingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteNetworkMapping not implemented")
+}
+func (UnimplementedNetworkMappingServer) UpdateNetworkMapping(context.Context, *UpdateNetworkMappingRequest) (*UpdateNetworkMappingReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateNetworkMapping not implemented")
 }
 func (UnimplementedNetworkMappingServer) mustEmbedUnimplementedNetworkMappingServer() {}
 
@@ -224,6 +239,24 @@ func _NetworkMapping_DeleteNetworkMapping_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NetworkMapping_UpdateNetworkMapping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNetworkMappingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NetworkMappingServer).UpdateNetworkMapping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NetworkMapping_UpdateNetworkMapping_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NetworkMappingServer).UpdateNetworkMapping(ctx, req.(*UpdateNetworkMappingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NetworkMapping_ServiceDesc is the grpc.ServiceDesc for NetworkMapping service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var NetworkMapping_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteNetworkMapping",
 			Handler:    _NetworkMapping_DeleteNetworkMapping_Handler,
+		},
+		{
+			MethodName: "UpdateNetworkMapping",
+			Handler:    _NetworkMapping_UpdateNetworkMapping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

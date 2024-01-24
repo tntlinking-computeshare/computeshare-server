@@ -42,3 +42,5 @@ deploy_abing.sh
 configs/config.yaml
 
 configs/alipay/*
+
+openapi.yaml
