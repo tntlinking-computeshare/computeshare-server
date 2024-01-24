@@ -303,7 +303,7 @@ func (o *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewReque
 
 	userId := claim.GetUserId()
 
-	err = o.cycleRenewalUseCase.ManualRenew(ctx, renewalId, userId)
+	err = o.cycleRenewalUseCase.ManualRenew(ctx, renewalId, userId, false)
 	return &pb.ManualRenewReply{
 		Code:    200,
 		Message: SUCCESS,

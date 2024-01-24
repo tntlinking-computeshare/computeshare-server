@@ -240,6 +240,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		GatewayId:    nwp.FkGatewayID.String(),
 		GatewayIp:    g.IP,
 		GatewayPort:  g.Port,
+		Protocol:     protocol,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {
