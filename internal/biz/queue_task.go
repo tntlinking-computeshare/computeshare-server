@@ -47,6 +47,7 @@ func (task *Task) GetTaskParam() (any, error) {
 		err := json.Unmarshal([]byte(*task.Params), &vo)
 		return &vo, err
 	case queue.TaskCmd_NAT_PROXY_CREATE, queue.TaskCmd_NAT_PROXY_DELETE,
+		queue.TaskCmd_NAT_PROXY_EDIT,
 		queue.TaskCmd_NAT_VISITOR_CREATE, queue.TaskCmd_NAT_VISITOR_DELETE:
 		var vo queue.NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(*task.Params), &vo)
@@ -188,6 +189,7 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			}
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_PROXY_DELETE,
+			queue.TaskCmd_NAT_PROXY_EDIT,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
 			queue.TaskCmd_NAT_VISITOR_DELETE:
 			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
@@ -270,7 +272,8 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			}
 			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
 		case queue.TaskCmd_NAT_PROXY_CREATE,
-			queue.TaskCmd_NAT_VISITOR_CREATE:
+			queue.TaskCmd_NAT_VISITOR_CREATE,
+			queue.TaskCmd_NAT_PROXY_EDIT:
 
 			id, err := uuid.Parse(param.(*queue.NatNetworkMappingTaskParamVO).Id)
 			if err != nil {
