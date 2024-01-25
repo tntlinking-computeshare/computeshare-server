@@ -82,6 +82,14 @@ func (repo *NetworkMappingRepo) CountNetworkMappingByUserId(ctx context.Context,
 	return count, err
 }
 
+func (repo *NetworkMappingRepo) CountNetworkMappingByUserIdAndInstanceId(ctx context.Context, userId uuid.UUID, instanceId uuid.UUID) (int, error) {
+	count, err := repo.data.getNetworkMapping(ctx).Query().
+		Select(networkmapping.FieldID).
+		Where(networkmapping.FkUserID(userId), networkmapping.FkComputerID(instanceId), networkmapping.DeleteState(false)).
+		Count(ctx)
+	return count, err
+}
+
 func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
 	return repo.data.getNetworkMapping(ctx).UpdateOneID(entity.ID).
 		SetName(entity.Name).
