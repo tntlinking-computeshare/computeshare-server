@@ -42,6 +42,8 @@ func (c *CronJob) StartJob() {
 	go c.syncContainerOverdue()
 	// 每日同步续费管理
 	go c.syncRenewalOrder(c.db)
+	// 虚拟机到期提醒
+	go c.syncOverDueNotatification()
 
 }
 

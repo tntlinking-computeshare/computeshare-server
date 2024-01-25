@@ -59,7 +59,7 @@ type NetworkMappingRepo interface {
 	DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
 	CountNetworkMappingByUserIdAndInstanceId(ctx context.Context, userId uuid.UUID, instanceId uuid.UUID) (int, error)
-	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
+	UpdateNetworkMapping(ctx context.Context, id uuid.UUID, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
 	GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*NetworkMapping, error)
@@ -291,7 +291,7 @@ func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uui
 		nwp.ComputerPort = nmc.ComputerPort
 		nwp.FkComputerID = nmc.ComputerId
 
-		err = m.repo.UpdateNetworkMapping(ctx, nwp)
+		err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
 		if err != nil {
 			return nil, err
 		}
@@ -337,7 +337,7 @@ func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uui
 		nwp.ComputerPort = nmc.ComputerPort
 		nwp.FkComputerID = nmc.ComputerId
 
-		err = m.repo.UpdateNetworkMapping(ctx, nwp)
+		err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
 		if err != nil {
 			return nil, err
 		}
@@ -495,7 +495,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	}
 
 	nwp.DeleteState = true
-	err = m.repo.UpdateNetworkMapping(ctx, nwp)
+	err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
 
 	if err != nil {
 		return err
@@ -511,7 +511,7 @@ func (m *NetworkMappingUseCase) UpdateNetworkMappingStatus(ctx context.Context, 
 		return err
 	}
 	nm.Status = status
-	return m.repo.UpdateNetworkMapping(ctx, nm)
+	return m.repo.UpdateNetworkMapping(ctx, id, nm)
 }
 
 func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId uuid.UUID) (*NextNetworkMappingInfo, error) {

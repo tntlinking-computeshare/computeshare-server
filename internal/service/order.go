@@ -22,6 +22,7 @@ type OrderService struct {
 	orderUseCase            *biz.OrderUseCase
 	cycleTransactionUseCase *biz.CycleTransactionUseCase
 	cycleRenewalUseCase     *biz.CycleRenewalUseCase
+	computeInstanceUseCase  *biz.ComputeInstanceUsercase
 	db                      *ent.Client
 }
 
@@ -29,6 +30,7 @@ func NewOrderService(logger log.Logger,
 	orderUseCase *biz.OrderUseCase,
 	cycleTransactionUseCase *biz.CycleTransactionUseCase,
 	cycleRenewalUseCase *biz.CycleRenewalUseCase,
+	computeInstanceUseCase *biz.ComputeInstanceUsercase,
 	db *ent.Client,
 ) *OrderService {
 	return &OrderService{
@@ -36,6 +38,7 @@ func NewOrderService(logger log.Logger,
 		orderUseCase:            orderUseCase,
 		cycleTransactionUseCase: cycleTransactionUseCase,
 		cycleRenewalUseCase:     cycleRenewalUseCase,
+		computeInstanceUseCase:  computeInstanceUseCase,
 		db:                      db,
 	}
 }
@@ -312,6 +315,8 @@ func (o *OrderService) ManualRenew(ctx context.Context, req *pb.ManualRenewReque
 
 func (o *OrderService) RenewDailyCheck(_ context.Context, _ *pb.DailyCheckRequest) (*pb.DailyCheckReply, error) {
 	o.cycleRenewalUseCase.DailyCheck(o.db)
+
+	o.computeInstanceUseCase.NotificationOverDue(context.Background())
 
 	return &pb.DailyCheckReply{
 		Code:    200,

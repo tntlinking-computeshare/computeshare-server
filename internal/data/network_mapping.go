@@ -90,8 +90,8 @@ func (repo *NetworkMappingRepo) CountNetworkMappingByUserIdAndInstanceId(ctx con
 	return count, err
 }
 
-func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
-	return repo.data.getNetworkMapping(ctx).UpdateOneID(entity.ID).
+func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, entity *biz.NetworkMapping) error {
+	return repo.data.getNetworkMapping(ctx).UpdateOneID(id).
 		SetName(entity.Name).
 		SetProtocol(entity.Protocol).
 		SetComputerPort(entity.ComputerPort).
