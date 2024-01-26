@@ -128,6 +128,7 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		Status:               item.Status,
 		UserId:               item.FkUserID,
 		GatewayIP:            item.GatewayIP,
+		DeleteState:          item.DeleteState,
 	}
 }
 
