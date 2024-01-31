@@ -58,8 +58,8 @@ type NetworkMappingRepo interface {
 	GetNetworkMapping(ctx context.Context, id uuid.UUID) (*NetworkMapping, error)
 	DeleteNetworkMapping(ctx context.Context, id uuid.UUID) error
 	PageNetworkMappingByUserID(ctx context.Context, computerId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error)
-	CountNetworkMappingByUserId(ctx context.Context, userId uuid.UUID) (int, error)
-	UpdateNetworkMapping(ctx context.Context, entity *NetworkMapping) error
+	CountNetworkMappingByUserIdAndInstanceId(ctx context.Context, userId uuid.UUID, instanceId uuid.UUID) (int, error)
+	UpdateNetworkMapping(ctx context.Context, id uuid.UUID, entity *NetworkMapping) error
 	QueryGatewayIdByAgentId(ctx context.Context, agentId uuid.UUID) (uuid.UUID, error)
 	QueryGatewayIdByComputeIds(ctx context.Context, computeInstanceIds []uuid.UUID) (uuid.UUID, error)
 	GetNetworkMappingByPublicIpdAndPort(ctx context.Context, ip string, port int32) (*NetworkMapping, error)
@@ -146,7 +146,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, errors.New("unauthorize")
 	}
 	// 查看当前用户有无达到限额
-	countNetworkMapping, err := m.repo.CountNetworkMappingByUserId(ctx, claim.GetUserId())
+	countNetworkMapping, err := m.repo.CountNetworkMappingByUserIdAndInstanceId(ctx, claim.GetUserId(), nmc.ComputerId)
 	if err != nil {
 		return nil, errors.New("count networkMapping fail")
 	}
@@ -155,7 +155,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		return nil, errors.New("userResourceLimit not found")
 	}
 	if countNetworkMapping >= int(userResourceLimit.MaxNetworkMapping) {
-		return nil, errors.New("端口映射达到用户最大限制")
+		return nil, errors.New("端口映射达到配额最大限制")
 	}
 
 	computeInstance, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
@@ -240,6 +240,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 		GatewayId:    nwp.FkGatewayID.String(),
 		GatewayIp:    g.IP,
 		GatewayPort:  g.Port,
+		Protocol:     protocol,
 	}
 	paramData, err := json.Marshal(nptp)
 	if err != nil {
@@ -265,6 +266,146 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	gp.IsUse = true
 	err = m.gatewayPortRepo.Update(ctx, gp)
 	return &nwp, err
+}
+
+func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, nmc *NetworkMappingCreate) (*NetworkMapping, error) {
+	nwp, err := m.repo.GetNetworkMapping(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	// 通过 computerID 得到 agentID
+	newComputeInstance, err := m.computeInstanceRepo.Get(ctx, nmc.ComputerId)
+	if err != nil {
+		return nil, err
+	}
+
+	if newComputeInstance.Status != consts.InstanceStatusRunning {
+		return nil, errors.New("请在虚拟机运行中创建端口映射")
+	}
+
+	// 在原虚拟机上进行端口映射修改
+	if nwp.FkComputerID == nmc.ComputerId {
+		nwp.Protocol = nmc.Protocol
+		nwp.Name = nmc.Name
+		nwp.ComputerPort = nmc.ComputerPort
+		nwp.FkComputerID = nmc.ComputerId
+
+		err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
+		if err != nil {
+			return nil, err
+		}
+
+		nptp := &queue.NatNetworkMappingTaskParamVO{
+			Id:           nwp.ID.String(),
+			Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
+			InstanceId:   nwp.FkComputerID.String(),
+			InstancePort: nwp.ComputerPort,
+			RemotePort:   nwp.GatewayPort,
+			GatewayId:    nwp.FkGatewayID.String(),
+			GatewayIp:    nwp.GatewayIP,
+			GatewayPort:  nwp.GatewayPort,
+			Protocol:     nmc.Protocol,
+		}
+
+		paramData, err := json.Marshal(nptp)
+		if err != nil {
+			return nil, err
+		}
+		param := string(paramData)
+		task := &Task{
+			AgentID: newComputeInstance.AgentId,
+			//   NAT_PROXY_EDIT = 8; // nat 代理修改
+			Cmd: queue.TaskCmd_NAT_PROXY_EDIT,
+			// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+			Params: &param,
+			//   CREATED = 0; //创建
+			Status: queue.TaskStatus_CREATED,
+			// CreateTime holds the value of the "create_time" field.
+			CreateTime: time.Now(),
+		}
+
+		err = m.taskRepo.CreateTask(ctx, task)
+		return nwp, err
+	} else { // 端口映射调整，从原来虚拟机变更到新虚拟机
+		previousComputeInstance, err := m.computeInstanceRepo.Get(ctx, nwp.FkComputerID)
+		if err != nil {
+			return nil, err
+		}
+		nwp.Protocol = nmc.Protocol
+		nwp.Name = nmc.Name
+		nwp.ComputerPort = nmc.ComputerPort
+		nwp.FkComputerID = nmc.ComputerId
+
+		err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
+		if err != nil {
+			return nil, err
+		}
+
+		nptp := &queue.NatNetworkMappingTaskParamVO{
+			Id:           nwp.ID.String(),
+			Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
+			InstanceId:   previousComputeInstance.ID.String(),
+			InstancePort: nwp.ComputerPort,
+			RemotePort:   nwp.GatewayPort,
+			GatewayId:    nwp.FkGatewayID.String(),
+			GatewayIp:    nwp.GatewayIP,
+			GatewayPort:  nwp.GatewayPort,
+		}
+		paramData, err := json.Marshal(nptp)
+		if err != nil {
+			return nil, err
+		}
+		param := string(paramData)
+		task := &Task{
+			AgentID: previousComputeInstance.AgentId,
+			Cmd:     queue.TaskCmd_NAT_PROXY_DELETE,
+			// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+			Params: &param,
+			//   CREATED = 0; //创建
+			Status: queue.TaskStatus_CREATED,
+			// CreateTime holds the value of the "create_time" field.
+			CreateTime: time.Now(),
+		}
+		err = m.taskRepo.CreateTask(ctx, task)
+		if err != nil {
+			return nil, err
+		}
+
+		nptp = &queue.NatNetworkMappingTaskParamVO{
+			Id:           nwp.ID.String(),
+			Name:         fmt.Sprintf("NetworkMapping_%s", nwp.ID.String()),
+			InstanceId:   newComputeInstance.ID.String(),
+			InstancePort: nwp.ComputerPort,
+			RemotePort:   nwp.GatewayPort,
+			GatewayId:    nwp.FkGatewayID.String(),
+			GatewayIp:    nwp.GatewayIP,
+			GatewayPort:  nwp.GatewayPort,
+			Protocol:     nmc.Protocol,
+		}
+		paramData, err = json.Marshal(nptp)
+		if err != nil {
+			return nil, err
+		}
+		param = string(paramData)
+		task = &Task{
+			AgentID: newComputeInstance.AgentId,
+			//   NAT_PROXY_CREATE = 6; // nat 代理创建
+			Cmd: queue.TaskCmd_NAT_PROXY_CREATE,
+			// 执行参数，nat 网络类型对应 NatProxyCreateVO, 虚拟机类型对应 ComputeInstanceTaskParamVO
+			Params: &param,
+			//   CREATED = 0; //创建
+			Status: queue.TaskStatus_CREATED,
+			// CreateTime holds the value of the "create_time" field.
+			CreateTime: time.Now().Add(time.Second * 3),
+		}
+		err = m.taskRepo.CreateTask(ctx, task)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return nwp, err
 }
 
 func (m *NetworkMappingUseCase) PageNetworkMapping(ctx context.Context, userId uuid.UUID, page int32, size int32) ([]*NetworkMapping, int32, error) {
@@ -354,7 +495,7 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	}
 
 	nwp.DeleteState = true
-	err = m.repo.UpdateNetworkMapping(ctx, nwp)
+	err = m.repo.UpdateNetworkMapping(ctx, id, nwp)
 
 	if err != nil {
 		return err
@@ -363,14 +504,14 @@ func (m *NetworkMappingUseCase) DeleteNetworkMapping(ctx context.Context, id uui
 	return nil
 }
 
-func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, status int) error {
+func (m *NetworkMappingUseCase) UpdateNetworkMappingStatus(ctx context.Context, id uuid.UUID, status int) error {
 	m.log.WithContext(ctx).Infof("UpdateNetworkMapping %s", id, status)
 	nm, err := m.repo.GetNetworkMapping(ctx, id)
 	if err != nil {
 		return err
 	}
 	nm.Status = status
-	return m.repo.UpdateNetworkMapping(ctx, nm)
+	return m.repo.UpdateNetworkMapping(ctx, id, nm)
 }
 
 func (m *NetworkMappingUseCase) NextNetworkMapping(ctx context.Context, computeInstanceId uuid.UUID) (*NextNetworkMappingInfo, error) {

@@ -36,6 +36,12 @@ service NetworkMapping {
       delete: "/v1/network-mappings/{id}",
     };
   };
+  rpc UpdateNetworkMapping (UpdateNetworkMappingRequest) returns (UpdateNetworkMappingReply) {
+    option (google.api.http) = {
+      put: "/v1/network-mappings/{id}",
+      body: "*",
+    };
+  }
 }
 
 message CreateNetworkMappingRequest {
@@ -47,6 +53,20 @@ message CreateNetworkMappingRequest {
 message CreateNetworkMappingReply {
   int32 code = 1;
 	string message = 2;
+  NetworkMappingVO network_mapping = 3;
+}
+
+message UpdateNetworkMappingRequest {
+  string id = 1;
+  string name = 2;
+  string protocol = 3;
+  string computer_id = 4;
+  int32 computer_port = 5;
+}
+
+message UpdateNetworkMappingReply {
+  int32 code = 1;
+  string message = 2;
   NetworkMappingVO network_mapping = 3;
 }
 

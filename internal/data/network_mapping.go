@@ -82,8 +82,16 @@ func (repo *NetworkMappingRepo) CountNetworkMappingByUserId(ctx context.Context,
 	return count, err
 }
 
-func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, entity *biz.NetworkMapping) error {
-	return repo.data.getNetworkMapping(ctx).UpdateOneID(entity.ID).
+func (repo *NetworkMappingRepo) CountNetworkMappingByUserIdAndInstanceId(ctx context.Context, userId uuid.UUID, instanceId uuid.UUID) (int, error) {
+	count, err := repo.data.getNetworkMapping(ctx).Query().
+		Select(networkmapping.FieldID).
+		Where(networkmapping.FkUserID(userId), networkmapping.FkComputerID(instanceId), networkmapping.DeleteState(false)).
+		Count(ctx)
+	return count, err
+}
+
+func (repo *NetworkMappingRepo) UpdateNetworkMapping(ctx context.Context, id uuid.UUID, entity *biz.NetworkMapping) error {
+	return repo.data.getNetworkMapping(ctx).UpdateOneID(id).
 		SetName(entity.Name).
 		SetProtocol(entity.Protocol).
 		SetComputerPort(entity.ComputerPort).
@@ -120,6 +128,7 @@ func (repo *NetworkMappingRepo) toBiz(item *ent.NetworkMapping, _ int) *biz.Netw
 		Status:               item.Status,
 		UserId:               item.FkUserID,
 		GatewayIP:            item.GatewayIP,
+		DeleteState:          item.DeleteState,
 	}
 }
 

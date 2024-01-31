@@ -180,7 +180,7 @@ func (c *CycleRenewalUseCase) Detail(ctx context.Context, renewalId uuid.UUID) (
 	return detail, nil
 }
 
-func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UUID, userId uuid.UUID) error {
+func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UUID, userId uuid.UUID, notify bool) error {
 
 	renewal, err := c.repo.GetById(ctx, renewalId)
 
@@ -199,7 +199,9 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 
 	cycle, err := c.cycleRepo.FindByUserID(ctx, userId)
 	if err != nil {
-		_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
+		if notify {
+			_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
+		}
 		return errors.New(400, "not_found", "Cycle不足，请先充值再试！")
 	}
 
@@ -207,7 +209,9 @@ func (c *CycleRenewalUseCase) ManualRenew(ctx context.Context, renewalId uuid.UU
 	extendPrice := decimal.NewFromFloat(renewal.ExtendPrice)
 
 	if cycle.Cycle.LessThan(extendPrice) {
-		_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
+		if notify {
+			_ = c.smsUseCase.InsufficientBalance(instance.Name, decimal.NewFromFloat(renewal.ExtendPrice), userId)
+		}
 		return errors.New(400, "insufficient balance", "Cycle不足，请先充值再试！")
 	}
 
@@ -310,7 +314,7 @@ func (c *CycleRenewalUseCase) DailyCheck(db *ent.Client) {
 		// 开启事物
 		tx, _ := db.Tx(ctx)
 		tctx := context.WithValue(ctx, "tx", tx)
-		err := c.ManualRenew(tctx, renewal.ID, renewal.FkUserID)
+		err := c.ManualRenew(tctx, renewal.ID, renewal.FkUserID, true)
 		if err != nil {
 			// 如何回滚，续费失败，延长续费时间
 			_ = tx.Rollback()

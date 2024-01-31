@@ -245,7 +245,7 @@ func (crs *computeInstanceRepo) instanceExKey(id uuid.UUID) string {
 func (csr *computeInstanceRepo) ListByOrderDue3Day(ctx context.Context) []*biz.ComputeInstance {
 	currentTime := time.Now()
 	startTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location())
-	startTime = startTime.AddDate(0, 0, -4)
+	startTime = startTime.AddDate(0, 0, 3)
 	endTime := startTime.AddDate(0, 0, 1)
 	item, err := csr.data.getComputeInstance(ctx).Query().Where(
 		computeinstance.ExpirationTimeGT(startTime), computeinstance.ExpirationTimeLTE(endTime), computeinstance.StatusNotIn(consts.InstanceStatusExpire, consts.InstanceStatusDeleted, consts.InstanceStatusDeleting)).

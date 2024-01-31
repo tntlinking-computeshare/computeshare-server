@@ -146,3 +146,27 @@ func (s *NetworkMappingService) NextNetworkMapping(ctx context.Context, req *pb.
 		},
 	}, err
 }
+
+func (s *NetworkMappingService) UpdateNetworkMapping(ctx context.Context, req *pb.UpdateNetworkMappingRequest) (*pb.UpdateNetworkMappingReply, error) {
+	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	computerId, err := uuid.Parse(req.ComputerId)
+	if err != nil {
+		return nil, err
+	}
+
+	networkmapping, err := s.nm.UpdateNetworkMapping(ctx, id, &biz.NetworkMappingCreate{
+		Name:         req.Name,
+		Protocol:     req.Protocol,
+		ComputerId:   computerId,
+		ComputerPort: req.ComputerPort,
+	})
+
+	return &pb.UpdateNetworkMappingReply{
+		Code:           200,
+		Message:        SUCCESS,
+		NetworkMapping: s.toReply(ctx, networkmapping, 0),
+	}, nil
+}

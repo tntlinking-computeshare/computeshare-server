@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         && apt-get autoremove -y && apt-get autoclean -y
 
 COPY --from=builder /src/bin /app
-COPY openapi.yaml /app/
 ENV TZ=Asia/Shanghai
 
 WORKDIR /app

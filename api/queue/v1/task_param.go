@@ -14,6 +14,7 @@ func (task *QueueTaskVo) GetTaskParam() (any, error) {
 		return &vo, err
 
 	case TaskCmd_NAT_PROXY_CREATE, TaskCmd_NAT_PROXY_DELETE,
+		TaskCmd_NAT_PROXY_EDIT,
 		TaskCmd_NAT_VISITOR_CREATE, TaskCmd_NAT_VISITOR_DELETE:
 		var vo NatNetworkMappingTaskParamVO
 		err := json.Unmarshal([]byte(task.GetParams()), &vo)

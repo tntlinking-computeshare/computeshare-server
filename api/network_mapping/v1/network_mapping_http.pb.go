@@ -24,6 +24,7 @@ const OperationNetworkMappingDeleteNetworkMapping = "/api.server.network_mapping
 const OperationNetworkMappingGetNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/GetNetworkMapping"
 const OperationNetworkMappingNextNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/NextNetworkMapping"
 const OperationNetworkMappingPageNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/PageNetworkMapping"
+const OperationNetworkMappingUpdateNetworkMapping = "/api.server.network_mapping.v1.NetworkMapping/UpdateNetworkMapping"
 
 type NetworkMappingHTTPServer interface {
 	CreateNetworkMapping(context.Context, *CreateNetworkMappingRequest) (*CreateNetworkMappingReply, error)
@@ -31,6 +32,7 @@ type NetworkMappingHTTPServer interface {
 	GetNetworkMapping(context.Context, *GetNetworkMappingRequest) (*GetNetworkMappingReply, error)
 	NextNetworkMapping(context.Context, *NextNetworkMappingRequest) (*NextNetworkMappingReply, error)
 	PageNetworkMapping(context.Context, *PageNetworkMappingRequest) (*PageNetworkMappingReply, error)
+	UpdateNetworkMapping(context.Context, *UpdateNetworkMappingRequest) (*UpdateNetworkMappingReply, error)
 }
 
 func RegisterNetworkMappingHTTPServer(s *http.Server, srv NetworkMappingHTTPServer) {
@@ -40,6 +42,7 @@ func RegisterNetworkMappingHTTPServer(s *http.Server, srv NetworkMappingHTTPServ
 	r.GET("/v1/network-mappings/next", _NetworkMapping_NextNetworkMapping0_HTTP_Handler(srv))
 	r.GET("/v1/network-mappings/{id}", _NetworkMapping_GetNetworkMapping0_HTTP_Handler(srv))
 	r.DELETE("/v1/network-mappings/{id}", _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv))
+	r.PUT("/v1/network-mappings/{id}", _NetworkMapping_UpdateNetworkMapping0_HTTP_Handler(srv))
 }
 
 func _NetworkMapping_CreateNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
@@ -146,12 +149,38 @@ func _NetworkMapping_DeleteNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPSe
 	}
 }
 
+func _NetworkMapping_UpdateNetworkMapping0_HTTP_Handler(srv NetworkMappingHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateNetworkMappingRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationNetworkMappingUpdateNetworkMapping)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateNetworkMapping(ctx, req.(*UpdateNetworkMappingRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateNetworkMappingReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type NetworkMappingHTTPClient interface {
 	CreateNetworkMapping(ctx context.Context, req *CreateNetworkMappingRequest, opts ...http.CallOption) (rsp *CreateNetworkMappingReply, err error)
 	DeleteNetworkMapping(ctx context.Context, req *DeleteNetworkMappingRequest, opts ...http.CallOption) (rsp *DeleteNetworkMappingReply, err error)
 	GetNetworkMapping(ctx context.Context, req *GetNetworkMappingRequest, opts ...http.CallOption) (rsp *GetNetworkMappingReply, err error)
 	NextNetworkMapping(ctx context.Context, req *NextNetworkMappingRequest, opts ...http.CallOption) (rsp *NextNetworkMappingReply, err error)
 	PageNetworkMapping(ctx context.Context, req *PageNetworkMappingRequest, opts ...http.CallOption) (rsp *PageNetworkMappingReply, err error)
+	UpdateNetworkMapping(ctx context.Context, req *UpdateNetworkMappingRequest, opts ...http.CallOption) (rsp *UpdateNetworkMappingReply, err error)
 }
 
 type NetworkMappingHTTPClientImpl struct {
@@ -221,6 +250,19 @@ func (c *NetworkMappingHTTPClientImpl) PageNetworkMapping(ctx context.Context, i
 	opts = append(opts, http.Operation(OperationNetworkMappingPageNetworkMapping))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *NetworkMappingHTTPClientImpl) UpdateNetworkMapping(ctx context.Context, in *UpdateNetworkMappingRequest, opts ...http.CallOption) (*UpdateNetworkMappingReply, error) {
+	var out UpdateNetworkMappingReply
+	pattern := "/v1/network-mappings/{id}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationNetworkMappingUpdateNetworkMapping))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

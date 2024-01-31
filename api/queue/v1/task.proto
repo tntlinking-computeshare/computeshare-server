@@ -18,10 +18,11 @@ enum TaskCmd //枚举消息类型
   VM_RECREATE = 5;  // 虚拟机重置
   NAT_PROXY_CREATE = 6; // nat 代理创建
   NAT_PROXY_DELETE = 7; // nat 代理删除
-  NAT_VISITOR_CREATE = 8; // nat 访问创建
-  NAT_VISITOR_DELETE = 9; // nat 访问删除
-  STORAGE_CREATE = 10; // 存储节点创建（虚拟机)
-  STORAGE_DELETE = 11; // 存储节点删除（虚拟机）
+  NAT_PROXY_EDIT = 8;   // nat 编辑
+  NAT_VISITOR_CREATE = 9; // nat 访问创建
+  NAT_VISITOR_DELETE = 10; // nat 访问删除
+  STORAGE_CREATE = 11; // 存储节点创建（虚拟机)
+  STORAGE_DELETE = 12; // 存储节点删除（虚拟机）
   PING = 99; // ping
 }
 
@@ -89,6 +90,7 @@ message NatNetworkMappingTaskParamVO {
   string gatewayId = 6;
   string gatewayIp = 7;
   int32 gatewayPort = 8;
+  string protocol = 9;
 }
 
 message ComputeInstanceTaskParamVO {
