@@ -1,0 +1,399 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  namespace: computeshare-2024
+  labels:
+    app: mysql
+spec:
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: mysql
+    - name: config
+      configMap:
+        name: mysql-config
+        defaultMode: 420
+    - name: localtime
+      hostPath:
+        path: /etc/localtime
+        type: File
+    - name: kube-api-access-5nztt
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+        defaultMode: 420
+  containers:
+    - name: mysql
+      image: mysql:8.0.19
+      ports:
+        - containerPort: 3306
+          protocol: TCP
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: Aline123456
+        - name: TZ
+          value: Asia/Shanghai
+      resources:
+        limits:
+          cpu: '2'
+          memory: 1Gi
+        requests:
+          cpu: '1'
+          memory: 512Mi
+      volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        - name: config
+          mountPath: /etc/mysql/conf.d/my.cnf
+          subPath: my.cnf
+        - name: localtime
+          readOnly: true
+          mountPath: /etc/localtime
+        - name: kube-api-access-5nztt
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      livenessProbe:
+        exec:
+          command:
+            - mysqladmin
+            - '-uroot'
+            - '-p'
+            - ping
+        initialDelaySeconds: 30
+        timeoutSeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+      readinessProbe:
+        exec:
+          command:
+            - mysqladmin
+            - '-uroot'
+            - '-p'
+            - ping
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  dnsPolicy: ClusterFirst
+  serviceAccountName: default
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: computeshare-2024
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: computeshare-2024
+  labels:
+    app: mysql
+data:
+  my.cnf: >-
+    [client]
+
+    default-character-set=utf8mb4
+
+    [mysql]
+
+    default-character-set=utf8mb4
+
+    [mysqld] 
+
+    max_connections = 2000
+
+    secure_file_priv=/var/lib/mysql
+
+    sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-root-ca.crt
+  namespace: computeshare-2024
+data:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIDBTCCAe2gAwIBAgIIdruWvvNIlOIwDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+    AxMKa3ViZXJuZXRlczAeFw0yMzExMjQwMjI1MDNaFw0zMzExMjEwMjMwMDNaMBUx
+    EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQCsyDB0PMvWUa+o2wU4oNVG3+JPKiV7rHwj7rQpaqrfTLoRSYLugT9Hvkxg
+    xsYX1THL1AzCNZQBzHNu6Dkkr07YpP1HpcKP94B+vBmR8tpSFOiQJMCqwNeV8qNx
+    WlBLH4brUY8Z86ji38nni2KlKscPgxkBEPiMS9wZujYxsKkpOo1CQ/31QQK7Eu59
+    sl+2fPT5yK16Jua5J0FT9gcsk1gMO+5mVrL7n5VWxQAtBXqy53x2ve/EoBgphOW7
+    8bT4OIRnryFwMgZ8840nnJd5uR44rq1A2Lh69059zibwyWPWDyW/Lzm0jYfZpHwc
+    wcyo4Hoqu6b1ECrDuHwTE7aUKBiLAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+    BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBRS+CTY+uYs4rNnwF7zj0TMPYMFNDAV
+    BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQBDmV7IOEsY
+    juIgA7VyBKhi6uAsf/gLVLuugSbM3i47uKkeqBrzm9qxBdmE+KS3f77I+55Hnlnb
+    HNKyvTK6AKZQVAnrSzNG67HkzRifjYE53zTzEs0WTYkWrtvHdHsTqXNP3CaKeuv8
+    zXs2bdhH1O8Rcze8oUOlv+jsHJAbXjRcpCMRAv4ExHA0btBg2EadXpydzZUtTRa5
+    hTpPN9lENeMTV7Umxhv2rd6bHnCCnZE+HkZV1XydgiyhPQFn0GFP3lCdVxHw5r71
+    Cbobja3HyPsO0NooM1o1+WVOY3xgskBqpy8Tp1SIr6soeKaaRUy/BGgtLexytLUO
+    xu2eGOZP70M5
+    -----END CERTIFICATE-----
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql
+  namespace: computeshare-2024
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+  volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kubo-data
+  namespace: computeshare-2024
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn
+  volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docker-tls
+  namespace: computeshare-2024
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Mi
+  storageClassName: longhorn
+  volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: computeshare-client-data
+  namespace: computeshare-2024
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: longhorn
+  volumeMode: Filesystem
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: computeshare-2024
+  labels:
+    app: mysql
+spec:
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 31252
+  selector:
+    app: mysql
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: computeshare-2024
+  labels:
+    app: redis
+spec:
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  selector:
+    app: redis
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seaweedfs-s3-service
+  namespace: computeshare-2024
+spec:
+  type: ExternalName
+  externalName: 192.168.0.2
+  ports:
+    - protocol: TCP
+      port: 8333
+      targetPort: 8333
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: seaweedfs-s3-service
+  namespace: computeshare-2024
+subsets:
+  - addresses:
+      - ip: 192.168.0.2
+    ports:
+      - port: 8333
+        protocol: TCP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: seaweedfs-s3-ingress
+  namespace: computeshare-2024
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - s3.test-computeshare.tntlinking.com
+      secretName: s3-computeshare-tntlinking-tls
+  rules:
+    - host: s3.test-computeshare.tntlinking.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: seaweedfs-s3-service
+                port:
+                  number: 8333
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seaweedfs-web-service
+  namespace: computeshare-2024
+spec:
+  type: ExternalName
+  externalName: 192.168.0.2
+  ports:
+    - protocol: TCP
+      port: 9333
+      targetPort: 9333
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: seaweedfs-web-service
+  namespace: computeshare-2024
+subsets:
+  - addresses:
+      - ip: 192.168.0.2
+    ports:
+      - port: 9333
+        protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: seaweedfs-web-ingress
+  namespace: computeshare-2024
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - s3-web.test-computeshare.tntlinking.com
+      secretName: s3-web-computeshare-tntlinking-tls
+  rules:
+    - host: s3-web.test-computeshare.tntlinking.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: seaweedfs-s3-service
+                port:
+                  number: 9333

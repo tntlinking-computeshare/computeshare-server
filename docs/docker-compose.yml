@@ -1,0 +1,87 @@
+version: '3.9'
+
+services:
+  master:
+    image: chrislusf/seaweedfs:3.58 # use a remote image
+    ports:
+      - 9333:9333
+      - 19333:19333
+      - 9324:9324
+    environment:
+      TZ: Asia/Shanghai
+    command: "master -ip=master -ip.bind=0.0.0.0 -metricsPort=9324 -defaultReplication=001  -volumeSizeLimitMB=5"
+    volumes:
+      - ./master_data:/data
+    restart: unless-stopped
+
+  volume:
+    image: chrislusf/seaweedfs:3.58 # use a remote image
+    ports:
+      - 38001:38001
+      - 38002:38002
+      - 9325:9325
+    environment:
+      TZ: Asia/Shanghai
+    command: 'volume -mserver="master:9333" -ip.bind=0.0.0.0 -port=38001  --ip=192.168.0.2 --port.grpc=38002  --publicUrl="192.168.0.2:38001" -port.public=38001 -metricsPort=9325'
+    volumes:
+      - ./base_volume_data:/data
+    restart: unless-stopped
+    depends_on:
+      - master
+
+  filer:
+    image: chrislusf/seaweedfs:3.58 # use a remote image
+    ports:
+      - 8888:8888
+      - 18888:18888
+      - 9326:9326
+    environment:
+      TZ: Asia/Shanghai
+    command: 'filer -master="master:9333" -ip.bind=0.0.0.0 -metricsPort=9326 -encryptVolumeData -metricsPort=9326'
+    volumes:
+      - ./filter_data:/data
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    depends_on:
+      - master
+      - volume
+  s3:
+    image: chrislusf/seaweedfs:3.58 # use a remote image
+    ports:
+      - 8333:8333
+      - 9327:9327
+    environment:
+      TZ: Asia/Shanghai
+    command: 's3 -filer="filer:8888" -ip.bind=0.0.0.0 -metricsPort=9327'
+    volumes:
+      - ./s3_data:/data
+    restart: unless-stopped
+    depends_on:
+      - master
+      - volume
+      - filer
+
+  webdav:
+    image: chrislusf/seaweedfs:3.58 # use a remote image
+    ports:
+      - 7333:7333
+    environment:
+      TZ: Asia/Shanghai
+    command: 'webdav -filer="filer:8888"'
+    volumes:
+      - ./webdav_data:/data
+    restart: unless-stopped
+    depends_on:
+      - master
+      - volume
+      - filer
+#  prometheus:
+#    image: prom/prometheus:v2.21.0
+#    ports:
+#      - 9000:9090
+#    volumes:
+#      - ./prometheus:/etc/prometheus
+#    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+#    depends_on:
+#      - s3

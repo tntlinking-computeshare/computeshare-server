@@ -2,44 +2,34 @@
 
 ## 基础环境安装
 
-### kubernetes 
+### kubernetes
 
 #### kubernetes 安装
+[kubernetes傻瓜式安装](https://github.com/abing258/kubernetes-study/blob/main/Linux-master-node-installation.md)
 
-#### helm 安装
-
-#### nginx ingress 安装
-
+### 基础环境安装
 ```shell
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-helm install ingress-nginx ingress-nginx/ingress-nginx --set controller.hostPort.enabled=true --namespace ingress-nginx --create-namespace
-```
+kubectl apply -f base-service.yml
 
-#### cert-manager 安装
+##启动成功后创建数据库
+create DATABASE computeshare;
 
-```shell
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-helm install   cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --version v1.13.2   --set installCRDs=true
-```
-
-#### longhorn 安装
-
-```shell
-helm repo add longhorn https://charts.longhorn.io
-helm repo update
-helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.5.3
+## 初始化数据 init.sql
 ```
 
 ### seaweedfs 中心
+1. 主节点的运行
+```shell
+##使用项目中的docker-compose.yml 修改ip
+docker compose up -d 
+
+```
 
 ## computeshare server 服务安装
 
 
 ## computeshare client 安装
 
-### 物理机基础环境
 
 ### computeshare client 客户端
 
