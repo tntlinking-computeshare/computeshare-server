@@ -67,6 +67,10 @@ func (s *DomainBindingService) DeleteDomainBinding(ctx context.Context, req *pb.
 	if err != nil {
 		return nil, err
 	}
+	err = s.CheckPermission(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
 	err = s.domainBindingUseCase.DeleteDomainBinding(ctx, id, user.GetUserId())
 	if err != nil {
 		return nil, err
@@ -76,6 +80,29 @@ func (s *DomainBindingService) DeleteDomainBinding(ctx context.Context, req *pb.
 		Message: SUCCESS,
 	}, nil
 }
+
+func (s *DomainBindingService) CheckPermission(ctx context.Context, domainBindingID string) error {
+
+	id, err := uuid.Parse(domainBindingID)
+	if err != nil {
+		return err
+	}
+	domainBindIng, err := s.domainBindingUseCase.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return errors.New("unauthorized")
+	}
+
+	userId := claim.GetUserId()
+	if domainBindIng.UserID == userId {
+		return nil
+	}
+	return errors.New("no permission")
+}
+
 func (s *DomainBindingService) GetDomainBinding(_ context.Context, _ *pb.GetDomainBindingRequest) (*pb.GetDomainBindingReply, error) {
 
 	return &pb.GetDomainBindingReply{}, nil

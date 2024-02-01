@@ -96,8 +96,37 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 		},
 	}, err
 }
+
+func (s *ComputeInstanceService) CheckPermission(ctx context.Context, instanceId string) error {
+	id, err := uuid.Parse(instanceId)
+	if err != nil {
+		return err
+	}
+
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return errors.New("unauthorized")
+	}
+
+	userId := claim.UserID
+	instance, err := s.uc.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	if instance.Owner == userId {
+		return nil
+	}
+	return errors.New("no permission")
+}
+
 func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInstanceRequest) (*pb.CommonReply, error) {
+
 	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -109,6 +138,10 @@ func (s *ComputeInstanceService) Delete(ctx context.Context, req *pb.DeleteInsta
 }
 func (s *ComputeInstanceService) Get(ctx context.Context, req *pb.GetInstanceRequest) (*pb.GetInstanceReply, error) {
 	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -143,6 +176,10 @@ func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetIn
 	if err != nil {
 		return nil, err
 	}
+	err = s.CheckPermission(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
 	err = s.uc.Stop(ctx, id)
 	return &pb.CommonReply{
 		Code:    200,
@@ -151,6 +188,10 @@ func (s *ComputeInstanceService) StopInstance(ctx context.Context, req *pb.GetIn
 }
 func (s *ComputeInstanceService) StartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
 	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -193,11 +234,19 @@ func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, id stri
 	if err != nil {
 		return "", err
 	}
+	err = s.CheckPermission(ctx, id)
+	if err != nil {
+		return "", err
+	}
 	return s.uc.GetVncConsole(ctx, instanceId, userId)
 }
 
 func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.GetInstanceRequest) (*pb.CommonReply, error) {
 	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -214,6 +263,10 @@ func (s *ComputeInstanceService) RestartInstance(ctx context.Context, req *pb.Ge
 
 func (s *ComputeInstanceService) ReCreateInstance(ctx context.Context, req *pb.RecreateInstanceRequest) (*pb.CommonReply, error) {
 	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -243,6 +296,10 @@ func (s *ComputeInstanceService) GetInstanceVncURL(ctx context.Context, req *pb.
 
 func (s *ComputeInstanceService) RenameInstance(ctx context.Context, req *pb.RenameInstanceRequest) (*pb.CommonReply, error) {
 	instanceId, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}

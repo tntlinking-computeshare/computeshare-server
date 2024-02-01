@@ -364,3 +364,7 @@ func (uc *DomainBindingUseCase) toBiz(item *DomainBinding, _ int) *pb.DomainBind
 		CreateTime:        item.CreateTime.UnixMilli(),
 	}
 }
+
+func (uc *DomainBindingUseCase) Get(ctx context.Context, id uuid.UUID) (*DomainBinding, error) {
+	return uc.domainBindingRepository.Get(ctx, id)
+}
