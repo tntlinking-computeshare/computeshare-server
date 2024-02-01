@@ -47,7 +47,9 @@ type ComputeInstance struct {
 	VncPort int32 `json:"vnc_port,omitempty"`
 	// 初始化的docker容器
 	DockerCompose string `json:"docker_compose,omitempty"`
-	selectValues  sql.SelectValues
+	// 创建时间
+	CreateTime   time.Time `json:"create_time,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -59,7 +61,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
 			values[i] = new(sql.NullString)
-		case computeinstance.FieldExpirationTime:
+		case computeinstance.FieldExpirationTime, computeinstance.FieldCreateTime:
 			values[i] = new(sql.NullTime)
 		case computeinstance.FieldID:
 			values[i] = new(uuid.UUID)
@@ -168,6 +170,12 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.DockerCompose = value.String
 			}
+		case computeinstance.FieldCreateTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field create_time", values[i])
+			} else if value.Valid {
+				ci.CreateTime = value.Time
+			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
 		}
@@ -245,6 +253,9 @@ func (ci *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("docker_compose=")
 	builder.WriteString(ci.DockerCompose)
+	builder.WriteString(", ")
+	builder.WriteString("create_time=")
+	builder.WriteString(ci.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

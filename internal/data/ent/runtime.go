@@ -85,6 +85,10 @@ func init() {
 	computeinstanceDescImage := computeinstanceFields[5].Descriptor()
 	// computeinstance.ImageValidator is a validator for the "image" field. It is called by the builders before save.
 	computeinstance.ImageValidator = computeinstanceDescImage.Validators[0].(func(string) error)
+	// computeinstanceDescCreateTime is the schema descriptor for create_time field.
+	computeinstanceDescCreateTime := computeinstanceFields[15].Descriptor()
+	// computeinstance.DefaultCreateTime holds the default value on creation for the create_time field.
+	computeinstance.DefaultCreateTime = computeinstanceDescCreateTime.Default.(func() time.Time)
 	// computeinstanceDescID is the schema descriptor for id field.
 	computeinstanceDescID := computeinstanceFields[0].Descriptor()
 	// computeinstance.DefaultID holds the default value on creation for the id field.

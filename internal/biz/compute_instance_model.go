@@ -66,6 +66,8 @@ type ComputeInstance struct {
 	VncPort       int32                 `json:"vnc_port,omitempty"`
 	DockerCompose string                `json:"docker_compose"`
 	Stats         []*ComputeInstanceRds `json:"stats"`
+
+	CreateTime time.Time `json:"create_time"`
 }
 
 func (i *ComputeInstance) GetCore() int64 {

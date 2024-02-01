@@ -113,6 +113,7 @@ var (
 		{Name: "vnc_ip", Type: field.TypeString},
 		{Name: "vnc_port", Type: field.TypeInt32},
 		{Name: "docker_compose", Type: field.TypeString, Size: 2147483647},
+		{Name: "create_time", Type: field.TypeTime},
 	}
 	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
 	ComputeInstancesTable = &schema.Table{

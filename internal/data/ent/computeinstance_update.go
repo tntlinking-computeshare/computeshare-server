@@ -190,6 +190,20 @@ func (ciu *ComputeInstanceUpdate) SetDockerCompose(s string) *ComputeInstanceUpd
 	return ciu
 }
 
+// SetCreateTime sets the "create_time" field.
+func (ciu *ComputeInstanceUpdate) SetCreateTime(t time.Time) *ComputeInstanceUpdate {
+	ciu.mutation.SetCreateTime(t)
+	return ciu
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (ciu *ComputeInstanceUpdate) SetNillableCreateTime(t *time.Time) *ComputeInstanceUpdate {
+	if t != nil {
+		ciu.SetCreateTime(*t)
+	}
+	return ciu
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (ciu *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
 	return ciu.mutation
@@ -319,6 +333,9 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := ciu.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
+	}
+	if value, ok := ciu.mutation.CreateTime(); ok {
+		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -501,6 +518,20 @@ func (ciuo *ComputeInstanceUpdateOne) SetDockerCompose(s string) *ComputeInstanc
 	return ciuo
 }
 
+// SetCreateTime sets the "create_time" field.
+func (ciuo *ComputeInstanceUpdateOne) SetCreateTime(t time.Time) *ComputeInstanceUpdateOne {
+	ciuo.mutation.SetCreateTime(t)
+	return ciuo
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (ciuo *ComputeInstanceUpdateOne) SetNillableCreateTime(t *time.Time) *ComputeInstanceUpdateOne {
+	if t != nil {
+		ciuo.SetCreateTime(*t)
+	}
+	return ciuo
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (ciuo *ComputeInstanceUpdateOne) Mutation() *ComputeInstanceMutation {
 	return ciuo.mutation
@@ -660,6 +691,9 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 	}
 	if value, ok := ciuo.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
+	}
+	if value, ok := ciuo.mutation.CreateTime(); ok {
+		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 	}
 	_node = &ComputeInstance{config: ciuo.config}
 	_spec.Assign = _node.assignValues

@@ -180,6 +180,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		VncIP:          gw.InternalIP,
 		VncPort:        gp.Port,
 		DockerCompose:  dockerComposeDecode,
+		CreateTime:     time.Now(),
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)

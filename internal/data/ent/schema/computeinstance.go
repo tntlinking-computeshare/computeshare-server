@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"time"
 )
 
 // ComputeInstance holds the schema definition for the ComputeInstance entity.
@@ -31,6 +32,7 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.String("vnc_ip").Comment("vnc 内网链接ip"),
 		field.Int32("vnc_port").Comment("vnc 内网链接端口号"),
 		field.Text("docker_compose").Comment("初始化的docker容器"),
+		field.Time("create_time").Default(time.Now).Comment("创建时间"),
 	}
 }
 

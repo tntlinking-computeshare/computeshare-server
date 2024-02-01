@@ -127,6 +127,11 @@ func DockerCompose(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldDockerCompose, v))
 }
 
+// CreateTime applies equality check predicate on the "create_time" field. It's identical to CreateTimeEQ.
+func CreateTime(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldCreateTime, v))
+}
+
 // OwnerEQ applies the EQ predicate on the "owner" field.
 func OwnerEQ(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldOwner, v))
@@ -929,6 +934,46 @@ func DockerComposeEqualFold(v string) predicate.ComputeInstance {
 // DockerComposeContainsFold applies the ContainsFold predicate on the "docker_compose" field.
 func DockerComposeContainsFold(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldContainsFold(FieldDockerCompose, v))
+}
+
+// CreateTimeEQ applies the EQ predicate on the "create_time" field.
+func CreateTimeEQ(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldCreateTime, v))
+}
+
+// CreateTimeNEQ applies the NEQ predicate on the "create_time" field.
+func CreateTimeNEQ(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldCreateTime, v))
+}
+
+// CreateTimeIn applies the In predicate on the "create_time" field.
+func CreateTimeIn(vs ...time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeNotIn applies the NotIn predicate on the "create_time" field.
+func CreateTimeNotIn(vs ...time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldCreateTime, vs...))
+}
+
+// CreateTimeGT applies the GT predicate on the "create_time" field.
+func CreateTimeGT(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldCreateTime, v))
+}
+
+// CreateTimeGTE applies the GTE predicate on the "create_time" field.
+func CreateTimeGTE(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldCreateTime, v))
+}
+
+// CreateTimeLT applies the LT predicate on the "create_time" field.
+func CreateTimeLT(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldCreateTime, v))
+}
+
+// CreateTimeLTE applies the LTE predicate on the "create_time" field.
+func CreateTimeLTE(v time.Time) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldCreateTime, v))
 }
 
 // And groups predicates with the AND operator between them.

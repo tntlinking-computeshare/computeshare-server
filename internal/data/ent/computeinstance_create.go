@@ -130,6 +130,20 @@ func (cic *ComputeInstanceCreate) SetDockerCompose(s string) *ComputeInstanceCre
 	return cic
 }
 
+// SetCreateTime sets the "create_time" field.
+func (cic *ComputeInstanceCreate) SetCreateTime(t time.Time) *ComputeInstanceCreate {
+	cic.mutation.SetCreateTime(t)
+	return cic
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (cic *ComputeInstanceCreate) SetNillableCreateTime(t *time.Time) *ComputeInstanceCreate {
+	if t != nil {
+		cic.SetCreateTime(*t)
+	}
+	return cic
+}
+
 // SetID sets the "id" field.
 func (cic *ComputeInstanceCreate) SetID(u uuid.UUID) *ComputeInstanceCreate {
 	cic.mutation.SetID(u)
@@ -179,6 +193,10 @@ func (cic *ComputeInstanceCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cic *ComputeInstanceCreate) defaults() {
+	if _, ok := cic.mutation.CreateTime(); !ok {
+		v := computeinstance.DefaultCreateTime()
+		cic.mutation.SetCreateTime(v)
+	}
 	if _, ok := cic.mutation.ID(); !ok {
 		v := computeinstance.DefaultID()
 		cic.mutation.SetID(v)
@@ -234,6 +252,9 @@ func (cic *ComputeInstanceCreate) check() error {
 	}
 	if _, ok := cic.mutation.DockerCompose(); !ok {
 		return &ValidationError{Name: "docker_compose", err: errors.New(`ent: missing required field "ComputeInstance.docker_compose"`)}
+	}
+	if _, ok := cic.mutation.CreateTime(); !ok {
+		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "ComputeInstance.create_time"`)}
 	}
 	return nil
 }
@@ -325,6 +346,10 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 	if value, ok := cic.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 		_node.DockerCompose = value
+	}
+	if value, ok := cic.mutation.CreateTime(); ok {
+		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
+		_node.CreateTime = value
 	}
 	return _node, _spec
 }
