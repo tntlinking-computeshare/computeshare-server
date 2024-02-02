@@ -103,8 +103,8 @@ message GatewaysListReply {
 		string name = 1;
 		string ip = 2;
 		int32 totalPort = 3;
-		int32 useIntranetPort = 4;
-		int32 usePublicPort = 5;
+		string useIntranetPort = 4;
+		string usePublicPort = 5;
 	}
 }
 

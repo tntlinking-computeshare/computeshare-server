@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"strconv"
 )
 
 type DashboardUseCase struct {
@@ -78,7 +79,7 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 	if err != nil {
 		return nil, err
 	}
-	gatewayPortByIsUsed, err := d.gatewayPortRepo.CountGatewayPortByIsUsed(ctx, true)
+	gatewayPortByIsUsed, err := d.gatewayPortRepo.CountIntranetGatewayPortByIsUsed(ctx, true)
 	if err != nil {
 		return nil, err
 	}
@@ -86,9 +87,19 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 	if err != nil {
 		return nil, err
 	}
+	publicGatewayPorts, err := d.gatewayPortRepo.CountPublicGatewayPort(ctx)
+	if err != nil {
+		return nil, err
+	}
+	intranetGatewayPorts, err := d.gatewayPortRepo.CountIntranetGatewayPort(ctx)
+	if err != nil {
+		return nil, err
+	}
 	gatewayPortMap := make(map[uuid.UUID]int32)
 	gatewayPortByIsUsedMap := make(map[uuid.UUID]int32)
 	publicGatewayPortByIsUsedMap := make(map[uuid.UUID]int32)
+	publicGatewayPortMap := make(map[uuid.UUID]int32)
+	intranetGatewayPortMap := make(map[uuid.UUID]int32)
 	for _, gatewayPort := range gatewayPorts {
 		gatewayPortMap[gatewayPort.FkGatewayID] = gatewayPort.Count
 	}
@@ -98,13 +109,19 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 	for _, publicGatewayPortCount := range publicGatewayPortByIsUsed {
 		publicGatewayPortByIsUsedMap[publicGatewayPortCount.FkGatewayID] = publicGatewayPortCount.Count
 	}
+	for _, publicGatewayPort := range publicGatewayPorts {
+		publicGatewayPortMap[publicGatewayPort.FkGatewayID] = publicGatewayPort.Count
+	}
+	for _, intranetGatewayPort := range intranetGatewayPorts {
+		intranetGatewayPortMap[intranetGatewayPort.FkGatewayID] = intranetGatewayPort.Count
+	}
 	for _, gateway := range gatewayList {
 		var gatewaysList pb.GatewaysListReply_GatewaysList
 		gatewaysList.Ip = gateway.IP
 		gatewaysList.Name = gateway.Name
 		gatewaysList.TotalPort = gatewayPortMap[gateway.ID]
-		gatewaysList.UseIntranetPort = gatewayPortByIsUsedMap[gateway.ID]
-		gatewaysList.UsePublicPort = publicGatewayPortByIsUsedMap[gateway.ID]
+		gatewaysList.UseIntranetPort = string(gatewayPortByIsUsedMap[gateway.ID]) + " / " + string(intranetGatewayPortMap[gateway.ID])
+		gatewaysList.UsePublicPort = string(publicGatewayPortByIsUsedMap[gateway.ID]) + "/" + string(publicGatewayPortMap[gateway.ID])
 		list = append(list, &gatewaysList)
 	}
 	return list, nil
@@ -125,7 +142,7 @@ func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCou
 	if err != nil {
 		return nil, err
 	}
-	cyclesCount.GrantVouchersTotal = string(rune(countCycleRedeemCodeTotal))
+	cyclesCount.GrantVouchersTotal = strconv.Itoa(countCycleRedeemCodeTotal)
 	cyclesCount.RecoveryTotal = countCycleUseTotal.StringFixed(2)
 	countRechargeCycle, err := d.cycleRechargeRepo.CountRechargeCycle(ctx)
 	if err != nil {

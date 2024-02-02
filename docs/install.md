@@ -15,6 +15,7 @@ kubectl apply -f base-service.yml
 create DATABASE computeshare;
 
 ## 初始化数据 init.sql
+## 运行项目中的 TestAddGatewaysPorts 生成端口数据
 ```
 
 ### seaweedfs 中心
@@ -26,7 +27,10 @@ docker compose up -d
 ```
 
 ## computeshare server 服务安装
-
+```shell
+## 按需要修改端口设置和域名配置
+kubectl apply -f computeshare-server.yml
+```
 
 ## computeshare client 安装
 

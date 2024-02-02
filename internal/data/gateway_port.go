@@ -34,11 +34,32 @@ func (repo *GatewayPortRepo) CountPublicGatewayPortByIsUsed(ctx context.Context,
 	return counts, err
 }
 
-func (repo *GatewayPortRepo) CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
+func (repo *GatewayPortRepo) CountIntranetGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*biz.GatewayPortCount, error) {
 	var counts []*biz.GatewayPortCount
 	err := repo.data.getGatewayPort(ctx).Query().
 		Select(gatewayport.FieldFkGatewayID).
-		Where(gatewayport.IsUse(isUsed)).
+		Where(gatewayport.IsUse(isUsed), gatewayport.IsPublic(false)).
+		GroupBy(gatewayport.FieldFkGatewayID).
+		Aggregate(ent.Count()).
+		Scan(ctx, &counts)
+	return counts, err
+}
+
+func (repo *GatewayPortRepo) CountPublicGatewayPort(ctx context.Context) ([]*biz.GatewayPortCount, error) {
+	var counts []*biz.GatewayPortCount
+	err := repo.data.getGatewayPort(ctx).Query().
+		Select(gatewayport.FieldFkGatewayID).
+		Where(gatewayport.IsPublic(true)).
+		GroupBy(gatewayport.FieldFkGatewayID).
+		Aggregate(ent.Count()).
+		Scan(ctx, &counts)
+	return counts, err
+}
+func (repo *GatewayPortRepo) CountIntranetGatewayPort(ctx context.Context) ([]*biz.GatewayPortCount, error) {
+	var counts []*biz.GatewayPortCount
+	err := repo.data.getGatewayPort(ctx).Query().
+		Select(gatewayport.FieldFkGatewayID).
+		Where(gatewayport.IsPublic(false)).
 		GroupBy(gatewayport.FieldFkGatewayID).
 		Aggregate(ent.Count()).
 		Scan(ctx, &counts)

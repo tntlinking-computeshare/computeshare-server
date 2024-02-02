@@ -138,14 +138,6 @@ data:
       grpc:
         addr: 0.0.0.0:9000
         timeout: 10s
-      p2p:
-        port: 4002
-        swarm_key: |
-          /key/swarm/psk/1.0.0/
-          /base16/
-          55158d9b6b7e5a8e41aa8b34dd057ff1880e38348613d27ae194ad7c5b9670d7
-        bootstraps:
-          - "/ip4/34.139.126.73/tcp/4001/p2p/12D3KooWRsKNAgbGaQkVbbzg5xEw2FtvPRF7MiYtmRvFPYegNVnu"
     data:
       database:
         driver: mysql
@@ -365,7 +357,7 @@ spec:
     spec:
       containers:
         - name: computeshare-frontend
-          image: hamstershare/computeshare-frontend:20240124180445
+          image: hamstershare/computeshare-frontend:20240201171358
           ports:
             - containerPort: 80
               protocol: TCP
@@ -473,6 +465,9 @@ spec:
       containers:
         - name: computeshare-dashboard
           image: hamstershare/computeshare-dashboard:20240117172441
+          env:
+            - name: NEXT_PUBLIC_BASE_API
+              value: https://api.test-computeshare.newtouch.com
           ports:
             - containerPort: 3000
               protocol: TCP

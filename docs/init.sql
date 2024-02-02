@@ -20,3 +20,5 @@ INSERT INTO computeshare.cycle_redeem_codes (id, fk_user_id, redeem_code, cycle,
 INSERT INTO computeshare.cycle_redeem_codes (id, fk_user_id, redeem_code, cycle, state, create_time, use_time) VALUES ('cab9ba0e-a237-a002-9c07-f1109b2ea9f8', null, 'i5XfBYlx', 500000.00, 0, '2024-01-31 17:01:29', null);
 INSERT INTO computeshare.cycle_redeem_codes (id, fk_user_id, redeem_code, cycle, state, create_time, use_time) VALUES ('d793b92e-3b0a-b665-88a9-f6e5ff3763a5', null, 'G37pO5kk', 500000.00, 0, '2024-01-31 17:01:29', null);
 INSERT INTO computeshare.cycle_redeem_codes (id, fk_user_id, redeem_code, cycle, state, create_time, use_time) VALUES ('e76d9f0b-b6dd-ce3c-a5cb-a8b06ae09f47', null, 'EQDgZyTx', 500000.00, 0, '2024-01-31 17:01:29', null);
+
+INSERT INTO computeshare.gateways (id, name, ip, port, internal_ip) VALUES ('db3b9c89-2eea-4ee0-a567-1f5f88d334f2', 'G1TEST', '61.172.179.6', 37000, '192.168.0.2');

@@ -98,7 +98,9 @@ type GatewayPortCount struct {
 
 type GatewayPortRepo interface {
 	CountPublicGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
-	CountGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
+	CountIntranetGatewayPortByIsUsed(ctx context.Context, isUsed bool) ([]*GatewayPortCount, error)
+	CountPublicGatewayPort(ctx context.Context) ([]*GatewayPortCount, error)
+	CountIntranetGatewayPort(ctx context.Context) ([]*GatewayPortCount, error)
 	CountGatewayPort(ctx context.Context) ([]*GatewayPortCount, error)
 	GetGatewayPortFirstByNotUsed(ctx context.Context, gatewayID uuid.UUID) (*GatewayPort, error)
 	Update(ctx context.Context, gp *GatewayPort) error
