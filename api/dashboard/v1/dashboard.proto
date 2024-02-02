@@ -139,9 +139,10 @@ message LastComputeInstancesCountReply {
 	string message = 2;
 	repeated ComputeInstances data = 3;
 	message ComputeInstances {
-		string name = 1;
-		string specs = 2;
-		string owner = 3;
-		int64 createTime = 4;
+		string id = 1;
+		string name = 2;
+		string specs = 3;
+		string owner = 4;
+		int64 createTime = 5;
 	}
 }

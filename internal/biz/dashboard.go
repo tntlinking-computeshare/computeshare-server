@@ -126,8 +126,8 @@ func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.Gateway
 		gatewaysList.Ip = gateway.IP
 		gatewaysList.Name = gateway.Name
 		gatewaysList.TotalPort = gatewayPortMap[gateway.ID]
-		gatewaysList.UseIntranetPort = string(gatewayPortByIsUsedMap[gateway.ID]) + " / " + string(intranetGatewayPortMap[gateway.ID])
-		gatewaysList.UsePublicPort = string(publicGatewayPortByIsUsedMap[gateway.ID]) + "/" + string(publicGatewayPortMap[gateway.ID])
+		gatewaysList.UseIntranetPort = strconv.Itoa(int(gatewayPortByIsUsedMap[gateway.ID])) + " / " + strconv.Itoa(int(intranetGatewayPortMap[gateway.ID]))
+		gatewaysList.UsePublicPort = strconv.Itoa(int(publicGatewayPortByIsUsedMap[gateway.ID])) + "/" + strconv.Itoa(int(publicGatewayPortMap[gateway.ID]))
 		list = append(list, &gatewaysList)
 	}
 	return list, nil
@@ -182,6 +182,7 @@ func (d *DashboardUseCase) LastComputeInstancesCount(ctx context.Context) (count
 	}
 	for _, instance := range computeInstances {
 		var reply pb.LastComputeInstancesCountReply_ComputeInstances
+		reply.Id = instance.ID.String()
 		reply.Name = instance.Name
 		reply.Specs = strconv.Itoa(instance.Core) + "C" + strconv.Itoa(instance.Memory) + "G"
 		reply.Owner = idNameMap[instance.Owner]
