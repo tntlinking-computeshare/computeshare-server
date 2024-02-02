@@ -258,3 +258,11 @@ func (csr *computeInstanceRepo) ListByOrderDue3Day(ctx context.Context) []*biz.C
 	}
 	return lo.Map(item, csr.toBiz)
 }
+
+func (csr *computeInstanceRepo) ListLastTop10(ctx context.Context) []*biz.ComputeInstance {
+	list, err := csr.data.getComputeInstance(ctx).Query().Order(computeinstance.ByCreateTime(sql.OrderDesc())).Limit(10).All(ctx)
+	if err != nil {
+		return []*biz.ComputeInstance{}
+	}
+	return lo.Map(list, csr.toBiz)
+}

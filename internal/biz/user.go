@@ -60,6 +60,7 @@ func (u *User) GetFullTelephone() string {
 
 type UserRepo interface {
 	ListUser(ctx context.Context, entity User) ([]*User, error)
+	ListUserByIds(ctx context.Context, ids []uuid.UUID) ([]*User, error)
 	GetUser(ctx context.Context, id uuid.UUID) (*User, error)
 	CreateUser(ctx context.Context, user *User) error
 	UpdateUser(ctx context.Context, id uuid.UUID, user *User) error

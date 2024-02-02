@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationDashboardCyclesCount = "/api.server.dashboard.v1.Dashboard/CyclesCount"
 const OperationDashboardGatewaysCount = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
 const OperationDashboardGatewaysList = "/api.server.dashboard.v1.Dashboard/GatewaysList"
+const OperationDashboardLastComputeInstancesCount = "/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"
 const OperationDashboardProvidersCount = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
 const OperationDashboardProvidersList = "/api.server.dashboard.v1.Dashboard/ProvidersList"
 const OperationDashboardSandboxCount = "/api.server.dashboard.v1.Dashboard/SandboxCount"
@@ -34,6 +35,8 @@ type DashboardHTTPServer interface {
 	GatewaysCount(context.Context, *GatewaysCountRequest) (*GatewaysCountReply, error)
 	// GatewaysListGateway列表 总端口数 已用端口数内网 外网
 	GatewaysList(context.Context, *GatewaysListRequest) (*GatewaysListReply, error)
+	// LastComputeInstancesCount最新创建虚拟机
+	LastComputeInstancesCount(context.Context, *LastComputeInstancesCountRequest) (*LastComputeInstancesCountReply, error)
 	// ProvidersCountProvider总数
 	ProvidersCount(context.Context, *ProvidersCountRequest) (*ProvidersCountReply, error)
 	// ProvidersListProvider列表 类型，规格，是否存活
@@ -53,6 +56,7 @@ func RegisterDashboardHTTPServer(s *http.Server, srv DashboardHTTPServer) {
 	r.GET("/v1/dashboard/gateways/list", _Dashboard_GatewaysList0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/cycles/count", _Dashboard_CyclesCount0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/sandbox/count", _Dashboard_SandboxCount0_HTTP_Handler(srv))
+	r.GET("/v1/dashboard/instances/count", _Dashboard_LastComputeInstancesCount0_HTTP_Handler(srv))
 }
 
 func _Dashboard_ProvidersCount0_HTTP_Handler(srv DashboardHTTPServer) func(ctx http.Context) error {
@@ -188,10 +192,30 @@ func _Dashboard_SandboxCount0_HTTP_Handler(srv DashboardHTTPServer) func(ctx htt
 	}
 }
 
+func _Dashboard_LastComputeInstancesCount0_HTTP_Handler(srv DashboardHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in LastComputeInstancesCountRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDashboardLastComputeInstancesCount)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.LastComputeInstancesCount(ctx, req.(*LastComputeInstancesCountRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*LastComputeInstancesCountReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type DashboardHTTPClient interface {
 	CyclesCount(ctx context.Context, req *CyclesCountRequest, opts ...http.CallOption) (rsp *CyclesCountReply, err error)
 	GatewaysCount(ctx context.Context, req *GatewaysCountRequest, opts ...http.CallOption) (rsp *GatewaysCountReply, err error)
 	GatewaysList(ctx context.Context, req *GatewaysListRequest, opts ...http.CallOption) (rsp *GatewaysListReply, err error)
+	LastComputeInstancesCount(ctx context.Context, req *LastComputeInstancesCountRequest, opts ...http.CallOption) (rsp *LastComputeInstancesCountReply, err error)
 	ProvidersCount(ctx context.Context, req *ProvidersCountRequest, opts ...http.CallOption) (rsp *ProvidersCountReply, err error)
 	ProvidersList(ctx context.Context, req *ProvidersListRequest, opts ...http.CallOption) (rsp *ProvidersListReply, err error)
 	SandboxCount(ctx context.Context, req *SandboxCountRequest, opts ...http.CallOption) (rsp *SandboxCountReply, err error)
@@ -237,6 +261,19 @@ func (c *DashboardHTTPClientImpl) GatewaysList(ctx context.Context, in *Gateways
 	pattern := "/v1/dashboard/gateways/list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationDashboardGatewaysList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *DashboardHTTPClientImpl) LastComputeInstancesCount(ctx context.Context, in *LastComputeInstancesCountRequest, opts ...http.CallOption) (*LastComputeInstancesCountReply, error) {
+	var out LastComputeInstancesCountReply
+	pattern := "/v1/dashboard/instances/count"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDashboardLastComputeInstancesCount))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

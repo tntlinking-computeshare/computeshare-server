@@ -15,6 +15,8 @@ type DashboardUseCase struct {
 	gatewayPortRepo     GatewayPortRepo
 	cycleRedeemCodeRepo CycleRedeemCodeRepo
 	cycleRechargeRepo   CycleRechargeRepo
+	computeInstanceRepo ComputeInstanceRepo
+	userRepo            UserRepo
 	logger              log.Logger
 }
 
@@ -24,6 +26,8 @@ func NewDashboardUseCase(
 	gatewayPortRepo GatewayPortRepo,
 	cycleRedeemCodeRepo CycleRedeemCodeRepo,
 	cycleRechargeRepo CycleRechargeRepo,
+	computeInstanceRepo ComputeInstanceRepo,
+	userRepo UserRepo,
 	logger log.Logger,
 ) *DashboardUseCase {
 	return &DashboardUseCase{
@@ -32,6 +36,8 @@ func NewDashboardUseCase(
 		gatewayPortRepo:     gatewayPortRepo,
 		cycleRedeemCodeRepo: cycleRedeemCodeRepo,
 		cycleRechargeRepo:   cycleRechargeRepo,
+		computeInstanceRepo: computeInstanceRepo,
+		userRepo:            userRepo,
 		logger:              logger,
 	}
 }
@@ -150,4 +156,37 @@ func (d *DashboardUseCase) CyclesCount(ctx context.Context) (count *pb.CyclesCou
 	}
 	cyclesCount.RechargedTotal = countRechargeCycle.StringFixed(2)
 	return &cyclesCount, nil
+}
+
+func (d *DashboardUseCase) LastComputeInstancesCount(ctx context.Context) (count []*pb.LastComputeInstancesCountReply_ComputeInstances, err error) {
+	computeInstances := d.computeInstanceRepo.ListLastTop10(ctx)
+	var ids []uuid.UUID
+	idMap := make(map[uuid.UUID]int32)
+	for _, computeInstance := range computeInstances {
+		id, err := uuid.Parse(computeInstance.Owner)
+		if err != nil {
+			return nil, err
+		}
+		idMap[id] = 1
+	}
+	for key, _ := range idMap {
+		ids = append(ids, key)
+	}
+	users, err := d.userRepo.ListUserByIds(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	idNameMap := make(map[string]string)
+	for _, user := range users {
+		idNameMap[user.ID.String()] = user.Name
+	}
+	for _, instance := range computeInstances {
+		var reply pb.LastComputeInstancesCountReply_ComputeInstances
+		reply.Name = instance.Name
+		reply.Specs = strconv.Itoa(instance.Core) + "C" + strconv.Itoa(instance.Memory) + "G"
+		reply.Owner = idNameMap[instance.Owner]
+		reply.CreateTime = instance.CreateTime.UnixMilli()
+		count = append(count, &reply)
+	}
+	return count, nil
 }

@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Dashboard_ProvidersCount_FullMethodName = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
-	Dashboard_GatewaysCount_FullMethodName  = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
-	Dashboard_StoragesCount_FullMethodName  = "/api.server.dashboard.v1.Dashboard/StoragesCount"
-	Dashboard_ProvidersList_FullMethodName  = "/api.server.dashboard.v1.Dashboard/ProvidersList"
-	Dashboard_GatewaysList_FullMethodName   = "/api.server.dashboard.v1.Dashboard/GatewaysList"
-	Dashboard_CyclesCount_FullMethodName    = "/api.server.dashboard.v1.Dashboard/CyclesCount"
-	Dashboard_SandboxCount_FullMethodName   = "/api.server.dashboard.v1.Dashboard/SandboxCount"
+	Dashboard_ProvidersCount_FullMethodName            = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
+	Dashboard_GatewaysCount_FullMethodName             = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
+	Dashboard_StoragesCount_FullMethodName             = "/api.server.dashboard.v1.Dashboard/StoragesCount"
+	Dashboard_ProvidersList_FullMethodName             = "/api.server.dashboard.v1.Dashboard/ProvidersList"
+	Dashboard_GatewaysList_FullMethodName              = "/api.server.dashboard.v1.Dashboard/GatewaysList"
+	Dashboard_CyclesCount_FullMethodName               = "/api.server.dashboard.v1.Dashboard/CyclesCount"
+	Dashboard_SandboxCount_FullMethodName              = "/api.server.dashboard.v1.Dashboard/SandboxCount"
+	Dashboard_LastComputeInstancesCount_FullMethodName = "/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"
 )
 
 // DashboardClient is the client API for Dashboard service.
@@ -46,6 +47,8 @@ type DashboardClient interface {
 	CyclesCount(ctx context.Context, in *CyclesCountRequest, opts ...grpc.CallOption) (*CyclesCountReply, error)
 	// 沙箱调用总数
 	SandboxCount(ctx context.Context, in *SandboxCountRequest, opts ...grpc.CallOption) (*SandboxCountReply, error)
+	// 最新创建虚拟机
+	LastComputeInstancesCount(ctx context.Context, in *LastComputeInstancesCountRequest, opts ...grpc.CallOption) (*LastComputeInstancesCountReply, error)
 }
 
 type dashboardClient struct {
@@ -119,6 +122,15 @@ func (c *dashboardClient) SandboxCount(ctx context.Context, in *SandboxCountRequ
 	return out, nil
 }
 
+func (c *dashboardClient) LastComputeInstancesCount(ctx context.Context, in *LastComputeInstancesCountRequest, opts ...grpc.CallOption) (*LastComputeInstancesCountReply, error) {
+	out := new(LastComputeInstancesCountReply)
+	err := c.cc.Invoke(ctx, Dashboard_LastComputeInstancesCount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DashboardServer is the server API for Dashboard service.
 // All implementations must embed UnimplementedDashboardServer
 // for forward compatibility
@@ -137,6 +149,8 @@ type DashboardServer interface {
 	CyclesCount(context.Context, *CyclesCountRequest) (*CyclesCountReply, error)
 	// 沙箱调用总数
 	SandboxCount(context.Context, *SandboxCountRequest) (*SandboxCountReply, error)
+	// 最新创建虚拟机
+	LastComputeInstancesCount(context.Context, *LastComputeInstancesCountRequest) (*LastComputeInstancesCountReply, error)
 	mustEmbedUnimplementedDashboardServer()
 }
 
@@ -164,6 +178,9 @@ func (UnimplementedDashboardServer) CyclesCount(context.Context, *CyclesCountReq
 }
 func (UnimplementedDashboardServer) SandboxCount(context.Context, *SandboxCountRequest) (*SandboxCountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SandboxCount not implemented")
+}
+func (UnimplementedDashboardServer) LastComputeInstancesCount(context.Context, *LastComputeInstancesCountRequest) (*LastComputeInstancesCountReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LastComputeInstancesCount not implemented")
 }
 func (UnimplementedDashboardServer) mustEmbedUnimplementedDashboardServer() {}
 
@@ -304,6 +321,24 @@ func _Dashboard_SandboxCount_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dashboard_LastComputeInstancesCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LastComputeInstancesCountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServer).LastComputeInstancesCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dashboard_LastComputeInstancesCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServer).LastComputeInstancesCount(ctx, req.(*LastComputeInstancesCountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Dashboard_ServiceDesc is the grpc.ServiceDesc for Dashboard service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -338,6 +373,10 @@ var Dashboard_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SandboxCount",
 			Handler:    _Dashboard_SandboxCount_Handler,
+		},
+		{
+			MethodName: "LastComputeInstancesCount",
+			Handler:    _Dashboard_LastComputeInstancesCount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

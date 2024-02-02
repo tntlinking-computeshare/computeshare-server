@@ -43,6 +43,7 @@ type ComputeInstanceRepo interface {
 	ListExpiration(ctx context.Context) ([]*ComputeInstance, error)
 	IfNeedSyncInstanceStats(ctx context.Context, id uuid.UUID) bool
 	ListByOrderDue3Day(ctx context.Context) []*ComputeInstance
+	ListLastTop10(ctx context.Context) []*ComputeInstance
 }
 
 type ComputeImageRepo interface {
