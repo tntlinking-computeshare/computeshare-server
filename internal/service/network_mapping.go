@@ -27,6 +27,27 @@ func NewNetworkMappingService(nm *biz.NetworkMappingUseCase, dm *biz.DomainBindi
 	}
 }
 
+func (s *NetworkMappingService) CheckPermission(ctx context.Context, networkMappingId string) error {
+	id, err := uuid.Parse(networkMappingId)
+	if err != nil {
+		return err
+	}
+	networkMapping, err := s.nm.GetNetworkMapping(ctx, id)
+	if err != nil {
+		return err
+	}
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return errors.New("unauthorized")
+	}
+
+	userId := claim.GetUserId()
+	if networkMapping.UserId == userId {
+		return nil
+	}
+	return errors.New("no permission")
+}
+
 func (s *NetworkMappingService) CreateNetworkMapping(ctx context.Context, req *pb.CreateNetworkMappingRequest) (*pb.CreateNetworkMappingReply, error) {
 	computerId, err := uuid.Parse(req.ComputerId)
 	if err != nil {
@@ -74,6 +95,11 @@ func (s *NetworkMappingService) GetNetworkMapping(ctx context.Context, req *pb.G
 	if err != nil {
 		return nil, err
 	}
+
+	err = s.CheckPermission(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
 	networkmapping, err := s.nm.GetNetworkMapping(ctx, id)
 	if err != nil {
 		return &pb.GetNetworkMappingReply{
@@ -90,6 +116,10 @@ func (s *NetworkMappingService) GetNetworkMapping(ctx context.Context, req *pb.G
 }
 func (s *NetworkMappingService) DeleteNetworkMapping(ctx context.Context, req *pb.DeleteNetworkMappingRequest) (*pb.DeleteNetworkMappingReply, error) {
 	id, err := uuid.Parse(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -149,6 +179,10 @@ func (s *NetworkMappingService) NextNetworkMapping(ctx context.Context, req *pb.
 
 func (s *NetworkMappingService) UpdateNetworkMapping(ctx context.Context, req *pb.UpdateNetworkMappingRequest) (*pb.UpdateNetworkMappingReply, error) {
 	id, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	err = s.CheckPermission(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}

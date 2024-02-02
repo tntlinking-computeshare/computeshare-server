@@ -3479,6 +3479,7 @@ type ComputeInstanceMutation struct {
 	vnc_port        *int32
 	addvnc_port     *int32
 	docker_compose  *string
+	create_time     *time.Time
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -4232,6 +4233,42 @@ func (m *ComputeInstanceMutation) ResetDockerCompose() {
 	m.docker_compose = nil
 }
 
+// SetCreateTime sets the "create_time" field.
+func (m *ComputeInstanceMutation) SetCreateTime(t time.Time) {
+	m.create_time = &t
+}
+
+// CreateTime returns the value of the "create_time" field in the mutation.
+func (m *ComputeInstanceMutation) CreateTime() (r time.Time, exists bool) {
+	v := m.create_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateTime returns the old "create_time" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldCreateTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreateTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreateTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateTime: %w", err)
+	}
+	return oldValue.CreateTime, nil
+}
+
+// ResetCreateTime resets all changes to the "create_time" field.
+func (m *ComputeInstanceMutation) ResetCreateTime() {
+	m.create_time = nil
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -4266,7 +4303,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -4309,6 +4346,9 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.docker_compose != nil {
 		fields = append(fields, computeinstance.FieldDockerCompose)
 	}
+	if m.create_time != nil {
+		fields = append(fields, computeinstance.FieldCreateTime)
+	}
 	return fields
 }
 
@@ -4345,6 +4385,8 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.VncPort()
 	case computeinstance.FieldDockerCompose:
 		return m.DockerCompose()
+	case computeinstance.FieldCreateTime:
+		return m.CreateTime()
 	}
 	return nil, false
 }
@@ -4382,6 +4424,8 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldVncPort(ctx)
 	case computeinstance.FieldDockerCompose:
 		return m.OldDockerCompose(ctx)
+	case computeinstance.FieldCreateTime:
+		return m.OldCreateTime(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -4488,6 +4532,13 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDockerCompose(v)
+		return nil
+	case computeinstance.FieldCreateTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateTime(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -4663,6 +4714,9 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldDockerCompose:
 		m.ResetDockerCompose()
+		return nil
+	case computeinstance.FieldCreateTime:
+		m.ResetCreateTime()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)

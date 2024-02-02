@@ -3,6 +3,8 @@
 package computeinstance
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 )
@@ -40,6 +42,8 @@ const (
 	FieldVncPort = "vnc_port"
 	// FieldDockerCompose holds the string denoting the docker_compose field in the database.
 	FieldDockerCompose = "docker_compose"
+	// FieldCreateTime holds the string denoting the create_time field in the database.
+	FieldCreateTime = "create_time"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
 )
@@ -61,6 +65,7 @@ var Columns = []string{
 	FieldVncIP,
 	FieldVncPort,
 	FieldDockerCompose,
+	FieldCreateTime,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -80,6 +85,8 @@ var (
 	NameValidator func(string) error
 	// ImageValidator is a validator for the "image" field. It is called by the builders before save.
 	ImageValidator func(string) error
+	// DefaultCreateTime holds the default value on creation for the "create_time" field.
+	DefaultCreateTime func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -160,4 +167,9 @@ func ByVncPort(opts ...sql.OrderTermOption) OrderOption {
 // ByDockerCompose orders the results by the docker_compose field.
 func ByDockerCompose(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDockerCompose, opts...).ToFunc()
+}
+
+// ByCreateTime orders the results by the create_time field.
+func ByCreateTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreateTime, opts...).ToFunc()
 }
