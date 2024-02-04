@@ -66,3 +66,14 @@ func (d *DashboardService) CyclesCount(ctx context.Context, req *pb.CyclesCountR
 func (d *DashboardService) SandboxCount(ctx context.Context, req *pb.SandboxCountRequest) (*pb.SandboxCountReply, error) {
 	return &pb.SandboxCountReply{}, nil
 }
+func (d *DashboardService) LastComputeInstancesCount(ctx context.Context, req *pb.LastComputeInstancesCountRequest) (*pb.LastComputeInstancesCountReply, error) {
+	list, err := d.dashboardUseCase.LastComputeInstancesCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LastComputeInstancesCountReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    list,
+	}, nil
+}

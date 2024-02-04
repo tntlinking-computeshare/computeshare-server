@@ -51,7 +51,12 @@ service Dashboard {
 			get: "/v1/dashboard/sandbox/count",
 		};
 	};
-
+	//最新创建虚拟机
+	rpc LastComputeInstancesCount (LastComputeInstancesCountRequest) returns (LastComputeInstancesCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/instances/count",
+		};
+	};
 }
 
 message ProvidersCountRequest {}
@@ -103,8 +108,8 @@ message GatewaysListReply {
 		string name = 1;
 		string ip = 2;
 		int32 totalPort = 3;
-		int32 useIntranetPort = 4;
-		int32 usePublicPort = 5;
+		string useIntranetPort = 4;
+		string usePublicPort = 5;
 	}
 }
 
@@ -126,4 +131,18 @@ message SandboxCountReply {
 	int32 code = 1;
 	string message = 2;
 	int32 data = 3;
+}
+
+message LastComputeInstancesCountRequest {}
+message LastComputeInstancesCountReply {
+	int32 code = 1;
+	string message = 2;
+	repeated ComputeInstances data = 3;
+	message ComputeInstances {
+		string id = 1;
+		string name = 2;
+		string specs = 3;
+		string owner = 4;
+		int64 createTime = 5;
+	}
 }

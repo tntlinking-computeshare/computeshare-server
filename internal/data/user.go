@@ -41,6 +41,13 @@ func (ur *userRepo) ListUser(ctx context.Context, entity biz.User) ([]*biz.User,
 	}
 	return lo.Map(ps, ur.toBiz), err
 }
+func (ur *userRepo) ListUserByIds(ctx context.Context, ids []uuid.UUID) ([]*biz.User, error) {
+	list, err := ur.data.getUserClient(ctx).Query().Where(user.IDIn(ids...)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return lo.Map(list, ur.toBiz), err
+}
 
 func (ur *userRepo) GetUser(ctx context.Context, id uuid.UUID) (*biz.User, error) {
 	p, err := ur.data.getUserClient(ctx).Get(ctx, id)

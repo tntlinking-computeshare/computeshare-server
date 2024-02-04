@@ -51,6 +51,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysList"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/CyclesCount"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/SandboxCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
