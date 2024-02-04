@@ -4,6 +4,7 @@ package ent
 
 import (
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"strings"
 	"time"
 
@@ -11,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ComputeInstance is the model entity for the ComputeInstance schema.
@@ -36,7 +36,7 @@ type ComputeInstance struct {
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
-	Status consts.InstanceStatus `json:"status,omitempty"`
+	Status compute.InstanceStatus `json:"status,omitempty"`
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id
@@ -138,7 +138,7 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ci.Status = consts.InstanceStatus(value.Int64)
+				ci.Status = compute.InstanceStatus(value.Int64)
 			}
 		case computeinstance.FieldContainerID:
 			if value, ok := values[i].(*sql.NullString); !ok {

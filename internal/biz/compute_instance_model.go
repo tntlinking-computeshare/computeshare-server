@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 )
 
@@ -55,7 +55,7 @@ type ComputeInstance struct {
 	// ExpirationTime holds the value of the "expiration_time" field.
 	ExpirationTime time.Time `json:"expiration_time,omitempty"`
 	// 0: 启动中,1:运行中,2:连接中断, 3:过期
-	Status consts.InstanceStatus `json:"status,omitempty"`
+	Status compute.InstanceStatus `json:"status,omitempty"`
 	// 容器id
 	ContainerID string `json:"container_id,omitempty"`
 	// p2p agent Id

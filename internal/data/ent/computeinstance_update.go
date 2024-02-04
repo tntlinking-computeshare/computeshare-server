@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -13,7 +14,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ComputeInstanceUpdate is the builder for updating ComputeInstance entities.
@@ -113,15 +113,15 @@ func (ciu *ComputeInstanceUpdate) SetExpirationTime(t time.Time) *ComputeInstanc
 }
 
 // SetStatus sets the "status" field.
-func (ciu *ComputeInstanceUpdate) SetStatus(cs consts.InstanceStatus) *ComputeInstanceUpdate {
+func (ciu *ComputeInstanceUpdate) SetStatus(gs compute.InstanceStatus) *ComputeInstanceUpdate {
 	ciu.mutation.ResetStatus()
-	ciu.mutation.SetStatus(cs)
+	ciu.mutation.SetStatus(gs)
 	return ciu
 }
 
-// AddStatus adds cs to the "status" field.
-func (ciu *ComputeInstanceUpdate) AddStatus(cs consts.InstanceStatus) *ComputeInstanceUpdate {
-	ciu.mutation.AddStatus(cs)
+// AddStatus adds gs to the "status" field.
+func (ciu *ComputeInstanceUpdate) AddStatus(gs compute.InstanceStatus) *ComputeInstanceUpdate {
+	ciu.mutation.AddStatus(gs)
 	return ciu
 }
 
@@ -441,15 +441,15 @@ func (ciuo *ComputeInstanceUpdateOne) SetExpirationTime(t time.Time) *ComputeIns
 }
 
 // SetStatus sets the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) SetStatus(cs consts.InstanceStatus) *ComputeInstanceUpdateOne {
+func (ciuo *ComputeInstanceUpdateOne) SetStatus(gs compute.InstanceStatus) *ComputeInstanceUpdateOne {
 	ciuo.mutation.ResetStatus()
-	ciuo.mutation.SetStatus(cs)
+	ciuo.mutation.SetStatus(gs)
 	return ciuo
 }
 
-// AddStatus adds cs to the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) AddStatus(cs consts.InstanceStatus) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddStatus(cs)
+// AddStatus adds gs to the "status" field.
+func (ciuo *ComputeInstanceUpdateOne) AddStatus(gs compute.InstanceStatus) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddStatus(gs)
 	return ciuo
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/samber/lo"
 	"strconv"
 
@@ -91,7 +91,7 @@ func (s *AgentService) ListAgent(_ context.Context, _ *pb.ListAgentRequest) (*pb
 }
 
 func (s *AgentService) ListAgentInstance(ctx context.Context, req *pb.ListAgentInstanceReq) (*computepb.ListInstanceReply, error) {
-	result, err := s.uc.ListAgentInstance(ctx, req.Mac)
+	result, err := s.uc.ListAgentInstance(ctx, req.GetAgentId())
 	return &computepb.ListInstanceReply{
 		Code:    200,
 		Message: SUCCESS,
@@ -119,7 +119,7 @@ func (s *AgentService) ReportInstanceStatus(ctx context.Context, req *computepb.
 		ID:          id,
 		ContainerID: req.ContainerId,
 		AgentId:     req.AgentId,
-		Status:      consts.InstanceStatus(req.Status),
+		Status:      compute.InstanceStatus(req.Status),
 	}
 	err = s.uc.ReportInstanceStatus(ctx, instance)
 	return &pb.ReportInstanceStatusReply{

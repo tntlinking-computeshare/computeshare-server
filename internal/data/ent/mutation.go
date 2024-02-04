@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"sync"
 	"time"
 
@@ -3471,8 +3472,8 @@ type ComputeInstanceMutation struct {
 	addimage_id     *int32
 	port            *string
 	expiration_time *time.Time
-	status          *consts.InstanceStatus
-	addstatus       *consts.InstanceStatus
+	status          *compute.InstanceStatus
+	addstatus       *compute.InstanceStatus
 	container_id    *string
 	agent_id        *string
 	vnc_ip          *string
@@ -3952,13 +3953,13 @@ func (m *ComputeInstanceMutation) ResetExpirationTime() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ComputeInstanceMutation) SetStatus(cs consts.InstanceStatus) {
-	m.status = &cs
+func (m *ComputeInstanceMutation) SetStatus(gs compute.InstanceStatus) {
+	m.status = &gs
 	m.addstatus = nil
 }
 
 // Status returns the value of the "status" field in the mutation.
-func (m *ComputeInstanceMutation) Status() (r consts.InstanceStatus, exists bool) {
+func (m *ComputeInstanceMutation) Status() (r compute.InstanceStatus, exists bool) {
 	v := m.status
 	if v == nil {
 		return
@@ -3969,7 +3970,7 @@ func (m *ComputeInstanceMutation) Status() (r consts.InstanceStatus, exists bool
 // OldStatus returns the old "status" field's value of the ComputeInstance entity.
 // If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v consts.InstanceStatus, err error) {
+func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v compute.InstanceStatus, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
 	}
@@ -3983,17 +3984,17 @@ func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v consts.Insta
 	return oldValue.Status, nil
 }
 
-// AddStatus adds cs to the "status" field.
-func (m *ComputeInstanceMutation) AddStatus(cs consts.InstanceStatus) {
+// AddStatus adds gs to the "status" field.
+func (m *ComputeInstanceMutation) AddStatus(gs compute.InstanceStatus) {
 	if m.addstatus != nil {
-		*m.addstatus += cs
+		*m.addstatus += gs
 	} else {
-		m.addstatus = &cs
+		m.addstatus = &gs
 	}
 }
 
 // AddedStatus returns the value that was added to the "status" field in this mutation.
-func (m *ComputeInstanceMutation) AddedStatus() (r consts.InstanceStatus, exists bool) {
+func (m *ComputeInstanceMutation) AddedStatus() (r compute.InstanceStatus, exists bool) {
 	v := m.addstatus
 	if v == nil {
 		return
@@ -4492,7 +4493,7 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 		m.SetExpirationTime(v)
 		return nil
 	case computeinstance.FieldStatus:
-		v, ok := value.(consts.InstanceStatus)
+		v, ok := value.(compute.InstanceStatus)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4612,7 +4613,7 @@ func (m *ComputeInstanceMutation) AddField(name string, value ent.Value) error {
 		m.AddImageID(v)
 		return nil
 	case computeinstance.FieldStatus:
-		v, ok := value.(consts.InstanceStatus)
+		v, ok := value.(compute.InstanceStatus)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

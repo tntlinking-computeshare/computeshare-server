@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 )
 
@@ -26,7 +26,7 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.Int32("image_id").Comment("镜像id"),
 		field.String("port").Optional().Comment("容器端口"),
 		field.Time("expiration_time"),
-		field.Int8("status").GoType(consts.InstanceStatus(0)).Comment("0: 启动中,1:运行中,2:连接中断, 3:过期"),
+		field.Int8("status").GoType(compute.InstanceStatus(0)).Comment("0: 启动中,1:运行中,2:连接中断, 3:过期"),
 		field.String("container_id").Optional().Comment("容器id"),
 		field.String("agent_id").Optional().Comment("p2p agent Id"),
 		field.String("vnc_ip").Comment("vnc 内网链接ip"),

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.7.0
 // - protoc             v4.23.2
-// source: api/agent/v1/order1111.proto
+// source: api/agent/v1/agent.proto
 
 package v1
 
@@ -45,7 +45,7 @@ func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r.DELETE("/v1/agent/{id}", _Agent_DeleteAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent/{id}", _Agent_GetAgent0_HTTP_Handler(srv))
 	r.GET("/v1/agent", _Agent_ListAgent0_HTTP_Handler(srv))
-	r.GET("/v1/agent/instance/{mac}", _Agent_ListAgentInstance0_HTTP_Handler(srv))
+	r.GET("/v1/agent/instance/{agentId}", _Agent_ListAgentInstance0_HTTP_Handler(srv))
 	r.PUT("/v1/agent/instance/report", _Agent_ReportInstanceStatus0_HTTP_Handler(srv))
 }
 
@@ -275,7 +275,7 @@ func (c *AgentHTTPClientImpl) ListAgent(ctx context.Context, in *ListAgentReques
 
 func (c *AgentHTTPClientImpl) ListAgentInstance(ctx context.Context, in *ListAgentInstanceReq, opts ...http.CallOption) (*v1.ListInstanceReply, error) {
 	var out v1.ListInstanceReply
-	pattern := "/v1/agent/instance/{mac}"
+	pattern := "/v1/agent/instance/{agentId}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationAgentListAgentInstance))
 	opts = append(opts, http.PathTemplate(pattern))

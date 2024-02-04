@@ -1,4 +1,4 @@
-package consts
+package compute
 
 type InstanceStatus int8
 
