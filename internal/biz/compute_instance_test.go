@@ -89,7 +89,7 @@ func TestTime(t *testing.T) {
 
 func TestComputeInstanceUsercase_GetLast24HInstanceStats(t *testing.T) {
 	client := NewComputeInstanceUsercase(
-		nil, nil, nil, nil, nil, nil, nil, nil, nil)
+		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 	data, err := client.GetLast24HInstanceStats(context.Background(), "76fe0a88-1960-4966-9beb-41b1c1251595")
 	assert.NoError(t, err)
 	fmt.Println(data)

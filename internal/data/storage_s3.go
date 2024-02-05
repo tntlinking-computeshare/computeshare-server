@@ -53,6 +53,10 @@ func (r *s3UserRepoImpl) GetS3User(ctx context.Context, id uuid.UUID) (*biz.S3Us
 	}
 	return r.toBiz(first, 0), err
 }
+func (r *s3UserRepoImpl) CountS3Key(ctx context.Context) (int, error) {
+	count, err := r.data.getS3UserClient(ctx).Query().Where(s3user.Type(int8(consts.UserCreation))).Count(ctx)
+	return count, err
+}
 func (r *s3UserRepoImpl) GetS3UserType(ctx context.Context, userId uuid.UUID, creator int8) ([]*biz.S3User, error) {
 	s3Users, err := r.data.getS3UserClient(ctx).Query().Where(s3user.FkUserIDIn(userId), s3user.Type(creator)).All(ctx)
 	if err != nil {

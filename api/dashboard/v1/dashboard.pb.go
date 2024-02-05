@@ -266,9 +266,9 @@ type StoragesCountReply struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Code    int32  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	Data    int32  `protobuf:"varint,3,opt,name=data,proto3" json:"data,omitempty"`
+	Code    int32                             `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message string                            `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data    *StoragesCountReply_StoragesCount `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *StoragesCountReply) Reset() {
@@ -317,11 +317,314 @@ func (x *StoragesCountReply) GetMessage() string {
 	return ""
 }
 
-func (x *StoragesCountReply) GetData() int32 {
+func (x *StoragesCountReply) GetData() *StoragesCountReply_StoragesCount {
 	if x != nil {
 		return x.Data
 	}
+	return nil
+}
+
+type StoragesProvidersListRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *StoragesProvidersListRequest) Reset() {
+	*x = StoragesProvidersListRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StoragesProvidersListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StoragesProvidersListRequest) ProtoMessage() {}
+
+func (x *StoragesProvidersListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StoragesProvidersListRequest.ProtoReflect.Descriptor instead.
+func (*StoragesProvidersListRequest) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{6}
+}
+
+type StoragesProvidersListReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code    int32                                           `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message string                                          `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data    []*StoragesProvidersListReply_StoragesProviders `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *StoragesProvidersListReply) Reset() {
+	*x = StoragesProvidersListReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StoragesProvidersListReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StoragesProvidersListReply) ProtoMessage() {}
+
+func (x *StoragesProvidersListReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StoragesProvidersListReply.ProtoReflect.Descriptor instead.
+func (*StoragesProvidersListReply) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *StoragesProvidersListReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
 	return 0
+}
+
+func (x *StoragesProvidersListReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *StoragesProvidersListReply) GetData() []*StoragesProvidersListReply_StoragesProviders {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type StorageBucketsVolumeNumListRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *StorageBucketsVolumeNumListRequest) Reset() {
+	*x = StorageBucketsVolumeNumListRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageBucketsVolumeNumListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageBucketsVolumeNumListRequest) ProtoMessage() {}
+
+func (x *StorageBucketsVolumeNumListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageBucketsVolumeNumListRequest.ProtoReflect.Descriptor instead.
+func (*StorageBucketsVolumeNumListRequest) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{8}
+}
+
+type StorageBucketsVolumeNumListReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code    int32                                             `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message string                                            `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data    []*StorageBucketsVolumeNumListReply_BucketsVolume `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *StorageBucketsVolumeNumListReply) Reset() {
+	*x = StorageBucketsVolumeNumListReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageBucketsVolumeNumListReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageBucketsVolumeNumListReply) ProtoMessage() {}
+
+func (x *StorageBucketsVolumeNumListReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageBucketsVolumeNumListReply.ProtoReflect.Descriptor instead.
+func (*StorageBucketsVolumeNumListReply) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *StorageBucketsVolumeNumListReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *StorageBucketsVolumeNumListReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *StorageBucketsVolumeNumListReply) GetData() []*StorageBucketsVolumeNumListReply_BucketsVolume {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type StorageS3KeyCallCountRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *StorageS3KeyCallCountRequest) Reset() {
+	*x = StorageS3KeyCallCountRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageS3KeyCallCountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageS3KeyCallCountRequest) ProtoMessage() {}
+
+func (x *StorageS3KeyCallCountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageS3KeyCallCountRequest.ProtoReflect.Descriptor instead.
+func (*StorageS3KeyCallCountRequest) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{10}
+}
+
+type StorageS3KeyCallCountReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code    int32                                      `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message string                                     `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Data    *StorageS3KeyCallCountReply_S3KeyCallCount `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *StorageS3KeyCallCountReply) Reset() {
+	*x = StorageS3KeyCallCountReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageS3KeyCallCountReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageS3KeyCallCountReply) ProtoMessage() {}
+
+func (x *StorageS3KeyCallCountReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageS3KeyCallCountReply.ProtoReflect.Descriptor instead.
+func (*StorageS3KeyCallCountReply) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *StorageS3KeyCallCountReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *StorageS3KeyCallCountReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *StorageS3KeyCallCountReply) GetData() *StorageS3KeyCallCountReply_S3KeyCallCount {
+	if x != nil {
+		return x.Data
+	}
+	return nil
 }
 
 type ProvidersListRequest struct {
@@ -333,7 +636,7 @@ type ProvidersListRequest struct {
 func (x *ProvidersListRequest) Reset() {
 	*x = ProvidersListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[6]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -346,7 +649,7 @@ func (x *ProvidersListRequest) String() string {
 func (*ProvidersListRequest) ProtoMessage() {}
 
 func (x *ProvidersListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[6]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +662,7 @@ func (x *ProvidersListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProvidersListRequest.ProtoReflect.Descriptor instead.
 func (*ProvidersListRequest) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{6}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{12}
 }
 
 type ProvidersListReply struct {
@@ -375,7 +678,7 @@ type ProvidersListReply struct {
 func (x *ProvidersListReply) Reset() {
 	*x = ProvidersListReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[7]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -388,7 +691,7 @@ func (x *ProvidersListReply) String() string {
 func (*ProvidersListReply) ProtoMessage() {}
 
 func (x *ProvidersListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[7]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -401,7 +704,7 @@ func (x *ProvidersListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProvidersListReply.ProtoReflect.Descriptor instead.
 func (*ProvidersListReply) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{7}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ProvidersListReply) GetCode() int32 {
@@ -434,7 +737,7 @@ type GatewaysListRequest struct {
 func (x *GatewaysListRequest) Reset() {
 	*x = GatewaysListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[8]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -447,7 +750,7 @@ func (x *GatewaysListRequest) String() string {
 func (*GatewaysListRequest) ProtoMessage() {}
 
 func (x *GatewaysListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[8]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -460,7 +763,7 @@ func (x *GatewaysListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewaysListRequest.ProtoReflect.Descriptor instead.
 func (*GatewaysListRequest) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{8}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{14}
 }
 
 type GatewaysListReply struct {
@@ -476,7 +779,7 @@ type GatewaysListReply struct {
 func (x *GatewaysListReply) Reset() {
 	*x = GatewaysListReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[9]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -489,7 +792,7 @@ func (x *GatewaysListReply) String() string {
 func (*GatewaysListReply) ProtoMessage() {}
 
 func (x *GatewaysListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[9]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -502,7 +805,7 @@ func (x *GatewaysListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewaysListReply.ProtoReflect.Descriptor instead.
 func (*GatewaysListReply) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{9}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GatewaysListReply) GetCode() int32 {
@@ -535,7 +838,7 @@ type CyclesCountRequest struct {
 func (x *CyclesCountRequest) Reset() {
 	*x = CyclesCountRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[10]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -548,7 +851,7 @@ func (x *CyclesCountRequest) String() string {
 func (*CyclesCountRequest) ProtoMessage() {}
 
 func (x *CyclesCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[10]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -561,7 +864,7 @@ func (x *CyclesCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CyclesCountRequest.ProtoReflect.Descriptor instead.
 func (*CyclesCountRequest) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{10}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{16}
 }
 
 type CyclesCountReply struct {
@@ -577,7 +880,7 @@ type CyclesCountReply struct {
 func (x *CyclesCountReply) Reset() {
 	*x = CyclesCountReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[11]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -590,7 +893,7 @@ func (x *CyclesCountReply) String() string {
 func (*CyclesCountReply) ProtoMessage() {}
 
 func (x *CyclesCountReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[11]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -603,7 +906,7 @@ func (x *CyclesCountReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CyclesCountReply.ProtoReflect.Descriptor instead.
 func (*CyclesCountReply) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{11}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CyclesCountReply) GetCode() int32 {
@@ -636,7 +939,7 @@ type SandboxCountRequest struct {
 func (x *SandboxCountRequest) Reset() {
 	*x = SandboxCountRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[12]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -649,7 +952,7 @@ func (x *SandboxCountRequest) String() string {
 func (*SandboxCountRequest) ProtoMessage() {}
 
 func (x *SandboxCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[12]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -662,7 +965,7 @@ func (x *SandboxCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SandboxCountRequest.ProtoReflect.Descriptor instead.
 func (*SandboxCountRequest) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{12}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{18}
 }
 
 type SandboxCountReply struct {
@@ -678,7 +981,7 @@ type SandboxCountReply struct {
 func (x *SandboxCountReply) Reset() {
 	*x = SandboxCountReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[13]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -691,7 +994,7 @@ func (x *SandboxCountReply) String() string {
 func (*SandboxCountReply) ProtoMessage() {}
 
 func (x *SandboxCountReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[13]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +1007,7 @@ func (x *SandboxCountReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SandboxCountReply.ProtoReflect.Descriptor instead.
 func (*SandboxCountReply) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{13}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *SandboxCountReply) GetCode() int32 {
@@ -737,7 +1040,7 @@ type LastComputeInstancesCountRequest struct {
 func (x *LastComputeInstancesCountRequest) Reset() {
 	*x = LastComputeInstancesCountRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[14]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -750,7 +1053,7 @@ func (x *LastComputeInstancesCountRequest) String() string {
 func (*LastComputeInstancesCountRequest) ProtoMessage() {}
 
 func (x *LastComputeInstancesCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[14]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -763,7 +1066,7 @@ func (x *LastComputeInstancesCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LastComputeInstancesCountRequest.ProtoReflect.Descriptor instead.
 func (*LastComputeInstancesCountRequest) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{14}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{20}
 }
 
 type LastComputeInstancesCountReply struct {
@@ -779,7 +1082,7 @@ type LastComputeInstancesCountReply struct {
 func (x *LastComputeInstancesCountReply) Reset() {
 	*x = LastComputeInstancesCountReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[15]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -792,7 +1095,7 @@ func (x *LastComputeInstancesCountReply) String() string {
 func (*LastComputeInstancesCountReply) ProtoMessage() {}
 
 func (x *LastComputeInstancesCountReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[15]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -805,7 +1108,7 @@ func (x *LastComputeInstancesCountReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LastComputeInstancesCountReply.ProtoReflect.Descriptor instead.
 func (*LastComputeInstancesCountReply) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{15}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *LastComputeInstancesCountReply) GetCode() int32 {
@@ -834,14 +1137,18 @@ type StoragesCountReply_StoragesCount struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StoragesTotal int32 `protobuf:"varint,1,opt,name=storagesTotal,proto3" json:"storagesTotal,omitempty"`
-	UseTotal      int32 `protobuf:"varint,2,opt,name=useTotal,proto3" json:"useTotal,omitempty"`
+	StoragesTotal       string `protobuf:"bytes,1,opt,name=storagesTotal,proto3" json:"storagesTotal,omitempty"`
+	StorageProvidersNum int32  `protobuf:"varint,2,opt,name=storageProvidersNum,proto3" json:"storageProvidersNum,omitempty"`
+	UsedVolumesTotal    int32  `protobuf:"varint,3,opt,name=usedVolumesTotal,proto3" json:"usedVolumesTotal,omitempty"`
+	UnusedVolumeCount   int32  `protobuf:"varint,4,opt,name=unusedVolumeCount,proto3" json:"unusedVolumeCount,omitempty"`
+	BucketsTotal        int32  `protobuf:"varint,5,opt,name=bucketsTotal,proto3" json:"bucketsTotal,omitempty"`
+	S3KeyTotal          int32  `protobuf:"varint,6,opt,name=S3KeyTotal,proto3" json:"S3KeyTotal,omitempty"`
 }
 
 func (x *StoragesCountReply_StoragesCount) Reset() {
 	*x = StoragesCountReply_StoragesCount{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[16]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -854,7 +1161,7 @@ func (x *StoragesCountReply_StoragesCount) String() string {
 func (*StoragesCountReply_StoragesCount) ProtoMessage() {}
 
 func (x *StoragesCountReply_StoragesCount) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[16]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -870,16 +1177,217 @@ func (*StoragesCountReply_StoragesCount) Descriptor() ([]byte, []int) {
 	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{5, 0}
 }
 
-func (x *StoragesCountReply_StoragesCount) GetStoragesTotal() int32 {
+func (x *StoragesCountReply_StoragesCount) GetStoragesTotal() string {
 	if x != nil {
 		return x.StoragesTotal
+	}
+	return ""
+}
+
+func (x *StoragesCountReply_StoragesCount) GetStorageProvidersNum() int32 {
+	if x != nil {
+		return x.StorageProvidersNum
 	}
 	return 0
 }
 
-func (x *StoragesCountReply_StoragesCount) GetUseTotal() int32 {
+func (x *StoragesCountReply_StoragesCount) GetUsedVolumesTotal() int32 {
 	if x != nil {
-		return x.UseTotal
+		return x.UsedVolumesTotal
+	}
+	return 0
+}
+
+func (x *StoragesCountReply_StoragesCount) GetUnusedVolumeCount() int32 {
+	if x != nil {
+		return x.UnusedVolumeCount
+	}
+	return 0
+}
+
+func (x *StoragesCountReply_StoragesCount) GetBucketsTotal() int32 {
+	if x != nil {
+		return x.BucketsTotal
+	}
+	return 0
+}
+
+func (x *StoragesCountReply_StoragesCount) GetS3KeyTotal() int32 {
+	if x != nil {
+		return x.S3KeyTotal
+	}
+	return 0
+}
+
+type StoragesProvidersListReply_StoragesProviders struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Instance  string `protobuf:"bytes,1,opt,name=instance,proto3" json:"instance,omitempty"`
+	VolumeNum int32  `protobuf:"varint,2,opt,name=volumeNum,proto3" json:"volumeNum,omitempty"`
+}
+
+func (x *StoragesProvidersListReply_StoragesProviders) Reset() {
+	*x = StoragesProvidersListReply_StoragesProviders{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StoragesProvidersListReply_StoragesProviders) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StoragesProvidersListReply_StoragesProviders) ProtoMessage() {}
+
+func (x *StoragesProvidersListReply_StoragesProviders) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StoragesProvidersListReply_StoragesProviders.ProtoReflect.Descriptor instead.
+func (*StoragesProvidersListReply_StoragesProviders) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *StoragesProvidersListReply_StoragesProviders) GetInstance() string {
+	if x != nil {
+		return x.Instance
+	}
+	return ""
+}
+
+func (x *StoragesProvidersListReply_StoragesProviders) GetVolumeNum() int32 {
+	if x != nil {
+		return x.VolumeNum
+	}
+	return 0
+}
+
+type StorageBucketsVolumeNumListReply_BucketsVolume struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name      string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	VolumeNum int32  `protobuf:"varint,2,opt,name=volumeNum,proto3" json:"volumeNum,omitempty"`
+}
+
+func (x *StorageBucketsVolumeNumListReply_BucketsVolume) Reset() {
+	*x = StorageBucketsVolumeNumListReply_BucketsVolume{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageBucketsVolumeNumListReply_BucketsVolume) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageBucketsVolumeNumListReply_BucketsVolume) ProtoMessage() {}
+
+func (x *StorageBucketsVolumeNumListReply_BucketsVolume) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageBucketsVolumeNumListReply_BucketsVolume.ProtoReflect.Descriptor instead.
+func (*StorageBucketsVolumeNumListReply_BucketsVolume) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{9, 0}
+}
+
+func (x *StorageBucketsVolumeNumListReply_BucketsVolume) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *StorageBucketsVolumeNumListReply_BucketsVolume) GetVolumeNum() int32 {
+	if x != nil {
+		return x.VolumeNum
+	}
+	return 0
+}
+
+type StorageS3KeyCallCountReply_S3KeyCallCount struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	S3CallTotal      int32 `protobuf:"varint,1,opt,name=s3CallTotal,proto3" json:"s3CallTotal,omitempty"`
+	S3WriteCallTotal int32 `protobuf:"varint,2,opt,name=s3WriteCallTotal,proto3" json:"s3WriteCallTotal,omitempty"`
+	S3ReadCallTotal  int32 `protobuf:"varint,3,opt,name=s3ReadCallTotal,proto3" json:"s3ReadCallTotal,omitempty"`
+}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) Reset() {
+	*x = StorageS3KeyCallCountReply_S3KeyCallCount{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageS3KeyCallCountReply_S3KeyCallCount) ProtoMessage() {}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageS3KeyCallCountReply_S3KeyCallCount.ProtoReflect.Descriptor instead.
+func (*StorageS3KeyCallCountReply_S3KeyCallCount) Descriptor() ([]byte, []int) {
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{11, 0}
+}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) GetS3CallTotal() int32 {
+	if x != nil {
+		return x.S3CallTotal
+	}
+	return 0
+}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) GetS3WriteCallTotal() int32 {
+	if x != nil {
+		return x.S3WriteCallTotal
+	}
+	return 0
+}
+
+func (x *StorageS3KeyCallCountReply_S3KeyCallCount) GetS3ReadCallTotal() int32 {
+	if x != nil {
+		return x.S3ReadCallTotal
 	}
 	return 0
 }
@@ -900,7 +1408,7 @@ type ProvidersListReply_ProvidersList struct {
 func (x *ProvidersListReply_ProvidersList) Reset() {
 	*x = ProvidersListReply_ProvidersList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[17]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -913,7 +1421,7 @@ func (x *ProvidersListReply_ProvidersList) String() string {
 func (*ProvidersListReply_ProvidersList) ProtoMessage() {}
 
 func (x *ProvidersListReply_ProvidersList) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[17]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -926,7 +1434,7 @@ func (x *ProvidersListReply_ProvidersList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProvidersListReply_ProvidersList.ProtoReflect.Descriptor instead.
 func (*ProvidersListReply_ProvidersList) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{7, 0}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{13, 0}
 }
 
 func (x *ProvidersListReply_ProvidersList) GetType() string {
@@ -986,7 +1494,7 @@ type GatewaysListReply_GatewaysList struct {
 func (x *GatewaysListReply_GatewaysList) Reset() {
 	*x = GatewaysListReply_GatewaysList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[18]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -999,7 +1507,7 @@ func (x *GatewaysListReply_GatewaysList) String() string {
 func (*GatewaysListReply_GatewaysList) ProtoMessage() {}
 
 func (x *GatewaysListReply_GatewaysList) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[18]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1012,7 +1520,7 @@ func (x *GatewaysListReply_GatewaysList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GatewaysListReply_GatewaysList.ProtoReflect.Descriptor instead.
 func (*GatewaysListReply_GatewaysList) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{9, 0}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{15, 0}
 }
 
 func (x *GatewaysListReply_GatewaysList) GetName() string {
@@ -1064,7 +1572,7 @@ type CyclesCountReply_CyclesCount struct {
 func (x *CyclesCountReply_CyclesCount) Reset() {
 	*x = CyclesCountReply_CyclesCount{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[19]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1077,7 +1585,7 @@ func (x *CyclesCountReply_CyclesCount) String() string {
 func (*CyclesCountReply_CyclesCount) ProtoMessage() {}
 
 func (x *CyclesCountReply_CyclesCount) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[19]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1090,7 +1598,7 @@ func (x *CyclesCountReply_CyclesCount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CyclesCountReply_CyclesCount.ProtoReflect.Descriptor instead.
 func (*CyclesCountReply_CyclesCount) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{11, 0}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{17, 0}
 }
 
 func (x *CyclesCountReply_CyclesCount) GetGrantTotal() string {
@@ -1136,7 +1644,7 @@ type LastComputeInstancesCountReply_ComputeInstances struct {
 func (x *LastComputeInstancesCountReply_ComputeInstances) Reset() {
 	*x = LastComputeInstancesCountReply_ComputeInstances{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[20]
+		mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1149,7 +1657,7 @@ func (x *LastComputeInstancesCountReply_ComputeInstances) String() string {
 func (*LastComputeInstancesCountReply_ComputeInstances) ProtoMessage() {}
 
 func (x *LastComputeInstancesCountReply_ComputeInstances) ProtoReflect() protoreflect.Message {
-	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[20]
+	mi := &file_api_dashboard_v1_dashboard_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1162,7 +1670,7 @@ func (x *LastComputeInstancesCountReply_ComputeInstances) ProtoReflect() protore
 
 // Deprecated: Use LastComputeInstancesCountReply_ComputeInstances.ProtoReflect.Descriptor instead.
 func (*LastComputeInstancesCountReply_ComputeInstances) Descriptor() ([]byte, []int) {
-	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{15, 0}
+	return file_api_dashboard_v1_dashboard_proto_rawDescGZIP(), []int{21, 0}
 }
 
 func (x *LastComputeInstancesCountReply_ComputeInstances) GetId() string {
@@ -1224,17 +1732,88 @@ var file_api_dashboard_v1_dashboard_proto_rawDesc = []byte{
 	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
 	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x16, 0x0a, 0x14, 0x53,
 	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x22, 0xa9, 0x01, 0x0a, 0x12, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73,
+	0x65, 0x73, 0x74, 0x22, 0x99, 0x03, 0x0a, 0x12, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73,
 	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f,
 	0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x18,
 	0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x51, 0x0a, 0x0d,
-	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a,
-	0x0d, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x05, 0x52, 0x0d, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x54, 0x6f,
-	0x74, 0x61, 0x6c, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x75, 0x73, 0x65, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x22,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x4d, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x39, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31,
+	0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x85, 0x02, 0x0a, 0x0d, 0x53, 0x74, 0x6f, 0x72,
+	0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x24, 0x0a, 0x0d, 0x73, 0x74, 0x6f,
+	0x72, 0x61, 0x67, 0x65, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0d, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12,
+	0x30, 0x0a, 0x13, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64,
+	0x65, 0x72, 0x73, 0x4e, 0x75, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x13, 0x73, 0x74,
+	0x6f, 0x72, 0x61, 0x67, 0x65, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4e, 0x75,
+	0x6d, 0x12, 0x2a, 0x0a, 0x10, 0x75, 0x73, 0x65, 0x64, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x73,
+	0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x10, 0x75, 0x73, 0x65,
+	0x64, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x2c, 0x0a,
+	0x11, 0x75, 0x6e, 0x75, 0x73, 0x65, 0x64, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x11, 0x75, 0x6e, 0x75, 0x73, 0x65, 0x64,
+	0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x22, 0x0a, 0x0c, 0x62,
+	0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x05, 0x52, 0x0c, 0x62, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12,
+	0x1e, 0x0a, 0x0a, 0x53, 0x33, 0x4b, 0x65, 0x79, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x0a, 0x53, 0x33, 0x4b, 0x65, 0x79, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x22,
+	0x1e, 0x0a, 0x1c, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76, 0x69,
+	0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
+	0xf4, 0x01, 0x0a, 0x1a, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76,
+	0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x12,
+	0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f,
+	0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x59, 0x0a, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x45, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f,
+	0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x2e,
+	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72,
+	0x73, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x4d, 0x0a, 0x11, 0x53, 0x74, 0x6f, 0x72, 0x61,
+	0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x12, 0x1a, 0x0a, 0x08,
+	0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x76, 0x6f, 0x6c, 0x75,
+	0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x76, 0x6f, 0x6c,
+	0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x22, 0x24, 0x0a, 0x22, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67,
+	0x65, 0x42, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75,
+	0x6d, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xf0, 0x01, 0x0a,
+	0x20, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x56,
+	0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12,
+	0x5b, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x47, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
+	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42,
+	0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x4c,
+	0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x2e, 0x42, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73,
+	0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x41, 0x0a, 0x0d,
+	0x42, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x1c, 0x0a, 0x09, 0x76, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x76, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x22,
+	0x1e, 0x0a, 0x1c, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x33, 0x4b, 0x65, 0x79, 0x43,
+	0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
+	0xad, 0x02, 0x0a, 0x1a, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x33, 0x4b, 0x65, 0x79,
+	0x43, 0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x12,
+	0x0a, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x63, 0x6f,
+	0x64, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x56, 0x0a, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x42, 0x2e, 0x61, 0x70, 0x69,
+	0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x33, 0x4b, 0x65,
+	0x79, 0x43, 0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x2e,
+	0x53, 0x33, 0x4b, 0x65, 0x79, 0x43, 0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x1a, 0x88, 0x01, 0x0a, 0x0e, 0x53, 0x33, 0x4b, 0x65, 0x79, 0x43, 0x61,
+	0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x73, 0x33, 0x43, 0x61, 0x6c,
+	0x6c, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0b, 0x73, 0x33,
+	0x43, 0x61, 0x6c, 0x6c, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x2a, 0x0a, 0x10, 0x73, 0x33, 0x57,
+	0x72, 0x69, 0x74, 0x65, 0x43, 0x61, 0x6c, 0x6c, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x10, 0x73, 0x33, 0x57, 0x72, 0x69, 0x74, 0x65, 0x43, 0x61, 0x6c, 0x6c,
+	0x54, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x28, 0x0a, 0x0f, 0x73, 0x33, 0x52, 0x65, 0x61, 0x64, 0x43,
+	0x61, 0x6c, 0x6c, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0f,
+	0x73, 0x33, 0x52, 0x65, 0x61, 0x64, 0x43, 0x61, 0x6c, 0x6c, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x22,
 	0x16, 0x0a, 0x14, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xaf, 0x02, 0x0a, 0x12, 0x50, 0x72, 0x6f, 0x76,
 	0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x12,
@@ -1325,7 +1904,7 @@ var file_api_dashboard_v1_dashboard_proto_rawDesc = []byte{
 	0x05, 0x73, 0x70, 0x65, 0x63, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x18,
 	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x12, 0x1e, 0x0a, 0x0a,
 	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03,
-	0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x32, 0xc4, 0x09, 0x0a,
+	0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x32, 0xed, 0x0d, 0x0a,
 	0x09, 0x44, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x12, 0x95, 0x01, 0x0a, 0x0e, 0x50,
 	0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2e, 0x2e,
 	0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
@@ -1354,60 +1933,95 @@ var file_api_dashboard_v1_dashboard_proto_rawDesc = []byte{
 	0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52,
 	0x65, 0x70, 0x6c, 0x79, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x76,
 	0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x73, 0x74, 0x6f, 0x72,
-	0x61, 0x67, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x91, 0x01, 0x0a, 0x0d, 0x50,
-	0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x2d, 0x2e, 0x61,
+	0x61, 0x67, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0xb2, 0x01, 0x0a, 0x15, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73,
+	0x4c, 0x69, 0x73, 0x74, 0x12, 0x35, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53,
+	0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73,
+	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61,
+	0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72,
+	0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79,
+	0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x27, 0x12, 0x25, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61,
+	0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72,
+	0x73, 0x2f, 0x76, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12,
+	0xc2, 0x01, 0x0a, 0x1b, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42, 0x75, 0x63, 0x6b, 0x65,
+	0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x3b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73,
+	0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67,
+	0x65, 0x42, 0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75,
+	0x6d, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x39, 0x2e, 0x61,
 	0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f,
-	0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73,
-	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61,
-	0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c,
-	0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e,
-	0x12, 0x1c, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f,
-	0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0x8d,
-	0x01, 0x0a, 0x0c, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12,
-	0x2c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73,
-	0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61,
-	0x79, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e,
-	0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
-	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x73,
-	0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x1d, 0x12, 0x1b, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64,
-	0x2f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0x89,
-	0x01, 0x0a, 0x0b, 0x43, 0x79, 0x63, 0x6c, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2b,
+	0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x42, 0x75,
+	0x63, 0x6b, 0x65, 0x74, 0x73, 0x56, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x4e, 0x75, 0x6d, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x2b, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x25, 0x12,
+	0x23, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x62,
+	0x75, 0x63, 0x6b, 0x65, 0x74, 0x73, 0x2f, 0x76, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x73, 0x2f, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0xac, 0x01, 0x0a, 0x15, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
+	0x53, 0x33, 0x4b, 0x65, 0x79, 0x43, 0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x35,
 	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68,
-	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x79, 0x63, 0x6c, 0x65, 0x73, 0x43,
-	0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61,
-	0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x79, 0x63, 0x6c, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e,
-	0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x22, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1c, 0x12, 0x1a,
-	0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x63, 0x79,
-	0x63, 0x6c, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x8d, 0x01, 0x0a, 0x0c, 0x53,
-	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2c, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61,
-	0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x43, 0x6f, 0x75,
-	0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x61, 0x70, 0x69, 0x2e,
-	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64,
-	0x2e, 0x76, 0x31, 0x2e, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f,
-	0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x73, 0x61, 0x6e,
-	0x64, 0x62, 0x6f, 0x78, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0xb6, 0x01, 0x0a, 0x19, 0x4c,
-	0x61, 0x73, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e,
-	0x63, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x39, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73,
+	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
+	0x53, 0x33, 0x4b, 0x65, 0x79, 0x43, 0x61, 0x6c, 0x6c, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x33, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e,
+	0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53, 0x33, 0x4b, 0x65, 0x79, 0x43, 0x61, 0x6c, 0x6c,
+	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x27, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x21, 0x12, 0x1f, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x2f, 0x73, 0x33, 0x5f, 0x6b, 0x65, 0x79, 0x2f, 0x63, 0x61, 0x6c, 0x6c, 0x2f, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x12, 0x91, 0x01, 0x0a, 0x0d, 0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72,
+	0x73, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x2d, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e,
+	0x50, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x2b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x50,
+	0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1e, 0x12, 0x1c, 0x2f, 0x76, 0x31, 0x2f, 0x64,
+	0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65,
+	0x72, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0x8d, 0x01, 0x0a, 0x0c, 0x47, 0x61, 0x74, 0x65,
+	0x77, 0x61, 0x79, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x2c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73,
 	0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e,
-	0x76, 0x31, 0x2e, 0x4c, 0x61, 0x73, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x49, 0x6e,
-	0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72,
-	0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x61,
-	0x73, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63,
-	0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x25, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x1f, 0x12, 0x1d, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f,
-	0x61, 0x72, 0x64, 0x2f, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x2f, 0x63, 0x6f,
-	0x75, 0x6e, 0x74, 0x42, 0x53, 0x0a, 0x10, 0x61, 0x70, 0x69, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
-	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x3d, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x6f, 0x68, 0x61, 0x69, 0x6a, 0x69, 0x61, 0x6e, 0x67,
-	0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x73, 0x68, 0x61, 0x72, 0x65, 0x2d, 0x73, 0x65,
-	0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61,
-	0x72, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x76, 0x31, 0x2e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31,
+	0x2e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70,
+	0x6c, 0x79, 0x22, 0x23, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f, 0x76, 0x31, 0x2f,
+	0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61,
+	0x79, 0x73, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0x89, 0x01, 0x0a, 0x0b, 0x43, 0x79, 0x63, 0x6c,
+	0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76,
+	0x31, 0x2e, 0x43, 0x79, 0x63, 0x6c, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x29, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x43,
+	0x79, 0x63, 0x6c, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
+	0x22, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1c, 0x12, 0x1a, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73,
+	0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x63, 0x79, 0x63, 0x6c, 0x65, 0x73, 0x2f, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x12, 0x8d, 0x01, 0x0a, 0x0c, 0x53, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x43,
+	0x6f, 0x75, 0x6e, 0x74, 0x12, 0x2c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53,
+	0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e,
+	0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x61, 0x6e,
+	0x64, 0x62, 0x6f, 0x78, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x23,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x12, 0x1b, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68,
+	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x73, 0x61, 0x6e, 0x64, 0x62, 0x6f, 0x78, 0x2f, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x12, 0xb6, 0x01, 0x0a, 0x19, 0x4c, 0x61, 0x73, 0x74, 0x43, 0x6f, 0x6d, 0x70,
+	0x75, 0x74, 0x65, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x39, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64,
+	0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x61, 0x73, 0x74,
+	0x43, 0x6f, 0x6d, 0x70, 0x75, 0x74, 0x65, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x73,
+	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f,
+	0x61, 0x72, 0x64, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x61, 0x73, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x75,
+	0x74, 0x65, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x25, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1f, 0x12, 0x1d, 0x2f,
+	0x76, 0x31, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x69, 0x6e, 0x73,
+	0x74, 0x61, 0x6e, 0x63, 0x65, 0x73, 0x2f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x53, 0x0a, 0x10,
+	0x61, 0x70, 0x69, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x76, 0x31,
+	0x50, 0x01, 0x5a, 0x3d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d,
+	0x6f, 0x68, 0x61, 0x69, 0x6a, 0x69, 0x61, 0x6e, 0x67, 0x2f, 0x63, 0x6f, 0x6d, 0x70, 0x75, 0x74,
+	0x65, 0x73, 0x68, 0x61, 0x72, 0x65, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x76,
+	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1422,7 +2036,7 @@ func file_api_dashboard_v1_dashboard_proto_rawDescGZIP() []byte {
 	return file_api_dashboard_v1_dashboard_proto_rawDescData
 }
 
-var file_api_dashboard_v1_dashboard_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_api_dashboard_v1_dashboard_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_api_dashboard_v1_dashboard_proto_goTypes = []interface{}{
 	(*ProvidersCountRequest)(nil),                           // 0: api.server.dashboard.v1.ProvidersCountRequest
 	(*ProvidersCountReply)(nil),                             // 1: api.server.dashboard.v1.ProvidersCountReply
@@ -1430,48 +2044,67 @@ var file_api_dashboard_v1_dashboard_proto_goTypes = []interface{}{
 	(*GatewaysCountReply)(nil),                              // 3: api.server.dashboard.v1.GatewaysCountReply
 	(*StoragesCountRequest)(nil),                            // 4: api.server.dashboard.v1.StoragesCountRequest
 	(*StoragesCountReply)(nil),                              // 5: api.server.dashboard.v1.StoragesCountReply
-	(*ProvidersListRequest)(nil),                            // 6: api.server.dashboard.v1.ProvidersListRequest
-	(*ProvidersListReply)(nil),                              // 7: api.server.dashboard.v1.ProvidersListReply
-	(*GatewaysListRequest)(nil),                             // 8: api.server.dashboard.v1.GatewaysListRequest
-	(*GatewaysListReply)(nil),                               // 9: api.server.dashboard.v1.GatewaysListReply
-	(*CyclesCountRequest)(nil),                              // 10: api.server.dashboard.v1.CyclesCountRequest
-	(*CyclesCountReply)(nil),                                // 11: api.server.dashboard.v1.CyclesCountReply
-	(*SandboxCountRequest)(nil),                             // 12: api.server.dashboard.v1.SandboxCountRequest
-	(*SandboxCountReply)(nil),                               // 13: api.server.dashboard.v1.SandboxCountReply
-	(*LastComputeInstancesCountRequest)(nil),                // 14: api.server.dashboard.v1.LastComputeInstancesCountRequest
-	(*LastComputeInstancesCountReply)(nil),                  // 15: api.server.dashboard.v1.LastComputeInstancesCountReply
-	(*StoragesCountReply_StoragesCount)(nil),                // 16: api.server.dashboard.v1.StoragesCountReply.StoragesCount
-	(*ProvidersListReply_ProvidersList)(nil),                // 17: api.server.dashboard.v1.ProvidersListReply.ProvidersList
-	(*GatewaysListReply_GatewaysList)(nil),                  // 18: api.server.dashboard.v1.GatewaysListReply.GatewaysList
-	(*CyclesCountReply_CyclesCount)(nil),                    // 19: api.server.dashboard.v1.CyclesCountReply.CyclesCount
-	(*LastComputeInstancesCountReply_ComputeInstances)(nil), // 20: api.server.dashboard.v1.LastComputeInstancesCountReply.ComputeInstances
+	(*StoragesProvidersListRequest)(nil),                    // 6: api.server.dashboard.v1.StoragesProvidersListRequest
+	(*StoragesProvidersListReply)(nil),                      // 7: api.server.dashboard.v1.StoragesProvidersListReply
+	(*StorageBucketsVolumeNumListRequest)(nil),              // 8: api.server.dashboard.v1.StorageBucketsVolumeNumListRequest
+	(*StorageBucketsVolumeNumListReply)(nil),                // 9: api.server.dashboard.v1.StorageBucketsVolumeNumListReply
+	(*StorageS3KeyCallCountRequest)(nil),                    // 10: api.server.dashboard.v1.StorageS3KeyCallCountRequest
+	(*StorageS3KeyCallCountReply)(nil),                      // 11: api.server.dashboard.v1.StorageS3KeyCallCountReply
+	(*ProvidersListRequest)(nil),                            // 12: api.server.dashboard.v1.ProvidersListRequest
+	(*ProvidersListReply)(nil),                              // 13: api.server.dashboard.v1.ProvidersListReply
+	(*GatewaysListRequest)(nil),                             // 14: api.server.dashboard.v1.GatewaysListRequest
+	(*GatewaysListReply)(nil),                               // 15: api.server.dashboard.v1.GatewaysListReply
+	(*CyclesCountRequest)(nil),                              // 16: api.server.dashboard.v1.CyclesCountRequest
+	(*CyclesCountReply)(nil),                                // 17: api.server.dashboard.v1.CyclesCountReply
+	(*SandboxCountRequest)(nil),                             // 18: api.server.dashboard.v1.SandboxCountRequest
+	(*SandboxCountReply)(nil),                               // 19: api.server.dashboard.v1.SandboxCountReply
+	(*LastComputeInstancesCountRequest)(nil),                // 20: api.server.dashboard.v1.LastComputeInstancesCountRequest
+	(*LastComputeInstancesCountReply)(nil),                  // 21: api.server.dashboard.v1.LastComputeInstancesCountReply
+	(*StoragesCountReply_StoragesCount)(nil),                // 22: api.server.dashboard.v1.StoragesCountReply.StoragesCount
+	(*StoragesProvidersListReply_StoragesProviders)(nil),    // 23: api.server.dashboard.v1.StoragesProvidersListReply.StoragesProviders
+	(*StorageBucketsVolumeNumListReply_BucketsVolume)(nil),  // 24: api.server.dashboard.v1.StorageBucketsVolumeNumListReply.BucketsVolume
+	(*StorageS3KeyCallCountReply_S3KeyCallCount)(nil),       // 25: api.server.dashboard.v1.StorageS3KeyCallCountReply.S3KeyCallCount
+	(*ProvidersListReply_ProvidersList)(nil),                // 26: api.server.dashboard.v1.ProvidersListReply.ProvidersList
+	(*GatewaysListReply_GatewaysList)(nil),                  // 27: api.server.dashboard.v1.GatewaysListReply.GatewaysList
+	(*CyclesCountReply_CyclesCount)(nil),                    // 28: api.server.dashboard.v1.CyclesCountReply.CyclesCount
+	(*LastComputeInstancesCountReply_ComputeInstances)(nil), // 29: api.server.dashboard.v1.LastComputeInstancesCountReply.ComputeInstances
 }
 var file_api_dashboard_v1_dashboard_proto_depIdxs = []int32{
-	17, // 0: api.server.dashboard.v1.ProvidersListReply.data:type_name -> api.server.dashboard.v1.ProvidersListReply.ProvidersList
-	18, // 1: api.server.dashboard.v1.GatewaysListReply.data:type_name -> api.server.dashboard.v1.GatewaysListReply.GatewaysList
-	19, // 2: api.server.dashboard.v1.CyclesCountReply.data:type_name -> api.server.dashboard.v1.CyclesCountReply.CyclesCount
-	20, // 3: api.server.dashboard.v1.LastComputeInstancesCountReply.data:type_name -> api.server.dashboard.v1.LastComputeInstancesCountReply.ComputeInstances
-	0,  // 4: api.server.dashboard.v1.Dashboard.ProvidersCount:input_type -> api.server.dashboard.v1.ProvidersCountRequest
-	2,  // 5: api.server.dashboard.v1.Dashboard.GatewaysCount:input_type -> api.server.dashboard.v1.GatewaysCountRequest
-	4,  // 6: api.server.dashboard.v1.Dashboard.StoragesCount:input_type -> api.server.dashboard.v1.StoragesCountRequest
-	6,  // 7: api.server.dashboard.v1.Dashboard.ProvidersList:input_type -> api.server.dashboard.v1.ProvidersListRequest
-	8,  // 8: api.server.dashboard.v1.Dashboard.GatewaysList:input_type -> api.server.dashboard.v1.GatewaysListRequest
-	10, // 9: api.server.dashboard.v1.Dashboard.CyclesCount:input_type -> api.server.dashboard.v1.CyclesCountRequest
-	12, // 10: api.server.dashboard.v1.Dashboard.SandboxCount:input_type -> api.server.dashboard.v1.SandboxCountRequest
-	14, // 11: api.server.dashboard.v1.Dashboard.LastComputeInstancesCount:input_type -> api.server.dashboard.v1.LastComputeInstancesCountRequest
-	1,  // 12: api.server.dashboard.v1.Dashboard.ProvidersCount:output_type -> api.server.dashboard.v1.ProvidersCountReply
-	3,  // 13: api.server.dashboard.v1.Dashboard.GatewaysCount:output_type -> api.server.dashboard.v1.GatewaysCountReply
-	5,  // 14: api.server.dashboard.v1.Dashboard.StoragesCount:output_type -> api.server.dashboard.v1.StoragesCountReply
-	7,  // 15: api.server.dashboard.v1.Dashboard.ProvidersList:output_type -> api.server.dashboard.v1.ProvidersListReply
-	9,  // 16: api.server.dashboard.v1.Dashboard.GatewaysList:output_type -> api.server.dashboard.v1.GatewaysListReply
-	11, // 17: api.server.dashboard.v1.Dashboard.CyclesCount:output_type -> api.server.dashboard.v1.CyclesCountReply
-	13, // 18: api.server.dashboard.v1.Dashboard.SandboxCount:output_type -> api.server.dashboard.v1.SandboxCountReply
-	15, // 19: api.server.dashboard.v1.Dashboard.LastComputeInstancesCount:output_type -> api.server.dashboard.v1.LastComputeInstancesCountReply
-	12, // [12:20] is the sub-list for method output_type
-	4,  // [4:12] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	22, // 0: api.server.dashboard.v1.StoragesCountReply.data:type_name -> api.server.dashboard.v1.StoragesCountReply.StoragesCount
+	23, // 1: api.server.dashboard.v1.StoragesProvidersListReply.data:type_name -> api.server.dashboard.v1.StoragesProvidersListReply.StoragesProviders
+	24, // 2: api.server.dashboard.v1.StorageBucketsVolumeNumListReply.data:type_name -> api.server.dashboard.v1.StorageBucketsVolumeNumListReply.BucketsVolume
+	25, // 3: api.server.dashboard.v1.StorageS3KeyCallCountReply.data:type_name -> api.server.dashboard.v1.StorageS3KeyCallCountReply.S3KeyCallCount
+	26, // 4: api.server.dashboard.v1.ProvidersListReply.data:type_name -> api.server.dashboard.v1.ProvidersListReply.ProvidersList
+	27, // 5: api.server.dashboard.v1.GatewaysListReply.data:type_name -> api.server.dashboard.v1.GatewaysListReply.GatewaysList
+	28, // 6: api.server.dashboard.v1.CyclesCountReply.data:type_name -> api.server.dashboard.v1.CyclesCountReply.CyclesCount
+	29, // 7: api.server.dashboard.v1.LastComputeInstancesCountReply.data:type_name -> api.server.dashboard.v1.LastComputeInstancesCountReply.ComputeInstances
+	0,  // 8: api.server.dashboard.v1.Dashboard.ProvidersCount:input_type -> api.server.dashboard.v1.ProvidersCountRequest
+	2,  // 9: api.server.dashboard.v1.Dashboard.GatewaysCount:input_type -> api.server.dashboard.v1.GatewaysCountRequest
+	4,  // 10: api.server.dashboard.v1.Dashboard.StoragesCount:input_type -> api.server.dashboard.v1.StoragesCountRequest
+	6,  // 11: api.server.dashboard.v1.Dashboard.StoragesProvidersList:input_type -> api.server.dashboard.v1.StoragesProvidersListRequest
+	8,  // 12: api.server.dashboard.v1.Dashboard.StorageBucketsVolumeNumList:input_type -> api.server.dashboard.v1.StorageBucketsVolumeNumListRequest
+	10, // 13: api.server.dashboard.v1.Dashboard.StorageS3KeyCallCount:input_type -> api.server.dashboard.v1.StorageS3KeyCallCountRequest
+	12, // 14: api.server.dashboard.v1.Dashboard.ProvidersList:input_type -> api.server.dashboard.v1.ProvidersListRequest
+	14, // 15: api.server.dashboard.v1.Dashboard.GatewaysList:input_type -> api.server.dashboard.v1.GatewaysListRequest
+	16, // 16: api.server.dashboard.v1.Dashboard.CyclesCount:input_type -> api.server.dashboard.v1.CyclesCountRequest
+	18, // 17: api.server.dashboard.v1.Dashboard.SandboxCount:input_type -> api.server.dashboard.v1.SandboxCountRequest
+	20, // 18: api.server.dashboard.v1.Dashboard.LastComputeInstancesCount:input_type -> api.server.dashboard.v1.LastComputeInstancesCountRequest
+	1,  // 19: api.server.dashboard.v1.Dashboard.ProvidersCount:output_type -> api.server.dashboard.v1.ProvidersCountReply
+	3,  // 20: api.server.dashboard.v1.Dashboard.GatewaysCount:output_type -> api.server.dashboard.v1.GatewaysCountReply
+	5,  // 21: api.server.dashboard.v1.Dashboard.StoragesCount:output_type -> api.server.dashboard.v1.StoragesCountReply
+	7,  // 22: api.server.dashboard.v1.Dashboard.StoragesProvidersList:output_type -> api.server.dashboard.v1.StoragesProvidersListReply
+	9,  // 23: api.server.dashboard.v1.Dashboard.StorageBucketsVolumeNumList:output_type -> api.server.dashboard.v1.StorageBucketsVolumeNumListReply
+	11, // 24: api.server.dashboard.v1.Dashboard.StorageS3KeyCallCount:output_type -> api.server.dashboard.v1.StorageS3KeyCallCountReply
+	13, // 25: api.server.dashboard.v1.Dashboard.ProvidersList:output_type -> api.server.dashboard.v1.ProvidersListReply
+	15, // 26: api.server.dashboard.v1.Dashboard.GatewaysList:output_type -> api.server.dashboard.v1.GatewaysListReply
+	17, // 27: api.server.dashboard.v1.Dashboard.CyclesCount:output_type -> api.server.dashboard.v1.CyclesCountReply
+	19, // 28: api.server.dashboard.v1.Dashboard.SandboxCount:output_type -> api.server.dashboard.v1.SandboxCountReply
+	21, // 29: api.server.dashboard.v1.Dashboard.LastComputeInstancesCount:output_type -> api.server.dashboard.v1.LastComputeInstancesCountReply
+	19, // [19:30] is the sub-list for method output_type
+	8,  // [8:19] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_dashboard_v1_dashboard_proto_init() }
@@ -1553,7 +2186,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProvidersListRequest); i {
+			switch v := v.(*StoragesProvidersListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1565,7 +2198,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProvidersListReply); i {
+			switch v := v.(*StoragesProvidersListReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1577,7 +2210,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GatewaysListRequest); i {
+			switch v := v.(*StorageBucketsVolumeNumListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1589,7 +2222,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GatewaysListReply); i {
+			switch v := v.(*StorageBucketsVolumeNumListReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1601,7 +2234,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CyclesCountRequest); i {
+			switch v := v.(*StorageS3KeyCallCountRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1613,7 +2246,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CyclesCountReply); i {
+			switch v := v.(*StorageS3KeyCallCountReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1625,7 +2258,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SandboxCountRequest); i {
+			switch v := v.(*ProvidersListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1637,7 +2270,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SandboxCountReply); i {
+			switch v := v.(*ProvidersListReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1649,7 +2282,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LastComputeInstancesCountRequest); i {
+			switch v := v.(*GatewaysListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1661,7 +2294,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LastComputeInstancesCountReply); i {
+			switch v := v.(*GatewaysListReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1673,7 +2306,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*StoragesCountReply_StoragesCount); i {
+			switch v := v.(*CyclesCountRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1685,7 +2318,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProvidersListReply_ProvidersList); i {
+			switch v := v.(*CyclesCountReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1697,7 +2330,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GatewaysListReply_GatewaysList); i {
+			switch v := v.(*SandboxCountRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1709,7 +2342,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CyclesCountReply_CyclesCount); i {
+			switch v := v.(*SandboxCountReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1721,6 +2354,114 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			}
 		}
 		file_api_dashboard_v1_dashboard_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LastComputeInstancesCountRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LastComputeInstancesCountReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StoragesCountReply_StoragesCount); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StoragesProvidersListReply_StoragesProviders); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StorageBucketsVolumeNumListReply_BucketsVolume); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StorageS3KeyCallCountReply_S3KeyCallCount); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProvidersListReply_ProvidersList); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GatewaysListReply_GatewaysList); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CyclesCountReply_CyclesCount); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dashboard_v1_dashboard_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LastComputeInstancesCountReply_ComputeInstances); i {
 			case 0:
 				return &v.state
@@ -1739,7 +2480,7 @@ func file_api_dashboard_v1_dashboard_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_dashboard_v1_dashboard_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -19,14 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Dashboard_ProvidersCount_FullMethodName            = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
-	Dashboard_GatewaysCount_FullMethodName             = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
-	Dashboard_StoragesCount_FullMethodName             = "/api.server.dashboard.v1.Dashboard/StoragesCount"
-	Dashboard_ProvidersList_FullMethodName             = "/api.server.dashboard.v1.Dashboard/ProvidersList"
-	Dashboard_GatewaysList_FullMethodName              = "/api.server.dashboard.v1.Dashboard/GatewaysList"
-	Dashboard_CyclesCount_FullMethodName               = "/api.server.dashboard.v1.Dashboard/CyclesCount"
-	Dashboard_SandboxCount_FullMethodName              = "/api.server.dashboard.v1.Dashboard/SandboxCount"
-	Dashboard_LastComputeInstancesCount_FullMethodName = "/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"
+	Dashboard_ProvidersCount_FullMethodName              = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
+	Dashboard_GatewaysCount_FullMethodName               = "/api.server.dashboard.v1.Dashboard/GatewaysCount"
+	Dashboard_StoragesCount_FullMethodName               = "/api.server.dashboard.v1.Dashboard/StoragesCount"
+	Dashboard_StoragesProvidersList_FullMethodName       = "/api.server.dashboard.v1.Dashboard/StoragesProvidersList"
+	Dashboard_StorageBucketsVolumeNumList_FullMethodName = "/api.server.dashboard.v1.Dashboard/StorageBucketsVolumeNumList"
+	Dashboard_StorageS3KeyCallCount_FullMethodName       = "/api.server.dashboard.v1.Dashboard/StorageS3KeyCallCount"
+	Dashboard_ProvidersList_FullMethodName               = "/api.server.dashboard.v1.Dashboard/ProvidersList"
+	Dashboard_GatewaysList_FullMethodName                = "/api.server.dashboard.v1.Dashboard/GatewaysList"
+	Dashboard_CyclesCount_FullMethodName                 = "/api.server.dashboard.v1.Dashboard/CyclesCount"
+	Dashboard_SandboxCount_FullMethodName                = "/api.server.dashboard.v1.Dashboard/SandboxCount"
+	Dashboard_LastComputeInstancesCount_FullMethodName   = "/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"
 )
 
 // DashboardClient is the client API for Dashboard service.
@@ -39,6 +42,12 @@ type DashboardClient interface {
 	GatewaysCount(ctx context.Context, in *GatewaysCountRequest, opts ...grpc.CallOption) (*GatewaysCountReply, error)
 	// 存储总数 已使用总数
 	StoragesCount(ctx context.Context, in *StoragesCountRequest, opts ...grpc.CallOption) (*StoragesCountReply, error)
+	// 存储提供者列表
+	StoragesProvidersList(ctx context.Context, in *StoragesProvidersListRequest, opts ...grpc.CallOption) (*StoragesProvidersListReply, error)
+	// 存储桶VolumeNum列表
+	StorageBucketsVolumeNumList(ctx context.Context, in *StorageBucketsVolumeNumListRequest, opts ...grpc.CallOption) (*StorageBucketsVolumeNumListReply, error)
+	// 存储桶VolumeNum列表
+	StorageS3KeyCallCount(ctx context.Context, in *StorageS3KeyCallCountRequest, opts ...grpc.CallOption) (*StorageS3KeyCallCountReply, error)
 	// Provider列表 类型，规格，是否存活
 	ProvidersList(ctx context.Context, in *ProvidersListRequest, opts ...grpc.CallOption) (*ProvidersListReply, error)
 	// Gateway列表 总端口数 已用端口数内网 外网
@@ -80,6 +89,33 @@ func (c *dashboardClient) GatewaysCount(ctx context.Context, in *GatewaysCountRe
 func (c *dashboardClient) StoragesCount(ctx context.Context, in *StoragesCountRequest, opts ...grpc.CallOption) (*StoragesCountReply, error) {
 	out := new(StoragesCountReply)
 	err := c.cc.Invoke(ctx, Dashboard_StoragesCount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dashboardClient) StoragesProvidersList(ctx context.Context, in *StoragesProvidersListRequest, opts ...grpc.CallOption) (*StoragesProvidersListReply, error) {
+	out := new(StoragesProvidersListReply)
+	err := c.cc.Invoke(ctx, Dashboard_StoragesProvidersList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dashboardClient) StorageBucketsVolumeNumList(ctx context.Context, in *StorageBucketsVolumeNumListRequest, opts ...grpc.CallOption) (*StorageBucketsVolumeNumListReply, error) {
+	out := new(StorageBucketsVolumeNumListReply)
+	err := c.cc.Invoke(ctx, Dashboard_StorageBucketsVolumeNumList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dashboardClient) StorageS3KeyCallCount(ctx context.Context, in *StorageS3KeyCallCountRequest, opts ...grpc.CallOption) (*StorageS3KeyCallCountReply, error) {
+	out := new(StorageS3KeyCallCountReply)
+	err := c.cc.Invoke(ctx, Dashboard_StorageS3KeyCallCount_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -141,6 +177,12 @@ type DashboardServer interface {
 	GatewaysCount(context.Context, *GatewaysCountRequest) (*GatewaysCountReply, error)
 	// 存储总数 已使用总数
 	StoragesCount(context.Context, *StoragesCountRequest) (*StoragesCountReply, error)
+	// 存储提供者列表
+	StoragesProvidersList(context.Context, *StoragesProvidersListRequest) (*StoragesProvidersListReply, error)
+	// 存储桶VolumeNum列表
+	StorageBucketsVolumeNumList(context.Context, *StorageBucketsVolumeNumListRequest) (*StorageBucketsVolumeNumListReply, error)
+	// 存储桶VolumeNum列表
+	StorageS3KeyCallCount(context.Context, *StorageS3KeyCallCountRequest) (*StorageS3KeyCallCountReply, error)
 	// Provider列表 类型，规格，是否存活
 	ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error)
 	// Gateway列表 总端口数 已用端口数内网 外网
@@ -166,6 +208,15 @@ func (UnimplementedDashboardServer) GatewaysCount(context.Context, *GatewaysCoun
 }
 func (UnimplementedDashboardServer) StoragesCount(context.Context, *StoragesCountRequest) (*StoragesCountReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StoragesCount not implemented")
+}
+func (UnimplementedDashboardServer) StoragesProvidersList(context.Context, *StoragesProvidersListRequest) (*StoragesProvidersListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StoragesProvidersList not implemented")
+}
+func (UnimplementedDashboardServer) StorageBucketsVolumeNumList(context.Context, *StorageBucketsVolumeNumListRequest) (*StorageBucketsVolumeNumListReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StorageBucketsVolumeNumList not implemented")
+}
+func (UnimplementedDashboardServer) StorageS3KeyCallCount(context.Context, *StorageS3KeyCallCountRequest) (*StorageS3KeyCallCountReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StorageS3KeyCallCount not implemented")
 }
 func (UnimplementedDashboardServer) ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ProvidersList not implemented")
@@ -245,6 +296,60 @@ func _Dashboard_StoragesCount_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DashboardServer).StoragesCount(ctx, req.(*StoragesCountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dashboard_StoragesProvidersList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoragesProvidersListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServer).StoragesProvidersList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dashboard_StoragesProvidersList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServer).StoragesProvidersList(ctx, req.(*StoragesProvidersListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dashboard_StorageBucketsVolumeNumList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StorageBucketsVolumeNumListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServer).StorageBucketsVolumeNumList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dashboard_StorageBucketsVolumeNumList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServer).StorageBucketsVolumeNumList(ctx, req.(*StorageBucketsVolumeNumListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dashboard_StorageS3KeyCallCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StorageS3KeyCallCountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServer).StorageS3KeyCallCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dashboard_StorageS3KeyCallCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServer).StorageS3KeyCallCount(ctx, req.(*StorageS3KeyCallCountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -357,6 +462,18 @@ var Dashboard_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StoragesCount",
 			Handler:    _Dashboard_StoragesCount_Handler,
+		},
+		{
+			MethodName: "StoragesProvidersList",
+			Handler:    _Dashboard_StoragesProvidersList_Handler,
+		},
+		{
+			MethodName: "StorageBucketsVolumeNumList",
+			Handler:    _Dashboard_StorageBucketsVolumeNumList_Handler,
+		},
+		{
+			MethodName: "StorageS3KeyCallCount",
+			Handler:    _Dashboard_StorageS3KeyCallCount_Handler,
 		},
 		{
 			MethodName: "ProvidersList",

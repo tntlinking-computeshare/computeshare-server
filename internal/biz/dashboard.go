@@ -2,11 +2,31 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
+	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tidwall/gjson"
+	"io"
+	"net/http"
+	"net/url"
 	"strconv"
+)
+
+var (
+	StorageSpaceTotal                = "sum(SeaweedFS_volumeServer_resource{type=\"all\"})"
+	UsedStorageSpaceTotal            = "sum(SeaweedFS_volumeServer_total_disk_size) by (exported_instance)"
+	StorageProvidersNum              = "count(SeaweedFS_volumeServer_resource{type=\"all\"})"
+	UsedVolumeTotal                  = "sum(SeaweedFS_volumeServer_volumes{type=\"volume\"})"
+	UnusedVolumeCount                = "sum(SeaweedFS_volumeServer_max_volumes)-sum(SeaweedFS_volumeServer_volumes{type=\"volume\"})"
+	BucketsTotal                     = "count (count by(collection) (SeaweedFS_volumeServer_volumes{collection!=\"\"}))"
+	BucketsCorrespondingVolumesNum   = "sum by (collection)(SeaweedFS_volumeServer_volumes{type=\"volume\",collection!=\"\"})"
+	ProvidersCorrespondingVolumesNum = "sum by (instance)(SeaweedFS_volumeServer_volumes{type=\"volume\"})"
+	S3CallTotal                      = "sum(SeaweedFS_s3_request_total)"
+	S3CallWriteTotal                 = "sum(SeaweedFS_s3_request_total{type=~\"PUT|DELETE\"})"
+	S3CallReadTotal                  = "sum(SeaweedFS_s3_request_total{type=~\"GET|LIST\"})"
 )
 
 type DashboardUseCase struct {
@@ -17,6 +37,8 @@ type DashboardUseCase struct {
 	cycleRechargeRepo   CycleRechargeRepo
 	computeInstanceRepo ComputeInstanceRepo
 	userRepo            UserRepo
+	s3UserRepo          S3UserRepo
+	dispose             *conf.Dispose
 	logger              log.Logger
 }
 
@@ -28,6 +50,8 @@ func NewDashboardUseCase(
 	cycleRechargeRepo CycleRechargeRepo,
 	computeInstanceRepo ComputeInstanceRepo,
 	userRepo UserRepo,
+	dispose *conf.Dispose,
+	s3UserRepo S3UserRepo,
 	logger log.Logger,
 ) *DashboardUseCase {
 	return &DashboardUseCase{
@@ -38,6 +62,8 @@ func NewDashboardUseCase(
 		cycleRechargeRepo:   cycleRechargeRepo,
 		computeInstanceRepo: computeInstanceRepo,
 		userRepo:            userRepo,
+		dispose:             dispose,
+		s3UserRepo:          s3UserRepo,
 		logger:              logger,
 	}
 }
@@ -74,6 +100,131 @@ func (d *DashboardUseCase) GatewaysCount(ctx context.Context) (count int, err er
 		return 0, err
 	}
 	return countGateway, nil
+}
+
+func (d *DashboardUseCase) StoragesCount(ctx context.Context) (count *pb.StoragesCountReply_StoragesCount, err error) {
+	var storagesCount pb.StoragesCountReply_StoragesCount
+	//获取存储总容量
+	storageSpaceTotalBytes, err := d.GetByteFromPrometheus(StorageSpaceTotal)
+	if err != nil {
+		return nil, err
+	}
+	storageSpaceTotal := ByteCountIEC(gjson.GetBytes(storageSpaceTotalBytes, "data.result.0.value.1").Int())
+
+	//获取使用的存储总容量
+	usedStorageSpaceTotalBytes, err := d.GetByteFromPrometheus(UsedStorageSpaceTotal)
+	if err != nil {
+		return nil, err
+	}
+	usedStorageSpaceTota := ByteCountIEC(gjson.GetBytes(usedStorageSpaceTotalBytes, "data.result.0.value.1").Int())
+	storagesCount.StoragesTotal = usedStorageSpaceTota + "/" + storageSpaceTotal
+	//获取存储提供者数量
+	storageProvidersNumBytes, err := d.GetByteFromPrometheus(StorageProvidersNum)
+	if err != nil {
+		return nil, err
+	}
+	storagesCount.StorageProvidersNum = int32(gjson.GetBytes(storageProvidersNumBytes, "data.result.0.value.1").Int())
+	//获取总使用的Volumes
+	usedVolumeTotalBytes, err := d.GetByteFromPrometheus(UsedVolumeTotal)
+	if err != nil {
+		return nil, err
+	}
+	storagesCount.UsedVolumesTotal = int32(gjson.GetBytes(usedVolumeTotalBytes, "data.result.0.value.1").Int())
+	//获取没有使用的Volumes数
+	unusedVolumeCountBytes, err := d.GetByteFromPrometheus(UnusedVolumeCount)
+	if err != nil {
+		return nil, err
+	}
+	storagesCount.UnusedVolumeCount = int32(gjson.GetBytes(unusedVolumeCountBytes, "data.result.0.value.1").Int())
+	//获取总使用Buckets
+	bucketsTotalBytes, err := d.GetByteFromPrometheus(BucketsTotal)
+	if err != nil {
+		return nil, err
+	}
+	storagesCount.BucketsTotal = int32(gjson.GetBytes(bucketsTotalBytes, "data.result.0.value.1").Int())
+	//获取总s3key数
+	countS3Key, err := d.s3UserRepo.CountS3Key(ctx)
+	if err != nil {
+		return nil, err
+	}
+	storagesCount.S3KeyTotal = int32(countS3Key)
+	return &storagesCount, nil
+}
+
+func (d *DashboardUseCase) StoragesProvidersList(ctx context.Context) ([]*pb.StoragesProvidersListReply_StoragesProviders, error) {
+	var storagesProvidersList []*pb.StoragesProvidersListReply_StoragesProviders
+	providersCorrespondingVolumesNumBytes, err := d.GetByteFromPrometheus(ProvidersCorrespondingVolumesNum)
+	if err != nil {
+		return nil, err
+	}
+	results := gjson.GetBytes(providersCorrespondingVolumesNumBytes, "data.result").Array()
+	for _, manyByte := range results {
+		var storagesProviders pb.StoragesProvidersListReply_StoragesProviders
+		storagesProviders.Instance = manyByte.Get("metric.instance").String()
+		storagesProviders.VolumeNum = int32(manyByte.Get("value.1").Int())
+		storagesProvidersList = append(storagesProvidersList, &storagesProviders)
+	}
+	return storagesProvidersList, nil
+}
+
+func (d *DashboardUseCase) StorageBucketsVolumeNumList(ctx context.Context) ([]*pb.StorageBucketsVolumeNumListReply_BucketsVolume, error) {
+	var bucketsVolumeList []*pb.StorageBucketsVolumeNumListReply_BucketsVolume
+	bucketsCorrespondingVolumesNumBytes, err := d.GetByteFromPrometheus(BucketsCorrespondingVolumesNum)
+	if err != nil {
+		return nil, err
+	}
+	results := gjson.GetBytes(bucketsCorrespondingVolumesNumBytes, "data.result").Array()
+	for _, manyByte := range results {
+		var bucketsVolume pb.StorageBucketsVolumeNumListReply_BucketsVolume
+		bucketsVolume.Name = manyByte.Get("metric.collection").String()
+		bucketsVolume.VolumeNum = int32(manyByte.Get("value.1").Int())
+		bucketsVolumeList = append(bucketsVolumeList, &bucketsVolume)
+	}
+	return bucketsVolumeList, nil
+}
+
+func (d *DashboardUseCase) StorageS3KeyCallCount(ctx context.Context) (*pb.StorageS3KeyCallCountReply_S3KeyCallCount, error) {
+	var count pb.StorageS3KeyCallCountReply_S3KeyCallCount
+	s3CallTotalBytes, err := d.GetByteFromPrometheus(S3CallTotal)
+	if err != nil {
+		return nil, err
+	}
+	count.S3CallTotal = int32(gjson.GetBytes(s3CallTotalBytes, "data.result.0.value.1").Int())
+
+	s3CallWriteTotalBytes, err := d.GetByteFromPrometheus(S3CallWriteTotal)
+	if err != nil {
+		return nil, err
+	}
+	count.S3WriteCallTotal = int32(gjson.GetBytes(s3CallWriteTotalBytes, "data.result.0.value.1").Int())
+
+	s3CallReadTotalBytes, err := d.GetByteFromPrometheus(S3CallReadTotal)
+	if err != nil {
+		return nil, err
+	}
+	count.S3ReadCallTotal = int32(gjson.GetBytes(s3CallReadTotalBytes, "data.result.0.value.1").Int())
+	return &count, nil
+}
+
+func (d *DashboardUseCase) GetByteFromPrometheus(query string) ([]byte, error) {
+	params := url.Values{}
+	parseURL, err := url.Parse(d.dispose.Prometheus.Host + d.dispose.Prometheus.QueryApi)
+	if err != nil {
+		return nil, err
+	}
+	params.Set("query", query)
+	parseURL.RawQuery = params.Encode()
+	urlPathWithParams := parseURL.String()
+	resp, err := http.Get(urlPathWithParams)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	bytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return bytes, nil
+
 }
 
 func (d *DashboardUseCase) GatewaysList(ctx context.Context) (list []*pb.GatewaysListReply_GatewaysList, err error) {
@@ -190,4 +341,18 @@ func (d *DashboardUseCase) LastComputeInstancesCount(ctx context.Context) (count
 		count = append(count, &reply)
 	}
 	return count, nil
+}
+
+func ByteCountIEC(b int64) string {
+	const unit = 1024
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB",
+		float64(b)/float64(div), "KMGTPE"[exp])
 }

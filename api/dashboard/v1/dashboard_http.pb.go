@@ -26,7 +26,10 @@ const OperationDashboardLastComputeInstancesCount = "/api.server.dashboard.v1.Da
 const OperationDashboardProvidersCount = "/api.server.dashboard.v1.Dashboard/ProvidersCount"
 const OperationDashboardProvidersList = "/api.server.dashboard.v1.Dashboard/ProvidersList"
 const OperationDashboardSandboxCount = "/api.server.dashboard.v1.Dashboard/SandboxCount"
+const OperationDashboardStorageBucketsVolumeNumList = "/api.server.dashboard.v1.Dashboard/StorageBucketsVolumeNumList"
+const OperationDashboardStorageS3KeyCallCount = "/api.server.dashboard.v1.Dashboard/StorageS3KeyCallCount"
 const OperationDashboardStoragesCount = "/api.server.dashboard.v1.Dashboard/StoragesCount"
+const OperationDashboardStoragesProvidersList = "/api.server.dashboard.v1.Dashboard/StoragesProvidersList"
 
 type DashboardHTTPServer interface {
 	// CyclesCount已发放积分总数 回收积分总数 发放代金券总数 已充值总数
@@ -43,8 +46,14 @@ type DashboardHTTPServer interface {
 	ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error)
 	// SandboxCount沙箱调用总数
 	SandboxCount(context.Context, *SandboxCountRequest) (*SandboxCountReply, error)
+	// StorageBucketsVolumeNumList存储桶VolumeNum列表
+	StorageBucketsVolumeNumList(context.Context, *StorageBucketsVolumeNumListRequest) (*StorageBucketsVolumeNumListReply, error)
+	// StorageS3KeyCallCount存储桶VolumeNum列表
+	StorageS3KeyCallCount(context.Context, *StorageS3KeyCallCountRequest) (*StorageS3KeyCallCountReply, error)
 	// StoragesCount存储总数 已使用总数
 	StoragesCount(context.Context, *StoragesCountRequest) (*StoragesCountReply, error)
+	// StoragesProvidersList存储提供者列表
+	StoragesProvidersList(context.Context, *StoragesProvidersListRequest) (*StoragesProvidersListReply, error)
 }
 
 func RegisterDashboardHTTPServer(s *http.Server, srv DashboardHTTPServer) {
@@ -52,6 +61,9 @@ func RegisterDashboardHTTPServer(s *http.Server, srv DashboardHTTPServer) {
 	r.GET("/v1/dashboard/providers/count", _Dashboard_ProvidersCount0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/gateways/count", _Dashboard_GatewaysCount0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/storages/count", _Dashboard_StoragesCount0_HTTP_Handler(srv))
+	r.GET("/v1/dashboard/providers/volumes/count", _Dashboard_StoragesProvidersList0_HTTP_Handler(srv))
+	r.GET("/v1/dashboard/buckets/volumes/count", _Dashboard_StorageBucketsVolumeNumList0_HTTP_Handler(srv))
+	r.GET("/v1/dashboard/s3_key/call/count", _Dashboard_StorageS3KeyCallCount0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/providers/list", _Dashboard_ProvidersList0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/gateways/list", _Dashboard_GatewaysList0_HTTP_Handler(srv))
 	r.GET("/v1/dashboard/cycles/count", _Dashboard_CyclesCount0_HTTP_Handler(srv))
@@ -112,6 +124,63 @@ func _Dashboard_StoragesCount0_HTTP_Handler(srv DashboardHTTPServer) func(ctx ht
 			return err
 		}
 		reply := out.(*StoragesCountReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Dashboard_StoragesProvidersList0_HTTP_Handler(srv DashboardHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StoragesProvidersListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDashboardStoragesProvidersList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.StoragesProvidersList(ctx, req.(*StoragesProvidersListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*StoragesProvidersListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Dashboard_StorageBucketsVolumeNumList0_HTTP_Handler(srv DashboardHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StorageBucketsVolumeNumListRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDashboardStorageBucketsVolumeNumList)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.StorageBucketsVolumeNumList(ctx, req.(*StorageBucketsVolumeNumListRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*StorageBucketsVolumeNumListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Dashboard_StorageS3KeyCallCount0_HTTP_Handler(srv DashboardHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StorageS3KeyCallCountRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDashboardStorageS3KeyCallCount)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.StorageS3KeyCallCount(ctx, req.(*StorageS3KeyCallCountRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*StorageS3KeyCallCountReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -219,7 +288,10 @@ type DashboardHTTPClient interface {
 	ProvidersCount(ctx context.Context, req *ProvidersCountRequest, opts ...http.CallOption) (rsp *ProvidersCountReply, err error)
 	ProvidersList(ctx context.Context, req *ProvidersListRequest, opts ...http.CallOption) (rsp *ProvidersListReply, err error)
 	SandboxCount(ctx context.Context, req *SandboxCountRequest, opts ...http.CallOption) (rsp *SandboxCountReply, err error)
+	StorageBucketsVolumeNumList(ctx context.Context, req *StorageBucketsVolumeNumListRequest, opts ...http.CallOption) (rsp *StorageBucketsVolumeNumListReply, err error)
+	StorageS3KeyCallCount(ctx context.Context, req *StorageS3KeyCallCountRequest, opts ...http.CallOption) (rsp *StorageS3KeyCallCountReply, err error)
 	StoragesCount(ctx context.Context, req *StoragesCountRequest, opts ...http.CallOption) (rsp *StoragesCountReply, err error)
+	StoragesProvidersList(ctx context.Context, req *StoragesProvidersListRequest, opts ...http.CallOption) (rsp *StoragesProvidersListReply, err error)
 }
 
 type DashboardHTTPClientImpl struct {
@@ -321,11 +393,50 @@ func (c *DashboardHTTPClientImpl) SandboxCount(ctx context.Context, in *SandboxC
 	return &out, err
 }
 
+func (c *DashboardHTTPClientImpl) StorageBucketsVolumeNumList(ctx context.Context, in *StorageBucketsVolumeNumListRequest, opts ...http.CallOption) (*StorageBucketsVolumeNumListReply, error) {
+	var out StorageBucketsVolumeNumListReply
+	pattern := "/v1/dashboard/buckets/volumes/count"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDashboardStorageBucketsVolumeNumList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *DashboardHTTPClientImpl) StorageS3KeyCallCount(ctx context.Context, in *StorageS3KeyCallCountRequest, opts ...http.CallOption) (*StorageS3KeyCallCountReply, error) {
+	var out StorageS3KeyCallCountReply
+	pattern := "/v1/dashboard/s3_key/call/count"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDashboardStorageS3KeyCallCount))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *DashboardHTTPClientImpl) StoragesCount(ctx context.Context, in *StoragesCountRequest, opts ...http.CallOption) (*StoragesCountReply, error) {
 	var out StoragesCountReply
 	pattern := "/v1/dashboard/storages/count"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationDashboardStoragesCount))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *DashboardHTTPClientImpl) StoragesProvidersList(ctx context.Context, in *StoragesProvidersListRequest, opts ...http.CallOption) (*StoragesProvidersListReply, error) {
+	var out StoragesProvidersListReply
+	pattern := "/v1/dashboard/providers/volumes/count"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDashboardStoragesProvidersList))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

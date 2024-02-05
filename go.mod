@@ -130,6 +130,9 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/templexxx/cpufeat v0.0.0-20180724012125-cef66df7f161 // indirect
 	github.com/templexxx/xor v0.0.0-20191217153810-f85b25db303b // indirect
+	github.com/tidwall/gjson v1.17.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/whyrusleeping/tar-utils v0.0.0-20180509141711-8c6c8ba81d5c // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect

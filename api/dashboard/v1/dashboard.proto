@@ -27,6 +27,24 @@ service Dashboard {
 			get: "/v1/dashboard/storages/count",
 		};
 	};
+	//存储提供者列表
+	rpc StoragesProvidersList (StoragesProvidersListRequest) returns (StoragesProvidersListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/providers/volumes/count",
+		};
+	};
+	//存储桶VolumeNum列表
+	rpc StorageBucketsVolumeNumList (StorageBucketsVolumeNumListRequest) returns (StorageBucketsVolumeNumListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/buckets/volumes/count",
+		};
+	};
+	//S3KeyCall
+	rpc StorageS3KeyCallCount (StorageS3KeyCallCountRequest) returns (StorageS3KeyCallCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/s3_key/call/count",
+		};
+	};
 	//Provider列表 类型，规格，是否存活
 	rpc ProvidersList (ProvidersListRequest) returns (ProvidersListReply){
 		option (google.api.http) = {
@@ -77,10 +95,48 @@ message StoragesCountRequest {}
 message StoragesCountReply {
 	int32 code = 1;
 	string message = 2;
-	int32 data = 3;
+	StoragesCount data = 3;
 	message StoragesCount {
-		int32 storagesTotal = 1;
-		int32 useTotal = 2;
+		string storagesTotal = 1;
+		int32 storageProvidersNum = 2;
+		int32 usedVolumesTotal = 3;
+		int32 unusedVolumeCount = 4;
+		int32 bucketsTotal = 5;
+		int32 S3KeyTotal = 6;
+	}
+}
+
+message StoragesProvidersListRequest {}
+message StoragesProvidersListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated StoragesProviders data = 3;
+	message StoragesProviders {
+		string instance = 1;
+		int32 volumeNum = 2;
+	}
+}
+
+message StorageBucketsVolumeNumListRequest {}
+message StorageBucketsVolumeNumListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated BucketsVolume data = 3;
+	message BucketsVolume {
+		string name = 1;
+		int32 volumeNum = 2;
+	}
+}
+
+message StorageS3KeyCallCountRequest {}
+message StorageS3KeyCallCountReply {
+	int32 code = 1;
+	string message = 2;
+	S3KeyCallCount data = 3;
+	message S3KeyCallCount {
+		int32 s3CallTotal = 1;
+		int32 s3WriteCallTotal = 2;
+		int32 s3ReadCallTotal = 3;
 	}
 }
 
