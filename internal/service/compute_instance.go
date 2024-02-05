@@ -74,6 +74,7 @@ func (s *ComputeInstanceService) ListComputeSpecPrice(ctx context.Context, req *
 	}, nil
 }
 func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInstanceRequest) (*pb.CreateInstanceReply, error) {
+
 	instance, err := s.uc.Create(ctx, &biz.ComputeInstanceCreate{
 		SpecId:        req.GetSpecId(),
 		ImageId:       req.GetImageId(),
@@ -81,6 +82,7 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 		PublicKey:     req.PublicKey,
 		Password:      req.Password,
 		DockerCompose: req.DockerCompose,
+		ExpirationDay: req.ExpirationDay,
 	})
 
 	if err != nil {

@@ -168,6 +168,14 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 			dockerComposeDecode = string(data)
 		}
 	}
+
+	var ExpirationTime time.Time
+	if cic.ExpirationDay != nil && *cic.ExpirationDay < specPrice.Day {
+		ExpirationTime = time.Now().AddDate(0, 0, int(*cic.ExpirationDay))
+	} else {
+		ExpirationTime = time.Now().AddDate(0, 0, int(specPrice.Day))
+	}
+
 	instance := &ComputeInstance{
 		Owner:          claim.UserID,
 		Name:           cic.Name,
@@ -176,7 +184,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		Port:           fmt.Sprintf("%d", computeImage.Port),
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
 		ImageId:        computeImage.ID,
-		ExpirationTime: time.Now().AddDate(0, 0, int(specPrice.Day)),
+		ExpirationTime: ExpirationTime,
 		AgentId:        agent.ID.String(),
 		Status:         compute.InstanceStatusCreating,
 		VncIP:          gw.InternalIP,
@@ -192,6 +200,9 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 
 	// 创建续费管理
 	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
+	if renewalTime.Before(time.Now()) {
+		renewalTime = time.Now()
+	}
 	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
 
 	fmt.Println("=============")

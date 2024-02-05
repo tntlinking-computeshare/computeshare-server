@@ -163,6 +163,7 @@ message CreateInstanceRequest {
 	string public_key = 4;
 	string password = 5;
 	string docker_compose = 6;
+	optional int32 expiration_day = 7;
 }
 
 message RecreateInstanceRequest {

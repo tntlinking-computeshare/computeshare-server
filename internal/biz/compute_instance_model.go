@@ -85,6 +85,7 @@ type ComputeInstanceCreate struct {
 	PublicKey     string
 	Password      string
 	DockerCompose string
+	ExpirationDay *int32
 }
 
 type ComputeImage struct {
