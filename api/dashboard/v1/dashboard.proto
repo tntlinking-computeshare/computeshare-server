@@ -102,7 +102,6 @@ message StoragesCountReply {
 		int32 usedVolumesTotal = 3;
 		int32 unusedVolumeCount = 4;
 		int32 bucketsTotal = 5;
-		int32 S3KeyTotal = 6;
 	}
 }
 
@@ -137,6 +136,7 @@ message StorageS3KeyCallCountReply {
 		int32 s3CallTotal = 1;
 		int32 s3WriteCallTotal = 2;
 		int32 s3ReadCallTotal = 3;
+		int32 S3KeyTotal = 4;
 	}
 }
 

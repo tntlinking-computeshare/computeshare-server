@@ -46,7 +46,7 @@ type DashboardClient interface {
 	StoragesProvidersList(ctx context.Context, in *StoragesProvidersListRequest, opts ...grpc.CallOption) (*StoragesProvidersListReply, error)
 	// 存储桶VolumeNum列表
 	StorageBucketsVolumeNumList(ctx context.Context, in *StorageBucketsVolumeNumListRequest, opts ...grpc.CallOption) (*StorageBucketsVolumeNumListReply, error)
-	// 存储桶VolumeNum列表
+	// S3KeyCall
 	StorageS3KeyCallCount(ctx context.Context, in *StorageS3KeyCallCountRequest, opts ...grpc.CallOption) (*StorageS3KeyCallCountReply, error)
 	// Provider列表 类型，规格，是否存活
 	ProvidersList(ctx context.Context, in *ProvidersListRequest, opts ...grpc.CallOption) (*ProvidersListReply, error)
@@ -181,7 +181,7 @@ type DashboardServer interface {
 	StoragesProvidersList(context.Context, *StoragesProvidersListRequest) (*StoragesProvidersListReply, error)
 	// 存储桶VolumeNum列表
 	StorageBucketsVolumeNumList(context.Context, *StorageBucketsVolumeNumListRequest) (*StorageBucketsVolumeNumListReply, error)
-	// 存储桶VolumeNum列表
+	// S3KeyCall
 	StorageS3KeyCallCount(context.Context, *StorageS3KeyCallCountRequest) (*StorageS3KeyCallCountReply, error)
 	// Provider列表 类型，规格，是否存活
 	ProvidersList(context.Context, *ProvidersListRequest) (*ProvidersListReply, error)

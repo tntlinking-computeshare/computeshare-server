@@ -142,12 +142,6 @@ func (d *DashboardUseCase) StoragesCount(ctx context.Context) (count *pb.Storage
 		return nil, err
 	}
 	storagesCount.BucketsTotal = int32(gjson.GetBytes(bucketsTotalBytes, "data.result.0.value.1").Int())
-	//获取总s3key数
-	countS3Key, err := d.s3UserRepo.CountS3Key(ctx)
-	if err != nil {
-		return nil, err
-	}
-	storagesCount.S3KeyTotal = int32(countS3Key)
 	return &storagesCount, nil
 }
 
@@ -202,6 +196,12 @@ func (d *DashboardUseCase) StorageS3KeyCallCount(ctx context.Context) (*pb.Stora
 		return nil, err
 	}
 	count.S3ReadCallTotal = int32(gjson.GetBytes(s3CallReadTotalBytes, "data.result.0.value.1").Int())
+	//获取总s3key数
+	countS3Key, err := d.s3UserRepo.CountS3Key(ctx)
+	if err != nil {
+		return nil, err
+	}
+	count.S3KeyTotal = int32(countS3Key)
 	return &count, nil
 }
 

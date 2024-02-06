@@ -48,7 +48,7 @@ type DashboardHTTPServer interface {
 	SandboxCount(context.Context, *SandboxCountRequest) (*SandboxCountReply, error)
 	// StorageBucketsVolumeNumList存储桶VolumeNum列表
 	StorageBucketsVolumeNumList(context.Context, *StorageBucketsVolumeNumListRequest) (*StorageBucketsVolumeNumListReply, error)
-	// StorageS3KeyCallCount存储桶VolumeNum列表
+	// StorageS3KeyCallCountS3KeyCall
 	StorageS3KeyCallCount(context.Context, *StorageS3KeyCallCountRequest) (*StorageS3KeyCallCountReply, error)
 	// StoragesCount存储总数 已使用总数
 	StoragesCount(context.Context, *StoragesCountRequest) (*StoragesCountReply, error)
