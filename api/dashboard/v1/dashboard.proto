@@ -136,7 +136,7 @@ message StorageS3KeyCallCountReply {
 		int32 s3CallTotal = 1;
 		int32 s3WriteCallTotal = 2;
 		int32 s3ReadCallTotal = 3;
-		int32 S3KeyTotal = 4;
+		int32 s3KeyTotal = 4;
 	}
 }
 
