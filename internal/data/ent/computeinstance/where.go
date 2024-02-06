@@ -3,12 +3,12 @@
 package computeinstance
 
 import (
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 )
 
 // ID filters vertices based on their ID field.
@@ -97,7 +97,7 @@ func ExpirationTime(v time.Time) predicate.ComputeInstance {
 }
 
 // Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v consts.InstanceStatus) predicate.ComputeInstance {
+func Status(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, vc))
 }
@@ -563,19 +563,19 @@ func ExpirationTimeLTE(v time.Time) predicate.ComputeInstance {
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusEQ(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldEQ(FieldStatus, vc))
 }
 
 // StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusNEQ(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldNEQ(FieldStatus, vc))
 }
 
 // StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
+func StatusIn(vs ...compute.InstanceStatus) predicate.ComputeInstance {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = int8(vs[i])
@@ -584,7 +584,7 @@ func StatusIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
 }
 
 // StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
+func StatusNotIn(vs ...compute.InstanceStatus) predicate.ComputeInstance {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = int8(vs[i])
@@ -593,25 +593,25 @@ func StatusNotIn(vs ...consts.InstanceStatus) predicate.ComputeInstance {
 }
 
 // StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusGT(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldGT(FieldStatus, vc))
 }
 
 // StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusGTE(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldGTE(FieldStatus, vc))
 }
 
 // StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusLT(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldLT(FieldStatus, vc))
 }
 
 // StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v consts.InstanceStatus) predicate.ComputeInstance {
+func StatusLTE(v compute.InstanceStatus) predicate.ComputeInstance {
 	vc := int8(v)
 	return predicate.ComputeInstance(sql.FieldLTE(FieldStatus, vc))
 }

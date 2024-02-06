@@ -116,7 +116,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 查询虚拟机
-GET  http://127.0.0.1:8000/v1/instance
+GET  http://127.0.0.1:8000/v1/instance?status=1
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
@@ -286,7 +286,13 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/dc74374a-6965-4832-a191-410641528c28
+DELETE  https://api.computeshare.newtouch.com/v1/instance/567cc2ec-8e41-4c25-8d94-831f173538ea
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+
+### 删除网络映射
+DELETE http://127.0.0.1:8000/v1/network-mappings/64e3f788-a1f1-424f-8b88-ffa3b9e60172
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

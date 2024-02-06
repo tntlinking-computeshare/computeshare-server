@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"time"
 
@@ -148,19 +149,19 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusCreating)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusCreating)
 		case queue.TaskCmd_VM_DELETE:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleting)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusDeleting)
 		case queue.TaskCmd_VM_START:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusStarting)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusStarting)
 		case queue.TaskCmd_VM_SHUTDOWN:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
@@ -170,22 +171,22 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			if instance.Status != consts.InstanceStatusExpire {
-				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosing)
+			if instance.Status != compute.InstanceStatusExpire {
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusClosing)
 			}
 		case queue.TaskCmd_VM_RESTART:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRestarting)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusRestarting)
 		case queue.TaskCmd_VM_RECREATE:
 			{
 				instanceId, err := getInstanceId(param)
 				if err != nil {
 					return err
 				}
-				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusReCreating)
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusReCreating)
 			}
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_PROXY_DELETE,
@@ -226,13 +227,13 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusRunning)
 		case queue.TaskCmd_VM_DELETE:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusDeleted)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusDeleted)
 			_ = m.computeInstanceRepo.Delete(ctx, instanceId)
 			renewal, err := m.cycleRenewalRepo.QueryByResourceId(ctx, instanceId)
 			if err != nil {
@@ -246,7 +247,7 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusRunning)
 		case queue.TaskCmd_VM_SHUTDOWN:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
@@ -256,21 +257,21 @@ func (m *TaskUseCase) UpdateTask(ctx context.Context, task *Task) error {
 			if err != nil {
 				return err
 			}
-			if instance.Status != consts.InstanceStatusExpire {
-				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusClosed)
+			if instance.Status != compute.InstanceStatusExpire {
+				_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusClosed)
 			}
 		case queue.TaskCmd_VM_RESTART:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusRunning)
 		case queue.TaskCmd_VM_RECREATE:
 			instanceId, err := getInstanceId(param)
 			if err != nil {
 				return err
 			}
-			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, consts.InstanceStatusRunning)
+			_ = m.computeInstanceRepo.UpdateStatus(ctx, instanceId, compute.InstanceStatusRunning)
 		case queue.TaskCmd_NAT_PROXY_CREATE,
 			queue.TaskCmd_NAT_VISITOR_CREATE,
 			queue.TaskCmd_NAT_PROXY_EDIT:

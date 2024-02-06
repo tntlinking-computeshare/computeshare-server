@@ -8,6 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
@@ -29,13 +30,13 @@ type ComputeSpecRepo interface {
 
 type ComputeInstanceRepo interface {
 	List(ctx context.Context, owner string) ([]*ComputeInstance, error)
-	ListByStatus(ctx context.Context, owner string, status consts.InstanceStatus) ([]*ComputeInstance, error)
+	ListByStatus(ctx context.Context, owner string, status compute.InstanceStatus) ([]*ComputeInstance, error)
 	ListByAgentId(ctx context.Context, agentId string) ([]*ComputeInstance, error)
 	ListAll(ctx context.Context) ([]*ComputeInstance, error)
 	Create(ctx context.Context, instance *ComputeInstance) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	Update(ctx context.Context, id uuid.UUID, instance *ComputeInstance) error
-	UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error
+	UpdateStatus(ctx context.Context, id uuid.UUID, status compute.InstanceStatus) error
 	SetInstanceExpiration(ctx context.Context) error
 	Get(ctx context.Context, id uuid.UUID) (*ComputeInstance, error)
 	SaveInstanceStats(context.Context, uuid.UUID, []*ComputeInstanceRds) error
@@ -177,7 +178,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		ImageId:        computeImage.ID,
 		ExpirationTime: time.Now().AddDate(0, 0, int(specPrice.Day)),
 		AgentId:        agent.ID.String(),
-		Status:         consts.InstanceStatusCreating,
+		Status:         compute.InstanceStatusCreating,
 		VncIP:          gw.InternalIP,
 		VncPort:        gp.Port,
 		DockerCompose:  dockerComposeDecode,
@@ -360,7 +361,7 @@ func (uc *ComputeInstanceUsercase) Delete(ctx context.Context, id uuid.UUID) err
 		return err
 	}
 
-	return uc.instanceRepo.UpdateStatus(ctx, instance.ID, consts.InstanceStatusDeleting)
+	return uc.instanceRepo.UpdateStatus(ctx, instance.ID, compute.InstanceStatusDeleting)
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owner string) ([]*ComputeInstance, error) {
@@ -372,7 +373,7 @@ func (uc *ComputeInstanceUsercase) ListComputeInstance(ctx context.Context, owne
 }
 
 func (uc *ComputeInstanceUsercase) ListComputeInstanceByStatus(ctx context.Context, owner string, status int32) ([]*ComputeInstance, error) {
-	list, err := uc.instanceRepo.ListByStatus(ctx, owner, consts.InstanceStatus(status))
+	list, err := uc.instanceRepo.ListByStatus(ctx, owner, compute.InstanceStatus(status))
 	return list, err
 }
 
@@ -386,7 +387,7 @@ func (uc *ComputeInstanceUsercase) Start(ctx context.Context, id uuid.UUID) erro
 		return err
 	}
 
-	instance.Status = consts.InstanceStatusStarting
+	instance.Status = compute.InstanceStatusStarting
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 
@@ -411,7 +412,7 @@ func (uc *ComputeInstanceUsercase) Stop(ctx context.Context, id uuid.UUID) error
 		return err
 	}
 
-	instance.Status = consts.InstanceStatusClosing
+	instance.Status = compute.InstanceStatusClosing
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 
@@ -452,12 +453,12 @@ func (uc *ComputeInstanceUsercase) SyncContainerOverdue() {
 	}
 
 	for _, instance := range expirationList {
-		if instance.Status == consts.InstanceStatusRunning {
+		if instance.Status == compute.InstanceStatusRunning {
 			// 停止实例
 			_ = uc.Stop(ctx, instance.ID)
 		}
 
-		err := uc.instanceRepo.UpdateStatus(ctx, instance.ID, consts.InstanceStatusExpire)
+		err := uc.instanceRepo.UpdateStatus(ctx, instance.ID, compute.InstanceStatusExpire)
 		if err != nil {
 			uc.log.Error("更新实例状态失败： ", err)
 			break
@@ -483,7 +484,7 @@ func (uc *ComputeInstanceUsercase) Reboot(ctx context.Context, instanceId uuid.U
 		return err
 	}
 
-	instance.Status = consts.InstanceStatusRestarting
+	instance.Status = compute.InstanceStatusRestarting
 
 	err = uc.instanceRepo.Update(ctx, instance.ID, instance)
 

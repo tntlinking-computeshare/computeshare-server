@@ -40,7 +40,7 @@ service Agent {
 	};
 	rpc ListAgentInstance(ListAgentInstanceReq) returns(api.server.compute.v1.ListInstanceReply){
 		option (google.api.http) = {
-			get: "/v1/agent/instance/{mac}"
+			get: "/v1/agent/instance/{agentId}"
 		};
 	}
 
@@ -117,7 +117,7 @@ message ListAgentReply {
 }
 
 message ListAgentInstanceReq {
-	string mac = 1;
+	string agentId = 1;
 }
 
 message ReportInstanceStatusReply {

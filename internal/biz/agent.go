@@ -104,8 +104,8 @@ func (s *AgentUsecase) SyncAgentStatus() {
 
 }
 
-func (uc *AgentUsecase) ListAgentInstance(ctx context.Context, peerId string) ([]*ComputeInstance, error) {
-	return uc.instanceRepo.ListByAgentId(ctx, peerId)
+func (uc *AgentUsecase) ListAgentInstance(ctx context.Context, agentId string) ([]*ComputeInstance, error) {
+	return uc.instanceRepo.ListByAgentId(ctx, agentId)
 }
 
 func (uc *AgentUsecase) ReportInstanceStatus(ctx context.Context, instance *ComputeInstance) error {

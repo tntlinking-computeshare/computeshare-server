@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 	"time"
 )
@@ -37,7 +37,7 @@ func (csr *computeInstanceRepo) List(ctx context.Context, owner string) ([]*biz.
 	return lo.Map(list, csr.toBiz), err
 }
 
-func (csr *computeInstanceRepo) ListByStatus(ctx context.Context, owner string, status consts.InstanceStatus) ([]*biz.ComputeInstance, error) {
+func (csr *computeInstanceRepo) ListByStatus(ctx context.Context, owner string, status compute.InstanceStatus) ([]*biz.ComputeInstance, error) {
 	list, err := csr.data.getComputeInstance(ctx).Query().
 		Where(computeinstance.OwnerEQ(owner), computeinstance.Status(status)).
 		Order(computeinstance.ByExpirationTime(sql.OrderDesc())).
@@ -175,7 +175,7 @@ func (crs *computeInstanceRepo) Get(ctx context.Context, id uuid.UUID) (*biz.Com
 }
 
 func (crs *computeInstanceRepo) ListAll(ctx context.Context) ([]*biz.ComputeInstance, error) {
-	result, err := crs.data.getComputeInstance(ctx).Query().Where(computeinstance.StatusEQ(consts.InstanceStatusRunning)).All(ctx)
+	result, err := crs.data.getComputeInstance(ctx).Query().Where(computeinstance.StatusEQ(compute.InstanceStatusRunning)).All(ctx)
 	if err != nil {
 		return []*biz.ComputeInstance{}, err
 	}
@@ -209,21 +209,21 @@ func (crs *computeInstanceRepo) GetInstanceStats(ctx context.Context, id uuid.UU
 
 func (crs *computeInstanceRepo) SetInstanceExpiration(ctx context.Context) error {
 	return crs.data.getComputeInstance(ctx).Update().
-		SetStatus(consts.InstanceStatusExpire).
+		SetStatus(compute.InstanceStatusExpire).
 		Where(
 			computeinstance.ExpirationTimeLT(time.Now()),
-			computeinstance.StatusNEQ(consts.InstanceStatusExpire),
+			computeinstance.StatusNEQ(compute.InstanceStatusExpire),
 		).
 		Exec(ctx)
 }
 
-func (crs *computeInstanceRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status consts.InstanceStatus) error {
+func (crs *computeInstanceRepo) UpdateStatus(ctx context.Context, id uuid.UUID, status compute.InstanceStatus) error {
 	return crs.data.getComputeInstance(ctx).UpdateOneID(id).SetStatus(status).Exec(ctx)
 }
 
 func (csr *computeInstanceRepo) ListExpiration(ctx context.Context) ([]*biz.ComputeInstance, error) {
 	list, err := csr.data.getComputeInstance(ctx).Query().Where(
-		computeinstance.ExpirationTimeLT(time.Now()), computeinstance.StatusNEQ(consts.InstanceStatusExpire),
+		computeinstance.ExpirationTimeLT(time.Now()), computeinstance.StatusNEQ(compute.InstanceStatusExpire),
 	).All(ctx)
 	if err != nil {
 		return nil, err
@@ -250,7 +250,7 @@ func (csr *computeInstanceRepo) ListByOrderDue3Day(ctx context.Context) []*biz.C
 	startTime = startTime.AddDate(0, 0, 3)
 	endTime := startTime.AddDate(0, 0, 1)
 	item, err := csr.data.getComputeInstance(ctx).Query().Where(
-		computeinstance.ExpirationTimeGT(startTime), computeinstance.ExpirationTimeLTE(endTime), computeinstance.StatusNotIn(consts.InstanceStatusExpire, consts.InstanceStatusDeleted, consts.InstanceStatusDeleting)).
+		computeinstance.ExpirationTimeGT(startTime), computeinstance.ExpirationTimeLTE(endTime), computeinstance.StatusNotIn(compute.InstanceStatusExpire, compute.InstanceStatusDeleted, compute.InstanceStatusDeleting)).
 		All(ctx)
 
 	if err != nil {

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/global"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
 	"time"
 
@@ -164,7 +164,7 @@ func (m *NetworkMappingUseCase) CreateNetworkMapping(ctx context.Context, nmc *N
 	if err != nil {
 		return nil, errors.New("compute instance cannot found")
 	}
-	if computeInstance.Status != consts.InstanceStatusRunning {
+	if computeInstance.Status != compute.InstanceStatusRunning {
 		return nil, errors.New("compute instance must be running")
 	}
 
@@ -282,7 +282,7 @@ func (m *NetworkMappingUseCase) UpdateNetworkMapping(ctx context.Context, id uui
 		return nil, err
 	}
 
-	if newComputeInstance.Status != consts.InstanceStatusRunning {
+	if newComputeInstance.Status != compute.InstanceStatusRunning {
 		return nil, errors.New("请在虚拟机运行中创建端口映射")
 	}
 
