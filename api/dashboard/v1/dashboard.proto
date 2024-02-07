@@ -100,7 +100,7 @@ message StoragesCountReply {
 		string storagesTotal = 1;
 		int32 storageProvidersNum = 2;
 		int32 usedVolumesTotal = 3;
-		int32 unusedVolumeCount = 4;
+		int32 unusedVolumeTotal = 4;
 		int32 bucketsTotal = 5;
 	}
 }
@@ -111,8 +111,9 @@ message StoragesProvidersListReply {
 	string message = 2;
 	repeated StoragesProviders data = 3;
 	message StoragesProviders {
-		string instance = 1;
-		int32 volumeNum = 2;
+		int32 id = 1;
+		string instance = 2;
+		int32 volumeNum = 3;
 	}
 }
 
@@ -122,8 +123,9 @@ message StorageBucketsVolumeNumListReply {
 	string message = 2;
 	repeated BucketsVolume data = 3;
 	message BucketsVolume {
-		string name = 1;
-		int32 volumeNum = 2;
+		int32 id = 1;
+		string name = 2;
+		int32 volumeNum = 3;
 	}
 }
 

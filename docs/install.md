@@ -79,3 +79,11 @@ systemctl start frps
 ```
 
 将frps 服务7000端口映射到公网， computehsare-client 客户端 server.p2p 配置 frps的公网和端口
+
+### prometheus 安装
+```shell
+mkdir prometheus
+将项目中的 `prometheus.yml`修改后放入
+docker compose docker-compose-prometheus.yml文件
+##设置测试环境密码为 Tntlinking2024 
+```

@@ -397,3 +397,113 @@ spec:
                 name: seaweedfs-s3-service
                 port:
                   number: 9333
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: computeshare-2024
+spec:
+  type: ExternalName
+  externalName: 192.168.0.2
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: grafana-service
+  namespace: computeshare-2024
+subsets:
+  - addresses:
+      - ip: 192.168.0.2
+    ports:
+      - port: 3000
+        protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: computeshare-2024
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - grafana.test-computeshare.tntlinking.com
+      secretName: grafana-computeshare-tntlinking-tls
+  rules:
+    - host: grafana.test-computeshare.tntlinking.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana-service
+                port:
+                  number: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+  namespace: computeshare-2024
+spec:
+  type: ExternalName
+  externalName: 192.168.0.2
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: prometheus-service
+  namespace: computeshare-2024
+subsets:
+  - addresses:
+      - ip: 192.168.0.2
+    ports:
+      - port: 9090
+        protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-ingress
+  namespace: computeshare-2024
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - prometheus.test-computeshare.tntlinking.com
+      secretName: prometheus-computeshare-tntlinking-tls
+  rules:
+    - host: prometheus.test-computeshare.tntlinking.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus-service
+                port:
+                  number: 9090

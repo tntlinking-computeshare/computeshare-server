@@ -135,7 +135,7 @@ func (d *DashboardUseCase) StoragesCount(ctx context.Context) (count *pb.Storage
 	if err != nil {
 		return nil, err
 	}
-	storagesCount.UnusedVolumeCount = int32(gjson.GetBytes(unusedVolumeCountBytes, "data.result.0.value.1").Int())
+	storagesCount.UnusedVolumeTotal = int32(gjson.GetBytes(unusedVolumeCountBytes, "data.result.0.value.1").Int())
 	//获取总使用Buckets
 	bucketsTotalBytes, err := d.GetByteFromPrometheus(BucketsTotal)
 	if err != nil {
@@ -152,8 +152,9 @@ func (d *DashboardUseCase) StoragesProvidersList(ctx context.Context) ([]*pb.Sto
 		return nil, err
 	}
 	results := gjson.GetBytes(providersCorrespondingVolumesNumBytes, "data.result").Array()
-	for _, manyByte := range results {
+	for i, manyByte := range results {
 		var storagesProviders pb.StoragesProvidersListReply_StoragesProviders
+		storagesProviders.Id = int32(i + 1)
 		storagesProviders.Instance = manyByte.Get("metric.instance").String()
 		storagesProviders.VolumeNum = int32(manyByte.Get("value.1").Int())
 		storagesProvidersList = append(storagesProvidersList, &storagesProviders)
@@ -168,8 +169,9 @@ func (d *DashboardUseCase) StorageBucketsVolumeNumList(ctx context.Context) ([]*
 		return nil, err
 	}
 	results := gjson.GetBytes(bucketsCorrespondingVolumesNumBytes, "data.result").Array()
-	for _, manyByte := range results {
+	for i, manyByte := range results {
 		var bucketsVolume pb.StorageBucketsVolumeNumListReply_BucketsVolume
+		bucketsVolume.Id = int32(i + 1)
 		bucketsVolume.Name = manyByte.Get("metric.collection").String()
 		bucketsVolume.VolumeNum = int32(manyByte.Get("value.1").Int())
 		bucketsVolumeList = append(bucketsVolumeList, &bucketsVolume)
