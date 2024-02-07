@@ -180,7 +180,7 @@ data:
         pay_return_url: http://localhost/dashboard/cycles
         pay_notify_url: https://api.test-computeshare.tntlinking.com/v1/alipay/pay/notify
       prometheus:
-        host: http://61.172.179.73:9090
+        host: https://prometheus.test-computeshare.tntlinking.com
         query_api: /api/v1/query
 
 ---
