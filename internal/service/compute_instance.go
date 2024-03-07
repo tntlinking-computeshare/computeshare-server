@@ -236,10 +236,6 @@ func (s *ComputeInstanceService) GetInstanceConsole(ctx context.Context, id stri
 	if err != nil {
 		return "", err
 	}
-	err = s.CheckPermission(ctx, id)
-	if err != nil {
-		return "", err
-	}
 	return s.uc.GetVncConsole(ctx, instanceId, userId)
 }
 

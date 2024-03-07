@@ -182,8 +182,9 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	fmt.Println("")
 	fmt.Println("请求地址：", r.RequestURI)
 	cookie, _ := r.Cookie("token")
-	fmt.Println("请求Header:  cookie: ", cookie.Value)
 	tokenString := cookie.Value
+	fmt.Println("apiKey:", ac.ApiKey)
+	fmt.Println("token:", tokenString)
 
 	token, err := jwt2.Parse(tokenString, func(token *jwt2.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
@@ -212,7 +213,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	//192.168.22.238:5915
 	if err != nil {
 		fmt.Println("===== websocket失败 ======")
-		fmt.Println(err)
+		fmt.Println("jwt 验证失败：", err.Error())
 		fmt.Println("=====              ======")
 		return
 	}
@@ -224,7 +225,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	consoleUrl, err := instanceService.GetInstanceConsole(r.Context(), r.FormValue("instanceId"), userId)
 	if err != nil {
 		fmt.Println("===== websocket失败 ======")
-		fmt.Println(err)
+		fmt.Println("jwt 解析失败：", err.Error())
 		fmt.Println("=====              ======")
 		return
 	}
@@ -233,7 +234,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	noVNCConn, _, err := websocket.DefaultDialer.Dial(consoleUrl, nil)
 	if err != nil {
 		fmt.Println("===== websocket失败 ======")
-		fmt.Println(err)
+		fmt.Println("dail 失败：", err)
 		fmt.Println("=====              ======")
 		return
 	}
@@ -245,14 +246,14 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 			_, message, err := noVNCConn.ReadMessage()
 			if err != nil {
 				fmt.Println("===== websocket失败 ======")
-				fmt.Println(err)
+				fmt.Println("ReadMessage失败： ", err)
 				fmt.Println("=====              ======")
 				return
 			}
 			err = conn.WriteMessage(websocket.BinaryMessage, message)
 			if err != nil {
 				fmt.Println("===== websocket失败 ======")
-				fmt.Println(err)
+				fmt.Println("WriteMessage失败: ", err)
 				fmt.Println("=====              ======")
 				return
 			}
