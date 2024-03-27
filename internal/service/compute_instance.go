@@ -288,7 +288,7 @@ func (s *ComputeInstanceService) GetInstanceVncURL(ctx context.Context, req *pb.
 	return &pb.GetInstanceVncURLReply{
 		Code:    200,
 		Message: SUCCESS,
-		Data:    fmt.Sprintf("%s/vnc_lite.html?host=%s&instanceId=%s", s.dispose.Domain.VncHost, s.dispose.Domain.ApiHost, req.GetId()),
+		Data:    fmt.Sprintf("https://vnc.%s/vnc_lite.html?host=api.%s&instanceId=%s", s.dispose.Domain.BaseHost, s.dispose.Domain.BaseHost, req.GetId()),
 	}, nil
 }
 

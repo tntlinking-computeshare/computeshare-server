@@ -38,6 +38,7 @@ dispose:
     deductions_successful_template_id:
     three_days_before_expiration_template_id:
   domain:
+    base_host: computeshare.newtouch.com
     vnc_host: https://vnc.computeshare.newtouch.com
     api_host: api.computeshare.newtouch.com
   alipay:

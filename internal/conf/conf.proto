@@ -81,8 +81,9 @@ message Dispose{
   }
 
   message Domain {
-    string vnc_host = 1;
-    string api_host = 2;
+    string base_host = 1;
+    string vnc_host = 2;
+    string api_host = 3;
   }
 
   message Alipay {
