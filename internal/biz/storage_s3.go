@@ -63,6 +63,7 @@ type S3UserRepo interface {
 	DeleteBucket(ctx context.Context, user *S3User, bucketName string) error
 	ListBucket(ctx context.Context, userId uuid.UUID) ([]*S3Bucket, error)
 	BucketPage(ctx context.Context, userId uuid.UUID, name string, page, size int32) ([]*S3Bucket, int, error)
+	CountS3Key(ctx context.Context) (int, error)
 }
 
 type StorageS3UseCase struct {

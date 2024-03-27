@@ -19,9 +19,11 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/ipfs/go-ipfs-api v0.3.0
 	github.com/ipfs/go-ipfs-files v0.0.9
+	github.com/jinzhu/copier v0.4.0
 	github.com/mohaijiang/computeshare-client v0.0.5
 	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
+	github.com/tidwall/gjson v1.17.0
 	github.com/tj/assert v0.0.3
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
@@ -85,7 +87,6 @@ require (
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/ipfs/go-cid v0.0.7 // indirect
-	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -130,6 +131,8 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/templexxx/cpufeat v0.0.0-20180724012125-cef66df7f161 // indirect
 	github.com/templexxx/xor v0.0.0-20191217153810-f85b25db303b // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/whyrusleeping/tar-utils v0.0.0-20180509141711-8c6c8ba81d5c // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect

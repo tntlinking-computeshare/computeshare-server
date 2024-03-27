@@ -48,3 +48,6 @@ dispose:
     app_private_key:
     pay_return_url:
     pay_notify_url:
+  prometheus:
+    host:
+    query_api:

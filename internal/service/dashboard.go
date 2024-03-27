@@ -37,7 +37,36 @@ func (d *DashboardService) GatewaysCount(ctx context.Context, req *pb.GatewaysCo
 	}, err
 }
 func (d *DashboardService) StoragesCount(ctx context.Context, req *pb.StoragesCountRequest) (*pb.StoragesCountReply, error) {
-	return &pb.StoragesCountReply{}, nil
+	storagesCount, err := d.dashboardUseCase.StoragesCount(ctx)
+	return &pb.StoragesCountReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    storagesCount,
+	}, err
+}
+func (d *DashboardService) StoragesProvidersList(ctx context.Context, req *pb.StoragesProvidersListRequest) (*pb.StoragesProvidersListReply, error) {
+	list, err := d.dashboardUseCase.StoragesProvidersList(ctx)
+	return &pb.StoragesProvidersListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    list,
+	}, err
+}
+func (d *DashboardService) StorageBucketsVolumeNumList(ctx context.Context, req *pb.StorageBucketsVolumeNumListRequest) (*pb.StorageBucketsVolumeNumListReply, error) {
+	list, err := d.dashboardUseCase.StorageBucketsVolumeNumList(ctx)
+	return &pb.StorageBucketsVolumeNumListReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    list,
+	}, err
+}
+func (d *DashboardService) StorageS3KeyCallCount(ctx context.Context, req *pb.StorageS3KeyCallCountRequest) (*pb.StorageS3KeyCallCountReply, error) {
+	count, err := d.dashboardUseCase.StorageS3KeyCallCount(ctx)
+	return &pb.StorageS3KeyCallCountReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    count,
+	}, err
 }
 func (d *DashboardService) ProvidersList(ctx context.Context, req *pb.ProvidersListRequest) (*pb.ProvidersListReply, error) {
 	list, err := d.dashboardUseCase.ProvidersList(ctx)

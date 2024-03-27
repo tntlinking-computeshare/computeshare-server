@@ -59,6 +59,7 @@ message Dispose{
   Dh3t dh3t = 2;
   Domain domain = 3;
   Alipay alipay = 4;
+  Prometheus prometheus = 5;
 
   message S3{
     string target_docker_host = 1;
@@ -92,5 +93,9 @@ message Dispose{
     string app_private_key = 5;
     string pay_return_url = 6;
     string pay_notify_url = 7;
+  }
+  message Prometheus {
+    string host = 1;
+    string query_api = 2;
   }
 }

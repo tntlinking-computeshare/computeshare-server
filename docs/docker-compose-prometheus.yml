@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  pushgateway:
+    image: prom/pushgateway:v1.6.2
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - '9091:9091'
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+
+volumes:
+  grafana-storage: {}

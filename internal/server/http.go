@@ -47,6 +47,9 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersCount"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysCount"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/StoragesCount"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/StoragesProvidersList"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/StorageBucketsVolumeNumList"] = struct{}{}
+	whiteList["/api.server.dashboard.v1.Dashboard/StorageS3KeyCallCount"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersList"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysList"] = struct{}{}
 	whiteList["/api.server.dashboard.v1.Dashboard/CyclesCount"] = struct{}{}

@@ -1,9 +1,11 @@
 package biz
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/tj/assert"
 	"io"
 	"net/http"
 	"net/url"
@@ -83,4 +85,12 @@ func TestTime(t *testing.T) {
 	fmt.Println(d)
 	fmt.Println("1704439933.053")
 	fmt.Println(time.Now().Unix())
+}
+
+func TestComputeInstanceUsercase_GetLast24HInstanceStats(t *testing.T) {
+	client := NewComputeInstanceUsercase(
+		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
+	data, err := client.GetLast24HInstanceStats(context.Background(), "76fe0a88-1960-4966-9beb-41b1c1251595")
+	assert.NoError(t, err)
+	fmt.Println(data)
 }
