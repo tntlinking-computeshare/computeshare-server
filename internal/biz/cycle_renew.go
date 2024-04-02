@@ -21,6 +21,8 @@ type CycleRenewalRepo interface {
 	PageByUserId(ctx context.Context, id uuid.UUID, page, size int) (*global2.Page[*CycleRenewal], error)
 	QueryDailyRenew(ctx context.Context) ([]*CycleRenewal, error)
 	QueryByResourceId(ctx context.Context, instanceId uuid.UUID) (*CycleRenewal, error)
+	ExistsByResourceId(ctx context.Context, instanceId uuid.UUID) (bool, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 type CycleRenewalUseCase struct {
@@ -29,6 +31,7 @@ type CycleRenewalUseCase struct {
 	cycleRepo            CycleRepo
 	cycleOrderRepo       CycleOrderRepo
 	cycleTransactionRepo CycleTransactionRepo
+	specRepo             ComputeSpecRepo
 	computeInstanceRepo  ComputeInstanceRepo
 	smsUseCase           *SmsUseCase
 }
@@ -39,6 +42,7 @@ func NewCycleRenewalUseCase(
 	cycleRepo CycleRepo,
 	cycleOrderRepo CycleOrderRepo,
 	cycleTransactionRepo CycleTransactionRepo,
+	specRepo ComputeSpecRepo,
 	computeInstanceRepo ComputeInstanceRepo,
 	smsUseCase *SmsUseCase,
 ) *CycleRenewalUseCase {
@@ -48,6 +52,7 @@ func NewCycleRenewalUseCase(
 		cycleRepo:            cycleRepo,
 		cycleOrderRepo:       cycleOrderRepo,
 		cycleTransactionRepo: cycleTransactionRepo,
+		specRepo:             specRepo,
 		computeInstanceRepo:  computeInstanceRepo,
 		smsUseCase:           smsUseCase,
 	}
@@ -335,4 +340,80 @@ func (c *CycleRenewalUseCase) DailyCheck(db *ent.Client) {
 
 		}
 	}
+}
+
+func (c *CycleRenewalUseCase) CreateRenewal(ctx context.Context, instanceId string) (uuid.UUID, error) {
+	claim, ok := global.FromContext(ctx)
+	if !ok {
+		return uuid.Nil, errors.New(400, "unauthorized", "无权限")
+	}
+
+	resourceId, err := uuid.Parse(instanceId)
+	if err != nil {
+		return uuid.Nil, errors.New(400, "resourceId is not uuid", "资源id不合法")
+	}
+
+	exists, err := c.repo.ExistsByResourceId(ctx, resourceId)
+	if err != nil {
+		return uuid.Nil, errors.New(400, "renewal query fail", "续费资源查询失败")
+	}
+	if exists {
+		return uuid.Nil, errors.New(400, "renewal is exists", "续费已存在")
+	}
+
+	instance, err := c.computeInstanceRepo.Get(ctx, resourceId)
+	if err != nil {
+		return uuid.Nil, errors.New(400, "resource not found", "资源不存在")
+	}
+	if !instance.Status.CanRenewal() {
+		return uuid.Nil, errors.New(400, "resource cannot renewal", "资源已删除或已过期")
+	}
+
+	computeSpec, err := c.specRepo.QueryByCoreAndMemory(ctx, instance.Core, instance.Memory)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	specPrice, err := c.specRepo.GetSpecPrice(ctx, computeSpec.ID)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	userId := claim.GetUserId()
+
+	// 创建续费管理
+	renewalTime := instance.ExpirationTime.AddDate(0, 0, -9)
+	if renewalTime.Before(time.Now()) {
+		renewalTime = time.Now()
+	}
+	renewalTime = time.Date(renewalTime.Year(), renewalTime.Month(), renewalTime.Day(), 23, 0, 0, 0, renewalTime.Location())
+
+	renewal := &CycleRenewal{
+		FkUserID:     userId,
+		ResourceID:   resourceId,
+		ResourceType: int(consts.RenewalResourceType_Resource),
+		ProductName:  string(consts.RentingCloudServers),
+		ProductDesc:  fmt.Sprintf("%s | %d核%dGB | %s | %d天", instance.Name, computeSpec.Core, computeSpec.Memory, instance.Image, specPrice.Day),
+		State:        int8(consts.RenewalState_IN_SERVICE),
+		ExtendDay:    int8(specPrice.Day),
+		ExtendPrice:  float64(specPrice.Price),
+		DueTime:      &instance.ExpirationTime,
+		RenewalTime:  &renewalTime,
+		AutoRenewal:  true,
+	}
+
+	renewal, err = c.repo.Create(ctx, renewal)
+
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return renewal.ID, nil
+}
+
+func (c *CycleRenewalUseCase) DeleteRenewal(ctx context.Context, renewalId string) error {
+	id, err := uuid.Parse(renewalId)
+	if err != nil {
+		return err
+	}
+	return c.repo.Delete(ctx, id)
 }

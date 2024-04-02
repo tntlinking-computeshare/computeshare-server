@@ -150,3 +150,11 @@ func (r *cycleRenewalRepo) QueryByResourceId(ctx context.Context, resourceId uui
 	entity, err := tx.Query().Where(cyclerenewal.ResourceID(resourceId)).First(ctx)
 	return r.toBiz(entity, 0), err
 }
+
+func (r *cycleRenewalRepo) Delete(ctx context.Context, id uuid.UUID) error {
+	return r.data.getCycleRenewal(ctx).DeleteOneID(id).Exec(ctx)
+}
+
+func (r *cycleRenewalRepo) ExistsByResourceId(ctx context.Context, resourceId uuid.UUID) (bool, error) {
+	return r.data.getCycleRenewal(ctx).Query().Where(cyclerenewal.ResourceID(resourceId)).Exist(ctx)
+}

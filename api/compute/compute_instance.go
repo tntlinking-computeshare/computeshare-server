@@ -24,3 +24,11 @@ const (
 	// InstanceStatusReCreating 实例重建中
 	InstanceStatusReCreating
 )
+
+func (i InstanceStatus) CanRenewal() bool {
+	if i == InstanceStatusDeleted || i == InstanceStatusDeleting || i == InstanceStatusExpire {
+		return false
+	}
+
+	return true
+}

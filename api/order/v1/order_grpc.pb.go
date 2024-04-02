@@ -26,7 +26,9 @@ const (
 	Order_GetCycleBalance_FullMethodName           = "/api.server.order.v1.Order/GetCycleBalance"
 	Order_OrderList_FullMethodName                 = "/api.server.order.v1.Order/OrderList"
 	Order_CycleTransactionList_FullMethodName      = "/api.server.order.v1.Order/CycleTransactionList"
+	Order_CreateCycleRenewal_FullMethodName        = "/api.server.order.v1.Order/CreateCycleRenewal"
 	Order_CycleRenewalDetail_FullMethodName        = "/api.server.order.v1.Order/CycleRenewalDetail"
+	Order_DeleteCycleRenewal_FullMethodName        = "/api.server.order.v1.Order/DeleteCycleRenewal"
 	Order_CycleRenewalList_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalList"
 	Order_CycleRenewalOpen_FullMethodName          = "/api.server.order.v1.Order/CycleRenewalOpen"
 	Order_CycleRenewalClose_FullMethodName         = "/api.server.order.v1.Order/CycleRenewalClose"
@@ -45,7 +47,9 @@ type OrderClient interface {
 	GetCycleBalance(ctx context.Context, in *GetCycleBalanceRequest, opts ...grpc.CallOption) (*GetCycleBalanceReply, error)
 	OrderList(ctx context.Context, in *OrderListRequest, opts ...grpc.CallOption) (*OrderListReply, error)
 	CycleTransactionList(ctx context.Context, in *CycleTransactionListRequest, opts ...grpc.CallOption) (*CycleTransactionListReply, error)
+	CreateCycleRenewal(ctx context.Context, in *CycleRenewalCreateRequest, opts ...grpc.CallOption) (*CycleRenewalCreateReply, error)
 	CycleRenewalDetail(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalGetReply, error)
+	DeleteCycleRenewal(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
 	CycleRenewalList(ctx context.Context, in *CycleRenewalListRequest, opts ...grpc.CallOption) (*CycleRenewalListReply, error)
 	CycleRenewalOpen(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
 	CycleRenewalClose(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error)
@@ -124,9 +128,27 @@ func (c *orderClient) CycleTransactionList(ctx context.Context, in *CycleTransac
 	return out, nil
 }
 
+func (c *orderClient) CreateCycleRenewal(ctx context.Context, in *CycleRenewalCreateRequest, opts ...grpc.CallOption) (*CycleRenewalCreateReply, error) {
+	out := new(CycleRenewalCreateReply)
+	err := c.cc.Invoke(ctx, Order_CreateCycleRenewal_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *orderClient) CycleRenewalDetail(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalGetReply, error) {
 	out := new(CycleRenewalGetReply)
 	err := c.cc.Invoke(ctx, Order_CycleRenewalDetail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *orderClient) DeleteCycleRenewal(ctx context.Context, in *CycleRenewalGetRequest, opts ...grpc.CallOption) (*CycleRenewalBaseReply, error) {
+	out := new(CycleRenewalBaseReply)
+	err := c.cc.Invoke(ctx, Order_DeleteCycleRenewal_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +211,9 @@ type OrderServer interface {
 	GetCycleBalance(context.Context, *GetCycleBalanceRequest) (*GetCycleBalanceReply, error)
 	OrderList(context.Context, *OrderListRequest) (*OrderListReply, error)
 	CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error)
+	CreateCycleRenewal(context.Context, *CycleRenewalCreateRequest) (*CycleRenewalCreateReply, error)
 	CycleRenewalDetail(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error)
+	DeleteCycleRenewal(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error)
 	CycleRenewalOpen(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
 	CycleRenewalClose(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error)
@@ -223,8 +247,14 @@ func (UnimplementedOrderServer) OrderList(context.Context, *OrderListRequest) (*
 func (UnimplementedOrderServer) CycleTransactionList(context.Context, *CycleTransactionListRequest) (*CycleTransactionListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CycleTransactionList not implemented")
 }
+func (UnimplementedOrderServer) CreateCycleRenewal(context.Context, *CycleRenewalCreateRequest) (*CycleRenewalCreateReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCycleRenewal not implemented")
+}
 func (UnimplementedOrderServer) CycleRenewalDetail(context.Context, *CycleRenewalGetRequest) (*CycleRenewalGetReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalDetail not implemented")
+}
+func (UnimplementedOrderServer) DeleteCycleRenewal(context.Context, *CycleRenewalGetRequest) (*CycleRenewalBaseReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCycleRenewal not implemented")
 }
 func (UnimplementedOrderServer) CycleRenewalList(context.Context, *CycleRenewalListRequest) (*CycleRenewalListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CycleRenewalList not implemented")
@@ -380,6 +410,24 @@ func _Order_CycleTransactionList_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Order_CreateCycleRenewal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).CreateCycleRenewal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_CreateCycleRenewal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).CreateCycleRenewal(ctx, req.(*CycleRenewalCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Order_CycleRenewalDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CycleRenewalGetRequest)
 	if err := dec(in); err != nil {
@@ -394,6 +442,24 @@ func _Order_CycleRenewalDetail_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OrderServer).CycleRenewalDetail(ctx, req.(*CycleRenewalGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Order_DeleteCycleRenewal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CycleRenewalGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OrderServer).DeleteCycleRenewal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Order_DeleteCycleRenewal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OrderServer).DeleteCycleRenewal(ctx, req.(*CycleRenewalGetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -524,8 +590,16 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Order_CycleTransactionList_Handler,
 		},
 		{
+			MethodName: "CreateCycleRenewal",
+			Handler:    _Order_CreateCycleRenewal_Handler,
+		},
+		{
 			MethodName: "CycleRenewalDetail",
 			Handler:    _Order_CycleRenewalDetail_Handler,
+		},
+		{
+			MethodName: "DeleteCycleRenewal",
+			Handler:    _Order_DeleteCycleRenewal_Handler,
 		},
 		{
 			MethodName: "CycleRenewalList",

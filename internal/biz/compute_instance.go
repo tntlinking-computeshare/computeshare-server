@@ -25,6 +25,7 @@ import (
 type ComputeSpecRepo interface {
 	List(ctx context.Context) ([]*ComputeSpec, error)
 	Get(ctx context.Context, id int32) (*ComputeSpec, error)
+	QueryByCoreAndMemory(ctx context.Context, core int, memory int) (*ComputeSpec, error)
 	GetSpecPrice(ctx context.Context, id int32) (*ComputeSpecPrice, error)
 }
 

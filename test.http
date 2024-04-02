@@ -326,3 +326,18 @@ GET https://api.computeshare.newtouch.com/v1/cycle/renewal?page=1&size=10
 #GET http://127.0.0.1:8000/v1/cycle/renewal?page=1&size=10
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
+
+
+### 创建自动续费
+POST  http://127.0.0.1:8000/v1/cycle/renewal
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "resourceId": "4e241e72-d482-490b-864d-ff1a9e6d9adb"
+}
+
+
+### 删除自动续费
+DELETE http://127.0.0.1:8000/v1/cycle/renewal/16e97fba-abce-4f5f-9023-4f0d873188da
+Authorization: Bearer {{ access_token }}

@@ -51,9 +51,22 @@ service Order {
 		};
 	}
 
+	rpc CreateCycleRenewal(CycleRenewalCreateRequest) returns (CycleRenewalCreateReply) {
+		option (google.api.http) = {
+			post: "/v1/cycle/renewal",
+			body: "*"
+		};
+	}
+
 	rpc CycleRenewalDetail(CycleRenewalGetRequest) returns (CycleRenewalGetReply) {
 		option (google.api.http) = {
 			get: "/v1/cycle/renewal/{id}",
+		};
+	}
+
+	rpc DeleteCycleRenewal(CycleRenewalGetRequest) returns (CycleRenewalBaseReply) {
+		option (google.api.http) = {
+			delete: "/v1/cycle/renewal/{id}",
 		};
 	}
 
@@ -308,4 +321,14 @@ message DailyCheckRequest {
 message DailyCheckReply {
 	int32 code = 1;
 	string message = 2;
+}
+
+message CycleRenewalCreateRequest {
+	string resource_id = 1;
+}
+
+message CycleRenewalCreateReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
 }

@@ -97,7 +97,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, dispose *conf.Dispose
 	cycleRedeemCodeRepo := data.NewCycleRedeemCodeRepo(dataData, logger)
 	orderUseCase := biz.NewOrderUseCase(cycleRepo, cycleOrderRepo, cycleRechargeRepo, alipayOrderRollbackRepo, cycleTransactionRepo, cycleRedeemCodeRepo, logger, dispose)
 	cycleTransactionUseCase := biz.NewCycleTransactionUseCase(logger, cycleTransactionRepo)
-	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeInstanceRepo, smsUseCase)
+	cycleRenewalUseCase := biz.NewCycleRenewalUseCase(logger, cycleRenewalRepo, cycleRepo, cycleOrderRepo, cycleTransactionRepo, computeSpecRepo, computeInstanceRepo, smsUseCase)
 	orderService := service.NewOrderService(logger, orderUseCase, cycleTransactionUseCase, cycleRenewalUseCase, computeInstanceUsercase, client)
 	dashboardUseCase := biz.NewDashboardUseCase(agentRepo, gatewayRepo, gatewayPortRepo, cycleRedeemCodeRepo, cycleRechargeRepo, computeInstanceRepo, userRepo, dispose, s3UserRepo, logger)
 	dashboardService := service.NewDashboardService(dashboardUseCase, logger)

@@ -323,3 +323,21 @@ func (o *OrderService) RenewDailyCheck(_ context.Context, _ *pb.DailyCheckReques
 		Message: SUCCESS,
 	}, nil
 }
+
+func (o *OrderService) CreateCycleRenewal(ctx context.Context, req *pb.CycleRenewalCreateRequest) (*pb.CycleRenewalCreateReply, error) {
+	renewalId, err := o.cycleRenewalUseCase.CreateRenewal(ctx, req.GetResourceId())
+	return &pb.CycleRenewalCreateReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    renewalId.String(),
+	}, err
+}
+
+func (o *OrderService) DeleteCycleRenewal(ctx context.Context, req *pb.CycleRenewalGetRequest) (*pb.CycleRenewalBaseReply, error) {
+	err := o.cycleRenewalUseCase.DeleteRenewal(ctx, req.GetId())
+
+	return &pb.CycleRenewalBaseReply{
+		Code:    200,
+		Message: SUCCESS,
+	}, err
+}
