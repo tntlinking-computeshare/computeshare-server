@@ -170,19 +170,13 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		}
 	}
 
-	var ExpirationTime time.Time
-	if cic.ExpirationDay != nil && *cic.ExpirationDay < specPrice.Day {
-		ExpirationTime = time.Now().AddDate(0, 0, int(*cic.ExpirationDay))
-	} else {
-		ExpirationTime = time.Now().AddDate(0, 0, int(specPrice.Day))
-	}
+	ExpirationTime := time.Now().AddDate(0, 0, int(specPrice.Day))
 
 	instance := &ComputeInstance{
 		Owner:          claim.UserID,
 		Name:           cic.Name,
 		Core:           computeSpec.Core,
 		Memory:         computeSpec.Memory,
-		Port:           fmt.Sprintf("%d", computeImage.Port),
 		Image:          fmt.Sprintf("%s:%s", computeImage.Image, computeImage.Tag),
 		ImageId:        computeImage.ID,
 		ExpirationTime: ExpirationTime,
@@ -717,4 +711,8 @@ func (uc *ComputeInstanceUsercase) NotificationOverDue(ctx context.Context) {
 		}
 		_ = uc.smsUseCase.ResourceBecomeDue(item.Name, userId)
 	}
+}
+
+func (uc *ComputeInstanceUsercase) GetComputeImage(ctx context.Context, id int32) (*ComputeImage, error) {
+	return uc.imageRepo.Get(ctx, id)
 }

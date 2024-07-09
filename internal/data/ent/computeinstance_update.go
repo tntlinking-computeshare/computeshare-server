@@ -6,12 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
@@ -113,15 +113,15 @@ func (ciu *ComputeInstanceUpdate) SetExpirationTime(t time.Time) *ComputeInstanc
 }
 
 // SetStatus sets the "status" field.
-func (ciu *ComputeInstanceUpdate) SetStatus(gs compute.InstanceStatus) *ComputeInstanceUpdate {
+func (ciu *ComputeInstanceUpdate) SetStatus(cs compute.InstanceStatus) *ComputeInstanceUpdate {
 	ciu.mutation.ResetStatus()
-	ciu.mutation.SetStatus(gs)
+	ciu.mutation.SetStatus(cs)
 	return ciu
 }
 
-// AddStatus adds gs to the "status" field.
-func (ciu *ComputeInstanceUpdate) AddStatus(gs compute.InstanceStatus) *ComputeInstanceUpdate {
-	ciu.mutation.AddStatus(gs)
+// AddStatus adds cs to the "status" field.
+func (ciu *ComputeInstanceUpdate) AddStatus(cs compute.InstanceStatus) *ComputeInstanceUpdate {
+	ciu.mutation.AddStatus(cs)
 	return ciu
 }
 
@@ -441,15 +441,15 @@ func (ciuo *ComputeInstanceUpdateOne) SetExpirationTime(t time.Time) *ComputeIns
 }
 
 // SetStatus sets the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) SetStatus(gs compute.InstanceStatus) *ComputeInstanceUpdateOne {
+func (ciuo *ComputeInstanceUpdateOne) SetStatus(cs compute.InstanceStatus) *ComputeInstanceUpdateOne {
 	ciuo.mutation.ResetStatus()
-	ciuo.mutation.SetStatus(gs)
+	ciuo.mutation.SetStatus(cs)
 	return ciuo
 }
 
-// AddStatus adds gs to the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) AddStatus(gs compute.InstanceStatus) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddStatus(gs)
+// AddStatus adds cs to the "status" field.
+func (ciuo *ComputeInstanceUpdateOne) AddStatus(cs compute.InstanceStatus) *ComputeInstanceUpdateOne {
+	ciuo.mutation.AddStatus(cs)
 	return ciuo
 }
 

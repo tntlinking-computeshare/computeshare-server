@@ -80,8 +80,11 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "image", Type: field.TypeString},
 		{Name: "tag", Type: field.TypeString},
-		{Name: "port", Type: field.TypeInt32},
-		{Name: "command", Type: field.TypeString},
+		{Name: "os_type", Type: field.TypeString},
+		{Name: "os_variant", Type: field.TypeString},
+		{Name: "filename", Type: field.TypeString},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "md5", Type: field.TypeString},
 	}
 	// ComputeImagesTable holds the schema information for the "compute_images" table.
 	ComputeImagesTable = &schema.Table{

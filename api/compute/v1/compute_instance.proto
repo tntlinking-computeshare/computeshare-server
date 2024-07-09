@@ -23,6 +23,13 @@ service ComputeInstance {
 		};
 	}
 
+	// 查询镜像
+	rpc GetComputeImage(GetComputeImageRequest) returns (GetComputeImageReply) {
+		option (google.api.http) = {
+			get: "/v1/compute/image/{id}",
+		};
+	}
+
 	// 查询资源规格价格
 	rpc ListComputeSpecPrice(ListComputeSpecPriceRequest) returns (ListComputeSpecPriceReply){
 		option (google.api.http) = {
@@ -127,12 +134,27 @@ message ListComputeImageReply {
 	repeated ComputeImage data = 3;
 }
 
+message GetComputeImageRequest {
+	int32 id = 1;
+}
+
+message GetComputeImageReply {
+	int32 code = 1;
+	string message = 2;
+	ComputeImage data = 3;
+}
+
+
 message ComputeImage {
 	int32 id = 1;
 	string name = 2;
 	string image = 3;
 	string tag = 4;
-	int32 port = 5;
+	string os_type = 5;
+	string os_variant = 6;
+	string filename = 7;
+	string download_url = 8;
+	string md5 = 9;
 }
 
 message ComputeSpec {
@@ -163,7 +185,7 @@ message CreateInstanceRequest {
 	string public_key = 4;
 	string password = 5;
 	string docker_compose = 6;
-	optional int32 expiration_day = 7;
+	int32 expiration_day = 7;
 }
 
 message RecreateInstanceRequest {
@@ -225,7 +247,7 @@ message GetInstanceReply {
 }
 
 message ListInstanceRequest {
-	optional int32 status = 1 ;
+	int32 status = 1 ;
 }
 message ListInstanceReply {
 	int32 code = 1;

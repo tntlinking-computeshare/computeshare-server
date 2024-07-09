@@ -17,10 +17,16 @@ const (
 	FieldImage = "image"
 	// FieldTag holds the string denoting the tag field in the database.
 	FieldTag = "tag"
-	// FieldPort holds the string denoting the port field in the database.
-	FieldPort = "port"
-	// FieldCommand holds the string denoting the command field in the database.
-	FieldCommand = "command"
+	// FieldOsType holds the string denoting the os_type field in the database.
+	FieldOsType = "os_type"
+	// FieldOsVariant holds the string denoting the os_variant field in the database.
+	FieldOsVariant = "os_variant"
+	// FieldFilename holds the string denoting the filename field in the database.
+	FieldFilename = "filename"
+	// FieldDownloadURL holds the string denoting the download_url field in the database.
+	FieldDownloadURL = "download_url"
+	// FieldMd5 holds the string denoting the md5 field in the database.
+	FieldMd5 = "md5"
 	// Table holds the table name of the computeimage in the database.
 	Table = "compute_images"
 )
@@ -31,8 +37,11 @@ var Columns = []string{
 	FieldName,
 	FieldImage,
 	FieldTag,
-	FieldPort,
-	FieldCommand,
+	FieldOsType,
+	FieldOsVariant,
+	FieldFilename,
+	FieldDownloadURL,
+	FieldMd5,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -52,6 +61,10 @@ var (
 	ImageValidator func(string) error
 	// TagValidator is a validator for the "tag" field. It is called by the builders before save.
 	TagValidator func(string) error
+	// OsTypeValidator is a validator for the "os_type" field. It is called by the builders before save.
+	OsTypeValidator func(string) error
+	// OsVariantValidator is a validator for the "os_variant" field. It is called by the builders before save.
+	OsVariantValidator func(string) error
 )
 
 // OrderOption defines the ordering options for the ComputeImage queries.
@@ -77,12 +90,27 @@ func ByTag(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTag, opts...).ToFunc()
 }
 
-// ByPort orders the results by the port field.
-func ByPort(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPort, opts...).ToFunc()
+// ByOsType orders the results by the os_type field.
+func ByOsType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOsType, opts...).ToFunc()
 }
 
-// ByCommand orders the results by the command field.
-func ByCommand(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCommand, opts...).ToFunc()
+// ByOsVariant orders the results by the os_variant field.
+func ByOsVariant(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOsVariant, opts...).ToFunc()
+}
+
+// ByFilename orders the results by the filename field.
+func ByFilename(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFilename, opts...).ToFunc()
+}
+
+// ByDownloadURL orders the results by the download_url field.
+func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
+}
+
+// ByMd5 orders the results by the md5 field.
+func ByMd5(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMd5, opts...).ToFunc()
 }

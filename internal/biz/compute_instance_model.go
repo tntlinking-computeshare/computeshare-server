@@ -85,7 +85,6 @@ type ComputeInstanceCreate struct {
 	PublicKey     string
 	Password      string
 	DockerCompose string
-	ExpirationDay *int32
 }
 
 type ComputeImage struct {
@@ -97,8 +96,16 @@ type ComputeImage struct {
 	Image string `json:"image,omitempty"`
 	// 版本名
 	Tag string `json:"tag,omitempty"`
-	// 端口号
-	Port    int32 `json:"port,omitempty"`
+	// 操作系统类型
+	OsType string `json:"os_type,omitempty"`
+	// 操作系统版本
+	OsVariant string `json:"os_variant,omitempty"`
+	// 镜像文件名
+	Filename string `json:"filename,omitempty"`
+	// 镜像下载地址
+	DownloadURL string `json:"download_url,omitempty"`
+	// 镜像md5
+	Md5     string `json:"md5,omitempty"`
 	Command string
 }
 

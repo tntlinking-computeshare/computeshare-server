@@ -3,11 +3,11 @@
 package computeinstance
 
 import (
-	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
 )
 

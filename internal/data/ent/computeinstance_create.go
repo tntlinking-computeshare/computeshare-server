@@ -6,12 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/api/compute"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 )
 
@@ -79,8 +79,8 @@ func (cic *ComputeInstanceCreate) SetExpirationTime(t time.Time) *ComputeInstanc
 }
 
 // SetStatus sets the "status" field.
-func (cic *ComputeInstanceCreate) SetStatus(gs compute.InstanceStatus) *ComputeInstanceCreate {
-	cic.mutation.SetStatus(gs)
+func (cic *ComputeInstanceCreate) SetStatus(cs compute.InstanceStatus) *ComputeInstanceCreate {
+	cic.mutation.SetStatus(cs)
 	return cic
 }
 

@@ -50,15 +50,43 @@ func (s *ComputeInstanceService) ListComputeImage(ctx context.Context, req *pb.L
 		Message: SUCCESS,
 		Data: lo.Map(list, func(item *biz.ComputeImage, _ int) *pb.ComputeImage {
 			return &pb.ComputeImage{
-				Id:    item.ID,
-				Name:  item.Name,
-				Image: item.Image,
-				Tag:   item.Tag,
-				Port:  item.Port,
+				Id:          item.ID,
+				Name:        item.Name,
+				Image:       item.Image,
+				Tag:         item.Tag,
+				OsType:      item.OsType,
+				OsVariant:   item.OsVariant,
+				Filename:    item.Filename,
+				DownloadUrl: item.DownloadURL,
+				Md5:         item.Md5,
 			}
 		}),
 	}, err
 }
+
+func (s *ComputeInstanceService) GetComputeImage(ctx context.Context, req *pb.GetComputeImageRequest) (*pb.GetComputeImageReply, error) {
+	item, err := s.uc.GetComputeImage(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	image := &pb.ComputeImage{
+		Id:          item.ID,
+		Name:        item.Name,
+		Image:       item.Image,
+		Tag:         item.Tag,
+		OsType:      item.OsType,
+		OsVariant:   item.OsVariant,
+		Filename:    item.Filename,
+		DownloadUrl: item.DownloadURL,
+		Md5:         item.Md5,
+	}
+	return &pb.GetComputeImageReply{
+		Code:    200,
+		Message: SUCCESS,
+		Data:    image,
+	}, nil
+}
+
 func (s *ComputeInstanceService) ListComputeSpecPrice(ctx context.Context, req *pb.ListComputeSpecPriceRequest) (*pb.ListComputeSpecPriceReply, error) {
 	price, err := s.uc.GetComputeSpecPrice(ctx, req.SpecId)
 	if err != nil {
@@ -82,7 +110,6 @@ func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInsta
 		PublicKey:     req.PublicKey,
 		Password:      req.Password,
 		DockerCompose: req.DockerCompose,
-		ExpirationDay: req.ExpirationDay,
 	})
 
 	if err != nil {
@@ -161,7 +188,7 @@ func (s *ComputeInstanceService) List(ctx context.Context, req *pb.ListInstanceR
 	}
 	var list []*biz.ComputeInstance
 	var err error
-	if req.Status == nil {
+	if req.GetStatus() == 0 {
 		list, err = s.uc.ListComputeInstance(ctx, claim.UserID)
 	} else {
 		list, err = s.uc.ListComputeInstanceByStatus(ctx, claim.UserID, req.GetStatus())

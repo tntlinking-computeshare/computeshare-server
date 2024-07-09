@@ -67,14 +67,29 @@ func Tag(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldTag, v))
 }
 
-// Port applies equality check predicate on the "port" field. It's identical to PortEQ.
-func Port(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldEQ(FieldPort, v))
+// OsType applies equality check predicate on the "os_type" field. It's identical to OsTypeEQ.
+func OsType(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldOsType, v))
 }
 
-// Command applies equality check predicate on the "command" field. It's identical to CommandEQ.
-func Command(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldEQ(FieldCommand, v))
+// OsVariant applies equality check predicate on the "os_variant" field. It's identical to OsVariantEQ.
+func OsVariant(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldOsVariant, v))
+}
+
+// Filename applies equality check predicate on the "filename" field. It's identical to FilenameEQ.
+func Filename(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldFilename, v))
+}
+
+// DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
+func DownloadURL(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldDownloadURL, v))
+}
+
+// Md5 applies equality check predicate on the "md5" field. It's identical to Md5EQ.
+func Md5(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldMd5, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -272,109 +287,329 @@ func TagContainsFold(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldContainsFold(FieldTag, v))
 }
 
-// PortEQ applies the EQ predicate on the "port" field.
-func PortEQ(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldEQ(FieldPort, v))
+// OsTypeEQ applies the EQ predicate on the "os_type" field.
+func OsTypeEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldOsType, v))
 }
 
-// PortNEQ applies the NEQ predicate on the "port" field.
-func PortNEQ(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldNEQ(FieldPort, v))
+// OsTypeNEQ applies the NEQ predicate on the "os_type" field.
+func OsTypeNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldOsType, v))
 }
 
-// PortIn applies the In predicate on the "port" field.
-func PortIn(vs ...int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldIn(FieldPort, vs...))
+// OsTypeIn applies the In predicate on the "os_type" field.
+func OsTypeIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldOsType, vs...))
 }
 
-// PortNotIn applies the NotIn predicate on the "port" field.
-func PortNotIn(vs ...int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldNotIn(FieldPort, vs...))
+// OsTypeNotIn applies the NotIn predicate on the "os_type" field.
+func OsTypeNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldOsType, vs...))
 }
 
-// PortGT applies the GT predicate on the "port" field.
-func PortGT(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldGT(FieldPort, v))
+// OsTypeGT applies the GT predicate on the "os_type" field.
+func OsTypeGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldOsType, v))
 }
 
-// PortGTE applies the GTE predicate on the "port" field.
-func PortGTE(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldGTE(FieldPort, v))
+// OsTypeGTE applies the GTE predicate on the "os_type" field.
+func OsTypeGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldOsType, v))
 }
 
-// PortLT applies the LT predicate on the "port" field.
-func PortLT(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldLT(FieldPort, v))
+// OsTypeLT applies the LT predicate on the "os_type" field.
+func OsTypeLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldOsType, v))
 }
 
-// PortLTE applies the LTE predicate on the "port" field.
-func PortLTE(v int32) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldLTE(FieldPort, v))
+// OsTypeLTE applies the LTE predicate on the "os_type" field.
+func OsTypeLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldOsType, v))
 }
 
-// CommandEQ applies the EQ predicate on the "command" field.
-func CommandEQ(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldEQ(FieldCommand, v))
+// OsTypeContains applies the Contains predicate on the "os_type" field.
+func OsTypeContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldOsType, v))
 }
 
-// CommandNEQ applies the NEQ predicate on the "command" field.
-func CommandNEQ(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldNEQ(FieldCommand, v))
+// OsTypeHasPrefix applies the HasPrefix predicate on the "os_type" field.
+func OsTypeHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldOsType, v))
 }
 
-// CommandIn applies the In predicate on the "command" field.
-func CommandIn(vs ...string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldIn(FieldCommand, vs...))
+// OsTypeHasSuffix applies the HasSuffix predicate on the "os_type" field.
+func OsTypeHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldOsType, v))
 }
 
-// CommandNotIn applies the NotIn predicate on the "command" field.
-func CommandNotIn(vs ...string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldNotIn(FieldCommand, vs...))
+// OsTypeEqualFold applies the EqualFold predicate on the "os_type" field.
+func OsTypeEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldOsType, v))
 }
 
-// CommandGT applies the GT predicate on the "command" field.
-func CommandGT(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldGT(FieldCommand, v))
+// OsTypeContainsFold applies the ContainsFold predicate on the "os_type" field.
+func OsTypeContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldOsType, v))
 }
 
-// CommandGTE applies the GTE predicate on the "command" field.
-func CommandGTE(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldGTE(FieldCommand, v))
+// OsVariantEQ applies the EQ predicate on the "os_variant" field.
+func OsVariantEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldOsVariant, v))
 }
 
-// CommandLT applies the LT predicate on the "command" field.
-func CommandLT(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldLT(FieldCommand, v))
+// OsVariantNEQ applies the NEQ predicate on the "os_variant" field.
+func OsVariantNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldOsVariant, v))
 }
 
-// CommandLTE applies the LTE predicate on the "command" field.
-func CommandLTE(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldLTE(FieldCommand, v))
+// OsVariantIn applies the In predicate on the "os_variant" field.
+func OsVariantIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldOsVariant, vs...))
 }
 
-// CommandContains applies the Contains predicate on the "command" field.
-func CommandContains(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldContains(FieldCommand, v))
+// OsVariantNotIn applies the NotIn predicate on the "os_variant" field.
+func OsVariantNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldOsVariant, vs...))
 }
 
-// CommandHasPrefix applies the HasPrefix predicate on the "command" field.
-func CommandHasPrefix(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldHasPrefix(FieldCommand, v))
+// OsVariantGT applies the GT predicate on the "os_variant" field.
+func OsVariantGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldOsVariant, v))
 }
 
-// CommandHasSuffix applies the HasSuffix predicate on the "command" field.
-func CommandHasSuffix(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldHasSuffix(FieldCommand, v))
+// OsVariantGTE applies the GTE predicate on the "os_variant" field.
+func OsVariantGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldOsVariant, v))
 }
 
-// CommandEqualFold applies the EqualFold predicate on the "command" field.
-func CommandEqualFold(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldEqualFold(FieldCommand, v))
+// OsVariantLT applies the LT predicate on the "os_variant" field.
+func OsVariantLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldOsVariant, v))
 }
 
-// CommandContainsFold applies the ContainsFold predicate on the "command" field.
-func CommandContainsFold(v string) predicate.ComputeImage {
-	return predicate.ComputeImage(sql.FieldContainsFold(FieldCommand, v))
+// OsVariantLTE applies the LTE predicate on the "os_variant" field.
+func OsVariantLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldOsVariant, v))
+}
+
+// OsVariantContains applies the Contains predicate on the "os_variant" field.
+func OsVariantContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldOsVariant, v))
+}
+
+// OsVariantHasPrefix applies the HasPrefix predicate on the "os_variant" field.
+func OsVariantHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldOsVariant, v))
+}
+
+// OsVariantHasSuffix applies the HasSuffix predicate on the "os_variant" field.
+func OsVariantHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldOsVariant, v))
+}
+
+// OsVariantEqualFold applies the EqualFold predicate on the "os_variant" field.
+func OsVariantEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldOsVariant, v))
+}
+
+// OsVariantContainsFold applies the ContainsFold predicate on the "os_variant" field.
+func OsVariantContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldOsVariant, v))
+}
+
+// FilenameEQ applies the EQ predicate on the "filename" field.
+func FilenameEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldFilename, v))
+}
+
+// FilenameNEQ applies the NEQ predicate on the "filename" field.
+func FilenameNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldFilename, v))
+}
+
+// FilenameIn applies the In predicate on the "filename" field.
+func FilenameIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldFilename, vs...))
+}
+
+// FilenameNotIn applies the NotIn predicate on the "filename" field.
+func FilenameNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldFilename, vs...))
+}
+
+// FilenameGT applies the GT predicate on the "filename" field.
+func FilenameGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldFilename, v))
+}
+
+// FilenameGTE applies the GTE predicate on the "filename" field.
+func FilenameGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldFilename, v))
+}
+
+// FilenameLT applies the LT predicate on the "filename" field.
+func FilenameLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldFilename, v))
+}
+
+// FilenameLTE applies the LTE predicate on the "filename" field.
+func FilenameLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldFilename, v))
+}
+
+// FilenameContains applies the Contains predicate on the "filename" field.
+func FilenameContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldFilename, v))
+}
+
+// FilenameHasPrefix applies the HasPrefix predicate on the "filename" field.
+func FilenameHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldFilename, v))
+}
+
+// FilenameHasSuffix applies the HasSuffix predicate on the "filename" field.
+func FilenameHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldFilename, v))
+}
+
+// FilenameEqualFold applies the EqualFold predicate on the "filename" field.
+func FilenameEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldFilename, v))
+}
+
+// FilenameContainsFold applies the ContainsFold predicate on the "filename" field.
+func FilenameContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldFilename, v))
+}
+
+// DownloadURLEQ applies the EQ predicate on the "download_url" field.
+func DownloadURLEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLNEQ applies the NEQ predicate on the "download_url" field.
+func DownloadURLNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLIn applies the In predicate on the "download_url" field.
+func DownloadURLIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLNotIn applies the NotIn predicate on the "download_url" field.
+func DownloadURLNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLGT applies the GT predicate on the "download_url" field.
+func DownloadURLGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldDownloadURL, v))
+}
+
+// DownloadURLGTE applies the GTE predicate on the "download_url" field.
+func DownloadURLGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldDownloadURL, v))
+}
+
+// DownloadURLLT applies the LT predicate on the "download_url" field.
+func DownloadURLLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldDownloadURL, v))
+}
+
+// DownloadURLLTE applies the LTE predicate on the "download_url" field.
+func DownloadURLLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldDownloadURL, v))
+}
+
+// DownloadURLContains applies the Contains predicate on the "download_url" field.
+func DownloadURLContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldDownloadURL, v))
+}
+
+// DownloadURLHasPrefix applies the HasPrefix predicate on the "download_url" field.
+func DownloadURLHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldDownloadURL, v))
+}
+
+// DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
+func DownloadURLHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldDownloadURL, v))
+}
+
+// DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
+func DownloadURLEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldDownloadURL, v))
+}
+
+// DownloadURLContainsFold applies the ContainsFold predicate on the "download_url" field.
+func DownloadURLContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldDownloadURL, v))
+}
+
+// Md5EQ applies the EQ predicate on the "md5" field.
+func Md5EQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldMd5, v))
+}
+
+// Md5NEQ applies the NEQ predicate on the "md5" field.
+func Md5NEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldMd5, v))
+}
+
+// Md5In applies the In predicate on the "md5" field.
+func Md5In(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldMd5, vs...))
+}
+
+// Md5NotIn applies the NotIn predicate on the "md5" field.
+func Md5NotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldMd5, vs...))
+}
+
+// Md5GT applies the GT predicate on the "md5" field.
+func Md5GT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldMd5, v))
+}
+
+// Md5GTE applies the GTE predicate on the "md5" field.
+func Md5GTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldMd5, v))
+}
+
+// Md5LT applies the LT predicate on the "md5" field.
+func Md5LT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldMd5, v))
+}
+
+// Md5LTE applies the LTE predicate on the "md5" field.
+func Md5LTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldMd5, v))
+}
+
+// Md5Contains applies the Contains predicate on the "md5" field.
+func Md5Contains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldMd5, v))
+}
+
+// Md5HasPrefix applies the HasPrefix predicate on the "md5" field.
+func Md5HasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldMd5, v))
+}
+
+// Md5HasSuffix applies the HasSuffix predicate on the "md5" field.
+func Md5HasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldMd5, v))
+}
+
+// Md5EqualFold applies the EqualFold predicate on the "md5" field.
+func Md5EqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldMd5, v))
+}
+
+// Md5ContainsFold applies the ContainsFold predicate on the "md5" field.
+func Md5ContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldMd5, v))
 }
 
 // And groups predicates with the AND operator between them.

@@ -71,6 +71,14 @@ func init() {
 	computeimageDescTag := computeimageFields[3].Descriptor()
 	// computeimage.TagValidator is a validator for the "tag" field. It is called by the builders before save.
 	computeimage.TagValidator = computeimageDescTag.Validators[0].(func(string) error)
+	// computeimageDescOsType is the schema descriptor for os_type field.
+	computeimageDescOsType := computeimageFields[4].Descriptor()
+	// computeimage.OsTypeValidator is a validator for the "os_type" field. It is called by the builders before save.
+	computeimage.OsTypeValidator = computeimageDescOsType.Validators[0].(func(string) error)
+	// computeimageDescOsVariant is the schema descriptor for os_variant field.
+	computeimageDescOsVariant := computeimageFields[5].Descriptor()
+	// computeimage.OsVariantValidator is a validator for the "os_variant" field. It is called by the builders before save.
+	computeimage.OsVariantValidator = computeimageDescOsVariant.Validators[0].(func(string) error)
 	computeinstanceFields := schema.ComputeInstance{}.Fields()
 	_ = computeinstanceFields
 	// computeinstanceDescOwner is the schema descriptor for owner field.

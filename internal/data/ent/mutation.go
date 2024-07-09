@@ -6,13 +6,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/api/compute"
 	"sync"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/mohaijiang/computeshare-server/api/compute"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/alipayorderrollback"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
@@ -2880,9 +2880,11 @@ type ComputeImageMutation struct {
 	name          *string
 	image         *string
 	tag           *string
-	port          *int32
-	addport       *int32
-	command       *string
+	os_type       *string
+	os_variant    *string
+	filename      *string
+	download_url  *string
+	md5           *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeImage, error)
@@ -3101,96 +3103,184 @@ func (m *ComputeImageMutation) ResetTag() {
 	m.tag = nil
 }
 
-// SetPort sets the "port" field.
-func (m *ComputeImageMutation) SetPort(i int32) {
-	m.port = &i
-	m.addport = nil
+// SetOsType sets the "os_type" field.
+func (m *ComputeImageMutation) SetOsType(s string) {
+	m.os_type = &s
 }
 
-// Port returns the value of the "port" field in the mutation.
-func (m *ComputeImageMutation) Port() (r int32, exists bool) {
-	v := m.port
+// OsType returns the value of the "os_type" field in the mutation.
+func (m *ComputeImageMutation) OsType() (r string, exists bool) {
+	v := m.os_type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldPort returns the old "port" field's value of the ComputeImage entity.
+// OldOsType returns the old "os_type" field's value of the ComputeImage entity.
 // If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeImageMutation) OldPort(ctx context.Context) (v int32, err error) {
+func (m *ComputeImageMutation) OldOsType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPort is only allowed on UpdateOne operations")
+		return v, errors.New("OldOsType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPort requires an ID field in the mutation")
+		return v, errors.New("OldOsType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPort: %w", err)
+		return v, fmt.Errorf("querying old value for OldOsType: %w", err)
 	}
-	return oldValue.Port, nil
+	return oldValue.OsType, nil
 }
 
-// AddPort adds i to the "port" field.
-func (m *ComputeImageMutation) AddPort(i int32) {
-	if m.addport != nil {
-		*m.addport += i
-	} else {
-		m.addport = &i
-	}
+// ResetOsType resets all changes to the "os_type" field.
+func (m *ComputeImageMutation) ResetOsType() {
+	m.os_type = nil
 }
 
-// AddedPort returns the value that was added to the "port" field in this mutation.
-func (m *ComputeImageMutation) AddedPort() (r int32, exists bool) {
-	v := m.addport
+// SetOsVariant sets the "os_variant" field.
+func (m *ComputeImageMutation) SetOsVariant(s string) {
+	m.os_variant = &s
+}
+
+// OsVariant returns the value of the "os_variant" field in the mutation.
+func (m *ComputeImageMutation) OsVariant() (r string, exists bool) {
+	v := m.os_variant
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetPort resets all changes to the "port" field.
-func (m *ComputeImageMutation) ResetPort() {
-	m.port = nil
-	m.addport = nil
-}
-
-// SetCommand sets the "command" field.
-func (m *ComputeImageMutation) SetCommand(s string) {
-	m.command = &s
-}
-
-// Command returns the value of the "command" field in the mutation.
-func (m *ComputeImageMutation) Command() (r string, exists bool) {
-	v := m.command
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCommand returns the old "command" field's value of the ComputeImage entity.
+// OldOsVariant returns the old "os_variant" field's value of the ComputeImage entity.
 // If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ComputeImageMutation) OldCommand(ctx context.Context) (v string, err error) {
+func (m *ComputeImageMutation) OldOsVariant(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCommand is only allowed on UpdateOne operations")
+		return v, errors.New("OldOsVariant is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCommand requires an ID field in the mutation")
+		return v, errors.New("OldOsVariant requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCommand: %w", err)
+		return v, fmt.Errorf("querying old value for OldOsVariant: %w", err)
 	}
-	return oldValue.Command, nil
+	return oldValue.OsVariant, nil
 }
 
-// ResetCommand resets all changes to the "command" field.
-func (m *ComputeImageMutation) ResetCommand() {
-	m.command = nil
+// ResetOsVariant resets all changes to the "os_variant" field.
+func (m *ComputeImageMutation) ResetOsVariant() {
+	m.os_variant = nil
+}
+
+// SetFilename sets the "filename" field.
+func (m *ComputeImageMutation) SetFilename(s string) {
+	m.filename = &s
+}
+
+// Filename returns the value of the "filename" field in the mutation.
+func (m *ComputeImageMutation) Filename() (r string, exists bool) {
+	v := m.filename
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFilename returns the old "filename" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldFilename(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFilename is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFilename requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFilename: %w", err)
+	}
+	return oldValue.Filename, nil
+}
+
+// ResetFilename resets all changes to the "filename" field.
+func (m *ComputeImageMutation) ResetFilename() {
+	m.filename = nil
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (m *ComputeImageMutation) SetDownloadURL(s string) {
+	m.download_url = &s
+}
+
+// DownloadURL returns the value of the "download_url" field in the mutation.
+func (m *ComputeImageMutation) DownloadURL() (r string, exists bool) {
+	v := m.download_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDownloadURL returns the old "download_url" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldDownloadURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDownloadURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDownloadURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDownloadURL: %w", err)
+	}
+	return oldValue.DownloadURL, nil
+}
+
+// ResetDownloadURL resets all changes to the "download_url" field.
+func (m *ComputeImageMutation) ResetDownloadURL() {
+	m.download_url = nil
+}
+
+// SetMd5 sets the "md5" field.
+func (m *ComputeImageMutation) SetMd5(s string) {
+	m.md5 = &s
+}
+
+// Md5 returns the value of the "md5" field in the mutation.
+func (m *ComputeImageMutation) Md5() (r string, exists bool) {
+	v := m.md5
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMd5 returns the old "md5" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldMd5(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMd5 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMd5 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMd5: %w", err)
+	}
+	return oldValue.Md5, nil
+}
+
+// ResetMd5 resets all changes to the "md5" field.
+func (m *ComputeImageMutation) ResetMd5() {
+	m.md5 = nil
 }
 
 // Where appends a list predicates to the ComputeImageMutation builder.
@@ -3227,7 +3317,7 @@ func (m *ComputeImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeImageMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 8)
 	if m.name != nil {
 		fields = append(fields, computeimage.FieldName)
 	}
@@ -3237,11 +3327,20 @@ func (m *ComputeImageMutation) Fields() []string {
 	if m.tag != nil {
 		fields = append(fields, computeimage.FieldTag)
 	}
-	if m.port != nil {
-		fields = append(fields, computeimage.FieldPort)
+	if m.os_type != nil {
+		fields = append(fields, computeimage.FieldOsType)
 	}
-	if m.command != nil {
-		fields = append(fields, computeimage.FieldCommand)
+	if m.os_variant != nil {
+		fields = append(fields, computeimage.FieldOsVariant)
+	}
+	if m.filename != nil {
+		fields = append(fields, computeimage.FieldFilename)
+	}
+	if m.download_url != nil {
+		fields = append(fields, computeimage.FieldDownloadURL)
+	}
+	if m.md5 != nil {
+		fields = append(fields, computeimage.FieldMd5)
 	}
 	return fields
 }
@@ -3257,10 +3356,16 @@ func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
 		return m.Image()
 	case computeimage.FieldTag:
 		return m.Tag()
-	case computeimage.FieldPort:
-		return m.Port()
-	case computeimage.FieldCommand:
-		return m.Command()
+	case computeimage.FieldOsType:
+		return m.OsType()
+	case computeimage.FieldOsVariant:
+		return m.OsVariant()
+	case computeimage.FieldFilename:
+		return m.Filename()
+	case computeimage.FieldDownloadURL:
+		return m.DownloadURL()
+	case computeimage.FieldMd5:
+		return m.Md5()
 	}
 	return nil, false
 }
@@ -3276,10 +3381,16 @@ func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldImage(ctx)
 	case computeimage.FieldTag:
 		return m.OldTag(ctx)
-	case computeimage.FieldPort:
-		return m.OldPort(ctx)
-	case computeimage.FieldCommand:
-		return m.OldCommand(ctx)
+	case computeimage.FieldOsType:
+		return m.OldOsType(ctx)
+	case computeimage.FieldOsVariant:
+		return m.OldOsVariant(ctx)
+	case computeimage.FieldFilename:
+		return m.OldFilename(ctx)
+	case computeimage.FieldDownloadURL:
+		return m.OldDownloadURL(ctx)
+	case computeimage.FieldMd5:
+		return m.OldMd5(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -3310,19 +3421,40 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTag(v)
 		return nil
-	case computeimage.FieldPort:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPort(v)
-		return nil
-	case computeimage.FieldCommand:
+	case computeimage.FieldOsType:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCommand(v)
+		m.SetOsType(v)
+		return nil
+	case computeimage.FieldOsVariant:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOsVariant(v)
+		return nil
+	case computeimage.FieldFilename:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFilename(v)
+		return nil
+	case computeimage.FieldDownloadURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDownloadURL(v)
+		return nil
+	case computeimage.FieldMd5:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMd5(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
@@ -3331,21 +3463,13 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ComputeImageMutation) AddedFields() []string {
-	var fields []string
-	if m.addport != nil {
-		fields = append(fields, computeimage.FieldPort)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ComputeImageMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case computeimage.FieldPort:
-		return m.AddedPort()
-	}
 	return nil, false
 }
 
@@ -3354,13 +3478,6 @@ func (m *ComputeImageMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ComputeImageMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case computeimage.FieldPort:
-		v, ok := value.(int32)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddPort(v)
-		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage numeric field %s", name)
 }
@@ -3397,11 +3514,20 @@ func (m *ComputeImageMutation) ResetField(name string) error {
 	case computeimage.FieldTag:
 		m.ResetTag()
 		return nil
-	case computeimage.FieldPort:
-		m.ResetPort()
+	case computeimage.FieldOsType:
+		m.ResetOsType()
 		return nil
-	case computeimage.FieldCommand:
-		m.ResetCommand()
+	case computeimage.FieldOsVariant:
+		m.ResetOsVariant()
+		return nil
+	case computeimage.FieldFilename:
+		m.ResetFilename()
+		return nil
+	case computeimage.FieldDownloadURL:
+		m.ResetDownloadURL()
+		return nil
+	case computeimage.FieldMd5:
+		m.ResetMd5()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
@@ -3953,8 +4079,8 @@ func (m *ComputeInstanceMutation) ResetExpirationTime() {
 }
 
 // SetStatus sets the "status" field.
-func (m *ComputeInstanceMutation) SetStatus(gs compute.InstanceStatus) {
-	m.status = &gs
+func (m *ComputeInstanceMutation) SetStatus(cs compute.InstanceStatus) {
+	m.status = &cs
 	m.addstatus = nil
 }
 
@@ -3984,12 +4110,12 @@ func (m *ComputeInstanceMutation) OldStatus(ctx context.Context) (v compute.Inst
 	return oldValue.Status, nil
 }
 
-// AddStatus adds gs to the "status" field.
-func (m *ComputeInstanceMutation) AddStatus(gs compute.InstanceStatus) {
+// AddStatus adds cs to the "status" field.
+func (m *ComputeInstanceMutation) AddStatus(cs compute.InstanceStatus) {
 	if m.addstatus != nil {
-		*m.addstatus += gs
+		*m.addstatus += cs
 	} else {
-		m.addstatus = &gs
+		m.addstatus = &cs
 	}
 }
 

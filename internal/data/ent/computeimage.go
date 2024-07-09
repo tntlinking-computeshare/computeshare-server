@@ -22,10 +22,16 @@ type ComputeImage struct {
 	Image string `json:"image,omitempty"`
 	// 版本名
 	Tag string `json:"tag,omitempty"`
-	// 端口号
-	Port int32 `json:"port,omitempty"`
-	// 容器命令
-	Command      string `json:"command,omitempty"`
+	// 操作系统类型
+	OsType string `json:"os_type,omitempty"`
+	// 操作系统版本
+	OsVariant string `json:"os_variant,omitempty"`
+	// 镜像文件名
+	Filename string `json:"filename,omitempty"`
+	// 镜像下载地址
+	DownloadURL string `json:"download_url,omitempty"`
+	// 镜像md5
+	Md5          string `json:"md5,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -34,9 +40,9 @@ func (*ComputeImage) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computeimage.FieldID, computeimage.FieldPort:
+		case computeimage.FieldID:
 			values[i] = new(sql.NullInt64)
-		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldCommand:
+		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldOsType, computeimage.FieldOsVariant, computeimage.FieldFilename, computeimage.FieldDownloadURL, computeimage.FieldMd5:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -77,17 +83,35 @@ func (ci *ComputeImage) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ci.Tag = value.String
 			}
-		case computeimage.FieldPort:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field port", values[i])
-			} else if value.Valid {
-				ci.Port = int32(value.Int64)
-			}
-		case computeimage.FieldCommand:
+		case computeimage.FieldOsType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field command", values[i])
+				return fmt.Errorf("unexpected type %T for field os_type", values[i])
 			} else if value.Valid {
-				ci.Command = value.String
+				ci.OsType = value.String
+			}
+		case computeimage.FieldOsVariant:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field os_variant", values[i])
+			} else if value.Valid {
+				ci.OsVariant = value.String
+			}
+		case computeimage.FieldFilename:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field filename", values[i])
+			} else if value.Valid {
+				ci.Filename = value.String
+			}
+		case computeimage.FieldDownloadURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field download_url", values[i])
+			} else if value.Valid {
+				ci.DownloadURL = value.String
+			}
+		case computeimage.FieldMd5:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field md5", values[i])
+			} else if value.Valid {
+				ci.Md5 = value.String
 			}
 		default:
 			ci.selectValues.Set(columns[i], values[i])
@@ -134,11 +158,20 @@ func (ci *ComputeImage) String() string {
 	builder.WriteString("tag=")
 	builder.WriteString(ci.Tag)
 	builder.WriteString(", ")
-	builder.WriteString("port=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Port))
+	builder.WriteString("os_type=")
+	builder.WriteString(ci.OsType)
 	builder.WriteString(", ")
-	builder.WriteString("command=")
-	builder.WriteString(ci.Command)
+	builder.WriteString("os_variant=")
+	builder.WriteString(ci.OsVariant)
+	builder.WriteString(", ")
+	builder.WriteString("filename=")
+	builder.WriteString(ci.Filename)
+	builder.WriteString(", ")
+	builder.WriteString("download_url=")
+	builder.WriteString(ci.DownloadURL)
+	builder.WriteString(", ")
+	builder.WriteString("md5=")
+	builder.WriteString(ci.Md5)
 	builder.WriteByte(')')
 	return builder.String()
 }

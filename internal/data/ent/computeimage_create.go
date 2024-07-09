@@ -37,15 +37,33 @@ func (cic *ComputeImageCreate) SetTag(s string) *ComputeImageCreate {
 	return cic
 }
 
-// SetPort sets the "port" field.
-func (cic *ComputeImageCreate) SetPort(i int32) *ComputeImageCreate {
-	cic.mutation.SetPort(i)
+// SetOsType sets the "os_type" field.
+func (cic *ComputeImageCreate) SetOsType(s string) *ComputeImageCreate {
+	cic.mutation.SetOsType(s)
 	return cic
 }
 
-// SetCommand sets the "command" field.
-func (cic *ComputeImageCreate) SetCommand(s string) *ComputeImageCreate {
-	cic.mutation.SetCommand(s)
+// SetOsVariant sets the "os_variant" field.
+func (cic *ComputeImageCreate) SetOsVariant(s string) *ComputeImageCreate {
+	cic.mutation.SetOsVariant(s)
+	return cic
+}
+
+// SetFilename sets the "filename" field.
+func (cic *ComputeImageCreate) SetFilename(s string) *ComputeImageCreate {
+	cic.mutation.SetFilename(s)
+	return cic
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (cic *ComputeImageCreate) SetDownloadURL(s string) *ComputeImageCreate {
+	cic.mutation.SetDownloadURL(s)
+	return cic
+}
+
+// SetMd5 sets the "md5" field.
+func (cic *ComputeImageCreate) SetMd5(s string) *ComputeImageCreate {
+	cic.mutation.SetMd5(s)
 	return cic
 }
 
@@ -113,11 +131,30 @@ func (cic *ComputeImageCreate) check() error {
 			return &ValidationError{Name: "tag", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.tag": %w`, err)}
 		}
 	}
-	if _, ok := cic.mutation.Port(); !ok {
-		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "ComputeImage.port"`)}
+	if _, ok := cic.mutation.OsType(); !ok {
+		return &ValidationError{Name: "os_type", err: errors.New(`ent: missing required field "ComputeImage.os_type"`)}
 	}
-	if _, ok := cic.mutation.Command(); !ok {
-		return &ValidationError{Name: "command", err: errors.New(`ent: missing required field "ComputeImage.command"`)}
+	if v, ok := cic.mutation.OsType(); ok {
+		if err := computeimage.OsTypeValidator(v); err != nil {
+			return &ValidationError{Name: "os_type", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_type": %w`, err)}
+		}
+	}
+	if _, ok := cic.mutation.OsVariant(); !ok {
+		return &ValidationError{Name: "os_variant", err: errors.New(`ent: missing required field "ComputeImage.os_variant"`)}
+	}
+	if v, ok := cic.mutation.OsVariant(); ok {
+		if err := computeimage.OsVariantValidator(v); err != nil {
+			return &ValidationError{Name: "os_variant", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_variant": %w`, err)}
+		}
+	}
+	if _, ok := cic.mutation.Filename(); !ok {
+		return &ValidationError{Name: "filename", err: errors.New(`ent: missing required field "ComputeImage.filename"`)}
+	}
+	if _, ok := cic.mutation.DownloadURL(); !ok {
+		return &ValidationError{Name: "download_url", err: errors.New(`ent: missing required field "ComputeImage.download_url"`)}
+	}
+	if _, ok := cic.mutation.Md5(); !ok {
+		return &ValidationError{Name: "md5", err: errors.New(`ent: missing required field "ComputeImage.md5"`)}
 	}
 	return nil
 }
@@ -163,13 +200,25 @@ func (cic *ComputeImageCreate) createSpec() (*ComputeImage, *sqlgraph.CreateSpec
 		_spec.SetField(computeimage.FieldTag, field.TypeString, value)
 		_node.Tag = value
 	}
-	if value, ok := cic.mutation.Port(); ok {
-		_spec.SetField(computeimage.FieldPort, field.TypeInt32, value)
-		_node.Port = value
+	if value, ok := cic.mutation.OsType(); ok {
+		_spec.SetField(computeimage.FieldOsType, field.TypeString, value)
+		_node.OsType = value
 	}
-	if value, ok := cic.mutation.Command(); ok {
-		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
-		_node.Command = value
+	if value, ok := cic.mutation.OsVariant(); ok {
+		_spec.SetField(computeimage.FieldOsVariant, field.TypeString, value)
+		_node.OsVariant = value
+	}
+	if value, ok := cic.mutation.Filename(); ok {
+		_spec.SetField(computeimage.FieldFilename, field.TypeString, value)
+		_node.Filename = value
+	}
+	if value, ok := cic.mutation.DownloadURL(); ok {
+		_spec.SetField(computeimage.FieldDownloadURL, field.TypeString, value)
+		_node.DownloadURL = value
+	}
+	if value, ok := cic.mutation.Md5(); ok {
+		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
+		_node.Md5 = value
 	}
 	return _node, _spec
 }

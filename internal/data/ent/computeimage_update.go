@@ -45,22 +45,33 @@ func (ciu *ComputeImageUpdate) SetTag(s string) *ComputeImageUpdate {
 	return ciu
 }
 
-// SetPort sets the "port" field.
-func (ciu *ComputeImageUpdate) SetPort(i int32) *ComputeImageUpdate {
-	ciu.mutation.ResetPort()
-	ciu.mutation.SetPort(i)
+// SetOsType sets the "os_type" field.
+func (ciu *ComputeImageUpdate) SetOsType(s string) *ComputeImageUpdate {
+	ciu.mutation.SetOsType(s)
 	return ciu
 }
 
-// AddPort adds i to the "port" field.
-func (ciu *ComputeImageUpdate) AddPort(i int32) *ComputeImageUpdate {
-	ciu.mutation.AddPort(i)
+// SetOsVariant sets the "os_variant" field.
+func (ciu *ComputeImageUpdate) SetOsVariant(s string) *ComputeImageUpdate {
+	ciu.mutation.SetOsVariant(s)
 	return ciu
 }
 
-// SetCommand sets the "command" field.
-func (ciu *ComputeImageUpdate) SetCommand(s string) *ComputeImageUpdate {
-	ciu.mutation.SetCommand(s)
+// SetFilename sets the "filename" field.
+func (ciu *ComputeImageUpdate) SetFilename(s string) *ComputeImageUpdate {
+	ciu.mutation.SetFilename(s)
+	return ciu
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (ciu *ComputeImageUpdate) SetDownloadURL(s string) *ComputeImageUpdate {
+	ciu.mutation.SetDownloadURL(s)
+	return ciu
+}
+
+// SetMd5 sets the "md5" field.
+func (ciu *ComputeImageUpdate) SetMd5(s string) *ComputeImageUpdate {
+	ciu.mutation.SetMd5(s)
 	return ciu
 }
 
@@ -113,6 +124,16 @@ func (ciu *ComputeImageUpdate) check() error {
 			return &ValidationError{Name: "tag", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.tag": %w`, err)}
 		}
 	}
+	if v, ok := ciu.mutation.OsType(); ok {
+		if err := computeimage.OsTypeValidator(v); err != nil {
+			return &ValidationError{Name: "os_type", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_type": %w`, err)}
+		}
+	}
+	if v, ok := ciu.mutation.OsVariant(); ok {
+		if err := computeimage.OsVariantValidator(v); err != nil {
+			return &ValidationError{Name: "os_variant", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_variant": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -137,14 +158,20 @@ func (ciu *ComputeImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ciu.mutation.Tag(); ok {
 		_spec.SetField(computeimage.FieldTag, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Port(); ok {
-		_spec.SetField(computeimage.FieldPort, field.TypeInt32, value)
+	if value, ok := ciu.mutation.OsType(); ok {
+		_spec.SetField(computeimage.FieldOsType, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.AddedPort(); ok {
-		_spec.AddField(computeimage.FieldPort, field.TypeInt32, value)
+	if value, ok := ciu.mutation.OsVariant(); ok {
+		_spec.SetField(computeimage.FieldOsVariant, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Command(); ok {
-		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
+	if value, ok := ciu.mutation.Filename(); ok {
+		_spec.SetField(computeimage.FieldFilename, field.TypeString, value)
+	}
+	if value, ok := ciu.mutation.DownloadURL(); ok {
+		_spec.SetField(computeimage.FieldDownloadURL, field.TypeString, value)
+	}
+	if value, ok := ciu.mutation.Md5(); ok {
+		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -184,22 +211,33 @@ func (ciuo *ComputeImageUpdateOne) SetTag(s string) *ComputeImageUpdateOne {
 	return ciuo
 }
 
-// SetPort sets the "port" field.
-func (ciuo *ComputeImageUpdateOne) SetPort(i int32) *ComputeImageUpdateOne {
-	ciuo.mutation.ResetPort()
-	ciuo.mutation.SetPort(i)
+// SetOsType sets the "os_type" field.
+func (ciuo *ComputeImageUpdateOne) SetOsType(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetOsType(s)
 	return ciuo
 }
 
-// AddPort adds i to the "port" field.
-func (ciuo *ComputeImageUpdateOne) AddPort(i int32) *ComputeImageUpdateOne {
-	ciuo.mutation.AddPort(i)
+// SetOsVariant sets the "os_variant" field.
+func (ciuo *ComputeImageUpdateOne) SetOsVariant(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetOsVariant(s)
 	return ciuo
 }
 
-// SetCommand sets the "command" field.
-func (ciuo *ComputeImageUpdateOne) SetCommand(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetCommand(s)
+// SetFilename sets the "filename" field.
+func (ciuo *ComputeImageUpdateOne) SetFilename(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetFilename(s)
+	return ciuo
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (ciuo *ComputeImageUpdateOne) SetDownloadURL(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetDownloadURL(s)
+	return ciuo
+}
+
+// SetMd5 sets the "md5" field.
+func (ciuo *ComputeImageUpdateOne) SetMd5(s string) *ComputeImageUpdateOne {
+	ciuo.mutation.SetMd5(s)
 	return ciuo
 }
 
@@ -265,6 +303,16 @@ func (ciuo *ComputeImageUpdateOne) check() error {
 			return &ValidationError{Name: "tag", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.tag": %w`, err)}
 		}
 	}
+	if v, ok := ciuo.mutation.OsType(); ok {
+		if err := computeimage.OsTypeValidator(v); err != nil {
+			return &ValidationError{Name: "os_type", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_type": %w`, err)}
+		}
+	}
+	if v, ok := ciuo.mutation.OsVariant(); ok {
+		if err := computeimage.OsVariantValidator(v); err != nil {
+			return &ValidationError{Name: "os_variant", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_variant": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -306,14 +354,20 @@ func (ciuo *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeI
 	if value, ok := ciuo.mutation.Tag(); ok {
 		_spec.SetField(computeimage.FieldTag, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Port(); ok {
-		_spec.SetField(computeimage.FieldPort, field.TypeInt32, value)
+	if value, ok := ciuo.mutation.OsType(); ok {
+		_spec.SetField(computeimage.FieldOsType, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.AddedPort(); ok {
-		_spec.AddField(computeimage.FieldPort, field.TypeInt32, value)
+	if value, ok := ciuo.mutation.OsVariant(); ok {
+		_spec.SetField(computeimage.FieldOsVariant, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Command(); ok {
-		_spec.SetField(computeimage.FieldCommand, field.TypeString, value)
+	if value, ok := ciuo.mutation.Filename(); ok {
+		_spec.SetField(computeimage.FieldFilename, field.TypeString, value)
+	}
+	if value, ok := ciuo.mutation.DownloadURL(); ok {
+		_spec.SetField(computeimage.FieldDownloadURL, field.TypeString, value)
+	}
+	if value, ok := ciuo.mutation.Md5(); ok {
+		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
 	}
 	_node = &ComputeImage{config: ciuo.config}
 	_spec.Assign = _node.assignValues

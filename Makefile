@@ -17,6 +17,8 @@ endif
 
 .PHONY: init
 # init env
+## // - protoc-gen-go-grpc v1.3.0
+#// - protoc             v4.23.2
 init:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
