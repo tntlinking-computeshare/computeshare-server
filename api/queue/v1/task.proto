@@ -107,6 +107,7 @@ message ComputeInstanceTaskParamVO {
   string vncConnectIp = 11;
   int32 vncConnectPort = 12;
   string docker_compose = 13;
+  int32 imageId = 14;
 }
 
 message StorageSetupTaskParamVO {

@@ -321,6 +321,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Cpu:        instance.GetCore(),
 		Memory:     instance.GetMemory(),
 		Image:      instance.Image,
+		ImageId:    instance.ImageId,
 		InstanceId: instance.ID.String(),
 	}
 	if publicKeyAndPassword != nil {

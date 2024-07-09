@@ -72,7 +72,7 @@ Authorization: Bearer {{ access_token }}
 
 ### 验证码
 #POST http://api.computeshare.newtouch.com/v1/sms/send
-POST  http://127.0.0.1:8000/v1/sms/send
+POST  https://api.computeshare.newtouch.com/v1/sms/send
 Content-Type: application/json
 
 {
@@ -82,13 +82,13 @@ Content-Type: application/json
 
 
 ### 登录
-POST http://api.computeshare.newtouch.com/v1/user/login_by_vc
+POST https://api.computeshare.newtouch.com/v1/user/login_by_vc
 Content-Type: application/json
 
 {
   "countryCallCoding": "+86",
   "telephoneNumber": "15001747213",
-  "validateCode": "000000"
+  "validateCode": "575055"
 }
 
 
