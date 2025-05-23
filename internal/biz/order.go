@@ -7,7 +7,7 @@ import (
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/alipay"
 	"github.com/google/uuid"
-	global2 "github.com/mohaijiang/computeshare-server/api/global"
+	global2 "github.com/mohaijiang/computeshare-server/api/server/global"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/global"

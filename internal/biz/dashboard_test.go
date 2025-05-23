@@ -2,7 +2,7 @@ package biz
 
 import (
 	"fmt"
-	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/dashboard/v1"
 	"github.com/tidwall/gjson"
 	"io"
 	"log"

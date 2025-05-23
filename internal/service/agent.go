@@ -4,16 +4,16 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"github.com/samber/lo"
 	"strconv"
 
 	//"github.com/ipfs/go-ipfs/core"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 
-	pb "github.com/mohaijiang/computeshare-server/api/agent/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/agent/v1"
 
-	computepb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	computepb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 )
 
 type AgentService struct {

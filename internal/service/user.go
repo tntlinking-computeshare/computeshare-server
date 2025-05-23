@@ -10,7 +10,7 @@ import (
 	"github.com/samber/lo"
 	"time"
 
-	pb "github.com/mohaijiang/computeshare-server/api/system/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/system/v1"
 )
 
 const SUCCESS = "success"

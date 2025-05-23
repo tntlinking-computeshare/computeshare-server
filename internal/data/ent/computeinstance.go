@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
 )
 

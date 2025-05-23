@@ -6,7 +6,7 @@ import (
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/samber/lo"
 
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 )
 
 type StorageProviderService struct {

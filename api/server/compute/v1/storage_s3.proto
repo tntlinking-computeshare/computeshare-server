@@ -1,0 +1,272 @@
+syntax = "proto3";
+
+package server.compute.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/server/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service StorageS3 {
+	rpc CreateS3Key(CreateS3KeyRequest) returns (CreateS3KeyReply){
+		option (google.api.http) = {
+			post: "/v1/s3user/create/key"
+			body: "*"
+		};
+	}
+	rpc GetUserS3UserList(GetUserS3UserListRequest) returns (GetUserS3UserListReply){
+		option (google.api.http) = {
+			get: "/v1/s3user"
+		};
+	};
+	rpc GetUserS3User(GetUserS3UserRequest) returns (GetUserS3UserReply){
+		option (google.api.http) = {
+			get: "/v1/s3user/{id}"
+		};
+	};
+	rpc DeleteUserS3User(DeleteUserS3UserRequest) returns (DeleteUserS3UserReply){
+		option (google.api.http) = {
+			delete: "/v1/s3user/{id}"
+		};
+	};
+	rpc CreateBucket (CreateBucketRequest) returns (CreateBucketReply){
+		option (google.api.http) = {
+			post: "/v1/s3bucket",
+			body: "*"
+		};
+	};
+	rpc DeleteBucket (DeleteBucketRequest) returns (DeleteBucketReply){
+		option (google.api.http) = {
+			delete: "/v1/s3bucket/{bucketName}",
+		};
+	};
+	rpc EmptyBucket (EmptyBucketRequest) returns (EmptyBucketReply){
+		option (google.api.http) = {
+			delete: "/v1/s3bucket/{bucketName}/empty",
+		};
+	};
+
+	rpc ListBucket(ListBucketRequest) returns (ListBucketReply) {
+		option (google.api.http) = {
+			get: "/v1/s3bucket",
+		};
+	};
+
+	rpc S3StorageInBucketList (S3StorageInBucketListRequest) returns (S3StorageInBucketListReply){
+		option (google.api.http) = {
+			get: "/v1/s3bucket/{bucketName}/objects",
+		};
+	};
+
+	rpc S3StorageUploadFile (S3StorageUploadFileRequest) returns (S3StorageUploadFileReply){
+		option (google.api.http) = {
+			post: "/v1/storage/{bucketName}/objects/upload/ersatz",
+			body: "*"
+		};
+	};
+
+	rpc S3StorageMkdir (S3StorageMkdirRequest) returns (S3StorageMkdirReply){
+		option (google.api.http) = {
+			post: "/v1/storage/{bucketName}/mkdir",
+			body: "*"
+		};
+	};
+
+	rpc S3StorageDeleteMkdir (S3StorageDeleteMkdirRequest) returns (S3StorageDeleteMkdirReply){
+		option (google.api.http) = {
+			delete: "/v1/storage/{bucketName}/mkdir",
+		};
+	};
+
+	rpc S3StorageDownload (S3StorageDownloadRequest) returns (S3StorageDownloadReply){
+		option (google.api.http) = {
+			get: "/v1/storage/{bucketName}/objects/download/ersatz",
+		};
+	};
+
+	rpc S3StorageDelete (S3StorageDeleteRequest) returns (S3StorageDeleteReply){
+		option (google.api.http) = {
+			delete: "/v1/storage/{bucketName}/objects/delete",
+		};
+	};
+
+}
+
+
+message CreateS3KeyRequest{}
+message CreateS3KeyReply{
+	int32 code = 1;
+	string message = 2;
+}
+
+message S3User {
+	string id = 1;
+	string accessKey = 2;
+	string secretKey  = 3;
+	int64 createTime  = 4;
+	int64 updateTime  = 5;
+	string endpoint = 6;
+}
+
+message GetUserS3UserListRequest {}
+message GetUserS3UserListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated S3User data = 3;
+}
+
+message GetUserS3UserRequest {
+	string id = 1;
+	string countryCallCoding = 2;
+	string telephoneNumber = 3;
+	string validateCode = 4;
+}
+message GetUserS3UserReply {
+	int32 code = 1;
+	string message = 2;
+	S3User data = 3;
+}
+
+message DeleteUserS3UserRequest {
+	string id = 1;
+	string countryCallCoding = 2;
+	string telephoneNumber = 3;
+	string validateCode = 4;
+}
+message DeleteUserS3UserReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message CreateBucketRequest {
+	string bucketName = 1;
+}
+message CreateBucketReply {
+	int32 code = 1;
+	string message = 2;
+	string data = 3; // bucket id
+}
+
+message DeleteBucketRequest {
+	string bucketName = 1;
+}
+message DeleteBucketReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message EmptyBucketRequest {
+	string bucketName = 1;
+}
+message EmptyBucketReply {
+	int32 code = 1;
+	string message = 2;
+}
+
+message ListBucketRequest {
+	int32 page = 1;
+	int32 size = 2;
+	string name = 3;
+}
+message ListBucketReply {
+	message BucketVo {
+		string id  = 1;
+		string bucket = 2;
+		int64 createdTime = 3;
+	}
+	message Data {
+		repeated BucketVo list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message S3Object {
+	string etag = 1;
+	string name = 3;
+	string s3Url = 4;
+	string url = 5;
+	int32 size = 6;
+	int64 last_modify = 7;
+	string prefix = 8;
+}
+
+message S3StorageInBucketListRequest {
+	string bucketName = 1;
+	string prefix = 2;
+	string name = 3;
+	int32 page = 4;
+	int32 size = 5;
+}
+message S3StorageInBucketListReply {
+	message Data {
+		repeated S3Object list = 1;
+		int32 total = 2;
+		int32 page = 3;
+		int32 size = 4;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message S3StorageMkdirRequest {
+	string bucketName = 1;
+	string dirName = 2;
+	string prefix = 3;
+}
+message S3StorageMkdirReply{
+	int32 code = 1;
+	string message = 2;
+	string data = 3;
+}
+
+message S3StorageDeleteMkdirRequest {
+	string bucketName = 1;
+	string dirName = 2;
+	string prefix = 3;
+}
+message S3StorageDeleteMkdirReply{
+	int32 code = 1;
+	string message = 2;
+}
+
+message S3StorageUploadFileRequest {
+	bytes body = 1;
+	string prefix = 2;
+	string fileName = 3;
+	string bucketName = 4;
+}
+message S3StorageUploadFileReply{
+	int32 code = 1;
+	string message = 2;
+	S3Object data = 3;
+}
+
+message S3StorageDownloadRequest {
+	string bucketName = 1;
+	string key = 2;
+}
+message S3StorageDownloadReply {
+	message Data {
+		bytes body = 1;
+		string name = 2;
+	}
+	int32 code = 1;
+	string message = 2;
+	Data data = 3;
+}
+
+message S3StorageDeleteRequest {
+	string bucketName = 1;
+	string key = 2;
+}
+message S3StorageDeleteReply {
+	int32 code = 1;
+	string message = 2;
+}

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package server.compute.v1;
+
+import "google/api/annotations.proto";
+import "server/network_mapping/v1/network_mapping.proto";
+import "server/compute/v1/compute_instance.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/server/compute/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.compute.v1";
+
+service Sandbox {
+	rpc CreateSandbox(CreateSandboxRequest) returns(CreateSandboxReply) {
+		option (google.api.http) = {
+			post: "/v1/sandbox",
+			body: "*",
+		};
+	}
+}
+
+message CreateSandboxRequest{
+	server.compute.v1.CreateInstanceRequest instance = 1;
+	repeated server.network_mapping.v1.CreateNetworkMappingRequest networkMapping = 2;
+}
+
+message CreateSandboxReply {
+	int32 code = 1;
+	string message = 2;
+	CreateSandboxReply_Data data = 3;
+
+	message CreateSandboxReply_Data {
+		string instanceId = 1;
+		repeated CreateSandbox_NetworkMapping network_mappings = 2;
+	}
+	message CreateSandbox_NetworkMapping {
+		string id = 1;
+		string name = 2;
+		int32 computer_port = 3;
+		string server_ip = 4;
+		int32 server_port = 5;
+	}
+}

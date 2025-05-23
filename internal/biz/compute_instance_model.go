@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"time"
 )
 

@@ -16,14 +16,14 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/go-kratos/swagger-api/openapiv2"
-	jwt2 "github.com/golang-jwt/jwt/v4"
-	agentV1 "github.com/mohaijiang/computeshare-server/api/agent/v1"
-	computeV1 "github.com/mohaijiang/computeshare-server/api/compute/v1"
-	dashboardV1 "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
-	networkmappingV1 "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
-	orderv1 "github.com/mohaijiang/computeshare-server/api/order/v1"
-	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/queue/v1"
-	systemv1 "github.com/mohaijiang/computeshare-server/api/system/v1"
+	jwt5 "github.com/golang-jwt/jwt/v5"
+	agentV1 "github.com/mohaijiang/computeshare-server/api/server/agent/v1"
+	computeV1 "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
+	dashboardV1 "github.com/mohaijiang/computeshare-server/api/server/dashboard/v1"
+	networkmappingV1 "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
+	orderv1 "github.com/mohaijiang/computeshare-server/api/server/order/v1"
+	queueTaskV1 "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
+	systemv1 "github.com/mohaijiang/computeshare-server/api/server/system/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/service"
@@ -114,9 +114,9 @@ func NewHTTPServer(c *conf.Server,
 	logger log.Logger) *http.Server {
 
 	jetMiddleware := selector.Server(
-		jwt.Server(func(token *jwt2.Token) (interface{}, error) {
+		jwt.Server(func(token *jwt5.Token) (interface{}, error) {
 			return []byte(ac.ApiKey), nil
-		}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
+		}, jwt.WithSigningMethod(jwt5.SigningMethodHS256), jwt.WithClaims(func() jwt5.Claims {
 			return &global.ComputeServerClaim{}
 		})),
 	).Match(NewWhiteListMatcher()).Build()
@@ -190,9 +190,9 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	fmt.Println("apiKey:", ac.ApiKey)
 	fmt.Println("token:", tokenString)
 
-	token, err := jwt2.Parse(tokenString, func(token *jwt2.Token) (interface{}, error) {
+	token, err := jwt5.Parse(tokenString, func(token *jwt5.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt2.SigningMethodHMAC); !ok {
+		if _, ok := token.Method.(*jwt5.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
@@ -205,7 +205,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request, instanceService *service.
 	}
 
 	var userId string
-	if claims, ok := token.Claims.(jwt2.MapClaims); ok {
+	if claims, ok := token.Claims.(jwt5.MapClaims); ok {
 		userId, _ = claims["UserID"].(string)
 	} else {
 		fmt.Println("===== websocket失败 ======")

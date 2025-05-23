@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 )
 
 type StorageS3Service struct {

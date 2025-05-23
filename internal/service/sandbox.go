@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 )
 
 type SandboxService struct {

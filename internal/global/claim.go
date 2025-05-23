@@ -3,7 +3,7 @@ package global
 import (
 	"context"
 	kratosJWT "github.com/go-kratos/kratos/v2/middleware/auth/jwt"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"time"
 )

@@ -13,7 +13,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"

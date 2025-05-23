@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/global"
+	"github.com/mohaijiang/computeshare-server/api/server/global"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"

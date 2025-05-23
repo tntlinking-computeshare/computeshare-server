@@ -1,0 +1,206 @@
+syntax = "proto3";
+
+package server.dashboard.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mohaijiang/computeshare-server/api/server/dashboard/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.dashboard.v1";
+
+service Dashboard {
+	//Provider总数
+	rpc ProvidersCount (ProvidersCountRequest) returns (ProvidersCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/providers/count",
+		};
+	};
+	//Gateway总数
+	rpc GatewaysCount (GatewaysCountRequest) returns (GatewaysCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/gateways/count",
+		};
+	};
+	//存储总数 已使用总数
+	rpc StoragesCount (StoragesCountRequest) returns (StoragesCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/storages/count",
+		};
+	};
+	//存储提供者列表
+	rpc StoragesProvidersList (StoragesProvidersListRequest) returns (StoragesProvidersListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/providers/volumes/count",
+		};
+	};
+	//存储桶VolumeNum列表
+	rpc StorageBucketsVolumeNumList (StorageBucketsVolumeNumListRequest) returns (StorageBucketsVolumeNumListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/buckets/volumes/count",
+		};
+	};
+	//S3KeyCall
+	rpc StorageS3KeyCallCount (StorageS3KeyCallCountRequest) returns (StorageS3KeyCallCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/s3_key/call/count",
+		};
+	};
+	//Provider列表 类型，规格，是否存活
+	rpc ProvidersList (ProvidersListRequest) returns (ProvidersListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/providers/list",
+		};
+	};
+	//Gateway列表 总端口数 已用端口数内网 外网
+	rpc GatewaysList (GatewaysListRequest) returns (GatewaysListReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/gateways/list",
+		};
+	};
+	//已发放积分总数 回收积分总数 发放代金券总数 已充值总数
+	rpc CyclesCount (CyclesCountRequest) returns (CyclesCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/cycles/count",
+		};
+	};
+	//沙箱调用总数
+	rpc SandboxCount (SandboxCountRequest) returns (SandboxCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/sandbox/count",
+		};
+	};
+	//最新创建虚拟机
+	rpc LastComputeInstancesCount (LastComputeInstancesCountRequest) returns (LastComputeInstancesCountReply){
+		option (google.api.http) = {
+			get: "/v1/dashboard/instances/count",
+		};
+	};
+}
+
+message ProvidersCountRequest {}
+message ProvidersCountReply {
+	int32 code = 1;
+	string message = 2;
+	int32 data = 3;
+}
+
+message GatewaysCountRequest {}
+message GatewaysCountReply {
+	int32 code = 1;
+	string message = 2;
+	int32 data = 3;
+}
+
+message StoragesCountRequest {}
+message StoragesCountReply {
+	int32 code = 1;
+	string message = 2;
+	StoragesCount data = 3;
+	message StoragesCount {
+		string storagesTotal = 1;
+		int32 storageProvidersNum = 2;
+		int32 usedVolumesTotal = 3;
+		int32 unusedVolumeTotal = 4;
+		int32 bucketsTotal = 5;
+	}
+}
+
+message StoragesProvidersListRequest {}
+message StoragesProvidersListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated StoragesProviders data = 3;
+	message StoragesProviders {
+		int32 id = 1;
+		string instance = 2;
+		int32 volumeNum = 3;
+	}
+}
+
+message StorageBucketsVolumeNumListRequest {}
+message StorageBucketsVolumeNumListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated BucketsVolume data = 3;
+	message BucketsVolume {
+		int32 id = 1;
+		string name = 2;
+		int32 volumeNum = 3;
+	}
+}
+
+message StorageS3KeyCallCountRequest {}
+message StorageS3KeyCallCountReply {
+	int32 code = 1;
+	string message = 2;
+	S3KeyCallCount data = 3;
+	message S3KeyCallCount {
+		int32 s3CallTotal = 1;
+		int32 s3WriteCallTotal = 2;
+		int32 s3ReadCallTotal = 3;
+		int32 s3KeyTotal = 4;
+	}
+}
+
+message ProvidersListRequest {}
+message ProvidersListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated ProvidersList data = 3;
+	message ProvidersList {
+		string type = 1;
+		string mac = 2;
+		string ip = 3;
+		int32 totalCpu = 4;
+		int32 totalMemory = 5;
+		bool active = 6;
+	}
+}
+
+message GatewaysListRequest {}
+message GatewaysListReply {
+	int32 code = 1;
+	string message = 2;
+	repeated GatewaysList data = 3;
+	message GatewaysList {
+		string name = 1;
+		string ip = 2;
+		int32 totalPort = 3;
+		string useIntranetPort = 4;
+		string usePublicPort = 5;
+	}
+}
+
+message CyclesCountRequest {}
+message CyclesCountReply {
+	int32 code = 1;
+	string message = 2;
+	CyclesCount data = 3;
+	message CyclesCount {
+		string grantTotal = 1;
+		string recoveryTotal = 2;
+		string grantVouchersTotal = 3;
+		string rechargedTotal = 4;
+	}
+}
+
+message SandboxCountRequest {}
+message SandboxCountReply {
+	int32 code = 1;
+	string message = 2;
+	int32 data = 3;
+}
+
+message LastComputeInstancesCountRequest {}
+message LastComputeInstancesCountReply {
+	int32 code = 1;
+	string message = 2;
+	repeated ComputeInstances data = 3;
+	message ComputeInstances {
+		string id = 1;
+		string name = 2;
+		string specs = 3;
+		string owner = 4;
+		int64 createTime = 5;
+	}
+}

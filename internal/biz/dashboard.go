@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/dashboard/v1"
 	"github.com/mohaijiang/computeshare-server/internal/conf"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/tidwall/gjson"

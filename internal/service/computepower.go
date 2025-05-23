@@ -6,7 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	shell "github.com/ipfs/go-ipfs-api"
 	files "github.com/ipfs/go-ipfs-files"
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"strconv"

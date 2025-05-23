@@ -13,7 +13,7 @@ import (
 	"github.com/samber/lo"
 	"strconv"
 
-	pb "github.com/mohaijiang/computeshare-server/api/order/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/order/v1"
 )
 
 type OrderService struct {

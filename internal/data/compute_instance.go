@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"

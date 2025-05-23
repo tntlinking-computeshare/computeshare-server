@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	shell "github.com/ipfs/go-ipfs-api"
 	files "github.com/ipfs/go-ipfs-files"
-	pb "github.com/mohaijiang/computeshare-server/api/compute/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
@@ -47,7 +47,7 @@ func (s *StorageService) List(ctx context.Context, req *pb.ListRequest) (*pb.Lis
 			Name:       item.Name,
 			Size:       item.Size,
 			LastModify: item.LastModify.UnixMilli(),
-			Cid:        &item.Cid,
+			Cid:        item.Cid,
 		}
 	})
 	return &pb.ListReply{
@@ -92,7 +92,7 @@ func (s *StorageService) UploadFile(ctx context.Context, req *pb.UploadFileReque
 		Data: &pb.File{
 			Id:         storage.ID.String(),
 			Name:       storage.Name,
-			Cid:        &storage.Cid,
+			Cid:        storage.Cid,
 			LastModify: storage.LastModify.UnixMilli(),
 			Type:       pb.FileType(storage.Type),
 			Size:       storage.Size,

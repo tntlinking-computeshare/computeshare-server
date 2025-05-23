@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
+	queue "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
 )
 
 type NetworkMapping struct {

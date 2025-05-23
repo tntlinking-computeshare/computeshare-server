@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
+	queue "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
 	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"time"

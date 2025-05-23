@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/mohaijiang/computeshare-server/api/compute"
+	"github.com/mohaijiang/computeshare-server/api/server/compute"
 	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	queue "github.com/mohaijiang/computeshare-server/api/queue/v1"
+	queue "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
 )
 
 type Task struct {

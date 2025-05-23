@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/samber/lo"
 )

@@ -286,7 +286,7 @@ Authorization: Bearer {{ access_token }}
 
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/7399c323-00d5-4a3f-bb27-d216ef04aefc
+DELETE  https://api.computeshare.newtouch.com/v1/instance/eecf6f74-744e-43ba-a54c-8ab52b7a2c7d
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

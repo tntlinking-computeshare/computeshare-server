@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	pb "github.com/mohaijiang/computeshare-server/api/dashboard/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/dashboard/v1"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 )
 

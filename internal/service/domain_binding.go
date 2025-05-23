@@ -10,7 +10,7 @@ import (
 	"github.com/samber/lo"
 	"net"
 
-	pb "github.com/mohaijiang/computeshare-server/api/network_mapping/v1"
+	pb "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
 )
 
 type DomainBindingService struct {
