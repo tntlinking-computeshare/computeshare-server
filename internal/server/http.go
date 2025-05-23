@@ -32,30 +32,30 @@ import (
 func NewWhiteListMatcher() selector.MatchFunc {
 
 	whiteList := make(map[string]struct{})
-	whiteList["/api.server.system.v1.User/Login"] = struct{}{}
-	whiteList["/api.server.system.v1.User/LoginWithClient"] = struct{}{}
-	whiteList["/api.server.system.v1.User/LoginWithValidateCode"] = struct{}{}
-	whiteList["/api.server.system.v1.User/VerifyCode"] = struct{}{}
-	whiteList["/api.server.system.v1.User/SendValidateCode"] = struct{}{}
-	whiteList["/api.server.agent.v1.Agent/CreateAgent"] = struct{}{}
-	whiteList["/api.server.agent.v1.Agent/ListAgentInstance"] = struct{}{}
-	whiteList["/api.server.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
-	whiteList["/api.server.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
-	whiteList["/api.server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
-	whiteList["/api.server.order.v1.Order/AlipayPayNotify"] = struct{}{}
-	whiteList["/api.server.compute.v1.ComputeInstance/GetComputeImage"] = struct{}{}
+	whiteList["/server.system.v1.User/Login"] = struct{}{}
+	whiteList["/server.system.v1.User/LoginWithClient"] = struct{}{}
+	whiteList["/server.system.v1.User/LoginWithValidateCode"] = struct{}{}
+	whiteList["/server.system.v1.User/VerifyCode"] = struct{}{}
+	whiteList["/server.system.v1.User/SendValidateCode"] = struct{}{}
+	whiteList["/server.agent.v1.Agent/CreateAgent"] = struct{}{}
+	whiteList["/server.agent.v1.Agent/ListAgentInstance"] = struct{}{}
+	whiteList["/server.agent.v1.Agent/ReportInstanceStatus"] = struct{}{}
+	whiteList["/server.queue.v1.QueueTask/GetAgentTask"] = struct{}{}
+	whiteList["/server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
+	whiteList["/server.order.v1.Order/AlipayPayNotify"] = struct{}{}
+	whiteList["/server.compute.v1.ComputeInstance/GetComputeImage"] = struct{}{}
 	//dashboard
-	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/StoragesCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/StoragesProvidersList"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/StorageBucketsVolumeNumList"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/StorageS3KeyCallCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/ProvidersList"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/GatewaysList"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/CyclesCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/SandboxCount"] = struct{}{}
-	whiteList["/api.server.dashboard.v1.Dashboard/LastComputeInstancesCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/ProvidersCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/GatewaysCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/StoragesCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/StoragesProvidersList"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/StorageBucketsVolumeNumList"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/StorageS3KeyCallCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/ProvidersList"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/GatewaysList"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/CyclesCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/SandboxCount"] = struct{}{}
+	whiteList["/server.dashboard.v1.Dashboard/LastComputeInstancesCount"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
 			return false
