@@ -44,6 +44,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList["/server.queue.v1.QueueTask/UpdateAgentTask"] = struct{}{}
 	whiteList["/server.order.v1.Order/AlipayPayNotify"] = struct{}{}
 	whiteList["/server.compute.v1.ComputeInstance/GetComputeImage"] = struct{}{}
+	whiteList["/server.compute.v1.ComputeInstance/ListComputeImage"] = struct{}{}
 	//dashboard
 	whiteList["/server.dashboard.v1.Dashboard/ProvidersCount"] = struct{}{}
 	whiteList["/server.dashboard.v1.Dashboard/GatewaysCount"] = struct{}{}
