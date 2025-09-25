@@ -22,115 +22,115 @@ type CycleRenewalCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (crc *CycleRenewalCreate) SetFkUserID(u uuid.UUID) *CycleRenewalCreate {
-	crc.mutation.SetFkUserID(u)
-	return crc
+func (_c *CycleRenewalCreate) SetFkUserID(v uuid.UUID) *CycleRenewalCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetResourceID sets the "resource_id" field.
-func (crc *CycleRenewalCreate) SetResourceID(u uuid.UUID) *CycleRenewalCreate {
-	crc.mutation.SetResourceID(u)
-	return crc
+func (_c *CycleRenewalCreate) SetResourceID(v uuid.UUID) *CycleRenewalCreate {
+	_c.mutation.SetResourceID(v)
+	return _c
 }
 
 // SetResourceType sets the "resource_type" field.
-func (crc *CycleRenewalCreate) SetResourceType(i int) *CycleRenewalCreate {
-	crc.mutation.SetResourceType(i)
-	return crc
+func (_c *CycleRenewalCreate) SetResourceType(v int) *CycleRenewalCreate {
+	_c.mutation.SetResourceType(v)
+	return _c
 }
 
 // SetProductName sets the "product_name" field.
-func (crc *CycleRenewalCreate) SetProductName(s string) *CycleRenewalCreate {
-	crc.mutation.SetProductName(s)
-	return crc
+func (_c *CycleRenewalCreate) SetProductName(v string) *CycleRenewalCreate {
+	_c.mutation.SetProductName(v)
+	return _c
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (crc *CycleRenewalCreate) SetProductDesc(s string) *CycleRenewalCreate {
-	crc.mutation.SetProductDesc(s)
-	return crc
+func (_c *CycleRenewalCreate) SetProductDesc(v string) *CycleRenewalCreate {
+	_c.mutation.SetProductDesc(v)
+	return _c
 }
 
 // SetState sets the "state" field.
-func (crc *CycleRenewalCreate) SetState(i int8) *CycleRenewalCreate {
-	crc.mutation.SetState(i)
-	return crc
+func (_c *CycleRenewalCreate) SetState(v int8) *CycleRenewalCreate {
+	_c.mutation.SetState(v)
+	return _c
 }
 
 // SetExtendDay sets the "extend_day" field.
-func (crc *CycleRenewalCreate) SetExtendDay(i int8) *CycleRenewalCreate {
-	crc.mutation.SetExtendDay(i)
-	return crc
+func (_c *CycleRenewalCreate) SetExtendDay(v int8) *CycleRenewalCreate {
+	_c.mutation.SetExtendDay(v)
+	return _c
 }
 
 // SetExtendPrice sets the "extend_price" field.
-func (crc *CycleRenewalCreate) SetExtendPrice(f float64) *CycleRenewalCreate {
-	crc.mutation.SetExtendPrice(f)
-	return crc
+func (_c *CycleRenewalCreate) SetExtendPrice(v float64) *CycleRenewalCreate {
+	_c.mutation.SetExtendPrice(v)
+	return _c
 }
 
 // SetDueTime sets the "due_time" field.
-func (crc *CycleRenewalCreate) SetDueTime(t time.Time) *CycleRenewalCreate {
-	crc.mutation.SetDueTime(t)
-	return crc
+func (_c *CycleRenewalCreate) SetDueTime(v time.Time) *CycleRenewalCreate {
+	_c.mutation.SetDueTime(v)
+	return _c
 }
 
 // SetNillableDueTime sets the "due_time" field if the given value is not nil.
-func (crc *CycleRenewalCreate) SetNillableDueTime(t *time.Time) *CycleRenewalCreate {
-	if t != nil {
-		crc.SetDueTime(*t)
+func (_c *CycleRenewalCreate) SetNillableDueTime(v *time.Time) *CycleRenewalCreate {
+	if v != nil {
+		_c.SetDueTime(*v)
 	}
-	return crc
+	return _c
 }
 
 // SetRenewalTime sets the "renewal_time" field.
-func (crc *CycleRenewalCreate) SetRenewalTime(t time.Time) *CycleRenewalCreate {
-	crc.mutation.SetRenewalTime(t)
-	return crc
+func (_c *CycleRenewalCreate) SetRenewalTime(v time.Time) *CycleRenewalCreate {
+	_c.mutation.SetRenewalTime(v)
+	return _c
 }
 
 // SetNillableRenewalTime sets the "renewal_time" field if the given value is not nil.
-func (crc *CycleRenewalCreate) SetNillableRenewalTime(t *time.Time) *CycleRenewalCreate {
-	if t != nil {
-		crc.SetRenewalTime(*t)
+func (_c *CycleRenewalCreate) SetNillableRenewalTime(v *time.Time) *CycleRenewalCreate {
+	if v != nil {
+		_c.SetRenewalTime(*v)
 	}
-	return crc
+	return _c
 }
 
 // SetAutoRenewal sets the "auto_renewal" field.
-func (crc *CycleRenewalCreate) SetAutoRenewal(b bool) *CycleRenewalCreate {
-	crc.mutation.SetAutoRenewal(b)
-	return crc
+func (_c *CycleRenewalCreate) SetAutoRenewal(v bool) *CycleRenewalCreate {
+	_c.mutation.SetAutoRenewal(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (crc *CycleRenewalCreate) SetID(u uuid.UUID) *CycleRenewalCreate {
-	crc.mutation.SetID(u)
-	return crc
+func (_c *CycleRenewalCreate) SetID(v uuid.UUID) *CycleRenewalCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (crc *CycleRenewalCreate) SetNillableID(u *uuid.UUID) *CycleRenewalCreate {
-	if u != nil {
-		crc.SetID(*u)
+func (_c *CycleRenewalCreate) SetNillableID(v *uuid.UUID) *CycleRenewalCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return crc
+	return _c
 }
 
 // Mutation returns the CycleRenewalMutation object of the builder.
-func (crc *CycleRenewalCreate) Mutation() *CycleRenewalMutation {
-	return crc.mutation
+func (_c *CycleRenewalCreate) Mutation() *CycleRenewalMutation {
+	return _c.mutation
 }
 
 // Save creates the CycleRenewal in the database.
-func (crc *CycleRenewalCreate) Save(ctx context.Context) (*CycleRenewal, error) {
-	crc.defaults()
-	return withHooks(ctx, crc.sqlSave, crc.mutation, crc.hooks)
+func (_c *CycleRenewalCreate) Save(ctx context.Context) (*CycleRenewal, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (crc *CycleRenewalCreate) SaveX(ctx context.Context) *CycleRenewal {
-	v, err := crc.Save(ctx)
+func (_c *CycleRenewalCreate) SaveX(ctx context.Context) *CycleRenewal {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,79 +138,79 @@ func (crc *CycleRenewalCreate) SaveX(ctx context.Context) *CycleRenewal {
 }
 
 // Exec executes the query.
-func (crc *CycleRenewalCreate) Exec(ctx context.Context) error {
-	_, err := crc.Save(ctx)
+func (_c *CycleRenewalCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crc *CycleRenewalCreate) ExecX(ctx context.Context) {
-	if err := crc.Exec(ctx); err != nil {
+func (_c *CycleRenewalCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (crc *CycleRenewalCreate) defaults() {
-	if _, ok := crc.mutation.ID(); !ok {
+func (_c *CycleRenewalCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := cyclerenewal.DefaultID()
-		crc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (crc *CycleRenewalCreate) check() error {
-	if _, ok := crc.mutation.FkUserID(); !ok {
+func (_c *CycleRenewalCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "CycleRenewal.fk_user_id"`)}
 	}
-	if _, ok := crc.mutation.ResourceID(); !ok {
+	if _, ok := _c.mutation.ResourceID(); !ok {
 		return &ValidationError{Name: "resource_id", err: errors.New(`ent: missing required field "CycleRenewal.resource_id"`)}
 	}
-	if _, ok := crc.mutation.ResourceType(); !ok {
+	if _, ok := _c.mutation.ResourceType(); !ok {
 		return &ValidationError{Name: "resource_type", err: errors.New(`ent: missing required field "CycleRenewal.resource_type"`)}
 	}
-	if v, ok := crc.mutation.ResourceType(); ok {
+	if v, ok := _c.mutation.ResourceType(); ok {
 		if err := cyclerenewal.ResourceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "resource_type", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.resource_type": %w`, err)}
 		}
 	}
-	if _, ok := crc.mutation.ProductName(); !ok {
+	if _, ok := _c.mutation.ProductName(); !ok {
 		return &ValidationError{Name: "product_name", err: errors.New(`ent: missing required field "CycleRenewal.product_name"`)}
 	}
-	if v, ok := crc.mutation.ProductName(); ok {
+	if v, ok := _c.mutation.ProductName(); ok {
 		if err := cyclerenewal.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_name": %w`, err)}
 		}
 	}
-	if _, ok := crc.mutation.ProductDesc(); !ok {
+	if _, ok := _c.mutation.ProductDesc(); !ok {
 		return &ValidationError{Name: "product_desc", err: errors.New(`ent: missing required field "CycleRenewal.product_desc"`)}
 	}
-	if v, ok := crc.mutation.ProductDesc(); ok {
+	if v, ok := _c.mutation.ProductDesc(); ok {
 		if err := cyclerenewal.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_desc": %w`, err)}
 		}
 	}
-	if _, ok := crc.mutation.State(); !ok {
+	if _, ok := _c.mutation.State(); !ok {
 		return &ValidationError{Name: "state", err: errors.New(`ent: missing required field "CycleRenewal.state"`)}
 	}
-	if _, ok := crc.mutation.ExtendDay(); !ok {
+	if _, ok := _c.mutation.ExtendDay(); !ok {
 		return &ValidationError{Name: "extend_day", err: errors.New(`ent: missing required field "CycleRenewal.extend_day"`)}
 	}
-	if _, ok := crc.mutation.ExtendPrice(); !ok {
+	if _, ok := _c.mutation.ExtendPrice(); !ok {
 		return &ValidationError{Name: "extend_price", err: errors.New(`ent: missing required field "CycleRenewal.extend_price"`)}
 	}
-	if _, ok := crc.mutation.AutoRenewal(); !ok {
+	if _, ok := _c.mutation.AutoRenewal(); !ok {
 		return &ValidationError{Name: "auto_renewal", err: errors.New(`ent: missing required field "CycleRenewal.auto_renewal"`)}
 	}
 	return nil
 }
 
-func (crc *CycleRenewalCreate) sqlSave(ctx context.Context) (*CycleRenewal, error) {
-	if err := crc.check(); err != nil {
+func (_c *CycleRenewalCreate) sqlSave(ctx context.Context) (*CycleRenewal, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := crc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, crc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -223,61 +223,61 @@ func (crc *CycleRenewalCreate) sqlSave(ctx context.Context) (*CycleRenewal, erro
 			return nil, err
 		}
 	}
-	crc.mutation.id = &_node.ID
-	crc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (crc *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec) {
+func (_c *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CycleRenewal{config: crc.config}
+		_node = &CycleRenewal{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(cyclerenewal.Table, sqlgraph.NewFieldSpec(cyclerenewal.FieldID, field.TypeUUID))
 	)
-	if id, ok := crc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := crc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerenewal.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := crc.mutation.ResourceID(); ok {
+	if value, ok := _c.mutation.ResourceID(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceID, field.TypeUUID, value)
 		_node.ResourceID = value
 	}
-	if value, ok := crc.mutation.ResourceType(); ok {
+	if value, ok := _c.mutation.ResourceType(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceType, field.TypeInt, value)
 		_node.ResourceType = value
 	}
-	if value, ok := crc.mutation.ProductName(); ok {
+	if value, ok := _c.mutation.ProductName(); ok {
 		_spec.SetField(cyclerenewal.FieldProductName, field.TypeString, value)
 		_node.ProductName = value
 	}
-	if value, ok := crc.mutation.ProductDesc(); ok {
+	if value, ok := _c.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 		_node.ProductDesc = value
 	}
-	if value, ok := crc.mutation.State(); ok {
+	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
 		_node.State = value
 	}
-	if value, ok := crc.mutation.ExtendDay(); ok {
+	if value, ok := _c.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 		_node.ExtendDay = value
 	}
-	if value, ok := crc.mutation.ExtendPrice(); ok {
+	if value, ok := _c.mutation.ExtendPrice(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendPrice, field.TypeFloat64, value)
 		_node.ExtendPrice = value
 	}
-	if value, ok := crc.mutation.DueTime(); ok {
+	if value, ok := _c.mutation.DueTime(); ok {
 		_spec.SetField(cyclerenewal.FieldDueTime, field.TypeTime, value)
 		_node.DueTime = &value
 	}
-	if value, ok := crc.mutation.RenewalTime(); ok {
+	if value, ok := _c.mutation.RenewalTime(); ok {
 		_spec.SetField(cyclerenewal.FieldRenewalTime, field.TypeTime, value)
 		_node.RenewalTime = &value
 	}
-	if value, ok := crc.mutation.AutoRenewal(); ok {
+	if value, ok := _c.mutation.AutoRenewal(); ok {
 		_spec.SetField(cyclerenewal.FieldAutoRenewal, field.TypeBool, value)
 		_node.AutoRenewal = value
 	}
@@ -287,17 +287,21 @@ func (crc *CycleRenewalCreate) createSpec() (*CycleRenewal, *sqlgraph.CreateSpec
 // CycleRenewalCreateBulk is the builder for creating many CycleRenewal entities in bulk.
 type CycleRenewalCreateBulk struct {
 	config
+	err      error
 	builders []*CycleRenewalCreate
 }
 
 // Save creates the CycleRenewal entities in the database.
-func (crcb *CycleRenewalCreateBulk) Save(ctx context.Context) ([]*CycleRenewal, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(crcb.builders))
-	nodes := make([]*CycleRenewal, len(crcb.builders))
-	mutators := make([]Mutator, len(crcb.builders))
-	for i := range crcb.builders {
+func (_c *CycleRenewalCreateBulk) Save(ctx context.Context) ([]*CycleRenewal, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CycleRenewal, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := crcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CycleRenewalMutation)
@@ -311,11 +315,11 @@ func (crcb *CycleRenewalCreateBulk) Save(ctx context.Context) ([]*CycleRenewal, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, crcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, crcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -335,7 +339,7 @@ func (crcb *CycleRenewalCreateBulk) Save(ctx context.Context) ([]*CycleRenewal, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, crcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -343,8 +347,8 @@ func (crcb *CycleRenewalCreateBulk) Save(ctx context.Context) ([]*CycleRenewal, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (crcb *CycleRenewalCreateBulk) SaveX(ctx context.Context) []*CycleRenewal {
-	v, err := crcb.Save(ctx)
+func (_c *CycleRenewalCreateBulk) SaveX(ctx context.Context) []*CycleRenewal {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -352,14 +356,14 @@ func (crcb *CycleRenewalCreateBulk) SaveX(ctx context.Context) []*CycleRenewal {
 }
 
 // Exec executes the query.
-func (crcb *CycleRenewalCreateBulk) Exec(ctx context.Context) error {
-	_, err := crcb.Save(ctx)
+func (_c *CycleRenewalCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crcb *CycleRenewalCreateBulk) ExecX(ctx context.Context) {
-	if err := crcb.Exec(ctx); err != nil {
+func (_c *CycleRenewalCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

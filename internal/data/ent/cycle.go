@@ -49,7 +49,7 @@ func (*Cycle) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Cycle fields.
-func (c *Cycle) assignValues(columns []string, values []any) error {
+func (_m *Cycle) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -59,34 +59,34 @@ func (c *Cycle) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				c.ID = *value
+				_m.ID = *value
 			}
 		case cycle.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				c.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cycle.FieldCycle:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field cycle", values[i])
 			} else if value.Valid {
-				c.Cycle = value.Float64
+				_m.Cycle = value.Float64
 			}
 		case cycle.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				c.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case cycle.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				c.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		default:
-			c.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -94,44 +94,44 @@ func (c *Cycle) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Cycle.
 // This includes values selected through modifiers, order, etc.
-func (c *Cycle) Value(name string) (ent.Value, error) {
-	return c.selectValues.Get(name)
+func (_m *Cycle) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Cycle.
 // Note that you need to call Cycle.Unwrap() before calling this method if this Cycle
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (c *Cycle) Update() *CycleUpdateOne {
-	return NewCycleClient(c.config).UpdateOne(c)
+func (_m *Cycle) Update() *CycleUpdateOne {
+	return NewCycleClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Cycle entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (c *Cycle) Unwrap() *Cycle {
-	_tx, ok := c.config.driver.(*txDriver)
+func (_m *Cycle) Unwrap() *Cycle {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Cycle is not a transactional entity")
 	}
-	c.config.driver = _tx.drv
-	return c
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (c *Cycle) String() string {
+func (_m *Cycle) String() string {
 	var builder strings.Builder
 	builder.WriteString("Cycle(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", c.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("cycle=")
-	builder.WriteString(fmt.Sprintf("%v", c.Cycle))
+	builder.WriteString(fmt.Sprintf("%v", _m.Cycle))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(c.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(c.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

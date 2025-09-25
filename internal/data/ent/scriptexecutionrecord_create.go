@@ -22,120 +22,120 @@ type ScriptExecutionRecordCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (serc *ScriptExecutionRecordCreate) SetUserID(s string) *ScriptExecutionRecordCreate {
-	serc.mutation.SetUserID(s)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetUserID(v string) *ScriptExecutionRecordCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetFkScriptID sets the "fk_script_id" field.
-func (serc *ScriptExecutionRecordCreate) SetFkScriptID(i int32) *ScriptExecutionRecordCreate {
-	serc.mutation.SetFkScriptID(i)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetFkScriptID(v int32) *ScriptExecutionRecordCreate {
+	_c.mutation.SetFkScriptID(v)
+	return _c
 }
 
 // SetScriptContent sets the "script_content" field.
-func (serc *ScriptExecutionRecordCreate) SetScriptContent(s string) *ScriptExecutionRecordCreate {
-	serc.mutation.SetScriptContent(s)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetScriptContent(v string) *ScriptExecutionRecordCreate {
+	_c.mutation.SetScriptContent(v)
+	return _c
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (serc *ScriptExecutionRecordCreate) SetTaskNumber(i int32) *ScriptExecutionRecordCreate {
-	serc.mutation.SetTaskNumber(i)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetTaskNumber(v int32) *ScriptExecutionRecordCreate {
+	_c.mutation.SetTaskNumber(v)
+	return _c
 }
 
 // SetScriptName sets the "script_name" field.
-func (serc *ScriptExecutionRecordCreate) SetScriptName(s string) *ScriptExecutionRecordCreate {
-	serc.mutation.SetScriptName(s)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetScriptName(v string) *ScriptExecutionRecordCreate {
+	_c.mutation.SetScriptName(v)
+	return _c
 }
 
 // SetFileAddress sets the "file_address" field.
-func (serc *ScriptExecutionRecordCreate) SetFileAddress(s string) *ScriptExecutionRecordCreate {
-	serc.mutation.SetFileAddress(s)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetFileAddress(v string) *ScriptExecutionRecordCreate {
+	_c.mutation.SetFileAddress(v)
+	return _c
 }
 
 // SetExecuteState sets the "execute_state" field.
-func (serc *ScriptExecutionRecordCreate) SetExecuteState(i int32) *ScriptExecutionRecordCreate {
-	serc.mutation.SetExecuteState(i)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetExecuteState(v int32) *ScriptExecutionRecordCreate {
+	_c.mutation.SetExecuteState(v)
+	return _c
 }
 
 // SetExecuteResult sets the "execute_result" field.
-func (serc *ScriptExecutionRecordCreate) SetExecuteResult(s string) *ScriptExecutionRecordCreate {
-	serc.mutation.SetExecuteResult(s)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetExecuteResult(v string) *ScriptExecutionRecordCreate {
+	_c.mutation.SetExecuteResult(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (serc *ScriptExecutionRecordCreate) SetCreateTime(t time.Time) *ScriptExecutionRecordCreate {
-	serc.mutation.SetCreateTime(t)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetCreateTime(v time.Time) *ScriptExecutionRecordCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (serc *ScriptExecutionRecordCreate) SetNillableCreateTime(t *time.Time) *ScriptExecutionRecordCreate {
-	if t != nil {
-		serc.SetCreateTime(*t)
+func (_c *ScriptExecutionRecordCreate) SetNillableCreateTime(v *time.Time) *ScriptExecutionRecordCreate {
+	if v != nil {
+		_c.SetCreateTime(*v)
 	}
-	return serc
+	return _c
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (serc *ScriptExecutionRecordCreate) SetUpdateTime(t time.Time) *ScriptExecutionRecordCreate {
-	serc.mutation.SetUpdateTime(t)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetUpdateTime(v time.Time) *ScriptExecutionRecordCreate {
+	_c.mutation.SetUpdateTime(v)
+	return _c
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (serc *ScriptExecutionRecordCreate) SetNillableUpdateTime(t *time.Time) *ScriptExecutionRecordCreate {
-	if t != nil {
-		serc.SetUpdateTime(*t)
+func (_c *ScriptExecutionRecordCreate) SetNillableUpdateTime(v *time.Time) *ScriptExecutionRecordCreate {
+	if v != nil {
+		_c.SetUpdateTime(*v)
 	}
-	return serc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (serc *ScriptExecutionRecordCreate) SetID(i int32) *ScriptExecutionRecordCreate {
-	serc.mutation.SetID(i)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetID(v int32) *ScriptExecutionRecordCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetScriptID sets the "script" edge to the Script entity by ID.
-func (serc *ScriptExecutionRecordCreate) SetScriptID(id int32) *ScriptExecutionRecordCreate {
-	serc.mutation.SetScriptID(id)
-	return serc
+func (_c *ScriptExecutionRecordCreate) SetScriptID(id int32) *ScriptExecutionRecordCreate {
+	_c.mutation.SetScriptID(id)
+	return _c
 }
 
 // SetNillableScriptID sets the "script" edge to the Script entity by ID if the given value is not nil.
-func (serc *ScriptExecutionRecordCreate) SetNillableScriptID(id *int32) *ScriptExecutionRecordCreate {
+func (_c *ScriptExecutionRecordCreate) SetNillableScriptID(id *int32) *ScriptExecutionRecordCreate {
 	if id != nil {
-		serc = serc.SetScriptID(*id)
+		_c = _c.SetScriptID(*id)
 	}
-	return serc
+	return _c
 }
 
 // SetScript sets the "script" edge to the Script entity.
-func (serc *ScriptExecutionRecordCreate) SetScript(s *Script) *ScriptExecutionRecordCreate {
-	return serc.SetScriptID(s.ID)
+func (_c *ScriptExecutionRecordCreate) SetScript(v *Script) *ScriptExecutionRecordCreate {
+	return _c.SetScriptID(v.ID)
 }
 
 // Mutation returns the ScriptExecutionRecordMutation object of the builder.
-func (serc *ScriptExecutionRecordCreate) Mutation() *ScriptExecutionRecordMutation {
-	return serc.mutation
+func (_c *ScriptExecutionRecordCreate) Mutation() *ScriptExecutionRecordMutation {
+	return _c.mutation
 }
 
 // Save creates the ScriptExecutionRecord in the database.
-func (serc *ScriptExecutionRecordCreate) Save(ctx context.Context) (*ScriptExecutionRecord, error) {
-	serc.defaults()
-	return withHooks(ctx, serc.sqlSave, serc.mutation, serc.hooks)
+func (_c *ScriptExecutionRecordCreate) Save(ctx context.Context) (*ScriptExecutionRecord, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (serc *ScriptExecutionRecordCreate) SaveX(ctx context.Context) *ScriptExecutionRecord {
-	v, err := serc.Save(ctx)
+func (_c *ScriptExecutionRecordCreate) SaveX(ctx context.Context) *ScriptExecutionRecord {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -143,91 +143,91 @@ func (serc *ScriptExecutionRecordCreate) SaveX(ctx context.Context) *ScriptExecu
 }
 
 // Exec executes the query.
-func (serc *ScriptExecutionRecordCreate) Exec(ctx context.Context) error {
-	_, err := serc.Save(ctx)
+func (_c *ScriptExecutionRecordCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (serc *ScriptExecutionRecordCreate) ExecX(ctx context.Context) {
-	if err := serc.Exec(ctx); err != nil {
+func (_c *ScriptExecutionRecordCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (serc *ScriptExecutionRecordCreate) defaults() {
-	if _, ok := serc.mutation.CreateTime(); !ok {
+func (_c *ScriptExecutionRecordCreate) defaults() {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := scriptexecutionrecord.DefaultCreateTime
-		serc.mutation.SetCreateTime(v)
+		_c.mutation.SetCreateTime(v)
 	}
-	if _, ok := serc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		v := scriptexecutionrecord.DefaultUpdateTime
-		serc.mutation.SetUpdateTime(v)
+		_c.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (serc *ScriptExecutionRecordCreate) check() error {
-	if _, ok := serc.mutation.UserID(); !ok {
+func (_c *ScriptExecutionRecordCreate) check() error {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "ScriptExecutionRecord.user_id"`)}
 	}
-	if _, ok := serc.mutation.FkScriptID(); !ok {
+	if _, ok := _c.mutation.FkScriptID(); !ok {
 		return &ValidationError{Name: "fk_script_id", err: errors.New(`ent: missing required field "ScriptExecutionRecord.fk_script_id"`)}
 	}
-	if v, ok := serc.mutation.FkScriptID(); ok {
+	if v, ok := _c.mutation.FkScriptID(); ok {
 		if err := scriptexecutionrecord.FkScriptIDValidator(v); err != nil {
 			return &ValidationError{Name: "fk_script_id", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.fk_script_id": %w`, err)}
 		}
 	}
-	if _, ok := serc.mutation.ScriptContent(); !ok {
+	if _, ok := _c.mutation.ScriptContent(); !ok {
 		return &ValidationError{Name: "script_content", err: errors.New(`ent: missing required field "ScriptExecutionRecord.script_content"`)}
 	}
-	if v, ok := serc.mutation.ScriptContent(); ok {
+	if v, ok := _c.mutation.ScriptContent(); ok {
 		if err := scriptexecutionrecord.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if _, ok := serc.mutation.TaskNumber(); !ok {
+	if _, ok := _c.mutation.TaskNumber(); !ok {
 		return &ValidationError{Name: "task_number", err: errors.New(`ent: missing required field "ScriptExecutionRecord.task_number"`)}
 	}
-	if v, ok := serc.mutation.TaskNumber(); ok {
+	if v, ok := _c.mutation.TaskNumber(); ok {
 		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
 		}
 	}
-	if _, ok := serc.mutation.ScriptName(); !ok {
+	if _, ok := _c.mutation.ScriptName(); !ok {
 		return &ValidationError{Name: "script_name", err: errors.New(`ent: missing required field "ScriptExecutionRecord.script_name"`)}
 	}
-	if v, ok := serc.mutation.ScriptName(); ok {
+	if v, ok := _c.mutation.ScriptName(); ok {
 		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
 		}
 	}
-	if _, ok := serc.mutation.FileAddress(); !ok {
+	if _, ok := _c.mutation.FileAddress(); !ok {
 		return &ValidationError{Name: "file_address", err: errors.New(`ent: missing required field "ScriptExecutionRecord.file_address"`)}
 	}
-	if _, ok := serc.mutation.ExecuteState(); !ok {
+	if _, ok := _c.mutation.ExecuteState(); !ok {
 		return &ValidationError{Name: "execute_state", err: errors.New(`ent: missing required field "ScriptExecutionRecord.execute_state"`)}
 	}
-	if _, ok := serc.mutation.ExecuteResult(); !ok {
+	if _, ok := _c.mutation.ExecuteResult(); !ok {
 		return &ValidationError{Name: "execute_result", err: errors.New(`ent: missing required field "ScriptExecutionRecord.execute_result"`)}
 	}
-	if _, ok := serc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "ScriptExecutionRecord.create_time"`)}
 	}
-	if _, ok := serc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "ScriptExecutionRecord.update_time"`)}
 	}
 	return nil
 }
 
-func (serc *ScriptExecutionRecordCreate) sqlSave(ctx context.Context) (*ScriptExecutionRecord, error) {
-	if err := serc.check(); err != nil {
+func (_c *ScriptExecutionRecordCreate) sqlSave(ctx context.Context) (*ScriptExecutionRecord, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := serc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, serc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -237,61 +237,61 @@ func (serc *ScriptExecutionRecordCreate) sqlSave(ctx context.Context) (*ScriptEx
 		id := _spec.ID.Value.(int64)
 		_node.ID = int32(id)
 	}
-	serc.mutation.id = &_node.ID
-	serc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (serc *ScriptExecutionRecordCreate) createSpec() (*ScriptExecutionRecord, *sqlgraph.CreateSpec) {
+func (_c *ScriptExecutionRecordCreate) createSpec() (*ScriptExecutionRecord, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ScriptExecutionRecord{config: serc.config}
+		_node = &ScriptExecutionRecord{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(scriptexecutionrecord.Table, sqlgraph.NewFieldSpec(scriptexecutionrecord.FieldID, field.TypeInt32))
 	)
-	if id, ok := serc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := serc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
-	if value, ok := serc.mutation.FkScriptID(); ok {
+	if value, ok := _c.mutation.FkScriptID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFkScriptID, field.TypeInt32, value)
 		_node.FkScriptID = value
 	}
-	if value, ok := serc.mutation.ScriptContent(); ok {
+	if value, ok := _c.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 		_node.ScriptContent = value
 	}
-	if value, ok := serc.mutation.TaskNumber(); ok {
+	if value, ok := _c.mutation.TaskNumber(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
 		_node.TaskNumber = value
 	}
-	if value, ok := serc.mutation.ScriptName(); ok {
+	if value, ok := _c.mutation.ScriptName(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
 		_node.ScriptName = value
 	}
-	if value, ok := serc.mutation.FileAddress(); ok {
+	if value, ok := _c.mutation.FileAddress(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 		_node.FileAddress = value
 	}
-	if value, ok := serc.mutation.ExecuteState(); ok {
+	if value, ok := _c.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 		_node.ExecuteState = value
 	}
-	if value, ok := serc.mutation.ExecuteResult(); ok {
+	if value, ok := _c.mutation.ExecuteResult(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteResult, field.TypeString, value)
 		_node.ExecuteResult = value
 	}
-	if value, ok := serc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := serc.mutation.UpdateTime(); ok {
+	if value, ok := _c.mutation.UpdateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUpdateTime, field.TypeTime, value)
 		_node.UpdateTime = value
 	}
-	if nodes := serc.mutation.ScriptIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScriptIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -314,17 +314,21 @@ func (serc *ScriptExecutionRecordCreate) createSpec() (*ScriptExecutionRecord, *
 // ScriptExecutionRecordCreateBulk is the builder for creating many ScriptExecutionRecord entities in bulk.
 type ScriptExecutionRecordCreateBulk struct {
 	config
+	err      error
 	builders []*ScriptExecutionRecordCreate
 }
 
 // Save creates the ScriptExecutionRecord entities in the database.
-func (sercb *ScriptExecutionRecordCreateBulk) Save(ctx context.Context) ([]*ScriptExecutionRecord, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(sercb.builders))
-	nodes := make([]*ScriptExecutionRecord, len(sercb.builders))
-	mutators := make([]Mutator, len(sercb.builders))
-	for i := range sercb.builders {
+func (_c *ScriptExecutionRecordCreateBulk) Save(ctx context.Context) ([]*ScriptExecutionRecord, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ScriptExecutionRecord, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := sercb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ScriptExecutionRecordMutation)
@@ -338,11 +342,11 @@ func (sercb *ScriptExecutionRecordCreateBulk) Save(ctx context.Context) ([]*Scri
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, sercb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, sercb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -366,7 +370,7 @@ func (sercb *ScriptExecutionRecordCreateBulk) Save(ctx context.Context) ([]*Scri
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, sercb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -374,8 +378,8 @@ func (sercb *ScriptExecutionRecordCreateBulk) Save(ctx context.Context) ([]*Scri
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (sercb *ScriptExecutionRecordCreateBulk) SaveX(ctx context.Context) []*ScriptExecutionRecord {
-	v, err := sercb.Save(ctx)
+func (_c *ScriptExecutionRecordCreateBulk) SaveX(ctx context.Context) []*ScriptExecutionRecord {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -383,14 +387,14 @@ func (sercb *ScriptExecutionRecordCreateBulk) SaveX(ctx context.Context) []*Scri
 }
 
 // Exec executes the query.
-func (sercb *ScriptExecutionRecordCreateBulk) Exec(ctx context.Context) error {
-	_, err := sercb.Save(ctx)
+func (_c *ScriptExecutionRecordCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sercb *ScriptExecutionRecordCreateBulk) ExecX(ctx context.Context) {
-	if err := sercb.Exec(ctx); err != nil {
+func (_c *ScriptExecutionRecordCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

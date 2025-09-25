@@ -24,92 +24,164 @@ type CycleTransactionUpdate struct {
 }
 
 // Where appends a list predicates to the CycleTransactionUpdate builder.
-func (ctu *CycleTransactionUpdate) Where(ps ...predicate.CycleTransaction) *CycleTransactionUpdate {
-	ctu.mutation.Where(ps...)
-	return ctu
+func (_u *CycleTransactionUpdate) Where(ps ...predicate.CycleTransaction) *CycleTransactionUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkCycleID sets the "fk_cycle_id" field.
-func (ctu *CycleTransactionUpdate) SetFkCycleID(u uuid.UUID) *CycleTransactionUpdate {
-	ctu.mutation.SetFkCycleID(u)
-	return ctu
+func (_u *CycleTransactionUpdate) SetFkCycleID(v uuid.UUID) *CycleTransactionUpdate {
+	_u.mutation.SetFkCycleID(v)
+	return _u
+}
+
+// SetNillableFkCycleID sets the "fk_cycle_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableFkCycleID(v *uuid.UUID) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetFkCycleID(*v)
+	}
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (ctu *CycleTransactionUpdate) SetFkUserID(u uuid.UUID) *CycleTransactionUpdate {
-	ctu.mutation.SetFkUserID(u)
-	return ctu
+func (_u *CycleTransactionUpdate) SetFkUserID(v uuid.UUID) *CycleTransactionUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableFkUserID(v *uuid.UUID) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetFkCycleOrderID sets the "fk_cycle_order_id" field.
-func (ctu *CycleTransactionUpdate) SetFkCycleOrderID(u uuid.UUID) *CycleTransactionUpdate {
-	ctu.mutation.SetFkCycleOrderID(u)
-	return ctu
+func (_u *CycleTransactionUpdate) SetFkCycleOrderID(v uuid.UUID) *CycleTransactionUpdate {
+	_u.mutation.SetFkCycleOrderID(v)
+	return _u
+}
+
+// SetNillableFkCycleOrderID sets the "fk_cycle_order_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableFkCycleOrderID(v *uuid.UUID) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetFkCycleOrderID(*v)
+	}
+	return _u
 }
 
 // SetFkCycleRechargeID sets the "fk_cycle_recharge_id" field.
-func (ctu *CycleTransactionUpdate) SetFkCycleRechargeID(u uuid.UUID) *CycleTransactionUpdate {
-	ctu.mutation.SetFkCycleRechargeID(u)
-	return ctu
+func (_u *CycleTransactionUpdate) SetFkCycleRechargeID(v uuid.UUID) *CycleTransactionUpdate {
+	_u.mutation.SetFkCycleRechargeID(v)
+	return _u
+}
+
+// SetNillableFkCycleRechargeID sets the "fk_cycle_recharge_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableFkCycleRechargeID(v *uuid.UUID) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetFkCycleRechargeID(*v)
+	}
+	return _u
 }
 
 // SetOperation sets the "operation" field.
-func (ctu *CycleTransactionUpdate) SetOperation(s string) *CycleTransactionUpdate {
-	ctu.mutation.SetOperation(s)
-	return ctu
+func (_u *CycleTransactionUpdate) SetOperation(v string) *CycleTransactionUpdate {
+	_u.mutation.SetOperation(v)
+	return _u
+}
+
+// SetNillableOperation sets the "operation" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableOperation(v *string) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetOperation(*v)
+	}
+	return _u
 }
 
 // SetSymbol sets the "symbol" field.
-func (ctu *CycleTransactionUpdate) SetSymbol(s string) *CycleTransactionUpdate {
-	ctu.mutation.SetSymbol(s)
-	return ctu
+func (_u *CycleTransactionUpdate) SetSymbol(v string) *CycleTransactionUpdate {
+	_u.mutation.SetSymbol(v)
+	return _u
+}
+
+// SetNillableSymbol sets the "symbol" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableSymbol(v *string) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetSymbol(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (ctu *CycleTransactionUpdate) SetCycle(f float64) *CycleTransactionUpdate {
-	ctu.mutation.ResetCycle()
-	ctu.mutation.SetCycle(f)
-	return ctu
+func (_u *CycleTransactionUpdate) SetCycle(v float64) *CycleTransactionUpdate {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (ctu *CycleTransactionUpdate) AddCycle(f float64) *CycleTransactionUpdate {
-	ctu.mutation.AddCycle(f)
-	return ctu
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableCycle(v *float64) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleTransactionUpdate) AddCycle(v float64) *CycleTransactionUpdate {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetBalance sets the "balance" field.
-func (ctu *CycleTransactionUpdate) SetBalance(f float64) *CycleTransactionUpdate {
-	ctu.mutation.ResetBalance()
-	ctu.mutation.SetBalance(f)
-	return ctu
+func (_u *CycleTransactionUpdate) SetBalance(v float64) *CycleTransactionUpdate {
+	_u.mutation.ResetBalance()
+	_u.mutation.SetBalance(v)
+	return _u
 }
 
-// AddBalance adds f to the "balance" field.
-func (ctu *CycleTransactionUpdate) AddBalance(f float64) *CycleTransactionUpdate {
-	ctu.mutation.AddBalance(f)
-	return ctu
+// SetNillableBalance sets the "balance" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableBalance(v *float64) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetBalance(*v)
+	}
+	return _u
+}
+
+// AddBalance adds value to the "balance" field.
+func (_u *CycleTransactionUpdate) AddBalance(v float64) *CycleTransactionUpdate {
+	_u.mutation.AddBalance(v)
+	return _u
 }
 
 // SetOperationTime sets the "operation_time" field.
-func (ctu *CycleTransactionUpdate) SetOperationTime(t time.Time) *CycleTransactionUpdate {
-	ctu.mutation.SetOperationTime(t)
-	return ctu
+func (_u *CycleTransactionUpdate) SetOperationTime(v time.Time) *CycleTransactionUpdate {
+	_u.mutation.SetOperationTime(v)
+	return _u
+}
+
+// SetNillableOperationTime sets the "operation_time" field if the given value is not nil.
+func (_u *CycleTransactionUpdate) SetNillableOperationTime(v *time.Time) *CycleTransactionUpdate {
+	if v != nil {
+		_u.SetOperationTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleTransactionMutation object of the builder.
-func (ctu *CycleTransactionUpdate) Mutation() *CycleTransactionMutation {
-	return ctu.mutation
+func (_u *CycleTransactionUpdate) Mutation() *CycleTransactionMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ctu *CycleTransactionUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, ctu.sqlSave, ctu.mutation, ctu.hooks)
+func (_u *CycleTransactionUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ctu *CycleTransactionUpdate) SaveX(ctx context.Context) int {
-	affected, err := ctu.Save(ctx)
+func (_u *CycleTransactionUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -117,26 +189,26 @@ func (ctu *CycleTransactionUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ctu *CycleTransactionUpdate) Exec(ctx context.Context) error {
-	_, err := ctu.Save(ctx)
+func (_u *CycleTransactionUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ctu *CycleTransactionUpdate) ExecX(ctx context.Context) {
-	if err := ctu.Exec(ctx); err != nil {
+func (_u *CycleTransactionUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ctu *CycleTransactionUpdate) check() error {
-	if v, ok := ctu.mutation.Operation(); ok {
+func (_u *CycleTransactionUpdate) check() error {
+	if v, ok := _u.mutation.Operation(); ok {
 		if err := cycletransaction.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CycleTransaction.operation": %w`, err)}
 		}
 	}
-	if v, ok := ctu.mutation.Symbol(); ok {
+	if v, ok := _u.mutation.Symbol(); ok {
 		if err := cycletransaction.SymbolValidator(v); err != nil {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleTransaction.symbol": %w`, err)}
 		}
@@ -144,52 +216,52 @@ func (ctu *CycleTransactionUpdate) check() error {
 	return nil
 }
 
-func (ctu *CycleTransactionUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ctu.check(); err != nil {
-		return n, err
+func (_u *CycleTransactionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cycletransaction.Table, cycletransaction.Columns, sqlgraph.NewFieldSpec(cycletransaction.FieldID, field.TypeUUID))
-	if ps := ctu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ctu.mutation.FkCycleID(); ok {
+	if value, ok := _u.mutation.FkCycleID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleID, field.TypeUUID, value)
 	}
-	if value, ok := ctu.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycletransaction.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := ctu.mutation.FkCycleOrderID(); ok {
+	if value, ok := _u.mutation.FkCycleOrderID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleOrderID, field.TypeUUID, value)
 	}
-	if value, ok := ctu.mutation.FkCycleRechargeID(); ok {
+	if value, ok := _u.mutation.FkCycleRechargeID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleRechargeID, field.TypeUUID, value)
 	}
-	if value, ok := ctu.mutation.Operation(); ok {
+	if value, ok := _u.mutation.Operation(); ok {
 		_spec.SetField(cycletransaction.FieldOperation, field.TypeString, value)
 	}
-	if value, ok := ctu.mutation.Symbol(); ok {
+	if value, ok := _u.mutation.Symbol(); ok {
 		_spec.SetField(cycletransaction.FieldSymbol, field.TypeString, value)
 	}
-	if value, ok := ctu.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycletransaction.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := ctu.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycletransaction.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := ctu.mutation.Balance(); ok {
+	if value, ok := _u.mutation.Balance(); ok {
 		_spec.SetField(cycletransaction.FieldBalance, field.TypeFloat64, value)
 	}
-	if value, ok := ctu.mutation.AddedBalance(); ok {
+	if value, ok := _u.mutation.AddedBalance(); ok {
 		_spec.AddField(cycletransaction.FieldBalance, field.TypeFloat64, value)
 	}
-	if value, ok := ctu.mutation.OperationTime(); ok {
+	if value, ok := _u.mutation.OperationTime(); ok {
 		_spec.SetField(cycletransaction.FieldOperationTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, ctu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycletransaction.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -197,8 +269,8 @@ func (ctu *CycleTransactionUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	ctu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CycleTransactionUpdateOne is the builder for updating a single CycleTransaction entity.
@@ -210,99 +282,171 @@ type CycleTransactionUpdateOne struct {
 }
 
 // SetFkCycleID sets the "fk_cycle_id" field.
-func (ctuo *CycleTransactionUpdateOne) SetFkCycleID(u uuid.UUID) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetFkCycleID(u)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetFkCycleID(v uuid.UUID) *CycleTransactionUpdateOne {
+	_u.mutation.SetFkCycleID(v)
+	return _u
+}
+
+// SetNillableFkCycleID sets the "fk_cycle_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableFkCycleID(v *uuid.UUID) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetFkCycleID(*v)
+	}
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (ctuo *CycleTransactionUpdateOne) SetFkUserID(u uuid.UUID) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetFkUserID(u)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetFkUserID(v uuid.UUID) *CycleTransactionUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableFkUserID(v *uuid.UUID) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetFkCycleOrderID sets the "fk_cycle_order_id" field.
-func (ctuo *CycleTransactionUpdateOne) SetFkCycleOrderID(u uuid.UUID) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetFkCycleOrderID(u)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetFkCycleOrderID(v uuid.UUID) *CycleTransactionUpdateOne {
+	_u.mutation.SetFkCycleOrderID(v)
+	return _u
+}
+
+// SetNillableFkCycleOrderID sets the "fk_cycle_order_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableFkCycleOrderID(v *uuid.UUID) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetFkCycleOrderID(*v)
+	}
+	return _u
 }
 
 // SetFkCycleRechargeID sets the "fk_cycle_recharge_id" field.
-func (ctuo *CycleTransactionUpdateOne) SetFkCycleRechargeID(u uuid.UUID) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetFkCycleRechargeID(u)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetFkCycleRechargeID(v uuid.UUID) *CycleTransactionUpdateOne {
+	_u.mutation.SetFkCycleRechargeID(v)
+	return _u
+}
+
+// SetNillableFkCycleRechargeID sets the "fk_cycle_recharge_id" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableFkCycleRechargeID(v *uuid.UUID) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetFkCycleRechargeID(*v)
+	}
+	return _u
 }
 
 // SetOperation sets the "operation" field.
-func (ctuo *CycleTransactionUpdateOne) SetOperation(s string) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetOperation(s)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetOperation(v string) *CycleTransactionUpdateOne {
+	_u.mutation.SetOperation(v)
+	return _u
+}
+
+// SetNillableOperation sets the "operation" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableOperation(v *string) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetOperation(*v)
+	}
+	return _u
 }
 
 // SetSymbol sets the "symbol" field.
-func (ctuo *CycleTransactionUpdateOne) SetSymbol(s string) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetSymbol(s)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetSymbol(v string) *CycleTransactionUpdateOne {
+	_u.mutation.SetSymbol(v)
+	return _u
+}
+
+// SetNillableSymbol sets the "symbol" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableSymbol(v *string) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetSymbol(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (ctuo *CycleTransactionUpdateOne) SetCycle(f float64) *CycleTransactionUpdateOne {
-	ctuo.mutation.ResetCycle()
-	ctuo.mutation.SetCycle(f)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetCycle(v float64) *CycleTransactionUpdateOne {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (ctuo *CycleTransactionUpdateOne) AddCycle(f float64) *CycleTransactionUpdateOne {
-	ctuo.mutation.AddCycle(f)
-	return ctuo
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableCycle(v *float64) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleTransactionUpdateOne) AddCycle(v float64) *CycleTransactionUpdateOne {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetBalance sets the "balance" field.
-func (ctuo *CycleTransactionUpdateOne) SetBalance(f float64) *CycleTransactionUpdateOne {
-	ctuo.mutation.ResetBalance()
-	ctuo.mutation.SetBalance(f)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetBalance(v float64) *CycleTransactionUpdateOne {
+	_u.mutation.ResetBalance()
+	_u.mutation.SetBalance(v)
+	return _u
 }
 
-// AddBalance adds f to the "balance" field.
-func (ctuo *CycleTransactionUpdateOne) AddBalance(f float64) *CycleTransactionUpdateOne {
-	ctuo.mutation.AddBalance(f)
-	return ctuo
+// SetNillableBalance sets the "balance" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableBalance(v *float64) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetBalance(*v)
+	}
+	return _u
+}
+
+// AddBalance adds value to the "balance" field.
+func (_u *CycleTransactionUpdateOne) AddBalance(v float64) *CycleTransactionUpdateOne {
+	_u.mutation.AddBalance(v)
+	return _u
 }
 
 // SetOperationTime sets the "operation_time" field.
-func (ctuo *CycleTransactionUpdateOne) SetOperationTime(t time.Time) *CycleTransactionUpdateOne {
-	ctuo.mutation.SetOperationTime(t)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) SetOperationTime(v time.Time) *CycleTransactionUpdateOne {
+	_u.mutation.SetOperationTime(v)
+	return _u
+}
+
+// SetNillableOperationTime sets the "operation_time" field if the given value is not nil.
+func (_u *CycleTransactionUpdateOne) SetNillableOperationTime(v *time.Time) *CycleTransactionUpdateOne {
+	if v != nil {
+		_u.SetOperationTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleTransactionMutation object of the builder.
-func (ctuo *CycleTransactionUpdateOne) Mutation() *CycleTransactionMutation {
-	return ctuo.mutation
+func (_u *CycleTransactionUpdateOne) Mutation() *CycleTransactionMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CycleTransactionUpdate builder.
-func (ctuo *CycleTransactionUpdateOne) Where(ps ...predicate.CycleTransaction) *CycleTransactionUpdateOne {
-	ctuo.mutation.Where(ps...)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) Where(ps ...predicate.CycleTransaction) *CycleTransactionUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ctuo *CycleTransactionUpdateOne) Select(field string, fields ...string) *CycleTransactionUpdateOne {
-	ctuo.fields = append([]string{field}, fields...)
-	return ctuo
+func (_u *CycleTransactionUpdateOne) Select(field string, fields ...string) *CycleTransactionUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CycleTransaction entity.
-func (ctuo *CycleTransactionUpdateOne) Save(ctx context.Context) (*CycleTransaction, error) {
-	return withHooks(ctx, ctuo.sqlSave, ctuo.mutation, ctuo.hooks)
+func (_u *CycleTransactionUpdateOne) Save(ctx context.Context) (*CycleTransaction, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ctuo *CycleTransactionUpdateOne) SaveX(ctx context.Context) *CycleTransaction {
-	node, err := ctuo.Save(ctx)
+func (_u *CycleTransactionUpdateOne) SaveX(ctx context.Context) *CycleTransaction {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -310,26 +454,26 @@ func (ctuo *CycleTransactionUpdateOne) SaveX(ctx context.Context) *CycleTransact
 }
 
 // Exec executes the query on the entity.
-func (ctuo *CycleTransactionUpdateOne) Exec(ctx context.Context) error {
-	_, err := ctuo.Save(ctx)
+func (_u *CycleTransactionUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ctuo *CycleTransactionUpdateOne) ExecX(ctx context.Context) {
-	if err := ctuo.Exec(ctx); err != nil {
+func (_u *CycleTransactionUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ctuo *CycleTransactionUpdateOne) check() error {
-	if v, ok := ctuo.mutation.Operation(); ok {
+func (_u *CycleTransactionUpdateOne) check() error {
+	if v, ok := _u.mutation.Operation(); ok {
 		if err := cycletransaction.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CycleTransaction.operation": %w`, err)}
 		}
 	}
-	if v, ok := ctuo.mutation.Symbol(); ok {
+	if v, ok := _u.mutation.Symbol(); ok {
 		if err := cycletransaction.SymbolValidator(v); err != nil {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleTransaction.symbol": %w`, err)}
 		}
@@ -337,17 +481,17 @@ func (ctuo *CycleTransactionUpdateOne) check() error {
 	return nil
 }
 
-func (ctuo *CycleTransactionUpdateOne) sqlSave(ctx context.Context) (_node *CycleTransaction, err error) {
-	if err := ctuo.check(); err != nil {
+func (_u *CycleTransactionUpdateOne) sqlSave(ctx context.Context) (_node *CycleTransaction, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cycletransaction.Table, cycletransaction.Columns, sqlgraph.NewFieldSpec(cycletransaction.FieldID, field.TypeUUID))
-	id, ok := ctuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CycleTransaction.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ctuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cycletransaction.FieldID)
 		for _, f := range fields {
@@ -359,50 +503,50 @@ func (ctuo *CycleTransactionUpdateOne) sqlSave(ctx context.Context) (_node *Cycl
 			}
 		}
 	}
-	if ps := ctuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ctuo.mutation.FkCycleID(); ok {
+	if value, ok := _u.mutation.FkCycleID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleID, field.TypeUUID, value)
 	}
-	if value, ok := ctuo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycletransaction.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := ctuo.mutation.FkCycleOrderID(); ok {
+	if value, ok := _u.mutation.FkCycleOrderID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleOrderID, field.TypeUUID, value)
 	}
-	if value, ok := ctuo.mutation.FkCycleRechargeID(); ok {
+	if value, ok := _u.mutation.FkCycleRechargeID(); ok {
 		_spec.SetField(cycletransaction.FieldFkCycleRechargeID, field.TypeUUID, value)
 	}
-	if value, ok := ctuo.mutation.Operation(); ok {
+	if value, ok := _u.mutation.Operation(); ok {
 		_spec.SetField(cycletransaction.FieldOperation, field.TypeString, value)
 	}
-	if value, ok := ctuo.mutation.Symbol(); ok {
+	if value, ok := _u.mutation.Symbol(); ok {
 		_spec.SetField(cycletransaction.FieldSymbol, field.TypeString, value)
 	}
-	if value, ok := ctuo.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycletransaction.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := ctuo.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycletransaction.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := ctuo.mutation.Balance(); ok {
+	if value, ok := _u.mutation.Balance(); ok {
 		_spec.SetField(cycletransaction.FieldBalance, field.TypeFloat64, value)
 	}
-	if value, ok := ctuo.mutation.AddedBalance(); ok {
+	if value, ok := _u.mutation.AddedBalance(); ok {
 		_spec.AddField(cycletransaction.FieldBalance, field.TypeFloat64, value)
 	}
-	if value, ok := ctuo.mutation.OperationTime(); ok {
+	if value, ok := _u.mutation.OperationTime(); ok {
 		_spec.SetField(cycletransaction.FieldOperationTime, field.TypeTime, value)
 	}
-	_node = &CycleTransaction{config: ctuo.config}
+	_node = &CycleTransaction{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ctuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycletransaction.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -410,6 +554,6 @@ func (ctuo *CycleTransactionUpdateOne) sqlSave(ctx context.Context) (_node *Cycl
 		}
 		return nil, err
 	}
-	ctuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

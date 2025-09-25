@@ -75,6 +75,11 @@ func Hostname(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldHostname, v))
 }
 
+// Arch applies equality check predicate on the "arch" field. It's identical to ArchEQ.
+func Arch(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldArch, v))
+}
+
 // TotalCPU applies equality check predicate on the "total_cpu" field. It's identical to TotalCPUEQ.
 func TotalCPU(v int32) predicate.Agent {
 	return predicate.Agent(sql.FieldEQ(FieldTotalCPU, v))
@@ -278,6 +283,71 @@ func HostnameEqualFold(v string) predicate.Agent {
 // HostnameContainsFold applies the ContainsFold predicate on the "hostname" field.
 func HostnameContainsFold(v string) predicate.Agent {
 	return predicate.Agent(sql.FieldContainsFold(FieldHostname, v))
+}
+
+// ArchEQ applies the EQ predicate on the "arch" field.
+func ArchEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEQ(FieldArch, v))
+}
+
+// ArchNEQ applies the NEQ predicate on the "arch" field.
+func ArchNEQ(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldNEQ(FieldArch, v))
+}
+
+// ArchIn applies the In predicate on the "arch" field.
+func ArchIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldIn(FieldArch, vs...))
+}
+
+// ArchNotIn applies the NotIn predicate on the "arch" field.
+func ArchNotIn(vs ...string) predicate.Agent {
+	return predicate.Agent(sql.FieldNotIn(FieldArch, vs...))
+}
+
+// ArchGT applies the GT predicate on the "arch" field.
+func ArchGT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGT(FieldArch, v))
+}
+
+// ArchGTE applies the GTE predicate on the "arch" field.
+func ArchGTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldGTE(FieldArch, v))
+}
+
+// ArchLT applies the LT predicate on the "arch" field.
+func ArchLT(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLT(FieldArch, v))
+}
+
+// ArchLTE applies the LTE predicate on the "arch" field.
+func ArchLTE(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldLTE(FieldArch, v))
+}
+
+// ArchContains applies the Contains predicate on the "arch" field.
+func ArchContains(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContains(FieldArch, v))
+}
+
+// ArchHasPrefix applies the HasPrefix predicate on the "arch" field.
+func ArchHasPrefix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasPrefix(FieldArch, v))
+}
+
+// ArchHasSuffix applies the HasSuffix predicate on the "arch" field.
+func ArchHasSuffix(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldHasSuffix(FieldArch, v))
+}
+
+// ArchEqualFold applies the EqualFold predicate on the "arch" field.
+func ArchEqualFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldEqualFold(FieldArch, v))
+}
+
+// ArchContainsFold applies the ContainsFold predicate on the "arch" field.
+func ArchContainsFold(v string) predicate.Agent {
+	return predicate.Agent(sql.FieldContainsFold(FieldArch, v))
 }
 
 // TotalCPUEQ applies the EQ predicate on the "total_cpu" field.
@@ -507,32 +577,15 @@ func IPContainsFold(v string) predicate.Agent {
 
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Agent) predicate.Agent {
-	return predicate.Agent(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for _, p := range predicates {
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Agent(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
 func Or(predicates ...predicate.Agent) predicate.Agent {
-	return predicate.Agent(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for i, p := range predicates {
-			if i > 0 {
-				s1.Or()
-			}
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Agent(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
 func Not(p predicate.Agent) predicate.Agent {
-	return predicate.Agent(func(s *sql.Selector) {
-		p(s.Not())
-	})
+	return predicate.Agent(sql.NotPredicates(p))
 }

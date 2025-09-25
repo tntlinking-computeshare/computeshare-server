@@ -24,143 +24,199 @@ type NetworkMappingUpdate struct {
 }
 
 // Where appends a list predicates to the NetworkMappingUpdate builder.
-func (nmu *NetworkMappingUpdate) Where(ps ...predicate.NetworkMapping) *NetworkMappingUpdate {
-	nmu.mutation.Where(ps...)
-	return nmu
+func (_u *NetworkMappingUpdate) Where(ps ...predicate.NetworkMapping) *NetworkMappingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (nmu *NetworkMappingUpdate) SetName(s string) *NetworkMappingUpdate {
-	nmu.mutation.SetName(s)
-	return nmu
+func (_u *NetworkMappingUpdate) SetName(v string) *NetworkMappingUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableName(v *string) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetProtocol sets the "protocol" field.
-func (nmu *NetworkMappingUpdate) SetProtocol(s string) *NetworkMappingUpdate {
-	nmu.mutation.SetProtocol(s)
-	return nmu
+func (_u *NetworkMappingUpdate) SetProtocol(v string) *NetworkMappingUpdate {
+	_u.mutation.SetProtocol(v)
+	return _u
 }
 
 // SetNillableProtocol sets the "protocol" field if the given value is not nil.
-func (nmu *NetworkMappingUpdate) SetNillableProtocol(s *string) *NetworkMappingUpdate {
-	if s != nil {
-		nmu.SetProtocol(*s)
+func (_u *NetworkMappingUpdate) SetNillableProtocol(v *string) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetProtocol(*v)
 	}
-	return nmu
+	return _u
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (nmu *NetworkMappingUpdate) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpdate {
-	nmu.mutation.SetFkGatewayID(u)
-	return nmu
+func (_u *NetworkMappingUpdate) SetFkGatewayID(v uuid.UUID) *NetworkMappingUpdate {
+	_u.mutation.SetFkGatewayID(v)
+	return _u
+}
+
+// SetNillableFkGatewayID sets the "fk_gateway_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableFkGatewayID(v *uuid.UUID) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetFkGatewayID(*v)
+	}
+	return _u
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmu *NetworkMappingUpdate) SetGatewayPort(i int32) *NetworkMappingUpdate {
-	nmu.mutation.ResetGatewayPort()
-	nmu.mutation.SetGatewayPort(i)
-	return nmu
+func (_u *NetworkMappingUpdate) SetGatewayPort(v int32) *NetworkMappingUpdate {
+	_u.mutation.ResetGatewayPort()
+	_u.mutation.SetGatewayPort(v)
+	return _u
 }
 
-// AddGatewayPort adds i to the "gateway_port" field.
-func (nmu *NetworkMappingUpdate) AddGatewayPort(i int32) *NetworkMappingUpdate {
-	nmu.mutation.AddGatewayPort(i)
-	return nmu
+// SetNillableGatewayPort sets the "gateway_port" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableGatewayPort(v *int32) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetGatewayPort(*v)
+	}
+	return _u
+}
+
+// AddGatewayPort adds value to the "gateway_port" field.
+func (_u *NetworkMappingUpdate) AddGatewayPort(v int32) *NetworkMappingUpdate {
+	_u.mutation.AddGatewayPort(v)
+	return _u
 }
 
 // SetGatewayIP sets the "gateway_ip" field.
-func (nmu *NetworkMappingUpdate) SetGatewayIP(s string) *NetworkMappingUpdate {
-	nmu.mutation.SetGatewayIP(s)
-	return nmu
+func (_u *NetworkMappingUpdate) SetGatewayIP(v string) *NetworkMappingUpdate {
+	_u.mutation.SetGatewayIP(v)
+	return _u
+}
+
+// SetNillableGatewayIP sets the "gateway_ip" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableGatewayIP(v *string) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetGatewayIP(*v)
+	}
+	return _u
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmu *NetworkMappingUpdate) SetComputerPort(i int32) *NetworkMappingUpdate {
-	nmu.mutation.ResetComputerPort()
-	nmu.mutation.SetComputerPort(i)
-	return nmu
+func (_u *NetworkMappingUpdate) SetComputerPort(v int32) *NetworkMappingUpdate {
+	_u.mutation.ResetComputerPort()
+	_u.mutation.SetComputerPort(v)
+	return _u
 }
 
-// AddComputerPort adds i to the "computer_port" field.
-func (nmu *NetworkMappingUpdate) AddComputerPort(i int32) *NetworkMappingUpdate {
-	nmu.mutation.AddComputerPort(i)
-	return nmu
+// SetNillableComputerPort sets the "computer_port" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableComputerPort(v *int32) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetComputerPort(*v)
+	}
+	return _u
+}
+
+// AddComputerPort adds value to the "computer_port" field.
+func (_u *NetworkMappingUpdate) AddComputerPort(v int32) *NetworkMappingUpdate {
+	_u.mutation.AddComputerPort(v)
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (nmu *NetworkMappingUpdate) SetStatus(i int) *NetworkMappingUpdate {
-	nmu.mutation.ResetStatus()
-	nmu.mutation.SetStatus(i)
-	return nmu
+func (_u *NetworkMappingUpdate) SetStatus(v int) *NetworkMappingUpdate {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (nmu *NetworkMappingUpdate) SetNillableStatus(i *int) *NetworkMappingUpdate {
-	if i != nil {
-		nmu.SetStatus(*i)
+func (_u *NetworkMappingUpdate) SetNillableStatus(v *int) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return nmu
+	return _u
 }
 
-// AddStatus adds i to the "status" field.
-func (nmu *NetworkMappingUpdate) AddStatus(i int) *NetworkMappingUpdate {
-	nmu.mutation.AddStatus(i)
-	return nmu
+// AddStatus adds value to the "status" field.
+func (_u *NetworkMappingUpdate) AddStatus(v int) *NetworkMappingUpdate {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetFkComputerID sets the "fk_computer_id" field.
-func (nmu *NetworkMappingUpdate) SetFkComputerID(u uuid.UUID) *NetworkMappingUpdate {
-	nmu.mutation.SetFkComputerID(u)
-	return nmu
+func (_u *NetworkMappingUpdate) SetFkComputerID(v uuid.UUID) *NetworkMappingUpdate {
+	_u.mutation.SetFkComputerID(v)
+	return _u
+}
+
+// SetNillableFkComputerID sets the "fk_computer_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableFkComputerID(v *uuid.UUID) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetFkComputerID(*v)
+	}
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (nmu *NetworkMappingUpdate) SetFkUserID(u uuid.UUID) *NetworkMappingUpdate {
-	nmu.mutation.SetFkUserID(u)
-	return nmu
+func (_u *NetworkMappingUpdate) SetFkUserID(v uuid.UUID) *NetworkMappingUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdate) SetNillableFkUserID(v *uuid.UUID) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetDeleteState sets the "delete_state" field.
-func (nmu *NetworkMappingUpdate) SetDeleteState(b bool) *NetworkMappingUpdate {
-	nmu.mutation.SetDeleteState(b)
-	return nmu
+func (_u *NetworkMappingUpdate) SetDeleteState(v bool) *NetworkMappingUpdate {
+	_u.mutation.SetDeleteState(v)
+	return _u
 }
 
 // SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
-func (nmu *NetworkMappingUpdate) SetNillableDeleteState(b *bool) *NetworkMappingUpdate {
-	if b != nil {
-		nmu.SetDeleteState(*b)
+func (_u *NetworkMappingUpdate) SetNillableDeleteState(v *bool) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetDeleteState(*v)
 	}
-	return nmu
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (nmu *NetworkMappingUpdate) SetCreateTime(t time.Time) *NetworkMappingUpdate {
-	nmu.mutation.SetCreateTime(t)
-	return nmu
+func (_u *NetworkMappingUpdate) SetCreateTime(v time.Time) *NetworkMappingUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (nmu *NetworkMappingUpdate) SetNillableCreateTime(t *time.Time) *NetworkMappingUpdate {
-	if t != nil {
-		nmu.SetCreateTime(*t)
+func (_u *NetworkMappingUpdate) SetNillableCreateTime(v *time.Time) *NetworkMappingUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return nmu
+	return _u
 }
 
 // Mutation returns the NetworkMappingMutation object of the builder.
-func (nmu *NetworkMappingUpdate) Mutation() *NetworkMappingMutation {
-	return nmu.mutation
+func (_u *NetworkMappingUpdate) Mutation() *NetworkMappingMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (nmu *NetworkMappingUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, nmu.sqlSave, nmu.mutation, nmu.hooks)
+func (_u *NetworkMappingUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nmu *NetworkMappingUpdate) SaveX(ctx context.Context) int {
-	affected, err := nmu.Save(ctx)
+func (_u *NetworkMappingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -168,26 +224,26 @@ func (nmu *NetworkMappingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (nmu *NetworkMappingUpdate) Exec(ctx context.Context) error {
-	_, err := nmu.Save(ctx)
+func (_u *NetworkMappingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmu *NetworkMappingUpdate) ExecX(ctx context.Context) {
-	if err := nmu.Exec(ctx); err != nil {
+func (_u *NetworkMappingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nmu *NetworkMappingUpdate) check() error {
-	if v, ok := nmu.mutation.Name(); ok {
+func (_u *NetworkMappingUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := networkmapping.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
 		}
 	}
-	if v, ok := nmu.mutation.Protocol(); ok {
+	if v, ok := _u.mutation.Protocol(); ok {
 		if err := networkmapping.ProtocolValidator(v); err != nil {
 			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
 		}
@@ -195,61 +251,61 @@ func (nmu *NetworkMappingUpdate) check() error {
 	return nil
 }
 
-func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := nmu.check(); err != nil {
-		return n, err
+func (_u *NetworkMappingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(networkmapping.Table, networkmapping.Columns, sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID))
-	if ps := nmu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := nmu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
 	}
-	if value, ok := nmu.mutation.Protocol(); ok {
+	if value, ok := _u.mutation.Protocol(); ok {
 		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
 	}
-	if value, ok := nmu.mutation.FkGatewayID(); ok {
+	if value, ok := _u.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := nmu.mutation.GatewayPort(); ok {
+	if value, ok := _u.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := nmu.mutation.AddedGatewayPort(); ok {
+	if value, ok := _u.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := nmu.mutation.GatewayIP(); ok {
+	if value, ok := _u.mutation.GatewayIP(); ok {
 		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
 	}
-	if value, ok := nmu.mutation.ComputerPort(); ok {
+	if value, ok := _u.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
-	if value, ok := nmu.mutation.AddedComputerPort(); ok {
+	if value, ok := _u.mutation.AddedComputerPort(); ok {
 		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
-	if value, ok := nmu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := nmu.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(networkmapping.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := nmu.mutation.FkComputerID(); ok {
+	if value, ok := _u.mutation.FkComputerID(); ok {
 		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
 	}
-	if value, ok := nmu.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := nmu.mutation.DeleteState(); ok {
+	if value, ok := _u.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 	}
-	if value, ok := nmu.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, nmu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{networkmapping.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -257,8 +313,8 @@ func (nmu *NetworkMappingUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		return 0, err
 	}
-	nmu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // NetworkMappingUpdateOne is the builder for updating a single NetworkMapping entity.
@@ -270,150 +326,206 @@ type NetworkMappingUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (nmuo *NetworkMappingUpdateOne) SetName(s string) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetName(s)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetName(v string) *NetworkMappingUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableName(v *string) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetProtocol sets the "protocol" field.
-func (nmuo *NetworkMappingUpdateOne) SetProtocol(s string) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetProtocol(s)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetProtocol(v string) *NetworkMappingUpdateOne {
+	_u.mutation.SetProtocol(v)
+	return _u
 }
 
 // SetNillableProtocol sets the "protocol" field if the given value is not nil.
-func (nmuo *NetworkMappingUpdateOne) SetNillableProtocol(s *string) *NetworkMappingUpdateOne {
-	if s != nil {
-		nmuo.SetProtocol(*s)
+func (_u *NetworkMappingUpdateOne) SetNillableProtocol(v *string) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetProtocol(*v)
 	}
-	return nmuo
+	return _u
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (nmuo *NetworkMappingUpdateOne) SetFkGatewayID(u uuid.UUID) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetFkGatewayID(u)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetFkGatewayID(v uuid.UUID) *NetworkMappingUpdateOne {
+	_u.mutation.SetFkGatewayID(v)
+	return _u
+}
+
+// SetNillableFkGatewayID sets the "fk_gateway_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableFkGatewayID(v *uuid.UUID) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetFkGatewayID(*v)
+	}
+	return _u
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmuo *NetworkMappingUpdateOne) SetGatewayPort(i int32) *NetworkMappingUpdateOne {
-	nmuo.mutation.ResetGatewayPort()
-	nmuo.mutation.SetGatewayPort(i)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetGatewayPort(v int32) *NetworkMappingUpdateOne {
+	_u.mutation.ResetGatewayPort()
+	_u.mutation.SetGatewayPort(v)
+	return _u
 }
 
-// AddGatewayPort adds i to the "gateway_port" field.
-func (nmuo *NetworkMappingUpdateOne) AddGatewayPort(i int32) *NetworkMappingUpdateOne {
-	nmuo.mutation.AddGatewayPort(i)
-	return nmuo
+// SetNillableGatewayPort sets the "gateway_port" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableGatewayPort(v *int32) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetGatewayPort(*v)
+	}
+	return _u
+}
+
+// AddGatewayPort adds value to the "gateway_port" field.
+func (_u *NetworkMappingUpdateOne) AddGatewayPort(v int32) *NetworkMappingUpdateOne {
+	_u.mutation.AddGatewayPort(v)
+	return _u
 }
 
 // SetGatewayIP sets the "gateway_ip" field.
-func (nmuo *NetworkMappingUpdateOne) SetGatewayIP(s string) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetGatewayIP(s)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetGatewayIP(v string) *NetworkMappingUpdateOne {
+	_u.mutation.SetGatewayIP(v)
+	return _u
+}
+
+// SetNillableGatewayIP sets the "gateway_ip" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableGatewayIP(v *string) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetGatewayIP(*v)
+	}
+	return _u
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmuo *NetworkMappingUpdateOne) SetComputerPort(i int32) *NetworkMappingUpdateOne {
-	nmuo.mutation.ResetComputerPort()
-	nmuo.mutation.SetComputerPort(i)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetComputerPort(v int32) *NetworkMappingUpdateOne {
+	_u.mutation.ResetComputerPort()
+	_u.mutation.SetComputerPort(v)
+	return _u
 }
 
-// AddComputerPort adds i to the "computer_port" field.
-func (nmuo *NetworkMappingUpdateOne) AddComputerPort(i int32) *NetworkMappingUpdateOne {
-	nmuo.mutation.AddComputerPort(i)
-	return nmuo
+// SetNillableComputerPort sets the "computer_port" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableComputerPort(v *int32) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetComputerPort(*v)
+	}
+	return _u
+}
+
+// AddComputerPort adds value to the "computer_port" field.
+func (_u *NetworkMappingUpdateOne) AddComputerPort(v int32) *NetworkMappingUpdateOne {
+	_u.mutation.AddComputerPort(v)
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (nmuo *NetworkMappingUpdateOne) SetStatus(i int) *NetworkMappingUpdateOne {
-	nmuo.mutation.ResetStatus()
-	nmuo.mutation.SetStatus(i)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetStatus(v int) *NetworkMappingUpdateOne {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (nmuo *NetworkMappingUpdateOne) SetNillableStatus(i *int) *NetworkMappingUpdateOne {
-	if i != nil {
-		nmuo.SetStatus(*i)
+func (_u *NetworkMappingUpdateOne) SetNillableStatus(v *int) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return nmuo
+	return _u
 }
 
-// AddStatus adds i to the "status" field.
-func (nmuo *NetworkMappingUpdateOne) AddStatus(i int) *NetworkMappingUpdateOne {
-	nmuo.mutation.AddStatus(i)
-	return nmuo
+// AddStatus adds value to the "status" field.
+func (_u *NetworkMappingUpdateOne) AddStatus(v int) *NetworkMappingUpdateOne {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetFkComputerID sets the "fk_computer_id" field.
-func (nmuo *NetworkMappingUpdateOne) SetFkComputerID(u uuid.UUID) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetFkComputerID(u)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetFkComputerID(v uuid.UUID) *NetworkMappingUpdateOne {
+	_u.mutation.SetFkComputerID(v)
+	return _u
+}
+
+// SetNillableFkComputerID sets the "fk_computer_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableFkComputerID(v *uuid.UUID) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetFkComputerID(*v)
+	}
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (nmuo *NetworkMappingUpdateOne) SetFkUserID(u uuid.UUID) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetFkUserID(u)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetFkUserID(v uuid.UUID) *NetworkMappingUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *NetworkMappingUpdateOne) SetNillableFkUserID(v *uuid.UUID) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetDeleteState sets the "delete_state" field.
-func (nmuo *NetworkMappingUpdateOne) SetDeleteState(b bool) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetDeleteState(b)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetDeleteState(v bool) *NetworkMappingUpdateOne {
+	_u.mutation.SetDeleteState(v)
+	return _u
 }
 
 // SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
-func (nmuo *NetworkMappingUpdateOne) SetNillableDeleteState(b *bool) *NetworkMappingUpdateOne {
-	if b != nil {
-		nmuo.SetDeleteState(*b)
+func (_u *NetworkMappingUpdateOne) SetNillableDeleteState(v *bool) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetDeleteState(*v)
 	}
-	return nmuo
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (nmuo *NetworkMappingUpdateOne) SetCreateTime(t time.Time) *NetworkMappingUpdateOne {
-	nmuo.mutation.SetCreateTime(t)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) SetCreateTime(v time.Time) *NetworkMappingUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (nmuo *NetworkMappingUpdateOne) SetNillableCreateTime(t *time.Time) *NetworkMappingUpdateOne {
-	if t != nil {
-		nmuo.SetCreateTime(*t)
+func (_u *NetworkMappingUpdateOne) SetNillableCreateTime(v *time.Time) *NetworkMappingUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return nmuo
+	return _u
 }
 
 // Mutation returns the NetworkMappingMutation object of the builder.
-func (nmuo *NetworkMappingUpdateOne) Mutation() *NetworkMappingMutation {
-	return nmuo.mutation
+func (_u *NetworkMappingUpdateOne) Mutation() *NetworkMappingMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the NetworkMappingUpdate builder.
-func (nmuo *NetworkMappingUpdateOne) Where(ps ...predicate.NetworkMapping) *NetworkMappingUpdateOne {
-	nmuo.mutation.Where(ps...)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) Where(ps ...predicate.NetworkMapping) *NetworkMappingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (nmuo *NetworkMappingUpdateOne) Select(field string, fields ...string) *NetworkMappingUpdateOne {
-	nmuo.fields = append([]string{field}, fields...)
-	return nmuo
+func (_u *NetworkMappingUpdateOne) Select(field string, fields ...string) *NetworkMappingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated NetworkMapping entity.
-func (nmuo *NetworkMappingUpdateOne) Save(ctx context.Context) (*NetworkMapping, error) {
-	return withHooks(ctx, nmuo.sqlSave, nmuo.mutation, nmuo.hooks)
+func (_u *NetworkMappingUpdateOne) Save(ctx context.Context) (*NetworkMapping, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nmuo *NetworkMappingUpdateOne) SaveX(ctx context.Context) *NetworkMapping {
-	node, err := nmuo.Save(ctx)
+func (_u *NetworkMappingUpdateOne) SaveX(ctx context.Context) *NetworkMapping {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -421,26 +533,26 @@ func (nmuo *NetworkMappingUpdateOne) SaveX(ctx context.Context) *NetworkMapping 
 }
 
 // Exec executes the query on the entity.
-func (nmuo *NetworkMappingUpdateOne) Exec(ctx context.Context) error {
-	_, err := nmuo.Save(ctx)
+func (_u *NetworkMappingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmuo *NetworkMappingUpdateOne) ExecX(ctx context.Context) {
-	if err := nmuo.Exec(ctx); err != nil {
+func (_u *NetworkMappingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nmuo *NetworkMappingUpdateOne) check() error {
-	if v, ok := nmuo.mutation.Name(); ok {
+func (_u *NetworkMappingUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := networkmapping.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
 		}
 	}
-	if v, ok := nmuo.mutation.Protocol(); ok {
+	if v, ok := _u.mutation.Protocol(); ok {
 		if err := networkmapping.ProtocolValidator(v); err != nil {
 			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
 		}
@@ -448,17 +560,17 @@ func (nmuo *NetworkMappingUpdateOne) check() error {
 	return nil
 }
 
-func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *NetworkMapping, err error) {
-	if err := nmuo.check(); err != nil {
+func (_u *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *NetworkMapping, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(networkmapping.Table, networkmapping.Columns, sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID))
-	id, ok := nmuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "NetworkMapping.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := nmuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, networkmapping.FieldID)
 		for _, f := range fields {
@@ -470,59 +582,59 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 			}
 		}
 	}
-	if ps := nmuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := nmuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
 	}
-	if value, ok := nmuo.mutation.Protocol(); ok {
+	if value, ok := _u.mutation.Protocol(); ok {
 		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
 	}
-	if value, ok := nmuo.mutation.FkGatewayID(); ok {
+	if value, ok := _u.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := nmuo.mutation.GatewayPort(); ok {
+	if value, ok := _u.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := nmuo.mutation.AddedGatewayPort(); ok {
+	if value, ok := _u.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := nmuo.mutation.GatewayIP(); ok {
+	if value, ok := _u.mutation.GatewayIP(); ok {
 		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
 	}
-	if value, ok := nmuo.mutation.ComputerPort(); ok {
+	if value, ok := _u.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
-	if value, ok := nmuo.mutation.AddedComputerPort(); ok {
+	if value, ok := _u.mutation.AddedComputerPort(); ok {
 		_spec.AddField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 	}
-	if value, ok := nmuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := nmuo.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(networkmapping.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := nmuo.mutation.FkComputerID(); ok {
+	if value, ok := _u.mutation.FkComputerID(); ok {
 		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
 	}
-	if value, ok := nmuo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := nmuo.mutation.DeleteState(); ok {
+	if value, ok := _u.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 	}
-	if value, ok := nmuo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
 	}
-	_node = &NetworkMapping{config: nmuo.config}
+	_node = &NetworkMapping{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, nmuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{networkmapping.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -530,6 +642,6 @@ func (nmuo *NetworkMappingUpdateOne) sqlSave(ctx context.Context) (_node *Networ
 		}
 		return nil, err
 	}
-	nmuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

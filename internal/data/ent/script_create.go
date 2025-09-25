@@ -22,98 +22,98 @@ type ScriptCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (sc *ScriptCreate) SetUserID(s string) *ScriptCreate {
-	sc.mutation.SetUserID(s)
-	return sc
+func (_c *ScriptCreate) SetUserID(v string) *ScriptCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (sc *ScriptCreate) SetTaskNumber(i int32) *ScriptCreate {
-	sc.mutation.SetTaskNumber(i)
-	return sc
+func (_c *ScriptCreate) SetTaskNumber(v int32) *ScriptCreate {
+	_c.mutation.SetTaskNumber(v)
+	return _c
 }
 
 // SetScriptName sets the "script_name" field.
-func (sc *ScriptCreate) SetScriptName(s string) *ScriptCreate {
-	sc.mutation.SetScriptName(s)
-	return sc
+func (_c *ScriptCreate) SetScriptName(v string) *ScriptCreate {
+	_c.mutation.SetScriptName(v)
+	return _c
 }
 
 // SetFileAddress sets the "file_address" field.
-func (sc *ScriptCreate) SetFileAddress(s string) *ScriptCreate {
-	sc.mutation.SetFileAddress(s)
-	return sc
+func (_c *ScriptCreate) SetFileAddress(v string) *ScriptCreate {
+	_c.mutation.SetFileAddress(v)
+	return _c
 }
 
 // SetScriptContent sets the "script_content" field.
-func (sc *ScriptCreate) SetScriptContent(s string) *ScriptCreate {
-	sc.mutation.SetScriptContent(s)
-	return sc
+func (_c *ScriptCreate) SetScriptContent(v string) *ScriptCreate {
+	_c.mutation.SetScriptContent(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (sc *ScriptCreate) SetCreateTime(t time.Time) *ScriptCreate {
-	sc.mutation.SetCreateTime(t)
-	return sc
+func (_c *ScriptCreate) SetCreateTime(v time.Time) *ScriptCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (sc *ScriptCreate) SetNillableCreateTime(t *time.Time) *ScriptCreate {
-	if t != nil {
-		sc.SetCreateTime(*t)
+func (_c *ScriptCreate) SetNillableCreateTime(v *time.Time) *ScriptCreate {
+	if v != nil {
+		_c.SetCreateTime(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (sc *ScriptCreate) SetUpdateTime(t time.Time) *ScriptCreate {
-	sc.mutation.SetUpdateTime(t)
-	return sc
+func (_c *ScriptCreate) SetUpdateTime(v time.Time) *ScriptCreate {
+	_c.mutation.SetUpdateTime(v)
+	return _c
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (sc *ScriptCreate) SetNillableUpdateTime(t *time.Time) *ScriptCreate {
-	if t != nil {
-		sc.SetUpdateTime(*t)
+func (_c *ScriptCreate) SetNillableUpdateTime(v *time.Time) *ScriptCreate {
+	if v != nil {
+		_c.SetUpdateTime(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *ScriptCreate) SetID(i int32) *ScriptCreate {
-	sc.mutation.SetID(i)
-	return sc
+func (_c *ScriptCreate) SetID(v int32) *ScriptCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // AddScriptExecutionRecordIDs adds the "scriptExecutionRecords" edge to the ScriptExecutionRecord entity by IDs.
-func (sc *ScriptCreate) AddScriptExecutionRecordIDs(ids ...int32) *ScriptCreate {
-	sc.mutation.AddScriptExecutionRecordIDs(ids...)
-	return sc
+func (_c *ScriptCreate) AddScriptExecutionRecordIDs(ids ...int32) *ScriptCreate {
+	_c.mutation.AddScriptExecutionRecordIDs(ids...)
+	return _c
 }
 
 // AddScriptExecutionRecords adds the "scriptExecutionRecords" edges to the ScriptExecutionRecord entity.
-func (sc *ScriptCreate) AddScriptExecutionRecords(s ...*ScriptExecutionRecord) *ScriptCreate {
-	ids := make([]int32, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_c *ScriptCreate) AddScriptExecutionRecords(v ...*ScriptExecutionRecord) *ScriptCreate {
+	ids := make([]int32, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return sc.AddScriptExecutionRecordIDs(ids...)
+	return _c.AddScriptExecutionRecordIDs(ids...)
 }
 
 // Mutation returns the ScriptMutation object of the builder.
-func (sc *ScriptCreate) Mutation() *ScriptMutation {
-	return sc.mutation
+func (_c *ScriptCreate) Mutation() *ScriptMutation {
+	return _c.mutation
 }
 
 // Save creates the Script in the database.
-func (sc *ScriptCreate) Save(ctx context.Context) (*Script, error) {
-	sc.defaults()
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+func (_c *ScriptCreate) Save(ctx context.Context) (*Script, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *ScriptCreate) SaveX(ctx context.Context) *Script {
-	v, err := sc.Save(ctx)
+func (_c *ScriptCreate) SaveX(ctx context.Context) *Script {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -121,77 +121,77 @@ func (sc *ScriptCreate) SaveX(ctx context.Context) *Script {
 }
 
 // Exec executes the query.
-func (sc *ScriptCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *ScriptCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *ScriptCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *ScriptCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *ScriptCreate) defaults() {
-	if _, ok := sc.mutation.CreateTime(); !ok {
+func (_c *ScriptCreate) defaults() {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := script.DefaultCreateTime
-		sc.mutation.SetCreateTime(v)
+		_c.mutation.SetCreateTime(v)
 	}
-	if _, ok := sc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		v := script.DefaultUpdateTime
-		sc.mutation.SetUpdateTime(v)
+		_c.mutation.SetUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *ScriptCreate) check() error {
-	if _, ok := sc.mutation.UserID(); !ok {
+func (_c *ScriptCreate) check() error {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Script.user_id"`)}
 	}
-	if _, ok := sc.mutation.TaskNumber(); !ok {
+	if _, ok := _c.mutation.TaskNumber(); !ok {
 		return &ValidationError{Name: "task_number", err: errors.New(`ent: missing required field "Script.task_number"`)}
 	}
-	if v, ok := sc.mutation.TaskNumber(); ok {
+	if v, ok := _c.mutation.TaskNumber(); ok {
 		if err := script.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "Script.task_number": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.ScriptName(); !ok {
+	if _, ok := _c.mutation.ScriptName(); !ok {
 		return &ValidationError{Name: "script_name", err: errors.New(`ent: missing required field "Script.script_name"`)}
 	}
-	if v, ok := sc.mutation.ScriptName(); ok {
+	if v, ok := _c.mutation.ScriptName(); ok {
 		if err := script.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "Script.script_name": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.FileAddress(); !ok {
+	if _, ok := _c.mutation.FileAddress(); !ok {
 		return &ValidationError{Name: "file_address", err: errors.New(`ent: missing required field "Script.file_address"`)}
 	}
-	if _, ok := sc.mutation.ScriptContent(); !ok {
+	if _, ok := _c.mutation.ScriptContent(); !ok {
 		return &ValidationError{Name: "script_content", err: errors.New(`ent: missing required field "Script.script_content"`)}
 	}
-	if v, ok := sc.mutation.ScriptContent(); ok {
+	if v, ok := _c.mutation.ScriptContent(); ok {
 		if err := script.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "Script.script_content": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Script.create_time"`)}
 	}
-	if _, ok := sc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Script.update_time"`)}
 	}
 	return nil
 }
 
-func (sc *ScriptCreate) sqlSave(ctx context.Context) (*Script, error) {
-	if err := sc.check(); err != nil {
+func (_c *ScriptCreate) sqlSave(ctx context.Context) (*Script, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -201,49 +201,49 @@ func (sc *ScriptCreate) sqlSave(ctx context.Context) (*Script, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int32(id)
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *ScriptCreate) createSpec() (*Script, *sqlgraph.CreateSpec) {
+func (_c *ScriptCreate) createSpec() (*Script, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Script{config: sc.config}
+		_node = &Script{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(script.Table, sqlgraph.NewFieldSpec(script.FieldID, field.TypeInt32))
 	)
-	if id, ok := sc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := sc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(script.FieldUserID, field.TypeString, value)
 		_node.UserID = value
 	}
-	if value, ok := sc.mutation.TaskNumber(); ok {
+	if value, ok := _c.mutation.TaskNumber(); ok {
 		_spec.SetField(script.FieldTaskNumber, field.TypeInt32, value)
 		_node.TaskNumber = value
 	}
-	if value, ok := sc.mutation.ScriptName(); ok {
+	if value, ok := _c.mutation.ScriptName(); ok {
 		_spec.SetField(script.FieldScriptName, field.TypeString, value)
 		_node.ScriptName = value
 	}
-	if value, ok := sc.mutation.FileAddress(); ok {
+	if value, ok := _c.mutation.FileAddress(); ok {
 		_spec.SetField(script.FieldFileAddress, field.TypeString, value)
 		_node.FileAddress = value
 	}
-	if value, ok := sc.mutation.ScriptContent(); ok {
+	if value, ok := _c.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
 		_node.ScriptContent = value
 	}
-	if value, ok := sc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := sc.mutation.UpdateTime(); ok {
+	if value, ok := _c.mutation.UpdateTime(); ok {
 		_spec.SetField(script.FieldUpdateTime, field.TypeTime, value)
 		_node.UpdateTime = value
 	}
-	if nodes := sc.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -265,17 +265,21 @@ func (sc *ScriptCreate) createSpec() (*Script, *sqlgraph.CreateSpec) {
 // ScriptCreateBulk is the builder for creating many Script entities in bulk.
 type ScriptCreateBulk struct {
 	config
+	err      error
 	builders []*ScriptCreate
 }
 
 // Save creates the Script entities in the database.
-func (scb *ScriptCreateBulk) Save(ctx context.Context) ([]*Script, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Script, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+func (_c *ScriptCreateBulk) Save(ctx context.Context) ([]*Script, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Script, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ScriptMutation)
@@ -289,11 +293,11 @@ func (scb *ScriptCreateBulk) Save(ctx context.Context) ([]*Script, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -317,7 +321,7 @@ func (scb *ScriptCreateBulk) Save(ctx context.Context) ([]*Script, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -325,8 +329,8 @@ func (scb *ScriptCreateBulk) Save(ctx context.Context) ([]*Script, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *ScriptCreateBulk) SaveX(ctx context.Context) []*Script {
-	v, err := scb.Save(ctx)
+func (_c *ScriptCreateBulk) SaveX(ctx context.Context) []*Script {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -334,14 +338,14 @@ func (scb *ScriptCreateBulk) SaveX(ctx context.Context) []*Script {
 }
 
 // Exec executes the query.
-func (scb *ScriptCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *ScriptCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *ScriptCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *ScriptCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

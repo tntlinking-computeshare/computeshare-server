@@ -25,95 +25,143 @@ type StorageProviderUpdate struct {
 }
 
 // Where appends a list predicates to the StorageProviderUpdate builder.
-func (spu *StorageProviderUpdate) Where(ps ...predicate.StorageProvider) *StorageProviderUpdate {
-	spu.mutation.Where(ps...)
-	return spu
+func (_u *StorageProviderUpdate) Where(ps ...predicate.StorageProvider) *StorageProviderUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetAgentID sets the "agent_id" field.
-func (spu *StorageProviderUpdate) SetAgentID(u uuid.UUID) *StorageProviderUpdate {
-	spu.mutation.SetAgentID(u)
-	return spu
+func (_u *StorageProviderUpdate) SetAgentID(v uuid.UUID) *StorageProviderUpdate {
+	_u.mutation.SetAgentID(v)
+	return _u
+}
+
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillableAgentID(v *uuid.UUID) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetAgentID(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (spu *StorageProviderUpdate) SetStatus(cps consts.StorageProviderStatus) *StorageProviderUpdate {
-	spu.mutation.ResetStatus()
-	spu.mutation.SetStatus(cps)
-	return spu
+func (_u *StorageProviderUpdate) SetStatus(v consts.StorageProviderStatus) *StorageProviderUpdate {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (spu *StorageProviderUpdate) SetNillableStatus(cps *consts.StorageProviderStatus) *StorageProviderUpdate {
-	if cps != nil {
-		spu.SetStatus(*cps)
+func (_u *StorageProviderUpdate) SetNillableStatus(v *consts.StorageProviderStatus) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return spu
+	return _u
 }
 
-// AddStatus adds cps to the "status" field.
-func (spu *StorageProviderUpdate) AddStatus(cps consts.StorageProviderStatus) *StorageProviderUpdate {
-	spu.mutation.AddStatus(cps)
-	return spu
+// AddStatus adds value to the "status" field.
+func (_u *StorageProviderUpdate) AddStatus(v consts.StorageProviderStatus) *StorageProviderUpdate {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetMasterServer sets the "master_server" field.
-func (spu *StorageProviderUpdate) SetMasterServer(s string) *StorageProviderUpdate {
-	spu.mutation.SetMasterServer(s)
-	return spu
+func (_u *StorageProviderUpdate) SetMasterServer(v string) *StorageProviderUpdate {
+	_u.mutation.SetMasterServer(v)
+	return _u
+}
+
+// SetNillableMasterServer sets the "master_server" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillableMasterServer(v *string) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetMasterServer(*v)
+	}
+	return _u
 }
 
 // SetPublicIP sets the "public_ip" field.
-func (spu *StorageProviderUpdate) SetPublicIP(s string) *StorageProviderUpdate {
-	spu.mutation.SetPublicIP(s)
-	return spu
+func (_u *StorageProviderUpdate) SetPublicIP(v string) *StorageProviderUpdate {
+	_u.mutation.SetPublicIP(v)
+	return _u
+}
+
+// SetNillablePublicIP sets the "public_ip" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillablePublicIP(v *string) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetPublicIP(*v)
+	}
+	return _u
 }
 
 // SetPublicPort sets the "public_port" field.
-func (spu *StorageProviderUpdate) SetPublicPort(i int32) *StorageProviderUpdate {
-	spu.mutation.ResetPublicPort()
-	spu.mutation.SetPublicPort(i)
-	return spu
+func (_u *StorageProviderUpdate) SetPublicPort(v int32) *StorageProviderUpdate {
+	_u.mutation.ResetPublicPort()
+	_u.mutation.SetPublicPort(v)
+	return _u
 }
 
-// AddPublicPort adds i to the "public_port" field.
-func (spu *StorageProviderUpdate) AddPublicPort(i int32) *StorageProviderUpdate {
-	spu.mutation.AddPublicPort(i)
-	return spu
+// SetNillablePublicPort sets the "public_port" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillablePublicPort(v *int32) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetPublicPort(*v)
+	}
+	return _u
+}
+
+// AddPublicPort adds value to the "public_port" field.
+func (_u *StorageProviderUpdate) AddPublicPort(v int32) *StorageProviderUpdate {
+	_u.mutation.AddPublicPort(v)
+	return _u
 }
 
 // SetGrpcPort sets the "grpc_port" field.
-func (spu *StorageProviderUpdate) SetGrpcPort(i int32) *StorageProviderUpdate {
-	spu.mutation.ResetGrpcPort()
-	spu.mutation.SetGrpcPort(i)
-	return spu
+func (_u *StorageProviderUpdate) SetGrpcPort(v int32) *StorageProviderUpdate {
+	_u.mutation.ResetGrpcPort()
+	_u.mutation.SetGrpcPort(v)
+	return _u
 }
 
-// AddGrpcPort adds i to the "grpc_port" field.
-func (spu *StorageProviderUpdate) AddGrpcPort(i int32) *StorageProviderUpdate {
-	spu.mutation.AddGrpcPort(i)
-	return spu
+// SetNillableGrpcPort sets the "grpc_port" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillableGrpcPort(v *int32) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetGrpcPort(*v)
+	}
+	return _u
+}
+
+// AddGrpcPort adds value to the "grpc_port" field.
+func (_u *StorageProviderUpdate) AddGrpcPort(v int32) *StorageProviderUpdate {
+	_u.mutation.AddGrpcPort(v)
+	return _u
 }
 
 // SetCreatedTime sets the "created_time" field.
-func (spu *StorageProviderUpdate) SetCreatedTime(t time.Time) *StorageProviderUpdate {
-	spu.mutation.SetCreatedTime(t)
-	return spu
+func (_u *StorageProviderUpdate) SetCreatedTime(v time.Time) *StorageProviderUpdate {
+	_u.mutation.SetCreatedTime(v)
+	return _u
+}
+
+// SetNillableCreatedTime sets the "created_time" field if the given value is not nil.
+func (_u *StorageProviderUpdate) SetNillableCreatedTime(v *time.Time) *StorageProviderUpdate {
+	if v != nil {
+		_u.SetCreatedTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the StorageProviderMutation object of the builder.
-func (spu *StorageProviderUpdate) Mutation() *StorageProviderMutation {
-	return spu.mutation
+func (_u *StorageProviderUpdate) Mutation() *StorageProviderMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (spu *StorageProviderUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, spu.sqlSave, spu.mutation, spu.hooks)
+func (_u *StorageProviderUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (spu *StorageProviderUpdate) SaveX(ctx context.Context) int {
-	affected, err := spu.Save(ctx)
+func (_u *StorageProviderUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -121,26 +169,26 @@ func (spu *StorageProviderUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (spu *StorageProviderUpdate) Exec(ctx context.Context) error {
-	_, err := spu.Save(ctx)
+func (_u *StorageProviderUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (spu *StorageProviderUpdate) ExecX(ctx context.Context) {
-	if err := spu.Exec(ctx); err != nil {
+func (_u *StorageProviderUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (spu *StorageProviderUpdate) check() error {
-	if v, ok := spu.mutation.MasterServer(); ok {
+func (_u *StorageProviderUpdate) check() error {
+	if v, ok := _u.mutation.MasterServer(); ok {
 		if err := storageprovider.MasterServerValidator(v); err != nil {
 			return &ValidationError{Name: "master_server", err: fmt.Errorf(`ent: validator failed for field "StorageProvider.master_server": %w`, err)}
 		}
 	}
-	if v, ok := spu.mutation.PublicIP(); ok {
+	if v, ok := _u.mutation.PublicIP(); ok {
 		if err := storageprovider.PublicIPValidator(v); err != nil {
 			return &ValidationError{Name: "public_ip", err: fmt.Errorf(`ent: validator failed for field "StorageProvider.public_ip": %w`, err)}
 		}
@@ -148,49 +196,49 @@ func (spu *StorageProviderUpdate) check() error {
 	return nil
 }
 
-func (spu *StorageProviderUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := spu.check(); err != nil {
-		return n, err
+func (_u *StorageProviderUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storageprovider.Table, storageprovider.Columns, sqlgraph.NewFieldSpec(storageprovider.FieldID, field.TypeUUID))
-	if ps := spu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := spu.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(storageprovider.FieldAgentID, field.TypeUUID, value)
 	}
-	if value, ok := spu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(storageprovider.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := spu.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(storageprovider.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := spu.mutation.MasterServer(); ok {
+	if value, ok := _u.mutation.MasterServer(); ok {
 		_spec.SetField(storageprovider.FieldMasterServer, field.TypeString, value)
 	}
-	if value, ok := spu.mutation.PublicIP(); ok {
+	if value, ok := _u.mutation.PublicIP(); ok {
 		_spec.SetField(storageprovider.FieldPublicIP, field.TypeString, value)
 	}
-	if value, ok := spu.mutation.PublicPort(); ok {
+	if value, ok := _u.mutation.PublicPort(); ok {
 		_spec.SetField(storageprovider.FieldPublicPort, field.TypeInt32, value)
 	}
-	if value, ok := spu.mutation.AddedPublicPort(); ok {
+	if value, ok := _u.mutation.AddedPublicPort(); ok {
 		_spec.AddField(storageprovider.FieldPublicPort, field.TypeInt32, value)
 	}
-	if value, ok := spu.mutation.GrpcPort(); ok {
+	if value, ok := _u.mutation.GrpcPort(); ok {
 		_spec.SetField(storageprovider.FieldGrpcPort, field.TypeInt32, value)
 	}
-	if value, ok := spu.mutation.AddedGrpcPort(); ok {
+	if value, ok := _u.mutation.AddedGrpcPort(); ok {
 		_spec.AddField(storageprovider.FieldGrpcPort, field.TypeInt32, value)
 	}
-	if value, ok := spu.mutation.CreatedTime(); ok {
+	if value, ok := _u.mutation.CreatedTime(); ok {
 		_spec.SetField(storageprovider.FieldCreatedTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, spu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storageprovider.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -198,8 +246,8 @@ func (spu *StorageProviderUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	spu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StorageProviderUpdateOne is the builder for updating a single StorageProvider entity.
@@ -211,102 +259,150 @@ type StorageProviderUpdateOne struct {
 }
 
 // SetAgentID sets the "agent_id" field.
-func (spuo *StorageProviderUpdateOne) SetAgentID(u uuid.UUID) *StorageProviderUpdateOne {
-	spuo.mutation.SetAgentID(u)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetAgentID(v uuid.UUID) *StorageProviderUpdateOne {
+	_u.mutation.SetAgentID(v)
+	return _u
+}
+
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillableAgentID(v *uuid.UUID) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetAgentID(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (spuo *StorageProviderUpdateOne) SetStatus(cps consts.StorageProviderStatus) *StorageProviderUpdateOne {
-	spuo.mutation.ResetStatus()
-	spuo.mutation.SetStatus(cps)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetStatus(v consts.StorageProviderStatus) *StorageProviderUpdateOne {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (spuo *StorageProviderUpdateOne) SetNillableStatus(cps *consts.StorageProviderStatus) *StorageProviderUpdateOne {
-	if cps != nil {
-		spuo.SetStatus(*cps)
+func (_u *StorageProviderUpdateOne) SetNillableStatus(v *consts.StorageProviderStatus) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
 	}
-	return spuo
+	return _u
 }
 
-// AddStatus adds cps to the "status" field.
-func (spuo *StorageProviderUpdateOne) AddStatus(cps consts.StorageProviderStatus) *StorageProviderUpdateOne {
-	spuo.mutation.AddStatus(cps)
-	return spuo
+// AddStatus adds value to the "status" field.
+func (_u *StorageProviderUpdateOne) AddStatus(v consts.StorageProviderStatus) *StorageProviderUpdateOne {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetMasterServer sets the "master_server" field.
-func (spuo *StorageProviderUpdateOne) SetMasterServer(s string) *StorageProviderUpdateOne {
-	spuo.mutation.SetMasterServer(s)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetMasterServer(v string) *StorageProviderUpdateOne {
+	_u.mutation.SetMasterServer(v)
+	return _u
+}
+
+// SetNillableMasterServer sets the "master_server" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillableMasterServer(v *string) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetMasterServer(*v)
+	}
+	return _u
 }
 
 // SetPublicIP sets the "public_ip" field.
-func (spuo *StorageProviderUpdateOne) SetPublicIP(s string) *StorageProviderUpdateOne {
-	spuo.mutation.SetPublicIP(s)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetPublicIP(v string) *StorageProviderUpdateOne {
+	_u.mutation.SetPublicIP(v)
+	return _u
+}
+
+// SetNillablePublicIP sets the "public_ip" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillablePublicIP(v *string) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetPublicIP(*v)
+	}
+	return _u
 }
 
 // SetPublicPort sets the "public_port" field.
-func (spuo *StorageProviderUpdateOne) SetPublicPort(i int32) *StorageProviderUpdateOne {
-	spuo.mutation.ResetPublicPort()
-	spuo.mutation.SetPublicPort(i)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetPublicPort(v int32) *StorageProviderUpdateOne {
+	_u.mutation.ResetPublicPort()
+	_u.mutation.SetPublicPort(v)
+	return _u
 }
 
-// AddPublicPort adds i to the "public_port" field.
-func (spuo *StorageProviderUpdateOne) AddPublicPort(i int32) *StorageProviderUpdateOne {
-	spuo.mutation.AddPublicPort(i)
-	return spuo
+// SetNillablePublicPort sets the "public_port" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillablePublicPort(v *int32) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetPublicPort(*v)
+	}
+	return _u
+}
+
+// AddPublicPort adds value to the "public_port" field.
+func (_u *StorageProviderUpdateOne) AddPublicPort(v int32) *StorageProviderUpdateOne {
+	_u.mutation.AddPublicPort(v)
+	return _u
 }
 
 // SetGrpcPort sets the "grpc_port" field.
-func (spuo *StorageProviderUpdateOne) SetGrpcPort(i int32) *StorageProviderUpdateOne {
-	spuo.mutation.ResetGrpcPort()
-	spuo.mutation.SetGrpcPort(i)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetGrpcPort(v int32) *StorageProviderUpdateOne {
+	_u.mutation.ResetGrpcPort()
+	_u.mutation.SetGrpcPort(v)
+	return _u
 }
 
-// AddGrpcPort adds i to the "grpc_port" field.
-func (spuo *StorageProviderUpdateOne) AddGrpcPort(i int32) *StorageProviderUpdateOne {
-	spuo.mutation.AddGrpcPort(i)
-	return spuo
+// SetNillableGrpcPort sets the "grpc_port" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillableGrpcPort(v *int32) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetGrpcPort(*v)
+	}
+	return _u
+}
+
+// AddGrpcPort adds value to the "grpc_port" field.
+func (_u *StorageProviderUpdateOne) AddGrpcPort(v int32) *StorageProviderUpdateOne {
+	_u.mutation.AddGrpcPort(v)
+	return _u
 }
 
 // SetCreatedTime sets the "created_time" field.
-func (spuo *StorageProviderUpdateOne) SetCreatedTime(t time.Time) *StorageProviderUpdateOne {
-	spuo.mutation.SetCreatedTime(t)
-	return spuo
+func (_u *StorageProviderUpdateOne) SetCreatedTime(v time.Time) *StorageProviderUpdateOne {
+	_u.mutation.SetCreatedTime(v)
+	return _u
+}
+
+// SetNillableCreatedTime sets the "created_time" field if the given value is not nil.
+func (_u *StorageProviderUpdateOne) SetNillableCreatedTime(v *time.Time) *StorageProviderUpdateOne {
+	if v != nil {
+		_u.SetCreatedTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the StorageProviderMutation object of the builder.
-func (spuo *StorageProviderUpdateOne) Mutation() *StorageProviderMutation {
-	return spuo.mutation
+func (_u *StorageProviderUpdateOne) Mutation() *StorageProviderMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the StorageProviderUpdate builder.
-func (spuo *StorageProviderUpdateOne) Where(ps ...predicate.StorageProvider) *StorageProviderUpdateOne {
-	spuo.mutation.Where(ps...)
-	return spuo
+func (_u *StorageProviderUpdateOne) Where(ps ...predicate.StorageProvider) *StorageProviderUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (spuo *StorageProviderUpdateOne) Select(field string, fields ...string) *StorageProviderUpdateOne {
-	spuo.fields = append([]string{field}, fields...)
-	return spuo
+func (_u *StorageProviderUpdateOne) Select(field string, fields ...string) *StorageProviderUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated StorageProvider entity.
-func (spuo *StorageProviderUpdateOne) Save(ctx context.Context) (*StorageProvider, error) {
-	return withHooks(ctx, spuo.sqlSave, spuo.mutation, spuo.hooks)
+func (_u *StorageProviderUpdateOne) Save(ctx context.Context) (*StorageProvider, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (spuo *StorageProviderUpdateOne) SaveX(ctx context.Context) *StorageProvider {
-	node, err := spuo.Save(ctx)
+func (_u *StorageProviderUpdateOne) SaveX(ctx context.Context) *StorageProvider {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,26 +410,26 @@ func (spuo *StorageProviderUpdateOne) SaveX(ctx context.Context) *StorageProvide
 }
 
 // Exec executes the query on the entity.
-func (spuo *StorageProviderUpdateOne) Exec(ctx context.Context) error {
-	_, err := spuo.Save(ctx)
+func (_u *StorageProviderUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (spuo *StorageProviderUpdateOne) ExecX(ctx context.Context) {
-	if err := spuo.Exec(ctx); err != nil {
+func (_u *StorageProviderUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (spuo *StorageProviderUpdateOne) check() error {
-	if v, ok := spuo.mutation.MasterServer(); ok {
+func (_u *StorageProviderUpdateOne) check() error {
+	if v, ok := _u.mutation.MasterServer(); ok {
 		if err := storageprovider.MasterServerValidator(v); err != nil {
 			return &ValidationError{Name: "master_server", err: fmt.Errorf(`ent: validator failed for field "StorageProvider.master_server": %w`, err)}
 		}
 	}
-	if v, ok := spuo.mutation.PublicIP(); ok {
+	if v, ok := _u.mutation.PublicIP(); ok {
 		if err := storageprovider.PublicIPValidator(v); err != nil {
 			return &ValidationError{Name: "public_ip", err: fmt.Errorf(`ent: validator failed for field "StorageProvider.public_ip": %w`, err)}
 		}
@@ -341,17 +437,17 @@ func (spuo *StorageProviderUpdateOne) check() error {
 	return nil
 }
 
-func (spuo *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *StorageProvider, err error) {
-	if err := spuo.check(); err != nil {
+func (_u *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *StorageProvider, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storageprovider.Table, storageprovider.Columns, sqlgraph.NewFieldSpec(storageprovider.FieldID, field.TypeUUID))
-	id, ok := spuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "StorageProvider.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := spuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storageprovider.FieldID)
 		for _, f := range fields {
@@ -363,47 +459,47 @@ func (spuo *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *Stora
 			}
 		}
 	}
-	if ps := spuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := spuo.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(storageprovider.FieldAgentID, field.TypeUUID, value)
 	}
-	if value, ok := spuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(storageprovider.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := spuo.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(storageprovider.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := spuo.mutation.MasterServer(); ok {
+	if value, ok := _u.mutation.MasterServer(); ok {
 		_spec.SetField(storageprovider.FieldMasterServer, field.TypeString, value)
 	}
-	if value, ok := spuo.mutation.PublicIP(); ok {
+	if value, ok := _u.mutation.PublicIP(); ok {
 		_spec.SetField(storageprovider.FieldPublicIP, field.TypeString, value)
 	}
-	if value, ok := spuo.mutation.PublicPort(); ok {
+	if value, ok := _u.mutation.PublicPort(); ok {
 		_spec.SetField(storageprovider.FieldPublicPort, field.TypeInt32, value)
 	}
-	if value, ok := spuo.mutation.AddedPublicPort(); ok {
+	if value, ok := _u.mutation.AddedPublicPort(); ok {
 		_spec.AddField(storageprovider.FieldPublicPort, field.TypeInt32, value)
 	}
-	if value, ok := spuo.mutation.GrpcPort(); ok {
+	if value, ok := _u.mutation.GrpcPort(); ok {
 		_spec.SetField(storageprovider.FieldGrpcPort, field.TypeInt32, value)
 	}
-	if value, ok := spuo.mutation.AddedGrpcPort(); ok {
+	if value, ok := _u.mutation.AddedGrpcPort(); ok {
 		_spec.AddField(storageprovider.FieldGrpcPort, field.TypeInt32, value)
 	}
-	if value, ok := spuo.mutation.CreatedTime(); ok {
+	if value, ok := _u.mutation.CreatedTime(); ok {
 		_spec.SetField(storageprovider.FieldCreatedTime, field.TypeTime, value)
 	}
-	_node = &StorageProvider{config: spuo.config}
+	_node = &StorageProvider{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, spuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storageprovider.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -411,6 +507,6 @@ func (spuo *StorageProviderUpdateOne) sqlSave(ctx context.Context) (_node *Stora
 		}
 		return nil, err
 	}
-	spuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

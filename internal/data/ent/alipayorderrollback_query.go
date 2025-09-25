@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -27,40 +28,40 @@ type AlipayOrderRollbackQuery struct {
 }
 
 // Where adds a new predicate for the AlipayOrderRollbackQuery builder.
-func (aorq *AlipayOrderRollbackQuery) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackQuery {
-	aorq.predicates = append(aorq.predicates, ps...)
-	return aorq
+func (_q *AlipayOrderRollbackQuery) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (aorq *AlipayOrderRollbackQuery) Limit(limit int) *AlipayOrderRollbackQuery {
-	aorq.ctx.Limit = &limit
-	return aorq
+func (_q *AlipayOrderRollbackQuery) Limit(limit int) *AlipayOrderRollbackQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (aorq *AlipayOrderRollbackQuery) Offset(offset int) *AlipayOrderRollbackQuery {
-	aorq.ctx.Offset = &offset
-	return aorq
+func (_q *AlipayOrderRollbackQuery) Offset(offset int) *AlipayOrderRollbackQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (aorq *AlipayOrderRollbackQuery) Unique(unique bool) *AlipayOrderRollbackQuery {
-	aorq.ctx.Unique = &unique
-	return aorq
+func (_q *AlipayOrderRollbackQuery) Unique(unique bool) *AlipayOrderRollbackQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (aorq *AlipayOrderRollbackQuery) Order(o ...alipayorderrollback.OrderOption) *AlipayOrderRollbackQuery {
-	aorq.order = append(aorq.order, o...)
-	return aorq
+func (_q *AlipayOrderRollbackQuery) Order(o ...alipayorderrollback.OrderOption) *AlipayOrderRollbackQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first AlipayOrderRollback entity from the query.
 // Returns a *NotFoundError when no AlipayOrderRollback was found.
-func (aorq *AlipayOrderRollbackQuery) First(ctx context.Context) (*AlipayOrderRollback, error) {
-	nodes, err := aorq.Limit(1).All(setContextOp(ctx, aorq.ctx, "First"))
+func (_q *AlipayOrderRollbackQuery) First(ctx context.Context) (*AlipayOrderRollback, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +72,8 @@ func (aorq *AlipayOrderRollbackQuery) First(ctx context.Context) (*AlipayOrderRo
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) FirstX(ctx context.Context) *AlipayOrderRollback {
-	node, err := aorq.First(ctx)
+func (_q *AlipayOrderRollbackQuery) FirstX(ctx context.Context) *AlipayOrderRollback {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -81,9 +82,9 @@ func (aorq *AlipayOrderRollbackQuery) FirstX(ctx context.Context) *AlipayOrderRo
 
 // FirstID returns the first AlipayOrderRollback ID from the query.
 // Returns a *NotFoundError when no AlipayOrderRollback ID was found.
-func (aorq *AlipayOrderRollbackQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *AlipayOrderRollbackQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = aorq.Limit(1).IDs(setContextOp(ctx, aorq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -94,8 +95,8 @@ func (aorq *AlipayOrderRollbackQuery) FirstID(ctx context.Context) (id int, err 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) FirstIDX(ctx context.Context) int {
-	id, err := aorq.FirstID(ctx)
+func (_q *AlipayOrderRollbackQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -105,8 +106,8 @@ func (aorq *AlipayOrderRollbackQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single AlipayOrderRollback entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one AlipayOrderRollback entity is found.
 // Returns a *NotFoundError when no AlipayOrderRollback entities are found.
-func (aorq *AlipayOrderRollbackQuery) Only(ctx context.Context) (*AlipayOrderRollback, error) {
-	nodes, err := aorq.Limit(2).All(setContextOp(ctx, aorq.ctx, "Only"))
+func (_q *AlipayOrderRollbackQuery) Only(ctx context.Context) (*AlipayOrderRollback, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +122,8 @@ func (aorq *AlipayOrderRollbackQuery) Only(ctx context.Context) (*AlipayOrderRol
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) OnlyX(ctx context.Context) *AlipayOrderRollback {
-	node, err := aorq.Only(ctx)
+func (_q *AlipayOrderRollbackQuery) OnlyX(ctx context.Context) *AlipayOrderRollback {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -132,9 +133,9 @@ func (aorq *AlipayOrderRollbackQuery) OnlyX(ctx context.Context) *AlipayOrderRol
 // OnlyID is like Only, but returns the only AlipayOrderRollback ID in the query.
 // Returns a *NotSingularError when more than one AlipayOrderRollback ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (aorq *AlipayOrderRollbackQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *AlipayOrderRollbackQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = aorq.Limit(2).IDs(setContextOp(ctx, aorq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -149,8 +150,8 @@ func (aorq *AlipayOrderRollbackQuery) OnlyID(ctx context.Context) (id int, err e
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) OnlyIDX(ctx context.Context) int {
-	id, err := aorq.OnlyID(ctx)
+func (_q *AlipayOrderRollbackQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -158,18 +159,18 @@ func (aorq *AlipayOrderRollbackQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of AlipayOrderRollbacks.
-func (aorq *AlipayOrderRollbackQuery) All(ctx context.Context) ([]*AlipayOrderRollback, error) {
-	ctx = setContextOp(ctx, aorq.ctx, "All")
-	if err := aorq.prepareQuery(ctx); err != nil {
+func (_q *AlipayOrderRollbackQuery) All(ctx context.Context) ([]*AlipayOrderRollback, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*AlipayOrderRollback, *AlipayOrderRollbackQuery]()
-	return withInterceptors[[]*AlipayOrderRollback](ctx, aorq, qr, aorq.inters)
+	return withInterceptors[[]*AlipayOrderRollback](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) AllX(ctx context.Context) []*AlipayOrderRollback {
-	nodes, err := aorq.All(ctx)
+func (_q *AlipayOrderRollbackQuery) AllX(ctx context.Context) []*AlipayOrderRollback {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -177,20 +178,20 @@ func (aorq *AlipayOrderRollbackQuery) AllX(ctx context.Context) []*AlipayOrderRo
 }
 
 // IDs executes the query and returns a list of AlipayOrderRollback IDs.
-func (aorq *AlipayOrderRollbackQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if aorq.ctx.Unique == nil && aorq.path != nil {
-		aorq.Unique(true)
+func (_q *AlipayOrderRollbackQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, aorq.ctx, "IDs")
-	if err = aorq.Select(alipayorderrollback.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(alipayorderrollback.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) IDsX(ctx context.Context) []int {
-	ids, err := aorq.IDs(ctx)
+func (_q *AlipayOrderRollbackQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -198,17 +199,17 @@ func (aorq *AlipayOrderRollbackQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (aorq *AlipayOrderRollbackQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, aorq.ctx, "Count")
-	if err := aorq.prepareQuery(ctx); err != nil {
+func (_q *AlipayOrderRollbackQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, aorq, querierCount[*AlipayOrderRollbackQuery](), aorq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*AlipayOrderRollbackQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) CountX(ctx context.Context) int {
-	count, err := aorq.Count(ctx)
+func (_q *AlipayOrderRollbackQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -216,9 +217,9 @@ func (aorq *AlipayOrderRollbackQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (aorq *AlipayOrderRollbackQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, aorq.ctx, "Exist")
-	switch _, err := aorq.FirstID(ctx); {
+func (_q *AlipayOrderRollbackQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -229,8 +230,8 @@ func (aorq *AlipayOrderRollbackQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (aorq *AlipayOrderRollbackQuery) ExistX(ctx context.Context) bool {
-	exist, err := aorq.Exist(ctx)
+func (_q *AlipayOrderRollbackQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,19 +240,19 @@ func (aorq *AlipayOrderRollbackQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the AlipayOrderRollbackQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (aorq *AlipayOrderRollbackQuery) Clone() *AlipayOrderRollbackQuery {
-	if aorq == nil {
+func (_q *AlipayOrderRollbackQuery) Clone() *AlipayOrderRollbackQuery {
+	if _q == nil {
 		return nil
 	}
 	return &AlipayOrderRollbackQuery{
-		config:     aorq.config,
-		ctx:        aorq.ctx.Clone(),
-		order:      append([]alipayorderrollback.OrderOption{}, aorq.order...),
-		inters:     append([]Interceptor{}, aorq.inters...),
-		predicates: append([]predicate.AlipayOrderRollback{}, aorq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]alipayorderrollback.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.AlipayOrderRollback{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  aorq.sql.Clone(),
-		path: aorq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -269,10 +270,10 @@ func (aorq *AlipayOrderRollbackQuery) Clone() *AlipayOrderRollbackQuery {
 //		GroupBy(alipayorderrollback.FieldNotifyID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (aorq *AlipayOrderRollbackQuery) GroupBy(field string, fields ...string) *AlipayOrderRollbackGroupBy {
-	aorq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &AlipayOrderRollbackGroupBy{build: aorq}
-	grbuild.flds = &aorq.ctx.Fields
+func (_q *AlipayOrderRollbackQuery) GroupBy(field string, fields ...string) *AlipayOrderRollbackGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &AlipayOrderRollbackGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = alipayorderrollback.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -290,62 +291,62 @@ func (aorq *AlipayOrderRollbackQuery) GroupBy(field string, fields ...string) *A
 //	client.AlipayOrderRollback.Query().
 //		Select(alipayorderrollback.FieldNotifyID).
 //		Scan(ctx, &v)
-func (aorq *AlipayOrderRollbackQuery) Select(fields ...string) *AlipayOrderRollbackSelect {
-	aorq.ctx.Fields = append(aorq.ctx.Fields, fields...)
-	sbuild := &AlipayOrderRollbackSelect{AlipayOrderRollbackQuery: aorq}
+func (_q *AlipayOrderRollbackQuery) Select(fields ...string) *AlipayOrderRollbackSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &AlipayOrderRollbackSelect{AlipayOrderRollbackQuery: _q}
 	sbuild.label = alipayorderrollback.Label
-	sbuild.flds, sbuild.scan = &aorq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a AlipayOrderRollbackSelect configured with the given aggregations.
-func (aorq *AlipayOrderRollbackQuery) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackSelect {
-	return aorq.Select().Aggregate(fns...)
+func (_q *AlipayOrderRollbackQuery) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (aorq *AlipayOrderRollbackQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range aorq.inters {
+func (_q *AlipayOrderRollbackQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, aorq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range aorq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !alipayorderrollback.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if aorq.path != nil {
-		prev, err := aorq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		aorq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (aorq *AlipayOrderRollbackQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AlipayOrderRollback, error) {
+func (_q *AlipayOrderRollbackQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*AlipayOrderRollback, error) {
 	var (
 		nodes = []*AlipayOrderRollback{}
-		_spec = aorq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*AlipayOrderRollback).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &AlipayOrderRollback{config: aorq.config}
+		node := &AlipayOrderRollback{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, aorq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -354,24 +355,24 @@ func (aorq *AlipayOrderRollbackQuery) sqlAll(ctx context.Context, hooks ...query
 	return nodes, nil
 }
 
-func (aorq *AlipayOrderRollbackQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := aorq.querySpec()
-	_spec.Node.Columns = aorq.ctx.Fields
-	if len(aorq.ctx.Fields) > 0 {
-		_spec.Unique = aorq.ctx.Unique != nil && *aorq.ctx.Unique
+func (_q *AlipayOrderRollbackQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, aorq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (aorq *AlipayOrderRollbackQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *AlipayOrderRollbackQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(alipayorderrollback.Table, alipayorderrollback.Columns, sqlgraph.NewFieldSpec(alipayorderrollback.FieldID, field.TypeInt))
-	_spec.From = aorq.sql
-	if unique := aorq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if aorq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := aorq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, alipayorderrollback.FieldID)
 		for i := range fields {
@@ -380,20 +381,20 @@ func (aorq *AlipayOrderRollbackQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := aorq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := aorq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := aorq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := aorq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -403,33 +404,33 @@ func (aorq *AlipayOrderRollbackQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (aorq *AlipayOrderRollbackQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(aorq.driver.Dialect())
+func (_q *AlipayOrderRollbackQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(alipayorderrollback.Table)
-	columns := aorq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = alipayorderrollback.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if aorq.sql != nil {
-		selector = aorq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if aorq.ctx.Unique != nil && *aorq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range aorq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range aorq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := aorq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := aorq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -442,41 +443,41 @@ type AlipayOrderRollbackGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (aorgb *AlipayOrderRollbackGroupBy) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackGroupBy {
-	aorgb.fns = append(aorgb.fns, fns...)
-	return aorgb
+func (_g *AlipayOrderRollbackGroupBy) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (aorgb *AlipayOrderRollbackGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, aorgb.build.ctx, "GroupBy")
-	if err := aorgb.build.prepareQuery(ctx); err != nil {
+func (_g *AlipayOrderRollbackGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*AlipayOrderRollbackQuery, *AlipayOrderRollbackGroupBy](ctx, aorgb.build, aorgb, aorgb.build.inters, v)
+	return scanWithInterceptors[*AlipayOrderRollbackQuery, *AlipayOrderRollbackGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (aorgb *AlipayOrderRollbackGroupBy) sqlScan(ctx context.Context, root *AlipayOrderRollbackQuery, v any) error {
+func (_g *AlipayOrderRollbackGroupBy) sqlScan(ctx context.Context, root *AlipayOrderRollbackQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(aorgb.fns))
-	for _, fn := range aorgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*aorgb.flds)+len(aorgb.fns))
-		for _, f := range *aorgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*aorgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := aorgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -490,27 +491,27 @@ type AlipayOrderRollbackSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (aors *AlipayOrderRollbackSelect) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackSelect {
-	aors.fns = append(aors.fns, fns...)
-	return aors
+func (_s *AlipayOrderRollbackSelect) Aggregate(fns ...AggregateFunc) *AlipayOrderRollbackSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (aors *AlipayOrderRollbackSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, aors.ctx, "Select")
-	if err := aors.prepareQuery(ctx); err != nil {
+func (_s *AlipayOrderRollbackSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*AlipayOrderRollbackQuery, *AlipayOrderRollbackSelect](ctx, aors.AlipayOrderRollbackQuery, aors, aors.inters, v)
+	return scanWithInterceptors[*AlipayOrderRollbackQuery, *AlipayOrderRollbackSelect](ctx, _s.AlipayOrderRollbackQuery, _s, _s.inters, v)
 }
 
-func (aors *AlipayOrderRollbackSelect) sqlScan(ctx context.Context, root *AlipayOrderRollbackQuery, v any) error {
+func (_s *AlipayOrderRollbackSelect) sqlScan(ctx context.Context, root *AlipayOrderRollbackQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(aors.fns))
-	for _, fn := range aors.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*aors.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -518,7 +519,7 @@ func (aors *AlipayOrderRollbackSelect) sqlScan(ctx context.Context, root *Alipay
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := aors.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

@@ -22,57 +22,65 @@ type EmployeeUpdate struct {
 }
 
 // Where appends a list predicates to the EmployeeUpdate builder.
-func (eu *EmployeeUpdate) Where(ps ...predicate.Employee) *EmployeeUpdate {
-	eu.mutation.Where(ps...)
-	return eu
+func (_u *EmployeeUpdate) Where(ps ...predicate.Employee) *EmployeeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (eu *EmployeeUpdate) SetName(s string) *EmployeeUpdate {
-	eu.mutation.SetName(s)
-	return eu
+func (_u *EmployeeUpdate) SetName(v string) *EmployeeUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *EmployeeUpdate) SetNillableName(v *string) *EmployeeUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetAge sets the "age" field.
-func (eu *EmployeeUpdate) SetAge(i int32) *EmployeeUpdate {
-	eu.mutation.ResetAge()
-	eu.mutation.SetAge(i)
-	return eu
+func (_u *EmployeeUpdate) SetAge(v int32) *EmployeeUpdate {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (eu *EmployeeUpdate) SetNillableAge(i *int32) *EmployeeUpdate {
-	if i != nil {
-		eu.SetAge(*i)
+func (_u *EmployeeUpdate) SetNillableAge(v *int32) *EmployeeUpdate {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return eu
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (eu *EmployeeUpdate) AddAge(i int32) *EmployeeUpdate {
-	eu.mutation.AddAge(i)
-	return eu
+// AddAge adds value to the "age" field.
+func (_u *EmployeeUpdate) AddAge(v int32) *EmployeeUpdate {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // ClearAge clears the value of the "age" field.
-func (eu *EmployeeUpdate) ClearAge() *EmployeeUpdate {
-	eu.mutation.ClearAge()
-	return eu
+func (_u *EmployeeUpdate) ClearAge() *EmployeeUpdate {
+	_u.mutation.ClearAge()
+	return _u
 }
 
 // Mutation returns the EmployeeMutation object of the builder.
-func (eu *EmployeeUpdate) Mutation() *EmployeeMutation {
-	return eu.mutation
+func (_u *EmployeeUpdate) Mutation() *EmployeeMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (eu *EmployeeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, eu.sqlSave, eu.mutation, eu.hooks)
+func (_u *EmployeeUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (eu *EmployeeUpdate) SaveX(ctx context.Context) int {
-	affected, err := eu.Save(ctx)
+func (_u *EmployeeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -80,40 +88,40 @@ func (eu *EmployeeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (eu *EmployeeUpdate) Exec(ctx context.Context) error {
-	_, err := eu.Save(ctx)
+func (_u *EmployeeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (eu *EmployeeUpdate) ExecX(ctx context.Context) {
-	if err := eu.Exec(ctx); err != nil {
+func (_u *EmployeeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (eu *EmployeeUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *EmployeeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(employee.Table, employee.Columns, sqlgraph.NewFieldSpec(employee.FieldID, field.TypeInt))
-	if ps := eu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := eu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(employee.FieldName, field.TypeString, value)
 	}
-	if value, ok := eu.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(employee.FieldAge, field.TypeInt32, value)
 	}
-	if value, ok := eu.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(employee.FieldAge, field.TypeInt32, value)
 	}
-	if eu.mutation.AgeCleared() {
+	if _u.mutation.AgeCleared() {
 		_spec.ClearField(employee.FieldAge, field.TypeInt32)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{employee.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -121,8 +129,8 @@ func (eu *EmployeeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	eu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // EmployeeUpdateOne is the builder for updating a single Employee entity.
@@ -134,64 +142,72 @@ type EmployeeUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (euo *EmployeeUpdateOne) SetName(s string) *EmployeeUpdateOne {
-	euo.mutation.SetName(s)
-	return euo
+func (_u *EmployeeUpdateOne) SetName(v string) *EmployeeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *EmployeeUpdateOne) SetNillableName(v *string) *EmployeeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetAge sets the "age" field.
-func (euo *EmployeeUpdateOne) SetAge(i int32) *EmployeeUpdateOne {
-	euo.mutation.ResetAge()
-	euo.mutation.SetAge(i)
-	return euo
+func (_u *EmployeeUpdateOne) SetAge(v int32) *EmployeeUpdateOne {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (euo *EmployeeUpdateOne) SetNillableAge(i *int32) *EmployeeUpdateOne {
-	if i != nil {
-		euo.SetAge(*i)
+func (_u *EmployeeUpdateOne) SetNillableAge(v *int32) *EmployeeUpdateOne {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return euo
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (euo *EmployeeUpdateOne) AddAge(i int32) *EmployeeUpdateOne {
-	euo.mutation.AddAge(i)
-	return euo
+// AddAge adds value to the "age" field.
+func (_u *EmployeeUpdateOne) AddAge(v int32) *EmployeeUpdateOne {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // ClearAge clears the value of the "age" field.
-func (euo *EmployeeUpdateOne) ClearAge() *EmployeeUpdateOne {
-	euo.mutation.ClearAge()
-	return euo
+func (_u *EmployeeUpdateOne) ClearAge() *EmployeeUpdateOne {
+	_u.mutation.ClearAge()
+	return _u
 }
 
 // Mutation returns the EmployeeMutation object of the builder.
-func (euo *EmployeeUpdateOne) Mutation() *EmployeeMutation {
-	return euo.mutation
+func (_u *EmployeeUpdateOne) Mutation() *EmployeeMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the EmployeeUpdate builder.
-func (euo *EmployeeUpdateOne) Where(ps ...predicate.Employee) *EmployeeUpdateOne {
-	euo.mutation.Where(ps...)
-	return euo
+func (_u *EmployeeUpdateOne) Where(ps ...predicate.Employee) *EmployeeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (euo *EmployeeUpdateOne) Select(field string, fields ...string) *EmployeeUpdateOne {
-	euo.fields = append([]string{field}, fields...)
-	return euo
+func (_u *EmployeeUpdateOne) Select(field string, fields ...string) *EmployeeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Employee entity.
-func (euo *EmployeeUpdateOne) Save(ctx context.Context) (*Employee, error) {
-	return withHooks(ctx, euo.sqlSave, euo.mutation, euo.hooks)
+func (_u *EmployeeUpdateOne) Save(ctx context.Context) (*Employee, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (euo *EmployeeUpdateOne) SaveX(ctx context.Context) *Employee {
-	node, err := euo.Save(ctx)
+func (_u *EmployeeUpdateOne) SaveX(ctx context.Context) *Employee {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,26 +215,26 @@ func (euo *EmployeeUpdateOne) SaveX(ctx context.Context) *Employee {
 }
 
 // Exec executes the query on the entity.
-func (euo *EmployeeUpdateOne) Exec(ctx context.Context) error {
-	_, err := euo.Save(ctx)
+func (_u *EmployeeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (euo *EmployeeUpdateOne) ExecX(ctx context.Context) {
-	if err := euo.Exec(ctx); err != nil {
+func (_u *EmployeeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (euo *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err error) {
+func (_u *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err error) {
 	_spec := sqlgraph.NewUpdateSpec(employee.Table, employee.Columns, sqlgraph.NewFieldSpec(employee.FieldID, field.TypeInt))
-	id, ok := euo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Employee.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := euo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, employee.FieldID)
 		for _, f := range fields {
@@ -230,29 +246,29 @@ func (euo *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err
 			}
 		}
 	}
-	if ps := euo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := euo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(employee.FieldName, field.TypeString, value)
 	}
-	if value, ok := euo.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(employee.FieldAge, field.TypeInt32, value)
 	}
-	if value, ok := euo.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(employee.FieldAge, field.TypeInt32, value)
 	}
-	if euo.mutation.AgeCleared() {
+	if _u.mutation.AgeCleared() {
 		_spec.ClearField(employee.FieldAge, field.TypeInt32)
 	}
-	_node = &Employee{config: euo.config}
+	_node = &Employee{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, euo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{employee.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -260,6 +276,6 @@ func (euo *EmployeeUpdateOne) sqlSave(ctx context.Context) (_node *Employee, err
 		}
 		return nil, err
 	}
-	euo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

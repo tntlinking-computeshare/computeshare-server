@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,40 +29,40 @@ type CycleOrderQuery struct {
 }
 
 // Where adds a new predicate for the CycleOrderQuery builder.
-func (coq *CycleOrderQuery) Where(ps ...predicate.CycleOrder) *CycleOrderQuery {
-	coq.predicates = append(coq.predicates, ps...)
-	return coq
+func (_q *CycleOrderQuery) Where(ps ...predicate.CycleOrder) *CycleOrderQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (coq *CycleOrderQuery) Limit(limit int) *CycleOrderQuery {
-	coq.ctx.Limit = &limit
-	return coq
+func (_q *CycleOrderQuery) Limit(limit int) *CycleOrderQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (coq *CycleOrderQuery) Offset(offset int) *CycleOrderQuery {
-	coq.ctx.Offset = &offset
-	return coq
+func (_q *CycleOrderQuery) Offset(offset int) *CycleOrderQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (coq *CycleOrderQuery) Unique(unique bool) *CycleOrderQuery {
-	coq.ctx.Unique = &unique
-	return coq
+func (_q *CycleOrderQuery) Unique(unique bool) *CycleOrderQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (coq *CycleOrderQuery) Order(o ...cycleorder.OrderOption) *CycleOrderQuery {
-	coq.order = append(coq.order, o...)
-	return coq
+func (_q *CycleOrderQuery) Order(o ...cycleorder.OrderOption) *CycleOrderQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first CycleOrder entity from the query.
 // Returns a *NotFoundError when no CycleOrder was found.
-func (coq *CycleOrderQuery) First(ctx context.Context) (*CycleOrder, error) {
-	nodes, err := coq.Limit(1).All(setContextOp(ctx, coq.ctx, "First"))
+func (_q *CycleOrderQuery) First(ctx context.Context) (*CycleOrder, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func (coq *CycleOrderQuery) First(ctx context.Context) (*CycleOrder, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (coq *CycleOrderQuery) FirstX(ctx context.Context) *CycleOrder {
-	node, err := coq.First(ctx)
+func (_q *CycleOrderQuery) FirstX(ctx context.Context) *CycleOrder {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +83,9 @@ func (coq *CycleOrderQuery) FirstX(ctx context.Context) *CycleOrder {
 
 // FirstID returns the first CycleOrder ID from the query.
 // Returns a *NotFoundError when no CycleOrder ID was found.
-func (coq *CycleOrderQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleOrderQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = coq.Limit(1).IDs(setContextOp(ctx, coq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +96,8 @@ func (coq *CycleOrderQuery) FirstID(ctx context.Context) (id uuid.UUID, err erro
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (coq *CycleOrderQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := coq.FirstID(ctx)
+func (_q *CycleOrderQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +107,8 @@ func (coq *CycleOrderQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single CycleOrder entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one CycleOrder entity is found.
 // Returns a *NotFoundError when no CycleOrder entities are found.
-func (coq *CycleOrderQuery) Only(ctx context.Context) (*CycleOrder, error) {
-	nodes, err := coq.Limit(2).All(setContextOp(ctx, coq.ctx, "Only"))
+func (_q *CycleOrderQuery) Only(ctx context.Context) (*CycleOrder, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +123,8 @@ func (coq *CycleOrderQuery) Only(ctx context.Context) (*CycleOrder, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (coq *CycleOrderQuery) OnlyX(ctx context.Context) *CycleOrder {
-	node, err := coq.Only(ctx)
+func (_q *CycleOrderQuery) OnlyX(ctx context.Context) *CycleOrder {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +134,9 @@ func (coq *CycleOrderQuery) OnlyX(ctx context.Context) *CycleOrder {
 // OnlyID is like Only, but returns the only CycleOrder ID in the query.
 // Returns a *NotSingularError when more than one CycleOrder ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (coq *CycleOrderQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleOrderQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = coq.Limit(2).IDs(setContextOp(ctx, coq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +151,8 @@ func (coq *CycleOrderQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (coq *CycleOrderQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := coq.OnlyID(ctx)
+func (_q *CycleOrderQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +160,18 @@ func (coq *CycleOrderQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of CycleOrders.
-func (coq *CycleOrderQuery) All(ctx context.Context) ([]*CycleOrder, error) {
-	ctx = setContextOp(ctx, coq.ctx, "All")
-	if err := coq.prepareQuery(ctx); err != nil {
+func (_q *CycleOrderQuery) All(ctx context.Context) ([]*CycleOrder, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*CycleOrder, *CycleOrderQuery]()
-	return withInterceptors[[]*CycleOrder](ctx, coq, qr, coq.inters)
+	return withInterceptors[[]*CycleOrder](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (coq *CycleOrderQuery) AllX(ctx context.Context) []*CycleOrder {
-	nodes, err := coq.All(ctx)
+func (_q *CycleOrderQuery) AllX(ctx context.Context) []*CycleOrder {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +179,20 @@ func (coq *CycleOrderQuery) AllX(ctx context.Context) []*CycleOrder {
 }
 
 // IDs executes the query and returns a list of CycleOrder IDs.
-func (coq *CycleOrderQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if coq.ctx.Unique == nil && coq.path != nil {
-		coq.Unique(true)
+func (_q *CycleOrderQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, coq.ctx, "IDs")
-	if err = coq.Select(cycleorder.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(cycleorder.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (coq *CycleOrderQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := coq.IDs(ctx)
+func (_q *CycleOrderQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +200,17 @@ func (coq *CycleOrderQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (coq *CycleOrderQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, coq.ctx, "Count")
-	if err := coq.prepareQuery(ctx); err != nil {
+func (_q *CycleOrderQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, coq, querierCount[*CycleOrderQuery](), coq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*CycleOrderQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (coq *CycleOrderQuery) CountX(ctx context.Context) int {
-	count, err := coq.Count(ctx)
+func (_q *CycleOrderQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +218,9 @@ func (coq *CycleOrderQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (coq *CycleOrderQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, coq.ctx, "Exist")
-	switch _, err := coq.FirstID(ctx); {
+func (_q *CycleOrderQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +231,8 @@ func (coq *CycleOrderQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (coq *CycleOrderQuery) ExistX(ctx context.Context) bool {
-	exist, err := coq.Exist(ctx)
+func (_q *CycleOrderQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +241,19 @@ func (coq *CycleOrderQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the CycleOrderQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (coq *CycleOrderQuery) Clone() *CycleOrderQuery {
-	if coq == nil {
+func (_q *CycleOrderQuery) Clone() *CycleOrderQuery {
+	if _q == nil {
 		return nil
 	}
 	return &CycleOrderQuery{
-		config:     coq.config,
-		ctx:        coq.ctx.Clone(),
-		order:      append([]cycleorder.OrderOption{}, coq.order...),
-		inters:     append([]Interceptor{}, coq.inters...),
-		predicates: append([]predicate.CycleOrder{}, coq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]cycleorder.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.CycleOrder{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  coq.sql.Clone(),
-		path: coq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +271,10 @@ func (coq *CycleOrderQuery) Clone() *CycleOrderQuery {
 //		GroupBy(cycleorder.FieldFkUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (coq *CycleOrderQuery) GroupBy(field string, fields ...string) *CycleOrderGroupBy {
-	coq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &CycleOrderGroupBy{build: coq}
-	grbuild.flds = &coq.ctx.Fields
+func (_q *CycleOrderQuery) GroupBy(field string, fields ...string) *CycleOrderGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CycleOrderGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = cycleorder.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +292,62 @@ func (coq *CycleOrderQuery) GroupBy(field string, fields ...string) *CycleOrderG
 //	client.CycleOrder.Query().
 //		Select(cycleorder.FieldFkUserID).
 //		Scan(ctx, &v)
-func (coq *CycleOrderQuery) Select(fields ...string) *CycleOrderSelect {
-	coq.ctx.Fields = append(coq.ctx.Fields, fields...)
-	sbuild := &CycleOrderSelect{CycleOrderQuery: coq}
+func (_q *CycleOrderQuery) Select(fields ...string) *CycleOrderSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &CycleOrderSelect{CycleOrderQuery: _q}
 	sbuild.label = cycleorder.Label
-	sbuild.flds, sbuild.scan = &coq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a CycleOrderSelect configured with the given aggregations.
-func (coq *CycleOrderQuery) Aggregate(fns ...AggregateFunc) *CycleOrderSelect {
-	return coq.Select().Aggregate(fns...)
+func (_q *CycleOrderQuery) Aggregate(fns ...AggregateFunc) *CycleOrderSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (coq *CycleOrderQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range coq.inters {
+func (_q *CycleOrderQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, coq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range coq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !cycleorder.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if coq.path != nil {
-		prev, err := coq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		coq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (coq *CycleOrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleOrder, error) {
+func (_q *CycleOrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleOrder, error) {
 	var (
 		nodes = []*CycleOrder{}
-		_spec = coq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CycleOrder).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &CycleOrder{config: coq.config}
+		node := &CycleOrder{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, coq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +356,24 @@ func (coq *CycleOrderQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	return nodes, nil
 }
 
-func (coq *CycleOrderQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := coq.querySpec()
-	_spec.Node.Columns = coq.ctx.Fields
-	if len(coq.ctx.Fields) > 0 {
-		_spec.Unique = coq.ctx.Unique != nil && *coq.ctx.Unique
+func (_q *CycleOrderQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, coq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (coq *CycleOrderQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *CycleOrderQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(cycleorder.Table, cycleorder.Columns, sqlgraph.NewFieldSpec(cycleorder.FieldID, field.TypeUUID))
-	_spec.From = coq.sql
-	if unique := coq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if coq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := coq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cycleorder.FieldID)
 		for i := range fields {
@@ -381,20 +382,20 @@ func (coq *CycleOrderQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := coq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := coq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := coq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := coq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +405,33 @@ func (coq *CycleOrderQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (coq *CycleOrderQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(coq.driver.Dialect())
+func (_q *CycleOrderQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(cycleorder.Table)
-	columns := coq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = cycleorder.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if coq.sql != nil {
-		selector = coq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if coq.ctx.Unique != nil && *coq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range coq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range coq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := coq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := coq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +444,41 @@ type CycleOrderGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (cogb *CycleOrderGroupBy) Aggregate(fns ...AggregateFunc) *CycleOrderGroupBy {
-	cogb.fns = append(cogb.fns, fns...)
-	return cogb
+func (_g *CycleOrderGroupBy) Aggregate(fns ...AggregateFunc) *CycleOrderGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cogb *CycleOrderGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cogb.build.ctx, "GroupBy")
-	if err := cogb.build.prepareQuery(ctx); err != nil {
+func (_g *CycleOrderGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleOrderQuery, *CycleOrderGroupBy](ctx, cogb.build, cogb, cogb.build.inters, v)
+	return scanWithInterceptors[*CycleOrderQuery, *CycleOrderGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (cogb *CycleOrderGroupBy) sqlScan(ctx context.Context, root *CycleOrderQuery, v any) error {
+func (_g *CycleOrderGroupBy) sqlScan(ctx context.Context, root *CycleOrderQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(cogb.fns))
-	for _, fn := range cogb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*cogb.flds)+len(cogb.fns))
-		for _, f := range *cogb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*cogb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cogb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +492,27 @@ type CycleOrderSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (cos *CycleOrderSelect) Aggregate(fns ...AggregateFunc) *CycleOrderSelect {
-	cos.fns = append(cos.fns, fns...)
-	return cos
+func (_s *CycleOrderSelect) Aggregate(fns ...AggregateFunc) *CycleOrderSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cos *CycleOrderSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cos.ctx, "Select")
-	if err := cos.prepareQuery(ctx); err != nil {
+func (_s *CycleOrderSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleOrderQuery, *CycleOrderSelect](ctx, cos.CycleOrderQuery, cos, cos.inters, v)
+	return scanWithInterceptors[*CycleOrderQuery, *CycleOrderSelect](ctx, _s.CycleOrderQuery, _s, _s.inters, v)
 }
 
-func (cos *CycleOrderSelect) sqlScan(ctx context.Context, root *CycleOrderQuery, v any) error {
+func (_s *CycleOrderSelect) sqlScan(ctx context.Context, root *CycleOrderQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(cos.fns))
-	for _, fn := range cos.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*cos.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +520,7 @@ func (cos *CycleOrderSelect) sqlScan(ctx context.Context, root *CycleOrderQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cos.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

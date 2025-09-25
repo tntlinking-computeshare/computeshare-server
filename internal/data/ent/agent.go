@@ -26,6 +26,8 @@ type Agent struct {
 	LastUpdateTime time.Time `json:"last_update_time,omitempty"`
 	// 主机名
 	Hostname string `json:"hostname,omitempty"`
+	// 计算机架构
+	Arch string `json:"arch,omitempty"`
 	// 总cpu数
 	TotalCPU int32 `json:"total_cpu,omitempty"`
 	// 总内存数
@@ -48,7 +50,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case agent.FieldTotalCPU, agent.FieldTotalMemory, agent.FieldOccupiedCPU, agent.FieldOccupiedMemory:
 			values[i] = new(sql.NullInt64)
-		case agent.FieldMAC, agent.FieldHostname, agent.FieldIP:
+		case agent.FieldMAC, agent.FieldHostname, agent.FieldArch, agent.FieldIP:
 			values[i] = new(sql.NullString)
 		case agent.FieldLastUpdateTime:
 			values[i] = new(sql.NullTime)
@@ -63,7 +65,7 @@ func (*Agent) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Agent fields.
-func (a *Agent) assignValues(columns []string, values []any) error {
+func (_m *Agent) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -73,64 +75,70 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				a.ID = *value
+				_m.ID = *value
 			}
 		case agent.FieldMAC:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field mac", values[i])
 			} else if value.Valid {
-				a.MAC = value.String
+				_m.MAC = value.String
 			}
 		case agent.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				a.Active = value.Bool
+				_m.Active = value.Bool
 			}
 		case agent.FieldLastUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_update_time", values[i])
 			} else if value.Valid {
-				a.LastUpdateTime = value.Time
+				_m.LastUpdateTime = value.Time
 			}
 		case agent.FieldHostname:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field hostname", values[i])
 			} else if value.Valid {
-				a.Hostname = value.String
+				_m.Hostname = value.String
+			}
+		case agent.FieldArch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field arch", values[i])
+			} else if value.Valid {
+				_m.Arch = value.String
 			}
 		case agent.FieldTotalCPU:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_cpu", values[i])
 			} else if value.Valid {
-				a.TotalCPU = int32(value.Int64)
+				_m.TotalCPU = int32(value.Int64)
 			}
 		case agent.FieldTotalMemory:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_memory", values[i])
 			} else if value.Valid {
-				a.TotalMemory = int32(value.Int64)
+				_m.TotalMemory = int32(value.Int64)
 			}
 		case agent.FieldOccupiedCPU:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field occupied_cpu", values[i])
 			} else if value.Valid {
-				a.OccupiedCPU = int32(value.Int64)
+				_m.OccupiedCPU = int32(value.Int64)
 			}
 		case agent.FieldOccupiedMemory:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field occupied_memory", values[i])
 			} else if value.Valid {
-				a.OccupiedMemory = int32(value.Int64)
+				_m.OccupiedMemory = int32(value.Int64)
 			}
 		case agent.FieldIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ip", values[i])
 			} else if value.Valid {
-				a.IP = value.String
+				_m.IP = value.String
 			}
 		default:
-			a.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -138,59 +146,62 @@ func (a *Agent) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Agent.
 // This includes values selected through modifiers, order, etc.
-func (a *Agent) Value(name string) (ent.Value, error) {
-	return a.selectValues.Get(name)
+func (_m *Agent) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Agent.
 // Note that you need to call Agent.Unwrap() before calling this method if this Agent
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (a *Agent) Update() *AgentUpdateOne {
-	return NewAgentClient(a.config).UpdateOne(a)
+func (_m *Agent) Update() *AgentUpdateOne {
+	return NewAgentClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Agent entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (a *Agent) Unwrap() *Agent {
-	_tx, ok := a.config.driver.(*txDriver)
+func (_m *Agent) Unwrap() *Agent {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Agent is not a transactional entity")
 	}
-	a.config.driver = _tx.drv
-	return a
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (a *Agent) String() string {
+func (_m *Agent) String() string {
 	var builder strings.Builder
 	builder.WriteString("Agent(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", a.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("mac=")
-	builder.WriteString(a.MAC)
+	builder.WriteString(_m.MAC)
 	builder.WriteString(", ")
 	builder.WriteString("active=")
-	builder.WriteString(fmt.Sprintf("%v", a.Active))
+	builder.WriteString(fmt.Sprintf("%v", _m.Active))
 	builder.WriteString(", ")
 	builder.WriteString("last_update_time=")
-	builder.WriteString(a.LastUpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.LastUpdateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("hostname=")
-	builder.WriteString(a.Hostname)
+	builder.WriteString(_m.Hostname)
+	builder.WriteString(", ")
+	builder.WriteString("arch=")
+	builder.WriteString(_m.Arch)
 	builder.WriteString(", ")
 	builder.WriteString("total_cpu=")
-	builder.WriteString(fmt.Sprintf("%v", a.TotalCPU))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalCPU))
 	builder.WriteString(", ")
 	builder.WriteString("total_memory=")
-	builder.WriteString(fmt.Sprintf("%v", a.TotalMemory))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalMemory))
 	builder.WriteString(", ")
 	builder.WriteString("occupied_cpu=")
-	builder.WriteString(fmt.Sprintf("%v", a.OccupiedCPU))
+	builder.WriteString(fmt.Sprintf("%v", _m.OccupiedCPU))
 	builder.WriteString(", ")
 	builder.WriteString("occupied_memory=")
-	builder.WriteString(fmt.Sprintf("%v", a.OccupiedMemory))
+	builder.WriteString(fmt.Sprintf("%v", _m.OccupiedMemory))
 	builder.WriteString(", ")
 	builder.WriteString("ip=")
-	builder.WriteString(a.IP)
+	builder.WriteString(_m.IP)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -67,7 +67,7 @@ func (*CycleRecharge) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CycleRecharge fields.
-func (cr *CycleRecharge) assignValues(columns []string, values []any) error {
+func (_m *CycleRecharge) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -77,76 +77,76 @@ func (cr *CycleRecharge) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				cr.ID = *value
+				_m.ID = *value
 			}
 		case cyclerecharge.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				cr.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cyclerecharge.FieldOutTradeNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field out_trade_no", values[i])
 			} else if value.Valid {
-				cr.OutTradeNo = value.String
+				_m.OutTradeNo = value.String
 			}
 		case cyclerecharge.FieldAlipayTradeNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field alipay_trade_no", values[i])
 			} else if value.Valid {
-				cr.AlipayTradeNo = value.String
+				_m.AlipayTradeNo = value.String
 			}
 		case cyclerecharge.FieldRechargeChannel:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field recharge_channel", values[i])
 			} else if value.Valid {
-				cr.RechargeChannel = int(value.Int64)
+				_m.RechargeChannel = int(value.Int64)
 			}
 		case cyclerecharge.FieldRedeemCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field redeem_code", values[i])
 			} else if value.Valid {
-				cr.RedeemCode = value.String
+				_m.RedeemCode = value.String
 			}
 		case cyclerecharge.FieldState:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
-				cr.State = value.String
+				_m.State = value.String
 			}
 		case cyclerecharge.FieldPayAmount:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field pay_amount", values[i])
 			} else if value.Valid {
-				cr.PayAmount = value.Float64
+				_m.PayAmount = value.Float64
 			}
 		case cyclerecharge.FieldTotalAmount:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_amount", values[i])
 			} else if value.Valid {
-				cr.TotalAmount = value.Float64
+				_m.TotalAmount = value.Float64
 			}
 		case cyclerecharge.FieldBuyCycle:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field buy_cycle", values[i])
 			} else if value.Valid {
-				cr.BuyCycle = value.Float64
+				_m.BuyCycle = value.Float64
 			}
 		case cyclerecharge.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				cr.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case cyclerecharge.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				cr.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		default:
-			cr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -154,65 +154,65 @@ func (cr *CycleRecharge) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CycleRecharge.
 // This includes values selected through modifiers, order, etc.
-func (cr *CycleRecharge) Value(name string) (ent.Value, error) {
-	return cr.selectValues.Get(name)
+func (_m *CycleRecharge) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CycleRecharge.
 // Note that you need to call CycleRecharge.Unwrap() before calling this method if this CycleRecharge
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cr *CycleRecharge) Update() *CycleRechargeUpdateOne {
-	return NewCycleRechargeClient(cr.config).UpdateOne(cr)
+func (_m *CycleRecharge) Update() *CycleRechargeUpdateOne {
+	return NewCycleRechargeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CycleRecharge entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cr *CycleRecharge) Unwrap() *CycleRecharge {
-	_tx, ok := cr.config.driver.(*txDriver)
+func (_m *CycleRecharge) Unwrap() *CycleRecharge {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CycleRecharge is not a transactional entity")
 	}
-	cr.config.driver = _tx.drv
-	return cr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cr *CycleRecharge) String() string {
+func (_m *CycleRecharge) String() string {
 	var builder strings.Builder
 	builder.WriteString("CycleRecharge(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", cr.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("out_trade_no=")
-	builder.WriteString(cr.OutTradeNo)
+	builder.WriteString(_m.OutTradeNo)
 	builder.WriteString(", ")
 	builder.WriteString("alipay_trade_no=")
-	builder.WriteString(cr.AlipayTradeNo)
+	builder.WriteString(_m.AlipayTradeNo)
 	builder.WriteString(", ")
 	builder.WriteString("recharge_channel=")
-	builder.WriteString(fmt.Sprintf("%v", cr.RechargeChannel))
+	builder.WriteString(fmt.Sprintf("%v", _m.RechargeChannel))
 	builder.WriteString(", ")
 	builder.WriteString("redeem_code=")
-	builder.WriteString(cr.RedeemCode)
+	builder.WriteString(_m.RedeemCode)
 	builder.WriteString(", ")
 	builder.WriteString("state=")
-	builder.WriteString(cr.State)
+	builder.WriteString(_m.State)
 	builder.WriteString(", ")
 	builder.WriteString("pay_amount=")
-	builder.WriteString(fmt.Sprintf("%v", cr.PayAmount))
+	builder.WriteString(fmt.Sprintf("%v", _m.PayAmount))
 	builder.WriteString(", ")
 	builder.WriteString("total_amount=")
-	builder.WriteString(fmt.Sprintf("%v", cr.TotalAmount))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalAmount))
 	builder.WriteString(", ")
 	builder.WriteString("buy_cycle=")
-	builder.WriteString(fmt.Sprintf("%v", cr.BuyCycle))
+	builder.WriteString(fmt.Sprintf("%v", _m.BuyCycle))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(cr.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(cr.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

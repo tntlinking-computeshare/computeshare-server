@@ -23,102 +23,150 @@ type UserUpdate struct {
 }
 
 // Where appends a list predicates to the UserUpdate builder.
-func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
-	uu.mutation.Where(ps...)
-	return uu
+func (_u *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUsername sets the "username" field.
-func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
-	uu.mutation.SetUsername(s)
-	return uu
+func (_u *UserUpdate) SetUsername(v string) *UserUpdate {
+	_u.mutation.SetUsername(v)
+	return _u
+}
+
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableUsername(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetUsername(*v)
+	}
+	return _u
 }
 
 // SetCountryCallCoding sets the "country_call_coding" field.
-func (uu *UserUpdate) SetCountryCallCoding(s string) *UserUpdate {
-	uu.mutation.SetCountryCallCoding(s)
-	return uu
+func (_u *UserUpdate) SetCountryCallCoding(v string) *UserUpdate {
+	_u.mutation.SetCountryCallCoding(v)
+	return _u
+}
+
+// SetNillableCountryCallCoding sets the "country_call_coding" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableCountryCallCoding(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetCountryCallCoding(*v)
+	}
+	return _u
 }
 
 // SetTelephoneNumber sets the "telephone_number" field.
-func (uu *UserUpdate) SetTelephoneNumber(s string) *UserUpdate {
-	uu.mutation.SetTelephoneNumber(s)
-	return uu
+func (_u *UserUpdate) SetTelephoneNumber(v string) *UserUpdate {
+	_u.mutation.SetTelephoneNumber(v)
+	return _u
+}
+
+// SetNillableTelephoneNumber sets the "telephone_number" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableTelephoneNumber(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetTelephoneNumber(*v)
+	}
+	return _u
 }
 
 // SetPassword sets the "password" field.
-func (uu *UserUpdate) SetPassword(s string) *UserUpdate {
-	uu.mutation.SetPassword(s)
-	return uu
+func (_u *UserUpdate) SetPassword(v string) *UserUpdate {
+	_u.mutation.SetPassword(v)
+	return _u
+}
+
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (_u *UserUpdate) SetNillablePassword(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetPassword(*v)
+	}
+	return _u
 }
 
 // SetCreateDate sets the "create_date" field.
-func (uu *UserUpdate) SetCreateDate(t time.Time) *UserUpdate {
-	uu.mutation.SetCreateDate(t)
-	return uu
+func (_u *UserUpdate) SetCreateDate(v time.Time) *UserUpdate {
+	_u.mutation.SetCreateDate(v)
+	return _u
 }
 
 // SetNillableCreateDate sets the "create_date" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableCreateDate(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetCreateDate(*t)
+func (_u *UserUpdate) SetNillableCreateDate(v *time.Time) *UserUpdate {
+	if v != nil {
+		_u.SetCreateDate(*v)
 	}
-	return uu
+	return _u
 }
 
 // SetLastLoginDate sets the "last_login_date" field.
-func (uu *UserUpdate) SetLastLoginDate(t time.Time) *UserUpdate {
-	uu.mutation.SetLastLoginDate(t)
-	return uu
+func (_u *UserUpdate) SetLastLoginDate(v time.Time) *UserUpdate {
+	_u.mutation.SetLastLoginDate(v)
+	return _u
 }
 
 // SetNillableLastLoginDate sets the "last_login_date" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableLastLoginDate(t *time.Time) *UserUpdate {
-	if t != nil {
-		uu.SetLastLoginDate(*t)
+func (_u *UserUpdate) SetNillableLastLoginDate(v *time.Time) *UserUpdate {
+	if v != nil {
+		_u.SetLastLoginDate(*v)
 	}
-	return uu
+	return _u
 }
 
 // SetName sets the "name" field.
-func (uu *UserUpdate) SetName(s string) *UserUpdate {
-	uu.mutation.SetName(s)
-	return uu
+func (_u *UserUpdate) SetName(v string) *UserUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableName(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (uu *UserUpdate) SetIcon(s string) *UserUpdate {
-	uu.mutation.SetIcon(s)
-	return uu
+func (_u *UserUpdate) SetIcon(v string) *UserUpdate {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableIcon(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
 }
 
 // SetPwdConfig sets the "pwd_config" field.
-func (uu *UserUpdate) SetPwdConfig(b bool) *UserUpdate {
-	uu.mutation.SetPwdConfig(b)
-	return uu
+func (_u *UserUpdate) SetPwdConfig(v bool) *UserUpdate {
+	_u.mutation.SetPwdConfig(v)
+	return _u
 }
 
 // SetNillablePwdConfig sets the "pwd_config" field if the given value is not nil.
-func (uu *UserUpdate) SetNillablePwdConfig(b *bool) *UserUpdate {
-	if b != nil {
-		uu.SetPwdConfig(*b)
+func (_u *UserUpdate) SetNillablePwdConfig(v *bool) *UserUpdate {
+	if v != nil {
+		_u.SetPwdConfig(*v)
 	}
-	return uu
+	return _u
 }
 
 // Mutation returns the UserMutation object of the builder.
-func (uu *UserUpdate) Mutation() *UserMutation {
-	return uu.mutation
+func (_u *UserUpdate) Mutation() *UserMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, uu.sqlSave, uu.mutation, uu.hooks)
+func (_u *UserUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (uu *UserUpdate) SaveX(ctx context.Context) int {
-	affected, err := uu.Save(ctx)
+func (_u *UserUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -126,41 +174,41 @@ func (uu *UserUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (uu *UserUpdate) Exec(ctx context.Context) error {
-	_, err := uu.Save(ctx)
+func (_u *UserUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uu *UserUpdate) ExecX(ctx context.Context) {
-	if err := uu.Exec(ctx); err != nil {
+func (_u *UserUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (uu *UserUpdate) check() error {
-	if v, ok := uu.mutation.Username(); ok {
+func (_u *UserUpdate) check() error {
+	if v, ok := _u.mutation.Username(); ok {
 		if err := user.UsernameValidator(v); err != nil {
 			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.CountryCallCoding(); ok {
+	if v, ok := _u.mutation.CountryCallCoding(); ok {
 		if err := user.CountryCallCodingValidator(v); err != nil {
 			return &ValidationError{Name: "country_call_coding", err: fmt.Errorf(`ent: validator failed for field "User.country_call_coding": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.TelephoneNumber(); ok {
+	if v, ok := _u.mutation.TelephoneNumber(); ok {
 		if err := user.TelephoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "telephone_number", err: fmt.Errorf(`ent: validator failed for field "User.telephone_number": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.Password(); ok {
+	if v, ok := _u.mutation.Password(); ok {
 		if err := user.PasswordValidator(v); err != nil {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := user.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "User.name": %w`, err)}
 		}
@@ -168,46 +216,46 @@ func (uu *UserUpdate) check() error {
 	return nil
 }
 
-func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := uu.check(); err != nil {
-		return n, err
+func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
-	if ps := uu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := uu.mutation.Username(); ok {
+	if value, ok := _u.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.CountryCallCoding(); ok {
+	if value, ok := _u.mutation.CountryCallCoding(); ok {
 		_spec.SetField(user.FieldCountryCallCoding, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.TelephoneNumber(); ok {
+	if value, ok := _u.mutation.TelephoneNumber(); ok {
 		_spec.SetField(user.FieldTelephoneNumber, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.Password(); ok {
+	if value, ok := _u.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.CreateDate(); ok {
+	if value, ok := _u.mutation.CreateDate(); ok {
 		_spec.SetField(user.FieldCreateDate, field.TypeTime, value)
 	}
-	if value, ok := uu.mutation.LastLoginDate(); ok {
+	if value, ok := _u.mutation.LastLoginDate(); ok {
 		_spec.SetField(user.FieldLastLoginDate, field.TypeTime, value)
 	}
-	if value, ok := uu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(user.FieldIcon, field.TypeString, value)
 	}
-	if value, ok := uu.mutation.PwdConfig(); ok {
+	if value, ok := _u.mutation.PwdConfig(); ok {
 		_spec.SetField(user.FieldPwdConfig, field.TypeBool, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -215,8 +263,8 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	uu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // UserUpdateOne is the builder for updating a single User entity.
@@ -228,109 +276,157 @@ type UserUpdateOne struct {
 }
 
 // SetUsername sets the "username" field.
-func (uuo *UserUpdateOne) SetUsername(s string) *UserUpdateOne {
-	uuo.mutation.SetUsername(s)
-	return uuo
+func (_u *UserUpdateOne) SetUsername(v string) *UserUpdateOne {
+	_u.mutation.SetUsername(v)
+	return _u
+}
+
+// SetNillableUsername sets the "username" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableUsername(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetUsername(*v)
+	}
+	return _u
 }
 
 // SetCountryCallCoding sets the "country_call_coding" field.
-func (uuo *UserUpdateOne) SetCountryCallCoding(s string) *UserUpdateOne {
-	uuo.mutation.SetCountryCallCoding(s)
-	return uuo
+func (_u *UserUpdateOne) SetCountryCallCoding(v string) *UserUpdateOne {
+	_u.mutation.SetCountryCallCoding(v)
+	return _u
+}
+
+// SetNillableCountryCallCoding sets the "country_call_coding" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableCountryCallCoding(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetCountryCallCoding(*v)
+	}
+	return _u
 }
 
 // SetTelephoneNumber sets the "telephone_number" field.
-func (uuo *UserUpdateOne) SetTelephoneNumber(s string) *UserUpdateOne {
-	uuo.mutation.SetTelephoneNumber(s)
-	return uuo
+func (_u *UserUpdateOne) SetTelephoneNumber(v string) *UserUpdateOne {
+	_u.mutation.SetTelephoneNumber(v)
+	return _u
+}
+
+// SetNillableTelephoneNumber sets the "telephone_number" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableTelephoneNumber(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetTelephoneNumber(*v)
+	}
+	return _u
 }
 
 // SetPassword sets the "password" field.
-func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
-	uuo.mutation.SetPassword(s)
-	return uuo
+func (_u *UserUpdateOne) SetPassword(v string) *UserUpdateOne {
+	_u.mutation.SetPassword(v)
+	return _u
+}
+
+// SetNillablePassword sets the "password" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillablePassword(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetPassword(*v)
+	}
+	return _u
 }
 
 // SetCreateDate sets the "create_date" field.
-func (uuo *UserUpdateOne) SetCreateDate(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetCreateDate(t)
-	return uuo
+func (_u *UserUpdateOne) SetCreateDate(v time.Time) *UserUpdateOne {
+	_u.mutation.SetCreateDate(v)
+	return _u
 }
 
 // SetNillableCreateDate sets the "create_date" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableCreateDate(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetCreateDate(*t)
+func (_u *UserUpdateOne) SetNillableCreateDate(v *time.Time) *UserUpdateOne {
+	if v != nil {
+		_u.SetCreateDate(*v)
 	}
-	return uuo
+	return _u
 }
 
 // SetLastLoginDate sets the "last_login_date" field.
-func (uuo *UserUpdateOne) SetLastLoginDate(t time.Time) *UserUpdateOne {
-	uuo.mutation.SetLastLoginDate(t)
-	return uuo
+func (_u *UserUpdateOne) SetLastLoginDate(v time.Time) *UserUpdateOne {
+	_u.mutation.SetLastLoginDate(v)
+	return _u
 }
 
 // SetNillableLastLoginDate sets the "last_login_date" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableLastLoginDate(t *time.Time) *UserUpdateOne {
-	if t != nil {
-		uuo.SetLastLoginDate(*t)
+func (_u *UserUpdateOne) SetNillableLastLoginDate(v *time.Time) *UserUpdateOne {
+	if v != nil {
+		_u.SetLastLoginDate(*v)
 	}
-	return uuo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
-	uuo.mutation.SetName(s)
-	return uuo
+func (_u *UserUpdateOne) SetName(v string) *UserUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableName(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetIcon sets the "icon" field.
-func (uuo *UserUpdateOne) SetIcon(s string) *UserUpdateOne {
-	uuo.mutation.SetIcon(s)
-	return uuo
+func (_u *UserUpdateOne) SetIcon(v string) *UserUpdateOne {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableIcon(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
 }
 
 // SetPwdConfig sets the "pwd_config" field.
-func (uuo *UserUpdateOne) SetPwdConfig(b bool) *UserUpdateOne {
-	uuo.mutation.SetPwdConfig(b)
-	return uuo
+func (_u *UserUpdateOne) SetPwdConfig(v bool) *UserUpdateOne {
+	_u.mutation.SetPwdConfig(v)
+	return _u
 }
 
 // SetNillablePwdConfig sets the "pwd_config" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillablePwdConfig(b *bool) *UserUpdateOne {
-	if b != nil {
-		uuo.SetPwdConfig(*b)
+func (_u *UserUpdateOne) SetNillablePwdConfig(v *bool) *UserUpdateOne {
+	if v != nil {
+		_u.SetPwdConfig(*v)
 	}
-	return uuo
+	return _u
 }
 
 // Mutation returns the UserMutation object of the builder.
-func (uuo *UserUpdateOne) Mutation() *UserMutation {
-	return uuo.mutation
+func (_u *UserUpdateOne) Mutation() *UserMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the UserUpdate builder.
-func (uuo *UserUpdateOne) Where(ps ...predicate.User) *UserUpdateOne {
-	uuo.mutation.Where(ps...)
-	return uuo
+func (_u *UserUpdateOne) Where(ps ...predicate.User) *UserUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (uuo *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne {
-	uuo.fields = append([]string{field}, fields...)
-	return uuo
+func (_u *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated User entity.
-func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
-	return withHooks(ctx, uuo.sqlSave, uuo.mutation, uuo.hooks)
+func (_u *UserUpdateOne) Save(ctx context.Context) (*User, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (uuo *UserUpdateOne) SaveX(ctx context.Context) *User {
-	node, err := uuo.Save(ctx)
+func (_u *UserUpdateOne) SaveX(ctx context.Context) *User {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -338,41 +434,41 @@ func (uuo *UserUpdateOne) SaveX(ctx context.Context) *User {
 }
 
 // Exec executes the query on the entity.
-func (uuo *UserUpdateOne) Exec(ctx context.Context) error {
-	_, err := uuo.Save(ctx)
+func (_u *UserUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
-	if err := uuo.Exec(ctx); err != nil {
+func (_u *UserUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (uuo *UserUpdateOne) check() error {
-	if v, ok := uuo.mutation.Username(); ok {
+func (_u *UserUpdateOne) check() error {
+	if v, ok := _u.mutation.Username(); ok {
 		if err := user.UsernameValidator(v); err != nil {
 			return &ValidationError{Name: "username", err: fmt.Errorf(`ent: validator failed for field "User.username": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.CountryCallCoding(); ok {
+	if v, ok := _u.mutation.CountryCallCoding(); ok {
 		if err := user.CountryCallCodingValidator(v); err != nil {
 			return &ValidationError{Name: "country_call_coding", err: fmt.Errorf(`ent: validator failed for field "User.country_call_coding": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.TelephoneNumber(); ok {
+	if v, ok := _u.mutation.TelephoneNumber(); ok {
 		if err := user.TelephoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "telephone_number", err: fmt.Errorf(`ent: validator failed for field "User.telephone_number": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.Password(); ok {
+	if v, ok := _u.mutation.Password(); ok {
 		if err := user.PasswordValidator(v); err != nil {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := user.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "User.name": %w`, err)}
 		}
@@ -380,17 +476,17 @@ func (uuo *UserUpdateOne) check() error {
 	return nil
 }
 
-func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
-	if err := uuo.check(); err != nil {
+func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
-	id, ok := uuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := uuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, user.FieldID)
 		for _, f := range fields {
@@ -402,44 +498,44 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			}
 		}
 	}
-	if ps := uuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := uuo.mutation.Username(); ok {
+	if value, ok := _u.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.CountryCallCoding(); ok {
+	if value, ok := _u.mutation.CountryCallCoding(); ok {
 		_spec.SetField(user.FieldCountryCallCoding, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.TelephoneNumber(); ok {
+	if value, ok := _u.mutation.TelephoneNumber(); ok {
 		_spec.SetField(user.FieldTelephoneNumber, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.Password(); ok {
+	if value, ok := _u.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.CreateDate(); ok {
+	if value, ok := _u.mutation.CreateDate(); ok {
 		_spec.SetField(user.FieldCreateDate, field.TypeTime, value)
 	}
-	if value, ok := uuo.mutation.LastLoginDate(); ok {
+	if value, ok := _u.mutation.LastLoginDate(); ok {
 		_spec.SetField(user.FieldLastLoginDate, field.TypeTime, value)
 	}
-	if value, ok := uuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.Icon(); ok {
+	if value, ok := _u.mutation.Icon(); ok {
 		_spec.SetField(user.FieldIcon, field.TypeString, value)
 	}
-	if value, ok := uuo.mutation.PwdConfig(); ok {
+	if value, ok := _u.mutation.PwdConfig(); ok {
 		_spec.SetField(user.FieldPwdConfig, field.TypeBool, value)
 	}
-	_node = &User{config: uuo.config}
+	_node = &User{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, uuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -447,6 +543,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		return nil, err
 	}
-	uuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

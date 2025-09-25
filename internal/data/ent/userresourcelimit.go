@@ -46,7 +46,7 @@ func (*UserResourceLimit) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the UserResourceLimit fields.
-func (url *UserResourceLimit) assignValues(columns []string, values []any) error {
+func (_m *UserResourceLimit) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -56,34 +56,34 @@ func (url *UserResourceLimit) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				url.ID = *value
+				_m.ID = *value
 			}
 		case userresourcelimit.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				url.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case userresourcelimit.FieldMaxCPU:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field max_cpu", values[i])
 			} else if value.Valid {
-				url.MaxCPU = int32(value.Int64)
+				_m.MaxCPU = int32(value.Int64)
 			}
 		case userresourcelimit.FieldMaxMemory:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field max_memory", values[i])
 			} else if value.Valid {
-				url.MaxMemory = int32(value.Int64)
+				_m.MaxMemory = int32(value.Int64)
 			}
 		case userresourcelimit.FieldMaxNetworkMapping:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field max_network_mapping", values[i])
 			} else if value.Valid {
-				url.MaxNetworkMapping = int32(value.Int64)
+				_m.MaxNetworkMapping = int32(value.Int64)
 			}
 		default:
-			url.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -91,44 +91,44 @@ func (url *UserResourceLimit) assignValues(columns []string, values []any) error
 
 // Value returns the ent.Value that was dynamically selected and assigned to the UserResourceLimit.
 // This includes values selected through modifiers, order, etc.
-func (url *UserResourceLimit) Value(name string) (ent.Value, error) {
-	return url.selectValues.Get(name)
+func (_m *UserResourceLimit) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this UserResourceLimit.
 // Note that you need to call UserResourceLimit.Unwrap() before calling this method if this UserResourceLimit
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (url *UserResourceLimit) Update() *UserResourceLimitUpdateOne {
-	return NewUserResourceLimitClient(url.config).UpdateOne(url)
+func (_m *UserResourceLimit) Update() *UserResourceLimitUpdateOne {
+	return NewUserResourceLimitClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the UserResourceLimit entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (url *UserResourceLimit) Unwrap() *UserResourceLimit {
-	_tx, ok := url.config.driver.(*txDriver)
+func (_m *UserResourceLimit) Unwrap() *UserResourceLimit {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: UserResourceLimit is not a transactional entity")
 	}
-	url.config.driver = _tx.drv
-	return url
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (url *UserResourceLimit) String() string {
+func (_m *UserResourceLimit) String() string {
 	var builder strings.Builder
 	builder.WriteString("UserResourceLimit(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", url.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", url.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("max_cpu=")
-	builder.WriteString(fmt.Sprintf("%v", url.MaxCPU))
+	builder.WriteString(fmt.Sprintf("%v", _m.MaxCPU))
 	builder.WriteString(", ")
 	builder.WriteString("max_memory=")
-	builder.WriteString(fmt.Sprintf("%v", url.MaxMemory))
+	builder.WriteString(fmt.Sprintf("%v", _m.MaxMemory))
 	builder.WriteString(", ")
 	builder.WriteString("max_network_mapping=")
-	builder.WriteString(fmt.Sprintf("%v", url.MaxNetworkMapping))
+	builder.WriteString(fmt.Sprintf("%v", _m.MaxNetworkMapping))
 	builder.WriteByte(')')
 	return builder.String()
 }

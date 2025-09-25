@@ -20,56 +20,56 @@ type CycleRedeemCodeDelete struct {
 }
 
 // Where appends a list predicates to the CycleRedeemCodeDelete builder.
-func (crcd *CycleRedeemCodeDelete) Where(ps ...predicate.CycleRedeemCode) *CycleRedeemCodeDelete {
-	crcd.mutation.Where(ps...)
-	return crcd
+func (_d *CycleRedeemCodeDelete) Where(ps ...predicate.CycleRedeemCode) *CycleRedeemCodeDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (crcd *CycleRedeemCodeDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, crcd.sqlExec, crcd.mutation, crcd.hooks)
+func (_d *CycleRedeemCodeDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crcd *CycleRedeemCodeDelete) ExecX(ctx context.Context) int {
-	n, err := crcd.Exec(ctx)
+func (_d *CycleRedeemCodeDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (crcd *CycleRedeemCodeDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CycleRedeemCodeDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(cycleredeemcode.Table, sqlgraph.NewFieldSpec(cycleredeemcode.FieldID, field.TypeUUID))
-	if ps := crcd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, crcd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	crcd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CycleRedeemCodeDeleteOne is the builder for deleting a single CycleRedeemCode entity.
 type CycleRedeemCodeDeleteOne struct {
-	crcd *CycleRedeemCodeDelete
+	_d *CycleRedeemCodeDelete
 }
 
 // Where appends a list predicates to the CycleRedeemCodeDelete builder.
-func (crcdo *CycleRedeemCodeDeleteOne) Where(ps ...predicate.CycleRedeemCode) *CycleRedeemCodeDeleteOne {
-	crcdo.crcd.mutation.Where(ps...)
-	return crcdo
+func (_d *CycleRedeemCodeDeleteOne) Where(ps ...predicate.CycleRedeemCode) *CycleRedeemCodeDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (crcdo *CycleRedeemCodeDeleteOne) Exec(ctx context.Context) error {
-	n, err := crcdo.crcd.Exec(ctx)
+func (_d *CycleRedeemCodeDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (crcdo *CycleRedeemCodeDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crcdo *CycleRedeemCodeDeleteOne) ExecX(ctx context.Context) {
-	if err := crcdo.Exec(ctx); err != nil {
+func (_d *CycleRedeemCodeDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

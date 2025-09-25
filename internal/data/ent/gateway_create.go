@@ -21,57 +21,57 @@ type GatewayCreate struct {
 }
 
 // SetName sets the "name" field.
-func (gc *GatewayCreate) SetName(s string) *GatewayCreate {
-	gc.mutation.SetName(s)
-	return gc
+func (_c *GatewayCreate) SetName(v string) *GatewayCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetIP sets the "ip" field.
-func (gc *GatewayCreate) SetIP(s string) *GatewayCreate {
-	gc.mutation.SetIP(s)
-	return gc
+func (_c *GatewayCreate) SetIP(v string) *GatewayCreate {
+	_c.mutation.SetIP(v)
+	return _c
 }
 
 // SetPort sets the "port" field.
-func (gc *GatewayCreate) SetPort(i int32) *GatewayCreate {
-	gc.mutation.SetPort(i)
-	return gc
+func (_c *GatewayCreate) SetPort(v int32) *GatewayCreate {
+	_c.mutation.SetPort(v)
+	return _c
 }
 
 // SetInternalIP sets the "internal_ip" field.
-func (gc *GatewayCreate) SetInternalIP(s string) *GatewayCreate {
-	gc.mutation.SetInternalIP(s)
-	return gc
+func (_c *GatewayCreate) SetInternalIP(v string) *GatewayCreate {
+	_c.mutation.SetInternalIP(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gc *GatewayCreate) SetID(u uuid.UUID) *GatewayCreate {
-	gc.mutation.SetID(u)
-	return gc
+func (_c *GatewayCreate) SetID(v uuid.UUID) *GatewayCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gc *GatewayCreate) SetNillableID(u *uuid.UUID) *GatewayCreate {
-	if u != nil {
-		gc.SetID(*u)
+func (_c *GatewayCreate) SetNillableID(v *uuid.UUID) *GatewayCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gc
+	return _c
 }
 
 // Mutation returns the GatewayMutation object of the builder.
-func (gc *GatewayCreate) Mutation() *GatewayMutation {
-	return gc.mutation
+func (_c *GatewayCreate) Mutation() *GatewayMutation {
+	return _c.mutation
 }
 
 // Save creates the Gateway in the database.
-func (gc *GatewayCreate) Save(ctx context.Context) (*Gateway, error) {
-	gc.defaults()
-	return withHooks(ctx, gc.sqlSave, gc.mutation, gc.hooks)
+func (_c *GatewayCreate) Save(ctx context.Context) (*Gateway, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gc *GatewayCreate) SaveX(ctx context.Context) *Gateway {
-	v, err := gc.Save(ctx)
+func (_c *GatewayCreate) SaveX(ctx context.Context) *Gateway {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -79,54 +79,54 @@ func (gc *GatewayCreate) SaveX(ctx context.Context) *Gateway {
 }
 
 // Exec executes the query.
-func (gc *GatewayCreate) Exec(ctx context.Context) error {
-	_, err := gc.Save(ctx)
+func (_c *GatewayCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gc *GatewayCreate) ExecX(ctx context.Context) {
-	if err := gc.Exec(ctx); err != nil {
+func (_c *GatewayCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gc *GatewayCreate) defaults() {
-	if _, ok := gc.mutation.ID(); !ok {
+func (_c *GatewayCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := gateway.DefaultID()
-		gc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gc *GatewayCreate) check() error {
-	if _, ok := gc.mutation.Name(); !ok {
+func (_c *GatewayCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Gateway.name"`)}
 	}
-	if v, ok := gc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := gateway.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Gateway.name": %w`, err)}
 		}
 	}
-	if _, ok := gc.mutation.IP(); !ok {
+	if _, ok := _c.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Gateway.ip"`)}
 	}
-	if _, ok := gc.mutation.Port(); !ok {
+	if _, ok := _c.mutation.Port(); !ok {
 		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "Gateway.port"`)}
 	}
-	if _, ok := gc.mutation.InternalIP(); !ok {
+	if _, ok := _c.mutation.InternalIP(); !ok {
 		return &ValidationError{Name: "internal_ip", err: errors.New(`ent: missing required field "Gateway.internal_ip"`)}
 	}
 	return nil
 }
 
-func (gc *GatewayCreate) sqlSave(ctx context.Context) (*Gateway, error) {
-	if err := gc.check(); err != nil {
+func (_c *GatewayCreate) sqlSave(ctx context.Context) (*Gateway, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -139,33 +139,33 @@ func (gc *GatewayCreate) sqlSave(ctx context.Context) (*Gateway, error) {
 			return nil, err
 		}
 	}
-	gc.mutation.id = &_node.ID
-	gc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gc *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
+func (_c *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Gateway{config: gc.config}
+		_node = &Gateway{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(gateway.Table, sqlgraph.NewFieldSpec(gateway.FieldID, field.TypeUUID))
 	)
-	if id, ok := gc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := gc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(gateway.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := gc.mutation.IP(); ok {
+	if value, ok := _c.mutation.IP(); ok {
 		_spec.SetField(gateway.FieldIP, field.TypeString, value)
 		_node.IP = value
 	}
-	if value, ok := gc.mutation.Port(); ok {
+	if value, ok := _c.mutation.Port(); ok {
 		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 		_node.Port = value
 	}
-	if value, ok := gc.mutation.InternalIP(); ok {
+	if value, ok := _c.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
 		_node.InternalIP = value
 	}
@@ -175,17 +175,21 @@ func (gc *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
 // GatewayCreateBulk is the builder for creating many Gateway entities in bulk.
 type GatewayCreateBulk struct {
 	config
+	err      error
 	builders []*GatewayCreate
 }
 
 // Save creates the Gateway entities in the database.
-func (gcb *GatewayCreateBulk) Save(ctx context.Context) ([]*Gateway, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(gcb.builders))
-	nodes := make([]*Gateway, len(gcb.builders))
-	mutators := make([]Mutator, len(gcb.builders))
-	for i := range gcb.builders {
+func (_c *GatewayCreateBulk) Save(ctx context.Context) ([]*Gateway, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Gateway, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GatewayMutation)
@@ -199,11 +203,11 @@ func (gcb *GatewayCreateBulk) Save(ctx context.Context) ([]*Gateway, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -223,7 +227,7 @@ func (gcb *GatewayCreateBulk) Save(ctx context.Context) ([]*Gateway, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -231,8 +235,8 @@ func (gcb *GatewayCreateBulk) Save(ctx context.Context) ([]*Gateway, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gcb *GatewayCreateBulk) SaveX(ctx context.Context) []*Gateway {
-	v, err := gcb.Save(ctx)
+func (_c *GatewayCreateBulk) SaveX(ctx context.Context) []*Gateway {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,14 +244,14 @@ func (gcb *GatewayCreateBulk) SaveX(ctx context.Context) []*Gateway {
 }
 
 // Exec executes the query.
-func (gcb *GatewayCreateBulk) Exec(ctx context.Context) error {
-	_, err := gcb.Save(ctx)
+func (_c *GatewayCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gcb *GatewayCreateBulk) ExecX(ctx context.Context) {
-	if err := gcb.Exec(ctx); err != nil {
+func (_c *GatewayCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

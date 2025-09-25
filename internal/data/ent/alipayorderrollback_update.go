@@ -23,204 +23,444 @@ type AlipayOrderRollbackUpdate struct {
 }
 
 // Where appends a list predicates to the AlipayOrderRollbackUpdate builder.
-func (aoru *AlipayOrderRollbackUpdate) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackUpdate {
-	aoru.mutation.Where(ps...)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetNotifyID sets the "notify_id" field.
-func (aoru *AlipayOrderRollbackUpdate) SetNotifyID(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetNotifyID(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetNotifyID(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetNotifyID(v)
+	return _u
+}
+
+// SetNillableNotifyID sets the "notify_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableNotifyID(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetNotifyID(*v)
+	}
+	return _u
 }
 
 // SetNotifyType sets the "notify_type" field.
-func (aoru *AlipayOrderRollbackUpdate) SetNotifyType(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetNotifyType(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetNotifyType(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetNotifyType(v)
+	return _u
+}
+
+// SetNillableNotifyType sets the "notify_type" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableNotifyType(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetNotifyType(*v)
+	}
+	return _u
 }
 
 // SetNotifyTime sets the "notify_time" field.
-func (aoru *AlipayOrderRollbackUpdate) SetNotifyTime(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetNotifyTime(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetNotifyTime(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetNotifyTime(v)
+	return _u
+}
+
+// SetNillableNotifyTime sets the "notify_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableNotifyTime(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetNotifyTime(*v)
+	}
+	return _u
 }
 
 // SetCharset sets the "charset" field.
-func (aoru *AlipayOrderRollbackUpdate) SetCharset(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetCharset(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetCharset(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetCharset(v)
+	return _u
+}
+
+// SetNillableCharset sets the "charset" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableCharset(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetCharset(*v)
+	}
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (aoru *AlipayOrderRollbackUpdate) SetVersion(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetVersion(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetVersion(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetVersion(v)
+	return _u
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableVersion(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetVersion(*v)
+	}
+	return _u
 }
 
 // SetSignType sets the "sign_type" field.
-func (aoru *AlipayOrderRollbackUpdate) SetSignType(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetSignType(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetSignType(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetSignType(v)
+	return _u
+}
+
+// SetNillableSignType sets the "sign_type" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableSignType(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetSignType(*v)
+	}
+	return _u
 }
 
 // SetSign sets the "sign" field.
-func (aoru *AlipayOrderRollbackUpdate) SetSign(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetSign(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetSign(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetSign(v)
+	return _u
+}
+
+// SetNillableSign sets the "sign" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableSign(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetSign(*v)
+	}
+	return _u
 }
 
 // SetFundBillList sets the "fund_bill_list" field.
-func (aoru *AlipayOrderRollbackUpdate) SetFundBillList(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetFundBillList(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetFundBillList(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetFundBillList(v)
+	return _u
+}
+
+// SetNillableFundBillList sets the "fund_bill_list" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableFundBillList(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetFundBillList(*v)
+	}
+	return _u
 }
 
 // SetReceiptAmount sets the "receipt_amount" field.
-func (aoru *AlipayOrderRollbackUpdate) SetReceiptAmount(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetReceiptAmount(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetReceiptAmount(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetReceiptAmount(v)
+	return _u
+}
+
+// SetNillableReceiptAmount sets the "receipt_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableReceiptAmount(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetReceiptAmount(*v)
+	}
+	return _u
 }
 
 // SetInvoiceAmount sets the "invoice_amount" field.
-func (aoru *AlipayOrderRollbackUpdate) SetInvoiceAmount(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetInvoiceAmount(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetInvoiceAmount(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetInvoiceAmount(v)
+	return _u
+}
+
+// SetNillableInvoiceAmount sets the "invoice_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableInvoiceAmount(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetInvoiceAmount(*v)
+	}
+	return _u
 }
 
 // SetBuyerPayAmount sets the "buyer_pay_amount" field.
-func (aoru *AlipayOrderRollbackUpdate) SetBuyerPayAmount(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetBuyerPayAmount(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetBuyerPayAmount(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetBuyerPayAmount(v)
+	return _u
+}
+
+// SetNillableBuyerPayAmount sets the "buyer_pay_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableBuyerPayAmount(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetBuyerPayAmount(*v)
+	}
+	return _u
 }
 
 // SetPointAmount sets the "point_amount" field.
-func (aoru *AlipayOrderRollbackUpdate) SetPointAmount(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetPointAmount(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetPointAmount(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetPointAmount(v)
+	return _u
+}
+
+// SetNillablePointAmount sets the "point_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillablePointAmount(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetPointAmount(*v)
+	}
+	return _u
 }
 
 // SetVoucherDetailList sets the "voucher_detail_list" field.
-func (aoru *AlipayOrderRollbackUpdate) SetVoucherDetailList(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetVoucherDetailList(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetVoucherDetailList(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetVoucherDetailList(v)
+	return _u
+}
+
+// SetNillableVoucherDetailList sets the "voucher_detail_list" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableVoucherDetailList(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetVoucherDetailList(*v)
+	}
+	return _u
 }
 
 // SetPassbackParams sets the "passback_params" field.
-func (aoru *AlipayOrderRollbackUpdate) SetPassbackParams(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetPassbackParams(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetPassbackParams(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetPassbackParams(v)
+	return _u
+}
+
+// SetNillablePassbackParams sets the "passback_params" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillablePassbackParams(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetPassbackParams(*v)
+	}
+	return _u
 }
 
 // SetTradeNo sets the "trade_no" field.
-func (aoru *AlipayOrderRollbackUpdate) SetTradeNo(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetTradeNo(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetTradeNo(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetTradeNo(v)
+	return _u
+}
+
+// SetNillableTradeNo sets the "trade_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableTradeNo(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetTradeNo(*v)
+	}
+	return _u
 }
 
 // SetAppID sets the "app_id" field.
-func (aoru *AlipayOrderRollbackUpdate) SetAppID(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetAppID(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetAppID(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetAppID(v)
+	return _u
+}
+
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableAppID(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetAppID(*v)
+	}
+	return _u
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (aoru *AlipayOrderRollbackUpdate) SetOutTradeNo(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetOutTradeNo(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetOutTradeNo(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetOutTradeNo(v)
+	return _u
+}
+
+// SetNillableOutTradeNo sets the "out_trade_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableOutTradeNo(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetOutTradeNo(*v)
+	}
+	return _u
 }
 
 // SetOutBizNo sets the "out_biz_no" field.
-func (aoru *AlipayOrderRollbackUpdate) SetOutBizNo(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetOutBizNo(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetOutBizNo(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetOutBizNo(v)
+	return _u
+}
+
+// SetNillableOutBizNo sets the "out_biz_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableOutBizNo(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetOutBizNo(*v)
+	}
+	return _u
 }
 
 // SetBuyerID sets the "buyer_id" field.
-func (aoru *AlipayOrderRollbackUpdate) SetBuyerID(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetBuyerID(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetBuyerID(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetBuyerID(v)
+	return _u
+}
+
+// SetNillableBuyerID sets the "buyer_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableBuyerID(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetBuyerID(*v)
+	}
+	return _u
 }
 
 // SetSellerID sets the "seller_id" field.
-func (aoru *AlipayOrderRollbackUpdate) SetSellerID(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetSellerID(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetSellerID(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetSellerID(v)
+	return _u
+}
+
+// SetNillableSellerID sets the "seller_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableSellerID(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetSellerID(*v)
+	}
+	return _u
 }
 
 // SetTradeStatus sets the "trade_status" field.
-func (aoru *AlipayOrderRollbackUpdate) SetTradeStatus(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetTradeStatus(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetTradeStatus(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetTradeStatus(v)
+	return _u
+}
+
+// SetNillableTradeStatus sets the "trade_status" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableTradeStatus(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetTradeStatus(*v)
+	}
+	return _u
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (aoru *AlipayOrderRollbackUpdate) SetTotalAmount(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetTotalAmount(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetTotalAmount(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetTotalAmount(v)
+	return _u
+}
+
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableTotalAmount(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetTotalAmount(*v)
+	}
+	return _u
 }
 
 // SetRefundFee sets the "refund_fee" field.
-func (aoru *AlipayOrderRollbackUpdate) SetRefundFee(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetRefundFee(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetRefundFee(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetRefundFee(v)
+	return _u
+}
+
+// SetNillableRefundFee sets the "refund_fee" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableRefundFee(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetRefundFee(*v)
+	}
+	return _u
 }
 
 // SetSubject sets the "subject" field.
-func (aoru *AlipayOrderRollbackUpdate) SetSubject(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetSubject(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetSubject(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetSubject(v)
+	return _u
+}
+
+// SetNillableSubject sets the "subject" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableSubject(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetSubject(*v)
+	}
+	return _u
 }
 
 // SetBody sets the "body" field.
-func (aoru *AlipayOrderRollbackUpdate) SetBody(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetBody(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetBody(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetBody(v)
+	return _u
+}
+
+// SetNillableBody sets the "body" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableBody(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetBody(*v)
+	}
+	return _u
 }
 
 // SetGmtCreate sets the "gmt_create" field.
-func (aoru *AlipayOrderRollbackUpdate) SetGmtCreate(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetGmtCreate(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetGmtCreate(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetGmtCreate(v)
+	return _u
+}
+
+// SetNillableGmtCreate sets the "gmt_create" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableGmtCreate(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetGmtCreate(*v)
+	}
+	return _u
 }
 
 // SetGmtPayment sets the "gmt_payment" field.
-func (aoru *AlipayOrderRollbackUpdate) SetGmtPayment(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetGmtPayment(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetGmtPayment(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetGmtPayment(v)
+	return _u
+}
+
+// SetNillableGmtPayment sets the "gmt_payment" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableGmtPayment(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetGmtPayment(*v)
+	}
+	return _u
 }
 
 // SetGmtClose sets the "gmt_close" field.
-func (aoru *AlipayOrderRollbackUpdate) SetGmtClose(s string) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetGmtClose(s)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetGmtClose(v string) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetGmtClose(v)
+	return _u
+}
+
+// SetNillableGmtClose sets the "gmt_close" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableGmtClose(v *string) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetGmtClose(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (aoru *AlipayOrderRollbackUpdate) SetCreateTime(t time.Time) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetCreateTime(t)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetCreateTime(v time.Time) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableCreateTime(v *time.Time) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (aoru *AlipayOrderRollbackUpdate) SetUpdateTime(t time.Time) *AlipayOrderRollbackUpdate {
-	aoru.mutation.SetUpdateTime(t)
-	return aoru
+func (_u *AlipayOrderRollbackUpdate) SetUpdateTime(v time.Time) *AlipayOrderRollbackUpdate {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdate) SetNillableUpdateTime(v *time.Time) *AlipayOrderRollbackUpdate {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
-func (aoru *AlipayOrderRollbackUpdate) Mutation() *AlipayOrderRollbackMutation {
-	return aoru.mutation
+func (_u *AlipayOrderRollbackUpdate) Mutation() *AlipayOrderRollbackMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (aoru *AlipayOrderRollbackUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, aoru.sqlSave, aoru.mutation, aoru.hooks)
+func (_u *AlipayOrderRollbackUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (aoru *AlipayOrderRollbackUpdate) SaveX(ctx context.Context) int {
-	affected, err := aoru.Save(ctx)
+func (_u *AlipayOrderRollbackUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -228,118 +468,118 @@ func (aoru *AlipayOrderRollbackUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (aoru *AlipayOrderRollbackUpdate) Exec(ctx context.Context) error {
-	_, err := aoru.Save(ctx)
+func (_u *AlipayOrderRollbackUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aoru *AlipayOrderRollbackUpdate) ExecX(ctx context.Context) {
-	if err := aoru.Exec(ctx); err != nil {
+func (_u *AlipayOrderRollbackUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (aoru *AlipayOrderRollbackUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *AlipayOrderRollbackUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(alipayorderrollback.Table, alipayorderrollback.Columns, sqlgraph.NewFieldSpec(alipayorderrollback.FieldID, field.TypeInt))
-	if ps := aoru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := aoru.mutation.NotifyID(); ok {
+	if value, ok := _u.mutation.NotifyID(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyID, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.NotifyType(); ok {
+	if value, ok := _u.mutation.NotifyType(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyType, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.NotifyTime(); ok {
+	if value, ok := _u.mutation.NotifyTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyTime, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.Charset(); ok {
+	if value, ok := _u.mutation.Charset(); ok {
 		_spec.SetField(alipayorderrollback.FieldCharset, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(alipayorderrollback.FieldVersion, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.SignType(); ok {
+	if value, ok := _u.mutation.SignType(); ok {
 		_spec.SetField(alipayorderrollback.FieldSignType, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.Sign(); ok {
+	if value, ok := _u.mutation.Sign(); ok {
 		_spec.SetField(alipayorderrollback.FieldSign, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.FundBillList(); ok {
+	if value, ok := _u.mutation.FundBillList(); ok {
 		_spec.SetField(alipayorderrollback.FieldFundBillList, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.ReceiptAmount(); ok {
+	if value, ok := _u.mutation.ReceiptAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldReceiptAmount, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.InvoiceAmount(); ok {
+	if value, ok := _u.mutation.InvoiceAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldInvoiceAmount, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.BuyerPayAmount(); ok {
+	if value, ok := _u.mutation.BuyerPayAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerPayAmount, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.PointAmount(); ok {
+	if value, ok := _u.mutation.PointAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldPointAmount, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.VoucherDetailList(); ok {
+	if value, ok := _u.mutation.VoucherDetailList(); ok {
 		_spec.SetField(alipayorderrollback.FieldVoucherDetailList, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.PassbackParams(); ok {
+	if value, ok := _u.mutation.PassbackParams(); ok {
 		_spec.SetField(alipayorderrollback.FieldPassbackParams, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.TradeNo(); ok {
+	if value, ok := _u.mutation.TradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeNo, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.AppID(); ok {
+	if value, ok := _u.mutation.AppID(); ok {
 		_spec.SetField(alipayorderrollback.FieldAppID, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.OutTradeNo(); ok {
+	if value, ok := _u.mutation.OutTradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutTradeNo, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.OutBizNo(); ok {
+	if value, ok := _u.mutation.OutBizNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutBizNo, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.BuyerID(); ok {
+	if value, ok := _u.mutation.BuyerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerID, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.SellerID(); ok {
+	if value, ok := _u.mutation.SellerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldSellerID, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.TradeStatus(); ok {
+	if value, ok := _u.mutation.TradeStatus(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeStatus, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.TotalAmount(); ok {
+	if value, ok := _u.mutation.TotalAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldTotalAmount, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.RefundFee(); ok {
+	if value, ok := _u.mutation.RefundFee(); ok {
 		_spec.SetField(alipayorderrollback.FieldRefundFee, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.Subject(); ok {
+	if value, ok := _u.mutation.Subject(); ok {
 		_spec.SetField(alipayorderrollback.FieldSubject, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.Body(); ok {
+	if value, ok := _u.mutation.Body(); ok {
 		_spec.SetField(alipayorderrollback.FieldBody, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.GmtCreate(); ok {
+	if value, ok := _u.mutation.GmtCreate(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtCreate, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.GmtPayment(); ok {
+	if value, ok := _u.mutation.GmtPayment(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtPayment, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.GmtClose(); ok {
+	if value, ok := _u.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
 	}
-	if value, ok := aoru.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := aoru.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, aoru.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{alipayorderrollback.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -347,8 +587,8 @@ func (aoru *AlipayOrderRollbackUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		return 0, err
 	}
-	aoru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AlipayOrderRollbackUpdateOne is the builder for updating a single AlipayOrderRollback entity.
@@ -360,211 +600,451 @@ type AlipayOrderRollbackUpdateOne struct {
 }
 
 // SetNotifyID sets the "notify_id" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetNotifyID(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetNotifyID(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetNotifyID(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetNotifyID(v)
+	return _u
+}
+
+// SetNillableNotifyID sets the "notify_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableNotifyID(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetNotifyID(*v)
+	}
+	return _u
 }
 
 // SetNotifyType sets the "notify_type" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetNotifyType(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetNotifyType(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetNotifyType(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetNotifyType(v)
+	return _u
+}
+
+// SetNillableNotifyType sets the "notify_type" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableNotifyType(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetNotifyType(*v)
+	}
+	return _u
 }
 
 // SetNotifyTime sets the "notify_time" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetNotifyTime(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetNotifyTime(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetNotifyTime(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetNotifyTime(v)
+	return _u
+}
+
+// SetNillableNotifyTime sets the "notify_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableNotifyTime(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetNotifyTime(*v)
+	}
+	return _u
 }
 
 // SetCharset sets the "charset" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetCharset(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetCharset(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetCharset(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetCharset(v)
+	return _u
+}
+
+// SetNillableCharset sets the "charset" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableCharset(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetCharset(*v)
+	}
+	return _u
 }
 
 // SetVersion sets the "version" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetVersion(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetVersion(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetVersion(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetVersion(v)
+	return _u
+}
+
+// SetNillableVersion sets the "version" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableVersion(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetVersion(*v)
+	}
+	return _u
 }
 
 // SetSignType sets the "sign_type" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetSignType(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetSignType(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetSignType(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetSignType(v)
+	return _u
+}
+
+// SetNillableSignType sets the "sign_type" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableSignType(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetSignType(*v)
+	}
+	return _u
 }
 
 // SetSign sets the "sign" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetSign(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetSign(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetSign(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetSign(v)
+	return _u
+}
+
+// SetNillableSign sets the "sign" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableSign(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetSign(*v)
+	}
+	return _u
 }
 
 // SetFundBillList sets the "fund_bill_list" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetFundBillList(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetFundBillList(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetFundBillList(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetFundBillList(v)
+	return _u
+}
+
+// SetNillableFundBillList sets the "fund_bill_list" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableFundBillList(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetFundBillList(*v)
+	}
+	return _u
 }
 
 // SetReceiptAmount sets the "receipt_amount" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetReceiptAmount(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetReceiptAmount(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetReceiptAmount(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetReceiptAmount(v)
+	return _u
+}
+
+// SetNillableReceiptAmount sets the "receipt_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableReceiptAmount(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetReceiptAmount(*v)
+	}
+	return _u
 }
 
 // SetInvoiceAmount sets the "invoice_amount" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetInvoiceAmount(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetInvoiceAmount(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetInvoiceAmount(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetInvoiceAmount(v)
+	return _u
+}
+
+// SetNillableInvoiceAmount sets the "invoice_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableInvoiceAmount(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetInvoiceAmount(*v)
+	}
+	return _u
 }
 
 // SetBuyerPayAmount sets the "buyer_pay_amount" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetBuyerPayAmount(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetBuyerPayAmount(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetBuyerPayAmount(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetBuyerPayAmount(v)
+	return _u
+}
+
+// SetNillableBuyerPayAmount sets the "buyer_pay_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableBuyerPayAmount(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetBuyerPayAmount(*v)
+	}
+	return _u
 }
 
 // SetPointAmount sets the "point_amount" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetPointAmount(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetPointAmount(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetPointAmount(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetPointAmount(v)
+	return _u
+}
+
+// SetNillablePointAmount sets the "point_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillablePointAmount(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetPointAmount(*v)
+	}
+	return _u
 }
 
 // SetVoucherDetailList sets the "voucher_detail_list" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetVoucherDetailList(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetVoucherDetailList(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetVoucherDetailList(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetVoucherDetailList(v)
+	return _u
+}
+
+// SetNillableVoucherDetailList sets the "voucher_detail_list" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableVoucherDetailList(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetVoucherDetailList(*v)
+	}
+	return _u
 }
 
 // SetPassbackParams sets the "passback_params" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetPassbackParams(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetPassbackParams(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetPassbackParams(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetPassbackParams(v)
+	return _u
+}
+
+// SetNillablePassbackParams sets the "passback_params" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillablePassbackParams(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetPassbackParams(*v)
+	}
+	return _u
 }
 
 // SetTradeNo sets the "trade_no" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetTradeNo(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetTradeNo(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetTradeNo(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetTradeNo(v)
+	return _u
+}
+
+// SetNillableTradeNo sets the "trade_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableTradeNo(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetTradeNo(*v)
+	}
+	return _u
 }
 
 // SetAppID sets the "app_id" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetAppID(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetAppID(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetAppID(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetAppID(v)
+	return _u
+}
+
+// SetNillableAppID sets the "app_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableAppID(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetAppID(*v)
+	}
+	return _u
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetOutTradeNo(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetOutTradeNo(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetOutTradeNo(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetOutTradeNo(v)
+	return _u
+}
+
+// SetNillableOutTradeNo sets the "out_trade_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableOutTradeNo(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetOutTradeNo(*v)
+	}
+	return _u
 }
 
 // SetOutBizNo sets the "out_biz_no" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetOutBizNo(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetOutBizNo(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetOutBizNo(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetOutBizNo(v)
+	return _u
+}
+
+// SetNillableOutBizNo sets the "out_biz_no" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableOutBizNo(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetOutBizNo(*v)
+	}
+	return _u
 }
 
 // SetBuyerID sets the "buyer_id" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetBuyerID(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetBuyerID(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetBuyerID(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetBuyerID(v)
+	return _u
+}
+
+// SetNillableBuyerID sets the "buyer_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableBuyerID(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetBuyerID(*v)
+	}
+	return _u
 }
 
 // SetSellerID sets the "seller_id" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetSellerID(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetSellerID(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetSellerID(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetSellerID(v)
+	return _u
+}
+
+// SetNillableSellerID sets the "seller_id" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableSellerID(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetSellerID(*v)
+	}
+	return _u
 }
 
 // SetTradeStatus sets the "trade_status" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetTradeStatus(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetTradeStatus(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetTradeStatus(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetTradeStatus(v)
+	return _u
+}
+
+// SetNillableTradeStatus sets the "trade_status" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableTradeStatus(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetTradeStatus(*v)
+	}
+	return _u
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetTotalAmount(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetTotalAmount(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetTotalAmount(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetTotalAmount(v)
+	return _u
+}
+
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableTotalAmount(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetTotalAmount(*v)
+	}
+	return _u
 }
 
 // SetRefundFee sets the "refund_fee" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetRefundFee(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetRefundFee(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetRefundFee(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetRefundFee(v)
+	return _u
+}
+
+// SetNillableRefundFee sets the "refund_fee" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableRefundFee(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetRefundFee(*v)
+	}
+	return _u
 }
 
 // SetSubject sets the "subject" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetSubject(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetSubject(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetSubject(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetSubject(v)
+	return _u
+}
+
+// SetNillableSubject sets the "subject" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableSubject(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetSubject(*v)
+	}
+	return _u
 }
 
 // SetBody sets the "body" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetBody(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetBody(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetBody(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetBody(v)
+	return _u
+}
+
+// SetNillableBody sets the "body" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableBody(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetBody(*v)
+	}
+	return _u
 }
 
 // SetGmtCreate sets the "gmt_create" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetGmtCreate(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetGmtCreate(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetGmtCreate(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetGmtCreate(v)
+	return _u
+}
+
+// SetNillableGmtCreate sets the "gmt_create" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableGmtCreate(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetGmtCreate(*v)
+	}
+	return _u
 }
 
 // SetGmtPayment sets the "gmt_payment" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetGmtPayment(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetGmtPayment(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetGmtPayment(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetGmtPayment(v)
+	return _u
+}
+
+// SetNillableGmtPayment sets the "gmt_payment" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableGmtPayment(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetGmtPayment(*v)
+	}
+	return _u
 }
 
 // SetGmtClose sets the "gmt_close" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetGmtClose(s string) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetGmtClose(s)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetGmtClose(v string) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetGmtClose(v)
+	return _u
+}
+
+// SetNillableGmtClose sets the "gmt_close" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableGmtClose(v *string) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetGmtClose(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetCreateTime(t time.Time) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetCreateTime(t)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetCreateTime(v time.Time) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableCreateTime(v *time.Time) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (aoruo *AlipayOrderRollbackUpdateOne) SetUpdateTime(t time.Time) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.SetUpdateTime(t)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) SetUpdateTime(v time.Time) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *AlipayOrderRollbackUpdateOne) SetNillableUpdateTime(v *time.Time) *AlipayOrderRollbackUpdateOne {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
-func (aoruo *AlipayOrderRollbackUpdateOne) Mutation() *AlipayOrderRollbackMutation {
-	return aoruo.mutation
+func (_u *AlipayOrderRollbackUpdateOne) Mutation() *AlipayOrderRollbackMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the AlipayOrderRollbackUpdate builder.
-func (aoruo *AlipayOrderRollbackUpdateOne) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackUpdateOne {
-	aoruo.mutation.Where(ps...)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (aoruo *AlipayOrderRollbackUpdateOne) Select(field string, fields ...string) *AlipayOrderRollbackUpdateOne {
-	aoruo.fields = append([]string{field}, fields...)
-	return aoruo
+func (_u *AlipayOrderRollbackUpdateOne) Select(field string, fields ...string) *AlipayOrderRollbackUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated AlipayOrderRollback entity.
-func (aoruo *AlipayOrderRollbackUpdateOne) Save(ctx context.Context) (*AlipayOrderRollback, error) {
-	return withHooks(ctx, aoruo.sqlSave, aoruo.mutation, aoruo.hooks)
+func (_u *AlipayOrderRollbackUpdateOne) Save(ctx context.Context) (*AlipayOrderRollback, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (aoruo *AlipayOrderRollbackUpdateOne) SaveX(ctx context.Context) *AlipayOrderRollback {
-	node, err := aoruo.Save(ctx)
+func (_u *AlipayOrderRollbackUpdateOne) SaveX(ctx context.Context) *AlipayOrderRollback {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -572,26 +1052,26 @@ func (aoruo *AlipayOrderRollbackUpdateOne) SaveX(ctx context.Context) *AlipayOrd
 }
 
 // Exec executes the query on the entity.
-func (aoruo *AlipayOrderRollbackUpdateOne) Exec(ctx context.Context) error {
-	_, err := aoruo.Save(ctx)
+func (_u *AlipayOrderRollbackUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aoruo *AlipayOrderRollbackUpdateOne) ExecX(ctx context.Context) {
-	if err := aoruo.Exec(ctx); err != nil {
+func (_u *AlipayOrderRollbackUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (aoruo *AlipayOrderRollbackUpdateOne) sqlSave(ctx context.Context) (_node *AlipayOrderRollback, err error) {
+func (_u *AlipayOrderRollbackUpdateOne) sqlSave(ctx context.Context) (_node *AlipayOrderRollback, err error) {
 	_spec := sqlgraph.NewUpdateSpec(alipayorderrollback.Table, alipayorderrollback.Columns, sqlgraph.NewFieldSpec(alipayorderrollback.FieldID, field.TypeInt))
-	id, ok := aoruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "AlipayOrderRollback.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := aoruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, alipayorderrollback.FieldID)
 		for _, f := range fields {
@@ -603,107 +1083,107 @@ func (aoruo *AlipayOrderRollbackUpdateOne) sqlSave(ctx context.Context) (_node *
 			}
 		}
 	}
-	if ps := aoruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := aoruo.mutation.NotifyID(); ok {
+	if value, ok := _u.mutation.NotifyID(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyID, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.NotifyType(); ok {
+	if value, ok := _u.mutation.NotifyType(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyType, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.NotifyTime(); ok {
+	if value, ok := _u.mutation.NotifyTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyTime, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.Charset(); ok {
+	if value, ok := _u.mutation.Charset(); ok {
 		_spec.SetField(alipayorderrollback.FieldCharset, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.Version(); ok {
+	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(alipayorderrollback.FieldVersion, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.SignType(); ok {
+	if value, ok := _u.mutation.SignType(); ok {
 		_spec.SetField(alipayorderrollback.FieldSignType, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.Sign(); ok {
+	if value, ok := _u.mutation.Sign(); ok {
 		_spec.SetField(alipayorderrollback.FieldSign, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.FundBillList(); ok {
+	if value, ok := _u.mutation.FundBillList(); ok {
 		_spec.SetField(alipayorderrollback.FieldFundBillList, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.ReceiptAmount(); ok {
+	if value, ok := _u.mutation.ReceiptAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldReceiptAmount, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.InvoiceAmount(); ok {
+	if value, ok := _u.mutation.InvoiceAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldInvoiceAmount, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.BuyerPayAmount(); ok {
+	if value, ok := _u.mutation.BuyerPayAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerPayAmount, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.PointAmount(); ok {
+	if value, ok := _u.mutation.PointAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldPointAmount, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.VoucherDetailList(); ok {
+	if value, ok := _u.mutation.VoucherDetailList(); ok {
 		_spec.SetField(alipayorderrollback.FieldVoucherDetailList, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.PassbackParams(); ok {
+	if value, ok := _u.mutation.PassbackParams(); ok {
 		_spec.SetField(alipayorderrollback.FieldPassbackParams, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.TradeNo(); ok {
+	if value, ok := _u.mutation.TradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeNo, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.AppID(); ok {
+	if value, ok := _u.mutation.AppID(); ok {
 		_spec.SetField(alipayorderrollback.FieldAppID, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.OutTradeNo(); ok {
+	if value, ok := _u.mutation.OutTradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutTradeNo, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.OutBizNo(); ok {
+	if value, ok := _u.mutation.OutBizNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutBizNo, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.BuyerID(); ok {
+	if value, ok := _u.mutation.BuyerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerID, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.SellerID(); ok {
+	if value, ok := _u.mutation.SellerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldSellerID, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.TradeStatus(); ok {
+	if value, ok := _u.mutation.TradeStatus(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeStatus, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.TotalAmount(); ok {
+	if value, ok := _u.mutation.TotalAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldTotalAmount, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.RefundFee(); ok {
+	if value, ok := _u.mutation.RefundFee(); ok {
 		_spec.SetField(alipayorderrollback.FieldRefundFee, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.Subject(); ok {
+	if value, ok := _u.mutation.Subject(); ok {
 		_spec.SetField(alipayorderrollback.FieldSubject, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.Body(); ok {
+	if value, ok := _u.mutation.Body(); ok {
 		_spec.SetField(alipayorderrollback.FieldBody, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.GmtCreate(); ok {
+	if value, ok := _u.mutation.GmtCreate(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtCreate, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.GmtPayment(); ok {
+	if value, ok := _u.mutation.GmtPayment(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtPayment, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.GmtClose(); ok {
+	if value, ok := _u.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
 	}
-	if value, ok := aoruo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := aoruo.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
 	}
-	_node = &AlipayOrderRollback{config: aoruo.config}
+	_node = &AlipayOrderRollback{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, aoruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{alipayorderrollback.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -711,6 +1191,6 @@ func (aoruo *AlipayOrderRollbackUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		return nil, err
 	}
-	aoruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

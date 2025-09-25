@@ -21,73 +21,73 @@ type GatewayPortCreate struct {
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpc *GatewayPortCreate) SetFkGatewayID(u uuid.UUID) *GatewayPortCreate {
-	gpc.mutation.SetFkGatewayID(u)
-	return gpc
+func (_c *GatewayPortCreate) SetFkGatewayID(v uuid.UUID) *GatewayPortCreate {
+	_c.mutation.SetFkGatewayID(v)
+	return _c
 }
 
 // SetPort sets the "port" field.
-func (gpc *GatewayPortCreate) SetPort(i int32) *GatewayPortCreate {
-	gpc.mutation.SetPort(i)
-	return gpc
+func (_c *GatewayPortCreate) SetPort(v int32) *GatewayPortCreate {
+	_c.mutation.SetPort(v)
+	return _c
 }
 
 // SetIsUse sets the "is_use" field.
-func (gpc *GatewayPortCreate) SetIsUse(b bool) *GatewayPortCreate {
-	gpc.mutation.SetIsUse(b)
-	return gpc
+func (_c *GatewayPortCreate) SetIsUse(v bool) *GatewayPortCreate {
+	_c.mutation.SetIsUse(v)
+	return _c
 }
 
 // SetNillableIsUse sets the "is_use" field if the given value is not nil.
-func (gpc *GatewayPortCreate) SetNillableIsUse(b *bool) *GatewayPortCreate {
-	if b != nil {
-		gpc.SetIsUse(*b)
+func (_c *GatewayPortCreate) SetNillableIsUse(v *bool) *GatewayPortCreate {
+	if v != nil {
+		_c.SetIsUse(*v)
 	}
-	return gpc
+	return _c
 }
 
 // SetIsPublic sets the "is_public" field.
-func (gpc *GatewayPortCreate) SetIsPublic(b bool) *GatewayPortCreate {
-	gpc.mutation.SetIsPublic(b)
-	return gpc
+func (_c *GatewayPortCreate) SetIsPublic(v bool) *GatewayPortCreate {
+	_c.mutation.SetIsPublic(v)
+	return _c
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (gpc *GatewayPortCreate) SetNillableIsPublic(b *bool) *GatewayPortCreate {
-	if b != nil {
-		gpc.SetIsPublic(*b)
+func (_c *GatewayPortCreate) SetNillableIsPublic(v *bool) *GatewayPortCreate {
+	if v != nil {
+		_c.SetIsPublic(*v)
 	}
-	return gpc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (gpc *GatewayPortCreate) SetID(u uuid.UUID) *GatewayPortCreate {
-	gpc.mutation.SetID(u)
-	return gpc
+func (_c *GatewayPortCreate) SetID(v uuid.UUID) *GatewayPortCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (gpc *GatewayPortCreate) SetNillableID(u *uuid.UUID) *GatewayPortCreate {
-	if u != nil {
-		gpc.SetID(*u)
+func (_c *GatewayPortCreate) SetNillableID(v *uuid.UUID) *GatewayPortCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return gpc
+	return _c
 }
 
 // Mutation returns the GatewayPortMutation object of the builder.
-func (gpc *GatewayPortCreate) Mutation() *GatewayPortMutation {
-	return gpc.mutation
+func (_c *GatewayPortCreate) Mutation() *GatewayPortMutation {
+	return _c.mutation
 }
 
 // Save creates the GatewayPort in the database.
-func (gpc *GatewayPortCreate) Save(ctx context.Context) (*GatewayPort, error) {
-	gpc.defaults()
-	return withHooks(ctx, gpc.sqlSave, gpc.mutation, gpc.hooks)
+func (_c *GatewayPortCreate) Save(ctx context.Context) (*GatewayPort, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (gpc *GatewayPortCreate) SaveX(ctx context.Context) *GatewayPort {
-	v, err := gpc.Save(ctx)
+func (_c *GatewayPortCreate) SaveX(ctx context.Context) *GatewayPort {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -95,57 +95,57 @@ func (gpc *GatewayPortCreate) SaveX(ctx context.Context) *GatewayPort {
 }
 
 // Exec executes the query.
-func (gpc *GatewayPortCreate) Exec(ctx context.Context) error {
-	_, err := gpc.Save(ctx)
+func (_c *GatewayPortCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gpc *GatewayPortCreate) ExecX(ctx context.Context) {
-	if err := gpc.Exec(ctx); err != nil {
+func (_c *GatewayPortCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (gpc *GatewayPortCreate) defaults() {
-	if _, ok := gpc.mutation.IsUse(); !ok {
+func (_c *GatewayPortCreate) defaults() {
+	if _, ok := _c.mutation.IsUse(); !ok {
 		v := gatewayport.DefaultIsUse
-		gpc.mutation.SetIsUse(v)
+		_c.mutation.SetIsUse(v)
 	}
-	if _, ok := gpc.mutation.IsPublic(); !ok {
+	if _, ok := _c.mutation.IsPublic(); !ok {
 		v := gatewayport.DefaultIsPublic
-		gpc.mutation.SetIsPublic(v)
+		_c.mutation.SetIsPublic(v)
 	}
-	if _, ok := gpc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := gatewayport.DefaultID()
-		gpc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gpc *GatewayPortCreate) check() error {
-	if _, ok := gpc.mutation.FkGatewayID(); !ok {
+func (_c *GatewayPortCreate) check() error {
+	if _, ok := _c.mutation.FkGatewayID(); !ok {
 		return &ValidationError{Name: "fk_gateway_id", err: errors.New(`ent: missing required field "GatewayPort.fk_gateway_id"`)}
 	}
-	if _, ok := gpc.mutation.Port(); !ok {
+	if _, ok := _c.mutation.Port(); !ok {
 		return &ValidationError{Name: "port", err: errors.New(`ent: missing required field "GatewayPort.port"`)}
 	}
-	if _, ok := gpc.mutation.IsUse(); !ok {
+	if _, ok := _c.mutation.IsUse(); !ok {
 		return &ValidationError{Name: "is_use", err: errors.New(`ent: missing required field "GatewayPort.is_use"`)}
 	}
-	if _, ok := gpc.mutation.IsPublic(); !ok {
+	if _, ok := _c.mutation.IsPublic(); !ok {
 		return &ValidationError{Name: "is_public", err: errors.New(`ent: missing required field "GatewayPort.is_public"`)}
 	}
 	return nil
 }
 
-func (gpc *GatewayPortCreate) sqlSave(ctx context.Context) (*GatewayPort, error) {
-	if err := gpc.check(); err != nil {
+func (_c *GatewayPortCreate) sqlSave(ctx context.Context) (*GatewayPort, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := gpc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, gpc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -158,33 +158,33 @@ func (gpc *GatewayPortCreate) sqlSave(ctx context.Context) (*GatewayPort, error)
 			return nil, err
 		}
 	}
-	gpc.mutation.id = &_node.ID
-	gpc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (gpc *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) {
+func (_c *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) {
 	var (
-		_node = &GatewayPort{config: gpc.config}
+		_node = &GatewayPort{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(gatewayport.Table, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
 	)
-	if id, ok := gpc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := gpc.mutation.FkGatewayID(); ok {
+	if value, ok := _c.mutation.FkGatewayID(); ok {
 		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 		_node.FkGatewayID = value
 	}
-	if value, ok := gpc.mutation.Port(); ok {
+	if value, ok := _c.mutation.Port(); ok {
 		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 		_node.Port = value
 	}
-	if value, ok := gpc.mutation.IsUse(); ok {
+	if value, ok := _c.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
 		_node.IsUse = value
 	}
-	if value, ok := gpc.mutation.IsPublic(); ok {
+	if value, ok := _c.mutation.IsPublic(); ok {
 		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
 		_node.IsPublic = value
 	}
@@ -194,17 +194,21 @@ func (gpc *GatewayPortCreate) createSpec() (*GatewayPort, *sqlgraph.CreateSpec) 
 // GatewayPortCreateBulk is the builder for creating many GatewayPort entities in bulk.
 type GatewayPortCreateBulk struct {
 	config
+	err      error
 	builders []*GatewayPortCreate
 }
 
 // Save creates the GatewayPort entities in the database.
-func (gpcb *GatewayPortCreateBulk) Save(ctx context.Context) ([]*GatewayPort, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(gpcb.builders))
-	nodes := make([]*GatewayPort, len(gpcb.builders))
-	mutators := make([]Mutator, len(gpcb.builders))
-	for i := range gpcb.builders {
+func (_c *GatewayPortCreateBulk) Save(ctx context.Context) ([]*GatewayPort, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*GatewayPort, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := gpcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*GatewayPortMutation)
@@ -218,11 +222,11 @@ func (gpcb *GatewayPortCreateBulk) Save(ctx context.Context) ([]*GatewayPort, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, gpcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, gpcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -242,7 +246,7 @@ func (gpcb *GatewayPortCreateBulk) Save(ctx context.Context) ([]*GatewayPort, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, gpcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -250,8 +254,8 @@ func (gpcb *GatewayPortCreateBulk) Save(ctx context.Context) ([]*GatewayPort, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gpcb *GatewayPortCreateBulk) SaveX(ctx context.Context) []*GatewayPort {
-	v, err := gpcb.Save(ctx)
+func (_c *GatewayPortCreateBulk) SaveX(ctx context.Context) []*GatewayPort {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -259,14 +263,14 @@ func (gpcb *GatewayPortCreateBulk) SaveX(ctx context.Context) []*GatewayPort {
 }
 
 // Exec executes the query.
-func (gpcb *GatewayPortCreateBulk) Exec(ctx context.Context) error {
-	_, err := gpcb.Save(ctx)
+func (_c *GatewayPortCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gpcb *GatewayPortCreateBulk) ExecX(ctx context.Context) {
-	if err := gpcb.Exec(ctx); err != nil {
+func (_c *GatewayPortCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -24,125 +24,165 @@ type ScriptUpdate struct {
 }
 
 // Where appends a list predicates to the ScriptUpdate builder.
-func (su *ScriptUpdate) Where(ps ...predicate.Script) *ScriptUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *ScriptUpdate) Where(ps ...predicate.Script) *ScriptUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (su *ScriptUpdate) SetUserID(s string) *ScriptUpdate {
-	su.mutation.SetUserID(s)
-	return su
+func (_u *ScriptUpdate) SetUserID(v string) *ScriptUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *ScriptUpdate) SetNillableUserID(v *string) *ScriptUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (su *ScriptUpdate) SetTaskNumber(i int32) *ScriptUpdate {
-	su.mutation.ResetTaskNumber()
-	su.mutation.SetTaskNumber(i)
-	return su
+func (_u *ScriptUpdate) SetTaskNumber(v int32) *ScriptUpdate {
+	_u.mutation.ResetTaskNumber()
+	_u.mutation.SetTaskNumber(v)
+	return _u
 }
 
-// AddTaskNumber adds i to the "task_number" field.
-func (su *ScriptUpdate) AddTaskNumber(i int32) *ScriptUpdate {
-	su.mutation.AddTaskNumber(i)
-	return su
+// SetNillableTaskNumber sets the "task_number" field if the given value is not nil.
+func (_u *ScriptUpdate) SetNillableTaskNumber(v *int32) *ScriptUpdate {
+	if v != nil {
+		_u.SetTaskNumber(*v)
+	}
+	return _u
+}
+
+// AddTaskNumber adds value to the "task_number" field.
+func (_u *ScriptUpdate) AddTaskNumber(v int32) *ScriptUpdate {
+	_u.mutation.AddTaskNumber(v)
+	return _u
 }
 
 // SetScriptName sets the "script_name" field.
-func (su *ScriptUpdate) SetScriptName(s string) *ScriptUpdate {
-	su.mutation.SetScriptName(s)
-	return su
+func (_u *ScriptUpdate) SetScriptName(v string) *ScriptUpdate {
+	_u.mutation.SetScriptName(v)
+	return _u
+}
+
+// SetNillableScriptName sets the "script_name" field if the given value is not nil.
+func (_u *ScriptUpdate) SetNillableScriptName(v *string) *ScriptUpdate {
+	if v != nil {
+		_u.SetScriptName(*v)
+	}
+	return _u
 }
 
 // SetFileAddress sets the "file_address" field.
-func (su *ScriptUpdate) SetFileAddress(s string) *ScriptUpdate {
-	su.mutation.SetFileAddress(s)
-	return su
+func (_u *ScriptUpdate) SetFileAddress(v string) *ScriptUpdate {
+	_u.mutation.SetFileAddress(v)
+	return _u
+}
+
+// SetNillableFileAddress sets the "file_address" field if the given value is not nil.
+func (_u *ScriptUpdate) SetNillableFileAddress(v *string) *ScriptUpdate {
+	if v != nil {
+		_u.SetFileAddress(*v)
+	}
+	return _u
 }
 
 // SetScriptContent sets the "script_content" field.
-func (su *ScriptUpdate) SetScriptContent(s string) *ScriptUpdate {
-	su.mutation.SetScriptContent(s)
-	return su
+func (_u *ScriptUpdate) SetScriptContent(v string) *ScriptUpdate {
+	_u.mutation.SetScriptContent(v)
+	return _u
+}
+
+// SetNillableScriptContent sets the "script_content" field if the given value is not nil.
+func (_u *ScriptUpdate) SetNillableScriptContent(v *string) *ScriptUpdate {
+	if v != nil {
+		_u.SetScriptContent(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (su *ScriptUpdate) SetCreateTime(t time.Time) *ScriptUpdate {
-	su.mutation.SetCreateTime(t)
-	return su
+func (_u *ScriptUpdate) SetCreateTime(v time.Time) *ScriptUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (su *ScriptUpdate) SetNillableCreateTime(t *time.Time) *ScriptUpdate {
-	if t != nil {
-		su.SetCreateTime(*t)
+func (_u *ScriptUpdate) SetNillableCreateTime(v *time.Time) *ScriptUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return su
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (su *ScriptUpdate) SetUpdateTime(t time.Time) *ScriptUpdate {
-	su.mutation.SetUpdateTime(t)
-	return su
+func (_u *ScriptUpdate) SetUpdateTime(v time.Time) *ScriptUpdate {
+	_u.mutation.SetUpdateTime(v)
+	return _u
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (su *ScriptUpdate) SetNillableUpdateTime(t *time.Time) *ScriptUpdate {
-	if t != nil {
-		su.SetUpdateTime(*t)
+func (_u *ScriptUpdate) SetNillableUpdateTime(v *time.Time) *ScriptUpdate {
+	if v != nil {
+		_u.SetUpdateTime(*v)
 	}
-	return su
+	return _u
 }
 
 // AddScriptExecutionRecordIDs adds the "scriptExecutionRecords" edge to the ScriptExecutionRecord entity by IDs.
-func (su *ScriptUpdate) AddScriptExecutionRecordIDs(ids ...int32) *ScriptUpdate {
-	su.mutation.AddScriptExecutionRecordIDs(ids...)
-	return su
+func (_u *ScriptUpdate) AddScriptExecutionRecordIDs(ids ...int32) *ScriptUpdate {
+	_u.mutation.AddScriptExecutionRecordIDs(ids...)
+	return _u
 }
 
 // AddScriptExecutionRecords adds the "scriptExecutionRecords" edges to the ScriptExecutionRecord entity.
-func (su *ScriptUpdate) AddScriptExecutionRecords(s ...*ScriptExecutionRecord) *ScriptUpdate {
-	ids := make([]int32, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScriptUpdate) AddScriptExecutionRecords(v ...*ScriptExecutionRecord) *ScriptUpdate {
+	ids := make([]int32, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.AddScriptExecutionRecordIDs(ids...)
+	return _u.AddScriptExecutionRecordIDs(ids...)
 }
 
 // Mutation returns the ScriptMutation object of the builder.
-func (su *ScriptUpdate) Mutation() *ScriptMutation {
-	return su.mutation
+func (_u *ScriptUpdate) Mutation() *ScriptMutation {
+	return _u.mutation
 }
 
 // ClearScriptExecutionRecords clears all "scriptExecutionRecords" edges to the ScriptExecutionRecord entity.
-func (su *ScriptUpdate) ClearScriptExecutionRecords() *ScriptUpdate {
-	su.mutation.ClearScriptExecutionRecords()
-	return su
+func (_u *ScriptUpdate) ClearScriptExecutionRecords() *ScriptUpdate {
+	_u.mutation.ClearScriptExecutionRecords()
+	return _u
 }
 
 // RemoveScriptExecutionRecordIDs removes the "scriptExecutionRecords" edge to ScriptExecutionRecord entities by IDs.
-func (su *ScriptUpdate) RemoveScriptExecutionRecordIDs(ids ...int32) *ScriptUpdate {
-	su.mutation.RemoveScriptExecutionRecordIDs(ids...)
-	return su
+func (_u *ScriptUpdate) RemoveScriptExecutionRecordIDs(ids ...int32) *ScriptUpdate {
+	_u.mutation.RemoveScriptExecutionRecordIDs(ids...)
+	return _u
 }
 
 // RemoveScriptExecutionRecords removes "scriptExecutionRecords" edges to ScriptExecutionRecord entities.
-func (su *ScriptUpdate) RemoveScriptExecutionRecords(s ...*ScriptExecutionRecord) *ScriptUpdate {
-	ids := make([]int32, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScriptUpdate) RemoveScriptExecutionRecords(v ...*ScriptExecutionRecord) *ScriptUpdate {
+	ids := make([]int32, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return su.RemoveScriptExecutionRecordIDs(ids...)
+	return _u.RemoveScriptExecutionRecordIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *ScriptUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+func (_u *ScriptUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *ScriptUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *ScriptUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -150,31 +190,31 @@ func (su *ScriptUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *ScriptUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *ScriptUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *ScriptUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *ScriptUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *ScriptUpdate) check() error {
-	if v, ok := su.mutation.TaskNumber(); ok {
+func (_u *ScriptUpdate) check() error {
+	if v, ok := _u.mutation.TaskNumber(); ok {
 		if err := script.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "Script.task_number": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.ScriptName(); ok {
+	if v, ok := _u.mutation.ScriptName(); ok {
 		if err := script.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "Script.script_name": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.ScriptContent(); ok {
+	if v, ok := _u.mutation.ScriptContent(); ok {
 		if err := script.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "Script.script_content": %w`, err)}
 		}
@@ -182,43 +222,43 @@ func (su *ScriptUpdate) check() error {
 	return nil
 }
 
-func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *ScriptUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(script.Table, script.Columns, sqlgraph.NewFieldSpec(script.FieldID, field.TypeInt32))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := su.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(script.FieldUserID, field.TypeString, value)
 	}
-	if value, ok := su.mutation.TaskNumber(); ok {
+	if value, ok := _u.mutation.TaskNumber(); ok {
 		_spec.SetField(script.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.AddedTaskNumber(); ok {
+	if value, ok := _u.mutation.AddedTaskNumber(); ok {
 		_spec.AddField(script.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.ScriptName(); ok {
+	if value, ok := _u.mutation.ScriptName(); ok {
 		_spec.SetField(script.FieldScriptName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.FileAddress(); ok {
+	if value, ok := _u.mutation.FileAddress(); ok {
 		_spec.SetField(script.FieldFileAddress, field.TypeString, value)
 	}
-	if value, ok := su.mutation.ScriptContent(); ok {
+	if value, ok := _u.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
 	}
-	if value, ok := su.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := su.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(script.FieldUpdateTime, field.TypeTime, value)
 	}
-	if su.mutation.ScriptExecutionRecordsCleared() {
+	if _u.mutation.ScriptExecutionRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -231,7 +271,7 @@ func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.RemovedScriptExecutionRecordsIDs(); len(nodes) > 0 && !su.mutation.ScriptExecutionRecordsCleared() {
+	if nodes := _u.mutation.RemovedScriptExecutionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ScriptExecutionRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -247,7 +287,7 @@ func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -263,7 +303,7 @@ func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{script.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -271,8 +311,8 @@ func (su *ScriptUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScriptUpdateOne is the builder for updating a single Script entity.
@@ -284,132 +324,172 @@ type ScriptUpdateOne struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (suo *ScriptUpdateOne) SetUserID(s string) *ScriptUpdateOne {
-	suo.mutation.SetUserID(s)
-	return suo
+func (_u *ScriptUpdateOne) SetUserID(v string) *ScriptUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *ScriptUpdateOne) SetNillableUserID(v *string) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (suo *ScriptUpdateOne) SetTaskNumber(i int32) *ScriptUpdateOne {
-	suo.mutation.ResetTaskNumber()
-	suo.mutation.SetTaskNumber(i)
-	return suo
+func (_u *ScriptUpdateOne) SetTaskNumber(v int32) *ScriptUpdateOne {
+	_u.mutation.ResetTaskNumber()
+	_u.mutation.SetTaskNumber(v)
+	return _u
 }
 
-// AddTaskNumber adds i to the "task_number" field.
-func (suo *ScriptUpdateOne) AddTaskNumber(i int32) *ScriptUpdateOne {
-	suo.mutation.AddTaskNumber(i)
-	return suo
+// SetNillableTaskNumber sets the "task_number" field if the given value is not nil.
+func (_u *ScriptUpdateOne) SetNillableTaskNumber(v *int32) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetTaskNumber(*v)
+	}
+	return _u
+}
+
+// AddTaskNumber adds value to the "task_number" field.
+func (_u *ScriptUpdateOne) AddTaskNumber(v int32) *ScriptUpdateOne {
+	_u.mutation.AddTaskNumber(v)
+	return _u
 }
 
 // SetScriptName sets the "script_name" field.
-func (suo *ScriptUpdateOne) SetScriptName(s string) *ScriptUpdateOne {
-	suo.mutation.SetScriptName(s)
-	return suo
+func (_u *ScriptUpdateOne) SetScriptName(v string) *ScriptUpdateOne {
+	_u.mutation.SetScriptName(v)
+	return _u
+}
+
+// SetNillableScriptName sets the "script_name" field if the given value is not nil.
+func (_u *ScriptUpdateOne) SetNillableScriptName(v *string) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetScriptName(*v)
+	}
+	return _u
 }
 
 // SetFileAddress sets the "file_address" field.
-func (suo *ScriptUpdateOne) SetFileAddress(s string) *ScriptUpdateOne {
-	suo.mutation.SetFileAddress(s)
-	return suo
+func (_u *ScriptUpdateOne) SetFileAddress(v string) *ScriptUpdateOne {
+	_u.mutation.SetFileAddress(v)
+	return _u
+}
+
+// SetNillableFileAddress sets the "file_address" field if the given value is not nil.
+func (_u *ScriptUpdateOne) SetNillableFileAddress(v *string) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetFileAddress(*v)
+	}
+	return _u
 }
 
 // SetScriptContent sets the "script_content" field.
-func (suo *ScriptUpdateOne) SetScriptContent(s string) *ScriptUpdateOne {
-	suo.mutation.SetScriptContent(s)
-	return suo
+func (_u *ScriptUpdateOne) SetScriptContent(v string) *ScriptUpdateOne {
+	_u.mutation.SetScriptContent(v)
+	return _u
+}
+
+// SetNillableScriptContent sets the "script_content" field if the given value is not nil.
+func (_u *ScriptUpdateOne) SetNillableScriptContent(v *string) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetScriptContent(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (suo *ScriptUpdateOne) SetCreateTime(t time.Time) *ScriptUpdateOne {
-	suo.mutation.SetCreateTime(t)
-	return suo
+func (_u *ScriptUpdateOne) SetCreateTime(v time.Time) *ScriptUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (suo *ScriptUpdateOne) SetNillableCreateTime(t *time.Time) *ScriptUpdateOne {
-	if t != nil {
-		suo.SetCreateTime(*t)
+func (_u *ScriptUpdateOne) SetNillableCreateTime(v *time.Time) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (suo *ScriptUpdateOne) SetUpdateTime(t time.Time) *ScriptUpdateOne {
-	suo.mutation.SetUpdateTime(t)
-	return suo
+func (_u *ScriptUpdateOne) SetUpdateTime(v time.Time) *ScriptUpdateOne {
+	_u.mutation.SetUpdateTime(v)
+	return _u
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (suo *ScriptUpdateOne) SetNillableUpdateTime(t *time.Time) *ScriptUpdateOne {
-	if t != nil {
-		suo.SetUpdateTime(*t)
+func (_u *ScriptUpdateOne) SetNillableUpdateTime(v *time.Time) *ScriptUpdateOne {
+	if v != nil {
+		_u.SetUpdateTime(*v)
 	}
-	return suo
+	return _u
 }
 
 // AddScriptExecutionRecordIDs adds the "scriptExecutionRecords" edge to the ScriptExecutionRecord entity by IDs.
-func (suo *ScriptUpdateOne) AddScriptExecutionRecordIDs(ids ...int32) *ScriptUpdateOne {
-	suo.mutation.AddScriptExecutionRecordIDs(ids...)
-	return suo
+func (_u *ScriptUpdateOne) AddScriptExecutionRecordIDs(ids ...int32) *ScriptUpdateOne {
+	_u.mutation.AddScriptExecutionRecordIDs(ids...)
+	return _u
 }
 
 // AddScriptExecutionRecords adds the "scriptExecutionRecords" edges to the ScriptExecutionRecord entity.
-func (suo *ScriptUpdateOne) AddScriptExecutionRecords(s ...*ScriptExecutionRecord) *ScriptUpdateOne {
-	ids := make([]int32, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScriptUpdateOne) AddScriptExecutionRecords(v ...*ScriptExecutionRecord) *ScriptUpdateOne {
+	ids := make([]int32, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.AddScriptExecutionRecordIDs(ids...)
+	return _u.AddScriptExecutionRecordIDs(ids...)
 }
 
 // Mutation returns the ScriptMutation object of the builder.
-func (suo *ScriptUpdateOne) Mutation() *ScriptMutation {
-	return suo.mutation
+func (_u *ScriptUpdateOne) Mutation() *ScriptMutation {
+	return _u.mutation
 }
 
 // ClearScriptExecutionRecords clears all "scriptExecutionRecords" edges to the ScriptExecutionRecord entity.
-func (suo *ScriptUpdateOne) ClearScriptExecutionRecords() *ScriptUpdateOne {
-	suo.mutation.ClearScriptExecutionRecords()
-	return suo
+func (_u *ScriptUpdateOne) ClearScriptExecutionRecords() *ScriptUpdateOne {
+	_u.mutation.ClearScriptExecutionRecords()
+	return _u
 }
 
 // RemoveScriptExecutionRecordIDs removes the "scriptExecutionRecords" edge to ScriptExecutionRecord entities by IDs.
-func (suo *ScriptUpdateOne) RemoveScriptExecutionRecordIDs(ids ...int32) *ScriptUpdateOne {
-	suo.mutation.RemoveScriptExecutionRecordIDs(ids...)
-	return suo
+func (_u *ScriptUpdateOne) RemoveScriptExecutionRecordIDs(ids ...int32) *ScriptUpdateOne {
+	_u.mutation.RemoveScriptExecutionRecordIDs(ids...)
+	return _u
 }
 
 // RemoveScriptExecutionRecords removes "scriptExecutionRecords" edges to ScriptExecutionRecord entities.
-func (suo *ScriptUpdateOne) RemoveScriptExecutionRecords(s ...*ScriptExecutionRecord) *ScriptUpdateOne {
-	ids := make([]int32, len(s))
-	for i := range s {
-		ids[i] = s[i].ID
+func (_u *ScriptUpdateOne) RemoveScriptExecutionRecords(v ...*ScriptExecutionRecord) *ScriptUpdateOne {
+	ids := make([]int32, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return suo.RemoveScriptExecutionRecordIDs(ids...)
+	return _u.RemoveScriptExecutionRecordIDs(ids...)
 }
 
 // Where appends a list predicates to the ScriptUpdate builder.
-func (suo *ScriptUpdateOne) Where(ps ...predicate.Script) *ScriptUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *ScriptUpdateOne) Where(ps ...predicate.Script) *ScriptUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *ScriptUpdateOne) Select(field string, fields ...string) *ScriptUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *ScriptUpdateOne) Select(field string, fields ...string) *ScriptUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Script entity.
-func (suo *ScriptUpdateOne) Save(ctx context.Context) (*Script, error) {
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+func (_u *ScriptUpdateOne) Save(ctx context.Context) (*Script, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *ScriptUpdateOne) SaveX(ctx context.Context) *Script {
-	node, err := suo.Save(ctx)
+func (_u *ScriptUpdateOne) SaveX(ctx context.Context) *Script {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -417,31 +497,31 @@ func (suo *ScriptUpdateOne) SaveX(ctx context.Context) *Script {
 }
 
 // Exec executes the query on the entity.
-func (suo *ScriptUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *ScriptUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *ScriptUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *ScriptUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *ScriptUpdateOne) check() error {
-	if v, ok := suo.mutation.TaskNumber(); ok {
+func (_u *ScriptUpdateOne) check() error {
+	if v, ok := _u.mutation.TaskNumber(); ok {
 		if err := script.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "Script.task_number": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.ScriptName(); ok {
+	if v, ok := _u.mutation.ScriptName(); ok {
 		if err := script.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "Script.script_name": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.ScriptContent(); ok {
+	if v, ok := _u.mutation.ScriptContent(); ok {
 		if err := script.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "Script.script_content": %w`, err)}
 		}
@@ -449,17 +529,17 @@ func (suo *ScriptUpdateOne) check() error {
 	return nil
 }
 
-func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err error) {
-	if err := suo.check(); err != nil {
+func (_u *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(script.Table, script.Columns, sqlgraph.NewFieldSpec(script.FieldID, field.TypeInt32))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Script.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, script.FieldID)
 		for _, f := range fields {
@@ -471,38 +551,38 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(script.FieldUserID, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.TaskNumber(); ok {
+	if value, ok := _u.mutation.TaskNumber(); ok {
 		_spec.SetField(script.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.AddedTaskNumber(); ok {
+	if value, ok := _u.mutation.AddedTaskNumber(); ok {
 		_spec.AddField(script.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.ScriptName(); ok {
+	if value, ok := _u.mutation.ScriptName(); ok {
 		_spec.SetField(script.FieldScriptName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.FileAddress(); ok {
+	if value, ok := _u.mutation.FileAddress(); ok {
 		_spec.SetField(script.FieldFileAddress, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.ScriptContent(); ok {
+	if value, ok := _u.mutation.ScriptContent(); ok {
 		_spec.SetField(script.FieldScriptContent, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(script.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := suo.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(script.FieldUpdateTime, field.TypeTime, value)
 	}
-	if suo.mutation.ScriptExecutionRecordsCleared() {
+	if _u.mutation.ScriptExecutionRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -515,7 +595,7 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.RemovedScriptExecutionRecordsIDs(); len(nodes) > 0 && !suo.mutation.ScriptExecutionRecordsCleared() {
+	if nodes := _u.mutation.RemovedScriptExecutionRecordsIDs(); len(nodes) > 0 && !_u.mutation.ScriptExecutionRecordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -531,7 +611,7 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScriptExecutionRecordsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -547,10 +627,10 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_node = &Script{config: suo.config}
+	_node = &Script{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{script.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -558,6 +638,6 @@ func (suo *ScriptUpdateOne) sqlSave(ctx context.Context) (_node *Script, err err
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -20,56 +20,56 @@ type CycleRenewalDelete struct {
 }
 
 // Where appends a list predicates to the CycleRenewalDelete builder.
-func (crd *CycleRenewalDelete) Where(ps ...predicate.CycleRenewal) *CycleRenewalDelete {
-	crd.mutation.Where(ps...)
-	return crd
+func (_d *CycleRenewalDelete) Where(ps ...predicate.CycleRenewal) *CycleRenewalDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (crd *CycleRenewalDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, crd.sqlExec, crd.mutation, crd.hooks)
+func (_d *CycleRenewalDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crd *CycleRenewalDelete) ExecX(ctx context.Context) int {
-	n, err := crd.Exec(ctx)
+func (_d *CycleRenewalDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (crd *CycleRenewalDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CycleRenewalDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(cyclerenewal.Table, sqlgraph.NewFieldSpec(cyclerenewal.FieldID, field.TypeUUID))
-	if ps := crd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, crd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	crd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CycleRenewalDeleteOne is the builder for deleting a single CycleRenewal entity.
 type CycleRenewalDeleteOne struct {
-	crd *CycleRenewalDelete
+	_d *CycleRenewalDelete
 }
 
 // Where appends a list predicates to the CycleRenewalDelete builder.
-func (crdo *CycleRenewalDeleteOne) Where(ps ...predicate.CycleRenewal) *CycleRenewalDeleteOne {
-	crdo.crd.mutation.Where(ps...)
-	return crdo
+func (_d *CycleRenewalDeleteOne) Where(ps ...predicate.CycleRenewal) *CycleRenewalDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (crdo *CycleRenewalDeleteOne) Exec(ctx context.Context) error {
-	n, err := crdo.crd.Exec(ctx)
+func (_d *CycleRenewalDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (crdo *CycleRenewalDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crdo *CycleRenewalDeleteOne) ExecX(ctx context.Context) {
-	if err := crdo.Exec(ctx); err != nil {
+func (_d *CycleRenewalDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

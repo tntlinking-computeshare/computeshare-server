@@ -48,7 +48,7 @@ func (*Gateway) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Gateway fields.
-func (ga *Gateway) assignValues(columns []string, values []any) error {
+func (_m *Gateway) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -58,34 +58,34 @@ func (ga *Gateway) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ga.ID = *value
+				_m.ID = *value
 			}
 		case gateway.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ga.Name = value.String
+				_m.Name = value.String
 			}
 		case gateway.FieldIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ip", values[i])
 			} else if value.Valid {
-				ga.IP = value.String
+				_m.IP = value.String
 			}
 		case gateway.FieldPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
-				ga.Port = int32(value.Int64)
+				_m.Port = int32(value.Int64)
 			}
 		case gateway.FieldInternalIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_ip", values[i])
 			} else if value.Valid {
-				ga.InternalIP = value.String
+				_m.InternalIP = value.String
 			}
 		default:
-			ga.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -93,44 +93,44 @@ func (ga *Gateway) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Gateway.
 // This includes values selected through modifiers, order, etc.
-func (ga *Gateway) Value(name string) (ent.Value, error) {
-	return ga.selectValues.Get(name)
+func (_m *Gateway) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Gateway.
 // Note that you need to call Gateway.Unwrap() before calling this method if this Gateway
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ga *Gateway) Update() *GatewayUpdateOne {
-	return NewGatewayClient(ga.config).UpdateOne(ga)
+func (_m *Gateway) Update() *GatewayUpdateOne {
+	return NewGatewayClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Gateway entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ga *Gateway) Unwrap() *Gateway {
-	_tx, ok := ga.config.driver.(*txDriver)
+func (_m *Gateway) Unwrap() *Gateway {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Gateway is not a transactional entity")
 	}
-	ga.config.driver = _tx.drv
-	return ga
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ga *Gateway) String() string {
+func (_m *Gateway) String() string {
 	var builder strings.Builder
 	builder.WriteString("Gateway(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ga.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
-	builder.WriteString(ga.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("ip=")
-	builder.WriteString(ga.IP)
+	builder.WriteString(_m.IP)
 	builder.WriteString(", ")
 	builder.WriteString("port=")
-	builder.WriteString(fmt.Sprintf("%v", ga.Port))
+	builder.WriteString(fmt.Sprintf("%v", _m.Port))
 	builder.WriteString(", ")
 	builder.WriteString("internal_ip=")
-	builder.WriteString(ga.InternalIP)
+	builder.WriteString(_m.InternalIP)
 	builder.WriteByte(')')
 	return builder.String()
 }

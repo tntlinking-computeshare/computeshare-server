@@ -22,85 +22,85 @@ type CycleRedeemCodeCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (crcc *CycleRedeemCodeCreate) SetFkUserID(u uuid.UUID) *CycleRedeemCodeCreate {
-	crcc.mutation.SetFkUserID(u)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetFkUserID(v uuid.UUID) *CycleRedeemCodeCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
-func (crcc *CycleRedeemCodeCreate) SetNillableFkUserID(u *uuid.UUID) *CycleRedeemCodeCreate {
-	if u != nil {
-		crcc.SetFkUserID(*u)
+func (_c *CycleRedeemCodeCreate) SetNillableFkUserID(v *uuid.UUID) *CycleRedeemCodeCreate {
+	if v != nil {
+		_c.SetFkUserID(*v)
 	}
-	return crcc
+	return _c
 }
 
 // SetRedeemCode sets the "redeem_code" field.
-func (crcc *CycleRedeemCodeCreate) SetRedeemCode(s string) *CycleRedeemCodeCreate {
-	crcc.mutation.SetRedeemCode(s)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetRedeemCode(v string) *CycleRedeemCodeCreate {
+	_c.mutation.SetRedeemCode(v)
+	return _c
 }
 
 // SetCycle sets the "cycle" field.
-func (crcc *CycleRedeemCodeCreate) SetCycle(f float64) *CycleRedeemCodeCreate {
-	crcc.mutation.SetCycle(f)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetCycle(v float64) *CycleRedeemCodeCreate {
+	_c.mutation.SetCycle(v)
+	return _c
 }
 
 // SetState sets the "state" field.
-func (crcc *CycleRedeemCodeCreate) SetState(b bool) *CycleRedeemCodeCreate {
-	crcc.mutation.SetState(b)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetState(v bool) *CycleRedeemCodeCreate {
+	_c.mutation.SetState(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (crcc *CycleRedeemCodeCreate) SetCreateTime(t time.Time) *CycleRedeemCodeCreate {
-	crcc.mutation.SetCreateTime(t)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetCreateTime(v time.Time) *CycleRedeemCodeCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetUseTime sets the "use_time" field.
-func (crcc *CycleRedeemCodeCreate) SetUseTime(t time.Time) *CycleRedeemCodeCreate {
-	crcc.mutation.SetUseTime(t)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetUseTime(v time.Time) *CycleRedeemCodeCreate {
+	_c.mutation.SetUseTime(v)
+	return _c
 }
 
 // SetNillableUseTime sets the "use_time" field if the given value is not nil.
-func (crcc *CycleRedeemCodeCreate) SetNillableUseTime(t *time.Time) *CycleRedeemCodeCreate {
-	if t != nil {
-		crcc.SetUseTime(*t)
+func (_c *CycleRedeemCodeCreate) SetNillableUseTime(v *time.Time) *CycleRedeemCodeCreate {
+	if v != nil {
+		_c.SetUseTime(*v)
 	}
-	return crcc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (crcc *CycleRedeemCodeCreate) SetID(u uuid.UUID) *CycleRedeemCodeCreate {
-	crcc.mutation.SetID(u)
-	return crcc
+func (_c *CycleRedeemCodeCreate) SetID(v uuid.UUID) *CycleRedeemCodeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (crcc *CycleRedeemCodeCreate) SetNillableID(u *uuid.UUID) *CycleRedeemCodeCreate {
-	if u != nil {
-		crcc.SetID(*u)
+func (_c *CycleRedeemCodeCreate) SetNillableID(v *uuid.UUID) *CycleRedeemCodeCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return crcc
+	return _c
 }
 
 // Mutation returns the CycleRedeemCodeMutation object of the builder.
-func (crcc *CycleRedeemCodeCreate) Mutation() *CycleRedeemCodeMutation {
-	return crcc.mutation
+func (_c *CycleRedeemCodeCreate) Mutation() *CycleRedeemCodeMutation {
+	return _c.mutation
 }
 
 // Save creates the CycleRedeemCode in the database.
-func (crcc *CycleRedeemCodeCreate) Save(ctx context.Context) (*CycleRedeemCode, error) {
-	crcc.defaults()
-	return withHooks(ctx, crcc.sqlSave, crcc.mutation, crcc.hooks)
+func (_c *CycleRedeemCodeCreate) Save(ctx context.Context) (*CycleRedeemCode, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (crcc *CycleRedeemCodeCreate) SaveX(ctx context.Context) *CycleRedeemCode {
-	v, err := crcc.Save(ctx)
+func (_c *CycleRedeemCodeCreate) SaveX(ctx context.Context) *CycleRedeemCode {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -108,49 +108,49 @@ func (crcc *CycleRedeemCodeCreate) SaveX(ctx context.Context) *CycleRedeemCode {
 }
 
 // Exec executes the query.
-func (crcc *CycleRedeemCodeCreate) Exec(ctx context.Context) error {
-	_, err := crcc.Save(ctx)
+func (_c *CycleRedeemCodeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crcc *CycleRedeemCodeCreate) ExecX(ctx context.Context) {
-	if err := crcc.Exec(ctx); err != nil {
+func (_c *CycleRedeemCodeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (crcc *CycleRedeemCodeCreate) defaults() {
-	if _, ok := crcc.mutation.ID(); !ok {
+func (_c *CycleRedeemCodeCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := cycleredeemcode.DefaultID()
-		crcc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (crcc *CycleRedeemCodeCreate) check() error {
-	if _, ok := crcc.mutation.RedeemCode(); !ok {
+func (_c *CycleRedeemCodeCreate) check() error {
+	if _, ok := _c.mutation.RedeemCode(); !ok {
 		return &ValidationError{Name: "redeem_code", err: errors.New(`ent: missing required field "CycleRedeemCode.redeem_code"`)}
 	}
-	if _, ok := crcc.mutation.Cycle(); !ok {
+	if _, ok := _c.mutation.Cycle(); !ok {
 		return &ValidationError{Name: "cycle", err: errors.New(`ent: missing required field "CycleRedeemCode.cycle"`)}
 	}
-	if _, ok := crcc.mutation.State(); !ok {
+	if _, ok := _c.mutation.State(); !ok {
 		return &ValidationError{Name: "state", err: errors.New(`ent: missing required field "CycleRedeemCode.state"`)}
 	}
-	if _, ok := crcc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "CycleRedeemCode.create_time"`)}
 	}
 	return nil
 }
 
-func (crcc *CycleRedeemCodeCreate) sqlSave(ctx context.Context) (*CycleRedeemCode, error) {
-	if err := crcc.check(); err != nil {
+func (_c *CycleRedeemCodeCreate) sqlSave(ctx context.Context) (*CycleRedeemCode, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := crcc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, crcc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -163,41 +163,41 @@ func (crcc *CycleRedeemCodeCreate) sqlSave(ctx context.Context) (*CycleRedeemCod
 			return nil, err
 		}
 	}
-	crcc.mutation.id = &_node.ID
-	crcc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (crcc *CycleRedeemCodeCreate) createSpec() (*CycleRedeemCode, *sqlgraph.CreateSpec) {
+func (_c *CycleRedeemCodeCreate) createSpec() (*CycleRedeemCode, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CycleRedeemCode{config: crcc.config}
+		_node = &CycleRedeemCode{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(cycleredeemcode.Table, sqlgraph.NewFieldSpec(cycleredeemcode.FieldID, field.TypeUUID))
 	)
-	if id, ok := crcc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := crcc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(cycleredeemcode.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := crcc.mutation.RedeemCode(); ok {
+	if value, ok := _c.mutation.RedeemCode(); ok {
 		_spec.SetField(cycleredeemcode.FieldRedeemCode, field.TypeString, value)
 		_node.RedeemCode = value
 	}
-	if value, ok := crcc.mutation.Cycle(); ok {
+	if value, ok := _c.mutation.Cycle(); ok {
 		_spec.SetField(cycleredeemcode.FieldCycle, field.TypeFloat64, value)
 		_node.Cycle = value
 	}
-	if value, ok := crcc.mutation.State(); ok {
+	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(cycleredeemcode.FieldState, field.TypeBool, value)
 		_node.State = value
 	}
-	if value, ok := crcc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(cycleredeemcode.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := crcc.mutation.UseTime(); ok {
+	if value, ok := _c.mutation.UseTime(); ok {
 		_spec.SetField(cycleredeemcode.FieldUseTime, field.TypeTime, value)
 		_node.UseTime = value
 	}
@@ -207,17 +207,21 @@ func (crcc *CycleRedeemCodeCreate) createSpec() (*CycleRedeemCode, *sqlgraph.Cre
 // CycleRedeemCodeCreateBulk is the builder for creating many CycleRedeemCode entities in bulk.
 type CycleRedeemCodeCreateBulk struct {
 	config
+	err      error
 	builders []*CycleRedeemCodeCreate
 }
 
 // Save creates the CycleRedeemCode entities in the database.
-func (crccb *CycleRedeemCodeCreateBulk) Save(ctx context.Context) ([]*CycleRedeemCode, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(crccb.builders))
-	nodes := make([]*CycleRedeemCode, len(crccb.builders))
-	mutators := make([]Mutator, len(crccb.builders))
-	for i := range crccb.builders {
+func (_c *CycleRedeemCodeCreateBulk) Save(ctx context.Context) ([]*CycleRedeemCode, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CycleRedeemCode, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := crccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CycleRedeemCodeMutation)
@@ -231,11 +235,11 @@ func (crccb *CycleRedeemCodeCreateBulk) Save(ctx context.Context) ([]*CycleRedee
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, crccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, crccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -255,7 +259,7 @@ func (crccb *CycleRedeemCodeCreateBulk) Save(ctx context.Context) ([]*CycleRedee
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, crccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -263,8 +267,8 @@ func (crccb *CycleRedeemCodeCreateBulk) Save(ctx context.Context) ([]*CycleRedee
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (crccb *CycleRedeemCodeCreateBulk) SaveX(ctx context.Context) []*CycleRedeemCode {
-	v, err := crccb.Save(ctx)
+func (_c *CycleRedeemCodeCreateBulk) SaveX(ctx context.Context) []*CycleRedeemCode {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -272,14 +276,14 @@ func (crccb *CycleRedeemCodeCreateBulk) SaveX(ctx context.Context) []*CycleRedee
 }
 
 // Exec executes the query.
-func (crccb *CycleRedeemCodeCreateBulk) Exec(ctx context.Context) error {
-	_, err := crccb.Save(ctx)
+func (_c *CycleRedeemCodeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crccb *CycleRedeemCodeCreateBulk) ExecX(ctx context.Context) {
-	if err := crccb.Exec(ctx); err != nil {
+func (_c *CycleRedeemCodeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -24,118 +24,206 @@ type CycleRechargeUpdate struct {
 }
 
 // Where appends a list predicates to the CycleRechargeUpdate builder.
-func (cru *CycleRechargeUpdate) Where(ps ...predicate.CycleRecharge) *CycleRechargeUpdate {
-	cru.mutation.Where(ps...)
-	return cru
+func (_u *CycleRechargeUpdate) Where(ps ...predicate.CycleRecharge) *CycleRechargeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cru *CycleRechargeUpdate) SetFkUserID(u uuid.UUID) *CycleRechargeUpdate {
-	cru.mutation.SetFkUserID(u)
-	return cru
+func (_u *CycleRechargeUpdate) SetFkUserID(v uuid.UUID) *CycleRechargeUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableFkUserID(v *uuid.UUID) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (cru *CycleRechargeUpdate) SetOutTradeNo(s string) *CycleRechargeUpdate {
-	cru.mutation.SetOutTradeNo(s)
-	return cru
+func (_u *CycleRechargeUpdate) SetOutTradeNo(v string) *CycleRechargeUpdate {
+	_u.mutation.SetOutTradeNo(v)
+	return _u
+}
+
+// SetNillableOutTradeNo sets the "out_trade_no" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableOutTradeNo(v *string) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetOutTradeNo(*v)
+	}
+	return _u
 }
 
 // SetAlipayTradeNo sets the "alipay_trade_no" field.
-func (cru *CycleRechargeUpdate) SetAlipayTradeNo(s string) *CycleRechargeUpdate {
-	cru.mutation.SetAlipayTradeNo(s)
-	return cru
+func (_u *CycleRechargeUpdate) SetAlipayTradeNo(v string) *CycleRechargeUpdate {
+	_u.mutation.SetAlipayTradeNo(v)
+	return _u
+}
+
+// SetNillableAlipayTradeNo sets the "alipay_trade_no" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableAlipayTradeNo(v *string) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetAlipayTradeNo(*v)
+	}
+	return _u
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (cru *CycleRechargeUpdate) SetRechargeChannel(i int) *CycleRechargeUpdate {
-	cru.mutation.ResetRechargeChannel()
-	cru.mutation.SetRechargeChannel(i)
-	return cru
+func (_u *CycleRechargeUpdate) SetRechargeChannel(v int) *CycleRechargeUpdate {
+	_u.mutation.ResetRechargeChannel()
+	_u.mutation.SetRechargeChannel(v)
+	return _u
 }
 
-// AddRechargeChannel adds i to the "recharge_channel" field.
-func (cru *CycleRechargeUpdate) AddRechargeChannel(i int) *CycleRechargeUpdate {
-	cru.mutation.AddRechargeChannel(i)
-	return cru
+// SetNillableRechargeChannel sets the "recharge_channel" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableRechargeChannel(v *int) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetRechargeChannel(*v)
+	}
+	return _u
+}
+
+// AddRechargeChannel adds value to the "recharge_channel" field.
+func (_u *CycleRechargeUpdate) AddRechargeChannel(v int) *CycleRechargeUpdate {
+	_u.mutation.AddRechargeChannel(v)
+	return _u
 }
 
 // SetRedeemCode sets the "redeem_code" field.
-func (cru *CycleRechargeUpdate) SetRedeemCode(s string) *CycleRechargeUpdate {
-	cru.mutation.SetRedeemCode(s)
-	return cru
+func (_u *CycleRechargeUpdate) SetRedeemCode(v string) *CycleRechargeUpdate {
+	_u.mutation.SetRedeemCode(v)
+	return _u
+}
+
+// SetNillableRedeemCode sets the "redeem_code" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableRedeemCode(v *string) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetRedeemCode(*v)
+	}
+	return _u
 }
 
 // SetState sets the "state" field.
-func (cru *CycleRechargeUpdate) SetState(s string) *CycleRechargeUpdate {
-	cru.mutation.SetState(s)
-	return cru
+func (_u *CycleRechargeUpdate) SetState(v string) *CycleRechargeUpdate {
+	_u.mutation.SetState(v)
+	return _u
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableState(v *string) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
 }
 
 // SetPayAmount sets the "pay_amount" field.
-func (cru *CycleRechargeUpdate) SetPayAmount(f float64) *CycleRechargeUpdate {
-	cru.mutation.ResetPayAmount()
-	cru.mutation.SetPayAmount(f)
-	return cru
+func (_u *CycleRechargeUpdate) SetPayAmount(v float64) *CycleRechargeUpdate {
+	_u.mutation.ResetPayAmount()
+	_u.mutation.SetPayAmount(v)
+	return _u
 }
 
-// AddPayAmount adds f to the "pay_amount" field.
-func (cru *CycleRechargeUpdate) AddPayAmount(f float64) *CycleRechargeUpdate {
-	cru.mutation.AddPayAmount(f)
-	return cru
+// SetNillablePayAmount sets the "pay_amount" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillablePayAmount(v *float64) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetPayAmount(*v)
+	}
+	return _u
+}
+
+// AddPayAmount adds value to the "pay_amount" field.
+func (_u *CycleRechargeUpdate) AddPayAmount(v float64) *CycleRechargeUpdate {
+	_u.mutation.AddPayAmount(v)
+	return _u
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (cru *CycleRechargeUpdate) SetTotalAmount(f float64) *CycleRechargeUpdate {
-	cru.mutation.ResetTotalAmount()
-	cru.mutation.SetTotalAmount(f)
-	return cru
+func (_u *CycleRechargeUpdate) SetTotalAmount(v float64) *CycleRechargeUpdate {
+	_u.mutation.ResetTotalAmount()
+	_u.mutation.SetTotalAmount(v)
+	return _u
 }
 
-// AddTotalAmount adds f to the "total_amount" field.
-func (cru *CycleRechargeUpdate) AddTotalAmount(f float64) *CycleRechargeUpdate {
-	cru.mutation.AddTotalAmount(f)
-	return cru
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableTotalAmount(v *float64) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetTotalAmount(*v)
+	}
+	return _u
+}
+
+// AddTotalAmount adds value to the "total_amount" field.
+func (_u *CycleRechargeUpdate) AddTotalAmount(v float64) *CycleRechargeUpdate {
+	_u.mutation.AddTotalAmount(v)
+	return _u
 }
 
 // SetBuyCycle sets the "buy_cycle" field.
-func (cru *CycleRechargeUpdate) SetBuyCycle(f float64) *CycleRechargeUpdate {
-	cru.mutation.ResetBuyCycle()
-	cru.mutation.SetBuyCycle(f)
-	return cru
+func (_u *CycleRechargeUpdate) SetBuyCycle(v float64) *CycleRechargeUpdate {
+	_u.mutation.ResetBuyCycle()
+	_u.mutation.SetBuyCycle(v)
+	return _u
 }
 
-// AddBuyCycle adds f to the "buy_cycle" field.
-func (cru *CycleRechargeUpdate) AddBuyCycle(f float64) *CycleRechargeUpdate {
-	cru.mutation.AddBuyCycle(f)
-	return cru
+// SetNillableBuyCycle sets the "buy_cycle" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableBuyCycle(v *float64) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetBuyCycle(*v)
+	}
+	return _u
+}
+
+// AddBuyCycle adds value to the "buy_cycle" field.
+func (_u *CycleRechargeUpdate) AddBuyCycle(v float64) *CycleRechargeUpdate {
+	_u.mutation.AddBuyCycle(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cru *CycleRechargeUpdate) SetCreateTime(t time.Time) *CycleRechargeUpdate {
-	cru.mutation.SetCreateTime(t)
-	return cru
+func (_u *CycleRechargeUpdate) SetCreateTime(v time.Time) *CycleRechargeUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableCreateTime(v *time.Time) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (cru *CycleRechargeUpdate) SetUpdateTime(t time.Time) *CycleRechargeUpdate {
-	cru.mutation.SetUpdateTime(t)
-	return cru
+func (_u *CycleRechargeUpdate) SetUpdateTime(v time.Time) *CycleRechargeUpdate {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *CycleRechargeUpdate) SetNillableUpdateTime(v *time.Time) *CycleRechargeUpdate {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleRechargeMutation object of the builder.
-func (cru *CycleRechargeUpdate) Mutation() *CycleRechargeMutation {
-	return cru.mutation
+func (_u *CycleRechargeUpdate) Mutation() *CycleRechargeMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cru *CycleRechargeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cru.sqlSave, cru.mutation, cru.hooks)
+func (_u *CycleRechargeUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cru *CycleRechargeUpdate) SaveX(ctx context.Context) int {
-	affected, err := cru.Save(ctx)
+func (_u *CycleRechargeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -143,73 +231,73 @@ func (cru *CycleRechargeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cru *CycleRechargeUpdate) Exec(ctx context.Context) error {
-	_, err := cru.Save(ctx)
+func (_u *CycleRechargeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cru *CycleRechargeUpdate) ExecX(ctx context.Context) {
-	if err := cru.Exec(ctx); err != nil {
+func (_u *CycleRechargeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cru *CycleRechargeUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *CycleRechargeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(cyclerecharge.Table, cyclerecharge.Columns, sqlgraph.NewFieldSpec(cyclerecharge.FieldID, field.TypeUUID))
-	if ps := cru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cru.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerecharge.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cru.mutation.OutTradeNo(); ok {
+	if value, ok := _u.mutation.OutTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldOutTradeNo, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.AlipayTradeNo(); ok {
+	if value, ok := _u.mutation.AlipayTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldAlipayTradeNo, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.RechargeChannel(); ok {
+	if value, ok := _u.mutation.RechargeChannel(); ok {
 		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
-	if value, ok := cru.mutation.AddedRechargeChannel(); ok {
+	if value, ok := _u.mutation.AddedRechargeChannel(); ok {
 		_spec.AddField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
-	if value, ok := cru.mutation.RedeemCode(); ok {
+	if value, ok := _u.mutation.RedeemCode(); ok {
 		_spec.SetField(cyclerecharge.FieldRedeemCode, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.State(); ok {
+	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(cyclerecharge.FieldState, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.PayAmount(); ok {
+	if value, ok := _u.mutation.PayAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldPayAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.AddedPayAmount(); ok {
+	if value, ok := _u.mutation.AddedPayAmount(); ok {
 		_spec.AddField(cyclerecharge.FieldPayAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.TotalAmount(); ok {
+	if value, ok := _u.mutation.TotalAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldTotalAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.AddedTotalAmount(); ok {
+	if value, ok := _u.mutation.AddedTotalAmount(); ok {
 		_spec.AddField(cyclerecharge.FieldTotalAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.BuyCycle(); ok {
+	if value, ok := _u.mutation.BuyCycle(); ok {
 		_spec.SetField(cyclerecharge.FieldBuyCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.AddedBuyCycle(); ok {
+	if value, ok := _u.mutation.AddedBuyCycle(); ok {
 		_spec.AddField(cyclerecharge.FieldBuyCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := cru.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldUpdateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cru.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cyclerecharge.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -217,8 +305,8 @@ func (cru *CycleRechargeUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	cru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CycleRechargeUpdateOne is the builder for updating a single CycleRecharge entity.
@@ -230,125 +318,213 @@ type CycleRechargeUpdateOne struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cruo *CycleRechargeUpdateOne) SetFkUserID(u uuid.UUID) *CycleRechargeUpdateOne {
-	cruo.mutation.SetFkUserID(u)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetFkUserID(v uuid.UUID) *CycleRechargeUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableFkUserID(v *uuid.UUID) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (cruo *CycleRechargeUpdateOne) SetOutTradeNo(s string) *CycleRechargeUpdateOne {
-	cruo.mutation.SetOutTradeNo(s)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetOutTradeNo(v string) *CycleRechargeUpdateOne {
+	_u.mutation.SetOutTradeNo(v)
+	return _u
+}
+
+// SetNillableOutTradeNo sets the "out_trade_no" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableOutTradeNo(v *string) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetOutTradeNo(*v)
+	}
+	return _u
 }
 
 // SetAlipayTradeNo sets the "alipay_trade_no" field.
-func (cruo *CycleRechargeUpdateOne) SetAlipayTradeNo(s string) *CycleRechargeUpdateOne {
-	cruo.mutation.SetAlipayTradeNo(s)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetAlipayTradeNo(v string) *CycleRechargeUpdateOne {
+	_u.mutation.SetAlipayTradeNo(v)
+	return _u
+}
+
+// SetNillableAlipayTradeNo sets the "alipay_trade_no" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableAlipayTradeNo(v *string) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetAlipayTradeNo(*v)
+	}
+	return _u
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (cruo *CycleRechargeUpdateOne) SetRechargeChannel(i int) *CycleRechargeUpdateOne {
-	cruo.mutation.ResetRechargeChannel()
-	cruo.mutation.SetRechargeChannel(i)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetRechargeChannel(v int) *CycleRechargeUpdateOne {
+	_u.mutation.ResetRechargeChannel()
+	_u.mutation.SetRechargeChannel(v)
+	return _u
 }
 
-// AddRechargeChannel adds i to the "recharge_channel" field.
-func (cruo *CycleRechargeUpdateOne) AddRechargeChannel(i int) *CycleRechargeUpdateOne {
-	cruo.mutation.AddRechargeChannel(i)
-	return cruo
+// SetNillableRechargeChannel sets the "recharge_channel" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableRechargeChannel(v *int) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetRechargeChannel(*v)
+	}
+	return _u
+}
+
+// AddRechargeChannel adds value to the "recharge_channel" field.
+func (_u *CycleRechargeUpdateOne) AddRechargeChannel(v int) *CycleRechargeUpdateOne {
+	_u.mutation.AddRechargeChannel(v)
+	return _u
 }
 
 // SetRedeemCode sets the "redeem_code" field.
-func (cruo *CycleRechargeUpdateOne) SetRedeemCode(s string) *CycleRechargeUpdateOne {
-	cruo.mutation.SetRedeemCode(s)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetRedeemCode(v string) *CycleRechargeUpdateOne {
+	_u.mutation.SetRedeemCode(v)
+	return _u
+}
+
+// SetNillableRedeemCode sets the "redeem_code" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableRedeemCode(v *string) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetRedeemCode(*v)
+	}
+	return _u
 }
 
 // SetState sets the "state" field.
-func (cruo *CycleRechargeUpdateOne) SetState(s string) *CycleRechargeUpdateOne {
-	cruo.mutation.SetState(s)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetState(v string) *CycleRechargeUpdateOne {
+	_u.mutation.SetState(v)
+	return _u
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableState(v *string) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
 }
 
 // SetPayAmount sets the "pay_amount" field.
-func (cruo *CycleRechargeUpdateOne) SetPayAmount(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.ResetPayAmount()
-	cruo.mutation.SetPayAmount(f)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetPayAmount(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.ResetPayAmount()
+	_u.mutation.SetPayAmount(v)
+	return _u
 }
 
-// AddPayAmount adds f to the "pay_amount" field.
-func (cruo *CycleRechargeUpdateOne) AddPayAmount(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.AddPayAmount(f)
-	return cruo
+// SetNillablePayAmount sets the "pay_amount" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillablePayAmount(v *float64) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetPayAmount(*v)
+	}
+	return _u
+}
+
+// AddPayAmount adds value to the "pay_amount" field.
+func (_u *CycleRechargeUpdateOne) AddPayAmount(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.AddPayAmount(v)
+	return _u
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (cruo *CycleRechargeUpdateOne) SetTotalAmount(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.ResetTotalAmount()
-	cruo.mutation.SetTotalAmount(f)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetTotalAmount(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.ResetTotalAmount()
+	_u.mutation.SetTotalAmount(v)
+	return _u
 }
 
-// AddTotalAmount adds f to the "total_amount" field.
-func (cruo *CycleRechargeUpdateOne) AddTotalAmount(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.AddTotalAmount(f)
-	return cruo
+// SetNillableTotalAmount sets the "total_amount" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableTotalAmount(v *float64) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetTotalAmount(*v)
+	}
+	return _u
+}
+
+// AddTotalAmount adds value to the "total_amount" field.
+func (_u *CycleRechargeUpdateOne) AddTotalAmount(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.AddTotalAmount(v)
+	return _u
 }
 
 // SetBuyCycle sets the "buy_cycle" field.
-func (cruo *CycleRechargeUpdateOne) SetBuyCycle(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.ResetBuyCycle()
-	cruo.mutation.SetBuyCycle(f)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetBuyCycle(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.ResetBuyCycle()
+	_u.mutation.SetBuyCycle(v)
+	return _u
 }
 
-// AddBuyCycle adds f to the "buy_cycle" field.
-func (cruo *CycleRechargeUpdateOne) AddBuyCycle(f float64) *CycleRechargeUpdateOne {
-	cruo.mutation.AddBuyCycle(f)
-	return cruo
+// SetNillableBuyCycle sets the "buy_cycle" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableBuyCycle(v *float64) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetBuyCycle(*v)
+	}
+	return _u
+}
+
+// AddBuyCycle adds value to the "buy_cycle" field.
+func (_u *CycleRechargeUpdateOne) AddBuyCycle(v float64) *CycleRechargeUpdateOne {
+	_u.mutation.AddBuyCycle(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cruo *CycleRechargeUpdateOne) SetCreateTime(t time.Time) *CycleRechargeUpdateOne {
-	cruo.mutation.SetCreateTime(t)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetCreateTime(v time.Time) *CycleRechargeUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableCreateTime(v *time.Time) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (cruo *CycleRechargeUpdateOne) SetUpdateTime(t time.Time) *CycleRechargeUpdateOne {
-	cruo.mutation.SetUpdateTime(t)
-	return cruo
+func (_u *CycleRechargeUpdateOne) SetUpdateTime(v time.Time) *CycleRechargeUpdateOne {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *CycleRechargeUpdateOne) SetNillableUpdateTime(v *time.Time) *CycleRechargeUpdateOne {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleRechargeMutation object of the builder.
-func (cruo *CycleRechargeUpdateOne) Mutation() *CycleRechargeMutation {
-	return cruo.mutation
+func (_u *CycleRechargeUpdateOne) Mutation() *CycleRechargeMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CycleRechargeUpdate builder.
-func (cruo *CycleRechargeUpdateOne) Where(ps ...predicate.CycleRecharge) *CycleRechargeUpdateOne {
-	cruo.mutation.Where(ps...)
-	return cruo
+func (_u *CycleRechargeUpdateOne) Where(ps ...predicate.CycleRecharge) *CycleRechargeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cruo *CycleRechargeUpdateOne) Select(field string, fields ...string) *CycleRechargeUpdateOne {
-	cruo.fields = append([]string{field}, fields...)
-	return cruo
+func (_u *CycleRechargeUpdateOne) Select(field string, fields ...string) *CycleRechargeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CycleRecharge entity.
-func (cruo *CycleRechargeUpdateOne) Save(ctx context.Context) (*CycleRecharge, error) {
-	return withHooks(ctx, cruo.sqlSave, cruo.mutation, cruo.hooks)
+func (_u *CycleRechargeUpdateOne) Save(ctx context.Context) (*CycleRecharge, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cruo *CycleRechargeUpdateOne) SaveX(ctx context.Context) *CycleRecharge {
-	node, err := cruo.Save(ctx)
+func (_u *CycleRechargeUpdateOne) SaveX(ctx context.Context) *CycleRecharge {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -356,26 +532,26 @@ func (cruo *CycleRechargeUpdateOne) SaveX(ctx context.Context) *CycleRecharge {
 }
 
 // Exec executes the query on the entity.
-func (cruo *CycleRechargeUpdateOne) Exec(ctx context.Context) error {
-	_, err := cruo.Save(ctx)
+func (_u *CycleRechargeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cruo *CycleRechargeUpdateOne) ExecX(ctx context.Context) {
-	if err := cruo.Exec(ctx); err != nil {
+func (_u *CycleRechargeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cruo *CycleRechargeUpdateOne) sqlSave(ctx context.Context) (_node *CycleRecharge, err error) {
+func (_u *CycleRechargeUpdateOne) sqlSave(ctx context.Context) (_node *CycleRecharge, err error) {
 	_spec := sqlgraph.NewUpdateSpec(cyclerecharge.Table, cyclerecharge.Columns, sqlgraph.NewFieldSpec(cyclerecharge.FieldID, field.TypeUUID))
-	id, ok := cruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CycleRecharge.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cyclerecharge.FieldID)
 		for _, f := range fields {
@@ -387,62 +563,62 @@ func (cruo *CycleRechargeUpdateOne) sqlSave(ctx context.Context) (_node *CycleRe
 			}
 		}
 	}
-	if ps := cruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cruo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerecharge.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cruo.mutation.OutTradeNo(); ok {
+	if value, ok := _u.mutation.OutTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldOutTradeNo, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.AlipayTradeNo(); ok {
+	if value, ok := _u.mutation.AlipayTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldAlipayTradeNo, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.RechargeChannel(); ok {
+	if value, ok := _u.mutation.RechargeChannel(); ok {
 		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
-	if value, ok := cruo.mutation.AddedRechargeChannel(); ok {
+	if value, ok := _u.mutation.AddedRechargeChannel(); ok {
 		_spec.AddField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 	}
-	if value, ok := cruo.mutation.RedeemCode(); ok {
+	if value, ok := _u.mutation.RedeemCode(); ok {
 		_spec.SetField(cyclerecharge.FieldRedeemCode, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.State(); ok {
+	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(cyclerecharge.FieldState, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.PayAmount(); ok {
+	if value, ok := _u.mutation.PayAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldPayAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.AddedPayAmount(); ok {
+	if value, ok := _u.mutation.AddedPayAmount(); ok {
 		_spec.AddField(cyclerecharge.FieldPayAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.TotalAmount(); ok {
+	if value, ok := _u.mutation.TotalAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldTotalAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.AddedTotalAmount(); ok {
+	if value, ok := _u.mutation.AddedTotalAmount(); ok {
 		_spec.AddField(cyclerecharge.FieldTotalAmount, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.BuyCycle(); ok {
+	if value, ok := _u.mutation.BuyCycle(); ok {
 		_spec.SetField(cyclerecharge.FieldBuyCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.AddedBuyCycle(); ok {
+	if value, ok := _u.mutation.AddedBuyCycle(); ok {
 		_spec.AddField(cyclerecharge.FieldBuyCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := cruo.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldUpdateTime, field.TypeTime, value)
 	}
-	_node = &CycleRecharge{config: cruo.config}
+	_node = &CycleRecharge{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cyclerecharge.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -450,6 +626,6 @@ func (cruo *CycleRechargeUpdateOne) sqlSave(ctx context.Context) (_node *CycleRe
 		}
 		return nil, err
 	}
-	cruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -57,7 +57,7 @@ func (*DomainBinding) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the DomainBinding fields.
-func (db *DomainBinding) assignValues(columns []string, values []any) error {
+func (_m *DomainBinding) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -67,52 +67,52 @@ func (db *DomainBinding) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				db.ID = *value
+				_m.ID = *value
 			}
 		case domainbinding.FieldUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value != nil {
-				db.UserID = *value
+				_m.UserID = *value
 			}
 		case domainbinding.FieldFkComputeInstanceID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_compute_instance_id", values[i])
 			} else if value != nil {
-				db.FkComputeInstanceID = *value
+				_m.FkComputeInstanceID = *value
 			}
 		case domainbinding.FieldFkNetworkMappingID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_network_mapping_id", values[i])
 			} else if value != nil {
-				db.FkNetworkMappingID = *value
+				_m.FkNetworkMappingID = *value
 			}
 		case domainbinding.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				db.Name = value.String
+				_m.Name = value.String
 			}
 		case domainbinding.FieldDomain:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field domain", values[i])
 			} else if value.Valid {
-				db.Domain = value.String
+				_m.Domain = value.String
 			}
 		case domainbinding.FieldGatewayPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field gateway_port", values[i])
 			} else if value.Valid {
-				db.GatewayPort = int32(value.Int64)
+				_m.GatewayPort = int32(value.Int64)
 			}
 		case domainbinding.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				db.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		default:
-			db.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -120,53 +120,53 @@ func (db *DomainBinding) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the DomainBinding.
 // This includes values selected through modifiers, order, etc.
-func (db *DomainBinding) Value(name string) (ent.Value, error) {
-	return db.selectValues.Get(name)
+func (_m *DomainBinding) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this DomainBinding.
 // Note that you need to call DomainBinding.Unwrap() before calling this method if this DomainBinding
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (db *DomainBinding) Update() *DomainBindingUpdateOne {
-	return NewDomainBindingClient(db.config).UpdateOne(db)
+func (_m *DomainBinding) Update() *DomainBindingUpdateOne {
+	return NewDomainBindingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the DomainBinding entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (db *DomainBinding) Unwrap() *DomainBinding {
-	_tx, ok := db.config.driver.(*txDriver)
+func (_m *DomainBinding) Unwrap() *DomainBinding {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: DomainBinding is not a transactional entity")
 	}
-	db.config.driver = _tx.drv
-	return db
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (db *DomainBinding) String() string {
+func (_m *DomainBinding) String() string {
 	var builder strings.Builder
 	builder.WriteString("DomainBinding(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", db.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", db.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_compute_instance_id=")
-	builder.WriteString(fmt.Sprintf("%v", db.FkComputeInstanceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkComputeInstanceID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_network_mapping_id=")
-	builder.WriteString(fmt.Sprintf("%v", db.FkNetworkMappingID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkNetworkMappingID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(db.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("domain=")
-	builder.WriteString(db.Domain)
+	builder.WriteString(_m.Domain)
 	builder.WriteString(", ")
 	builder.WriteString("gateway_port=")
-	builder.WriteString(fmt.Sprintf("%v", db.GatewayPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.GatewayPort))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(db.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -58,7 +58,7 @@ func (*StorageProvider) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the StorageProvider fields.
-func (sp *StorageProvider) assignValues(columns []string, values []any) error {
+func (_m *StorageProvider) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -68,52 +68,52 @@ func (sp *StorageProvider) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				sp.ID = *value
+				_m.ID = *value
 			}
 		case storageprovider.FieldAgentID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field agent_id", values[i])
 			} else if value != nil {
-				sp.AgentID = *value
+				_m.AgentID = *value
 			}
 		case storageprovider.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				sp.Status = consts.StorageProviderStatus(value.Int64)
+				_m.Status = consts.StorageProviderStatus(value.Int64)
 			}
 		case storageprovider.FieldMasterServer:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field master_server", values[i])
 			} else if value.Valid {
-				sp.MasterServer = value.String
+				_m.MasterServer = value.String
 			}
 		case storageprovider.FieldPublicIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field public_ip", values[i])
 			} else if value.Valid {
-				sp.PublicIP = value.String
+				_m.PublicIP = value.String
 			}
 		case storageprovider.FieldPublicPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field public_port", values[i])
 			} else if value.Valid {
-				sp.PublicPort = int32(value.Int64)
+				_m.PublicPort = int32(value.Int64)
 			}
 		case storageprovider.FieldGrpcPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field grpc_port", values[i])
 			} else if value.Valid {
-				sp.GrpcPort = int32(value.Int64)
+				_m.GrpcPort = int32(value.Int64)
 			}
 		case storageprovider.FieldCreatedTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_time", values[i])
 			} else if value.Valid {
-				sp.CreatedTime = value.Time
+				_m.CreatedTime = value.Time
 			}
 		default:
-			sp.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -121,53 +121,53 @@ func (sp *StorageProvider) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the StorageProvider.
 // This includes values selected through modifiers, order, etc.
-func (sp *StorageProvider) Value(name string) (ent.Value, error) {
-	return sp.selectValues.Get(name)
+func (_m *StorageProvider) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this StorageProvider.
 // Note that you need to call StorageProvider.Unwrap() before calling this method if this StorageProvider
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sp *StorageProvider) Update() *StorageProviderUpdateOne {
-	return NewStorageProviderClient(sp.config).UpdateOne(sp)
+func (_m *StorageProvider) Update() *StorageProviderUpdateOne {
+	return NewStorageProviderClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the StorageProvider entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sp *StorageProvider) Unwrap() *StorageProvider {
-	_tx, ok := sp.config.driver.(*txDriver)
+func (_m *StorageProvider) Unwrap() *StorageProvider {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: StorageProvider is not a transactional entity")
 	}
-	sp.config.driver = _tx.drv
-	return sp
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sp *StorageProvider) String() string {
+func (_m *StorageProvider) String() string {
 	var builder strings.Builder
 	builder.WriteString("StorageProvider(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sp.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("agent_id=")
-	builder.WriteString(fmt.Sprintf("%v", sp.AgentID))
+	builder.WriteString(fmt.Sprintf("%v", _m.AgentID))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", sp.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("master_server=")
-	builder.WriteString(sp.MasterServer)
+	builder.WriteString(_m.MasterServer)
 	builder.WriteString(", ")
 	builder.WriteString("public_ip=")
-	builder.WriteString(sp.PublicIP)
+	builder.WriteString(_m.PublicIP)
 	builder.WriteString(", ")
 	builder.WriteString("public_port=")
-	builder.WriteString(fmt.Sprintf("%v", sp.PublicPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.PublicPort))
 	builder.WriteString(", ")
 	builder.WriteString("grpc_port=")
-	builder.WriteString(fmt.Sprintf("%v", sp.GrpcPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.GrpcPort))
 	builder.WriteString(", ")
 	builder.WriteString("created_time=")
-	builder.WriteString(sp.CreatedTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

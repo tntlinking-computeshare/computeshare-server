@@ -20,36 +20,36 @@ type ComputeSpecCreate struct {
 }
 
 // SetCore sets the "core" field.
-func (csc *ComputeSpecCreate) SetCore(i int) *ComputeSpecCreate {
-	csc.mutation.SetCore(i)
-	return csc
+func (_c *ComputeSpecCreate) SetCore(v int) *ComputeSpecCreate {
+	_c.mutation.SetCore(v)
+	return _c
 }
 
 // SetMemory sets the "memory" field.
-func (csc *ComputeSpecCreate) SetMemory(i int) *ComputeSpecCreate {
-	csc.mutation.SetMemory(i)
-	return csc
+func (_c *ComputeSpecCreate) SetMemory(v int) *ComputeSpecCreate {
+	_c.mutation.SetMemory(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (csc *ComputeSpecCreate) SetID(i int32) *ComputeSpecCreate {
-	csc.mutation.SetID(i)
-	return csc
+func (_c *ComputeSpecCreate) SetID(v int32) *ComputeSpecCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // Mutation returns the ComputeSpecMutation object of the builder.
-func (csc *ComputeSpecCreate) Mutation() *ComputeSpecMutation {
-	return csc.mutation
+func (_c *ComputeSpecCreate) Mutation() *ComputeSpecMutation {
+	return _c.mutation
 }
 
 // Save creates the ComputeSpec in the database.
-func (csc *ComputeSpecCreate) Save(ctx context.Context) (*ComputeSpec, error) {
-	return withHooks(ctx, csc.sqlSave, csc.mutation, csc.hooks)
+func (_c *ComputeSpecCreate) Save(ctx context.Context) (*ComputeSpec, error) {
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (csc *ComputeSpecCreate) SaveX(ctx context.Context) *ComputeSpec {
-	v, err := csc.Save(ctx)
+func (_c *ComputeSpecCreate) SaveX(ctx context.Context) *ComputeSpec {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -57,35 +57,35 @@ func (csc *ComputeSpecCreate) SaveX(ctx context.Context) *ComputeSpec {
 }
 
 // Exec executes the query.
-func (csc *ComputeSpecCreate) Exec(ctx context.Context) error {
-	_, err := csc.Save(ctx)
+func (_c *ComputeSpecCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (csc *ComputeSpecCreate) ExecX(ctx context.Context) {
-	if err := csc.Exec(ctx); err != nil {
+func (_c *ComputeSpecCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (csc *ComputeSpecCreate) check() error {
-	if _, ok := csc.mutation.Core(); !ok {
+func (_c *ComputeSpecCreate) check() error {
+	if _, ok := _c.mutation.Core(); !ok {
 		return &ValidationError{Name: "core", err: errors.New(`ent: missing required field "ComputeSpec.core"`)}
 	}
-	if _, ok := csc.mutation.Memory(); !ok {
+	if _, ok := _c.mutation.Memory(); !ok {
 		return &ValidationError{Name: "memory", err: errors.New(`ent: missing required field "ComputeSpec.memory"`)}
 	}
 	return nil
 }
 
-func (csc *ComputeSpecCreate) sqlSave(ctx context.Context) (*ComputeSpec, error) {
-	if err := csc.check(); err != nil {
+func (_c *ComputeSpecCreate) sqlSave(ctx context.Context) (*ComputeSpec, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := csc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, csc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -95,25 +95,25 @@ func (csc *ComputeSpecCreate) sqlSave(ctx context.Context) (*ComputeSpec, error)
 		id := _spec.ID.Value.(int64)
 		_node.ID = int32(id)
 	}
-	csc.mutation.id = &_node.ID
-	csc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (csc *ComputeSpecCreate) createSpec() (*ComputeSpec, *sqlgraph.CreateSpec) {
+func (_c *ComputeSpecCreate) createSpec() (*ComputeSpec, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ComputeSpec{config: csc.config}
+		_node = &ComputeSpec{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(computespec.Table, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
 	)
-	if id, ok := csc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := csc.mutation.Core(); ok {
+	if value, ok := _c.mutation.Core(); ok {
 		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
 		_node.Core = value
 	}
-	if value, ok := csc.mutation.Memory(); ok {
+	if value, ok := _c.mutation.Memory(); ok {
 		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
 		_node.Memory = value
 	}
@@ -123,17 +123,21 @@ func (csc *ComputeSpecCreate) createSpec() (*ComputeSpec, *sqlgraph.CreateSpec) 
 // ComputeSpecCreateBulk is the builder for creating many ComputeSpec entities in bulk.
 type ComputeSpecCreateBulk struct {
 	config
+	err      error
 	builders []*ComputeSpecCreate
 }
 
 // Save creates the ComputeSpec entities in the database.
-func (cscb *ComputeSpecCreateBulk) Save(ctx context.Context) ([]*ComputeSpec, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(cscb.builders))
-	nodes := make([]*ComputeSpec, len(cscb.builders))
-	mutators := make([]Mutator, len(cscb.builders))
-	for i := range cscb.builders {
+func (_c *ComputeSpecCreateBulk) Save(ctx context.Context) ([]*ComputeSpec, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ComputeSpec, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cscb.builders[i]
+			builder := _c.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ComputeSpecMutation)
 				if !ok {
@@ -146,11 +150,11 @@ func (cscb *ComputeSpecCreateBulk) Save(ctx context.Context) ([]*ComputeSpec, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -174,7 +178,7 @@ func (cscb *ComputeSpecCreateBulk) Save(ctx context.Context) ([]*ComputeSpec, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -182,8 +186,8 @@ func (cscb *ComputeSpecCreateBulk) Save(ctx context.Context) ([]*ComputeSpec, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cscb *ComputeSpecCreateBulk) SaveX(ctx context.Context) []*ComputeSpec {
-	v, err := cscb.Save(ctx)
+func (_c *ComputeSpecCreateBulk) SaveX(ctx context.Context) []*ComputeSpec {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -191,14 +195,14 @@ func (cscb *ComputeSpecCreateBulk) SaveX(ctx context.Context) []*ComputeSpec {
 }
 
 // Exec executes the query.
-func (cscb *ComputeSpecCreateBulk) Exec(ctx context.Context) error {
-	_, err := cscb.Save(ctx)
+func (_c *ComputeSpecCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cscb *ComputeSpecCreateBulk) ExecX(ctx context.Context) {
-	if err := cscb.Exec(ctx); err != nil {
+func (_c *ComputeSpecCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -23,84 +23,108 @@ type TaskUpdate struct {
 }
 
 // Where appends a list predicates to the TaskUpdate builder.
-func (tu *TaskUpdate) Where(ps ...predicate.Task) *TaskUpdate {
-	tu.mutation.Where(ps...)
-	return tu
+func (_u *TaskUpdate) Where(ps ...predicate.Task) *TaskUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetAgentID sets the "agent_id" field.
-func (tu *TaskUpdate) SetAgentID(s string) *TaskUpdate {
-	tu.mutation.SetAgentID(s)
-	return tu
+func (_u *TaskUpdate) SetAgentID(v string) *TaskUpdate {
+	_u.mutation.SetAgentID(v)
+	return _u
+}
+
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableAgentID(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetAgentID(*v)
+	}
+	return _u
 }
 
 // SetCmd sets the "cmd" field.
-func (tu *TaskUpdate) SetCmd(i int32) *TaskUpdate {
-	tu.mutation.ResetCmd()
-	tu.mutation.SetCmd(i)
-	return tu
+func (_u *TaskUpdate) SetCmd(v int32) *TaskUpdate {
+	_u.mutation.ResetCmd()
+	_u.mutation.SetCmd(v)
+	return _u
 }
 
 // SetNillableCmd sets the "cmd" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableCmd(i *int32) *TaskUpdate {
-	if i != nil {
-		tu.SetCmd(*i)
+func (_u *TaskUpdate) SetNillableCmd(v *int32) *TaskUpdate {
+	if v != nil {
+		_u.SetCmd(*v)
 	}
-	return tu
+	return _u
 }
 
-// AddCmd adds i to the "cmd" field.
-func (tu *TaskUpdate) AddCmd(i int32) *TaskUpdate {
-	tu.mutation.AddCmd(i)
-	return tu
+// AddCmd adds value to the "cmd" field.
+func (_u *TaskUpdate) AddCmd(v int32) *TaskUpdate {
+	_u.mutation.AddCmd(v)
+	return _u
 }
 
 // SetParams sets the "params" field.
-func (tu *TaskUpdate) SetParams(s string) *TaskUpdate {
-	tu.mutation.SetParams(s)
-	return tu
+func (_u *TaskUpdate) SetParams(v string) *TaskUpdate {
+	_u.mutation.SetParams(v)
+	return _u
+}
+
+// SetNillableParams sets the "params" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableParams(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetParams(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (tu *TaskUpdate) SetStatus(i int) *TaskUpdate {
-	tu.mutation.ResetStatus()
-	tu.mutation.SetStatus(i)
-	return tu
+func (_u *TaskUpdate) SetStatus(v int) *TaskUpdate {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
-// AddStatus adds i to the "status" field.
-func (tu *TaskUpdate) AddStatus(i int) *TaskUpdate {
-	tu.mutation.AddStatus(i)
-	return tu
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableStatus(v *int) *TaskUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *TaskUpdate) AddStatus(v int) *TaskUpdate {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (tu *TaskUpdate) SetCreateTime(t time.Time) *TaskUpdate {
-	tu.mutation.SetCreateTime(t)
-	return tu
+func (_u *TaskUpdate) SetCreateTime(v time.Time) *TaskUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableCreateTime(t *time.Time) *TaskUpdate {
-	if t != nil {
-		tu.SetCreateTime(*t)
+func (_u *TaskUpdate) SetNillableCreateTime(v *time.Time) *TaskUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return tu
+	return _u
 }
 
 // Mutation returns the TaskMutation object of the builder.
-func (tu *TaskUpdate) Mutation() *TaskMutation {
-	return tu.mutation
+func (_u *TaskUpdate) Mutation() *TaskMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tu *TaskUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
+func (_u *TaskUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tu *TaskUpdate) SaveX(ctx context.Context) int {
-	affected, err := tu.Save(ctx)
+func (_u *TaskUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -108,26 +132,26 @@ func (tu *TaskUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tu *TaskUpdate) Exec(ctx context.Context) error {
-	_, err := tu.Save(ctx)
+func (_u *TaskUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tu *TaskUpdate) ExecX(ctx context.Context) {
-	if err := tu.Exec(ctx); err != nil {
+func (_u *TaskUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tu *TaskUpdate) check() error {
-	if v, ok := tu.mutation.AgentID(); ok {
+func (_u *TaskUpdate) check() error {
+	if v, ok := _u.mutation.AgentID(); ok {
 		if err := task.AgentIDValidator(v); err != nil {
 			return &ValidationError{Name: "agent_id", err: fmt.Errorf(`ent: validator failed for field "Task.agent_id": %w`, err)}
 		}
 	}
-	if v, ok := tu.mutation.Params(); ok {
+	if v, ok := _u.mutation.Params(); ok {
 		if err := task.ParamsValidator(v); err != nil {
 			return &ValidationError{Name: "params", err: fmt.Errorf(`ent: validator failed for field "Task.params": %w`, err)}
 		}
@@ -135,40 +159,40 @@ func (tu *TaskUpdate) check() error {
 	return nil
 }
 
-func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tu.check(); err != nil {
-		return n, err
+func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(task.Table, task.Columns, sqlgraph.NewFieldSpec(task.FieldID, field.TypeUUID))
-	if ps := tu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tu.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(task.FieldAgentID, field.TypeString, value)
 	}
-	if value, ok := tu.mutation.Cmd(); ok {
+	if value, ok := _u.mutation.Cmd(); ok {
 		_spec.SetField(task.FieldCmd, field.TypeInt32, value)
 	}
-	if value, ok := tu.mutation.AddedCmd(); ok {
+	if value, ok := _u.mutation.AddedCmd(); ok {
 		_spec.AddField(task.FieldCmd, field.TypeInt32, value)
 	}
-	if value, ok := tu.mutation.Params(); ok {
+	if value, ok := _u.mutation.Params(); ok {
 		_spec.SetField(task.FieldParams, field.TypeString, value)
 	}
-	if value, ok := tu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := tu.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(task.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := tu.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(task.FieldCreateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{task.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -176,8 +200,8 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	tu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TaskUpdateOne is the builder for updating a single Task entity.
@@ -189,91 +213,115 @@ type TaskUpdateOne struct {
 }
 
 // SetAgentID sets the "agent_id" field.
-func (tuo *TaskUpdateOne) SetAgentID(s string) *TaskUpdateOne {
-	tuo.mutation.SetAgentID(s)
-	return tuo
+func (_u *TaskUpdateOne) SetAgentID(v string) *TaskUpdateOne {
+	_u.mutation.SetAgentID(v)
+	return _u
+}
+
+// SetNillableAgentID sets the "agent_id" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableAgentID(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetAgentID(*v)
+	}
+	return _u
 }
 
 // SetCmd sets the "cmd" field.
-func (tuo *TaskUpdateOne) SetCmd(i int32) *TaskUpdateOne {
-	tuo.mutation.ResetCmd()
-	tuo.mutation.SetCmd(i)
-	return tuo
+func (_u *TaskUpdateOne) SetCmd(v int32) *TaskUpdateOne {
+	_u.mutation.ResetCmd()
+	_u.mutation.SetCmd(v)
+	return _u
 }
 
 // SetNillableCmd sets the "cmd" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableCmd(i *int32) *TaskUpdateOne {
-	if i != nil {
-		tuo.SetCmd(*i)
+func (_u *TaskUpdateOne) SetNillableCmd(v *int32) *TaskUpdateOne {
+	if v != nil {
+		_u.SetCmd(*v)
 	}
-	return tuo
+	return _u
 }
 
-// AddCmd adds i to the "cmd" field.
-func (tuo *TaskUpdateOne) AddCmd(i int32) *TaskUpdateOne {
-	tuo.mutation.AddCmd(i)
-	return tuo
+// AddCmd adds value to the "cmd" field.
+func (_u *TaskUpdateOne) AddCmd(v int32) *TaskUpdateOne {
+	_u.mutation.AddCmd(v)
+	return _u
 }
 
 // SetParams sets the "params" field.
-func (tuo *TaskUpdateOne) SetParams(s string) *TaskUpdateOne {
-	tuo.mutation.SetParams(s)
-	return tuo
+func (_u *TaskUpdateOne) SetParams(v string) *TaskUpdateOne {
+	_u.mutation.SetParams(v)
+	return _u
+}
+
+// SetNillableParams sets the "params" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableParams(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetParams(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (tuo *TaskUpdateOne) SetStatus(i int) *TaskUpdateOne {
-	tuo.mutation.ResetStatus()
-	tuo.mutation.SetStatus(i)
-	return tuo
+func (_u *TaskUpdateOne) SetStatus(v int) *TaskUpdateOne {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
-// AddStatus adds i to the "status" field.
-func (tuo *TaskUpdateOne) AddStatus(i int) *TaskUpdateOne {
-	tuo.mutation.AddStatus(i)
-	return tuo
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableStatus(v *int) *TaskUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *TaskUpdateOne) AddStatus(v int) *TaskUpdateOne {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (tuo *TaskUpdateOne) SetCreateTime(t time.Time) *TaskUpdateOne {
-	tuo.mutation.SetCreateTime(t)
-	return tuo
+func (_u *TaskUpdateOne) SetCreateTime(v time.Time) *TaskUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableCreateTime(t *time.Time) *TaskUpdateOne {
-	if t != nil {
-		tuo.SetCreateTime(*t)
+func (_u *TaskUpdateOne) SetNillableCreateTime(v *time.Time) *TaskUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return tuo
+	return _u
 }
 
 // Mutation returns the TaskMutation object of the builder.
-func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
-	return tuo.mutation
+func (_u *TaskUpdateOne) Mutation() *TaskMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TaskUpdate builder.
-func (tuo *TaskUpdateOne) Where(ps ...predicate.Task) *TaskUpdateOne {
-	tuo.mutation.Where(ps...)
-	return tuo
+func (_u *TaskUpdateOne) Where(ps ...predicate.Task) *TaskUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tuo *TaskUpdateOne) Select(field string, fields ...string) *TaskUpdateOne {
-	tuo.fields = append([]string{field}, fields...)
-	return tuo
+func (_u *TaskUpdateOne) Select(field string, fields ...string) *TaskUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Task entity.
-func (tuo *TaskUpdateOne) Save(ctx context.Context) (*Task, error) {
-	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
+func (_u *TaskUpdateOne) Save(ctx context.Context) (*Task, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tuo *TaskUpdateOne) SaveX(ctx context.Context) *Task {
-	node, err := tuo.Save(ctx)
+func (_u *TaskUpdateOne) SaveX(ctx context.Context) *Task {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -281,26 +329,26 @@ func (tuo *TaskUpdateOne) SaveX(ctx context.Context) *Task {
 }
 
 // Exec executes the query on the entity.
-func (tuo *TaskUpdateOne) Exec(ctx context.Context) error {
-	_, err := tuo.Save(ctx)
+func (_u *TaskUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuo *TaskUpdateOne) ExecX(ctx context.Context) {
-	if err := tuo.Exec(ctx); err != nil {
+func (_u *TaskUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuo *TaskUpdateOne) check() error {
-	if v, ok := tuo.mutation.AgentID(); ok {
+func (_u *TaskUpdateOne) check() error {
+	if v, ok := _u.mutation.AgentID(); ok {
 		if err := task.AgentIDValidator(v); err != nil {
 			return &ValidationError{Name: "agent_id", err: fmt.Errorf(`ent: validator failed for field "Task.agent_id": %w`, err)}
 		}
 	}
-	if v, ok := tuo.mutation.Params(); ok {
+	if v, ok := _u.mutation.Params(); ok {
 		if err := task.ParamsValidator(v); err != nil {
 			return &ValidationError{Name: "params", err: fmt.Errorf(`ent: validator failed for field "Task.params": %w`, err)}
 		}
@@ -308,17 +356,17 @@ func (tuo *TaskUpdateOne) check() error {
 	return nil
 }
 
-func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
-	if err := tuo.check(); err != nil {
+func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(task.Table, task.Columns, sqlgraph.NewFieldSpec(task.FieldID, field.TypeUUID))
-	id, ok := tuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Task.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, task.FieldID)
 		for _, f := range fields {
@@ -330,38 +378,38 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 			}
 		}
 	}
-	if ps := tuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tuo.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(task.FieldAgentID, field.TypeString, value)
 	}
-	if value, ok := tuo.mutation.Cmd(); ok {
+	if value, ok := _u.mutation.Cmd(); ok {
 		_spec.SetField(task.FieldCmd, field.TypeInt32, value)
 	}
-	if value, ok := tuo.mutation.AddedCmd(); ok {
+	if value, ok := _u.mutation.AddedCmd(); ok {
 		_spec.AddField(task.FieldCmd, field.TypeInt32, value)
 	}
-	if value, ok := tuo.mutation.Params(); ok {
+	if value, ok := _u.mutation.Params(); ok {
 		_spec.SetField(task.FieldParams, field.TypeString, value)
 	}
-	if value, ok := tuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := tuo.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(task.FieldStatus, field.TypeInt, value)
 	}
-	if value, ok := tuo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(task.FieldCreateTime, field.TypeTime, value)
 	}
-	_node = &Task{config: tuo.config}
+	_node = &Task{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{task.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -369,6 +417,6 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		}
 		return nil, err
 	}
-	tuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

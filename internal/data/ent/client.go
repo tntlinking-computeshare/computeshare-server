@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/google/uuid"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent/migrate"
@@ -104,9 +105,7 @@ type Client struct {
 
 // NewClient creates a new client configured with the given options.
 func NewClient(opts ...Option) *Client {
-	cfg := config{log: log.Println, hooks: &hooks{}, inters: &inters{}}
-	cfg.options(opts...)
-	client := &Client{config: cfg}
+	client := &Client{config: newConfig(opts...)}
 	client.init()
 	return client
 }
@@ -159,6 +158,13 @@ type (
 	Option func(*config)
 )
 
+// newConfig creates a new config for the client.
+func newConfig(opts ...Option) config {
+	cfg := config{log: log.Println, hooks: &hooks{}, inters: &inters{}}
+	cfg.options(opts...)
+	return cfg
+}
+
 // options applies the options on the config object.
 func (c *config) options(opts ...Option) {
 	for _, opt := range opts {
@@ -206,11 +212,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -440,6 +449,21 @@ func (c *AgentClient) CreateBulk(builders ...*AgentCreate) *AgentCreateBulk {
 	return &AgentCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AgentClient) MapCreateBulk(slice any, setFunc func(*AgentCreate, int)) *AgentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AgentCreateBulk{err: fmt.Errorf("calling to AgentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AgentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AgentCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Agent.
 func (c *AgentClient) Update() *AgentUpdate {
 	mutation := newAgentMutation(c.config, OpUpdate)
@@ -447,8 +471,8 @@ func (c *AgentClient) Update() *AgentUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AgentClient) UpdateOne(a *Agent) *AgentUpdateOne {
-	mutation := newAgentMutation(c.config, OpUpdateOne, withAgent(a))
+func (c *AgentClient) UpdateOne(_m *Agent) *AgentUpdateOne {
+	mutation := newAgentMutation(c.config, OpUpdateOne, withAgent(_m))
 	return &AgentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -465,8 +489,8 @@ func (c *AgentClient) Delete() *AgentDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AgentClient) DeleteOne(a *Agent) *AgentDeleteOne {
-	return c.DeleteOneID(a.ID)
+func (c *AgentClient) DeleteOne(_m *Agent) *AgentDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -558,6 +582,21 @@ func (c *AlipayOrderRollbackClient) CreateBulk(builders ...*AlipayOrderRollbackC
 	return &AlipayOrderRollbackCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AlipayOrderRollbackClient) MapCreateBulk(slice any, setFunc func(*AlipayOrderRollbackCreate, int)) *AlipayOrderRollbackCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AlipayOrderRollbackCreateBulk{err: fmt.Errorf("calling to AlipayOrderRollbackClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AlipayOrderRollbackCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AlipayOrderRollbackCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for AlipayOrderRollback.
 func (c *AlipayOrderRollbackClient) Update() *AlipayOrderRollbackUpdate {
 	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdate)
@@ -565,8 +604,8 @@ func (c *AlipayOrderRollbackClient) Update() *AlipayOrderRollbackUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AlipayOrderRollbackClient) UpdateOne(aor *AlipayOrderRollback) *AlipayOrderRollbackUpdateOne {
-	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdateOne, withAlipayOrderRollback(aor))
+func (c *AlipayOrderRollbackClient) UpdateOne(_m *AlipayOrderRollback) *AlipayOrderRollbackUpdateOne {
+	mutation := newAlipayOrderRollbackMutation(c.config, OpUpdateOne, withAlipayOrderRollback(_m))
 	return &AlipayOrderRollbackUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -583,8 +622,8 @@ func (c *AlipayOrderRollbackClient) Delete() *AlipayOrderRollbackDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AlipayOrderRollbackClient) DeleteOne(aor *AlipayOrderRollback) *AlipayOrderRollbackDeleteOne {
-	return c.DeleteOneID(aor.ID)
+func (c *AlipayOrderRollbackClient) DeleteOne(_m *AlipayOrderRollback) *AlipayOrderRollbackDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -676,6 +715,21 @@ func (c *ComputeImageClient) CreateBulk(builders ...*ComputeImageCreate) *Comput
 	return &ComputeImageCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ComputeImageClient) MapCreateBulk(slice any, setFunc func(*ComputeImageCreate, int)) *ComputeImageCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ComputeImageCreateBulk{err: fmt.Errorf("calling to ComputeImageClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ComputeImageCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ComputeImageCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ComputeImage.
 func (c *ComputeImageClient) Update() *ComputeImageUpdate {
 	mutation := newComputeImageMutation(c.config, OpUpdate)
@@ -683,8 +737,8 @@ func (c *ComputeImageClient) Update() *ComputeImageUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ComputeImageClient) UpdateOne(ci *ComputeImage) *ComputeImageUpdateOne {
-	mutation := newComputeImageMutation(c.config, OpUpdateOne, withComputeImage(ci))
+func (c *ComputeImageClient) UpdateOne(_m *ComputeImage) *ComputeImageUpdateOne {
+	mutation := newComputeImageMutation(c.config, OpUpdateOne, withComputeImage(_m))
 	return &ComputeImageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -701,8 +755,8 @@ func (c *ComputeImageClient) Delete() *ComputeImageDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ComputeImageClient) DeleteOne(ci *ComputeImage) *ComputeImageDeleteOne {
-	return c.DeleteOneID(ci.ID)
+func (c *ComputeImageClient) DeleteOne(_m *ComputeImage) *ComputeImageDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -794,6 +848,21 @@ func (c *ComputeInstanceClient) CreateBulk(builders ...*ComputeInstanceCreate) *
 	return &ComputeInstanceCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ComputeInstanceClient) MapCreateBulk(slice any, setFunc func(*ComputeInstanceCreate, int)) *ComputeInstanceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ComputeInstanceCreateBulk{err: fmt.Errorf("calling to ComputeInstanceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ComputeInstanceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ComputeInstanceCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ComputeInstance.
 func (c *ComputeInstanceClient) Update() *ComputeInstanceUpdate {
 	mutation := newComputeInstanceMutation(c.config, OpUpdate)
@@ -801,8 +870,8 @@ func (c *ComputeInstanceClient) Update() *ComputeInstanceUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ComputeInstanceClient) UpdateOne(ci *ComputeInstance) *ComputeInstanceUpdateOne {
-	mutation := newComputeInstanceMutation(c.config, OpUpdateOne, withComputeInstance(ci))
+func (c *ComputeInstanceClient) UpdateOne(_m *ComputeInstance) *ComputeInstanceUpdateOne {
+	mutation := newComputeInstanceMutation(c.config, OpUpdateOne, withComputeInstance(_m))
 	return &ComputeInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -819,8 +888,8 @@ func (c *ComputeInstanceClient) Delete() *ComputeInstanceDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ComputeInstanceClient) DeleteOne(ci *ComputeInstance) *ComputeInstanceDeleteOne {
-	return c.DeleteOneID(ci.ID)
+func (c *ComputeInstanceClient) DeleteOne(_m *ComputeInstance) *ComputeInstanceDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -912,6 +981,21 @@ func (c *ComputeSpecClient) CreateBulk(builders ...*ComputeSpecCreate) *ComputeS
 	return &ComputeSpecCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ComputeSpecClient) MapCreateBulk(slice any, setFunc func(*ComputeSpecCreate, int)) *ComputeSpecCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ComputeSpecCreateBulk{err: fmt.Errorf("calling to ComputeSpecClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ComputeSpecCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ComputeSpecCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ComputeSpec.
 func (c *ComputeSpecClient) Update() *ComputeSpecUpdate {
 	mutation := newComputeSpecMutation(c.config, OpUpdate)
@@ -919,8 +1003,8 @@ func (c *ComputeSpecClient) Update() *ComputeSpecUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ComputeSpecClient) UpdateOne(cs *ComputeSpec) *ComputeSpecUpdateOne {
-	mutation := newComputeSpecMutation(c.config, OpUpdateOne, withComputeSpec(cs))
+func (c *ComputeSpecClient) UpdateOne(_m *ComputeSpec) *ComputeSpecUpdateOne {
+	mutation := newComputeSpecMutation(c.config, OpUpdateOne, withComputeSpec(_m))
 	return &ComputeSpecUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -937,8 +1021,8 @@ func (c *ComputeSpecClient) Delete() *ComputeSpecDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ComputeSpecClient) DeleteOne(cs *ComputeSpec) *ComputeSpecDeleteOne {
-	return c.DeleteOneID(cs.ID)
+func (c *ComputeSpecClient) DeleteOne(_m *ComputeSpec) *ComputeSpecDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1030,6 +1114,21 @@ func (c *ComputeSpecPriceClient) CreateBulk(builders ...*ComputeSpecPriceCreate)
 	return &ComputeSpecPriceCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ComputeSpecPriceClient) MapCreateBulk(slice any, setFunc func(*ComputeSpecPriceCreate, int)) *ComputeSpecPriceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ComputeSpecPriceCreateBulk{err: fmt.Errorf("calling to ComputeSpecPriceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ComputeSpecPriceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ComputeSpecPriceCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ComputeSpecPrice.
 func (c *ComputeSpecPriceClient) Update() *ComputeSpecPriceUpdate {
 	mutation := newComputeSpecPriceMutation(c.config, OpUpdate)
@@ -1037,8 +1136,8 @@ func (c *ComputeSpecPriceClient) Update() *ComputeSpecPriceUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ComputeSpecPriceClient) UpdateOne(csp *ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
-	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPrice(csp))
+func (c *ComputeSpecPriceClient) UpdateOne(_m *ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
+	mutation := newComputeSpecPriceMutation(c.config, OpUpdateOne, withComputeSpecPrice(_m))
 	return &ComputeSpecPriceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1055,8 +1154,8 @@ func (c *ComputeSpecPriceClient) Delete() *ComputeSpecPriceDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ComputeSpecPriceClient) DeleteOne(csp *ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
-	return c.DeleteOneID(csp.ID)
+func (c *ComputeSpecPriceClient) DeleteOne(_m *ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1148,6 +1247,21 @@ func (c *CycleClient) CreateBulk(builders ...*CycleCreate) *CycleCreateBulk {
 	return &CycleCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleClient) MapCreateBulk(slice any, setFunc func(*CycleCreate, int)) *CycleCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleCreateBulk{err: fmt.Errorf("calling to CycleClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Cycle.
 func (c *CycleClient) Update() *CycleUpdate {
 	mutation := newCycleMutation(c.config, OpUpdate)
@@ -1155,8 +1269,8 @@ func (c *CycleClient) Update() *CycleUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleClient) UpdateOne(cy *Cycle) *CycleUpdateOne {
-	mutation := newCycleMutation(c.config, OpUpdateOne, withCycle(cy))
+func (c *CycleClient) UpdateOne(_m *Cycle) *CycleUpdateOne {
+	mutation := newCycleMutation(c.config, OpUpdateOne, withCycle(_m))
 	return &CycleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1173,8 +1287,8 @@ func (c *CycleClient) Delete() *CycleDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleClient) DeleteOne(cy *Cycle) *CycleDeleteOne {
-	return c.DeleteOneID(cy.ID)
+func (c *CycleClient) DeleteOne(_m *Cycle) *CycleDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1266,6 +1380,21 @@ func (c *CycleOrderClient) CreateBulk(builders ...*CycleOrderCreate) *CycleOrder
 	return &CycleOrderCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleOrderClient) MapCreateBulk(slice any, setFunc func(*CycleOrderCreate, int)) *CycleOrderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleOrderCreateBulk{err: fmt.Errorf("calling to CycleOrderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleOrderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleOrderCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CycleOrder.
 func (c *CycleOrderClient) Update() *CycleOrderUpdate {
 	mutation := newCycleOrderMutation(c.config, OpUpdate)
@@ -1273,8 +1402,8 @@ func (c *CycleOrderClient) Update() *CycleOrderUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleOrderClient) UpdateOne(co *CycleOrder) *CycleOrderUpdateOne {
-	mutation := newCycleOrderMutation(c.config, OpUpdateOne, withCycleOrder(co))
+func (c *CycleOrderClient) UpdateOne(_m *CycleOrder) *CycleOrderUpdateOne {
+	mutation := newCycleOrderMutation(c.config, OpUpdateOne, withCycleOrder(_m))
 	return &CycleOrderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1291,8 +1420,8 @@ func (c *CycleOrderClient) Delete() *CycleOrderDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleOrderClient) DeleteOne(co *CycleOrder) *CycleOrderDeleteOne {
-	return c.DeleteOneID(co.ID)
+func (c *CycleOrderClient) DeleteOne(_m *CycleOrder) *CycleOrderDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1384,6 +1513,21 @@ func (c *CycleRechargeClient) CreateBulk(builders ...*CycleRechargeCreate) *Cycl
 	return &CycleRechargeCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleRechargeClient) MapCreateBulk(slice any, setFunc func(*CycleRechargeCreate, int)) *CycleRechargeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleRechargeCreateBulk{err: fmt.Errorf("calling to CycleRechargeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleRechargeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleRechargeCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CycleRecharge.
 func (c *CycleRechargeClient) Update() *CycleRechargeUpdate {
 	mutation := newCycleRechargeMutation(c.config, OpUpdate)
@@ -1391,8 +1535,8 @@ func (c *CycleRechargeClient) Update() *CycleRechargeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleRechargeClient) UpdateOne(cr *CycleRecharge) *CycleRechargeUpdateOne {
-	mutation := newCycleRechargeMutation(c.config, OpUpdateOne, withCycleRecharge(cr))
+func (c *CycleRechargeClient) UpdateOne(_m *CycleRecharge) *CycleRechargeUpdateOne {
+	mutation := newCycleRechargeMutation(c.config, OpUpdateOne, withCycleRecharge(_m))
 	return &CycleRechargeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1409,8 +1553,8 @@ func (c *CycleRechargeClient) Delete() *CycleRechargeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleRechargeClient) DeleteOne(cr *CycleRecharge) *CycleRechargeDeleteOne {
-	return c.DeleteOneID(cr.ID)
+func (c *CycleRechargeClient) DeleteOne(_m *CycleRecharge) *CycleRechargeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1502,6 +1646,21 @@ func (c *CycleRedeemCodeClient) CreateBulk(builders ...*CycleRedeemCodeCreate) *
 	return &CycleRedeemCodeCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleRedeemCodeClient) MapCreateBulk(slice any, setFunc func(*CycleRedeemCodeCreate, int)) *CycleRedeemCodeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleRedeemCodeCreateBulk{err: fmt.Errorf("calling to CycleRedeemCodeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleRedeemCodeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleRedeemCodeCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CycleRedeemCode.
 func (c *CycleRedeemCodeClient) Update() *CycleRedeemCodeUpdate {
 	mutation := newCycleRedeemCodeMutation(c.config, OpUpdate)
@@ -1509,8 +1668,8 @@ func (c *CycleRedeemCodeClient) Update() *CycleRedeemCodeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleRedeemCodeClient) UpdateOne(crc *CycleRedeemCode) *CycleRedeemCodeUpdateOne {
-	mutation := newCycleRedeemCodeMutation(c.config, OpUpdateOne, withCycleRedeemCode(crc))
+func (c *CycleRedeemCodeClient) UpdateOne(_m *CycleRedeemCode) *CycleRedeemCodeUpdateOne {
+	mutation := newCycleRedeemCodeMutation(c.config, OpUpdateOne, withCycleRedeemCode(_m))
 	return &CycleRedeemCodeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1527,8 +1686,8 @@ func (c *CycleRedeemCodeClient) Delete() *CycleRedeemCodeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleRedeemCodeClient) DeleteOne(crc *CycleRedeemCode) *CycleRedeemCodeDeleteOne {
-	return c.DeleteOneID(crc.ID)
+func (c *CycleRedeemCodeClient) DeleteOne(_m *CycleRedeemCode) *CycleRedeemCodeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1620,6 +1779,21 @@ func (c *CycleRenewalClient) CreateBulk(builders ...*CycleRenewalCreate) *CycleR
 	return &CycleRenewalCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleRenewalClient) MapCreateBulk(slice any, setFunc func(*CycleRenewalCreate, int)) *CycleRenewalCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleRenewalCreateBulk{err: fmt.Errorf("calling to CycleRenewalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleRenewalCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleRenewalCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CycleRenewal.
 func (c *CycleRenewalClient) Update() *CycleRenewalUpdate {
 	mutation := newCycleRenewalMutation(c.config, OpUpdate)
@@ -1627,8 +1801,8 @@ func (c *CycleRenewalClient) Update() *CycleRenewalUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleRenewalClient) UpdateOne(cr *CycleRenewal) *CycleRenewalUpdateOne {
-	mutation := newCycleRenewalMutation(c.config, OpUpdateOne, withCycleRenewal(cr))
+func (c *CycleRenewalClient) UpdateOne(_m *CycleRenewal) *CycleRenewalUpdateOne {
+	mutation := newCycleRenewalMutation(c.config, OpUpdateOne, withCycleRenewal(_m))
 	return &CycleRenewalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1645,8 +1819,8 @@ func (c *CycleRenewalClient) Delete() *CycleRenewalDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleRenewalClient) DeleteOne(cr *CycleRenewal) *CycleRenewalDeleteOne {
-	return c.DeleteOneID(cr.ID)
+func (c *CycleRenewalClient) DeleteOne(_m *CycleRenewal) *CycleRenewalDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1738,6 +1912,21 @@ func (c *CycleTransactionClient) CreateBulk(builders ...*CycleTransactionCreate)
 	return &CycleTransactionCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CycleTransactionClient) MapCreateBulk(slice any, setFunc func(*CycleTransactionCreate, int)) *CycleTransactionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CycleTransactionCreateBulk{err: fmt.Errorf("calling to CycleTransactionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CycleTransactionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CycleTransactionCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CycleTransaction.
 func (c *CycleTransactionClient) Update() *CycleTransactionUpdate {
 	mutation := newCycleTransactionMutation(c.config, OpUpdate)
@@ -1745,8 +1934,8 @@ func (c *CycleTransactionClient) Update() *CycleTransactionUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *CycleTransactionClient) UpdateOne(ct *CycleTransaction) *CycleTransactionUpdateOne {
-	mutation := newCycleTransactionMutation(c.config, OpUpdateOne, withCycleTransaction(ct))
+func (c *CycleTransactionClient) UpdateOne(_m *CycleTransaction) *CycleTransactionUpdateOne {
+	mutation := newCycleTransactionMutation(c.config, OpUpdateOne, withCycleTransaction(_m))
 	return &CycleTransactionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1763,8 +1952,8 @@ func (c *CycleTransactionClient) Delete() *CycleTransactionDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *CycleTransactionClient) DeleteOne(ct *CycleTransaction) *CycleTransactionDeleteOne {
-	return c.DeleteOneID(ct.ID)
+func (c *CycleTransactionClient) DeleteOne(_m *CycleTransaction) *CycleTransactionDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1856,6 +2045,21 @@ func (c *DomainBindingClient) CreateBulk(builders ...*DomainBindingCreate) *Doma
 	return &DomainBindingCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DomainBindingClient) MapCreateBulk(slice any, setFunc func(*DomainBindingCreate, int)) *DomainBindingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DomainBindingCreateBulk{err: fmt.Errorf("calling to DomainBindingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DomainBindingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DomainBindingCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for DomainBinding.
 func (c *DomainBindingClient) Update() *DomainBindingUpdate {
 	mutation := newDomainBindingMutation(c.config, OpUpdate)
@@ -1863,8 +2067,8 @@ func (c *DomainBindingClient) Update() *DomainBindingUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *DomainBindingClient) UpdateOne(db *DomainBinding) *DomainBindingUpdateOne {
-	mutation := newDomainBindingMutation(c.config, OpUpdateOne, withDomainBinding(db))
+func (c *DomainBindingClient) UpdateOne(_m *DomainBinding) *DomainBindingUpdateOne {
+	mutation := newDomainBindingMutation(c.config, OpUpdateOne, withDomainBinding(_m))
 	return &DomainBindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1881,8 +2085,8 @@ func (c *DomainBindingClient) Delete() *DomainBindingDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *DomainBindingClient) DeleteOne(db *DomainBinding) *DomainBindingDeleteOne {
-	return c.DeleteOneID(db.ID)
+func (c *DomainBindingClient) DeleteOne(_m *DomainBinding) *DomainBindingDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1974,6 +2178,21 @@ func (c *EmployeeClient) CreateBulk(builders ...*EmployeeCreate) *EmployeeCreate
 	return &EmployeeCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EmployeeClient) MapCreateBulk(slice any, setFunc func(*EmployeeCreate, int)) *EmployeeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EmployeeCreateBulk{err: fmt.Errorf("calling to EmployeeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EmployeeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EmployeeCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Employee.
 func (c *EmployeeClient) Update() *EmployeeUpdate {
 	mutation := newEmployeeMutation(c.config, OpUpdate)
@@ -1981,8 +2200,8 @@ func (c *EmployeeClient) Update() *EmployeeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *EmployeeClient) UpdateOne(e *Employee) *EmployeeUpdateOne {
-	mutation := newEmployeeMutation(c.config, OpUpdateOne, withEmployee(e))
+func (c *EmployeeClient) UpdateOne(_m *Employee) *EmployeeUpdateOne {
+	mutation := newEmployeeMutation(c.config, OpUpdateOne, withEmployee(_m))
 	return &EmployeeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1999,8 +2218,8 @@ func (c *EmployeeClient) Delete() *EmployeeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *EmployeeClient) DeleteOne(e *Employee) *EmployeeDeleteOne {
-	return c.DeleteOneID(e.ID)
+func (c *EmployeeClient) DeleteOne(_m *Employee) *EmployeeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2092,6 +2311,21 @@ func (c *GatewayClient) CreateBulk(builders ...*GatewayCreate) *GatewayCreateBul
 	return &GatewayCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *GatewayClient) MapCreateBulk(slice any, setFunc func(*GatewayCreate, int)) *GatewayCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &GatewayCreateBulk{err: fmt.Errorf("calling to GatewayClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*GatewayCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &GatewayCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Gateway.
 func (c *GatewayClient) Update() *GatewayUpdate {
 	mutation := newGatewayMutation(c.config, OpUpdate)
@@ -2099,8 +2333,8 @@ func (c *GatewayClient) Update() *GatewayUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *GatewayClient) UpdateOne(ga *Gateway) *GatewayUpdateOne {
-	mutation := newGatewayMutation(c.config, OpUpdateOne, withGateway(ga))
+func (c *GatewayClient) UpdateOne(_m *Gateway) *GatewayUpdateOne {
+	mutation := newGatewayMutation(c.config, OpUpdateOne, withGateway(_m))
 	return &GatewayUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2117,8 +2351,8 @@ func (c *GatewayClient) Delete() *GatewayDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *GatewayClient) DeleteOne(ga *Gateway) *GatewayDeleteOne {
-	return c.DeleteOneID(ga.ID)
+func (c *GatewayClient) DeleteOne(_m *Gateway) *GatewayDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2210,6 +2444,21 @@ func (c *GatewayPortClient) CreateBulk(builders ...*GatewayPortCreate) *GatewayP
 	return &GatewayPortCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *GatewayPortClient) MapCreateBulk(slice any, setFunc func(*GatewayPortCreate, int)) *GatewayPortCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &GatewayPortCreateBulk{err: fmt.Errorf("calling to GatewayPortClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*GatewayPortCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &GatewayPortCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for GatewayPort.
 func (c *GatewayPortClient) Update() *GatewayPortUpdate {
 	mutation := newGatewayPortMutation(c.config, OpUpdate)
@@ -2217,8 +2466,8 @@ func (c *GatewayPortClient) Update() *GatewayPortUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *GatewayPortClient) UpdateOne(gp *GatewayPort) *GatewayPortUpdateOne {
-	mutation := newGatewayPortMutation(c.config, OpUpdateOne, withGatewayPort(gp))
+func (c *GatewayPortClient) UpdateOne(_m *GatewayPort) *GatewayPortUpdateOne {
+	mutation := newGatewayPortMutation(c.config, OpUpdateOne, withGatewayPort(_m))
 	return &GatewayPortUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2235,8 +2484,8 @@ func (c *GatewayPortClient) Delete() *GatewayPortDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *GatewayPortClient) DeleteOne(gp *GatewayPort) *GatewayPortDeleteOne {
-	return c.DeleteOneID(gp.ID)
+func (c *GatewayPortClient) DeleteOne(_m *GatewayPort) *GatewayPortDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2328,6 +2577,21 @@ func (c *NetworkMappingClient) CreateBulk(builders ...*NetworkMappingCreate) *Ne
 	return &NetworkMappingCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NetworkMappingClient) MapCreateBulk(slice any, setFunc func(*NetworkMappingCreate, int)) *NetworkMappingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NetworkMappingCreateBulk{err: fmt.Errorf("calling to NetworkMappingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NetworkMappingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NetworkMappingCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for NetworkMapping.
 func (c *NetworkMappingClient) Update() *NetworkMappingUpdate {
 	mutation := newNetworkMappingMutation(c.config, OpUpdate)
@@ -2335,8 +2599,8 @@ func (c *NetworkMappingClient) Update() *NetworkMappingUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *NetworkMappingClient) UpdateOne(nm *NetworkMapping) *NetworkMappingUpdateOne {
-	mutation := newNetworkMappingMutation(c.config, OpUpdateOne, withNetworkMapping(nm))
+func (c *NetworkMappingClient) UpdateOne(_m *NetworkMapping) *NetworkMappingUpdateOne {
+	mutation := newNetworkMappingMutation(c.config, OpUpdateOne, withNetworkMapping(_m))
 	return &NetworkMappingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2353,8 +2617,8 @@ func (c *NetworkMappingClient) Delete() *NetworkMappingDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *NetworkMappingClient) DeleteOne(nm *NetworkMapping) *NetworkMappingDeleteOne {
-	return c.DeleteOneID(nm.ID)
+func (c *NetworkMappingClient) DeleteOne(_m *NetworkMapping) *NetworkMappingDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2446,6 +2710,21 @@ func (c *S3BucketClient) CreateBulk(builders ...*S3BucketCreate) *S3BucketCreate
 	return &S3BucketCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *S3BucketClient) MapCreateBulk(slice any, setFunc func(*S3BucketCreate, int)) *S3BucketCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &S3BucketCreateBulk{err: fmt.Errorf("calling to S3BucketClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*S3BucketCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &S3BucketCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for S3Bucket.
 func (c *S3BucketClient) Update() *S3BucketUpdate {
 	mutation := newS3BucketMutation(c.config, OpUpdate)
@@ -2453,8 +2732,8 @@ func (c *S3BucketClient) Update() *S3BucketUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *S3BucketClient) UpdateOne(s *S3Bucket) *S3BucketUpdateOne {
-	mutation := newS3BucketMutation(c.config, OpUpdateOne, withS3Bucket(s))
+func (c *S3BucketClient) UpdateOne(_m *S3Bucket) *S3BucketUpdateOne {
+	mutation := newS3BucketMutation(c.config, OpUpdateOne, withS3Bucket(_m))
 	return &S3BucketUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2471,8 +2750,8 @@ func (c *S3BucketClient) Delete() *S3BucketDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *S3BucketClient) DeleteOne(s *S3Bucket) *S3BucketDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *S3BucketClient) DeleteOne(_m *S3Bucket) *S3BucketDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2564,6 +2843,21 @@ func (c *S3UserClient) CreateBulk(builders ...*S3UserCreate) *S3UserCreateBulk {
 	return &S3UserCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *S3UserClient) MapCreateBulk(slice any, setFunc func(*S3UserCreate, int)) *S3UserCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &S3UserCreateBulk{err: fmt.Errorf("calling to S3UserClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*S3UserCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &S3UserCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for S3User.
 func (c *S3UserClient) Update() *S3UserUpdate {
 	mutation := newS3UserMutation(c.config, OpUpdate)
@@ -2571,8 +2865,8 @@ func (c *S3UserClient) Update() *S3UserUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *S3UserClient) UpdateOne(s *S3User) *S3UserUpdateOne {
-	mutation := newS3UserMutation(c.config, OpUpdateOne, withS3User(s))
+func (c *S3UserClient) UpdateOne(_m *S3User) *S3UserUpdateOne {
+	mutation := newS3UserMutation(c.config, OpUpdateOne, withS3User(_m))
 	return &S3UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2589,8 +2883,8 @@ func (c *S3UserClient) Delete() *S3UserDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *S3UserClient) DeleteOne(s *S3User) *S3UserDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *S3UserClient) DeleteOne(_m *S3User) *S3UserDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2682,6 +2976,21 @@ func (c *ScriptClient) CreateBulk(builders ...*ScriptCreate) *ScriptCreateBulk {
 	return &ScriptCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScriptClient) MapCreateBulk(slice any, setFunc func(*ScriptCreate, int)) *ScriptCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScriptCreateBulk{err: fmt.Errorf("calling to ScriptClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScriptCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScriptCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Script.
 func (c *ScriptClient) Update() *ScriptUpdate {
 	mutation := newScriptMutation(c.config, OpUpdate)
@@ -2689,8 +2998,8 @@ func (c *ScriptClient) Update() *ScriptUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ScriptClient) UpdateOne(s *Script) *ScriptUpdateOne {
-	mutation := newScriptMutation(c.config, OpUpdateOne, withScript(s))
+func (c *ScriptClient) UpdateOne(_m *Script) *ScriptUpdateOne {
+	mutation := newScriptMutation(c.config, OpUpdateOne, withScript(_m))
 	return &ScriptUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2707,8 +3016,8 @@ func (c *ScriptClient) Delete() *ScriptDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ScriptClient) DeleteOne(s *Script) *ScriptDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *ScriptClient) DeleteOne(_m *Script) *ScriptDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2743,16 +3052,16 @@ func (c *ScriptClient) GetX(ctx context.Context, id int32) *Script {
 }
 
 // QueryScriptExecutionRecords queries the scriptExecutionRecords edge of a Script.
-func (c *ScriptClient) QueryScriptExecutionRecords(s *Script) *ScriptExecutionRecordQuery {
+func (c *ScriptClient) QueryScriptExecutionRecords(_m *Script) *ScriptExecutionRecordQuery {
 	query := (&ScriptExecutionRecordClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(script.Table, script.FieldID, id),
 			sqlgraph.To(scriptexecutionrecord.Table, scriptexecutionrecord.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, script.ScriptExecutionRecordsTable, script.ScriptExecutionRecordsColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -2816,6 +3125,21 @@ func (c *ScriptExecutionRecordClient) CreateBulk(builders ...*ScriptExecutionRec
 	return &ScriptExecutionRecordCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScriptExecutionRecordClient) MapCreateBulk(slice any, setFunc func(*ScriptExecutionRecordCreate, int)) *ScriptExecutionRecordCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScriptExecutionRecordCreateBulk{err: fmt.Errorf("calling to ScriptExecutionRecordClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScriptExecutionRecordCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScriptExecutionRecordCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ScriptExecutionRecord.
 func (c *ScriptExecutionRecordClient) Update() *ScriptExecutionRecordUpdate {
 	mutation := newScriptExecutionRecordMutation(c.config, OpUpdate)
@@ -2823,8 +3147,8 @@ func (c *ScriptExecutionRecordClient) Update() *ScriptExecutionRecordUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ScriptExecutionRecordClient) UpdateOne(ser *ScriptExecutionRecord) *ScriptExecutionRecordUpdateOne {
-	mutation := newScriptExecutionRecordMutation(c.config, OpUpdateOne, withScriptExecutionRecord(ser))
+func (c *ScriptExecutionRecordClient) UpdateOne(_m *ScriptExecutionRecord) *ScriptExecutionRecordUpdateOne {
+	mutation := newScriptExecutionRecordMutation(c.config, OpUpdateOne, withScriptExecutionRecord(_m))
 	return &ScriptExecutionRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2841,8 +3165,8 @@ func (c *ScriptExecutionRecordClient) Delete() *ScriptExecutionRecordDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ScriptExecutionRecordClient) DeleteOne(ser *ScriptExecutionRecord) *ScriptExecutionRecordDeleteOne {
-	return c.DeleteOneID(ser.ID)
+func (c *ScriptExecutionRecordClient) DeleteOne(_m *ScriptExecutionRecord) *ScriptExecutionRecordDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -2877,16 +3201,16 @@ func (c *ScriptExecutionRecordClient) GetX(ctx context.Context, id int32) *Scrip
 }
 
 // QueryScript queries the script edge of a ScriptExecutionRecord.
-func (c *ScriptExecutionRecordClient) QueryScript(ser *ScriptExecutionRecord) *ScriptQuery {
+func (c *ScriptExecutionRecordClient) QueryScript(_m *ScriptExecutionRecord) *ScriptQuery {
 	query := (&ScriptClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ser.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scriptexecutionrecord.Table, scriptexecutionrecord.FieldID, id),
 			sqlgraph.To(script.Table, script.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scriptexecutionrecord.ScriptTable, scriptexecutionrecord.ScriptColumn),
 		)
-		fromV = sqlgraph.Neighbors(ser.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -2950,6 +3274,21 @@ func (c *StorageClient) CreateBulk(builders ...*StorageCreate) *StorageCreateBul
 	return &StorageCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *StorageClient) MapCreateBulk(slice any, setFunc func(*StorageCreate, int)) *StorageCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &StorageCreateBulk{err: fmt.Errorf("calling to StorageClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*StorageCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &StorageCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Storage.
 func (c *StorageClient) Update() *StorageUpdate {
 	mutation := newStorageMutation(c.config, OpUpdate)
@@ -2957,8 +3296,8 @@ func (c *StorageClient) Update() *StorageUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StorageClient) UpdateOne(s *Storage) *StorageUpdateOne {
-	mutation := newStorageMutation(c.config, OpUpdateOne, withStorage(s))
+func (c *StorageClient) UpdateOne(_m *Storage) *StorageUpdateOne {
+	mutation := newStorageMutation(c.config, OpUpdateOne, withStorage(_m))
 	return &StorageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -2975,8 +3314,8 @@ func (c *StorageClient) Delete() *StorageDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StorageClient) DeleteOne(s *Storage) *StorageDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *StorageClient) DeleteOne(_m *Storage) *StorageDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -3068,6 +3407,21 @@ func (c *StorageProviderClient) CreateBulk(builders ...*StorageProviderCreate) *
 	return &StorageProviderCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *StorageProviderClient) MapCreateBulk(slice any, setFunc func(*StorageProviderCreate, int)) *StorageProviderCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &StorageProviderCreateBulk{err: fmt.Errorf("calling to StorageProviderClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*StorageProviderCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &StorageProviderCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for StorageProvider.
 func (c *StorageProviderClient) Update() *StorageProviderUpdate {
 	mutation := newStorageProviderMutation(c.config, OpUpdate)
@@ -3075,8 +3429,8 @@ func (c *StorageProviderClient) Update() *StorageProviderUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StorageProviderClient) UpdateOne(sp *StorageProvider) *StorageProviderUpdateOne {
-	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProvider(sp))
+func (c *StorageProviderClient) UpdateOne(_m *StorageProvider) *StorageProviderUpdateOne {
+	mutation := newStorageProviderMutation(c.config, OpUpdateOne, withStorageProvider(_m))
 	return &StorageProviderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -3093,8 +3447,8 @@ func (c *StorageProviderClient) Delete() *StorageProviderDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StorageProviderClient) DeleteOne(sp *StorageProvider) *StorageProviderDeleteOne {
-	return c.DeleteOneID(sp.ID)
+func (c *StorageProviderClient) DeleteOne(_m *StorageProvider) *StorageProviderDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -3186,6 +3540,21 @@ func (c *TaskClient) CreateBulk(builders ...*TaskCreate) *TaskCreateBulk {
 	return &TaskCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TaskClient) MapCreateBulk(slice any, setFunc func(*TaskCreate, int)) *TaskCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TaskCreateBulk{err: fmt.Errorf("calling to TaskClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TaskCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for Task.
 func (c *TaskClient) Update() *TaskUpdate {
 	mutation := newTaskMutation(c.config, OpUpdate)
@@ -3193,8 +3562,8 @@ func (c *TaskClient) Update() *TaskUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TaskClient) UpdateOne(t *Task) *TaskUpdateOne {
-	mutation := newTaskMutation(c.config, OpUpdateOne, withTask(t))
+func (c *TaskClient) UpdateOne(_m *Task) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTask(_m))
 	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -3211,8 +3580,8 @@ func (c *TaskClient) Delete() *TaskDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TaskClient) DeleteOne(t *Task) *TaskDeleteOne {
-	return c.DeleteOneID(t.ID)
+func (c *TaskClient) DeleteOne(_m *Task) *TaskDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -3304,6 +3673,21 @@ func (c *UserClient) CreateBulk(builders ...*UserCreate) *UserCreateBulk {
 	return &UserCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserClient) MapCreateBulk(slice any, setFunc func(*UserCreate, int)) *UserCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserCreateBulk{err: fmt.Errorf("calling to UserClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for User.
 func (c *UserClient) Update() *UserUpdate {
 	mutation := newUserMutation(c.config, OpUpdate)
@@ -3311,8 +3695,8 @@ func (c *UserClient) Update() *UserUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *UserClient) UpdateOne(u *User) *UserUpdateOne {
-	mutation := newUserMutation(c.config, OpUpdateOne, withUser(u))
+func (c *UserClient) UpdateOne(_m *User) *UserUpdateOne {
+	mutation := newUserMutation(c.config, OpUpdateOne, withUser(_m))
 	return &UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -3329,8 +3713,8 @@ func (c *UserClient) Delete() *UserDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *UserClient) DeleteOne(u *User) *UserDeleteOne {
-	return c.DeleteOneID(u.ID)
+func (c *UserClient) DeleteOne(_m *User) *UserDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -3422,6 +3806,21 @@ func (c *UserResourceLimitClient) CreateBulk(builders ...*UserResourceLimitCreat
 	return &UserResourceLimitCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserResourceLimitClient) MapCreateBulk(slice any, setFunc func(*UserResourceLimitCreate, int)) *UserResourceLimitCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserResourceLimitCreateBulk{err: fmt.Errorf("calling to UserResourceLimitClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserResourceLimitCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserResourceLimitCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for UserResourceLimit.
 func (c *UserResourceLimitClient) Update() *UserResourceLimitUpdate {
 	mutation := newUserResourceLimitMutation(c.config, OpUpdate)
@@ -3429,8 +3828,8 @@ func (c *UserResourceLimitClient) Update() *UserResourceLimitUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *UserResourceLimitClient) UpdateOne(url *UserResourceLimit) *UserResourceLimitUpdateOne {
-	mutation := newUserResourceLimitMutation(c.config, OpUpdateOne, withUserResourceLimit(url))
+func (c *UserResourceLimitClient) UpdateOne(_m *UserResourceLimit) *UserResourceLimitUpdateOne {
+	mutation := newUserResourceLimitMutation(c.config, OpUpdateOne, withUserResourceLimit(_m))
 	return &UserResourceLimitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -3447,8 +3846,8 @@ func (c *UserResourceLimitClient) Delete() *UserResourceLimitDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *UserResourceLimitClient) DeleteOne(url *UserResourceLimit) *UserResourceLimitDeleteOne {
-	return c.DeleteOneID(url.ID)
+func (c *UserResourceLimitClient) DeleteOne(_m *UserResourceLimit) *UserResourceLimitDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

@@ -20,56 +20,56 @@ type AlipayOrderRollbackDelete struct {
 }
 
 // Where appends a list predicates to the AlipayOrderRollbackDelete builder.
-func (aord *AlipayOrderRollbackDelete) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackDelete {
-	aord.mutation.Where(ps...)
-	return aord
+func (_d *AlipayOrderRollbackDelete) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (aord *AlipayOrderRollbackDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, aord.sqlExec, aord.mutation, aord.hooks)
+func (_d *AlipayOrderRollbackDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aord *AlipayOrderRollbackDelete) ExecX(ctx context.Context) int {
-	n, err := aord.Exec(ctx)
+func (_d *AlipayOrderRollbackDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (aord *AlipayOrderRollbackDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *AlipayOrderRollbackDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(alipayorderrollback.Table, sqlgraph.NewFieldSpec(alipayorderrollback.FieldID, field.TypeInt))
-	if ps := aord.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, aord.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	aord.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // AlipayOrderRollbackDeleteOne is the builder for deleting a single AlipayOrderRollback entity.
 type AlipayOrderRollbackDeleteOne struct {
-	aord *AlipayOrderRollbackDelete
+	_d *AlipayOrderRollbackDelete
 }
 
 // Where appends a list predicates to the AlipayOrderRollbackDelete builder.
-func (aordo *AlipayOrderRollbackDeleteOne) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackDeleteOne {
-	aordo.aord.mutation.Where(ps...)
-	return aordo
+func (_d *AlipayOrderRollbackDeleteOne) Where(ps ...predicate.AlipayOrderRollback) *AlipayOrderRollbackDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (aordo *AlipayOrderRollbackDeleteOne) Exec(ctx context.Context) error {
-	n, err := aordo.aord.Exec(ctx)
+func (_d *AlipayOrderRollbackDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (aordo *AlipayOrderRollbackDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aordo *AlipayOrderRollbackDeleteOne) ExecX(ctx context.Context) {
-	if err := aordo.Exec(ctx); err != nil {
+func (_d *AlipayOrderRollbackDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

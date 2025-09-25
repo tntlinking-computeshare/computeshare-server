@@ -61,7 +61,7 @@ func (*CycleTransaction) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CycleTransaction fields.
-func (ct *CycleTransaction) assignValues(columns []string, values []any) error {
+func (_m *CycleTransaction) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -71,64 +71,64 @@ func (ct *CycleTransaction) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ct.ID = *value
+				_m.ID = *value
 			}
 		case cycletransaction.FieldFkCycleID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_cycle_id", values[i])
 			} else if value != nil {
-				ct.FkCycleID = *value
+				_m.FkCycleID = *value
 			}
 		case cycletransaction.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				ct.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cycletransaction.FieldFkCycleOrderID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_cycle_order_id", values[i])
 			} else if value != nil {
-				ct.FkCycleOrderID = *value
+				_m.FkCycleOrderID = *value
 			}
 		case cycletransaction.FieldFkCycleRechargeID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_cycle_recharge_id", values[i])
 			} else if value != nil {
-				ct.FkCycleRechargeID = *value
+				_m.FkCycleRechargeID = *value
 			}
 		case cycletransaction.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				ct.Operation = value.String
+				_m.Operation = value.String
 			}
 		case cycletransaction.FieldSymbol:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field symbol", values[i])
 			} else if value.Valid {
-				ct.Symbol = value.String
+				_m.Symbol = value.String
 			}
 		case cycletransaction.FieldCycle:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field cycle", values[i])
 			} else if value.Valid {
-				ct.Cycle = value.Float64
+				_m.Cycle = value.Float64
 			}
 		case cycletransaction.FieldBalance:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field balance", values[i])
 			} else if value.Valid {
-				ct.Balance = value.Float64
+				_m.Balance = value.Float64
 			}
 		case cycletransaction.FieldOperationTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field operation_time", values[i])
 			} else if value.Valid {
-				ct.OperationTime = value.Time
+				_m.OperationTime = value.Time
 			}
 		default:
-			ct.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -136,59 +136,59 @@ func (ct *CycleTransaction) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CycleTransaction.
 // This includes values selected through modifiers, order, etc.
-func (ct *CycleTransaction) Value(name string) (ent.Value, error) {
-	return ct.selectValues.Get(name)
+func (_m *CycleTransaction) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CycleTransaction.
 // Note that you need to call CycleTransaction.Unwrap() before calling this method if this CycleTransaction
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ct *CycleTransaction) Update() *CycleTransactionUpdateOne {
-	return NewCycleTransactionClient(ct.config).UpdateOne(ct)
+func (_m *CycleTransaction) Update() *CycleTransactionUpdateOne {
+	return NewCycleTransactionClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CycleTransaction entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ct *CycleTransaction) Unwrap() *CycleTransaction {
-	_tx, ok := ct.config.driver.(*txDriver)
+func (_m *CycleTransaction) Unwrap() *CycleTransaction {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CycleTransaction is not a transactional entity")
 	}
-	ct.config.driver = _tx.drv
-	return ct
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ct *CycleTransaction) String() string {
+func (_m *CycleTransaction) String() string {
 	var builder strings.Builder
 	builder.WriteString("CycleTransaction(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ct.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_cycle_id=")
-	builder.WriteString(fmt.Sprintf("%v", ct.FkCycleID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkCycleID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", ct.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_cycle_order_id=")
-	builder.WriteString(fmt.Sprintf("%v", ct.FkCycleOrderID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkCycleOrderID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_cycle_recharge_id=")
-	builder.WriteString(fmt.Sprintf("%v", ct.FkCycleRechargeID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkCycleRechargeID))
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(ct.Operation)
+	builder.WriteString(_m.Operation)
 	builder.WriteString(", ")
 	builder.WriteString("symbol=")
-	builder.WriteString(ct.Symbol)
+	builder.WriteString(_m.Symbol)
 	builder.WriteString(", ")
 	builder.WriteString("cycle=")
-	builder.WriteString(fmt.Sprintf("%v", ct.Cycle))
+	builder.WriteString(fmt.Sprintf("%v", _m.Cycle))
 	builder.WriteString(", ")
 	builder.WriteString("balance=")
-	builder.WriteString(fmt.Sprintf("%v", ct.Balance))
+	builder.WriteString(fmt.Sprintf("%v", _m.Balance))
 	builder.WriteString(", ")
 	builder.WriteString("operation_time=")
-	builder.WriteString(ct.OperationTime.Format(time.ANSIC))
+	builder.WriteString(_m.OperationTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

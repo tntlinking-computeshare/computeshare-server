@@ -48,7 +48,7 @@ func (*GatewayPort) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the GatewayPort fields.
-func (gp *GatewayPort) assignValues(columns []string, values []any) error {
+func (_m *GatewayPort) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -58,34 +58,34 @@ func (gp *GatewayPort) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				gp.ID = *value
+				_m.ID = *value
 			}
 		case gatewayport.FieldFkGatewayID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_gateway_id", values[i])
 			} else if value != nil {
-				gp.FkGatewayID = *value
+				_m.FkGatewayID = *value
 			}
 		case gatewayport.FieldPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
-				gp.Port = int32(value.Int64)
+				_m.Port = int32(value.Int64)
 			}
 		case gatewayport.FieldIsUse:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_use", values[i])
 			} else if value.Valid {
-				gp.IsUse = value.Bool
+				_m.IsUse = value.Bool
 			}
 		case gatewayport.FieldIsPublic:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_public", values[i])
 			} else if value.Valid {
-				gp.IsPublic = value.Bool
+				_m.IsPublic = value.Bool
 			}
 		default:
-			gp.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -93,44 +93,44 @@ func (gp *GatewayPort) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the GatewayPort.
 // This includes values selected through modifiers, order, etc.
-func (gp *GatewayPort) Value(name string) (ent.Value, error) {
-	return gp.selectValues.Get(name)
+func (_m *GatewayPort) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this GatewayPort.
 // Note that you need to call GatewayPort.Unwrap() before calling this method if this GatewayPort
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (gp *GatewayPort) Update() *GatewayPortUpdateOne {
-	return NewGatewayPortClient(gp.config).UpdateOne(gp)
+func (_m *GatewayPort) Update() *GatewayPortUpdateOne {
+	return NewGatewayPortClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the GatewayPort entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (gp *GatewayPort) Unwrap() *GatewayPort {
-	_tx, ok := gp.config.driver.(*txDriver)
+func (_m *GatewayPort) Unwrap() *GatewayPort {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: GatewayPort is not a transactional entity")
 	}
-	gp.config.driver = _tx.drv
-	return gp
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (gp *GatewayPort) String() string {
+func (_m *GatewayPort) String() string {
 	var builder strings.Builder
 	builder.WriteString("GatewayPort(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", gp.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_gateway_id=")
-	builder.WriteString(fmt.Sprintf("%v", gp.FkGatewayID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkGatewayID))
 	builder.WriteString(", ")
 	builder.WriteString("port=")
-	builder.WriteString(fmt.Sprintf("%v", gp.Port))
+	builder.WriteString(fmt.Sprintf("%v", _m.Port))
 	builder.WriteString(", ")
 	builder.WriteString("is_use=")
-	builder.WriteString(fmt.Sprintf("%v", gp.IsUse))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsUse))
 	builder.WriteString(", ")
 	builder.WriteString("is_public=")
-	builder.WriteString(fmt.Sprintf("%v", gp.IsPublic))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPublic))
 	builder.WriteByte(')')
 	return builder.String()
 }

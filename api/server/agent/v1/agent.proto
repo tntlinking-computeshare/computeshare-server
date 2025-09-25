@@ -55,11 +55,12 @@ service Agent {
 message CreateAgentRequest {
 	string mac = 1;
 	string hostname = 2;
-	int32 totalCpu = 3;
-	int32 totalMemory = 4;
-	int32 occupiedCpu = 5;
-	int32 occupiedMemory = 6;
-	string ip = 7;
+	string arch = 3;
+	int32 totalCpu = 4;
+	int32 totalMemory = 5;
+	int32 occupiedCpu = 6;
+	int32 occupiedMemory = 7;
+	string ip = 8;
 }
 message CreateAgentReply {
 	message Data {
@@ -73,12 +74,13 @@ message CreateAgentReply {
 message UpdateAgentRequest {
 	string mac = 1;
 	string hostname = 2;
-	int32 totalCpu = 3;
-	int32 totalMemory = 4;
-	int32 occupiedCpu = 5;
-	int32 occupiedMemory = 6;
-	string ip = 7;
-	string id = 8;
+	string arch = 3;
+	int32 totalCpu = 4;
+	int32 totalMemory = 5;
+	int32 occupiedCpu = 6;
+	int32 occupiedMemory = 7;
+	string ip = 8;
+	string id = 9;
 }
 message UpdateAgentReply {
 	int32 code = 1;

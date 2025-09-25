@@ -22,79 +22,79 @@ type TaskCreate struct {
 }
 
 // SetAgentID sets the "agent_id" field.
-func (tc *TaskCreate) SetAgentID(s string) *TaskCreate {
-	tc.mutation.SetAgentID(s)
-	return tc
+func (_c *TaskCreate) SetAgentID(v string) *TaskCreate {
+	_c.mutation.SetAgentID(v)
+	return _c
 }
 
 // SetCmd sets the "cmd" field.
-func (tc *TaskCreate) SetCmd(i int32) *TaskCreate {
-	tc.mutation.SetCmd(i)
-	return tc
+func (_c *TaskCreate) SetCmd(v int32) *TaskCreate {
+	_c.mutation.SetCmd(v)
+	return _c
 }
 
 // SetNillableCmd sets the "cmd" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCmd(i *int32) *TaskCreate {
-	if i != nil {
-		tc.SetCmd(*i)
+func (_c *TaskCreate) SetNillableCmd(v *int32) *TaskCreate {
+	if v != nil {
+		_c.SetCmd(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetParams sets the "params" field.
-func (tc *TaskCreate) SetParams(s string) *TaskCreate {
-	tc.mutation.SetParams(s)
-	return tc
+func (_c *TaskCreate) SetParams(v string) *TaskCreate {
+	_c.mutation.SetParams(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (tc *TaskCreate) SetStatus(i int) *TaskCreate {
-	tc.mutation.SetStatus(i)
-	return tc
+func (_c *TaskCreate) SetStatus(v int) *TaskCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (tc *TaskCreate) SetCreateTime(t time.Time) *TaskCreate {
-	tc.mutation.SetCreateTime(t)
-	return tc
+func (_c *TaskCreate) SetCreateTime(v time.Time) *TaskCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableCreateTime(t *time.Time) *TaskCreate {
-	if t != nil {
-		tc.SetCreateTime(*t)
+func (_c *TaskCreate) SetNillableCreateTime(v *time.Time) *TaskCreate {
+	if v != nil {
+		_c.SetCreateTime(*v)
 	}
-	return tc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tc *TaskCreate) SetID(u uuid.UUID) *TaskCreate {
-	tc.mutation.SetID(u)
-	return tc
+func (_c *TaskCreate) SetID(v uuid.UUID) *TaskCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableID(u *uuid.UUID) *TaskCreate {
-	if u != nil {
-		tc.SetID(*u)
+func (_c *TaskCreate) SetNillableID(v *uuid.UUID) *TaskCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tc
+	return _c
 }
 
 // Mutation returns the TaskMutation object of the builder.
-func (tc *TaskCreate) Mutation() *TaskMutation {
-	return tc.mutation
+func (_c *TaskCreate) Mutation() *TaskMutation {
+	return _c.mutation
 }
 
 // Save creates the Task in the database.
-func (tc *TaskCreate) Save(ctx context.Context) (*Task, error) {
-	tc.defaults()
-	return withHooks(ctx, tc.sqlSave, tc.mutation, tc.hooks)
+func (_c *TaskCreate) Save(ctx context.Context) (*Task, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tc *TaskCreate) SaveX(ctx context.Context) *Task {
-	v, err := tc.Save(ctx)
+func (_c *TaskCreate) SaveX(ctx context.Context) *Task {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -102,70 +102,70 @@ func (tc *TaskCreate) SaveX(ctx context.Context) *Task {
 }
 
 // Exec executes the query.
-func (tc *TaskCreate) Exec(ctx context.Context) error {
-	_, err := tc.Save(ctx)
+func (_c *TaskCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tc *TaskCreate) ExecX(ctx context.Context) {
-	if err := tc.Exec(ctx); err != nil {
+func (_c *TaskCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tc *TaskCreate) defaults() {
-	if _, ok := tc.mutation.Cmd(); !ok {
+func (_c *TaskCreate) defaults() {
+	if _, ok := _c.mutation.Cmd(); !ok {
 		v := task.DefaultCmd
-		tc.mutation.SetCmd(v)
+		_c.mutation.SetCmd(v)
 	}
-	if _, ok := tc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := task.DefaultCreateTime()
-		tc.mutation.SetCreateTime(v)
+		_c.mutation.SetCreateTime(v)
 	}
-	if _, ok := tc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := task.DefaultID()
-		tc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tc *TaskCreate) check() error {
-	if _, ok := tc.mutation.AgentID(); !ok {
+func (_c *TaskCreate) check() error {
+	if _, ok := _c.mutation.AgentID(); !ok {
 		return &ValidationError{Name: "agent_id", err: errors.New(`ent: missing required field "Task.agent_id"`)}
 	}
-	if v, ok := tc.mutation.AgentID(); ok {
+	if v, ok := _c.mutation.AgentID(); ok {
 		if err := task.AgentIDValidator(v); err != nil {
 			return &ValidationError{Name: "agent_id", err: fmt.Errorf(`ent: validator failed for field "Task.agent_id": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Cmd(); !ok {
+	if _, ok := _c.mutation.Cmd(); !ok {
 		return &ValidationError{Name: "cmd", err: errors.New(`ent: missing required field "Task.cmd"`)}
 	}
-	if _, ok := tc.mutation.Params(); !ok {
+	if _, ok := _c.mutation.Params(); !ok {
 		return &ValidationError{Name: "params", err: errors.New(`ent: missing required field "Task.params"`)}
 	}
-	if v, ok := tc.mutation.Params(); ok {
+	if v, ok := _c.mutation.Params(); ok {
 		if err := task.ParamsValidator(v); err != nil {
 			return &ValidationError{Name: "params", err: fmt.Errorf(`ent: validator failed for field "Task.params": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "Task.status"`)}
 	}
-	if _, ok := tc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Task.create_time"`)}
 	}
 	return nil
 }
 
-func (tc *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
-	if err := tc.check(); err != nil {
+func (_c *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -178,37 +178,37 @@ func (tc *TaskCreate) sqlSave(ctx context.Context) (*Task, error) {
 			return nil, err
 		}
 	}
-	tc.mutation.id = &_node.ID
-	tc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
+func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Task{config: tc.config}
+		_node = &Task{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(task.Table, sqlgraph.NewFieldSpec(task.FieldID, field.TypeUUID))
 	)
-	if id, ok := tc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := tc.mutation.AgentID(); ok {
+	if value, ok := _c.mutation.AgentID(); ok {
 		_spec.SetField(task.FieldAgentID, field.TypeString, value)
 		_node.AgentID = value
 	}
-	if value, ok := tc.mutation.Cmd(); ok {
+	if value, ok := _c.mutation.Cmd(); ok {
 		_spec.SetField(task.FieldCmd, field.TypeInt32, value)
 		_node.Cmd = value
 	}
-	if value, ok := tc.mutation.Params(); ok {
+	if value, ok := _c.mutation.Params(); ok {
 		_spec.SetField(task.FieldParams, field.TypeString, value)
 		_node.Params = &value
 	}
-	if value, ok := tc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeInt, value)
 		_node.Status = value
 	}
-	if value, ok := tc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(task.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
@@ -218,17 +218,21 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 // TaskCreateBulk is the builder for creating many Task entities in bulk.
 type TaskCreateBulk struct {
 	config
+	err      error
 	builders []*TaskCreate
 }
 
 // Save creates the Task entities in the database.
-func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(tcb.builders))
-	nodes := make([]*Task, len(tcb.builders))
-	mutators := make([]Mutator, len(tcb.builders))
-	for i := range tcb.builders {
+func (_c *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Task, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TaskMutation)
@@ -242,11 +246,11 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -266,7 +270,7 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -274,8 +278,8 @@ func (tcb *TaskCreateBulk) Save(ctx context.Context) ([]*Task, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcb *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
-	v, err := tcb.Save(ctx)
+func (_c *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,14 +287,14 @@ func (tcb *TaskCreateBulk) SaveX(ctx context.Context) []*Task {
 }
 
 // Exec executes the query.
-func (tcb *TaskCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcb.Save(ctx)
+func (_c *TaskCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcb *TaskCreateBulk) ExecX(ctx context.Context) {
-	if err := tcb.Exec(ctx); err != nil {
+func (_c *TaskCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

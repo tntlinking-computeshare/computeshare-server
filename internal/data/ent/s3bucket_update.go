@@ -24,42 +24,66 @@ type S3BucketUpdate struct {
 }
 
 // Where appends a list predicates to the S3BucketUpdate builder.
-func (su *S3BucketUpdate) Where(ps ...predicate.S3Bucket) *S3BucketUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *S3BucketUpdate) Where(ps ...predicate.S3Bucket) *S3BucketUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (su *S3BucketUpdate) SetFkUserID(u uuid.UUID) *S3BucketUpdate {
-	su.mutation.SetFkUserID(u)
-	return su
+func (_u *S3BucketUpdate) SetFkUserID(v uuid.UUID) *S3BucketUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *S3BucketUpdate) SetNillableFkUserID(v *uuid.UUID) *S3BucketUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (su *S3BucketUpdate) SetBucketName(s string) *S3BucketUpdate {
-	su.mutation.SetBucketName(s)
-	return su
+func (_u *S3BucketUpdate) SetBucketName(v string) *S3BucketUpdate {
+	_u.mutation.SetBucketName(v)
+	return _u
+}
+
+// SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
+func (_u *S3BucketUpdate) SetNillableBucketName(v *string) *S3BucketUpdate {
+	if v != nil {
+		_u.SetBucketName(*v)
+	}
+	return _u
 }
 
 // SetCreatedTime sets the "createdTime" field.
-func (su *S3BucketUpdate) SetCreatedTime(t time.Time) *S3BucketUpdate {
-	su.mutation.SetCreatedTime(t)
-	return su
+func (_u *S3BucketUpdate) SetCreatedTime(v time.Time) *S3BucketUpdate {
+	_u.mutation.SetCreatedTime(v)
+	return _u
+}
+
+// SetNillableCreatedTime sets the "createdTime" field if the given value is not nil.
+func (_u *S3BucketUpdate) SetNillableCreatedTime(v *time.Time) *S3BucketUpdate {
+	if v != nil {
+		_u.SetCreatedTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the S3BucketMutation object of the builder.
-func (su *S3BucketUpdate) Mutation() *S3BucketMutation {
-	return su.mutation
+func (_u *S3BucketUpdate) Mutation() *S3BucketMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *S3BucketUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+func (_u *S3BucketUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *S3BucketUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *S3BucketUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -67,21 +91,21 @@ func (su *S3BucketUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *S3BucketUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *S3BucketUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *S3BucketUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *S3BucketUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *S3BucketUpdate) check() error {
-	if v, ok := su.mutation.BucketName(); ok {
+func (_u *S3BucketUpdate) check() error {
+	if v, ok := _u.mutation.BucketName(); ok {
 		if err := s3bucket.BucketNameValidator(v); err != nil {
 			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
@@ -89,28 +113,28 @@ func (su *S3BucketUpdate) check() error {
 	return nil
 }
 
-func (su *S3BucketUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *S3BucketUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(s3bucket.Table, s3bucket.Columns, sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := su.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := su.mutation.BucketName(); ok {
+	if value, ok := _u.mutation.BucketName(); ok {
 		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.CreatedTime(); ok {
+	if value, ok := _u.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{s3bucket.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -118,8 +142,8 @@ func (su *S3BucketUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // S3BucketUpdateOne is the builder for updating a single S3Bucket entity.
@@ -131,49 +155,73 @@ type S3BucketUpdateOne struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (suo *S3BucketUpdateOne) SetFkUserID(u uuid.UUID) *S3BucketUpdateOne {
-	suo.mutation.SetFkUserID(u)
-	return suo
+func (_u *S3BucketUpdateOne) SetFkUserID(v uuid.UUID) *S3BucketUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *S3BucketUpdateOne) SetNillableFkUserID(v *uuid.UUID) *S3BucketUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (suo *S3BucketUpdateOne) SetBucketName(s string) *S3BucketUpdateOne {
-	suo.mutation.SetBucketName(s)
-	return suo
+func (_u *S3BucketUpdateOne) SetBucketName(v string) *S3BucketUpdateOne {
+	_u.mutation.SetBucketName(v)
+	return _u
+}
+
+// SetNillableBucketName sets the "bucket_name" field if the given value is not nil.
+func (_u *S3BucketUpdateOne) SetNillableBucketName(v *string) *S3BucketUpdateOne {
+	if v != nil {
+		_u.SetBucketName(*v)
+	}
+	return _u
 }
 
 // SetCreatedTime sets the "createdTime" field.
-func (suo *S3BucketUpdateOne) SetCreatedTime(t time.Time) *S3BucketUpdateOne {
-	suo.mutation.SetCreatedTime(t)
-	return suo
+func (_u *S3BucketUpdateOne) SetCreatedTime(v time.Time) *S3BucketUpdateOne {
+	_u.mutation.SetCreatedTime(v)
+	return _u
+}
+
+// SetNillableCreatedTime sets the "createdTime" field if the given value is not nil.
+func (_u *S3BucketUpdateOne) SetNillableCreatedTime(v *time.Time) *S3BucketUpdateOne {
+	if v != nil {
+		_u.SetCreatedTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the S3BucketMutation object of the builder.
-func (suo *S3BucketUpdateOne) Mutation() *S3BucketMutation {
-	return suo.mutation
+func (_u *S3BucketUpdateOne) Mutation() *S3BucketMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the S3BucketUpdate builder.
-func (suo *S3BucketUpdateOne) Where(ps ...predicate.S3Bucket) *S3BucketUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *S3BucketUpdateOne) Where(ps ...predicate.S3Bucket) *S3BucketUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *S3BucketUpdateOne) Select(field string, fields ...string) *S3BucketUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *S3BucketUpdateOne) Select(field string, fields ...string) *S3BucketUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated S3Bucket entity.
-func (suo *S3BucketUpdateOne) Save(ctx context.Context) (*S3Bucket, error) {
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+func (_u *S3BucketUpdateOne) Save(ctx context.Context) (*S3Bucket, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *S3BucketUpdateOne) SaveX(ctx context.Context) *S3Bucket {
-	node, err := suo.Save(ctx)
+func (_u *S3BucketUpdateOne) SaveX(ctx context.Context) *S3Bucket {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -181,21 +229,21 @@ func (suo *S3BucketUpdateOne) SaveX(ctx context.Context) *S3Bucket {
 }
 
 // Exec executes the query on the entity.
-func (suo *S3BucketUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *S3BucketUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *S3BucketUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *S3BucketUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *S3BucketUpdateOne) check() error {
-	if v, ok := suo.mutation.BucketName(); ok {
+func (_u *S3BucketUpdateOne) check() error {
+	if v, ok := _u.mutation.BucketName(); ok {
 		if err := s3bucket.BucketNameValidator(v); err != nil {
 			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
@@ -203,17 +251,17 @@ func (suo *S3BucketUpdateOne) check() error {
 	return nil
 }
 
-func (suo *S3BucketUpdateOne) sqlSave(ctx context.Context) (_node *S3Bucket, err error) {
-	if err := suo.check(); err != nil {
+func (_u *S3BucketUpdateOne) sqlSave(ctx context.Context) (_node *S3Bucket, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(s3bucket.Table, s3bucket.Columns, sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "S3Bucket.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, s3bucket.FieldID)
 		for _, f := range fields {
@@ -225,26 +273,26 @@ func (suo *S3BucketUpdateOne) sqlSave(ctx context.Context) (_node *S3Bucket, err
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := suo.mutation.BucketName(); ok {
+	if value, ok := _u.mutation.BucketName(); ok {
 		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.CreatedTime(); ok {
+	if value, ok := _u.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
 	}
-	_node = &S3Bucket{config: suo.config}
+	_node = &S3Bucket{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{s3bucket.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -252,6 +300,6 @@ func (suo *S3BucketUpdateOne) sqlSave(ctx context.Context) (_node *S3Bucket, err
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

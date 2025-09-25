@@ -22,50 +22,66 @@ type ComputeSpecUpdate struct {
 }
 
 // Where appends a list predicates to the ComputeSpecUpdate builder.
-func (csu *ComputeSpecUpdate) Where(ps ...predicate.ComputeSpec) *ComputeSpecUpdate {
-	csu.mutation.Where(ps...)
-	return csu
+func (_u *ComputeSpecUpdate) Where(ps ...predicate.ComputeSpec) *ComputeSpecUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetCore sets the "core" field.
-func (csu *ComputeSpecUpdate) SetCore(i int) *ComputeSpecUpdate {
-	csu.mutation.ResetCore()
-	csu.mutation.SetCore(i)
-	return csu
+func (_u *ComputeSpecUpdate) SetCore(v int) *ComputeSpecUpdate {
+	_u.mutation.ResetCore()
+	_u.mutation.SetCore(v)
+	return _u
 }
 
-// AddCore adds i to the "core" field.
-func (csu *ComputeSpecUpdate) AddCore(i int) *ComputeSpecUpdate {
-	csu.mutation.AddCore(i)
-	return csu
+// SetNillableCore sets the "core" field if the given value is not nil.
+func (_u *ComputeSpecUpdate) SetNillableCore(v *int) *ComputeSpecUpdate {
+	if v != nil {
+		_u.SetCore(*v)
+	}
+	return _u
+}
+
+// AddCore adds value to the "core" field.
+func (_u *ComputeSpecUpdate) AddCore(v int) *ComputeSpecUpdate {
+	_u.mutation.AddCore(v)
+	return _u
 }
 
 // SetMemory sets the "memory" field.
-func (csu *ComputeSpecUpdate) SetMemory(i int) *ComputeSpecUpdate {
-	csu.mutation.ResetMemory()
-	csu.mutation.SetMemory(i)
-	return csu
+func (_u *ComputeSpecUpdate) SetMemory(v int) *ComputeSpecUpdate {
+	_u.mutation.ResetMemory()
+	_u.mutation.SetMemory(v)
+	return _u
 }
 
-// AddMemory adds i to the "memory" field.
-func (csu *ComputeSpecUpdate) AddMemory(i int) *ComputeSpecUpdate {
-	csu.mutation.AddMemory(i)
-	return csu
+// SetNillableMemory sets the "memory" field if the given value is not nil.
+func (_u *ComputeSpecUpdate) SetNillableMemory(v *int) *ComputeSpecUpdate {
+	if v != nil {
+		_u.SetMemory(*v)
+	}
+	return _u
+}
+
+// AddMemory adds value to the "memory" field.
+func (_u *ComputeSpecUpdate) AddMemory(v int) *ComputeSpecUpdate {
+	_u.mutation.AddMemory(v)
+	return _u
 }
 
 // Mutation returns the ComputeSpecMutation object of the builder.
-func (csu *ComputeSpecUpdate) Mutation() *ComputeSpecMutation {
-	return csu.mutation
+func (_u *ComputeSpecUpdate) Mutation() *ComputeSpecMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (csu *ComputeSpecUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, csu.sqlSave, csu.mutation, csu.hooks)
+func (_u *ComputeSpecUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (csu *ComputeSpecUpdate) SaveX(ctx context.Context) int {
-	affected, err := csu.Save(ctx)
+func (_u *ComputeSpecUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -73,40 +89,40 @@ func (csu *ComputeSpecUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (csu *ComputeSpecUpdate) Exec(ctx context.Context) error {
-	_, err := csu.Save(ctx)
+func (_u *ComputeSpecUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (csu *ComputeSpecUpdate) ExecX(ctx context.Context) {
-	if err := csu.Exec(ctx); err != nil {
+func (_u *ComputeSpecUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (csu *ComputeSpecUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *ComputeSpecUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(computespec.Table, computespec.Columns, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
-	if ps := csu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := csu.mutation.Core(); ok {
+	if value, ok := _u.mutation.Core(); ok {
 		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := csu.mutation.AddedCore(); ok {
+	if value, ok := _u.mutation.AddedCore(); ok {
 		_spec.AddField(computespec.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := csu.mutation.Memory(); ok {
+	if value, ok := _u.mutation.Memory(); ok {
 		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := csu.mutation.AddedMemory(); ok {
+	if value, ok := _u.mutation.AddedMemory(); ok {
 		_spec.AddField(computespec.FieldMemory, field.TypeInt, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, csu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computespec.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -114,8 +130,8 @@ func (csu *ComputeSpecUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	csu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ComputeSpecUpdateOne is the builder for updating a single ComputeSpec entity.
@@ -127,57 +143,73 @@ type ComputeSpecUpdateOne struct {
 }
 
 // SetCore sets the "core" field.
-func (csuo *ComputeSpecUpdateOne) SetCore(i int) *ComputeSpecUpdateOne {
-	csuo.mutation.ResetCore()
-	csuo.mutation.SetCore(i)
-	return csuo
+func (_u *ComputeSpecUpdateOne) SetCore(v int) *ComputeSpecUpdateOne {
+	_u.mutation.ResetCore()
+	_u.mutation.SetCore(v)
+	return _u
 }
 
-// AddCore adds i to the "core" field.
-func (csuo *ComputeSpecUpdateOne) AddCore(i int) *ComputeSpecUpdateOne {
-	csuo.mutation.AddCore(i)
-	return csuo
+// SetNillableCore sets the "core" field if the given value is not nil.
+func (_u *ComputeSpecUpdateOne) SetNillableCore(v *int) *ComputeSpecUpdateOne {
+	if v != nil {
+		_u.SetCore(*v)
+	}
+	return _u
+}
+
+// AddCore adds value to the "core" field.
+func (_u *ComputeSpecUpdateOne) AddCore(v int) *ComputeSpecUpdateOne {
+	_u.mutation.AddCore(v)
+	return _u
 }
 
 // SetMemory sets the "memory" field.
-func (csuo *ComputeSpecUpdateOne) SetMemory(i int) *ComputeSpecUpdateOne {
-	csuo.mutation.ResetMemory()
-	csuo.mutation.SetMemory(i)
-	return csuo
+func (_u *ComputeSpecUpdateOne) SetMemory(v int) *ComputeSpecUpdateOne {
+	_u.mutation.ResetMemory()
+	_u.mutation.SetMemory(v)
+	return _u
 }
 
-// AddMemory adds i to the "memory" field.
-func (csuo *ComputeSpecUpdateOne) AddMemory(i int) *ComputeSpecUpdateOne {
-	csuo.mutation.AddMemory(i)
-	return csuo
+// SetNillableMemory sets the "memory" field if the given value is not nil.
+func (_u *ComputeSpecUpdateOne) SetNillableMemory(v *int) *ComputeSpecUpdateOne {
+	if v != nil {
+		_u.SetMemory(*v)
+	}
+	return _u
+}
+
+// AddMemory adds value to the "memory" field.
+func (_u *ComputeSpecUpdateOne) AddMemory(v int) *ComputeSpecUpdateOne {
+	_u.mutation.AddMemory(v)
+	return _u
 }
 
 // Mutation returns the ComputeSpecMutation object of the builder.
-func (csuo *ComputeSpecUpdateOne) Mutation() *ComputeSpecMutation {
-	return csuo.mutation
+func (_u *ComputeSpecUpdateOne) Mutation() *ComputeSpecMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ComputeSpecUpdate builder.
-func (csuo *ComputeSpecUpdateOne) Where(ps ...predicate.ComputeSpec) *ComputeSpecUpdateOne {
-	csuo.mutation.Where(ps...)
-	return csuo
+func (_u *ComputeSpecUpdateOne) Where(ps ...predicate.ComputeSpec) *ComputeSpecUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (csuo *ComputeSpecUpdateOne) Select(field string, fields ...string) *ComputeSpecUpdateOne {
-	csuo.fields = append([]string{field}, fields...)
-	return csuo
+func (_u *ComputeSpecUpdateOne) Select(field string, fields ...string) *ComputeSpecUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ComputeSpec entity.
-func (csuo *ComputeSpecUpdateOne) Save(ctx context.Context) (*ComputeSpec, error) {
-	return withHooks(ctx, csuo.sqlSave, csuo.mutation, csuo.hooks)
+func (_u *ComputeSpecUpdateOne) Save(ctx context.Context) (*ComputeSpec, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (csuo *ComputeSpecUpdateOne) SaveX(ctx context.Context) *ComputeSpec {
-	node, err := csuo.Save(ctx)
+func (_u *ComputeSpecUpdateOne) SaveX(ctx context.Context) *ComputeSpec {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -185,26 +217,26 @@ func (csuo *ComputeSpecUpdateOne) SaveX(ctx context.Context) *ComputeSpec {
 }
 
 // Exec executes the query on the entity.
-func (csuo *ComputeSpecUpdateOne) Exec(ctx context.Context) error {
-	_, err := csuo.Save(ctx)
+func (_u *ComputeSpecUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (csuo *ComputeSpecUpdateOne) ExecX(ctx context.Context) {
-	if err := csuo.Exec(ctx); err != nil {
+func (_u *ComputeSpecUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (csuo *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSpec, err error) {
+func (_u *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSpec, err error) {
 	_spec := sqlgraph.NewUpdateSpec(computespec.Table, computespec.Columns, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
-	id, ok := csuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ComputeSpec.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := csuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, computespec.FieldID)
 		for _, f := range fields {
@@ -216,29 +248,29 @@ func (csuo *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSp
 			}
 		}
 	}
-	if ps := csuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := csuo.mutation.Core(); ok {
+	if value, ok := _u.mutation.Core(); ok {
 		_spec.SetField(computespec.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := csuo.mutation.AddedCore(); ok {
+	if value, ok := _u.mutation.AddedCore(); ok {
 		_spec.AddField(computespec.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := csuo.mutation.Memory(); ok {
+	if value, ok := _u.mutation.Memory(); ok {
 		_spec.SetField(computespec.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := csuo.mutation.AddedMemory(); ok {
+	if value, ok := _u.mutation.AddedMemory(); ok {
 		_spec.AddField(computespec.FieldMemory, field.TypeInt, value)
 	}
-	_node = &ComputeSpec{config: csuo.config}
+	_node = &ComputeSpec{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, csuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computespec.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -246,6 +278,6 @@ func (csuo *ComputeSpecUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSp
 		}
 		return nil, err
 	}
-	csuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

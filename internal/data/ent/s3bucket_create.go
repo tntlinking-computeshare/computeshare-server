@@ -22,51 +22,51 @@ type S3BucketCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (sc *S3BucketCreate) SetFkUserID(u uuid.UUID) *S3BucketCreate {
-	sc.mutation.SetFkUserID(u)
-	return sc
+func (_c *S3BucketCreate) SetFkUserID(v uuid.UUID) *S3BucketCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetBucketName sets the "bucket_name" field.
-func (sc *S3BucketCreate) SetBucketName(s string) *S3BucketCreate {
-	sc.mutation.SetBucketName(s)
-	return sc
+func (_c *S3BucketCreate) SetBucketName(v string) *S3BucketCreate {
+	_c.mutation.SetBucketName(v)
+	return _c
 }
 
 // SetCreatedTime sets the "createdTime" field.
-func (sc *S3BucketCreate) SetCreatedTime(t time.Time) *S3BucketCreate {
-	sc.mutation.SetCreatedTime(t)
-	return sc
+func (_c *S3BucketCreate) SetCreatedTime(v time.Time) *S3BucketCreate {
+	_c.mutation.SetCreatedTime(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *S3BucketCreate) SetID(u uuid.UUID) *S3BucketCreate {
-	sc.mutation.SetID(u)
-	return sc
+func (_c *S3BucketCreate) SetID(v uuid.UUID) *S3BucketCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *S3BucketCreate) SetNillableID(u *uuid.UUID) *S3BucketCreate {
-	if u != nil {
-		sc.SetID(*u)
+func (_c *S3BucketCreate) SetNillableID(v *uuid.UUID) *S3BucketCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // Mutation returns the S3BucketMutation object of the builder.
-func (sc *S3BucketCreate) Mutation() *S3BucketMutation {
-	return sc.mutation
+func (_c *S3BucketCreate) Mutation() *S3BucketMutation {
+	return _c.mutation
 }
 
 // Save creates the S3Bucket in the database.
-func (sc *S3BucketCreate) Save(ctx context.Context) (*S3Bucket, error) {
-	sc.defaults()
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+func (_c *S3BucketCreate) Save(ctx context.Context) (*S3Bucket, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *S3BucketCreate) SaveX(ctx context.Context) *S3Bucket {
-	v, err := sc.Save(ctx)
+func (_c *S3BucketCreate) SaveX(ctx context.Context) *S3Bucket {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -74,51 +74,51 @@ func (sc *S3BucketCreate) SaveX(ctx context.Context) *S3Bucket {
 }
 
 // Exec executes the query.
-func (sc *S3BucketCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *S3BucketCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *S3BucketCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *S3BucketCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *S3BucketCreate) defaults() {
-	if _, ok := sc.mutation.ID(); !ok {
+func (_c *S3BucketCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := s3bucket.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *S3BucketCreate) check() error {
-	if _, ok := sc.mutation.FkUserID(); !ok {
+func (_c *S3BucketCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "S3Bucket.fk_user_id"`)}
 	}
-	if _, ok := sc.mutation.BucketName(); !ok {
+	if _, ok := _c.mutation.BucketName(); !ok {
 		return &ValidationError{Name: "bucket_name", err: errors.New(`ent: missing required field "S3Bucket.bucket_name"`)}
 	}
-	if v, ok := sc.mutation.BucketName(); ok {
+	if v, ok := _c.mutation.BucketName(); ok {
 		if err := s3bucket.BucketNameValidator(v); err != nil {
 			return &ValidationError{Name: "bucket_name", err: fmt.Errorf(`ent: validator failed for field "S3Bucket.bucket_name": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.CreatedTime(); !ok {
+	if _, ok := _c.mutation.CreatedTime(); !ok {
 		return &ValidationError{Name: "createdTime", err: errors.New(`ent: missing required field "S3Bucket.createdTime"`)}
 	}
 	return nil
 }
 
-func (sc *S3BucketCreate) sqlSave(ctx context.Context) (*S3Bucket, error) {
-	if err := sc.check(); err != nil {
+func (_c *S3BucketCreate) sqlSave(ctx context.Context) (*S3Bucket, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -131,29 +131,29 @@ func (sc *S3BucketCreate) sqlSave(ctx context.Context) (*S3Bucket, error) {
 			return nil, err
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
+func (_c *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
 	var (
-		_node = &S3Bucket{config: sc.config}
+		_node = &S3Bucket{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(s3bucket.Table, sqlgraph.NewFieldSpec(s3bucket.FieldID, field.TypeUUID))
 	)
-	if id, ok := sc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := sc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(s3bucket.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := sc.mutation.BucketName(); ok {
+	if value, ok := _c.mutation.BucketName(); ok {
 		_spec.SetField(s3bucket.FieldBucketName, field.TypeString, value)
 		_node.BucketName = value
 	}
-	if value, ok := sc.mutation.CreatedTime(); ok {
+	if value, ok := _c.mutation.CreatedTime(); ok {
 		_spec.SetField(s3bucket.FieldCreatedTime, field.TypeTime, value)
 		_node.CreatedTime = value
 	}
@@ -163,17 +163,21 @@ func (sc *S3BucketCreate) createSpec() (*S3Bucket, *sqlgraph.CreateSpec) {
 // S3BucketCreateBulk is the builder for creating many S3Bucket entities in bulk.
 type S3BucketCreateBulk struct {
 	config
+	err      error
 	builders []*S3BucketCreate
 }
 
 // Save creates the S3Bucket entities in the database.
-func (scb *S3BucketCreateBulk) Save(ctx context.Context) ([]*S3Bucket, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*S3Bucket, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+func (_c *S3BucketCreateBulk) Save(ctx context.Context) ([]*S3Bucket, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*S3Bucket, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*S3BucketMutation)
@@ -187,11 +191,11 @@ func (scb *S3BucketCreateBulk) Save(ctx context.Context) ([]*S3Bucket, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -211,7 +215,7 @@ func (scb *S3BucketCreateBulk) Save(ctx context.Context) ([]*S3Bucket, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -219,8 +223,8 @@ func (scb *S3BucketCreateBulk) Save(ctx context.Context) ([]*S3Bucket, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *S3BucketCreateBulk) SaveX(ctx context.Context) []*S3Bucket {
-	v, err := scb.Save(ctx)
+func (_c *S3BucketCreateBulk) SaveX(ctx context.Context) []*S3Bucket {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -228,14 +232,14 @@ func (scb *S3BucketCreateBulk) SaveX(ctx context.Context) []*S3Bucket {
 }
 
 // Exec executes the query.
-func (scb *S3BucketCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *S3BucketCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *S3BucketCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *S3BucketCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -20,56 +20,56 @@ type ScriptDelete struct {
 }
 
 // Where appends a list predicates to the ScriptDelete builder.
-func (sd *ScriptDelete) Where(ps ...predicate.Script) *ScriptDelete {
-	sd.mutation.Where(ps...)
-	return sd
+func (_d *ScriptDelete) Where(ps ...predicate.Script) *ScriptDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (sd *ScriptDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, sd.sqlExec, sd.mutation, sd.hooks)
+func (_d *ScriptDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sd *ScriptDelete) ExecX(ctx context.Context) int {
-	n, err := sd.Exec(ctx)
+func (_d *ScriptDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (sd *ScriptDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ScriptDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(script.Table, sqlgraph.NewFieldSpec(script.FieldID, field.TypeInt32))
-	if ps := sd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, sd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	sd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ScriptDeleteOne is the builder for deleting a single Script entity.
 type ScriptDeleteOne struct {
-	sd *ScriptDelete
+	_d *ScriptDelete
 }
 
 // Where appends a list predicates to the ScriptDelete builder.
-func (sdo *ScriptDeleteOne) Where(ps ...predicate.Script) *ScriptDeleteOne {
-	sdo.sd.mutation.Where(ps...)
-	return sdo
+func (_d *ScriptDeleteOne) Where(ps ...predicate.Script) *ScriptDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (sdo *ScriptDeleteOne) Exec(ctx context.Context) error {
-	n, err := sdo.sd.Exec(ctx)
+func (_d *ScriptDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (sdo *ScriptDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sdo *ScriptDeleteOne) ExecX(ctx context.Context) {
-	if err := sdo.Exec(ctx); err != nil {
+func (_d *ScriptDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

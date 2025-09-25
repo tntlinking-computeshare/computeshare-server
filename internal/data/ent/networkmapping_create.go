@@ -22,131 +22,131 @@ type NetworkMappingCreate struct {
 }
 
 // SetName sets the "name" field.
-func (nmc *NetworkMappingCreate) SetName(s string) *NetworkMappingCreate {
-	nmc.mutation.SetName(s)
-	return nmc
+func (_c *NetworkMappingCreate) SetName(v string) *NetworkMappingCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetProtocol sets the "protocol" field.
-func (nmc *NetworkMappingCreate) SetProtocol(s string) *NetworkMappingCreate {
-	nmc.mutation.SetProtocol(s)
-	return nmc
+func (_c *NetworkMappingCreate) SetProtocol(v string) *NetworkMappingCreate {
+	_c.mutation.SetProtocol(v)
+	return _c
 }
 
 // SetNillableProtocol sets the "protocol" field if the given value is not nil.
-func (nmc *NetworkMappingCreate) SetNillableProtocol(s *string) *NetworkMappingCreate {
-	if s != nil {
-		nmc.SetProtocol(*s)
+func (_c *NetworkMappingCreate) SetNillableProtocol(v *string) *NetworkMappingCreate {
+	if v != nil {
+		_c.SetProtocol(*v)
 	}
-	return nmc
+	return _c
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (nmc *NetworkMappingCreate) SetFkGatewayID(u uuid.UUID) *NetworkMappingCreate {
-	nmc.mutation.SetFkGatewayID(u)
-	return nmc
+func (_c *NetworkMappingCreate) SetFkGatewayID(v uuid.UUID) *NetworkMappingCreate {
+	_c.mutation.SetFkGatewayID(v)
+	return _c
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (nmc *NetworkMappingCreate) SetGatewayPort(i int32) *NetworkMappingCreate {
-	nmc.mutation.SetGatewayPort(i)
-	return nmc
+func (_c *NetworkMappingCreate) SetGatewayPort(v int32) *NetworkMappingCreate {
+	_c.mutation.SetGatewayPort(v)
+	return _c
 }
 
 // SetGatewayIP sets the "gateway_ip" field.
-func (nmc *NetworkMappingCreate) SetGatewayIP(s string) *NetworkMappingCreate {
-	nmc.mutation.SetGatewayIP(s)
-	return nmc
+func (_c *NetworkMappingCreate) SetGatewayIP(v string) *NetworkMappingCreate {
+	_c.mutation.SetGatewayIP(v)
+	return _c
 }
 
 // SetComputerPort sets the "computer_port" field.
-func (nmc *NetworkMappingCreate) SetComputerPort(i int32) *NetworkMappingCreate {
-	nmc.mutation.SetComputerPort(i)
-	return nmc
+func (_c *NetworkMappingCreate) SetComputerPort(v int32) *NetworkMappingCreate {
+	_c.mutation.SetComputerPort(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (nmc *NetworkMappingCreate) SetStatus(i int) *NetworkMappingCreate {
-	nmc.mutation.SetStatus(i)
-	return nmc
+func (_c *NetworkMappingCreate) SetStatus(v int) *NetworkMappingCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetNillableStatus sets the "status" field if the given value is not nil.
-func (nmc *NetworkMappingCreate) SetNillableStatus(i *int) *NetworkMappingCreate {
-	if i != nil {
-		nmc.SetStatus(*i)
+func (_c *NetworkMappingCreate) SetNillableStatus(v *int) *NetworkMappingCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
-	return nmc
+	return _c
 }
 
 // SetFkComputerID sets the "fk_computer_id" field.
-func (nmc *NetworkMappingCreate) SetFkComputerID(u uuid.UUID) *NetworkMappingCreate {
-	nmc.mutation.SetFkComputerID(u)
-	return nmc
+func (_c *NetworkMappingCreate) SetFkComputerID(v uuid.UUID) *NetworkMappingCreate {
+	_c.mutation.SetFkComputerID(v)
+	return _c
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (nmc *NetworkMappingCreate) SetFkUserID(u uuid.UUID) *NetworkMappingCreate {
-	nmc.mutation.SetFkUserID(u)
-	return nmc
+func (_c *NetworkMappingCreate) SetFkUserID(v uuid.UUID) *NetworkMappingCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetDeleteState sets the "delete_state" field.
-func (nmc *NetworkMappingCreate) SetDeleteState(b bool) *NetworkMappingCreate {
-	nmc.mutation.SetDeleteState(b)
-	return nmc
+func (_c *NetworkMappingCreate) SetDeleteState(v bool) *NetworkMappingCreate {
+	_c.mutation.SetDeleteState(v)
+	return _c
 }
 
 // SetNillableDeleteState sets the "delete_state" field if the given value is not nil.
-func (nmc *NetworkMappingCreate) SetNillableDeleteState(b *bool) *NetworkMappingCreate {
-	if b != nil {
-		nmc.SetDeleteState(*b)
+func (_c *NetworkMappingCreate) SetNillableDeleteState(v *bool) *NetworkMappingCreate {
+	if v != nil {
+		_c.SetDeleteState(*v)
 	}
-	return nmc
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (nmc *NetworkMappingCreate) SetCreateTime(t time.Time) *NetworkMappingCreate {
-	nmc.mutation.SetCreateTime(t)
-	return nmc
+func (_c *NetworkMappingCreate) SetCreateTime(v time.Time) *NetworkMappingCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (nmc *NetworkMappingCreate) SetNillableCreateTime(t *time.Time) *NetworkMappingCreate {
-	if t != nil {
-		nmc.SetCreateTime(*t)
+func (_c *NetworkMappingCreate) SetNillableCreateTime(v *time.Time) *NetworkMappingCreate {
+	if v != nil {
+		_c.SetCreateTime(*v)
 	}
-	return nmc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (nmc *NetworkMappingCreate) SetID(u uuid.UUID) *NetworkMappingCreate {
-	nmc.mutation.SetID(u)
-	return nmc
+func (_c *NetworkMappingCreate) SetID(v uuid.UUID) *NetworkMappingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (nmc *NetworkMappingCreate) SetNillableID(u *uuid.UUID) *NetworkMappingCreate {
-	if u != nil {
-		nmc.SetID(*u)
+func (_c *NetworkMappingCreate) SetNillableID(v *uuid.UUID) *NetworkMappingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return nmc
+	return _c
 }
 
 // Mutation returns the NetworkMappingMutation object of the builder.
-func (nmc *NetworkMappingCreate) Mutation() *NetworkMappingMutation {
-	return nmc.mutation
+func (_c *NetworkMappingCreate) Mutation() *NetworkMappingMutation {
+	return _c.mutation
 }
 
 // Save creates the NetworkMapping in the database.
-func (nmc *NetworkMappingCreate) Save(ctx context.Context) (*NetworkMapping, error) {
-	nmc.defaults()
-	return withHooks(ctx, nmc.sqlSave, nmc.mutation, nmc.hooks)
+func (_c *NetworkMappingCreate) Save(ctx context.Context) (*NetworkMapping, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (nmc *NetworkMappingCreate) SaveX(ctx context.Context) *NetworkMapping {
-	v, err := nmc.Save(ctx)
+func (_c *NetworkMappingCreate) SaveX(ctx context.Context) *NetworkMapping {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -154,96 +154,96 @@ func (nmc *NetworkMappingCreate) SaveX(ctx context.Context) *NetworkMapping {
 }
 
 // Exec executes the query.
-func (nmc *NetworkMappingCreate) Exec(ctx context.Context) error {
-	_, err := nmc.Save(ctx)
+func (_c *NetworkMappingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmc *NetworkMappingCreate) ExecX(ctx context.Context) {
-	if err := nmc.Exec(ctx); err != nil {
+func (_c *NetworkMappingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (nmc *NetworkMappingCreate) defaults() {
-	if _, ok := nmc.mutation.Protocol(); !ok {
+func (_c *NetworkMappingCreate) defaults() {
+	if _, ok := _c.mutation.Protocol(); !ok {
 		v := networkmapping.DefaultProtocol
-		nmc.mutation.SetProtocol(v)
+		_c.mutation.SetProtocol(v)
 	}
-	if _, ok := nmc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		v := networkmapping.DefaultStatus
-		nmc.mutation.SetStatus(v)
+		_c.mutation.SetStatus(v)
 	}
-	if _, ok := nmc.mutation.DeleteState(); !ok {
+	if _, ok := _c.mutation.DeleteState(); !ok {
 		v := networkmapping.DefaultDeleteState
-		nmc.mutation.SetDeleteState(v)
+		_c.mutation.SetDeleteState(v)
 	}
-	if _, ok := nmc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := networkmapping.DefaultCreateTime()
-		nmc.mutation.SetCreateTime(v)
+		_c.mutation.SetCreateTime(v)
 	}
-	if _, ok := nmc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := networkmapping.DefaultID()
-		nmc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (nmc *NetworkMappingCreate) check() error {
-	if _, ok := nmc.mutation.Name(); !ok {
+func (_c *NetworkMappingCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "NetworkMapping.name"`)}
 	}
-	if v, ok := nmc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := networkmapping.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.name": %w`, err)}
 		}
 	}
-	if _, ok := nmc.mutation.Protocol(); !ok {
+	if _, ok := _c.mutation.Protocol(); !ok {
 		return &ValidationError{Name: "protocol", err: errors.New(`ent: missing required field "NetworkMapping.protocol"`)}
 	}
-	if v, ok := nmc.mutation.Protocol(); ok {
+	if v, ok := _c.mutation.Protocol(); ok {
 		if err := networkmapping.ProtocolValidator(v); err != nil {
 			return &ValidationError{Name: "protocol", err: fmt.Errorf(`ent: validator failed for field "NetworkMapping.protocol": %w`, err)}
 		}
 	}
-	if _, ok := nmc.mutation.FkGatewayID(); !ok {
+	if _, ok := _c.mutation.FkGatewayID(); !ok {
 		return &ValidationError{Name: "fk_gateway_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_gateway_id"`)}
 	}
-	if _, ok := nmc.mutation.GatewayPort(); !ok {
+	if _, ok := _c.mutation.GatewayPort(); !ok {
 		return &ValidationError{Name: "gateway_port", err: errors.New(`ent: missing required field "NetworkMapping.gateway_port"`)}
 	}
-	if _, ok := nmc.mutation.GatewayIP(); !ok {
+	if _, ok := _c.mutation.GatewayIP(); !ok {
 		return &ValidationError{Name: "gateway_ip", err: errors.New(`ent: missing required field "NetworkMapping.gateway_ip"`)}
 	}
-	if _, ok := nmc.mutation.ComputerPort(); !ok {
+	if _, ok := _c.mutation.ComputerPort(); !ok {
 		return &ValidationError{Name: "computer_port", err: errors.New(`ent: missing required field "NetworkMapping.computer_port"`)}
 	}
-	if _, ok := nmc.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "NetworkMapping.status"`)}
 	}
-	if _, ok := nmc.mutation.FkComputerID(); !ok {
+	if _, ok := _c.mutation.FkComputerID(); !ok {
 		return &ValidationError{Name: "fk_computer_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_computer_id"`)}
 	}
-	if _, ok := nmc.mutation.FkUserID(); !ok {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "NetworkMapping.fk_user_id"`)}
 	}
-	if _, ok := nmc.mutation.DeleteState(); !ok {
+	if _, ok := _c.mutation.DeleteState(); !ok {
 		return &ValidationError{Name: "delete_state", err: errors.New(`ent: missing required field "NetworkMapping.delete_state"`)}
 	}
-	if _, ok := nmc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "NetworkMapping.create_time"`)}
 	}
 	return nil
 }
 
-func (nmc *NetworkMappingCreate) sqlSave(ctx context.Context) (*NetworkMapping, error) {
-	if err := nmc.check(); err != nil {
+func (_c *NetworkMappingCreate) sqlSave(ctx context.Context) (*NetworkMapping, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := nmc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, nmc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -256,61 +256,61 @@ func (nmc *NetworkMappingCreate) sqlSave(ctx context.Context) (*NetworkMapping, 
 			return nil, err
 		}
 	}
-	nmc.mutation.id = &_node.ID
-	nmc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.CreateSpec) {
+func (_c *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.CreateSpec) {
 	var (
-		_node = &NetworkMapping{config: nmc.config}
+		_node = &NetworkMapping{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(networkmapping.Table, sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID))
 	)
-	if id, ok := nmc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := nmc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(networkmapping.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := nmc.mutation.Protocol(); ok {
+	if value, ok := _c.mutation.Protocol(); ok {
 		_spec.SetField(networkmapping.FieldProtocol, field.TypeString, value)
 		_node.Protocol = value
 	}
-	if value, ok := nmc.mutation.FkGatewayID(); ok {
+	if value, ok := _c.mutation.FkGatewayID(); ok {
 		_spec.SetField(networkmapping.FieldFkGatewayID, field.TypeUUID, value)
 		_node.FkGatewayID = value
 	}
-	if value, ok := nmc.mutation.GatewayPort(); ok {
+	if value, ok := _c.mutation.GatewayPort(); ok {
 		_spec.SetField(networkmapping.FieldGatewayPort, field.TypeInt32, value)
 		_node.GatewayPort = value
 	}
-	if value, ok := nmc.mutation.GatewayIP(); ok {
+	if value, ok := _c.mutation.GatewayIP(); ok {
 		_spec.SetField(networkmapping.FieldGatewayIP, field.TypeString, value)
 		_node.GatewayIP = value
 	}
-	if value, ok := nmc.mutation.ComputerPort(); ok {
+	if value, ok := _c.mutation.ComputerPort(); ok {
 		_spec.SetField(networkmapping.FieldComputerPort, field.TypeInt32, value)
 		_node.ComputerPort = value
 	}
-	if value, ok := nmc.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(networkmapping.FieldStatus, field.TypeInt, value)
 		_node.Status = value
 	}
-	if value, ok := nmc.mutation.FkComputerID(); ok {
+	if value, ok := _c.mutation.FkComputerID(); ok {
 		_spec.SetField(networkmapping.FieldFkComputerID, field.TypeUUID, value)
 		_node.FkComputerID = value
 	}
-	if value, ok := nmc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(networkmapping.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := nmc.mutation.DeleteState(); ok {
+	if value, ok := _c.mutation.DeleteState(); ok {
 		_spec.SetField(networkmapping.FieldDeleteState, field.TypeBool, value)
 		_node.DeleteState = value
 	}
-	if value, ok := nmc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(networkmapping.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
@@ -320,17 +320,21 @@ func (nmc *NetworkMappingCreate) createSpec() (*NetworkMapping, *sqlgraph.Create
 // NetworkMappingCreateBulk is the builder for creating many NetworkMapping entities in bulk.
 type NetworkMappingCreateBulk struct {
 	config
+	err      error
 	builders []*NetworkMappingCreate
 }
 
 // Save creates the NetworkMapping entities in the database.
-func (nmcb *NetworkMappingCreateBulk) Save(ctx context.Context) ([]*NetworkMapping, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(nmcb.builders))
-	nodes := make([]*NetworkMapping, len(nmcb.builders))
-	mutators := make([]Mutator, len(nmcb.builders))
-	for i := range nmcb.builders {
+func (_c *NetworkMappingCreateBulk) Save(ctx context.Context) ([]*NetworkMapping, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*NetworkMapping, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := nmcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*NetworkMappingMutation)
@@ -344,11 +348,11 @@ func (nmcb *NetworkMappingCreateBulk) Save(ctx context.Context) ([]*NetworkMappi
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, nmcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, nmcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -368,7 +372,7 @@ func (nmcb *NetworkMappingCreateBulk) Save(ctx context.Context) ([]*NetworkMappi
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, nmcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -376,8 +380,8 @@ func (nmcb *NetworkMappingCreateBulk) Save(ctx context.Context) ([]*NetworkMappi
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (nmcb *NetworkMappingCreateBulk) SaveX(ctx context.Context) []*NetworkMapping {
-	v, err := nmcb.Save(ctx)
+func (_c *NetworkMappingCreateBulk) SaveX(ctx context.Context) []*NetworkMapping {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -385,14 +389,14 @@ func (nmcb *NetworkMappingCreateBulk) SaveX(ctx context.Context) []*NetworkMappi
 }
 
 // Exec executes the query.
-func (nmcb *NetworkMappingCreateBulk) Exec(ctx context.Context) error {
-	_, err := nmcb.Save(ctx)
+func (_c *NetworkMappingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmcb *NetworkMappingCreateBulk) ExecX(ctx context.Context) {
-	if err := nmcb.Exec(ctx); err != nil {
+func (_c *NetworkMappingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -22,55 +22,87 @@ type GatewayUpdate struct {
 }
 
 // Where appends a list predicates to the GatewayUpdate builder.
-func (gu *GatewayUpdate) Where(ps ...predicate.Gateway) *GatewayUpdate {
-	gu.mutation.Where(ps...)
-	return gu
+func (_u *GatewayUpdate) Where(ps ...predicate.Gateway) *GatewayUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (gu *GatewayUpdate) SetName(s string) *GatewayUpdate {
-	gu.mutation.SetName(s)
-	return gu
+func (_u *GatewayUpdate) SetName(v string) *GatewayUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *GatewayUpdate) SetNillableName(v *string) *GatewayUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetIP sets the "ip" field.
-func (gu *GatewayUpdate) SetIP(s string) *GatewayUpdate {
-	gu.mutation.SetIP(s)
-	return gu
+func (_u *GatewayUpdate) SetIP(v string) *GatewayUpdate {
+	_u.mutation.SetIP(v)
+	return _u
+}
+
+// SetNillableIP sets the "ip" field if the given value is not nil.
+func (_u *GatewayUpdate) SetNillableIP(v *string) *GatewayUpdate {
+	if v != nil {
+		_u.SetIP(*v)
+	}
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (gu *GatewayUpdate) SetPort(i int32) *GatewayUpdate {
-	gu.mutation.ResetPort()
-	gu.mutation.SetPort(i)
-	return gu
+func (_u *GatewayUpdate) SetPort(v int32) *GatewayUpdate {
+	_u.mutation.ResetPort()
+	_u.mutation.SetPort(v)
+	return _u
 }
 
-// AddPort adds i to the "port" field.
-func (gu *GatewayUpdate) AddPort(i int32) *GatewayUpdate {
-	gu.mutation.AddPort(i)
-	return gu
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (_u *GatewayUpdate) SetNillablePort(v *int32) *GatewayUpdate {
+	if v != nil {
+		_u.SetPort(*v)
+	}
+	return _u
+}
+
+// AddPort adds value to the "port" field.
+func (_u *GatewayUpdate) AddPort(v int32) *GatewayUpdate {
+	_u.mutation.AddPort(v)
+	return _u
 }
 
 // SetInternalIP sets the "internal_ip" field.
-func (gu *GatewayUpdate) SetInternalIP(s string) *GatewayUpdate {
-	gu.mutation.SetInternalIP(s)
-	return gu
+func (_u *GatewayUpdate) SetInternalIP(v string) *GatewayUpdate {
+	_u.mutation.SetInternalIP(v)
+	return _u
+}
+
+// SetNillableInternalIP sets the "internal_ip" field if the given value is not nil.
+func (_u *GatewayUpdate) SetNillableInternalIP(v *string) *GatewayUpdate {
+	if v != nil {
+		_u.SetInternalIP(*v)
+	}
+	return _u
 }
 
 // Mutation returns the GatewayMutation object of the builder.
-func (gu *GatewayUpdate) Mutation() *GatewayMutation {
-	return gu.mutation
+func (_u *GatewayUpdate) Mutation() *GatewayMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (gu *GatewayUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, gu.sqlSave, gu.mutation, gu.hooks)
+func (_u *GatewayUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gu *GatewayUpdate) SaveX(ctx context.Context) int {
-	affected, err := gu.Save(ctx)
+func (_u *GatewayUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -78,21 +110,21 @@ func (gu *GatewayUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (gu *GatewayUpdate) Exec(ctx context.Context) error {
-	_, err := gu.Save(ctx)
+func (_u *GatewayUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gu *GatewayUpdate) ExecX(ctx context.Context) {
-	if err := gu.Exec(ctx); err != nil {
+func (_u *GatewayUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (gu *GatewayUpdate) check() error {
-	if v, ok := gu.mutation.Name(); ok {
+func (_u *GatewayUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := gateway.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Gateway.name": %w`, err)}
 		}
@@ -100,34 +132,34 @@ func (gu *GatewayUpdate) check() error {
 	return nil
 }
 
-func (gu *GatewayUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := gu.check(); err != nil {
-		return n, err
+func (_u *GatewayUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(gateway.Table, gateway.Columns, sqlgraph.NewFieldSpec(gateway.FieldID, field.TypeUUID))
-	if ps := gu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := gu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(gateway.FieldName, field.TypeString, value)
 	}
-	if value, ok := gu.mutation.IP(); ok {
+	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(gateway.FieldIP, field.TypeString, value)
 	}
-	if value, ok := gu.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gu.mutation.AddedPort(); ok {
+	if value, ok := _u.mutation.AddedPort(); ok {
 		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gu.mutation.InternalIP(); ok {
+	if value, ok := _u.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gateway.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -135,8 +167,8 @@ func (gu *GatewayUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	gu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // GatewayUpdateOne is the builder for updating a single Gateway entity.
@@ -148,62 +180,94 @@ type GatewayUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (guo *GatewayUpdateOne) SetName(s string) *GatewayUpdateOne {
-	guo.mutation.SetName(s)
-	return guo
+func (_u *GatewayUpdateOne) SetName(v string) *GatewayUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *GatewayUpdateOne) SetNillableName(v *string) *GatewayUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetIP sets the "ip" field.
-func (guo *GatewayUpdateOne) SetIP(s string) *GatewayUpdateOne {
-	guo.mutation.SetIP(s)
-	return guo
+func (_u *GatewayUpdateOne) SetIP(v string) *GatewayUpdateOne {
+	_u.mutation.SetIP(v)
+	return _u
+}
+
+// SetNillableIP sets the "ip" field if the given value is not nil.
+func (_u *GatewayUpdateOne) SetNillableIP(v *string) *GatewayUpdateOne {
+	if v != nil {
+		_u.SetIP(*v)
+	}
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (guo *GatewayUpdateOne) SetPort(i int32) *GatewayUpdateOne {
-	guo.mutation.ResetPort()
-	guo.mutation.SetPort(i)
-	return guo
+func (_u *GatewayUpdateOne) SetPort(v int32) *GatewayUpdateOne {
+	_u.mutation.ResetPort()
+	_u.mutation.SetPort(v)
+	return _u
 }
 
-// AddPort adds i to the "port" field.
-func (guo *GatewayUpdateOne) AddPort(i int32) *GatewayUpdateOne {
-	guo.mutation.AddPort(i)
-	return guo
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (_u *GatewayUpdateOne) SetNillablePort(v *int32) *GatewayUpdateOne {
+	if v != nil {
+		_u.SetPort(*v)
+	}
+	return _u
+}
+
+// AddPort adds value to the "port" field.
+func (_u *GatewayUpdateOne) AddPort(v int32) *GatewayUpdateOne {
+	_u.mutation.AddPort(v)
+	return _u
 }
 
 // SetInternalIP sets the "internal_ip" field.
-func (guo *GatewayUpdateOne) SetInternalIP(s string) *GatewayUpdateOne {
-	guo.mutation.SetInternalIP(s)
-	return guo
+func (_u *GatewayUpdateOne) SetInternalIP(v string) *GatewayUpdateOne {
+	_u.mutation.SetInternalIP(v)
+	return _u
+}
+
+// SetNillableInternalIP sets the "internal_ip" field if the given value is not nil.
+func (_u *GatewayUpdateOne) SetNillableInternalIP(v *string) *GatewayUpdateOne {
+	if v != nil {
+		_u.SetInternalIP(*v)
+	}
+	return _u
 }
 
 // Mutation returns the GatewayMutation object of the builder.
-func (guo *GatewayUpdateOne) Mutation() *GatewayMutation {
-	return guo.mutation
+func (_u *GatewayUpdateOne) Mutation() *GatewayMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the GatewayUpdate builder.
-func (guo *GatewayUpdateOne) Where(ps ...predicate.Gateway) *GatewayUpdateOne {
-	guo.mutation.Where(ps...)
-	return guo
+func (_u *GatewayUpdateOne) Where(ps ...predicate.Gateway) *GatewayUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (guo *GatewayUpdateOne) Select(field string, fields ...string) *GatewayUpdateOne {
-	guo.fields = append([]string{field}, fields...)
-	return guo
+func (_u *GatewayUpdateOne) Select(field string, fields ...string) *GatewayUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Gateway entity.
-func (guo *GatewayUpdateOne) Save(ctx context.Context) (*Gateway, error) {
-	return withHooks(ctx, guo.sqlSave, guo.mutation, guo.hooks)
+func (_u *GatewayUpdateOne) Save(ctx context.Context) (*Gateway, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (guo *GatewayUpdateOne) SaveX(ctx context.Context) *Gateway {
-	node, err := guo.Save(ctx)
+func (_u *GatewayUpdateOne) SaveX(ctx context.Context) *Gateway {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -211,21 +275,21 @@ func (guo *GatewayUpdateOne) SaveX(ctx context.Context) *Gateway {
 }
 
 // Exec executes the query on the entity.
-func (guo *GatewayUpdateOne) Exec(ctx context.Context) error {
-	_, err := guo.Save(ctx)
+func (_u *GatewayUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (guo *GatewayUpdateOne) ExecX(ctx context.Context) {
-	if err := guo.Exec(ctx); err != nil {
+func (_u *GatewayUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (guo *GatewayUpdateOne) check() error {
-	if v, ok := guo.mutation.Name(); ok {
+func (_u *GatewayUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := gateway.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Gateway.name": %w`, err)}
 		}
@@ -233,17 +297,17 @@ func (guo *GatewayUpdateOne) check() error {
 	return nil
 }
 
-func (guo *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err error) {
-	if err := guo.check(); err != nil {
+func (_u *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(gateway.Table, gateway.Columns, sqlgraph.NewFieldSpec(gateway.FieldID, field.TypeUUID))
-	id, ok := guo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Gateway.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := guo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, gateway.FieldID)
 		for _, f := range fields {
@@ -255,32 +319,32 @@ func (guo *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err e
 			}
 		}
 	}
-	if ps := guo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := guo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(gateway.FieldName, field.TypeString, value)
 	}
-	if value, ok := guo.mutation.IP(); ok {
+	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(gateway.FieldIP, field.TypeString, value)
 	}
-	if value, ok := guo.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(gateway.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := guo.mutation.AddedPort(); ok {
+	if value, ok := _u.mutation.AddedPort(); ok {
 		_spec.AddField(gateway.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := guo.mutation.InternalIP(); ok {
+	if value, ok := _u.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
 	}
-	_node = &Gateway{config: guo.config}
+	_node = &Gateway{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, guo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gateway.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -288,6 +352,6 @@ func (guo *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err e
 		}
 		return nil, err
 	}
-	guo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

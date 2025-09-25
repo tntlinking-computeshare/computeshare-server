@@ -23,96 +23,136 @@ type StorageUpdate struct {
 }
 
 // Where appends a list predicates to the StorageUpdate builder.
-func (su *StorageUpdate) Where(ps ...predicate.Storage) *StorageUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *StorageUpdate) Where(ps ...predicate.Storage) *StorageUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOwner sets the "owner" field.
-func (su *StorageUpdate) SetOwner(s string) *StorageUpdate {
-	su.mutation.SetOwner(s)
-	return su
+func (_u *StorageUpdate) SetOwner(v string) *StorageUpdate {
+	_u.mutation.SetOwner(v)
+	return _u
+}
+
+// SetNillableOwner sets the "owner" field if the given value is not nil.
+func (_u *StorageUpdate) SetNillableOwner(v *string) *StorageUpdate {
+	if v != nil {
+		_u.SetOwner(*v)
+	}
+	return _u
 }
 
 // SetType sets the "type" field.
-func (su *StorageUpdate) SetType(i int32) *StorageUpdate {
-	su.mutation.ResetType()
-	su.mutation.SetType(i)
-	return su
+func (_u *StorageUpdate) SetType(v int32) *StorageUpdate {
+	_u.mutation.ResetType()
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (su *StorageUpdate) SetNillableType(i *int32) *StorageUpdate {
-	if i != nil {
-		su.SetType(*i)
+func (_u *StorageUpdate) SetNillableType(v *int32) *StorageUpdate {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return su
+	return _u
 }
 
-// AddType adds i to the "type" field.
-func (su *StorageUpdate) AddType(i int32) *StorageUpdate {
-	su.mutation.AddType(i)
-	return su
+// AddType adds value to the "type" field.
+func (_u *StorageUpdate) AddType(v int32) *StorageUpdate {
+	_u.mutation.AddType(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (su *StorageUpdate) SetName(s string) *StorageUpdate {
-	su.mutation.SetName(s)
-	return su
+func (_u *StorageUpdate) SetName(v string) *StorageUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *StorageUpdate) SetNillableName(v *string) *StorageUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetCid sets the "cid" field.
-func (su *StorageUpdate) SetCid(s string) *StorageUpdate {
-	su.mutation.SetCid(s)
-	return su
+func (_u *StorageUpdate) SetCid(v string) *StorageUpdate {
+	_u.mutation.SetCid(v)
+	return _u
+}
+
+// SetNillableCid sets the "cid" field if the given value is not nil.
+func (_u *StorageUpdate) SetNillableCid(v *string) *StorageUpdate {
+	if v != nil {
+		_u.SetCid(*v)
+	}
+	return _u
 }
 
 // SetSize sets the "size" field.
-func (su *StorageUpdate) SetSize(i int32) *StorageUpdate {
-	su.mutation.ResetSize()
-	su.mutation.SetSize(i)
-	return su
+func (_u *StorageUpdate) SetSize(v int32) *StorageUpdate {
+	_u.mutation.ResetSize()
+	_u.mutation.SetSize(v)
+	return _u
 }
 
-// AddSize adds i to the "size" field.
-func (su *StorageUpdate) AddSize(i int32) *StorageUpdate {
-	su.mutation.AddSize(i)
-	return su
+// SetNillableSize sets the "size" field if the given value is not nil.
+func (_u *StorageUpdate) SetNillableSize(v *int32) *StorageUpdate {
+	if v != nil {
+		_u.SetSize(*v)
+	}
+	return _u
+}
+
+// AddSize adds value to the "size" field.
+func (_u *StorageUpdate) AddSize(v int32) *StorageUpdate {
+	_u.mutation.AddSize(v)
+	return _u
 }
 
 // SetLastModify sets the "last_modify" field.
-func (su *StorageUpdate) SetLastModify(t time.Time) *StorageUpdate {
-	su.mutation.SetLastModify(t)
-	return su
+func (_u *StorageUpdate) SetLastModify(v time.Time) *StorageUpdate {
+	_u.mutation.SetLastModify(v)
+	return _u
 }
 
 // SetNillableLastModify sets the "last_modify" field if the given value is not nil.
-func (su *StorageUpdate) SetNillableLastModify(t *time.Time) *StorageUpdate {
-	if t != nil {
-		su.SetLastModify(*t)
+func (_u *StorageUpdate) SetNillableLastModify(v *time.Time) *StorageUpdate {
+	if v != nil {
+		_u.SetLastModify(*v)
 	}
-	return su
+	return _u
 }
 
 // SetParentID sets the "parent_id" field.
-func (su *StorageUpdate) SetParentID(s string) *StorageUpdate {
-	su.mutation.SetParentID(s)
-	return su
+func (_u *StorageUpdate) SetParentID(v string) *StorageUpdate {
+	_u.mutation.SetParentID(v)
+	return _u
+}
+
+// SetNillableParentID sets the "parent_id" field if the given value is not nil.
+func (_u *StorageUpdate) SetNillableParentID(v *string) *StorageUpdate {
+	if v != nil {
+		_u.SetParentID(*v)
+	}
+	return _u
 }
 
 // Mutation returns the StorageMutation object of the builder.
-func (su *StorageUpdate) Mutation() *StorageMutation {
-	return su.mutation
+func (_u *StorageUpdate) Mutation() *StorageMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *StorageUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+func (_u *StorageUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *StorageUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *StorageUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -120,36 +160,36 @@ func (su *StorageUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *StorageUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *StorageUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *StorageUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *StorageUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *StorageUpdate) check() error {
-	if v, ok := su.mutation.Owner(); ok {
+func (_u *StorageUpdate) check() error {
+	if v, ok := _u.mutation.Owner(); ok {
 		if err := storage.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "Storage.owner": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := storage.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Storage.name": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.Cid(); ok {
+	if v, ok := _u.mutation.Cid(); ok {
 		if err := storage.CidValidator(v); err != nil {
 			return &ValidationError{Name: "cid", err: fmt.Errorf(`ent: validator failed for field "Storage.cid": %w`, err)}
 		}
 	}
-	if v, ok := su.mutation.ParentID(); ok {
+	if v, ok := _u.mutation.ParentID(); ok {
 		if err := storage.ParentIDValidator(v); err != nil {
 			return &ValidationError{Name: "parent_id", err: fmt.Errorf(`ent: validator failed for field "Storage.parent_id": %w`, err)}
 		}
@@ -157,46 +197,46 @@ func (su *StorageUpdate) check() error {
 	return nil
 }
 
-func (su *StorageUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *StorageUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storage.Table, storage.Columns, sqlgraph.NewFieldSpec(storage.FieldID, field.TypeUUID))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := su.mutation.Owner(); ok {
+	if value, ok := _u.mutation.Owner(); ok {
 		_spec.SetField(storage.FieldOwner, field.TypeString, value)
 	}
-	if value, ok := su.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(storage.FieldType, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.AddedType(); ok {
+	if value, ok := _u.mutation.AddedType(); ok {
 		_spec.AddField(storage.FieldType, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(storage.FieldName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.Cid(); ok {
+	if value, ok := _u.mutation.Cid(); ok {
 		_spec.SetField(storage.FieldCid, field.TypeString, value)
 	}
-	if value, ok := su.mutation.Size(); ok {
+	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storage.FieldSize, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.AddedSize(); ok {
+	if value, ok := _u.mutation.AddedSize(); ok {
 		_spec.AddField(storage.FieldSize, field.TypeInt32, value)
 	}
-	if value, ok := su.mutation.LastModify(); ok {
+	if value, ok := _u.mutation.LastModify(); ok {
 		_spec.SetField(storage.FieldLastModify, field.TypeTime, value)
 	}
-	if value, ok := su.mutation.ParentID(); ok {
+	if value, ok := _u.mutation.ParentID(); ok {
 		_spec.SetField(storage.FieldParentID, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storage.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -204,8 +244,8 @@ func (su *StorageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StorageUpdateOne is the builder for updating a single Storage entity.
@@ -217,103 +257,143 @@ type StorageUpdateOne struct {
 }
 
 // SetOwner sets the "owner" field.
-func (suo *StorageUpdateOne) SetOwner(s string) *StorageUpdateOne {
-	suo.mutation.SetOwner(s)
-	return suo
+func (_u *StorageUpdateOne) SetOwner(v string) *StorageUpdateOne {
+	_u.mutation.SetOwner(v)
+	return _u
+}
+
+// SetNillableOwner sets the "owner" field if the given value is not nil.
+func (_u *StorageUpdateOne) SetNillableOwner(v *string) *StorageUpdateOne {
+	if v != nil {
+		_u.SetOwner(*v)
+	}
+	return _u
 }
 
 // SetType sets the "type" field.
-func (suo *StorageUpdateOne) SetType(i int32) *StorageUpdateOne {
-	suo.mutation.ResetType()
-	suo.mutation.SetType(i)
-	return suo
+func (_u *StorageUpdateOne) SetType(v int32) *StorageUpdateOne {
+	_u.mutation.ResetType()
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (suo *StorageUpdateOne) SetNillableType(i *int32) *StorageUpdateOne {
-	if i != nil {
-		suo.SetType(*i)
+func (_u *StorageUpdateOne) SetNillableType(v *int32) *StorageUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return suo
+	return _u
 }
 
-// AddType adds i to the "type" field.
-func (suo *StorageUpdateOne) AddType(i int32) *StorageUpdateOne {
-	suo.mutation.AddType(i)
-	return suo
+// AddType adds value to the "type" field.
+func (_u *StorageUpdateOne) AddType(v int32) *StorageUpdateOne {
+	_u.mutation.AddType(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (suo *StorageUpdateOne) SetName(s string) *StorageUpdateOne {
-	suo.mutation.SetName(s)
-	return suo
+func (_u *StorageUpdateOne) SetName(v string) *StorageUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *StorageUpdateOne) SetNillableName(v *string) *StorageUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetCid sets the "cid" field.
-func (suo *StorageUpdateOne) SetCid(s string) *StorageUpdateOne {
-	suo.mutation.SetCid(s)
-	return suo
+func (_u *StorageUpdateOne) SetCid(v string) *StorageUpdateOne {
+	_u.mutation.SetCid(v)
+	return _u
+}
+
+// SetNillableCid sets the "cid" field if the given value is not nil.
+func (_u *StorageUpdateOne) SetNillableCid(v *string) *StorageUpdateOne {
+	if v != nil {
+		_u.SetCid(*v)
+	}
+	return _u
 }
 
 // SetSize sets the "size" field.
-func (suo *StorageUpdateOne) SetSize(i int32) *StorageUpdateOne {
-	suo.mutation.ResetSize()
-	suo.mutation.SetSize(i)
-	return suo
+func (_u *StorageUpdateOne) SetSize(v int32) *StorageUpdateOne {
+	_u.mutation.ResetSize()
+	_u.mutation.SetSize(v)
+	return _u
 }
 
-// AddSize adds i to the "size" field.
-func (suo *StorageUpdateOne) AddSize(i int32) *StorageUpdateOne {
-	suo.mutation.AddSize(i)
-	return suo
+// SetNillableSize sets the "size" field if the given value is not nil.
+func (_u *StorageUpdateOne) SetNillableSize(v *int32) *StorageUpdateOne {
+	if v != nil {
+		_u.SetSize(*v)
+	}
+	return _u
+}
+
+// AddSize adds value to the "size" field.
+func (_u *StorageUpdateOne) AddSize(v int32) *StorageUpdateOne {
+	_u.mutation.AddSize(v)
+	return _u
 }
 
 // SetLastModify sets the "last_modify" field.
-func (suo *StorageUpdateOne) SetLastModify(t time.Time) *StorageUpdateOne {
-	suo.mutation.SetLastModify(t)
-	return suo
+func (_u *StorageUpdateOne) SetLastModify(v time.Time) *StorageUpdateOne {
+	_u.mutation.SetLastModify(v)
+	return _u
 }
 
 // SetNillableLastModify sets the "last_modify" field if the given value is not nil.
-func (suo *StorageUpdateOne) SetNillableLastModify(t *time.Time) *StorageUpdateOne {
-	if t != nil {
-		suo.SetLastModify(*t)
+func (_u *StorageUpdateOne) SetNillableLastModify(v *time.Time) *StorageUpdateOne {
+	if v != nil {
+		_u.SetLastModify(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetParentID sets the "parent_id" field.
-func (suo *StorageUpdateOne) SetParentID(s string) *StorageUpdateOne {
-	suo.mutation.SetParentID(s)
-	return suo
+func (_u *StorageUpdateOne) SetParentID(v string) *StorageUpdateOne {
+	_u.mutation.SetParentID(v)
+	return _u
+}
+
+// SetNillableParentID sets the "parent_id" field if the given value is not nil.
+func (_u *StorageUpdateOne) SetNillableParentID(v *string) *StorageUpdateOne {
+	if v != nil {
+		_u.SetParentID(*v)
+	}
+	return _u
 }
 
 // Mutation returns the StorageMutation object of the builder.
-func (suo *StorageUpdateOne) Mutation() *StorageMutation {
-	return suo.mutation
+func (_u *StorageUpdateOne) Mutation() *StorageMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the StorageUpdate builder.
-func (suo *StorageUpdateOne) Where(ps ...predicate.Storage) *StorageUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *StorageUpdateOne) Where(ps ...predicate.Storage) *StorageUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *StorageUpdateOne) Select(field string, fields ...string) *StorageUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *StorageUpdateOne) Select(field string, fields ...string) *StorageUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Storage entity.
-func (suo *StorageUpdateOne) Save(ctx context.Context) (*Storage, error) {
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+func (_u *StorageUpdateOne) Save(ctx context.Context) (*Storage, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *StorageUpdateOne) SaveX(ctx context.Context) *Storage {
-	node, err := suo.Save(ctx)
+func (_u *StorageUpdateOne) SaveX(ctx context.Context) *Storage {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -321,36 +401,36 @@ func (suo *StorageUpdateOne) SaveX(ctx context.Context) *Storage {
 }
 
 // Exec executes the query on the entity.
-func (suo *StorageUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *StorageUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *StorageUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *StorageUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *StorageUpdateOne) check() error {
-	if v, ok := suo.mutation.Owner(); ok {
+func (_u *StorageUpdateOne) check() error {
+	if v, ok := _u.mutation.Owner(); ok {
 		if err := storage.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "Storage.owner": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := storage.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Storage.name": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.Cid(); ok {
+	if v, ok := _u.mutation.Cid(); ok {
 		if err := storage.CidValidator(v); err != nil {
 			return &ValidationError{Name: "cid", err: fmt.Errorf(`ent: validator failed for field "Storage.cid": %w`, err)}
 		}
 	}
-	if v, ok := suo.mutation.ParentID(); ok {
+	if v, ok := _u.mutation.ParentID(); ok {
 		if err := storage.ParentIDValidator(v); err != nil {
 			return &ValidationError{Name: "parent_id", err: fmt.Errorf(`ent: validator failed for field "Storage.parent_id": %w`, err)}
 		}
@@ -358,17 +438,17 @@ func (suo *StorageUpdateOne) check() error {
 	return nil
 }
 
-func (suo *StorageUpdateOne) sqlSave(ctx context.Context) (_node *Storage, err error) {
-	if err := suo.check(); err != nil {
+func (_u *StorageUpdateOne) sqlSave(ctx context.Context) (_node *Storage, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(storage.Table, storage.Columns, sqlgraph.NewFieldSpec(storage.FieldID, field.TypeUUID))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Storage.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storage.FieldID)
 		for _, f := range fields {
@@ -380,44 +460,44 @@ func (suo *StorageUpdateOne) sqlSave(ctx context.Context) (_node *Storage, err e
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suo.mutation.Owner(); ok {
+	if value, ok := _u.mutation.Owner(); ok {
 		_spec.SetField(storage.FieldOwner, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(storage.FieldType, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.AddedType(); ok {
+	if value, ok := _u.mutation.AddedType(); ok {
 		_spec.AddField(storage.FieldType, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(storage.FieldName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.Cid(); ok {
+	if value, ok := _u.mutation.Cid(); ok {
 		_spec.SetField(storage.FieldCid, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.Size(); ok {
+	if value, ok := _u.mutation.Size(); ok {
 		_spec.SetField(storage.FieldSize, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.AddedSize(); ok {
+	if value, ok := _u.mutation.AddedSize(); ok {
 		_spec.AddField(storage.FieldSize, field.TypeInt32, value)
 	}
-	if value, ok := suo.mutation.LastModify(); ok {
+	if value, ok := _u.mutation.LastModify(); ok {
 		_spec.SetField(storage.FieldLastModify, field.TypeTime, value)
 	}
-	if value, ok := suo.mutation.ParentID(); ok {
+	if value, ok := _u.mutation.ParentID(); ok {
 		_spec.SetField(storage.FieldParentID, field.TypeString, value)
 	}
-	_node = &Storage{config: suo.config}
+	_node = &Storage{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storage.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -425,6 +505,6 @@ func (suo *StorageUpdateOne) sqlSave(ctx context.Context) (_node *Storage, err e
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

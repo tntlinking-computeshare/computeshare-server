@@ -20,56 +20,56 @@ type GatewayDelete struct {
 }
 
 // Where appends a list predicates to the GatewayDelete builder.
-func (gd *GatewayDelete) Where(ps ...predicate.Gateway) *GatewayDelete {
-	gd.mutation.Where(ps...)
-	return gd
+func (_d *GatewayDelete) Where(ps ...predicate.Gateway) *GatewayDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (gd *GatewayDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, gd.sqlExec, gd.mutation, gd.hooks)
+func (_d *GatewayDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gd *GatewayDelete) ExecX(ctx context.Context) int {
-	n, err := gd.Exec(ctx)
+func (_d *GatewayDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (gd *GatewayDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *GatewayDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(gateway.Table, sqlgraph.NewFieldSpec(gateway.FieldID, field.TypeUUID))
-	if ps := gd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, gd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	gd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // GatewayDeleteOne is the builder for deleting a single Gateway entity.
 type GatewayDeleteOne struct {
-	gd *GatewayDelete
+	_d *GatewayDelete
 }
 
 // Where appends a list predicates to the GatewayDelete builder.
-func (gdo *GatewayDeleteOne) Where(ps ...predicate.Gateway) *GatewayDeleteOne {
-	gdo.gd.mutation.Where(ps...)
-	return gdo
+func (_d *GatewayDeleteOne) Where(ps ...predicate.Gateway) *GatewayDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (gdo *GatewayDeleteOne) Exec(ctx context.Context) error {
-	n, err := gdo.gd.Exec(ctx)
+func (_d *GatewayDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (gdo *GatewayDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gdo *GatewayDeleteOne) ExecX(ctx context.Context) {
-	if err := gdo.Exec(ctx); err != nil {
+func (_d *GatewayDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

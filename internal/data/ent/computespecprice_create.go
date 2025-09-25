@@ -20,59 +20,59 @@ type ComputeSpecPriceCreate struct {
 }
 
 // SetFkComputeSpecID sets the "fk_compute_spec_id" field.
-func (cspc *ComputeSpecPriceCreate) SetFkComputeSpecID(i int32) *ComputeSpecPriceCreate {
-	cspc.mutation.SetFkComputeSpecID(i)
-	return cspc
+func (_c *ComputeSpecPriceCreate) SetFkComputeSpecID(v int32) *ComputeSpecPriceCreate {
+	_c.mutation.SetFkComputeSpecID(v)
+	return _c
 }
 
 // SetDay sets the "day" field.
-func (cspc *ComputeSpecPriceCreate) SetDay(i int32) *ComputeSpecPriceCreate {
-	cspc.mutation.SetDay(i)
-	return cspc
+func (_c *ComputeSpecPriceCreate) SetDay(v int32) *ComputeSpecPriceCreate {
+	_c.mutation.SetDay(v)
+	return _c
 }
 
 // SetNillableDay sets the "day" field if the given value is not nil.
-func (cspc *ComputeSpecPriceCreate) SetNillableDay(i *int32) *ComputeSpecPriceCreate {
-	if i != nil {
-		cspc.SetDay(*i)
+func (_c *ComputeSpecPriceCreate) SetNillableDay(v *int32) *ComputeSpecPriceCreate {
+	if v != nil {
+		_c.SetDay(*v)
 	}
-	return cspc
+	return _c
 }
 
 // SetPrice sets the "price" field.
-func (cspc *ComputeSpecPriceCreate) SetPrice(f float32) *ComputeSpecPriceCreate {
-	cspc.mutation.SetPrice(f)
-	return cspc
+func (_c *ComputeSpecPriceCreate) SetPrice(v float32) *ComputeSpecPriceCreate {
+	_c.mutation.SetPrice(v)
+	return _c
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (cspc *ComputeSpecPriceCreate) SetNillablePrice(f *float32) *ComputeSpecPriceCreate {
-	if f != nil {
-		cspc.SetPrice(*f)
+func (_c *ComputeSpecPriceCreate) SetNillablePrice(v *float32) *ComputeSpecPriceCreate {
+	if v != nil {
+		_c.SetPrice(*v)
 	}
-	return cspc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cspc *ComputeSpecPriceCreate) SetID(i int32) *ComputeSpecPriceCreate {
-	cspc.mutation.SetID(i)
-	return cspc
+func (_c *ComputeSpecPriceCreate) SetID(v int32) *ComputeSpecPriceCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // Mutation returns the ComputeSpecPriceMutation object of the builder.
-func (cspc *ComputeSpecPriceCreate) Mutation() *ComputeSpecPriceMutation {
-	return cspc.mutation
+func (_c *ComputeSpecPriceCreate) Mutation() *ComputeSpecPriceMutation {
+	return _c.mutation
 }
 
 // Save creates the ComputeSpecPrice in the database.
-func (cspc *ComputeSpecPriceCreate) Save(ctx context.Context) (*ComputeSpecPrice, error) {
-	cspc.defaults()
-	return withHooks(ctx, cspc.sqlSave, cspc.mutation, cspc.hooks)
+func (_c *ComputeSpecPriceCreate) Save(ctx context.Context) (*ComputeSpecPrice, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cspc *ComputeSpecPriceCreate) SaveX(ctx context.Context) *ComputeSpecPrice {
-	v, err := cspc.Save(ctx)
+func (_c *ComputeSpecPriceCreate) SaveX(ctx context.Context) *ComputeSpecPrice {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -80,50 +80,50 @@ func (cspc *ComputeSpecPriceCreate) SaveX(ctx context.Context) *ComputeSpecPrice
 }
 
 // Exec executes the query.
-func (cspc *ComputeSpecPriceCreate) Exec(ctx context.Context) error {
-	_, err := cspc.Save(ctx)
+func (_c *ComputeSpecPriceCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspc *ComputeSpecPriceCreate) ExecX(ctx context.Context) {
-	if err := cspc.Exec(ctx); err != nil {
+func (_c *ComputeSpecPriceCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cspc *ComputeSpecPriceCreate) defaults() {
-	if _, ok := cspc.mutation.Day(); !ok {
+func (_c *ComputeSpecPriceCreate) defaults() {
+	if _, ok := _c.mutation.Day(); !ok {
 		v := computespecprice.DefaultDay
-		cspc.mutation.SetDay(v)
+		_c.mutation.SetDay(v)
 	}
-	if _, ok := cspc.mutation.Price(); !ok {
+	if _, ok := _c.mutation.Price(); !ok {
 		v := computespecprice.DefaultPrice
-		cspc.mutation.SetPrice(v)
+		_c.mutation.SetPrice(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cspc *ComputeSpecPriceCreate) check() error {
-	if _, ok := cspc.mutation.FkComputeSpecID(); !ok {
+func (_c *ComputeSpecPriceCreate) check() error {
+	if _, ok := _c.mutation.FkComputeSpecID(); !ok {
 		return &ValidationError{Name: "fk_compute_spec_id", err: errors.New(`ent: missing required field "ComputeSpecPrice.fk_compute_spec_id"`)}
 	}
-	if _, ok := cspc.mutation.Day(); !ok {
+	if _, ok := _c.mutation.Day(); !ok {
 		return &ValidationError{Name: "day", err: errors.New(`ent: missing required field "ComputeSpecPrice.day"`)}
 	}
-	if _, ok := cspc.mutation.Price(); !ok {
+	if _, ok := _c.mutation.Price(); !ok {
 		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "ComputeSpecPrice.price"`)}
 	}
 	return nil
 }
 
-func (cspc *ComputeSpecPriceCreate) sqlSave(ctx context.Context) (*ComputeSpecPrice, error) {
-	if err := cspc.check(); err != nil {
+func (_c *ComputeSpecPriceCreate) sqlSave(ctx context.Context) (*ComputeSpecPrice, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cspc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cspc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -133,29 +133,29 @@ func (cspc *ComputeSpecPriceCreate) sqlSave(ctx context.Context) (*ComputeSpecPr
 		id := _spec.ID.Value.(int64)
 		_node.ID = int32(id)
 	}
-	cspc.mutation.id = &_node.ID
-	cspc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cspc *ComputeSpecPriceCreate) createSpec() (*ComputeSpecPrice, *sqlgraph.CreateSpec) {
+func (_c *ComputeSpecPriceCreate) createSpec() (*ComputeSpecPrice, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ComputeSpecPrice{config: cspc.config}
+		_node = &ComputeSpecPrice{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(computespecprice.Table, sqlgraph.NewFieldSpec(computespecprice.FieldID, field.TypeInt32))
 	)
-	if id, ok := cspc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := cspc.mutation.FkComputeSpecID(); ok {
+	if value, ok := _c.mutation.FkComputeSpecID(); ok {
 		_spec.SetField(computespecprice.FieldFkComputeSpecID, field.TypeInt32, value)
 		_node.FkComputeSpecID = value
 	}
-	if value, ok := cspc.mutation.Day(); ok {
+	if value, ok := _c.mutation.Day(); ok {
 		_spec.SetField(computespecprice.FieldDay, field.TypeInt32, value)
 		_node.Day = value
 	}
-	if value, ok := cspc.mutation.Price(); ok {
+	if value, ok := _c.mutation.Price(); ok {
 		_spec.SetField(computespecprice.FieldPrice, field.TypeFloat32, value)
 		_node.Price = value
 	}
@@ -165,17 +165,21 @@ func (cspc *ComputeSpecPriceCreate) createSpec() (*ComputeSpecPrice, *sqlgraph.C
 // ComputeSpecPriceCreateBulk is the builder for creating many ComputeSpecPrice entities in bulk.
 type ComputeSpecPriceCreateBulk struct {
 	config
+	err      error
 	builders []*ComputeSpecPriceCreate
 }
 
 // Save creates the ComputeSpecPrice entities in the database.
-func (cspcb *ComputeSpecPriceCreateBulk) Save(ctx context.Context) ([]*ComputeSpecPrice, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(cspcb.builders))
-	nodes := make([]*ComputeSpecPrice, len(cspcb.builders))
-	mutators := make([]Mutator, len(cspcb.builders))
-	for i := range cspcb.builders {
+func (_c *ComputeSpecPriceCreateBulk) Save(ctx context.Context) ([]*ComputeSpecPrice, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ComputeSpecPrice, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cspcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ComputeSpecPriceMutation)
@@ -189,11 +193,11 @@ func (cspcb *ComputeSpecPriceCreateBulk) Save(ctx context.Context) ([]*ComputeSp
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cspcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cspcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -217,7 +221,7 @@ func (cspcb *ComputeSpecPriceCreateBulk) Save(ctx context.Context) ([]*ComputeSp
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cspcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -225,8 +229,8 @@ func (cspcb *ComputeSpecPriceCreateBulk) Save(ctx context.Context) ([]*ComputeSp
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cspcb *ComputeSpecPriceCreateBulk) SaveX(ctx context.Context) []*ComputeSpecPrice {
-	v, err := cspcb.Save(ctx)
+func (_c *ComputeSpecPriceCreateBulk) SaveX(ctx context.Context) []*ComputeSpecPrice {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -234,14 +238,14 @@ func (cspcb *ComputeSpecPriceCreateBulk) SaveX(ctx context.Context) []*ComputeSp
 }
 
 // Exec executes the query.
-func (cspcb *ComputeSpecPriceCreateBulk) Exec(ctx context.Context) error {
-	_, err := cspcb.Save(ctx)
+func (_c *ComputeSpecPriceCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspcb *ComputeSpecPriceCreateBulk) ExecX(ctx context.Context) {
-	if err := cspcb.Exec(ctx); err != nil {
+func (_c *ComputeSpecPriceCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

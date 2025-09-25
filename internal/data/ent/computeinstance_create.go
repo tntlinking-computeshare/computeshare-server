@@ -23,155 +23,155 @@ type ComputeInstanceCreate struct {
 }
 
 // SetOwner sets the "owner" field.
-func (cic *ComputeInstanceCreate) SetOwner(s string) *ComputeInstanceCreate {
-	cic.mutation.SetOwner(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetOwner(v string) *ComputeInstanceCreate {
+	_c.mutation.SetOwner(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (cic *ComputeInstanceCreate) SetName(s string) *ComputeInstanceCreate {
-	cic.mutation.SetName(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetName(v string) *ComputeInstanceCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetCore sets the "core" field.
-func (cic *ComputeInstanceCreate) SetCore(i int) *ComputeInstanceCreate {
-	cic.mutation.SetCore(i)
-	return cic
+func (_c *ComputeInstanceCreate) SetCore(v int) *ComputeInstanceCreate {
+	_c.mutation.SetCore(v)
+	return _c
 }
 
 // SetMemory sets the "memory" field.
-func (cic *ComputeInstanceCreate) SetMemory(i int) *ComputeInstanceCreate {
-	cic.mutation.SetMemory(i)
-	return cic
+func (_c *ComputeInstanceCreate) SetMemory(v int) *ComputeInstanceCreate {
+	_c.mutation.SetMemory(v)
+	return _c
 }
 
 // SetImage sets the "image" field.
-func (cic *ComputeInstanceCreate) SetImage(s string) *ComputeInstanceCreate {
-	cic.mutation.SetImage(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetImage(v string) *ComputeInstanceCreate {
+	_c.mutation.SetImage(v)
+	return _c
 }
 
 // SetImageID sets the "image_id" field.
-func (cic *ComputeInstanceCreate) SetImageID(i int32) *ComputeInstanceCreate {
-	cic.mutation.SetImageID(i)
-	return cic
+func (_c *ComputeInstanceCreate) SetImageID(v int32) *ComputeInstanceCreate {
+	_c.mutation.SetImageID(v)
+	return _c
 }
 
 // SetPort sets the "port" field.
-func (cic *ComputeInstanceCreate) SetPort(s string) *ComputeInstanceCreate {
-	cic.mutation.SetPort(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetPort(v string) *ComputeInstanceCreate {
+	_c.mutation.SetPort(v)
+	return _c
 }
 
 // SetNillablePort sets the "port" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillablePort(s *string) *ComputeInstanceCreate {
-	if s != nil {
-		cic.SetPort(*s)
+func (_c *ComputeInstanceCreate) SetNillablePort(v *string) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetPort(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetExpirationTime sets the "expiration_time" field.
-func (cic *ComputeInstanceCreate) SetExpirationTime(t time.Time) *ComputeInstanceCreate {
-	cic.mutation.SetExpirationTime(t)
-	return cic
+func (_c *ComputeInstanceCreate) SetExpirationTime(v time.Time) *ComputeInstanceCreate {
+	_c.mutation.SetExpirationTime(v)
+	return _c
 }
 
 // SetStatus sets the "status" field.
-func (cic *ComputeInstanceCreate) SetStatus(cs compute.InstanceStatus) *ComputeInstanceCreate {
-	cic.mutation.SetStatus(cs)
-	return cic
+func (_c *ComputeInstanceCreate) SetStatus(v compute.InstanceStatus) *ComputeInstanceCreate {
+	_c.mutation.SetStatus(v)
+	return _c
 }
 
 // SetContainerID sets the "container_id" field.
-func (cic *ComputeInstanceCreate) SetContainerID(s string) *ComputeInstanceCreate {
-	cic.mutation.SetContainerID(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetContainerID(v string) *ComputeInstanceCreate {
+	_c.mutation.SetContainerID(v)
+	return _c
 }
 
 // SetNillableContainerID sets the "container_id" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillableContainerID(s *string) *ComputeInstanceCreate {
-	if s != nil {
-		cic.SetContainerID(*s)
+func (_c *ComputeInstanceCreate) SetNillableContainerID(v *string) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetContainerID(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetAgentID sets the "agent_id" field.
-func (cic *ComputeInstanceCreate) SetAgentID(s string) *ComputeInstanceCreate {
-	cic.mutation.SetAgentID(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetAgentID(v string) *ComputeInstanceCreate {
+	_c.mutation.SetAgentID(v)
+	return _c
 }
 
 // SetNillableAgentID sets the "agent_id" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillableAgentID(s *string) *ComputeInstanceCreate {
-	if s != nil {
-		cic.SetAgentID(*s)
+func (_c *ComputeInstanceCreate) SetNillableAgentID(v *string) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetAgentID(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetVncIP sets the "vnc_ip" field.
-func (cic *ComputeInstanceCreate) SetVncIP(s string) *ComputeInstanceCreate {
-	cic.mutation.SetVncIP(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetVncIP(v string) *ComputeInstanceCreate {
+	_c.mutation.SetVncIP(v)
+	return _c
 }
 
 // SetVncPort sets the "vnc_port" field.
-func (cic *ComputeInstanceCreate) SetVncPort(i int32) *ComputeInstanceCreate {
-	cic.mutation.SetVncPort(i)
-	return cic
+func (_c *ComputeInstanceCreate) SetVncPort(v int32) *ComputeInstanceCreate {
+	_c.mutation.SetVncPort(v)
+	return _c
 }
 
 // SetDockerCompose sets the "docker_compose" field.
-func (cic *ComputeInstanceCreate) SetDockerCompose(s string) *ComputeInstanceCreate {
-	cic.mutation.SetDockerCompose(s)
-	return cic
+func (_c *ComputeInstanceCreate) SetDockerCompose(v string) *ComputeInstanceCreate {
+	_c.mutation.SetDockerCompose(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cic *ComputeInstanceCreate) SetCreateTime(t time.Time) *ComputeInstanceCreate {
-	cic.mutation.SetCreateTime(t)
-	return cic
+func (_c *ComputeInstanceCreate) SetCreateTime(v time.Time) *ComputeInstanceCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillableCreateTime(t *time.Time) *ComputeInstanceCreate {
-	if t != nil {
-		cic.SetCreateTime(*t)
+func (_c *ComputeInstanceCreate) SetNillableCreateTime(v *time.Time) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetCreateTime(*v)
 	}
-	return cic
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cic *ComputeInstanceCreate) SetID(u uuid.UUID) *ComputeInstanceCreate {
-	cic.mutation.SetID(u)
-	return cic
+func (_c *ComputeInstanceCreate) SetID(v uuid.UUID) *ComputeInstanceCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cic *ComputeInstanceCreate) SetNillableID(u *uuid.UUID) *ComputeInstanceCreate {
-	if u != nil {
-		cic.SetID(*u)
+func (_c *ComputeInstanceCreate) SetNillableID(v *uuid.UUID) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cic
+	return _c
 }
 
 // Mutation returns the ComputeInstanceMutation object of the builder.
-func (cic *ComputeInstanceCreate) Mutation() *ComputeInstanceMutation {
-	return cic.mutation
+func (_c *ComputeInstanceCreate) Mutation() *ComputeInstanceMutation {
+	return _c.mutation
 }
 
 // Save creates the ComputeInstance in the database.
-func (cic *ComputeInstanceCreate) Save(ctx context.Context) (*ComputeInstance, error) {
-	cic.defaults()
-	return withHooks(ctx, cic.sqlSave, cic.mutation, cic.hooks)
+func (_c *ComputeInstanceCreate) Save(ctx context.Context) (*ComputeInstance, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cic *ComputeInstanceCreate) SaveX(ctx context.Context) *ComputeInstance {
-	v, err := cic.Save(ctx)
+func (_c *ComputeInstanceCreate) SaveX(ctx context.Context) *ComputeInstance {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,92 +179,92 @@ func (cic *ComputeInstanceCreate) SaveX(ctx context.Context) *ComputeInstance {
 }
 
 // Exec executes the query.
-func (cic *ComputeInstanceCreate) Exec(ctx context.Context) error {
-	_, err := cic.Save(ctx)
+func (_c *ComputeInstanceCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cic *ComputeInstanceCreate) ExecX(ctx context.Context) {
-	if err := cic.Exec(ctx); err != nil {
+func (_c *ComputeInstanceCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cic *ComputeInstanceCreate) defaults() {
-	if _, ok := cic.mutation.CreateTime(); !ok {
+func (_c *ComputeInstanceCreate) defaults() {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := computeinstance.DefaultCreateTime()
-		cic.mutation.SetCreateTime(v)
+		_c.mutation.SetCreateTime(v)
 	}
-	if _, ok := cic.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := computeinstance.DefaultID()
-		cic.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cic *ComputeInstanceCreate) check() error {
-	if _, ok := cic.mutation.Owner(); !ok {
+func (_c *ComputeInstanceCreate) check() error {
+	if _, ok := _c.mutation.Owner(); !ok {
 		return &ValidationError{Name: "owner", err: errors.New(`ent: missing required field "ComputeInstance.owner"`)}
 	}
-	if v, ok := cic.mutation.Owner(); ok {
+	if v, ok := _c.mutation.Owner(); ok {
 		if err := computeinstance.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.owner": %w`, err)}
 		}
 	}
-	if _, ok := cic.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "ComputeInstance.name"`)}
 	}
-	if v, ok := cic.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := computeinstance.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.name": %w`, err)}
 		}
 	}
-	if _, ok := cic.mutation.Core(); !ok {
+	if _, ok := _c.mutation.Core(); !ok {
 		return &ValidationError{Name: "core", err: errors.New(`ent: missing required field "ComputeInstance.core"`)}
 	}
-	if _, ok := cic.mutation.Memory(); !ok {
+	if _, ok := _c.mutation.Memory(); !ok {
 		return &ValidationError{Name: "memory", err: errors.New(`ent: missing required field "ComputeInstance.memory"`)}
 	}
-	if _, ok := cic.mutation.Image(); !ok {
+	if _, ok := _c.mutation.Image(); !ok {
 		return &ValidationError{Name: "image", err: errors.New(`ent: missing required field "ComputeInstance.image"`)}
 	}
-	if v, ok := cic.mutation.Image(); ok {
+	if v, ok := _c.mutation.Image(); ok {
 		if err := computeinstance.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
 		}
 	}
-	if _, ok := cic.mutation.ImageID(); !ok {
+	if _, ok := _c.mutation.ImageID(); !ok {
 		return &ValidationError{Name: "image_id", err: errors.New(`ent: missing required field "ComputeInstance.image_id"`)}
 	}
-	if _, ok := cic.mutation.ExpirationTime(); !ok {
+	if _, ok := _c.mutation.ExpirationTime(); !ok {
 		return &ValidationError{Name: "expiration_time", err: errors.New(`ent: missing required field "ComputeInstance.expiration_time"`)}
 	}
-	if _, ok := cic.mutation.Status(); !ok {
+	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "ComputeInstance.status"`)}
 	}
-	if _, ok := cic.mutation.VncIP(); !ok {
+	if _, ok := _c.mutation.VncIP(); !ok {
 		return &ValidationError{Name: "vnc_ip", err: errors.New(`ent: missing required field "ComputeInstance.vnc_ip"`)}
 	}
-	if _, ok := cic.mutation.VncPort(); !ok {
+	if _, ok := _c.mutation.VncPort(); !ok {
 		return &ValidationError{Name: "vnc_port", err: errors.New(`ent: missing required field "ComputeInstance.vnc_port"`)}
 	}
-	if _, ok := cic.mutation.DockerCompose(); !ok {
+	if _, ok := _c.mutation.DockerCompose(); !ok {
 		return &ValidationError{Name: "docker_compose", err: errors.New(`ent: missing required field "ComputeInstance.docker_compose"`)}
 	}
-	if _, ok := cic.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "ComputeInstance.create_time"`)}
 	}
 	return nil
 }
 
-func (cic *ComputeInstanceCreate) sqlSave(ctx context.Context) (*ComputeInstance, error) {
-	if err := cic.check(); err != nil {
+func (_c *ComputeInstanceCreate) sqlSave(ctx context.Context) (*ComputeInstance, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cic.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cic.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -277,77 +277,77 @@ func (cic *ComputeInstanceCreate) sqlSave(ctx context.Context) (*ComputeInstance
 			return nil, err
 		}
 	}
-	cic.mutation.id = &_node.ID
-	cic.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.CreateSpec) {
+func (_c *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ComputeInstance{config: cic.config}
+		_node = &ComputeInstance{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(computeinstance.Table, sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID))
 	)
-	if id, ok := cic.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := cic.mutation.Owner(); ok {
+	if value, ok := _c.mutation.Owner(); ok {
 		_spec.SetField(computeinstance.FieldOwner, field.TypeString, value)
 		_node.Owner = value
 	}
-	if value, ok := cic.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(computeinstance.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := cic.mutation.Core(); ok {
+	if value, ok := _c.mutation.Core(); ok {
 		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
 		_node.Core = value
 	}
-	if value, ok := cic.mutation.Memory(); ok {
+	if value, ok := _c.mutation.Memory(); ok {
 		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
 		_node.Memory = value
 	}
-	if value, ok := cic.mutation.Image(); ok {
+	if value, ok := _c.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 		_node.Image = value
 	}
-	if value, ok := cic.mutation.ImageID(); ok {
+	if value, ok := _c.mutation.ImageID(); ok {
 		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
 		_node.ImageID = value
 	}
-	if value, ok := cic.mutation.Port(); ok {
+	if value, ok := _c.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
 		_node.Port = value
 	}
-	if value, ok := cic.mutation.ExpirationTime(); ok {
+	if value, ok := _c.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 		_node.ExpirationTime = value
 	}
-	if value, ok := cic.mutation.Status(); ok {
+	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(computeinstance.FieldStatus, field.TypeInt8, value)
 		_node.Status = value
 	}
-	if value, ok := cic.mutation.ContainerID(); ok {
+	if value, ok := _c.mutation.ContainerID(); ok {
 		_spec.SetField(computeinstance.FieldContainerID, field.TypeString, value)
 		_node.ContainerID = value
 	}
-	if value, ok := cic.mutation.AgentID(); ok {
+	if value, ok := _c.mutation.AgentID(); ok {
 		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 		_node.AgentID = value
 	}
-	if value, ok := cic.mutation.VncIP(); ok {
+	if value, ok := _c.mutation.VncIP(); ok {
 		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
 		_node.VncIP = value
 	}
-	if value, ok := cic.mutation.VncPort(); ok {
+	if value, ok := _c.mutation.VncPort(); ok {
 		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
 		_node.VncPort = value
 	}
-	if value, ok := cic.mutation.DockerCompose(); ok {
+	if value, ok := _c.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 		_node.DockerCompose = value
 	}
-	if value, ok := cic.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
@@ -357,17 +357,21 @@ func (cic *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Crea
 // ComputeInstanceCreateBulk is the builder for creating many ComputeInstance entities in bulk.
 type ComputeInstanceCreateBulk struct {
 	config
+	err      error
 	builders []*ComputeInstanceCreate
 }
 
 // Save creates the ComputeInstance entities in the database.
-func (cicb *ComputeInstanceCreateBulk) Save(ctx context.Context) ([]*ComputeInstance, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(cicb.builders))
-	nodes := make([]*ComputeInstance, len(cicb.builders))
-	mutators := make([]Mutator, len(cicb.builders))
-	for i := range cicb.builders {
+func (_c *ComputeInstanceCreateBulk) Save(ctx context.Context) ([]*ComputeInstance, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ComputeInstance, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cicb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ComputeInstanceMutation)
@@ -381,11 +385,11 @@ func (cicb *ComputeInstanceCreateBulk) Save(ctx context.Context) ([]*ComputeInst
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cicb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cicb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -405,7 +409,7 @@ func (cicb *ComputeInstanceCreateBulk) Save(ctx context.Context) ([]*ComputeInst
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cicb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -413,8 +417,8 @@ func (cicb *ComputeInstanceCreateBulk) Save(ctx context.Context) ([]*ComputeInst
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cicb *ComputeInstanceCreateBulk) SaveX(ctx context.Context) []*ComputeInstance {
-	v, err := cicb.Save(ctx)
+func (_c *ComputeInstanceCreateBulk) SaveX(ctx context.Context) []*ComputeInstance {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -422,14 +426,14 @@ func (cicb *ComputeInstanceCreateBulk) SaveX(ctx context.Context) []*ComputeInst
 }
 
 // Exec executes the query.
-func (cicb *ComputeInstanceCreateBulk) Exec(ctx context.Context) error {
-	_, err := cicb.Save(ctx)
+func (_c *ComputeInstanceCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cicb *ComputeInstanceCreateBulk) ExecX(ctx context.Context) {
-	if err := cicb.Exec(ctx); err != nil {
+func (_c *ComputeInstanceCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

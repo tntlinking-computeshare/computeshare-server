@@ -20,56 +20,56 @@ type ComputeSpecPriceDelete struct {
 }
 
 // Where appends a list predicates to the ComputeSpecPriceDelete builder.
-func (cspd *ComputeSpecPriceDelete) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceDelete {
-	cspd.mutation.Where(ps...)
-	return cspd
+func (_d *ComputeSpecPriceDelete) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cspd *ComputeSpecPriceDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cspd.sqlExec, cspd.mutation, cspd.hooks)
+func (_d *ComputeSpecPriceDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspd *ComputeSpecPriceDelete) ExecX(ctx context.Context) int {
-	n, err := cspd.Exec(ctx)
+func (_d *ComputeSpecPriceDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cspd *ComputeSpecPriceDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ComputeSpecPriceDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(computespecprice.Table, sqlgraph.NewFieldSpec(computespecprice.FieldID, field.TypeInt32))
-	if ps := cspd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cspd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cspd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ComputeSpecPriceDeleteOne is the builder for deleting a single ComputeSpecPrice entity.
 type ComputeSpecPriceDeleteOne struct {
-	cspd *ComputeSpecPriceDelete
+	_d *ComputeSpecPriceDelete
 }
 
 // Where appends a list predicates to the ComputeSpecPriceDelete builder.
-func (cspdo *ComputeSpecPriceDeleteOne) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
-	cspdo.cspd.mutation.Where(ps...)
-	return cspdo
+func (_d *ComputeSpecPriceDeleteOne) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cspdo *ComputeSpecPriceDeleteOne) Exec(ctx context.Context) error {
-	n, err := cspdo.cspd.Exec(ctx)
+func (_d *ComputeSpecPriceDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (cspdo *ComputeSpecPriceDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspdo *ComputeSpecPriceDeleteOne) ExecX(ctx context.Context) {
-	if err := cspdo.Exec(ctx); err != nil {
+func (_d *ComputeSpecPriceDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

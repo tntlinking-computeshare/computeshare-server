@@ -43,7 +43,7 @@ func (*ComputeSpecPrice) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ComputeSpecPrice fields.
-func (csp *ComputeSpecPrice) assignValues(columns []string, values []any) error {
+func (_m *ComputeSpecPrice) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -54,27 +54,27 @@ func (csp *ComputeSpecPrice) assignValues(columns []string, values []any) error 
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			csp.ID = int32(value.Int64)
+			_m.ID = int32(value.Int64)
 		case computespecprice.FieldFkComputeSpecID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_compute_spec_id", values[i])
 			} else if value.Valid {
-				csp.FkComputeSpecID = int32(value.Int64)
+				_m.FkComputeSpecID = int32(value.Int64)
 			}
 		case computespecprice.FieldDay:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field day", values[i])
 			} else if value.Valid {
-				csp.Day = int32(value.Int64)
+				_m.Day = int32(value.Int64)
 			}
 		case computespecprice.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				csp.Price = float32(value.Float64)
+				_m.Price = float32(value.Float64)
 			}
 		default:
-			csp.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -82,41 +82,41 @@ func (csp *ComputeSpecPrice) assignValues(columns []string, values []any) error 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ComputeSpecPrice.
 // This includes values selected through modifiers, order, etc.
-func (csp *ComputeSpecPrice) Value(name string) (ent.Value, error) {
-	return csp.selectValues.Get(name)
+func (_m *ComputeSpecPrice) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ComputeSpecPrice.
 // Note that you need to call ComputeSpecPrice.Unwrap() before calling this method if this ComputeSpecPrice
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (csp *ComputeSpecPrice) Update() *ComputeSpecPriceUpdateOne {
-	return NewComputeSpecPriceClient(csp.config).UpdateOne(csp)
+func (_m *ComputeSpecPrice) Update() *ComputeSpecPriceUpdateOne {
+	return NewComputeSpecPriceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ComputeSpecPrice entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (csp *ComputeSpecPrice) Unwrap() *ComputeSpecPrice {
-	_tx, ok := csp.config.driver.(*txDriver)
+func (_m *ComputeSpecPrice) Unwrap() *ComputeSpecPrice {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: ComputeSpecPrice is not a transactional entity")
 	}
-	csp.config.driver = _tx.drv
-	return csp
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (csp *ComputeSpecPrice) String() string {
+func (_m *ComputeSpecPrice) String() string {
 	var builder strings.Builder
 	builder.WriteString("ComputeSpecPrice(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", csp.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_compute_spec_id=")
-	builder.WriteString(fmt.Sprintf("%v", csp.FkComputeSpecID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkComputeSpecID))
 	builder.WriteString(", ")
 	builder.WriteString("day=")
-	builder.WriteString(fmt.Sprintf("%v", csp.Day))
+	builder.WriteString(fmt.Sprintf("%v", _m.Day))
 	builder.WriteString(", ")
 	builder.WriteString("price=")
-	builder.WriteString(fmt.Sprintf("%v", csp.Price))
+	builder.WriteString(fmt.Sprintf("%v", _m.Price))
 	builder.WriteByte(')')
 	return builder.String()
 }

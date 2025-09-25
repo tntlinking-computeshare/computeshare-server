@@ -20,56 +20,56 @@ type CycleDelete struct {
 }
 
 // Where appends a list predicates to the CycleDelete builder.
-func (cd *CycleDelete) Where(ps ...predicate.Cycle) *CycleDelete {
-	cd.mutation.Where(ps...)
-	return cd
+func (_d *CycleDelete) Where(ps ...predicate.Cycle) *CycleDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cd *CycleDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cd.sqlExec, cd.mutation, cd.hooks)
+func (_d *CycleDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cd *CycleDelete) ExecX(ctx context.Context) int {
-	n, err := cd.Exec(ctx)
+func (_d *CycleDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cd *CycleDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CycleDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(cycle.Table, sqlgraph.NewFieldSpec(cycle.FieldID, field.TypeUUID))
-	if ps := cd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CycleDeleteOne is the builder for deleting a single Cycle entity.
 type CycleDeleteOne struct {
-	cd *CycleDelete
+	_d *CycleDelete
 }
 
 // Where appends a list predicates to the CycleDelete builder.
-func (cdo *CycleDeleteOne) Where(ps ...predicate.Cycle) *CycleDeleteOne {
-	cdo.cd.mutation.Where(ps...)
-	return cdo
+func (_d *CycleDeleteOne) Where(ps ...predicate.Cycle) *CycleDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cdo *CycleDeleteOne) Exec(ctx context.Context) error {
-	n, err := cdo.cd.Exec(ctx)
+func (_d *CycleDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (cdo *CycleDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdo *CycleDeleteOne) ExecX(ctx context.Context) {
-	if err := cdo.Exec(ctx); err != nil {
+func (_d *CycleDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

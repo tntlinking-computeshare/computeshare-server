@@ -24,199 +24,287 @@ type ComputeInstanceUpdate struct {
 }
 
 // Where appends a list predicates to the ComputeInstanceUpdate builder.
-func (ciu *ComputeInstanceUpdate) Where(ps ...predicate.ComputeInstance) *ComputeInstanceUpdate {
-	ciu.mutation.Where(ps...)
-	return ciu
+func (_u *ComputeInstanceUpdate) Where(ps ...predicate.ComputeInstance) *ComputeInstanceUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOwner sets the "owner" field.
-func (ciu *ComputeInstanceUpdate) SetOwner(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetOwner(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetOwner(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetOwner(v)
+	return _u
+}
+
+// SetNillableOwner sets the "owner" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableOwner(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetOwner(*v)
+	}
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ciu *ComputeInstanceUpdate) SetName(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetName(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetName(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableName(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetCore sets the "core" field.
-func (ciu *ComputeInstanceUpdate) SetCore(i int) *ComputeInstanceUpdate {
-	ciu.mutation.ResetCore()
-	ciu.mutation.SetCore(i)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetCore(v int) *ComputeInstanceUpdate {
+	_u.mutation.ResetCore()
+	_u.mutation.SetCore(v)
+	return _u
 }
 
-// AddCore adds i to the "core" field.
-func (ciu *ComputeInstanceUpdate) AddCore(i int) *ComputeInstanceUpdate {
-	ciu.mutation.AddCore(i)
-	return ciu
+// SetNillableCore sets the "core" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableCore(v *int) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetCore(*v)
+	}
+	return _u
+}
+
+// AddCore adds value to the "core" field.
+func (_u *ComputeInstanceUpdate) AddCore(v int) *ComputeInstanceUpdate {
+	_u.mutation.AddCore(v)
+	return _u
 }
 
 // SetMemory sets the "memory" field.
-func (ciu *ComputeInstanceUpdate) SetMemory(i int) *ComputeInstanceUpdate {
-	ciu.mutation.ResetMemory()
-	ciu.mutation.SetMemory(i)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetMemory(v int) *ComputeInstanceUpdate {
+	_u.mutation.ResetMemory()
+	_u.mutation.SetMemory(v)
+	return _u
 }
 
-// AddMemory adds i to the "memory" field.
-func (ciu *ComputeInstanceUpdate) AddMemory(i int) *ComputeInstanceUpdate {
-	ciu.mutation.AddMemory(i)
-	return ciu
+// SetNillableMemory sets the "memory" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableMemory(v *int) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetMemory(*v)
+	}
+	return _u
+}
+
+// AddMemory adds value to the "memory" field.
+func (_u *ComputeInstanceUpdate) AddMemory(v int) *ComputeInstanceUpdate {
+	_u.mutation.AddMemory(v)
+	return _u
 }
 
 // SetImage sets the "image" field.
-func (ciu *ComputeInstanceUpdate) SetImage(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetImage(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetImage(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableImage(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetImage(*v)
+	}
+	return _u
 }
 
 // SetImageID sets the "image_id" field.
-func (ciu *ComputeInstanceUpdate) SetImageID(i int32) *ComputeInstanceUpdate {
-	ciu.mutation.ResetImageID()
-	ciu.mutation.SetImageID(i)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetImageID(v int32) *ComputeInstanceUpdate {
+	_u.mutation.ResetImageID()
+	_u.mutation.SetImageID(v)
+	return _u
 }
 
-// AddImageID adds i to the "image_id" field.
-func (ciu *ComputeInstanceUpdate) AddImageID(i int32) *ComputeInstanceUpdate {
-	ciu.mutation.AddImageID(i)
-	return ciu
+// SetNillableImageID sets the "image_id" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableImageID(v *int32) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetImageID(*v)
+	}
+	return _u
+}
+
+// AddImageID adds value to the "image_id" field.
+func (_u *ComputeInstanceUpdate) AddImageID(v int32) *ComputeInstanceUpdate {
+	_u.mutation.AddImageID(v)
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (ciu *ComputeInstanceUpdate) SetPort(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetPort(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetPort(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetPort(v)
+	return _u
 }
 
 // SetNillablePort sets the "port" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillablePort(s *string) *ComputeInstanceUpdate {
-	if s != nil {
-		ciu.SetPort(*s)
+func (_u *ComputeInstanceUpdate) SetNillablePort(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetPort(*v)
 	}
-	return ciu
+	return _u
 }
 
 // ClearPort clears the value of the "port" field.
-func (ciu *ComputeInstanceUpdate) ClearPort() *ComputeInstanceUpdate {
-	ciu.mutation.ClearPort()
-	return ciu
+func (_u *ComputeInstanceUpdate) ClearPort() *ComputeInstanceUpdate {
+	_u.mutation.ClearPort()
+	return _u
 }
 
 // SetExpirationTime sets the "expiration_time" field.
-func (ciu *ComputeInstanceUpdate) SetExpirationTime(t time.Time) *ComputeInstanceUpdate {
-	ciu.mutation.SetExpirationTime(t)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetExpirationTime(v time.Time) *ComputeInstanceUpdate {
+	_u.mutation.SetExpirationTime(v)
+	return _u
+}
+
+// SetNillableExpirationTime sets the "expiration_time" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableExpirationTime(v *time.Time) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetExpirationTime(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ciu *ComputeInstanceUpdate) SetStatus(cs compute.InstanceStatus) *ComputeInstanceUpdate {
-	ciu.mutation.ResetStatus()
-	ciu.mutation.SetStatus(cs)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetStatus(v compute.InstanceStatus) *ComputeInstanceUpdate {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
-// AddStatus adds cs to the "status" field.
-func (ciu *ComputeInstanceUpdate) AddStatus(cs compute.InstanceStatus) *ComputeInstanceUpdate {
-	ciu.mutation.AddStatus(cs)
-	return ciu
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableStatus(v *compute.InstanceStatus) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *ComputeInstanceUpdate) AddStatus(v compute.InstanceStatus) *ComputeInstanceUpdate {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetContainerID sets the "container_id" field.
-func (ciu *ComputeInstanceUpdate) SetContainerID(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetContainerID(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetContainerID(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetContainerID(v)
+	return _u
 }
 
 // SetNillableContainerID sets the "container_id" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillableContainerID(s *string) *ComputeInstanceUpdate {
-	if s != nil {
-		ciu.SetContainerID(*s)
+func (_u *ComputeInstanceUpdate) SetNillableContainerID(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetContainerID(*v)
 	}
-	return ciu
+	return _u
 }
 
 // ClearContainerID clears the value of the "container_id" field.
-func (ciu *ComputeInstanceUpdate) ClearContainerID() *ComputeInstanceUpdate {
-	ciu.mutation.ClearContainerID()
-	return ciu
+func (_u *ComputeInstanceUpdate) ClearContainerID() *ComputeInstanceUpdate {
+	_u.mutation.ClearContainerID()
+	return _u
 }
 
 // SetAgentID sets the "agent_id" field.
-func (ciu *ComputeInstanceUpdate) SetAgentID(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetAgentID(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetAgentID(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetAgentID(v)
+	return _u
 }
 
 // SetNillableAgentID sets the "agent_id" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillableAgentID(s *string) *ComputeInstanceUpdate {
-	if s != nil {
-		ciu.SetAgentID(*s)
+func (_u *ComputeInstanceUpdate) SetNillableAgentID(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetAgentID(*v)
 	}
-	return ciu
+	return _u
 }
 
 // ClearAgentID clears the value of the "agent_id" field.
-func (ciu *ComputeInstanceUpdate) ClearAgentID() *ComputeInstanceUpdate {
-	ciu.mutation.ClearAgentID()
-	return ciu
+func (_u *ComputeInstanceUpdate) ClearAgentID() *ComputeInstanceUpdate {
+	_u.mutation.ClearAgentID()
+	return _u
 }
 
 // SetVncIP sets the "vnc_ip" field.
-func (ciu *ComputeInstanceUpdate) SetVncIP(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetVncIP(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetVncIP(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetVncIP(v)
+	return _u
+}
+
+// SetNillableVncIP sets the "vnc_ip" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableVncIP(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetVncIP(*v)
+	}
+	return _u
 }
 
 // SetVncPort sets the "vnc_port" field.
-func (ciu *ComputeInstanceUpdate) SetVncPort(i int32) *ComputeInstanceUpdate {
-	ciu.mutation.ResetVncPort()
-	ciu.mutation.SetVncPort(i)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetVncPort(v int32) *ComputeInstanceUpdate {
+	_u.mutation.ResetVncPort()
+	_u.mutation.SetVncPort(v)
+	return _u
 }
 
-// AddVncPort adds i to the "vnc_port" field.
-func (ciu *ComputeInstanceUpdate) AddVncPort(i int32) *ComputeInstanceUpdate {
-	ciu.mutation.AddVncPort(i)
-	return ciu
+// SetNillableVncPort sets the "vnc_port" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableVncPort(v *int32) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetVncPort(*v)
+	}
+	return _u
+}
+
+// AddVncPort adds value to the "vnc_port" field.
+func (_u *ComputeInstanceUpdate) AddVncPort(v int32) *ComputeInstanceUpdate {
+	_u.mutation.AddVncPort(v)
+	return _u
 }
 
 // SetDockerCompose sets the "docker_compose" field.
-func (ciu *ComputeInstanceUpdate) SetDockerCompose(s string) *ComputeInstanceUpdate {
-	ciu.mutation.SetDockerCompose(s)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetDockerCompose(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetDockerCompose(v)
+	return _u
+}
+
+// SetNillableDockerCompose sets the "docker_compose" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableDockerCompose(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetDockerCompose(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (ciu *ComputeInstanceUpdate) SetCreateTime(t time.Time) *ComputeInstanceUpdate {
-	ciu.mutation.SetCreateTime(t)
-	return ciu
+func (_u *ComputeInstanceUpdate) SetCreateTime(v time.Time) *ComputeInstanceUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (ciu *ComputeInstanceUpdate) SetNillableCreateTime(t *time.Time) *ComputeInstanceUpdate {
-	if t != nil {
-		ciu.SetCreateTime(*t)
+func (_u *ComputeInstanceUpdate) SetNillableCreateTime(v *time.Time) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return ciu
+	return _u
 }
 
 // Mutation returns the ComputeInstanceMutation object of the builder.
-func (ciu *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
-	return ciu.mutation
+func (_u *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ciu *ComputeInstanceUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, ciu.sqlSave, ciu.mutation, ciu.hooks)
+func (_u *ComputeInstanceUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ciu *ComputeInstanceUpdate) SaveX(ctx context.Context) int {
-	affected, err := ciu.Save(ctx)
+func (_u *ComputeInstanceUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -224,31 +312,31 @@ func (ciu *ComputeInstanceUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ciu *ComputeInstanceUpdate) Exec(ctx context.Context) error {
-	_, err := ciu.Save(ctx)
+func (_u *ComputeInstanceUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ciu *ComputeInstanceUpdate) ExecX(ctx context.Context) {
-	if err := ciu.Exec(ctx); err != nil {
+func (_u *ComputeInstanceUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ciu *ComputeInstanceUpdate) check() error {
-	if v, ok := ciu.mutation.Owner(); ok {
+func (_u *ComputeInstanceUpdate) check() error {
+	if v, ok := _u.mutation.Owner(); ok {
 		if err := computeinstance.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.owner": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := computeinstance.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.name": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.Image(); ok {
+	if v, ok := _u.mutation.Image(); ok {
 		if err := computeinstance.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
 		}
@@ -256,88 +344,88 @@ func (ciu *ComputeInstanceUpdate) check() error {
 	return nil
 }
 
-func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ciu.check(); err != nil {
-		return n, err
+func (_u *ComputeInstanceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(computeinstance.Table, computeinstance.Columns, sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID))
-	if ps := ciu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ciu.mutation.Owner(); ok {
+	if value, ok := _u.mutation.Owner(); ok {
 		_spec.SetField(computeinstance.FieldOwner, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(computeinstance.FieldName, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Core(); ok {
+	if value, ok := _u.mutation.Core(); ok {
 		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := ciu.mutation.AddedCore(); ok {
+	if value, ok := _u.mutation.AddedCore(); ok {
 		_spec.AddField(computeinstance.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := ciu.mutation.Memory(); ok {
+	if value, ok := _u.mutation.Memory(); ok {
 		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := ciu.mutation.AddedMemory(); ok {
+	if value, ok := _u.mutation.AddedMemory(); ok {
 		_spec.AddField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := ciu.mutation.Image(); ok {
+	if value, ok := _u.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.ImageID(); ok {
+	if value, ok := _u.mutation.ImageID(); ok {
 		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
 	}
-	if value, ok := ciu.mutation.AddedImageID(); ok {
+	if value, ok := _u.mutation.AddedImageID(); ok {
 		_spec.AddField(computeinstance.FieldImageID, field.TypeInt32, value)
 	}
-	if value, ok := ciu.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
 	}
-	if ciu.mutation.PortCleared() {
+	if _u.mutation.PortCleared() {
 		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
 	}
-	if value, ok := ciu.mutation.ExpirationTime(); ok {
+	if value, ok := _u.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 	}
-	if value, ok := ciu.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(computeinstance.FieldStatus, field.TypeInt8, value)
 	}
-	if value, ok := ciu.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(computeinstance.FieldStatus, field.TypeInt8, value)
 	}
-	if value, ok := ciu.mutation.ContainerID(); ok {
+	if value, ok := _u.mutation.ContainerID(); ok {
 		_spec.SetField(computeinstance.FieldContainerID, field.TypeString, value)
 	}
-	if ciu.mutation.ContainerIDCleared() {
+	if _u.mutation.ContainerIDCleared() {
 		_spec.ClearField(computeinstance.FieldContainerID, field.TypeString)
 	}
-	if value, ok := ciu.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 	}
-	if ciu.mutation.AgentIDCleared() {
+	if _u.mutation.AgentIDCleared() {
 		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
-	if value, ok := ciu.mutation.VncIP(); ok {
+	if value, ok := _u.mutation.VncIP(); ok {
 		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.VncPort(); ok {
+	if value, ok := _u.mutation.VncPort(); ok {
 		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
-	if value, ok := ciu.mutation.AddedVncPort(); ok {
+	if value, ok := _u.mutation.AddedVncPort(); ok {
 		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
-	if value, ok := ciu.mutation.DockerCompose(); ok {
+	if value, ok := _u.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computeinstance.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -345,8 +433,8 @@ func (ciu *ComputeInstanceUpdate) sqlSave(ctx context.Context) (n int, err error
 		}
 		return 0, err
 	}
-	ciu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ComputeInstanceUpdateOne is the builder for updating a single ComputeInstance entity.
@@ -358,206 +446,294 @@ type ComputeInstanceUpdateOne struct {
 }
 
 // SetOwner sets the "owner" field.
-func (ciuo *ComputeInstanceUpdateOne) SetOwner(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetOwner(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetOwner(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetOwner(v)
+	return _u
+}
+
+// SetNillableOwner sets the "owner" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableOwner(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetOwner(*v)
+	}
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ciuo *ComputeInstanceUpdateOne) SetName(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetName(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetName(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableName(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetCore sets the "core" field.
-func (ciuo *ComputeInstanceUpdateOne) SetCore(i int) *ComputeInstanceUpdateOne {
-	ciuo.mutation.ResetCore()
-	ciuo.mutation.SetCore(i)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetCore(v int) *ComputeInstanceUpdateOne {
+	_u.mutation.ResetCore()
+	_u.mutation.SetCore(v)
+	return _u
 }
 
-// AddCore adds i to the "core" field.
-func (ciuo *ComputeInstanceUpdateOne) AddCore(i int) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddCore(i)
-	return ciuo
+// SetNillableCore sets the "core" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableCore(v *int) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetCore(*v)
+	}
+	return _u
+}
+
+// AddCore adds value to the "core" field.
+func (_u *ComputeInstanceUpdateOne) AddCore(v int) *ComputeInstanceUpdateOne {
+	_u.mutation.AddCore(v)
+	return _u
 }
 
 // SetMemory sets the "memory" field.
-func (ciuo *ComputeInstanceUpdateOne) SetMemory(i int) *ComputeInstanceUpdateOne {
-	ciuo.mutation.ResetMemory()
-	ciuo.mutation.SetMemory(i)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetMemory(v int) *ComputeInstanceUpdateOne {
+	_u.mutation.ResetMemory()
+	_u.mutation.SetMemory(v)
+	return _u
 }
 
-// AddMemory adds i to the "memory" field.
-func (ciuo *ComputeInstanceUpdateOne) AddMemory(i int) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddMemory(i)
-	return ciuo
+// SetNillableMemory sets the "memory" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableMemory(v *int) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetMemory(*v)
+	}
+	return _u
+}
+
+// AddMemory adds value to the "memory" field.
+func (_u *ComputeInstanceUpdateOne) AddMemory(v int) *ComputeInstanceUpdateOne {
+	_u.mutation.AddMemory(v)
+	return _u
 }
 
 // SetImage sets the "image" field.
-func (ciuo *ComputeInstanceUpdateOne) SetImage(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetImage(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetImage(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableImage(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetImage(*v)
+	}
+	return _u
 }
 
 // SetImageID sets the "image_id" field.
-func (ciuo *ComputeInstanceUpdateOne) SetImageID(i int32) *ComputeInstanceUpdateOne {
-	ciuo.mutation.ResetImageID()
-	ciuo.mutation.SetImageID(i)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetImageID(v int32) *ComputeInstanceUpdateOne {
+	_u.mutation.ResetImageID()
+	_u.mutation.SetImageID(v)
+	return _u
 }
 
-// AddImageID adds i to the "image_id" field.
-func (ciuo *ComputeInstanceUpdateOne) AddImageID(i int32) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddImageID(i)
-	return ciuo
+// SetNillableImageID sets the "image_id" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableImageID(v *int32) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetImageID(*v)
+	}
+	return _u
+}
+
+// AddImageID adds value to the "image_id" field.
+func (_u *ComputeInstanceUpdateOne) AddImageID(v int32) *ComputeInstanceUpdateOne {
+	_u.mutation.AddImageID(v)
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (ciuo *ComputeInstanceUpdateOne) SetPort(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetPort(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetPort(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetPort(v)
+	return _u
 }
 
 // SetNillablePort sets the "port" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillablePort(s *string) *ComputeInstanceUpdateOne {
-	if s != nil {
-		ciuo.SetPort(*s)
+func (_u *ComputeInstanceUpdateOne) SetNillablePort(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetPort(*v)
 	}
-	return ciuo
+	return _u
 }
 
 // ClearPort clears the value of the "port" field.
-func (ciuo *ComputeInstanceUpdateOne) ClearPort() *ComputeInstanceUpdateOne {
-	ciuo.mutation.ClearPort()
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) ClearPort() *ComputeInstanceUpdateOne {
+	_u.mutation.ClearPort()
+	return _u
 }
 
 // SetExpirationTime sets the "expiration_time" field.
-func (ciuo *ComputeInstanceUpdateOne) SetExpirationTime(t time.Time) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetExpirationTime(t)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetExpirationTime(v time.Time) *ComputeInstanceUpdateOne {
+	_u.mutation.SetExpirationTime(v)
+	return _u
+}
+
+// SetNillableExpirationTime sets the "expiration_time" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableExpirationTime(v *time.Time) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetExpirationTime(*v)
+	}
+	return _u
 }
 
 // SetStatus sets the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) SetStatus(cs compute.InstanceStatus) *ComputeInstanceUpdateOne {
-	ciuo.mutation.ResetStatus()
-	ciuo.mutation.SetStatus(cs)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetStatus(v compute.InstanceStatus) *ComputeInstanceUpdateOne {
+	_u.mutation.ResetStatus()
+	_u.mutation.SetStatus(v)
+	return _u
 }
 
-// AddStatus adds cs to the "status" field.
-func (ciuo *ComputeInstanceUpdateOne) AddStatus(cs compute.InstanceStatus) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddStatus(cs)
-	return ciuo
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableStatus(v *compute.InstanceStatus) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// AddStatus adds value to the "status" field.
+func (_u *ComputeInstanceUpdateOne) AddStatus(v compute.InstanceStatus) *ComputeInstanceUpdateOne {
+	_u.mutation.AddStatus(v)
+	return _u
 }
 
 // SetContainerID sets the "container_id" field.
-func (ciuo *ComputeInstanceUpdateOne) SetContainerID(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetContainerID(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetContainerID(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetContainerID(v)
+	return _u
 }
 
 // SetNillableContainerID sets the "container_id" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillableContainerID(s *string) *ComputeInstanceUpdateOne {
-	if s != nil {
-		ciuo.SetContainerID(*s)
+func (_u *ComputeInstanceUpdateOne) SetNillableContainerID(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetContainerID(*v)
 	}
-	return ciuo
+	return _u
 }
 
 // ClearContainerID clears the value of the "container_id" field.
-func (ciuo *ComputeInstanceUpdateOne) ClearContainerID() *ComputeInstanceUpdateOne {
-	ciuo.mutation.ClearContainerID()
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) ClearContainerID() *ComputeInstanceUpdateOne {
+	_u.mutation.ClearContainerID()
+	return _u
 }
 
 // SetAgentID sets the "agent_id" field.
-func (ciuo *ComputeInstanceUpdateOne) SetAgentID(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetAgentID(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetAgentID(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetAgentID(v)
+	return _u
 }
 
 // SetNillableAgentID sets the "agent_id" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillableAgentID(s *string) *ComputeInstanceUpdateOne {
-	if s != nil {
-		ciuo.SetAgentID(*s)
+func (_u *ComputeInstanceUpdateOne) SetNillableAgentID(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetAgentID(*v)
 	}
-	return ciuo
+	return _u
 }
 
 // ClearAgentID clears the value of the "agent_id" field.
-func (ciuo *ComputeInstanceUpdateOne) ClearAgentID() *ComputeInstanceUpdateOne {
-	ciuo.mutation.ClearAgentID()
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) ClearAgentID() *ComputeInstanceUpdateOne {
+	_u.mutation.ClearAgentID()
+	return _u
 }
 
 // SetVncIP sets the "vnc_ip" field.
-func (ciuo *ComputeInstanceUpdateOne) SetVncIP(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetVncIP(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetVncIP(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetVncIP(v)
+	return _u
+}
+
+// SetNillableVncIP sets the "vnc_ip" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableVncIP(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetVncIP(*v)
+	}
+	return _u
 }
 
 // SetVncPort sets the "vnc_port" field.
-func (ciuo *ComputeInstanceUpdateOne) SetVncPort(i int32) *ComputeInstanceUpdateOne {
-	ciuo.mutation.ResetVncPort()
-	ciuo.mutation.SetVncPort(i)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetVncPort(v int32) *ComputeInstanceUpdateOne {
+	_u.mutation.ResetVncPort()
+	_u.mutation.SetVncPort(v)
+	return _u
 }
 
-// AddVncPort adds i to the "vnc_port" field.
-func (ciuo *ComputeInstanceUpdateOne) AddVncPort(i int32) *ComputeInstanceUpdateOne {
-	ciuo.mutation.AddVncPort(i)
-	return ciuo
+// SetNillableVncPort sets the "vnc_port" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableVncPort(v *int32) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetVncPort(*v)
+	}
+	return _u
+}
+
+// AddVncPort adds value to the "vnc_port" field.
+func (_u *ComputeInstanceUpdateOne) AddVncPort(v int32) *ComputeInstanceUpdateOne {
+	_u.mutation.AddVncPort(v)
+	return _u
 }
 
 // SetDockerCompose sets the "docker_compose" field.
-func (ciuo *ComputeInstanceUpdateOne) SetDockerCompose(s string) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetDockerCompose(s)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetDockerCompose(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetDockerCompose(v)
+	return _u
+}
+
+// SetNillableDockerCompose sets the "docker_compose" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableDockerCompose(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetDockerCompose(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (ciuo *ComputeInstanceUpdateOne) SetCreateTime(t time.Time) *ComputeInstanceUpdateOne {
-	ciuo.mutation.SetCreateTime(t)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) SetCreateTime(v time.Time) *ComputeInstanceUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (ciuo *ComputeInstanceUpdateOne) SetNillableCreateTime(t *time.Time) *ComputeInstanceUpdateOne {
-	if t != nil {
-		ciuo.SetCreateTime(*t)
+func (_u *ComputeInstanceUpdateOne) SetNillableCreateTime(v *time.Time) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return ciuo
+	return _u
 }
 
 // Mutation returns the ComputeInstanceMutation object of the builder.
-func (ciuo *ComputeInstanceUpdateOne) Mutation() *ComputeInstanceMutation {
-	return ciuo.mutation
+func (_u *ComputeInstanceUpdateOne) Mutation() *ComputeInstanceMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ComputeInstanceUpdate builder.
-func (ciuo *ComputeInstanceUpdateOne) Where(ps ...predicate.ComputeInstance) *ComputeInstanceUpdateOne {
-	ciuo.mutation.Where(ps...)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) Where(ps ...predicate.ComputeInstance) *ComputeInstanceUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ciuo *ComputeInstanceUpdateOne) Select(field string, fields ...string) *ComputeInstanceUpdateOne {
-	ciuo.fields = append([]string{field}, fields...)
-	return ciuo
+func (_u *ComputeInstanceUpdateOne) Select(field string, fields ...string) *ComputeInstanceUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ComputeInstance entity.
-func (ciuo *ComputeInstanceUpdateOne) Save(ctx context.Context) (*ComputeInstance, error) {
-	return withHooks(ctx, ciuo.sqlSave, ciuo.mutation, ciuo.hooks)
+func (_u *ComputeInstanceUpdateOne) Save(ctx context.Context) (*ComputeInstance, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ciuo *ComputeInstanceUpdateOne) SaveX(ctx context.Context) *ComputeInstance {
-	node, err := ciuo.Save(ctx)
+func (_u *ComputeInstanceUpdateOne) SaveX(ctx context.Context) *ComputeInstance {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -565,31 +741,31 @@ func (ciuo *ComputeInstanceUpdateOne) SaveX(ctx context.Context) *ComputeInstanc
 }
 
 // Exec executes the query on the entity.
-func (ciuo *ComputeInstanceUpdateOne) Exec(ctx context.Context) error {
-	_, err := ciuo.Save(ctx)
+func (_u *ComputeInstanceUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ciuo *ComputeInstanceUpdateOne) ExecX(ctx context.Context) {
-	if err := ciuo.Exec(ctx); err != nil {
+func (_u *ComputeInstanceUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ciuo *ComputeInstanceUpdateOne) check() error {
-	if v, ok := ciuo.mutation.Owner(); ok {
+func (_u *ComputeInstanceUpdateOne) check() error {
+	if v, ok := _u.mutation.Owner(); ok {
 		if err := computeinstance.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.owner": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.Name(); ok {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := computeinstance.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.name": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.Image(); ok {
+	if v, ok := _u.mutation.Image(); ok {
 		if err := computeinstance.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeInstance.image": %w`, err)}
 		}
@@ -597,17 +773,17 @@ func (ciuo *ComputeInstanceUpdateOne) check() error {
 	return nil
 }
 
-func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *ComputeInstance, err error) {
-	if err := ciuo.check(); err != nil {
+func (_u *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *ComputeInstance, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(computeinstance.Table, computeinstance.Columns, sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID))
-	id, ok := ciuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ComputeInstance.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ciuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, computeinstance.FieldID)
 		for _, f := range fields {
@@ -619,86 +795,86 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 			}
 		}
 	}
-	if ps := ciuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ciuo.mutation.Owner(); ok {
+	if value, ok := _u.mutation.Owner(); ok {
 		_spec.SetField(computeinstance.FieldOwner, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(computeinstance.FieldName, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Core(); ok {
+	if value, ok := _u.mutation.Core(); ok {
 		_spec.SetField(computeinstance.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := ciuo.mutation.AddedCore(); ok {
+	if value, ok := _u.mutation.AddedCore(); ok {
 		_spec.AddField(computeinstance.FieldCore, field.TypeInt, value)
 	}
-	if value, ok := ciuo.mutation.Memory(); ok {
+	if value, ok := _u.mutation.Memory(); ok {
 		_spec.SetField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := ciuo.mutation.AddedMemory(); ok {
+	if value, ok := _u.mutation.AddedMemory(); ok {
 		_spec.AddField(computeinstance.FieldMemory, field.TypeInt, value)
 	}
-	if value, ok := ciuo.mutation.Image(); ok {
+	if value, ok := _u.mutation.Image(); ok {
 		_spec.SetField(computeinstance.FieldImage, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.ImageID(); ok {
+	if value, ok := _u.mutation.ImageID(); ok {
 		_spec.SetField(computeinstance.FieldImageID, field.TypeInt32, value)
 	}
-	if value, ok := ciuo.mutation.AddedImageID(); ok {
+	if value, ok := _u.mutation.AddedImageID(); ok {
 		_spec.AddField(computeinstance.FieldImageID, field.TypeInt32, value)
 	}
-	if value, ok := ciuo.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(computeinstance.FieldPort, field.TypeString, value)
 	}
-	if ciuo.mutation.PortCleared() {
+	if _u.mutation.PortCleared() {
 		_spec.ClearField(computeinstance.FieldPort, field.TypeString)
 	}
-	if value, ok := ciuo.mutation.ExpirationTime(); ok {
+	if value, ok := _u.mutation.ExpirationTime(); ok {
 		_spec.SetField(computeinstance.FieldExpirationTime, field.TypeTime, value)
 	}
-	if value, ok := ciuo.mutation.Status(); ok {
+	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(computeinstance.FieldStatus, field.TypeInt8, value)
 	}
-	if value, ok := ciuo.mutation.AddedStatus(); ok {
+	if value, ok := _u.mutation.AddedStatus(); ok {
 		_spec.AddField(computeinstance.FieldStatus, field.TypeInt8, value)
 	}
-	if value, ok := ciuo.mutation.ContainerID(); ok {
+	if value, ok := _u.mutation.ContainerID(); ok {
 		_spec.SetField(computeinstance.FieldContainerID, field.TypeString, value)
 	}
-	if ciuo.mutation.ContainerIDCleared() {
+	if _u.mutation.ContainerIDCleared() {
 		_spec.ClearField(computeinstance.FieldContainerID, field.TypeString)
 	}
-	if value, ok := ciuo.mutation.AgentID(); ok {
+	if value, ok := _u.mutation.AgentID(); ok {
 		_spec.SetField(computeinstance.FieldAgentID, field.TypeString, value)
 	}
-	if ciuo.mutation.AgentIDCleared() {
+	if _u.mutation.AgentIDCleared() {
 		_spec.ClearField(computeinstance.FieldAgentID, field.TypeString)
 	}
-	if value, ok := ciuo.mutation.VncIP(); ok {
+	if value, ok := _u.mutation.VncIP(); ok {
 		_spec.SetField(computeinstance.FieldVncIP, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.VncPort(); ok {
+	if value, ok := _u.mutation.VncPort(); ok {
 		_spec.SetField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
-	if value, ok := ciuo.mutation.AddedVncPort(); ok {
+	if value, ok := _u.mutation.AddedVncPort(); ok {
 		_spec.AddField(computeinstance.FieldVncPort, field.TypeInt32, value)
 	}
-	if value, ok := ciuo.mutation.DockerCompose(); ok {
+	if value, ok := _u.mutation.DockerCompose(); ok {
 		_spec.SetField(computeinstance.FieldDockerCompose, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 	}
-	_node = &ComputeInstance{config: ciuo.config}
+	_node = &ComputeInstance{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ciuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computeinstance.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -706,6 +882,6 @@ func (ciuo *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compu
 		}
 		return nil, err
 	}
-	ciuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

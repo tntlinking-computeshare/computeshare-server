@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,40 +29,40 @@ type UserResourceLimitQuery struct {
 }
 
 // Where adds a new predicate for the UserResourceLimitQuery builder.
-func (urlq *UserResourceLimitQuery) Where(ps ...predicate.UserResourceLimit) *UserResourceLimitQuery {
-	urlq.predicates = append(urlq.predicates, ps...)
-	return urlq
+func (_q *UserResourceLimitQuery) Where(ps ...predicate.UserResourceLimit) *UserResourceLimitQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (urlq *UserResourceLimitQuery) Limit(limit int) *UserResourceLimitQuery {
-	urlq.ctx.Limit = &limit
-	return urlq
+func (_q *UserResourceLimitQuery) Limit(limit int) *UserResourceLimitQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (urlq *UserResourceLimitQuery) Offset(offset int) *UserResourceLimitQuery {
-	urlq.ctx.Offset = &offset
-	return urlq
+func (_q *UserResourceLimitQuery) Offset(offset int) *UserResourceLimitQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (urlq *UserResourceLimitQuery) Unique(unique bool) *UserResourceLimitQuery {
-	urlq.ctx.Unique = &unique
-	return urlq
+func (_q *UserResourceLimitQuery) Unique(unique bool) *UserResourceLimitQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (urlq *UserResourceLimitQuery) Order(o ...userresourcelimit.OrderOption) *UserResourceLimitQuery {
-	urlq.order = append(urlq.order, o...)
-	return urlq
+func (_q *UserResourceLimitQuery) Order(o ...userresourcelimit.OrderOption) *UserResourceLimitQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first UserResourceLimit entity from the query.
 // Returns a *NotFoundError when no UserResourceLimit was found.
-func (urlq *UserResourceLimitQuery) First(ctx context.Context) (*UserResourceLimit, error) {
-	nodes, err := urlq.Limit(1).All(setContextOp(ctx, urlq.ctx, "First"))
+func (_q *UserResourceLimitQuery) First(ctx context.Context) (*UserResourceLimit, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func (urlq *UserResourceLimitQuery) First(ctx context.Context) (*UserResourceLim
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) FirstX(ctx context.Context) *UserResourceLimit {
-	node, err := urlq.First(ctx)
+func (_q *UserResourceLimitQuery) FirstX(ctx context.Context) *UserResourceLimit {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +83,9 @@ func (urlq *UserResourceLimitQuery) FirstX(ctx context.Context) *UserResourceLim
 
 // FirstID returns the first UserResourceLimit ID from the query.
 // Returns a *NotFoundError when no UserResourceLimit ID was found.
-func (urlq *UserResourceLimitQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *UserResourceLimitQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = urlq.Limit(1).IDs(setContextOp(ctx, urlq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +96,8 @@ func (urlq *UserResourceLimitQuery) FirstID(ctx context.Context) (id uuid.UUID, 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := urlq.FirstID(ctx)
+func (_q *UserResourceLimitQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +107,8 @@ func (urlq *UserResourceLimitQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single UserResourceLimit entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one UserResourceLimit entity is found.
 // Returns a *NotFoundError when no UserResourceLimit entities are found.
-func (urlq *UserResourceLimitQuery) Only(ctx context.Context) (*UserResourceLimit, error) {
-	nodes, err := urlq.Limit(2).All(setContextOp(ctx, urlq.ctx, "Only"))
+func (_q *UserResourceLimitQuery) Only(ctx context.Context) (*UserResourceLimit, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +123,8 @@ func (urlq *UserResourceLimitQuery) Only(ctx context.Context) (*UserResourceLimi
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) OnlyX(ctx context.Context) *UserResourceLimit {
-	node, err := urlq.Only(ctx)
+func (_q *UserResourceLimitQuery) OnlyX(ctx context.Context) *UserResourceLimit {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +134,9 @@ func (urlq *UserResourceLimitQuery) OnlyX(ctx context.Context) *UserResourceLimi
 // OnlyID is like Only, but returns the only UserResourceLimit ID in the query.
 // Returns a *NotSingularError when more than one UserResourceLimit ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (urlq *UserResourceLimitQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *UserResourceLimitQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = urlq.Limit(2).IDs(setContextOp(ctx, urlq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +151,8 @@ func (urlq *UserResourceLimitQuery) OnlyID(ctx context.Context) (id uuid.UUID, e
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := urlq.OnlyID(ctx)
+func (_q *UserResourceLimitQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +160,18 @@ func (urlq *UserResourceLimitQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of UserResourceLimits.
-func (urlq *UserResourceLimitQuery) All(ctx context.Context) ([]*UserResourceLimit, error) {
-	ctx = setContextOp(ctx, urlq.ctx, "All")
-	if err := urlq.prepareQuery(ctx); err != nil {
+func (_q *UserResourceLimitQuery) All(ctx context.Context) ([]*UserResourceLimit, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*UserResourceLimit, *UserResourceLimitQuery]()
-	return withInterceptors[[]*UserResourceLimit](ctx, urlq, qr, urlq.inters)
+	return withInterceptors[[]*UserResourceLimit](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) AllX(ctx context.Context) []*UserResourceLimit {
-	nodes, err := urlq.All(ctx)
+func (_q *UserResourceLimitQuery) AllX(ctx context.Context) []*UserResourceLimit {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +179,20 @@ func (urlq *UserResourceLimitQuery) AllX(ctx context.Context) []*UserResourceLim
 }
 
 // IDs executes the query and returns a list of UserResourceLimit IDs.
-func (urlq *UserResourceLimitQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if urlq.ctx.Unique == nil && urlq.path != nil {
-		urlq.Unique(true)
+func (_q *UserResourceLimitQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, urlq.ctx, "IDs")
-	if err = urlq.Select(userresourcelimit.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(userresourcelimit.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := urlq.IDs(ctx)
+func (_q *UserResourceLimitQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +200,17 @@ func (urlq *UserResourceLimitQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (urlq *UserResourceLimitQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, urlq.ctx, "Count")
-	if err := urlq.prepareQuery(ctx); err != nil {
+func (_q *UserResourceLimitQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, urlq, querierCount[*UserResourceLimitQuery](), urlq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*UserResourceLimitQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) CountX(ctx context.Context) int {
-	count, err := urlq.Count(ctx)
+func (_q *UserResourceLimitQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +218,9 @@ func (urlq *UserResourceLimitQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (urlq *UserResourceLimitQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, urlq.ctx, "Exist")
-	switch _, err := urlq.FirstID(ctx); {
+func (_q *UserResourceLimitQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +231,8 @@ func (urlq *UserResourceLimitQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (urlq *UserResourceLimitQuery) ExistX(ctx context.Context) bool {
-	exist, err := urlq.Exist(ctx)
+func (_q *UserResourceLimitQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +241,19 @@ func (urlq *UserResourceLimitQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the UserResourceLimitQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (urlq *UserResourceLimitQuery) Clone() *UserResourceLimitQuery {
-	if urlq == nil {
+func (_q *UserResourceLimitQuery) Clone() *UserResourceLimitQuery {
+	if _q == nil {
 		return nil
 	}
 	return &UserResourceLimitQuery{
-		config:     urlq.config,
-		ctx:        urlq.ctx.Clone(),
-		order:      append([]userresourcelimit.OrderOption{}, urlq.order...),
-		inters:     append([]Interceptor{}, urlq.inters...),
-		predicates: append([]predicate.UserResourceLimit{}, urlq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]userresourcelimit.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.UserResourceLimit{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  urlq.sql.Clone(),
-		path: urlq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +271,10 @@ func (urlq *UserResourceLimitQuery) Clone() *UserResourceLimitQuery {
 //		GroupBy(userresourcelimit.FieldFkUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (urlq *UserResourceLimitQuery) GroupBy(field string, fields ...string) *UserResourceLimitGroupBy {
-	urlq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &UserResourceLimitGroupBy{build: urlq}
-	grbuild.flds = &urlq.ctx.Fields
+func (_q *UserResourceLimitQuery) GroupBy(field string, fields ...string) *UserResourceLimitGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &UserResourceLimitGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = userresourcelimit.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +292,62 @@ func (urlq *UserResourceLimitQuery) GroupBy(field string, fields ...string) *Use
 //	client.UserResourceLimit.Query().
 //		Select(userresourcelimit.FieldFkUserID).
 //		Scan(ctx, &v)
-func (urlq *UserResourceLimitQuery) Select(fields ...string) *UserResourceLimitSelect {
-	urlq.ctx.Fields = append(urlq.ctx.Fields, fields...)
-	sbuild := &UserResourceLimitSelect{UserResourceLimitQuery: urlq}
+func (_q *UserResourceLimitQuery) Select(fields ...string) *UserResourceLimitSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &UserResourceLimitSelect{UserResourceLimitQuery: _q}
 	sbuild.label = userresourcelimit.Label
-	sbuild.flds, sbuild.scan = &urlq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a UserResourceLimitSelect configured with the given aggregations.
-func (urlq *UserResourceLimitQuery) Aggregate(fns ...AggregateFunc) *UserResourceLimitSelect {
-	return urlq.Select().Aggregate(fns...)
+func (_q *UserResourceLimitQuery) Aggregate(fns ...AggregateFunc) *UserResourceLimitSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (urlq *UserResourceLimitQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range urlq.inters {
+func (_q *UserResourceLimitQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, urlq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range urlq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !userresourcelimit.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if urlq.path != nil {
-		prev, err := urlq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		urlq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (urlq *UserResourceLimitQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserResourceLimit, error) {
+func (_q *UserResourceLimitQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*UserResourceLimit, error) {
 	var (
 		nodes = []*UserResourceLimit{}
-		_spec = urlq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*UserResourceLimit).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &UserResourceLimit{config: urlq.config}
+		node := &UserResourceLimit{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, urlq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +356,24 @@ func (urlq *UserResourceLimitQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	return nodes, nil
 }
 
-func (urlq *UserResourceLimitQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := urlq.querySpec()
-	_spec.Node.Columns = urlq.ctx.Fields
-	if len(urlq.ctx.Fields) > 0 {
-		_spec.Unique = urlq.ctx.Unique != nil && *urlq.ctx.Unique
+func (_q *UserResourceLimitQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, urlq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (urlq *UserResourceLimitQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *UserResourceLimitQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(userresourcelimit.Table, userresourcelimit.Columns, sqlgraph.NewFieldSpec(userresourcelimit.FieldID, field.TypeUUID))
-	_spec.From = urlq.sql
-	if unique := urlq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if urlq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := urlq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, userresourcelimit.FieldID)
 		for i := range fields {
@@ -381,20 +382,20 @@ func (urlq *UserResourceLimitQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := urlq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := urlq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := urlq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := urlq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +405,33 @@ func (urlq *UserResourceLimitQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (urlq *UserResourceLimitQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(urlq.driver.Dialect())
+func (_q *UserResourceLimitQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(userresourcelimit.Table)
-	columns := urlq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = userresourcelimit.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if urlq.sql != nil {
-		selector = urlq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if urlq.ctx.Unique != nil && *urlq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range urlq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range urlq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := urlq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := urlq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +444,41 @@ type UserResourceLimitGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (urlgb *UserResourceLimitGroupBy) Aggregate(fns ...AggregateFunc) *UserResourceLimitGroupBy {
-	urlgb.fns = append(urlgb.fns, fns...)
-	return urlgb
+func (_g *UserResourceLimitGroupBy) Aggregate(fns ...AggregateFunc) *UserResourceLimitGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (urlgb *UserResourceLimitGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, urlgb.build.ctx, "GroupBy")
-	if err := urlgb.build.prepareQuery(ctx); err != nil {
+func (_g *UserResourceLimitGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserResourceLimitQuery, *UserResourceLimitGroupBy](ctx, urlgb.build, urlgb, urlgb.build.inters, v)
+	return scanWithInterceptors[*UserResourceLimitQuery, *UserResourceLimitGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (urlgb *UserResourceLimitGroupBy) sqlScan(ctx context.Context, root *UserResourceLimitQuery, v any) error {
+func (_g *UserResourceLimitGroupBy) sqlScan(ctx context.Context, root *UserResourceLimitQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(urlgb.fns))
-	for _, fn := range urlgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*urlgb.flds)+len(urlgb.fns))
-		for _, f := range *urlgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*urlgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := urlgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +492,27 @@ type UserResourceLimitSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (urls *UserResourceLimitSelect) Aggregate(fns ...AggregateFunc) *UserResourceLimitSelect {
-	urls.fns = append(urls.fns, fns...)
-	return urls
+func (_s *UserResourceLimitSelect) Aggregate(fns ...AggregateFunc) *UserResourceLimitSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (urls *UserResourceLimitSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, urls.ctx, "Select")
-	if err := urls.prepareQuery(ctx); err != nil {
+func (_s *UserResourceLimitSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*UserResourceLimitQuery, *UserResourceLimitSelect](ctx, urls.UserResourceLimitQuery, urls, urls.inters, v)
+	return scanWithInterceptors[*UserResourceLimitQuery, *UserResourceLimitSelect](ctx, _s.UserResourceLimitQuery, _s, _s.inters, v)
 }
 
-func (urls *UserResourceLimitSelect) sqlScan(ctx context.Context, root *UserResourceLimitQuery, v any) error {
+func (_s *UserResourceLimitSelect) sqlScan(ctx context.Context, root *UserResourceLimitQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(urls.fns))
-	for _, fn := range urls.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*urls.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +520,7 @@ func (urls *UserResourceLimitSelect) sqlScan(ctx context.Context, root *UserReso
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := urls.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

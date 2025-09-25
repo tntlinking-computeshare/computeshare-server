@@ -57,7 +57,7 @@ func (*CycleRedeemCode) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CycleRedeemCode fields.
-func (crc *CycleRedeemCode) assignValues(columns []string, values []any) error {
+func (_m *CycleRedeemCode) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -67,46 +67,46 @@ func (crc *CycleRedeemCode) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				crc.ID = *value
+				_m.ID = *value
 			}
 		case cycleredeemcode.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				crc.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cycleredeemcode.FieldRedeemCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field redeem_code", values[i])
 			} else if value.Valid {
-				crc.RedeemCode = value.String
+				_m.RedeemCode = value.String
 			}
 		case cycleredeemcode.FieldCycle:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field cycle", values[i])
 			} else if value.Valid {
-				crc.Cycle = value.Float64
+				_m.Cycle = value.Float64
 			}
 		case cycleredeemcode.FieldState:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
-				crc.State = value.Bool
+				_m.State = value.Bool
 			}
 		case cycleredeemcode.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				crc.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case cycleredeemcode.FieldUseTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field use_time", values[i])
 			} else if value.Valid {
-				crc.UseTime = value.Time
+				_m.UseTime = value.Time
 			}
 		default:
-			crc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -114,50 +114,50 @@ func (crc *CycleRedeemCode) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CycleRedeemCode.
 // This includes values selected through modifiers, order, etc.
-func (crc *CycleRedeemCode) Value(name string) (ent.Value, error) {
-	return crc.selectValues.Get(name)
+func (_m *CycleRedeemCode) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CycleRedeemCode.
 // Note that you need to call CycleRedeemCode.Unwrap() before calling this method if this CycleRedeemCode
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (crc *CycleRedeemCode) Update() *CycleRedeemCodeUpdateOne {
-	return NewCycleRedeemCodeClient(crc.config).UpdateOne(crc)
+func (_m *CycleRedeemCode) Update() *CycleRedeemCodeUpdateOne {
+	return NewCycleRedeemCodeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CycleRedeemCode entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (crc *CycleRedeemCode) Unwrap() *CycleRedeemCode {
-	_tx, ok := crc.config.driver.(*txDriver)
+func (_m *CycleRedeemCode) Unwrap() *CycleRedeemCode {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CycleRedeemCode is not a transactional entity")
 	}
-	crc.config.driver = _tx.drv
-	return crc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (crc *CycleRedeemCode) String() string {
+func (_m *CycleRedeemCode) String() string {
 	var builder strings.Builder
 	builder.WriteString("CycleRedeemCode(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", crc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", crc.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("redeem_code=")
-	builder.WriteString(crc.RedeemCode)
+	builder.WriteString(_m.RedeemCode)
 	builder.WriteString(", ")
 	builder.WriteString("cycle=")
-	builder.WriteString(fmt.Sprintf("%v", crc.Cycle))
+	builder.WriteString(fmt.Sprintf("%v", _m.Cycle))
 	builder.WriteString(", ")
 	builder.WriteString("state=")
-	builder.WriteString(fmt.Sprintf("%v", crc.State))
+	builder.WriteString(fmt.Sprintf("%v", _m.State))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(crc.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("use_time=")
-	builder.WriteString(crc.UseTime.Format(time.ANSIC))
+	builder.WriteString(_m.UseTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

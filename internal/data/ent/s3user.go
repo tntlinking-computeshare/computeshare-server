@@ -55,7 +55,7 @@ func (*S3User) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the S3User fields.
-func (s *S3User) assignValues(columns []string, values []any) error {
+func (_m *S3User) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -65,46 +65,46 @@ func (s *S3User) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				s.ID = *value
+				_m.ID = *value
 			}
 		case s3user.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				s.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case s3user.FieldType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				s.Type = int8(value.Int64)
+				_m.Type = int8(value.Int64)
 			}
 		case s3user.FieldAccessKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field access_key", values[i])
 			} else if value.Valid {
-				s.AccessKey = value.String
+				_m.AccessKey = value.String
 			}
 		case s3user.FieldSecretKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field secret_key", values[i])
 			} else if value.Valid {
-				s.SecretKey = value.String
+				_m.SecretKey = value.String
 			}
 		case s3user.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				s.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case s3user.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				s.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -112,50 +112,50 @@ func (s *S3User) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the S3User.
 // This includes values selected through modifiers, order, etc.
-func (s *S3User) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *S3User) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this S3User.
 // Note that you need to call S3User.Unwrap() before calling this method if this S3User
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *S3User) Update() *S3UserUpdateOne {
-	return NewS3UserClient(s.config).UpdateOne(s)
+func (_m *S3User) Update() *S3UserUpdateOne {
+	return NewS3UserClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the S3User entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *S3User) Unwrap() *S3User {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *S3User) Unwrap() *S3User {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: S3User is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *S3User) String() string {
+func (_m *S3User) String() string {
 	var builder strings.Builder
 	builder.WriteString("S3User(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", s.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", s.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("access_key=")
-	builder.WriteString(s.AccessKey)
+	builder.WriteString(_m.AccessKey)
 	builder.WriteString(", ")
 	builder.WriteString("secret_key=")
-	builder.WriteString(s.SecretKey)
+	builder.WriteString(_m.SecretKey)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(s.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(s.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

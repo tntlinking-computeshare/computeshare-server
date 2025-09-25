@@ -24,146 +24,218 @@ type CycleRenewalUpdate struct {
 }
 
 // Where appends a list predicates to the CycleRenewalUpdate builder.
-func (cru *CycleRenewalUpdate) Where(ps ...predicate.CycleRenewal) *CycleRenewalUpdate {
-	cru.mutation.Where(ps...)
-	return cru
+func (_u *CycleRenewalUpdate) Where(ps ...predicate.CycleRenewal) *CycleRenewalUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cru *CycleRenewalUpdate) SetFkUserID(u uuid.UUID) *CycleRenewalUpdate {
-	cru.mutation.SetFkUserID(u)
-	return cru
+func (_u *CycleRenewalUpdate) SetFkUserID(v uuid.UUID) *CycleRenewalUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableFkUserID(v *uuid.UUID) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetResourceID sets the "resource_id" field.
-func (cru *CycleRenewalUpdate) SetResourceID(u uuid.UUID) *CycleRenewalUpdate {
-	cru.mutation.SetResourceID(u)
-	return cru
+func (_u *CycleRenewalUpdate) SetResourceID(v uuid.UUID) *CycleRenewalUpdate {
+	_u.mutation.SetResourceID(v)
+	return _u
+}
+
+// SetNillableResourceID sets the "resource_id" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableResourceID(v *uuid.UUID) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetResourceID(*v)
+	}
+	return _u
 }
 
 // SetResourceType sets the "resource_type" field.
-func (cru *CycleRenewalUpdate) SetResourceType(i int) *CycleRenewalUpdate {
-	cru.mutation.ResetResourceType()
-	cru.mutation.SetResourceType(i)
-	return cru
+func (_u *CycleRenewalUpdate) SetResourceType(v int) *CycleRenewalUpdate {
+	_u.mutation.ResetResourceType()
+	_u.mutation.SetResourceType(v)
+	return _u
 }
 
-// AddResourceType adds i to the "resource_type" field.
-func (cru *CycleRenewalUpdate) AddResourceType(i int) *CycleRenewalUpdate {
-	cru.mutation.AddResourceType(i)
-	return cru
+// SetNillableResourceType sets the "resource_type" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableResourceType(v *int) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetResourceType(*v)
+	}
+	return _u
+}
+
+// AddResourceType adds value to the "resource_type" field.
+func (_u *CycleRenewalUpdate) AddResourceType(v int) *CycleRenewalUpdate {
+	_u.mutation.AddResourceType(v)
+	return _u
 }
 
 // SetProductName sets the "product_name" field.
-func (cru *CycleRenewalUpdate) SetProductName(s string) *CycleRenewalUpdate {
-	cru.mutation.SetProductName(s)
-	return cru
+func (_u *CycleRenewalUpdate) SetProductName(v string) *CycleRenewalUpdate {
+	_u.mutation.SetProductName(v)
+	return _u
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableProductName(v *string) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetProductName(*v)
+	}
+	return _u
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (cru *CycleRenewalUpdate) SetProductDesc(s string) *CycleRenewalUpdate {
-	cru.mutation.SetProductDesc(s)
-	return cru
+func (_u *CycleRenewalUpdate) SetProductDesc(v string) *CycleRenewalUpdate {
+	_u.mutation.SetProductDesc(v)
+	return _u
+}
+
+// SetNillableProductDesc sets the "product_desc" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableProductDesc(v *string) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetProductDesc(*v)
+	}
+	return _u
 }
 
 // SetState sets the "state" field.
-func (cru *CycleRenewalUpdate) SetState(i int8) *CycleRenewalUpdate {
-	cru.mutation.ResetState()
-	cru.mutation.SetState(i)
-	return cru
+func (_u *CycleRenewalUpdate) SetState(v int8) *CycleRenewalUpdate {
+	_u.mutation.ResetState()
+	_u.mutation.SetState(v)
+	return _u
 }
 
-// AddState adds i to the "state" field.
-func (cru *CycleRenewalUpdate) AddState(i int8) *CycleRenewalUpdate {
-	cru.mutation.AddState(i)
-	return cru
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableState(v *int8) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
+}
+
+// AddState adds value to the "state" field.
+func (_u *CycleRenewalUpdate) AddState(v int8) *CycleRenewalUpdate {
+	_u.mutation.AddState(v)
+	return _u
 }
 
 // SetExtendDay sets the "extend_day" field.
-func (cru *CycleRenewalUpdate) SetExtendDay(i int8) *CycleRenewalUpdate {
-	cru.mutation.ResetExtendDay()
-	cru.mutation.SetExtendDay(i)
-	return cru
+func (_u *CycleRenewalUpdate) SetExtendDay(v int8) *CycleRenewalUpdate {
+	_u.mutation.ResetExtendDay()
+	_u.mutation.SetExtendDay(v)
+	return _u
 }
 
-// AddExtendDay adds i to the "extend_day" field.
-func (cru *CycleRenewalUpdate) AddExtendDay(i int8) *CycleRenewalUpdate {
-	cru.mutation.AddExtendDay(i)
-	return cru
+// SetNillableExtendDay sets the "extend_day" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableExtendDay(v *int8) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetExtendDay(*v)
+	}
+	return _u
+}
+
+// AddExtendDay adds value to the "extend_day" field.
+func (_u *CycleRenewalUpdate) AddExtendDay(v int8) *CycleRenewalUpdate {
+	_u.mutation.AddExtendDay(v)
+	return _u
 }
 
 // SetExtendPrice sets the "extend_price" field.
-func (cru *CycleRenewalUpdate) SetExtendPrice(f float64) *CycleRenewalUpdate {
-	cru.mutation.ResetExtendPrice()
-	cru.mutation.SetExtendPrice(f)
-	return cru
+func (_u *CycleRenewalUpdate) SetExtendPrice(v float64) *CycleRenewalUpdate {
+	_u.mutation.ResetExtendPrice()
+	_u.mutation.SetExtendPrice(v)
+	return _u
 }
 
-// AddExtendPrice adds f to the "extend_price" field.
-func (cru *CycleRenewalUpdate) AddExtendPrice(f float64) *CycleRenewalUpdate {
-	cru.mutation.AddExtendPrice(f)
-	return cru
+// SetNillableExtendPrice sets the "extend_price" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableExtendPrice(v *float64) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetExtendPrice(*v)
+	}
+	return _u
+}
+
+// AddExtendPrice adds value to the "extend_price" field.
+func (_u *CycleRenewalUpdate) AddExtendPrice(v float64) *CycleRenewalUpdate {
+	_u.mutation.AddExtendPrice(v)
+	return _u
 }
 
 // SetDueTime sets the "due_time" field.
-func (cru *CycleRenewalUpdate) SetDueTime(t time.Time) *CycleRenewalUpdate {
-	cru.mutation.SetDueTime(t)
-	return cru
+func (_u *CycleRenewalUpdate) SetDueTime(v time.Time) *CycleRenewalUpdate {
+	_u.mutation.SetDueTime(v)
+	return _u
 }
 
 // SetNillableDueTime sets the "due_time" field if the given value is not nil.
-func (cru *CycleRenewalUpdate) SetNillableDueTime(t *time.Time) *CycleRenewalUpdate {
-	if t != nil {
-		cru.SetDueTime(*t)
+func (_u *CycleRenewalUpdate) SetNillableDueTime(v *time.Time) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetDueTime(*v)
 	}
-	return cru
+	return _u
 }
 
 // ClearDueTime clears the value of the "due_time" field.
-func (cru *CycleRenewalUpdate) ClearDueTime() *CycleRenewalUpdate {
-	cru.mutation.ClearDueTime()
-	return cru
+func (_u *CycleRenewalUpdate) ClearDueTime() *CycleRenewalUpdate {
+	_u.mutation.ClearDueTime()
+	return _u
 }
 
 // SetRenewalTime sets the "renewal_time" field.
-func (cru *CycleRenewalUpdate) SetRenewalTime(t time.Time) *CycleRenewalUpdate {
-	cru.mutation.SetRenewalTime(t)
-	return cru
+func (_u *CycleRenewalUpdate) SetRenewalTime(v time.Time) *CycleRenewalUpdate {
+	_u.mutation.SetRenewalTime(v)
+	return _u
 }
 
 // SetNillableRenewalTime sets the "renewal_time" field if the given value is not nil.
-func (cru *CycleRenewalUpdate) SetNillableRenewalTime(t *time.Time) *CycleRenewalUpdate {
-	if t != nil {
-		cru.SetRenewalTime(*t)
+func (_u *CycleRenewalUpdate) SetNillableRenewalTime(v *time.Time) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetRenewalTime(*v)
 	}
-	return cru
+	return _u
 }
 
 // ClearRenewalTime clears the value of the "renewal_time" field.
-func (cru *CycleRenewalUpdate) ClearRenewalTime() *CycleRenewalUpdate {
-	cru.mutation.ClearRenewalTime()
-	return cru
+func (_u *CycleRenewalUpdate) ClearRenewalTime() *CycleRenewalUpdate {
+	_u.mutation.ClearRenewalTime()
+	return _u
 }
 
 // SetAutoRenewal sets the "auto_renewal" field.
-func (cru *CycleRenewalUpdate) SetAutoRenewal(b bool) *CycleRenewalUpdate {
-	cru.mutation.SetAutoRenewal(b)
-	return cru
+func (_u *CycleRenewalUpdate) SetAutoRenewal(v bool) *CycleRenewalUpdate {
+	_u.mutation.SetAutoRenewal(v)
+	return _u
+}
+
+// SetNillableAutoRenewal sets the "auto_renewal" field if the given value is not nil.
+func (_u *CycleRenewalUpdate) SetNillableAutoRenewal(v *bool) *CycleRenewalUpdate {
+	if v != nil {
+		_u.SetAutoRenewal(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleRenewalMutation object of the builder.
-func (cru *CycleRenewalUpdate) Mutation() *CycleRenewalMutation {
-	return cru.mutation
+func (_u *CycleRenewalUpdate) Mutation() *CycleRenewalMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cru *CycleRenewalUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cru.sqlSave, cru.mutation, cru.hooks)
+func (_u *CycleRenewalUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cru *CycleRenewalUpdate) SaveX(ctx context.Context) int {
-	affected, err := cru.Save(ctx)
+func (_u *CycleRenewalUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -171,31 +243,31 @@ func (cru *CycleRenewalUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cru *CycleRenewalUpdate) Exec(ctx context.Context) error {
-	_, err := cru.Save(ctx)
+func (_u *CycleRenewalUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cru *CycleRenewalUpdate) ExecX(ctx context.Context) {
-	if err := cru.Exec(ctx); err != nil {
+func (_u *CycleRenewalUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cru *CycleRenewalUpdate) check() error {
-	if v, ok := cru.mutation.ResourceType(); ok {
+func (_u *CycleRenewalUpdate) check() error {
+	if v, ok := _u.mutation.ResourceType(); ok {
 		if err := cyclerenewal.ResourceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "resource_type", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.resource_type": %w`, err)}
 		}
 	}
-	if v, ok := cru.mutation.ProductName(); ok {
+	if v, ok := _u.mutation.ProductName(); ok {
 		if err := cyclerenewal.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_name": %w`, err)}
 		}
 	}
-	if v, ok := cru.mutation.ProductDesc(); ok {
+	if v, ok := _u.mutation.ProductDesc(); ok {
 		if err := cyclerenewal.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_desc": %w`, err)}
 		}
@@ -203,70 +275,70 @@ func (cru *CycleRenewalUpdate) check() error {
 	return nil
 }
 
-func (cru *CycleRenewalUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cru.check(); err != nil {
-		return n, err
+func (_u *CycleRenewalUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cyclerenewal.Table, cyclerenewal.Columns, sqlgraph.NewFieldSpec(cyclerenewal.FieldID, field.TypeUUID))
-	if ps := cru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cru.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerenewal.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cru.mutation.ResourceID(); ok {
+	if value, ok := _u.mutation.ResourceID(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceID, field.TypeUUID, value)
 	}
-	if value, ok := cru.mutation.ResourceType(); ok {
+	if value, ok := _u.mutation.ResourceType(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceType, field.TypeInt, value)
 	}
-	if value, ok := cru.mutation.AddedResourceType(); ok {
+	if value, ok := _u.mutation.AddedResourceType(); ok {
 		_spec.AddField(cyclerenewal.FieldResourceType, field.TypeInt, value)
 	}
-	if value, ok := cru.mutation.ProductName(); ok {
+	if value, ok := _u.mutation.ProductName(); ok {
 		_spec.SetField(cyclerenewal.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.ProductDesc(); ok {
+	if value, ok := _u.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 	}
-	if value, ok := cru.mutation.State(); ok {
+	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
 	}
-	if value, ok := cru.mutation.AddedState(); ok {
+	if value, ok := _u.mutation.AddedState(); ok {
 		_spec.AddField(cyclerenewal.FieldState, field.TypeInt8, value)
 	}
-	if value, ok := cru.mutation.ExtendDay(); ok {
+	if value, ok := _u.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 	}
-	if value, ok := cru.mutation.AddedExtendDay(); ok {
+	if value, ok := _u.mutation.AddedExtendDay(); ok {
 		_spec.AddField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 	}
-	if value, ok := cru.mutation.ExtendPrice(); ok {
+	if value, ok := _u.mutation.ExtendPrice(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendPrice, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.AddedExtendPrice(); ok {
+	if value, ok := _u.mutation.AddedExtendPrice(); ok {
 		_spec.AddField(cyclerenewal.FieldExtendPrice, field.TypeFloat64, value)
 	}
-	if value, ok := cru.mutation.DueTime(); ok {
+	if value, ok := _u.mutation.DueTime(); ok {
 		_spec.SetField(cyclerenewal.FieldDueTime, field.TypeTime, value)
 	}
-	if cru.mutation.DueTimeCleared() {
+	if _u.mutation.DueTimeCleared() {
 		_spec.ClearField(cyclerenewal.FieldDueTime, field.TypeTime)
 	}
-	if value, ok := cru.mutation.RenewalTime(); ok {
+	if value, ok := _u.mutation.RenewalTime(); ok {
 		_spec.SetField(cyclerenewal.FieldRenewalTime, field.TypeTime, value)
 	}
-	if cru.mutation.RenewalTimeCleared() {
+	if _u.mutation.RenewalTimeCleared() {
 		_spec.ClearField(cyclerenewal.FieldRenewalTime, field.TypeTime)
 	}
-	if value, ok := cru.mutation.AutoRenewal(); ok {
+	if value, ok := _u.mutation.AutoRenewal(); ok {
 		_spec.SetField(cyclerenewal.FieldAutoRenewal, field.TypeBool, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cru.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cyclerenewal.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -274,8 +346,8 @@ func (cru *CycleRenewalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CycleRenewalUpdateOne is the builder for updating a single CycleRenewal entity.
@@ -287,153 +359,225 @@ type CycleRenewalUpdateOne struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cruo *CycleRenewalUpdateOne) SetFkUserID(u uuid.UUID) *CycleRenewalUpdateOne {
-	cruo.mutation.SetFkUserID(u)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetFkUserID(v uuid.UUID) *CycleRenewalUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableFkUserID(v *uuid.UUID) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetResourceID sets the "resource_id" field.
-func (cruo *CycleRenewalUpdateOne) SetResourceID(u uuid.UUID) *CycleRenewalUpdateOne {
-	cruo.mutation.SetResourceID(u)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetResourceID(v uuid.UUID) *CycleRenewalUpdateOne {
+	_u.mutation.SetResourceID(v)
+	return _u
+}
+
+// SetNillableResourceID sets the "resource_id" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableResourceID(v *uuid.UUID) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetResourceID(*v)
+	}
+	return _u
 }
 
 // SetResourceType sets the "resource_type" field.
-func (cruo *CycleRenewalUpdateOne) SetResourceType(i int) *CycleRenewalUpdateOne {
-	cruo.mutation.ResetResourceType()
-	cruo.mutation.SetResourceType(i)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetResourceType(v int) *CycleRenewalUpdateOne {
+	_u.mutation.ResetResourceType()
+	_u.mutation.SetResourceType(v)
+	return _u
 }
 
-// AddResourceType adds i to the "resource_type" field.
-func (cruo *CycleRenewalUpdateOne) AddResourceType(i int) *CycleRenewalUpdateOne {
-	cruo.mutation.AddResourceType(i)
-	return cruo
+// SetNillableResourceType sets the "resource_type" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableResourceType(v *int) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetResourceType(*v)
+	}
+	return _u
+}
+
+// AddResourceType adds value to the "resource_type" field.
+func (_u *CycleRenewalUpdateOne) AddResourceType(v int) *CycleRenewalUpdateOne {
+	_u.mutation.AddResourceType(v)
+	return _u
 }
 
 // SetProductName sets the "product_name" field.
-func (cruo *CycleRenewalUpdateOne) SetProductName(s string) *CycleRenewalUpdateOne {
-	cruo.mutation.SetProductName(s)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetProductName(v string) *CycleRenewalUpdateOne {
+	_u.mutation.SetProductName(v)
+	return _u
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableProductName(v *string) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetProductName(*v)
+	}
+	return _u
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (cruo *CycleRenewalUpdateOne) SetProductDesc(s string) *CycleRenewalUpdateOne {
-	cruo.mutation.SetProductDesc(s)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetProductDesc(v string) *CycleRenewalUpdateOne {
+	_u.mutation.SetProductDesc(v)
+	return _u
+}
+
+// SetNillableProductDesc sets the "product_desc" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableProductDesc(v *string) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetProductDesc(*v)
+	}
+	return _u
 }
 
 // SetState sets the "state" field.
-func (cruo *CycleRenewalUpdateOne) SetState(i int8) *CycleRenewalUpdateOne {
-	cruo.mutation.ResetState()
-	cruo.mutation.SetState(i)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetState(v int8) *CycleRenewalUpdateOne {
+	_u.mutation.ResetState()
+	_u.mutation.SetState(v)
+	return _u
 }
 
-// AddState adds i to the "state" field.
-func (cruo *CycleRenewalUpdateOne) AddState(i int8) *CycleRenewalUpdateOne {
-	cruo.mutation.AddState(i)
-	return cruo
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableState(v *int8) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
+}
+
+// AddState adds value to the "state" field.
+func (_u *CycleRenewalUpdateOne) AddState(v int8) *CycleRenewalUpdateOne {
+	_u.mutation.AddState(v)
+	return _u
 }
 
 // SetExtendDay sets the "extend_day" field.
-func (cruo *CycleRenewalUpdateOne) SetExtendDay(i int8) *CycleRenewalUpdateOne {
-	cruo.mutation.ResetExtendDay()
-	cruo.mutation.SetExtendDay(i)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetExtendDay(v int8) *CycleRenewalUpdateOne {
+	_u.mutation.ResetExtendDay()
+	_u.mutation.SetExtendDay(v)
+	return _u
 }
 
-// AddExtendDay adds i to the "extend_day" field.
-func (cruo *CycleRenewalUpdateOne) AddExtendDay(i int8) *CycleRenewalUpdateOne {
-	cruo.mutation.AddExtendDay(i)
-	return cruo
+// SetNillableExtendDay sets the "extend_day" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableExtendDay(v *int8) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetExtendDay(*v)
+	}
+	return _u
+}
+
+// AddExtendDay adds value to the "extend_day" field.
+func (_u *CycleRenewalUpdateOne) AddExtendDay(v int8) *CycleRenewalUpdateOne {
+	_u.mutation.AddExtendDay(v)
+	return _u
 }
 
 // SetExtendPrice sets the "extend_price" field.
-func (cruo *CycleRenewalUpdateOne) SetExtendPrice(f float64) *CycleRenewalUpdateOne {
-	cruo.mutation.ResetExtendPrice()
-	cruo.mutation.SetExtendPrice(f)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetExtendPrice(v float64) *CycleRenewalUpdateOne {
+	_u.mutation.ResetExtendPrice()
+	_u.mutation.SetExtendPrice(v)
+	return _u
 }
 
-// AddExtendPrice adds f to the "extend_price" field.
-func (cruo *CycleRenewalUpdateOne) AddExtendPrice(f float64) *CycleRenewalUpdateOne {
-	cruo.mutation.AddExtendPrice(f)
-	return cruo
+// SetNillableExtendPrice sets the "extend_price" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableExtendPrice(v *float64) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetExtendPrice(*v)
+	}
+	return _u
+}
+
+// AddExtendPrice adds value to the "extend_price" field.
+func (_u *CycleRenewalUpdateOne) AddExtendPrice(v float64) *CycleRenewalUpdateOne {
+	_u.mutation.AddExtendPrice(v)
+	return _u
 }
 
 // SetDueTime sets the "due_time" field.
-func (cruo *CycleRenewalUpdateOne) SetDueTime(t time.Time) *CycleRenewalUpdateOne {
-	cruo.mutation.SetDueTime(t)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetDueTime(v time.Time) *CycleRenewalUpdateOne {
+	_u.mutation.SetDueTime(v)
+	return _u
 }
 
 // SetNillableDueTime sets the "due_time" field if the given value is not nil.
-func (cruo *CycleRenewalUpdateOne) SetNillableDueTime(t *time.Time) *CycleRenewalUpdateOne {
-	if t != nil {
-		cruo.SetDueTime(*t)
+func (_u *CycleRenewalUpdateOne) SetNillableDueTime(v *time.Time) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetDueTime(*v)
 	}
-	return cruo
+	return _u
 }
 
 // ClearDueTime clears the value of the "due_time" field.
-func (cruo *CycleRenewalUpdateOne) ClearDueTime() *CycleRenewalUpdateOne {
-	cruo.mutation.ClearDueTime()
-	return cruo
+func (_u *CycleRenewalUpdateOne) ClearDueTime() *CycleRenewalUpdateOne {
+	_u.mutation.ClearDueTime()
+	return _u
 }
 
 // SetRenewalTime sets the "renewal_time" field.
-func (cruo *CycleRenewalUpdateOne) SetRenewalTime(t time.Time) *CycleRenewalUpdateOne {
-	cruo.mutation.SetRenewalTime(t)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetRenewalTime(v time.Time) *CycleRenewalUpdateOne {
+	_u.mutation.SetRenewalTime(v)
+	return _u
 }
 
 // SetNillableRenewalTime sets the "renewal_time" field if the given value is not nil.
-func (cruo *CycleRenewalUpdateOne) SetNillableRenewalTime(t *time.Time) *CycleRenewalUpdateOne {
-	if t != nil {
-		cruo.SetRenewalTime(*t)
+func (_u *CycleRenewalUpdateOne) SetNillableRenewalTime(v *time.Time) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetRenewalTime(*v)
 	}
-	return cruo
+	return _u
 }
 
 // ClearRenewalTime clears the value of the "renewal_time" field.
-func (cruo *CycleRenewalUpdateOne) ClearRenewalTime() *CycleRenewalUpdateOne {
-	cruo.mutation.ClearRenewalTime()
-	return cruo
+func (_u *CycleRenewalUpdateOne) ClearRenewalTime() *CycleRenewalUpdateOne {
+	_u.mutation.ClearRenewalTime()
+	return _u
 }
 
 // SetAutoRenewal sets the "auto_renewal" field.
-func (cruo *CycleRenewalUpdateOne) SetAutoRenewal(b bool) *CycleRenewalUpdateOne {
-	cruo.mutation.SetAutoRenewal(b)
-	return cruo
+func (_u *CycleRenewalUpdateOne) SetAutoRenewal(v bool) *CycleRenewalUpdateOne {
+	_u.mutation.SetAutoRenewal(v)
+	return _u
+}
+
+// SetNillableAutoRenewal sets the "auto_renewal" field if the given value is not nil.
+func (_u *CycleRenewalUpdateOne) SetNillableAutoRenewal(v *bool) *CycleRenewalUpdateOne {
+	if v != nil {
+		_u.SetAutoRenewal(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleRenewalMutation object of the builder.
-func (cruo *CycleRenewalUpdateOne) Mutation() *CycleRenewalMutation {
-	return cruo.mutation
+func (_u *CycleRenewalUpdateOne) Mutation() *CycleRenewalMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CycleRenewalUpdate builder.
-func (cruo *CycleRenewalUpdateOne) Where(ps ...predicate.CycleRenewal) *CycleRenewalUpdateOne {
-	cruo.mutation.Where(ps...)
-	return cruo
+func (_u *CycleRenewalUpdateOne) Where(ps ...predicate.CycleRenewal) *CycleRenewalUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cruo *CycleRenewalUpdateOne) Select(field string, fields ...string) *CycleRenewalUpdateOne {
-	cruo.fields = append([]string{field}, fields...)
-	return cruo
+func (_u *CycleRenewalUpdateOne) Select(field string, fields ...string) *CycleRenewalUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CycleRenewal entity.
-func (cruo *CycleRenewalUpdateOne) Save(ctx context.Context) (*CycleRenewal, error) {
-	return withHooks(ctx, cruo.sqlSave, cruo.mutation, cruo.hooks)
+func (_u *CycleRenewalUpdateOne) Save(ctx context.Context) (*CycleRenewal, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cruo *CycleRenewalUpdateOne) SaveX(ctx context.Context) *CycleRenewal {
-	node, err := cruo.Save(ctx)
+func (_u *CycleRenewalUpdateOne) SaveX(ctx context.Context) *CycleRenewal {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -441,31 +585,31 @@ func (cruo *CycleRenewalUpdateOne) SaveX(ctx context.Context) *CycleRenewal {
 }
 
 // Exec executes the query on the entity.
-func (cruo *CycleRenewalUpdateOne) Exec(ctx context.Context) error {
-	_, err := cruo.Save(ctx)
+func (_u *CycleRenewalUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cruo *CycleRenewalUpdateOne) ExecX(ctx context.Context) {
-	if err := cruo.Exec(ctx); err != nil {
+func (_u *CycleRenewalUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cruo *CycleRenewalUpdateOne) check() error {
-	if v, ok := cruo.mutation.ResourceType(); ok {
+func (_u *CycleRenewalUpdateOne) check() error {
+	if v, ok := _u.mutation.ResourceType(); ok {
 		if err := cyclerenewal.ResourceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "resource_type", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.resource_type": %w`, err)}
 		}
 	}
-	if v, ok := cruo.mutation.ProductName(); ok {
+	if v, ok := _u.mutation.ProductName(); ok {
 		if err := cyclerenewal.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_name": %w`, err)}
 		}
 	}
-	if v, ok := cruo.mutation.ProductDesc(); ok {
+	if v, ok := _u.mutation.ProductDesc(); ok {
 		if err := cyclerenewal.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleRenewal.product_desc": %w`, err)}
 		}
@@ -473,17 +617,17 @@ func (cruo *CycleRenewalUpdateOne) check() error {
 	return nil
 }
 
-func (cruo *CycleRenewalUpdateOne) sqlSave(ctx context.Context) (_node *CycleRenewal, err error) {
-	if err := cruo.check(); err != nil {
+func (_u *CycleRenewalUpdateOne) sqlSave(ctx context.Context) (_node *CycleRenewal, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cyclerenewal.Table, cyclerenewal.Columns, sqlgraph.NewFieldSpec(cyclerenewal.FieldID, field.TypeUUID))
-	id, ok := cruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CycleRenewal.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cyclerenewal.FieldID)
 		for _, f := range fields {
@@ -495,68 +639,68 @@ func (cruo *CycleRenewalUpdateOne) sqlSave(ctx context.Context) (_node *CycleRen
 			}
 		}
 	}
-	if ps := cruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cruo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerenewal.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cruo.mutation.ResourceID(); ok {
+	if value, ok := _u.mutation.ResourceID(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceID, field.TypeUUID, value)
 	}
-	if value, ok := cruo.mutation.ResourceType(); ok {
+	if value, ok := _u.mutation.ResourceType(); ok {
 		_spec.SetField(cyclerenewal.FieldResourceType, field.TypeInt, value)
 	}
-	if value, ok := cruo.mutation.AddedResourceType(); ok {
+	if value, ok := _u.mutation.AddedResourceType(); ok {
 		_spec.AddField(cyclerenewal.FieldResourceType, field.TypeInt, value)
 	}
-	if value, ok := cruo.mutation.ProductName(); ok {
+	if value, ok := _u.mutation.ProductName(); ok {
 		_spec.SetField(cyclerenewal.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.ProductDesc(); ok {
+	if value, ok := _u.mutation.ProductDesc(); ok {
 		_spec.SetField(cyclerenewal.FieldProductDesc, field.TypeString, value)
 	}
-	if value, ok := cruo.mutation.State(); ok {
+	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(cyclerenewal.FieldState, field.TypeInt8, value)
 	}
-	if value, ok := cruo.mutation.AddedState(); ok {
+	if value, ok := _u.mutation.AddedState(); ok {
 		_spec.AddField(cyclerenewal.FieldState, field.TypeInt8, value)
 	}
-	if value, ok := cruo.mutation.ExtendDay(); ok {
+	if value, ok := _u.mutation.ExtendDay(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 	}
-	if value, ok := cruo.mutation.AddedExtendDay(); ok {
+	if value, ok := _u.mutation.AddedExtendDay(); ok {
 		_spec.AddField(cyclerenewal.FieldExtendDay, field.TypeInt8, value)
 	}
-	if value, ok := cruo.mutation.ExtendPrice(); ok {
+	if value, ok := _u.mutation.ExtendPrice(); ok {
 		_spec.SetField(cyclerenewal.FieldExtendPrice, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.AddedExtendPrice(); ok {
+	if value, ok := _u.mutation.AddedExtendPrice(); ok {
 		_spec.AddField(cyclerenewal.FieldExtendPrice, field.TypeFloat64, value)
 	}
-	if value, ok := cruo.mutation.DueTime(); ok {
+	if value, ok := _u.mutation.DueTime(); ok {
 		_spec.SetField(cyclerenewal.FieldDueTime, field.TypeTime, value)
 	}
-	if cruo.mutation.DueTimeCleared() {
+	if _u.mutation.DueTimeCleared() {
 		_spec.ClearField(cyclerenewal.FieldDueTime, field.TypeTime)
 	}
-	if value, ok := cruo.mutation.RenewalTime(); ok {
+	if value, ok := _u.mutation.RenewalTime(); ok {
 		_spec.SetField(cyclerenewal.FieldRenewalTime, field.TypeTime, value)
 	}
-	if cruo.mutation.RenewalTimeCleared() {
+	if _u.mutation.RenewalTimeCleared() {
 		_spec.ClearField(cyclerenewal.FieldRenewalTime, field.TypeTime)
 	}
-	if value, ok := cruo.mutation.AutoRenewal(); ok {
+	if value, ok := _u.mutation.AutoRenewal(); ok {
 		_spec.SetField(cyclerenewal.FieldAutoRenewal, field.TypeBool, value)
 	}
-	_node = &CycleRenewal{config: cruo.config}
+	_node = &CycleRenewal{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cyclerenewal.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -564,6 +708,6 @@ func (cruo *CycleRenewalUpdateOne) sqlSave(ctx context.Context) (_node *CycleRen
 		}
 		return nil, err
 	}
-	cruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

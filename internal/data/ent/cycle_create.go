@@ -22,57 +22,57 @@ type CycleCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cc *CycleCreate) SetFkUserID(u uuid.UUID) *CycleCreate {
-	cc.mutation.SetFkUserID(u)
-	return cc
+func (_c *CycleCreate) SetFkUserID(v uuid.UUID) *CycleCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetCycle sets the "cycle" field.
-func (cc *CycleCreate) SetCycle(f float64) *CycleCreate {
-	cc.mutation.SetCycle(f)
-	return cc
+func (_c *CycleCreate) SetCycle(v float64) *CycleCreate {
+	_c.mutation.SetCycle(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cc *CycleCreate) SetCreateTime(t time.Time) *CycleCreate {
-	cc.mutation.SetCreateTime(t)
-	return cc
+func (_c *CycleCreate) SetCreateTime(v time.Time) *CycleCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (cc *CycleCreate) SetUpdateTime(t time.Time) *CycleCreate {
-	cc.mutation.SetUpdateTime(t)
-	return cc
+func (_c *CycleCreate) SetUpdateTime(v time.Time) *CycleCreate {
+	_c.mutation.SetUpdateTime(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (cc *CycleCreate) SetID(u uuid.UUID) *CycleCreate {
-	cc.mutation.SetID(u)
-	return cc
+func (_c *CycleCreate) SetID(v uuid.UUID) *CycleCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (cc *CycleCreate) SetNillableID(u *uuid.UUID) *CycleCreate {
-	if u != nil {
-		cc.SetID(*u)
+func (_c *CycleCreate) SetNillableID(v *uuid.UUID) *CycleCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return cc
+	return _c
 }
 
 // Mutation returns the CycleMutation object of the builder.
-func (cc *CycleCreate) Mutation() *CycleMutation {
-	return cc.mutation
+func (_c *CycleCreate) Mutation() *CycleMutation {
+	return _c.mutation
 }
 
 // Save creates the Cycle in the database.
-func (cc *CycleCreate) Save(ctx context.Context) (*Cycle, error) {
-	cc.defaults()
-	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
+func (_c *CycleCreate) Save(ctx context.Context) (*Cycle, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cc *CycleCreate) SaveX(ctx context.Context) *Cycle {
-	v, err := cc.Save(ctx)
+func (_c *CycleCreate) SaveX(ctx context.Context) *Cycle {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -80,49 +80,49 @@ func (cc *CycleCreate) SaveX(ctx context.Context) *Cycle {
 }
 
 // Exec executes the query.
-func (cc *CycleCreate) Exec(ctx context.Context) error {
-	_, err := cc.Save(ctx)
+func (_c *CycleCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cc *CycleCreate) ExecX(ctx context.Context) {
-	if err := cc.Exec(ctx); err != nil {
+func (_c *CycleCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cc *CycleCreate) defaults() {
-	if _, ok := cc.mutation.ID(); !ok {
+func (_c *CycleCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := cycle.DefaultID()
-		cc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cc *CycleCreate) check() error {
-	if _, ok := cc.mutation.FkUserID(); !ok {
+func (_c *CycleCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "Cycle.fk_user_id"`)}
 	}
-	if _, ok := cc.mutation.Cycle(); !ok {
+	if _, ok := _c.mutation.Cycle(); !ok {
 		return &ValidationError{Name: "cycle", err: errors.New(`ent: missing required field "Cycle.cycle"`)}
 	}
-	if _, ok := cc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "Cycle.create_time"`)}
 	}
-	if _, ok := cc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "Cycle.update_time"`)}
 	}
 	return nil
 }
 
-func (cc *CycleCreate) sqlSave(ctx context.Context) (*Cycle, error) {
-	if err := cc.check(); err != nil {
+func (_c *CycleCreate) sqlSave(ctx context.Context) (*Cycle, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -135,33 +135,33 @@ func (cc *CycleCreate) sqlSave(ctx context.Context) (*Cycle, error) {
 			return nil, err
 		}
 	}
-	cc.mutation.id = &_node.ID
-	cc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cc *CycleCreate) createSpec() (*Cycle, *sqlgraph.CreateSpec) {
+func (_c *CycleCreate) createSpec() (*Cycle, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Cycle{config: cc.config}
+		_node = &Cycle{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(cycle.Table, sqlgraph.NewFieldSpec(cycle.FieldID, field.TypeUUID))
 	)
-	if id, ok := cc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := cc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(cycle.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := cc.mutation.Cycle(); ok {
+	if value, ok := _c.mutation.Cycle(); ok {
 		_spec.SetField(cycle.FieldCycle, field.TypeFloat64, value)
 		_node.Cycle = value
 	}
-	if value, ok := cc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := cc.mutation.UpdateTime(); ok {
+	if value, ok := _c.mutation.UpdateTime(); ok {
 		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
 		_node.UpdateTime = value
 	}
@@ -171,17 +171,21 @@ func (cc *CycleCreate) createSpec() (*Cycle, *sqlgraph.CreateSpec) {
 // CycleCreateBulk is the builder for creating many Cycle entities in bulk.
 type CycleCreateBulk struct {
 	config
+	err      error
 	builders []*CycleCreate
 }
 
 // Save creates the Cycle entities in the database.
-func (ccb *CycleCreateBulk) Save(ctx context.Context) ([]*Cycle, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
-	nodes := make([]*Cycle, len(ccb.builders))
-	mutators := make([]Mutator, len(ccb.builders))
-	for i := range ccb.builders {
+func (_c *CycleCreateBulk) Save(ctx context.Context) ([]*Cycle, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Cycle, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CycleMutation)
@@ -195,11 +199,11 @@ func (ccb *CycleCreateBulk) Save(ctx context.Context) ([]*Cycle, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -219,7 +223,7 @@ func (ccb *CycleCreateBulk) Save(ctx context.Context) ([]*Cycle, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -227,8 +231,8 @@ func (ccb *CycleCreateBulk) Save(ctx context.Context) ([]*Cycle, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ccb *CycleCreateBulk) SaveX(ctx context.Context) []*Cycle {
-	v, err := ccb.Save(ctx)
+func (_c *CycleCreateBulk) SaveX(ctx context.Context) []*Cycle {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -236,14 +240,14 @@ func (ccb *CycleCreateBulk) SaveX(ctx context.Context) []*Cycle {
 }
 
 // Exec executes the query.
-func (ccb *CycleCreateBulk) Exec(ctx context.Context) error {
-	_, err := ccb.Save(ctx)
+func (_c *CycleCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ccb *CycleCreateBulk) ExecX(ctx context.Context) {
-	if err := ccb.Exec(ctx); err != nil {
+func (_c *CycleCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

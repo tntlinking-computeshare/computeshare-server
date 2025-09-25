@@ -15,6 +15,7 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "last_update_time", Type: field.TypeTime},
 		{Name: "hostname", Type: field.TypeString},
+		{Name: "arch", Type: field.TypeString},
 		{Name: "total_cpu", Type: field.TypeInt32},
 		{Name: "total_memory", Type: field.TypeInt32},
 		{Name: "occupied_cpu", Type: field.TypeInt32},

@@ -75,7 +75,7 @@ func (*Script) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Script fields.
-func (s *Script) assignValues(columns []string, values []any) error {
+func (_m *Script) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -86,51 +86,51 @@ func (s *Script) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			s.ID = int32(value.Int64)
+			_m.ID = int32(value.Int64)
 		case script.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				s.UserID = value.String
+				_m.UserID = value.String
 			}
 		case script.FieldTaskNumber:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field task_number", values[i])
 			} else if value.Valid {
-				s.TaskNumber = int32(value.Int64)
+				_m.TaskNumber = int32(value.Int64)
 			}
 		case script.FieldScriptName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script_name", values[i])
 			} else if value.Valid {
-				s.ScriptName = value.String
+				_m.ScriptName = value.String
 			}
 		case script.FieldFileAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field file_address", values[i])
 			} else if value.Valid {
-				s.FileAddress = value.String
+				_m.FileAddress = value.String
 			}
 		case script.FieldScriptContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script_content", values[i])
 			} else if value.Valid {
-				s.ScriptContent = value.String
+				_m.ScriptContent = value.String
 			}
 		case script.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				s.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case script.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				s.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -138,58 +138,58 @@ func (s *Script) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Script.
 // This includes values selected through modifiers, order, etc.
-func (s *Script) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Script) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryScriptExecutionRecords queries the "scriptExecutionRecords" edge of the Script entity.
-func (s *Script) QueryScriptExecutionRecords() *ScriptExecutionRecordQuery {
-	return NewScriptClient(s.config).QueryScriptExecutionRecords(s)
+func (_m *Script) QueryScriptExecutionRecords() *ScriptExecutionRecordQuery {
+	return NewScriptClient(_m.config).QueryScriptExecutionRecords(_m)
 }
 
 // Update returns a builder for updating this Script.
 // Note that you need to call Script.Unwrap() before calling this method if this Script
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Script) Update() *ScriptUpdateOne {
-	return NewScriptClient(s.config).UpdateOne(s)
+func (_m *Script) Update() *ScriptUpdateOne {
+	return NewScriptClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Script entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Script) Unwrap() *Script {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Script) Unwrap() *Script {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Script is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Script) String() string {
+func (_m *Script) String() string {
 	var builder strings.Builder
 	builder.WriteString("Script(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("user_id=")
-	builder.WriteString(s.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteString(", ")
 	builder.WriteString("task_number=")
-	builder.WriteString(fmt.Sprintf("%v", s.TaskNumber))
+	builder.WriteString(fmt.Sprintf("%v", _m.TaskNumber))
 	builder.WriteString(", ")
 	builder.WriteString("script_name=")
-	builder.WriteString(s.ScriptName)
+	builder.WriteString(_m.ScriptName)
 	builder.WriteString(", ")
 	builder.WriteString("file_address=")
-	builder.WriteString(s.FileAddress)
+	builder.WriteString(_m.FileAddress)
 	builder.WriteString(", ")
 	builder.WriteString("script_content=")
-	builder.WriteString(s.ScriptContent)
+	builder.WriteString(_m.ScriptContent)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(s.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(s.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -22,103 +22,109 @@ type AgentCreate struct {
 }
 
 // SetMAC sets the "mac" field.
-func (ac *AgentCreate) SetMAC(s string) *AgentCreate {
-	ac.mutation.SetMAC(s)
-	return ac
+func (_c *AgentCreate) SetMAC(v string) *AgentCreate {
+	_c.mutation.SetMAC(v)
+	return _c
 }
 
 // SetActive sets the "active" field.
-func (ac *AgentCreate) SetActive(b bool) *AgentCreate {
-	ac.mutation.SetActive(b)
-	return ac
+func (_c *AgentCreate) SetActive(v bool) *AgentCreate {
+	_c.mutation.SetActive(v)
+	return _c
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (ac *AgentCreate) SetNillableActive(b *bool) *AgentCreate {
-	if b != nil {
-		ac.SetActive(*b)
+func (_c *AgentCreate) SetNillableActive(v *bool) *AgentCreate {
+	if v != nil {
+		_c.SetActive(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetLastUpdateTime sets the "last_update_time" field.
-func (ac *AgentCreate) SetLastUpdateTime(t time.Time) *AgentCreate {
-	ac.mutation.SetLastUpdateTime(t)
-	return ac
+func (_c *AgentCreate) SetLastUpdateTime(v time.Time) *AgentCreate {
+	_c.mutation.SetLastUpdateTime(v)
+	return _c
 }
 
 // SetNillableLastUpdateTime sets the "last_update_time" field if the given value is not nil.
-func (ac *AgentCreate) SetNillableLastUpdateTime(t *time.Time) *AgentCreate {
-	if t != nil {
-		ac.SetLastUpdateTime(*t)
+func (_c *AgentCreate) SetNillableLastUpdateTime(v *time.Time) *AgentCreate {
+	if v != nil {
+		_c.SetLastUpdateTime(*v)
 	}
-	return ac
+	return _c
 }
 
 // SetHostname sets the "hostname" field.
-func (ac *AgentCreate) SetHostname(s string) *AgentCreate {
-	ac.mutation.SetHostname(s)
-	return ac
+func (_c *AgentCreate) SetHostname(v string) *AgentCreate {
+	_c.mutation.SetHostname(v)
+	return _c
+}
+
+// SetArch sets the "arch" field.
+func (_c *AgentCreate) SetArch(v string) *AgentCreate {
+	_c.mutation.SetArch(v)
+	return _c
 }
 
 // SetTotalCPU sets the "total_cpu" field.
-func (ac *AgentCreate) SetTotalCPU(i int32) *AgentCreate {
-	ac.mutation.SetTotalCPU(i)
-	return ac
+func (_c *AgentCreate) SetTotalCPU(v int32) *AgentCreate {
+	_c.mutation.SetTotalCPU(v)
+	return _c
 }
 
 // SetTotalMemory sets the "total_memory" field.
-func (ac *AgentCreate) SetTotalMemory(i int32) *AgentCreate {
-	ac.mutation.SetTotalMemory(i)
-	return ac
+func (_c *AgentCreate) SetTotalMemory(v int32) *AgentCreate {
+	_c.mutation.SetTotalMemory(v)
+	return _c
 }
 
 // SetOccupiedCPU sets the "occupied_cpu" field.
-func (ac *AgentCreate) SetOccupiedCPU(i int32) *AgentCreate {
-	ac.mutation.SetOccupiedCPU(i)
-	return ac
+func (_c *AgentCreate) SetOccupiedCPU(v int32) *AgentCreate {
+	_c.mutation.SetOccupiedCPU(v)
+	return _c
 }
 
 // SetOccupiedMemory sets the "occupied_memory" field.
-func (ac *AgentCreate) SetOccupiedMemory(i int32) *AgentCreate {
-	ac.mutation.SetOccupiedMemory(i)
-	return ac
+func (_c *AgentCreate) SetOccupiedMemory(v int32) *AgentCreate {
+	_c.mutation.SetOccupiedMemory(v)
+	return _c
 }
 
 // SetIP sets the "ip" field.
-func (ac *AgentCreate) SetIP(s string) *AgentCreate {
-	ac.mutation.SetIP(s)
-	return ac
+func (_c *AgentCreate) SetIP(v string) *AgentCreate {
+	_c.mutation.SetIP(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (ac *AgentCreate) SetID(u uuid.UUID) *AgentCreate {
-	ac.mutation.SetID(u)
-	return ac
+func (_c *AgentCreate) SetID(v uuid.UUID) *AgentCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (ac *AgentCreate) SetNillableID(u *uuid.UUID) *AgentCreate {
-	if u != nil {
-		ac.SetID(*u)
+func (_c *AgentCreate) SetNillableID(v *uuid.UUID) *AgentCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return ac
+	return _c
 }
 
 // Mutation returns the AgentMutation object of the builder.
-func (ac *AgentCreate) Mutation() *AgentMutation {
-	return ac.mutation
+func (_c *AgentCreate) Mutation() *AgentMutation {
+	return _c.mutation
 }
 
 // Save creates the Agent in the database.
-func (ac *AgentCreate) Save(ctx context.Context) (*Agent, error) {
-	ac.defaults()
-	return withHooks(ctx, ac.sqlSave, ac.mutation, ac.hooks)
+func (_c *AgentCreate) Save(ctx context.Context) (*Agent, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ac *AgentCreate) SaveX(ctx context.Context) *Agent {
-	v, err := ac.Save(ctx)
+func (_c *AgentCreate) SaveX(ctx context.Context) *Agent {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -126,77 +132,80 @@ func (ac *AgentCreate) SaveX(ctx context.Context) *Agent {
 }
 
 // Exec executes the query.
-func (ac *AgentCreate) Exec(ctx context.Context) error {
-	_, err := ac.Save(ctx)
+func (_c *AgentCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ac *AgentCreate) ExecX(ctx context.Context) {
-	if err := ac.Exec(ctx); err != nil {
+func (_c *AgentCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ac *AgentCreate) defaults() {
-	if _, ok := ac.mutation.Active(); !ok {
+func (_c *AgentCreate) defaults() {
+	if _, ok := _c.mutation.Active(); !ok {
 		v := agent.DefaultActive
-		ac.mutation.SetActive(v)
+		_c.mutation.SetActive(v)
 	}
-	if _, ok := ac.mutation.LastUpdateTime(); !ok {
+	if _, ok := _c.mutation.LastUpdateTime(); !ok {
 		v := agent.DefaultLastUpdateTime()
-		ac.mutation.SetLastUpdateTime(v)
+		_c.mutation.SetLastUpdateTime(v)
 	}
-	if _, ok := ac.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := agent.DefaultID()
-		ac.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ac *AgentCreate) check() error {
-	if _, ok := ac.mutation.MAC(); !ok {
+func (_c *AgentCreate) check() error {
+	if _, ok := _c.mutation.MAC(); !ok {
 		return &ValidationError{Name: "mac", err: errors.New(`ent: missing required field "Agent.mac"`)}
 	}
-	if v, ok := ac.mutation.MAC(); ok {
+	if v, ok := _c.mutation.MAC(); ok {
 		if err := agent.MACValidator(v); err != nil {
 			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
 	}
-	if _, ok := ac.mutation.Active(); !ok {
+	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`ent: missing required field "Agent.active"`)}
 	}
-	if _, ok := ac.mutation.LastUpdateTime(); !ok {
+	if _, ok := _c.mutation.LastUpdateTime(); !ok {
 		return &ValidationError{Name: "last_update_time", err: errors.New(`ent: missing required field "Agent.last_update_time"`)}
 	}
-	if _, ok := ac.mutation.Hostname(); !ok {
+	if _, ok := _c.mutation.Hostname(); !ok {
 		return &ValidationError{Name: "hostname", err: errors.New(`ent: missing required field "Agent.hostname"`)}
 	}
-	if _, ok := ac.mutation.TotalCPU(); !ok {
+	if _, ok := _c.mutation.Arch(); !ok {
+		return &ValidationError{Name: "arch", err: errors.New(`ent: missing required field "Agent.arch"`)}
+	}
+	if _, ok := _c.mutation.TotalCPU(); !ok {
 		return &ValidationError{Name: "total_cpu", err: errors.New(`ent: missing required field "Agent.total_cpu"`)}
 	}
-	if _, ok := ac.mutation.TotalMemory(); !ok {
+	if _, ok := _c.mutation.TotalMemory(); !ok {
 		return &ValidationError{Name: "total_memory", err: errors.New(`ent: missing required field "Agent.total_memory"`)}
 	}
-	if _, ok := ac.mutation.OccupiedCPU(); !ok {
+	if _, ok := _c.mutation.OccupiedCPU(); !ok {
 		return &ValidationError{Name: "occupied_cpu", err: errors.New(`ent: missing required field "Agent.occupied_cpu"`)}
 	}
-	if _, ok := ac.mutation.OccupiedMemory(); !ok {
+	if _, ok := _c.mutation.OccupiedMemory(); !ok {
 		return &ValidationError{Name: "occupied_memory", err: errors.New(`ent: missing required field "Agent.occupied_memory"`)}
 	}
-	if _, ok := ac.mutation.IP(); !ok {
+	if _, ok := _c.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Agent.ip"`)}
 	}
 	return nil
 }
 
-func (ac *AgentCreate) sqlSave(ctx context.Context) (*Agent, error) {
-	if err := ac.check(); err != nil {
+func (_c *AgentCreate) sqlSave(ctx context.Context) (*Agent, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -209,53 +218,57 @@ func (ac *AgentCreate) sqlSave(ctx context.Context) (*Agent, error) {
 			return nil, err
 		}
 	}
-	ac.mutation.id = &_node.ID
-	ac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
+func (_c *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Agent{config: ac.config}
+		_node = &Agent{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(agent.Table, sqlgraph.NewFieldSpec(agent.FieldID, field.TypeUUID))
 	)
-	if id, ok := ac.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := ac.mutation.MAC(); ok {
+	if value, ok := _c.mutation.MAC(); ok {
 		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 		_node.MAC = value
 	}
-	if value, ok := ac.mutation.Active(); ok {
+	if value, ok := _c.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := ac.mutation.LastUpdateTime(); ok {
+	if value, ok := _c.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 		_node.LastUpdateTime = value
 	}
-	if value, ok := ac.mutation.Hostname(); ok {
+	if value, ok := _c.mutation.Hostname(); ok {
 		_spec.SetField(agent.FieldHostname, field.TypeString, value)
 		_node.Hostname = value
 	}
-	if value, ok := ac.mutation.TotalCPU(); ok {
+	if value, ok := _c.mutation.Arch(); ok {
+		_spec.SetField(agent.FieldArch, field.TypeString, value)
+		_node.Arch = value
+	}
+	if value, ok := _c.mutation.TotalCPU(); ok {
 		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
 		_node.TotalCPU = value
 	}
-	if value, ok := ac.mutation.TotalMemory(); ok {
+	if value, ok := _c.mutation.TotalMemory(); ok {
 		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
 		_node.TotalMemory = value
 	}
-	if value, ok := ac.mutation.OccupiedCPU(); ok {
+	if value, ok := _c.mutation.OccupiedCPU(); ok {
 		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
 		_node.OccupiedCPU = value
 	}
-	if value, ok := ac.mutation.OccupiedMemory(); ok {
+	if value, ok := _c.mutation.OccupiedMemory(); ok {
 		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
 		_node.OccupiedMemory = value
 	}
-	if value, ok := ac.mutation.IP(); ok {
+	if value, ok := _c.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
 		_node.IP = value
 	}
@@ -265,17 +278,21 @@ func (ac *AgentCreate) createSpec() (*Agent, *sqlgraph.CreateSpec) {
 // AgentCreateBulk is the builder for creating many Agent entities in bulk.
 type AgentCreateBulk struct {
 	config
+	err      error
 	builders []*AgentCreate
 }
 
 // Save creates the Agent entities in the database.
-func (acb *AgentCreateBulk) Save(ctx context.Context) ([]*Agent, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(acb.builders))
-	nodes := make([]*Agent, len(acb.builders))
-	mutators := make([]Mutator, len(acb.builders))
-	for i := range acb.builders {
+func (_c *AgentCreateBulk) Save(ctx context.Context) ([]*Agent, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Agent, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := acb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AgentMutation)
@@ -289,11 +306,11 @@ func (acb *AgentCreateBulk) Save(ctx context.Context) ([]*Agent, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, acb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, acb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -313,7 +330,7 @@ func (acb *AgentCreateBulk) Save(ctx context.Context) ([]*Agent, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, acb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -321,8 +338,8 @@ func (acb *AgentCreateBulk) Save(ctx context.Context) ([]*Agent, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (acb *AgentCreateBulk) SaveX(ctx context.Context) []*Agent {
-	v, err := acb.Save(ctx)
+func (_c *AgentCreateBulk) SaveX(ctx context.Context) []*Agent {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -330,14 +347,14 @@ func (acb *AgentCreateBulk) SaveX(ctx context.Context) []*Agent {
 }
 
 // Exec executes the query.
-func (acb *AgentCreateBulk) Exec(ctx context.Context) error {
-	_, err := acb.Save(ctx)
+func (_c *AgentCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (acb *AgentCreateBulk) ExecX(ctx context.Context) {
-	if err := acb.Exec(ctx); err != nil {
+func (_c *AgentCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -22,6 +22,8 @@ const (
 	FieldLastUpdateTime = "last_update_time"
 	// FieldHostname holds the string denoting the hostname field in the database.
 	FieldHostname = "hostname"
+	// FieldArch holds the string denoting the arch field in the database.
+	FieldArch = "arch"
 	// FieldTotalCPU holds the string denoting the total_cpu field in the database.
 	FieldTotalCPU = "total_cpu"
 	// FieldTotalMemory holds the string denoting the total_memory field in the database.
@@ -43,6 +45,7 @@ var Columns = []string{
 	FieldActive,
 	FieldLastUpdateTime,
 	FieldHostname,
+	FieldArch,
 	FieldTotalCPU,
 	FieldTotalMemory,
 	FieldOccupiedCPU,
@@ -99,6 +102,11 @@ func ByLastUpdateTime(opts ...sql.OrderTermOption) OrderOption {
 // ByHostname orders the results by the hostname field.
 func ByHostname(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHostname, opts...).ToFunc()
+}
+
+// ByArch orders the results by the arch field.
+func ByArch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArch, opts...).ToFunc()
 }
 
 // ByTotalCPU orders the results by the total_cpu field.

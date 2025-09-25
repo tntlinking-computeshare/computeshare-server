@@ -24,55 +24,87 @@ type CycleUpdate struct {
 }
 
 // Where appends a list predicates to the CycleUpdate builder.
-func (cu *CycleUpdate) Where(ps ...predicate.Cycle) *CycleUpdate {
-	cu.mutation.Where(ps...)
-	return cu
+func (_u *CycleUpdate) Where(ps ...predicate.Cycle) *CycleUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cu *CycleUpdate) SetFkUserID(u uuid.UUID) *CycleUpdate {
-	cu.mutation.SetFkUserID(u)
-	return cu
+func (_u *CycleUpdate) SetFkUserID(v uuid.UUID) *CycleUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleUpdate) SetNillableFkUserID(v *uuid.UUID) *CycleUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (cu *CycleUpdate) SetCycle(f float64) *CycleUpdate {
-	cu.mutation.ResetCycle()
-	cu.mutation.SetCycle(f)
-	return cu
+func (_u *CycleUpdate) SetCycle(v float64) *CycleUpdate {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (cu *CycleUpdate) AddCycle(f float64) *CycleUpdate {
-	cu.mutation.AddCycle(f)
-	return cu
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleUpdate) SetNillableCycle(v *float64) *CycleUpdate {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleUpdate) AddCycle(v float64) *CycleUpdate {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cu *CycleUpdate) SetCreateTime(t time.Time) *CycleUpdate {
-	cu.mutation.SetCreateTime(t)
-	return cu
+func (_u *CycleUpdate) SetCreateTime(v time.Time) *CycleUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleUpdate) SetNillableCreateTime(v *time.Time) *CycleUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (cu *CycleUpdate) SetUpdateTime(t time.Time) *CycleUpdate {
-	cu.mutation.SetUpdateTime(t)
-	return cu
+func (_u *CycleUpdate) SetUpdateTime(v time.Time) *CycleUpdate {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *CycleUpdate) SetNillableUpdateTime(v *time.Time) *CycleUpdate {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleMutation object of the builder.
-func (cu *CycleUpdate) Mutation() *CycleMutation {
-	return cu.mutation
+func (_u *CycleUpdate) Mutation() *CycleMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cu *CycleUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
+func (_u *CycleUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cu *CycleUpdate) SaveX(ctx context.Context) int {
-	affected, err := cu.Save(ctx)
+func (_u *CycleUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -80,43 +112,43 @@ func (cu *CycleUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cu *CycleUpdate) Exec(ctx context.Context) error {
-	_, err := cu.Save(ctx)
+func (_u *CycleUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cu *CycleUpdate) ExecX(ctx context.Context) {
-	if err := cu.Exec(ctx); err != nil {
+func (_u *CycleUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cu *CycleUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *CycleUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(cycle.Table, cycle.Columns, sqlgraph.NewFieldSpec(cycle.FieldID, field.TypeUUID))
-	if ps := cu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cu.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycle.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cu.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycle.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cu.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycle.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cu.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := cu.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycle.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -124,8 +156,8 @@ func (cu *CycleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CycleUpdateOne is the builder for updating a single Cycle entity.
@@ -137,62 +169,94 @@ type CycleUpdateOne struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cuo *CycleUpdateOne) SetFkUserID(u uuid.UUID) *CycleUpdateOne {
-	cuo.mutation.SetFkUserID(u)
-	return cuo
+func (_u *CycleUpdateOne) SetFkUserID(v uuid.UUID) *CycleUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleUpdateOne) SetNillableFkUserID(v *uuid.UUID) *CycleUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (cuo *CycleUpdateOne) SetCycle(f float64) *CycleUpdateOne {
-	cuo.mutation.ResetCycle()
-	cuo.mutation.SetCycle(f)
-	return cuo
+func (_u *CycleUpdateOne) SetCycle(v float64) *CycleUpdateOne {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (cuo *CycleUpdateOne) AddCycle(f float64) *CycleUpdateOne {
-	cuo.mutation.AddCycle(f)
-	return cuo
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleUpdateOne) SetNillableCycle(v *float64) *CycleUpdateOne {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleUpdateOne) AddCycle(v float64) *CycleUpdateOne {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cuo *CycleUpdateOne) SetCreateTime(t time.Time) *CycleUpdateOne {
-	cuo.mutation.SetCreateTime(t)
-	return cuo
+func (_u *CycleUpdateOne) SetCreateTime(v time.Time) *CycleUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleUpdateOne) SetNillableCreateTime(v *time.Time) *CycleUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (cuo *CycleUpdateOne) SetUpdateTime(t time.Time) *CycleUpdateOne {
-	cuo.mutation.SetUpdateTime(t)
-	return cuo
+func (_u *CycleUpdateOne) SetUpdateTime(v time.Time) *CycleUpdateOne {
+	_u.mutation.SetUpdateTime(v)
+	return _u
+}
+
+// SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
+func (_u *CycleUpdateOne) SetNillableUpdateTime(v *time.Time) *CycleUpdateOne {
+	if v != nil {
+		_u.SetUpdateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleMutation object of the builder.
-func (cuo *CycleUpdateOne) Mutation() *CycleMutation {
-	return cuo.mutation
+func (_u *CycleUpdateOne) Mutation() *CycleMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CycleUpdate builder.
-func (cuo *CycleUpdateOne) Where(ps ...predicate.Cycle) *CycleUpdateOne {
-	cuo.mutation.Where(ps...)
-	return cuo
+func (_u *CycleUpdateOne) Where(ps ...predicate.Cycle) *CycleUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cuo *CycleUpdateOne) Select(field string, fields ...string) *CycleUpdateOne {
-	cuo.fields = append([]string{field}, fields...)
-	return cuo
+func (_u *CycleUpdateOne) Select(field string, fields ...string) *CycleUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Cycle entity.
-func (cuo *CycleUpdateOne) Save(ctx context.Context) (*Cycle, error) {
-	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
+func (_u *CycleUpdateOne) Save(ctx context.Context) (*Cycle, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cuo *CycleUpdateOne) SaveX(ctx context.Context) *Cycle {
-	node, err := cuo.Save(ctx)
+func (_u *CycleUpdateOne) SaveX(ctx context.Context) *Cycle {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,26 +264,26 @@ func (cuo *CycleUpdateOne) SaveX(ctx context.Context) *Cycle {
 }
 
 // Exec executes the query on the entity.
-func (cuo *CycleUpdateOne) Exec(ctx context.Context) error {
-	_, err := cuo.Save(ctx)
+func (_u *CycleUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cuo *CycleUpdateOne) ExecX(ctx context.Context) {
-	if err := cuo.Exec(ctx); err != nil {
+func (_u *CycleUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cuo *CycleUpdateOne) sqlSave(ctx context.Context) (_node *Cycle, err error) {
+func (_u *CycleUpdateOne) sqlSave(ctx context.Context) (_node *Cycle, err error) {
 	_spec := sqlgraph.NewUpdateSpec(cycle.Table, cycle.Columns, sqlgraph.NewFieldSpec(cycle.FieldID, field.TypeUUID))
-	id, ok := cuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Cycle.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cycle.FieldID)
 		for _, f := range fields {
@@ -231,32 +295,32 @@ func (cuo *CycleUpdateOne) sqlSave(ctx context.Context) (_node *Cycle, err error
 			}
 		}
 	}
-	if ps := cuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cuo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycle.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cuo.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycle.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cuo.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycle.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cuo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cycle.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := cuo.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(cycle.FieldUpdateTime, field.TypeTime, value)
 	}
-	_node = &Cycle{config: cuo.config}
+	_node = &Cycle{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycle.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -264,6 +328,6 @@ func (cuo *CycleUpdateOne) sqlSave(ctx context.Context) (_node *Cycle, err error
 		}
 		return nil, err
 	}
-	cuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

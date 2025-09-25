@@ -90,6 +90,7 @@ type AgentMutation struct {
 	active             *bool
 	last_update_time   *time.Time
 	hostname           *string
+	arch               *string
 	total_cpu          *int32
 	addtotal_cpu       *int32
 	total_memory       *int32
@@ -351,6 +352,42 @@ func (m *AgentMutation) OldHostname(ctx context.Context) (v string, err error) {
 // ResetHostname resets all changes to the "hostname" field.
 func (m *AgentMutation) ResetHostname() {
 	m.hostname = nil
+}
+
+// SetArch sets the "arch" field.
+func (m *AgentMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *AgentMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the Agent entity.
+// If the Agent object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AgentMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *AgentMutation) ResetArch() {
+	m.arch = nil
 }
 
 // SetTotalCPU sets the "total_cpu" field.
@@ -647,7 +684,7 @@ func (m *AgentMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AgentMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.mac != nil {
 		fields = append(fields, agent.FieldMAC)
 	}
@@ -659,6 +696,9 @@ func (m *AgentMutation) Fields() []string {
 	}
 	if m.hostname != nil {
 		fields = append(fields, agent.FieldHostname)
+	}
+	if m.arch != nil {
+		fields = append(fields, agent.FieldArch)
 	}
 	if m.total_cpu != nil {
 		fields = append(fields, agent.FieldTotalCPU)
@@ -691,6 +731,8 @@ func (m *AgentMutation) Field(name string) (ent.Value, bool) {
 		return m.LastUpdateTime()
 	case agent.FieldHostname:
 		return m.Hostname()
+	case agent.FieldArch:
+		return m.Arch()
 	case agent.FieldTotalCPU:
 		return m.TotalCPU()
 	case agent.FieldTotalMemory:
@@ -718,6 +760,8 @@ func (m *AgentMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldLastUpdateTime(ctx)
 	case agent.FieldHostname:
 		return m.OldHostname(ctx)
+	case agent.FieldArch:
+		return m.OldArch(ctx)
 	case agent.FieldTotalCPU:
 		return m.OldTotalCPU(ctx)
 	case agent.FieldTotalMemory:
@@ -764,6 +808,13 @@ func (m *AgentMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetHostname(v)
+		return nil
+	case agent.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
 		return nil
 	case agent.FieldTotalCPU:
 		v, ok := value.(int32)
@@ -911,6 +962,9 @@ func (m *AgentMutation) ResetField(name string) error {
 		return nil
 	case agent.FieldHostname:
 		m.ResetHostname()
+		return nil
+	case agent.FieldArch:
+		m.ResetArch()
 		return nil
 	case agent.FieldTotalCPU:
 		m.ResetTotalCPU()

@@ -21,198 +21,198 @@ type AlipayOrderRollbackCreate struct {
 }
 
 // SetNotifyID sets the "notify_id" field.
-func (aorc *AlipayOrderRollbackCreate) SetNotifyID(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetNotifyID(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetNotifyID(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetNotifyID(v)
+	return _c
 }
 
 // SetNotifyType sets the "notify_type" field.
-func (aorc *AlipayOrderRollbackCreate) SetNotifyType(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetNotifyType(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetNotifyType(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetNotifyType(v)
+	return _c
 }
 
 // SetNotifyTime sets the "notify_time" field.
-func (aorc *AlipayOrderRollbackCreate) SetNotifyTime(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetNotifyTime(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetNotifyTime(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetNotifyTime(v)
+	return _c
 }
 
 // SetCharset sets the "charset" field.
-func (aorc *AlipayOrderRollbackCreate) SetCharset(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetCharset(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetCharset(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetCharset(v)
+	return _c
 }
 
 // SetVersion sets the "version" field.
-func (aorc *AlipayOrderRollbackCreate) SetVersion(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetVersion(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetVersion(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetVersion(v)
+	return _c
 }
 
 // SetSignType sets the "sign_type" field.
-func (aorc *AlipayOrderRollbackCreate) SetSignType(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetSignType(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetSignType(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetSignType(v)
+	return _c
 }
 
 // SetSign sets the "sign" field.
-func (aorc *AlipayOrderRollbackCreate) SetSign(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetSign(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetSign(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetSign(v)
+	return _c
 }
 
 // SetFundBillList sets the "fund_bill_list" field.
-func (aorc *AlipayOrderRollbackCreate) SetFundBillList(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetFundBillList(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetFundBillList(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetFundBillList(v)
+	return _c
 }
 
 // SetReceiptAmount sets the "receipt_amount" field.
-func (aorc *AlipayOrderRollbackCreate) SetReceiptAmount(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetReceiptAmount(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetReceiptAmount(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetReceiptAmount(v)
+	return _c
 }
 
 // SetInvoiceAmount sets the "invoice_amount" field.
-func (aorc *AlipayOrderRollbackCreate) SetInvoiceAmount(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetInvoiceAmount(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetInvoiceAmount(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetInvoiceAmount(v)
+	return _c
 }
 
 // SetBuyerPayAmount sets the "buyer_pay_amount" field.
-func (aorc *AlipayOrderRollbackCreate) SetBuyerPayAmount(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetBuyerPayAmount(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetBuyerPayAmount(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetBuyerPayAmount(v)
+	return _c
 }
 
 // SetPointAmount sets the "point_amount" field.
-func (aorc *AlipayOrderRollbackCreate) SetPointAmount(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetPointAmount(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetPointAmount(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetPointAmount(v)
+	return _c
 }
 
 // SetVoucherDetailList sets the "voucher_detail_list" field.
-func (aorc *AlipayOrderRollbackCreate) SetVoucherDetailList(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetVoucherDetailList(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetVoucherDetailList(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetVoucherDetailList(v)
+	return _c
 }
 
 // SetPassbackParams sets the "passback_params" field.
-func (aorc *AlipayOrderRollbackCreate) SetPassbackParams(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetPassbackParams(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetPassbackParams(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetPassbackParams(v)
+	return _c
 }
 
 // SetTradeNo sets the "trade_no" field.
-func (aorc *AlipayOrderRollbackCreate) SetTradeNo(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetTradeNo(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetTradeNo(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetTradeNo(v)
+	return _c
 }
 
 // SetAppID sets the "app_id" field.
-func (aorc *AlipayOrderRollbackCreate) SetAppID(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetAppID(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetAppID(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetAppID(v)
+	return _c
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (aorc *AlipayOrderRollbackCreate) SetOutTradeNo(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetOutTradeNo(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetOutTradeNo(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetOutTradeNo(v)
+	return _c
 }
 
 // SetOutBizNo sets the "out_biz_no" field.
-func (aorc *AlipayOrderRollbackCreate) SetOutBizNo(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetOutBizNo(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetOutBizNo(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetOutBizNo(v)
+	return _c
 }
 
 // SetBuyerID sets the "buyer_id" field.
-func (aorc *AlipayOrderRollbackCreate) SetBuyerID(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetBuyerID(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetBuyerID(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetBuyerID(v)
+	return _c
 }
 
 // SetSellerID sets the "seller_id" field.
-func (aorc *AlipayOrderRollbackCreate) SetSellerID(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetSellerID(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetSellerID(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetSellerID(v)
+	return _c
 }
 
 // SetTradeStatus sets the "trade_status" field.
-func (aorc *AlipayOrderRollbackCreate) SetTradeStatus(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetTradeStatus(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetTradeStatus(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetTradeStatus(v)
+	return _c
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (aorc *AlipayOrderRollbackCreate) SetTotalAmount(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetTotalAmount(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetTotalAmount(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetTotalAmount(v)
+	return _c
 }
 
 // SetRefundFee sets the "refund_fee" field.
-func (aorc *AlipayOrderRollbackCreate) SetRefundFee(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetRefundFee(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetRefundFee(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetRefundFee(v)
+	return _c
 }
 
 // SetSubject sets the "subject" field.
-func (aorc *AlipayOrderRollbackCreate) SetSubject(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetSubject(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetSubject(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetSubject(v)
+	return _c
 }
 
 // SetBody sets the "body" field.
-func (aorc *AlipayOrderRollbackCreate) SetBody(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetBody(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetBody(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetBody(v)
+	return _c
 }
 
 // SetGmtCreate sets the "gmt_create" field.
-func (aorc *AlipayOrderRollbackCreate) SetGmtCreate(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetGmtCreate(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetGmtCreate(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetGmtCreate(v)
+	return _c
 }
 
 // SetGmtPayment sets the "gmt_payment" field.
-func (aorc *AlipayOrderRollbackCreate) SetGmtPayment(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetGmtPayment(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetGmtPayment(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetGmtPayment(v)
+	return _c
 }
 
 // SetGmtClose sets the "gmt_close" field.
-func (aorc *AlipayOrderRollbackCreate) SetGmtClose(s string) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetGmtClose(s)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetGmtClose(v string) *AlipayOrderRollbackCreate {
+	_c.mutation.SetGmtClose(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (aorc *AlipayOrderRollbackCreate) SetCreateTime(t time.Time) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetCreateTime(t)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetCreateTime(v time.Time) *AlipayOrderRollbackCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (aorc *AlipayOrderRollbackCreate) SetUpdateTime(t time.Time) *AlipayOrderRollbackCreate {
-	aorc.mutation.SetUpdateTime(t)
-	return aorc
+func (_c *AlipayOrderRollbackCreate) SetUpdateTime(v time.Time) *AlipayOrderRollbackCreate {
+	_c.mutation.SetUpdateTime(v)
+	return _c
 }
 
 // Mutation returns the AlipayOrderRollbackMutation object of the builder.
-func (aorc *AlipayOrderRollbackCreate) Mutation() *AlipayOrderRollbackMutation {
-	return aorc.mutation
+func (_c *AlipayOrderRollbackCreate) Mutation() *AlipayOrderRollbackMutation {
+	return _c.mutation
 }
 
 // Save creates the AlipayOrderRollback in the database.
-func (aorc *AlipayOrderRollbackCreate) Save(ctx context.Context) (*AlipayOrderRollback, error) {
-	return withHooks(ctx, aorc.sqlSave, aorc.mutation, aorc.hooks)
+func (_c *AlipayOrderRollbackCreate) Save(ctx context.Context) (*AlipayOrderRollback, error) {
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (aorc *AlipayOrderRollbackCreate) SaveX(ctx context.Context) *AlipayOrderRollback {
-	v, err := aorc.Save(ctx)
+func (_c *AlipayOrderRollbackCreate) SaveX(ctx context.Context) *AlipayOrderRollback {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,119 +220,119 @@ func (aorc *AlipayOrderRollbackCreate) SaveX(ctx context.Context) *AlipayOrderRo
 }
 
 // Exec executes the query.
-func (aorc *AlipayOrderRollbackCreate) Exec(ctx context.Context) error {
-	_, err := aorc.Save(ctx)
+func (_c *AlipayOrderRollbackCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aorc *AlipayOrderRollbackCreate) ExecX(ctx context.Context) {
-	if err := aorc.Exec(ctx); err != nil {
+func (_c *AlipayOrderRollbackCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (aorc *AlipayOrderRollbackCreate) check() error {
-	if _, ok := aorc.mutation.NotifyID(); !ok {
+func (_c *AlipayOrderRollbackCreate) check() error {
+	if _, ok := _c.mutation.NotifyID(); !ok {
 		return &ValidationError{Name: "notify_id", err: errors.New(`ent: missing required field "AlipayOrderRollback.notify_id"`)}
 	}
-	if _, ok := aorc.mutation.NotifyType(); !ok {
+	if _, ok := _c.mutation.NotifyType(); !ok {
 		return &ValidationError{Name: "notify_type", err: errors.New(`ent: missing required field "AlipayOrderRollback.notify_type"`)}
 	}
-	if _, ok := aorc.mutation.NotifyTime(); !ok {
+	if _, ok := _c.mutation.NotifyTime(); !ok {
 		return &ValidationError{Name: "notify_time", err: errors.New(`ent: missing required field "AlipayOrderRollback.notify_time"`)}
 	}
-	if _, ok := aorc.mutation.Charset(); !ok {
+	if _, ok := _c.mutation.Charset(); !ok {
 		return &ValidationError{Name: "charset", err: errors.New(`ent: missing required field "AlipayOrderRollback.charset"`)}
 	}
-	if _, ok := aorc.mutation.Version(); !ok {
+	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`ent: missing required field "AlipayOrderRollback.version"`)}
 	}
-	if _, ok := aorc.mutation.SignType(); !ok {
+	if _, ok := _c.mutation.SignType(); !ok {
 		return &ValidationError{Name: "sign_type", err: errors.New(`ent: missing required field "AlipayOrderRollback.sign_type"`)}
 	}
-	if _, ok := aorc.mutation.Sign(); !ok {
+	if _, ok := _c.mutation.Sign(); !ok {
 		return &ValidationError{Name: "sign", err: errors.New(`ent: missing required field "AlipayOrderRollback.sign"`)}
 	}
-	if _, ok := aorc.mutation.FundBillList(); !ok {
+	if _, ok := _c.mutation.FundBillList(); !ok {
 		return &ValidationError{Name: "fund_bill_list", err: errors.New(`ent: missing required field "AlipayOrderRollback.fund_bill_list"`)}
 	}
-	if _, ok := aorc.mutation.ReceiptAmount(); !ok {
+	if _, ok := _c.mutation.ReceiptAmount(); !ok {
 		return &ValidationError{Name: "receipt_amount", err: errors.New(`ent: missing required field "AlipayOrderRollback.receipt_amount"`)}
 	}
-	if _, ok := aorc.mutation.InvoiceAmount(); !ok {
+	if _, ok := _c.mutation.InvoiceAmount(); !ok {
 		return &ValidationError{Name: "invoice_amount", err: errors.New(`ent: missing required field "AlipayOrderRollback.invoice_amount"`)}
 	}
-	if _, ok := aorc.mutation.BuyerPayAmount(); !ok {
+	if _, ok := _c.mutation.BuyerPayAmount(); !ok {
 		return &ValidationError{Name: "buyer_pay_amount", err: errors.New(`ent: missing required field "AlipayOrderRollback.buyer_pay_amount"`)}
 	}
-	if _, ok := aorc.mutation.PointAmount(); !ok {
+	if _, ok := _c.mutation.PointAmount(); !ok {
 		return &ValidationError{Name: "point_amount", err: errors.New(`ent: missing required field "AlipayOrderRollback.point_amount"`)}
 	}
-	if _, ok := aorc.mutation.VoucherDetailList(); !ok {
+	if _, ok := _c.mutation.VoucherDetailList(); !ok {
 		return &ValidationError{Name: "voucher_detail_list", err: errors.New(`ent: missing required field "AlipayOrderRollback.voucher_detail_list"`)}
 	}
-	if _, ok := aorc.mutation.PassbackParams(); !ok {
+	if _, ok := _c.mutation.PassbackParams(); !ok {
 		return &ValidationError{Name: "passback_params", err: errors.New(`ent: missing required field "AlipayOrderRollback.passback_params"`)}
 	}
-	if _, ok := aorc.mutation.TradeNo(); !ok {
+	if _, ok := _c.mutation.TradeNo(); !ok {
 		return &ValidationError{Name: "trade_no", err: errors.New(`ent: missing required field "AlipayOrderRollback.trade_no"`)}
 	}
-	if _, ok := aorc.mutation.AppID(); !ok {
+	if _, ok := _c.mutation.AppID(); !ok {
 		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "AlipayOrderRollback.app_id"`)}
 	}
-	if _, ok := aorc.mutation.OutTradeNo(); !ok {
+	if _, ok := _c.mutation.OutTradeNo(); !ok {
 		return &ValidationError{Name: "out_trade_no", err: errors.New(`ent: missing required field "AlipayOrderRollback.out_trade_no"`)}
 	}
-	if _, ok := aorc.mutation.OutBizNo(); !ok {
+	if _, ok := _c.mutation.OutBizNo(); !ok {
 		return &ValidationError{Name: "out_biz_no", err: errors.New(`ent: missing required field "AlipayOrderRollback.out_biz_no"`)}
 	}
-	if _, ok := aorc.mutation.BuyerID(); !ok {
+	if _, ok := _c.mutation.BuyerID(); !ok {
 		return &ValidationError{Name: "buyer_id", err: errors.New(`ent: missing required field "AlipayOrderRollback.buyer_id"`)}
 	}
-	if _, ok := aorc.mutation.SellerID(); !ok {
+	if _, ok := _c.mutation.SellerID(); !ok {
 		return &ValidationError{Name: "seller_id", err: errors.New(`ent: missing required field "AlipayOrderRollback.seller_id"`)}
 	}
-	if _, ok := aorc.mutation.TradeStatus(); !ok {
+	if _, ok := _c.mutation.TradeStatus(); !ok {
 		return &ValidationError{Name: "trade_status", err: errors.New(`ent: missing required field "AlipayOrderRollback.trade_status"`)}
 	}
-	if _, ok := aorc.mutation.TotalAmount(); !ok {
+	if _, ok := _c.mutation.TotalAmount(); !ok {
 		return &ValidationError{Name: "total_amount", err: errors.New(`ent: missing required field "AlipayOrderRollback.total_amount"`)}
 	}
-	if _, ok := aorc.mutation.RefundFee(); !ok {
+	if _, ok := _c.mutation.RefundFee(); !ok {
 		return &ValidationError{Name: "refund_fee", err: errors.New(`ent: missing required field "AlipayOrderRollback.refund_fee"`)}
 	}
-	if _, ok := aorc.mutation.Subject(); !ok {
+	if _, ok := _c.mutation.Subject(); !ok {
 		return &ValidationError{Name: "subject", err: errors.New(`ent: missing required field "AlipayOrderRollback.subject"`)}
 	}
-	if _, ok := aorc.mutation.Body(); !ok {
+	if _, ok := _c.mutation.Body(); !ok {
 		return &ValidationError{Name: "body", err: errors.New(`ent: missing required field "AlipayOrderRollback.body"`)}
 	}
-	if _, ok := aorc.mutation.GmtCreate(); !ok {
+	if _, ok := _c.mutation.GmtCreate(); !ok {
 		return &ValidationError{Name: "gmt_create", err: errors.New(`ent: missing required field "AlipayOrderRollback.gmt_create"`)}
 	}
-	if _, ok := aorc.mutation.GmtPayment(); !ok {
+	if _, ok := _c.mutation.GmtPayment(); !ok {
 		return &ValidationError{Name: "gmt_payment", err: errors.New(`ent: missing required field "AlipayOrderRollback.gmt_payment"`)}
 	}
-	if _, ok := aorc.mutation.GmtClose(); !ok {
+	if _, ok := _c.mutation.GmtClose(); !ok {
 		return &ValidationError{Name: "gmt_close", err: errors.New(`ent: missing required field "AlipayOrderRollback.gmt_close"`)}
 	}
-	if _, ok := aorc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "AlipayOrderRollback.create_time"`)}
 	}
-	if _, ok := aorc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "AlipayOrderRollback.update_time"`)}
 	}
 	return nil
 }
 
-func (aorc *AlipayOrderRollbackCreate) sqlSave(ctx context.Context) (*AlipayOrderRollback, error) {
-	if err := aorc.check(); err != nil {
+func (_c *AlipayOrderRollbackCreate) sqlSave(ctx context.Context) (*AlipayOrderRollback, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := aorc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, aorc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -340,133 +340,133 @@ func (aorc *AlipayOrderRollbackCreate) sqlSave(ctx context.Context) (*AlipayOrde
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	aorc.mutation.id = &_node.ID
-	aorc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (aorc *AlipayOrderRollbackCreate) createSpec() (*AlipayOrderRollback, *sqlgraph.CreateSpec) {
+func (_c *AlipayOrderRollbackCreate) createSpec() (*AlipayOrderRollback, *sqlgraph.CreateSpec) {
 	var (
-		_node = &AlipayOrderRollback{config: aorc.config}
+		_node = &AlipayOrderRollback{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(alipayorderrollback.Table, sqlgraph.NewFieldSpec(alipayorderrollback.FieldID, field.TypeInt))
 	)
-	if value, ok := aorc.mutation.NotifyID(); ok {
+	if value, ok := _c.mutation.NotifyID(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyID, field.TypeString, value)
 		_node.NotifyID = value
 	}
-	if value, ok := aorc.mutation.NotifyType(); ok {
+	if value, ok := _c.mutation.NotifyType(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyType, field.TypeString, value)
 		_node.NotifyType = value
 	}
-	if value, ok := aorc.mutation.NotifyTime(); ok {
+	if value, ok := _c.mutation.NotifyTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldNotifyTime, field.TypeString, value)
 		_node.NotifyTime = value
 	}
-	if value, ok := aorc.mutation.Charset(); ok {
+	if value, ok := _c.mutation.Charset(); ok {
 		_spec.SetField(alipayorderrollback.FieldCharset, field.TypeString, value)
 		_node.Charset = value
 	}
-	if value, ok := aorc.mutation.Version(); ok {
+	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(alipayorderrollback.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := aorc.mutation.SignType(); ok {
+	if value, ok := _c.mutation.SignType(); ok {
 		_spec.SetField(alipayorderrollback.FieldSignType, field.TypeString, value)
 		_node.SignType = value
 	}
-	if value, ok := aorc.mutation.Sign(); ok {
+	if value, ok := _c.mutation.Sign(); ok {
 		_spec.SetField(alipayorderrollback.FieldSign, field.TypeString, value)
 		_node.Sign = value
 	}
-	if value, ok := aorc.mutation.FundBillList(); ok {
+	if value, ok := _c.mutation.FundBillList(); ok {
 		_spec.SetField(alipayorderrollback.FieldFundBillList, field.TypeString, value)
 		_node.FundBillList = value
 	}
-	if value, ok := aorc.mutation.ReceiptAmount(); ok {
+	if value, ok := _c.mutation.ReceiptAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldReceiptAmount, field.TypeString, value)
 		_node.ReceiptAmount = value
 	}
-	if value, ok := aorc.mutation.InvoiceAmount(); ok {
+	if value, ok := _c.mutation.InvoiceAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldInvoiceAmount, field.TypeString, value)
 		_node.InvoiceAmount = value
 	}
-	if value, ok := aorc.mutation.BuyerPayAmount(); ok {
+	if value, ok := _c.mutation.BuyerPayAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerPayAmount, field.TypeString, value)
 		_node.BuyerPayAmount = value
 	}
-	if value, ok := aorc.mutation.PointAmount(); ok {
+	if value, ok := _c.mutation.PointAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldPointAmount, field.TypeString, value)
 		_node.PointAmount = value
 	}
-	if value, ok := aorc.mutation.VoucherDetailList(); ok {
+	if value, ok := _c.mutation.VoucherDetailList(); ok {
 		_spec.SetField(alipayorderrollback.FieldVoucherDetailList, field.TypeString, value)
 		_node.VoucherDetailList = value
 	}
-	if value, ok := aorc.mutation.PassbackParams(); ok {
+	if value, ok := _c.mutation.PassbackParams(); ok {
 		_spec.SetField(alipayorderrollback.FieldPassbackParams, field.TypeString, value)
 		_node.PassbackParams = value
 	}
-	if value, ok := aorc.mutation.TradeNo(); ok {
+	if value, ok := _c.mutation.TradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeNo, field.TypeString, value)
 		_node.TradeNo = value
 	}
-	if value, ok := aorc.mutation.AppID(); ok {
+	if value, ok := _c.mutation.AppID(); ok {
 		_spec.SetField(alipayorderrollback.FieldAppID, field.TypeString, value)
 		_node.AppID = value
 	}
-	if value, ok := aorc.mutation.OutTradeNo(); ok {
+	if value, ok := _c.mutation.OutTradeNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutTradeNo, field.TypeString, value)
 		_node.OutTradeNo = value
 	}
-	if value, ok := aorc.mutation.OutBizNo(); ok {
+	if value, ok := _c.mutation.OutBizNo(); ok {
 		_spec.SetField(alipayorderrollback.FieldOutBizNo, field.TypeString, value)
 		_node.OutBizNo = value
 	}
-	if value, ok := aorc.mutation.BuyerID(); ok {
+	if value, ok := _c.mutation.BuyerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldBuyerID, field.TypeString, value)
 		_node.BuyerID = value
 	}
-	if value, ok := aorc.mutation.SellerID(); ok {
+	if value, ok := _c.mutation.SellerID(); ok {
 		_spec.SetField(alipayorderrollback.FieldSellerID, field.TypeString, value)
 		_node.SellerID = value
 	}
-	if value, ok := aorc.mutation.TradeStatus(); ok {
+	if value, ok := _c.mutation.TradeStatus(); ok {
 		_spec.SetField(alipayorderrollback.FieldTradeStatus, field.TypeString, value)
 		_node.TradeStatus = value
 	}
-	if value, ok := aorc.mutation.TotalAmount(); ok {
+	if value, ok := _c.mutation.TotalAmount(); ok {
 		_spec.SetField(alipayorderrollback.FieldTotalAmount, field.TypeString, value)
 		_node.TotalAmount = value
 	}
-	if value, ok := aorc.mutation.RefundFee(); ok {
+	if value, ok := _c.mutation.RefundFee(); ok {
 		_spec.SetField(alipayorderrollback.FieldRefundFee, field.TypeString, value)
 		_node.RefundFee = value
 	}
-	if value, ok := aorc.mutation.Subject(); ok {
+	if value, ok := _c.mutation.Subject(); ok {
 		_spec.SetField(alipayorderrollback.FieldSubject, field.TypeString, value)
 		_node.Subject = value
 	}
-	if value, ok := aorc.mutation.Body(); ok {
+	if value, ok := _c.mutation.Body(); ok {
 		_spec.SetField(alipayorderrollback.FieldBody, field.TypeString, value)
 		_node.Body = value
 	}
-	if value, ok := aorc.mutation.GmtCreate(); ok {
+	if value, ok := _c.mutation.GmtCreate(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtCreate, field.TypeString, value)
 		_node.GmtCreate = value
 	}
-	if value, ok := aorc.mutation.GmtPayment(); ok {
+	if value, ok := _c.mutation.GmtPayment(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtPayment, field.TypeString, value)
 		_node.GmtPayment = value
 	}
-	if value, ok := aorc.mutation.GmtClose(); ok {
+	if value, ok := _c.mutation.GmtClose(); ok {
 		_spec.SetField(alipayorderrollback.FieldGmtClose, field.TypeString, value)
 		_node.GmtClose = value
 	}
-	if value, ok := aorc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := aorc.mutation.UpdateTime(); ok {
+	if value, ok := _c.mutation.UpdateTime(); ok {
 		_spec.SetField(alipayorderrollback.FieldUpdateTime, field.TypeTime, value)
 		_node.UpdateTime = value
 	}
@@ -476,17 +476,21 @@ func (aorc *AlipayOrderRollbackCreate) createSpec() (*AlipayOrderRollback, *sqlg
 // AlipayOrderRollbackCreateBulk is the builder for creating many AlipayOrderRollback entities in bulk.
 type AlipayOrderRollbackCreateBulk struct {
 	config
+	err      error
 	builders []*AlipayOrderRollbackCreate
 }
 
 // Save creates the AlipayOrderRollback entities in the database.
-func (aorcb *AlipayOrderRollbackCreateBulk) Save(ctx context.Context) ([]*AlipayOrderRollback, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(aorcb.builders))
-	nodes := make([]*AlipayOrderRollback, len(aorcb.builders))
-	mutators := make([]Mutator, len(aorcb.builders))
-	for i := range aorcb.builders {
+func (_c *AlipayOrderRollbackCreateBulk) Save(ctx context.Context) ([]*AlipayOrderRollback, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*AlipayOrderRollback, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := aorcb.builders[i]
+			builder := _c.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AlipayOrderRollbackMutation)
 				if !ok {
@@ -499,11 +503,11 @@ func (aorcb *AlipayOrderRollbackCreateBulk) Save(ctx context.Context) ([]*Alipay
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, aorcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, aorcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -527,7 +531,7 @@ func (aorcb *AlipayOrderRollbackCreateBulk) Save(ctx context.Context) ([]*Alipay
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, aorcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -535,8 +539,8 @@ func (aorcb *AlipayOrderRollbackCreateBulk) Save(ctx context.Context) ([]*Alipay
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (aorcb *AlipayOrderRollbackCreateBulk) SaveX(ctx context.Context) []*AlipayOrderRollback {
-	v, err := aorcb.Save(ctx)
+func (_c *AlipayOrderRollbackCreateBulk) SaveX(ctx context.Context) []*AlipayOrderRollback {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -544,14 +548,14 @@ func (aorcb *AlipayOrderRollbackCreateBulk) SaveX(ctx context.Context) []*Alipay
 }
 
 // Exec executes the query.
-func (aorcb *AlipayOrderRollbackCreateBulk) Exec(ctx context.Context) error {
-	_, err := aorcb.Save(ctx)
+func (_c *AlipayOrderRollbackCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (aorcb *AlipayOrderRollbackCreateBulk) ExecX(ctx context.Context) {
-	if err := aorcb.Exec(ctx); err != nil {
+func (_c *AlipayOrderRollbackCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

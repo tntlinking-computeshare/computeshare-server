@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,40 +29,40 @@ type CycleRechargeQuery struct {
 }
 
 // Where adds a new predicate for the CycleRechargeQuery builder.
-func (crq *CycleRechargeQuery) Where(ps ...predicate.CycleRecharge) *CycleRechargeQuery {
-	crq.predicates = append(crq.predicates, ps...)
-	return crq
+func (_q *CycleRechargeQuery) Where(ps ...predicate.CycleRecharge) *CycleRechargeQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (crq *CycleRechargeQuery) Limit(limit int) *CycleRechargeQuery {
-	crq.ctx.Limit = &limit
-	return crq
+func (_q *CycleRechargeQuery) Limit(limit int) *CycleRechargeQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (crq *CycleRechargeQuery) Offset(offset int) *CycleRechargeQuery {
-	crq.ctx.Offset = &offset
-	return crq
+func (_q *CycleRechargeQuery) Offset(offset int) *CycleRechargeQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (crq *CycleRechargeQuery) Unique(unique bool) *CycleRechargeQuery {
-	crq.ctx.Unique = &unique
-	return crq
+func (_q *CycleRechargeQuery) Unique(unique bool) *CycleRechargeQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (crq *CycleRechargeQuery) Order(o ...cyclerecharge.OrderOption) *CycleRechargeQuery {
-	crq.order = append(crq.order, o...)
-	return crq
+func (_q *CycleRechargeQuery) Order(o ...cyclerecharge.OrderOption) *CycleRechargeQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first CycleRecharge entity from the query.
 // Returns a *NotFoundError when no CycleRecharge was found.
-func (crq *CycleRechargeQuery) First(ctx context.Context) (*CycleRecharge, error) {
-	nodes, err := crq.Limit(1).All(setContextOp(ctx, crq.ctx, "First"))
+func (_q *CycleRechargeQuery) First(ctx context.Context) (*CycleRecharge, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func (crq *CycleRechargeQuery) First(ctx context.Context) (*CycleRecharge, error
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (crq *CycleRechargeQuery) FirstX(ctx context.Context) *CycleRecharge {
-	node, err := crq.First(ctx)
+func (_q *CycleRechargeQuery) FirstX(ctx context.Context) *CycleRecharge {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +83,9 @@ func (crq *CycleRechargeQuery) FirstX(ctx context.Context) *CycleRecharge {
 
 // FirstID returns the first CycleRecharge ID from the query.
 // Returns a *NotFoundError when no CycleRecharge ID was found.
-func (crq *CycleRechargeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleRechargeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = crq.Limit(1).IDs(setContextOp(ctx, crq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +96,8 @@ func (crq *CycleRechargeQuery) FirstID(ctx context.Context) (id uuid.UUID, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (crq *CycleRechargeQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := crq.FirstID(ctx)
+func (_q *CycleRechargeQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +107,8 @@ func (crq *CycleRechargeQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single CycleRecharge entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one CycleRecharge entity is found.
 // Returns a *NotFoundError when no CycleRecharge entities are found.
-func (crq *CycleRechargeQuery) Only(ctx context.Context) (*CycleRecharge, error) {
-	nodes, err := crq.Limit(2).All(setContextOp(ctx, crq.ctx, "Only"))
+func (_q *CycleRechargeQuery) Only(ctx context.Context) (*CycleRecharge, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +123,8 @@ func (crq *CycleRechargeQuery) Only(ctx context.Context) (*CycleRecharge, error)
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (crq *CycleRechargeQuery) OnlyX(ctx context.Context) *CycleRecharge {
-	node, err := crq.Only(ctx)
+func (_q *CycleRechargeQuery) OnlyX(ctx context.Context) *CycleRecharge {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +134,9 @@ func (crq *CycleRechargeQuery) OnlyX(ctx context.Context) *CycleRecharge {
 // OnlyID is like Only, but returns the only CycleRecharge ID in the query.
 // Returns a *NotSingularError when more than one CycleRecharge ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (crq *CycleRechargeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleRechargeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = crq.Limit(2).IDs(setContextOp(ctx, crq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +151,8 @@ func (crq *CycleRechargeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (crq *CycleRechargeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := crq.OnlyID(ctx)
+func (_q *CycleRechargeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +160,18 @@ func (crq *CycleRechargeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of CycleRecharges.
-func (crq *CycleRechargeQuery) All(ctx context.Context) ([]*CycleRecharge, error) {
-	ctx = setContextOp(ctx, crq.ctx, "All")
-	if err := crq.prepareQuery(ctx); err != nil {
+func (_q *CycleRechargeQuery) All(ctx context.Context) ([]*CycleRecharge, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*CycleRecharge, *CycleRechargeQuery]()
-	return withInterceptors[[]*CycleRecharge](ctx, crq, qr, crq.inters)
+	return withInterceptors[[]*CycleRecharge](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (crq *CycleRechargeQuery) AllX(ctx context.Context) []*CycleRecharge {
-	nodes, err := crq.All(ctx)
+func (_q *CycleRechargeQuery) AllX(ctx context.Context) []*CycleRecharge {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +179,20 @@ func (crq *CycleRechargeQuery) AllX(ctx context.Context) []*CycleRecharge {
 }
 
 // IDs executes the query and returns a list of CycleRecharge IDs.
-func (crq *CycleRechargeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if crq.ctx.Unique == nil && crq.path != nil {
-		crq.Unique(true)
+func (_q *CycleRechargeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, crq.ctx, "IDs")
-	if err = crq.Select(cyclerecharge.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(cyclerecharge.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (crq *CycleRechargeQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := crq.IDs(ctx)
+func (_q *CycleRechargeQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +200,17 @@ func (crq *CycleRechargeQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (crq *CycleRechargeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, crq.ctx, "Count")
-	if err := crq.prepareQuery(ctx); err != nil {
+func (_q *CycleRechargeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, crq, querierCount[*CycleRechargeQuery](), crq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*CycleRechargeQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (crq *CycleRechargeQuery) CountX(ctx context.Context) int {
-	count, err := crq.Count(ctx)
+func (_q *CycleRechargeQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +218,9 @@ func (crq *CycleRechargeQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (crq *CycleRechargeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, crq.ctx, "Exist")
-	switch _, err := crq.FirstID(ctx); {
+func (_q *CycleRechargeQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +231,8 @@ func (crq *CycleRechargeQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (crq *CycleRechargeQuery) ExistX(ctx context.Context) bool {
-	exist, err := crq.Exist(ctx)
+func (_q *CycleRechargeQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +241,19 @@ func (crq *CycleRechargeQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the CycleRechargeQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (crq *CycleRechargeQuery) Clone() *CycleRechargeQuery {
-	if crq == nil {
+func (_q *CycleRechargeQuery) Clone() *CycleRechargeQuery {
+	if _q == nil {
 		return nil
 	}
 	return &CycleRechargeQuery{
-		config:     crq.config,
-		ctx:        crq.ctx.Clone(),
-		order:      append([]cyclerecharge.OrderOption{}, crq.order...),
-		inters:     append([]Interceptor{}, crq.inters...),
-		predicates: append([]predicate.CycleRecharge{}, crq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]cyclerecharge.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.CycleRecharge{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  crq.sql.Clone(),
-		path: crq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +271,10 @@ func (crq *CycleRechargeQuery) Clone() *CycleRechargeQuery {
 //		GroupBy(cyclerecharge.FieldFkUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (crq *CycleRechargeQuery) GroupBy(field string, fields ...string) *CycleRechargeGroupBy {
-	crq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &CycleRechargeGroupBy{build: crq}
-	grbuild.flds = &crq.ctx.Fields
+func (_q *CycleRechargeQuery) GroupBy(field string, fields ...string) *CycleRechargeGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CycleRechargeGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = cyclerecharge.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +292,62 @@ func (crq *CycleRechargeQuery) GroupBy(field string, fields ...string) *CycleRec
 //	client.CycleRecharge.Query().
 //		Select(cyclerecharge.FieldFkUserID).
 //		Scan(ctx, &v)
-func (crq *CycleRechargeQuery) Select(fields ...string) *CycleRechargeSelect {
-	crq.ctx.Fields = append(crq.ctx.Fields, fields...)
-	sbuild := &CycleRechargeSelect{CycleRechargeQuery: crq}
+func (_q *CycleRechargeQuery) Select(fields ...string) *CycleRechargeSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &CycleRechargeSelect{CycleRechargeQuery: _q}
 	sbuild.label = cyclerecharge.Label
-	sbuild.flds, sbuild.scan = &crq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a CycleRechargeSelect configured with the given aggregations.
-func (crq *CycleRechargeQuery) Aggregate(fns ...AggregateFunc) *CycleRechargeSelect {
-	return crq.Select().Aggregate(fns...)
+func (_q *CycleRechargeQuery) Aggregate(fns ...AggregateFunc) *CycleRechargeSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (crq *CycleRechargeQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range crq.inters {
+func (_q *CycleRechargeQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, crq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range crq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !cyclerecharge.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if crq.path != nil {
-		prev, err := crq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		crq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (crq *CycleRechargeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleRecharge, error) {
+func (_q *CycleRechargeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleRecharge, error) {
 	var (
 		nodes = []*CycleRecharge{}
-		_spec = crq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CycleRecharge).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &CycleRecharge{config: crq.config}
+		node := &CycleRecharge{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, crq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +356,24 @@ func (crq *CycleRechargeQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (crq *CycleRechargeQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := crq.querySpec()
-	_spec.Node.Columns = crq.ctx.Fields
-	if len(crq.ctx.Fields) > 0 {
-		_spec.Unique = crq.ctx.Unique != nil && *crq.ctx.Unique
+func (_q *CycleRechargeQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, crq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (crq *CycleRechargeQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *CycleRechargeQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(cyclerecharge.Table, cyclerecharge.Columns, sqlgraph.NewFieldSpec(cyclerecharge.FieldID, field.TypeUUID))
-	_spec.From = crq.sql
-	if unique := crq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if crq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := crq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cyclerecharge.FieldID)
 		for i := range fields {
@@ -381,20 +382,20 @@ func (crq *CycleRechargeQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := crq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := crq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := crq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := crq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +405,33 @@ func (crq *CycleRechargeQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (crq *CycleRechargeQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(crq.driver.Dialect())
+func (_q *CycleRechargeQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(cyclerecharge.Table)
-	columns := crq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = cyclerecharge.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if crq.sql != nil {
-		selector = crq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if crq.ctx.Unique != nil && *crq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range crq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range crq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := crq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := crq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +444,41 @@ type CycleRechargeGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (crgb *CycleRechargeGroupBy) Aggregate(fns ...AggregateFunc) *CycleRechargeGroupBy {
-	crgb.fns = append(crgb.fns, fns...)
-	return crgb
+func (_g *CycleRechargeGroupBy) Aggregate(fns ...AggregateFunc) *CycleRechargeGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (crgb *CycleRechargeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, crgb.build.ctx, "GroupBy")
-	if err := crgb.build.prepareQuery(ctx); err != nil {
+func (_g *CycleRechargeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleRechargeQuery, *CycleRechargeGroupBy](ctx, crgb.build, crgb, crgb.build.inters, v)
+	return scanWithInterceptors[*CycleRechargeQuery, *CycleRechargeGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (crgb *CycleRechargeGroupBy) sqlScan(ctx context.Context, root *CycleRechargeQuery, v any) error {
+func (_g *CycleRechargeGroupBy) sqlScan(ctx context.Context, root *CycleRechargeQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(crgb.fns))
-	for _, fn := range crgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*crgb.flds)+len(crgb.fns))
-		for _, f := range *crgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*crgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := crgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +492,27 @@ type CycleRechargeSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (crs *CycleRechargeSelect) Aggregate(fns ...AggregateFunc) *CycleRechargeSelect {
-	crs.fns = append(crs.fns, fns...)
-	return crs
+func (_s *CycleRechargeSelect) Aggregate(fns ...AggregateFunc) *CycleRechargeSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (crs *CycleRechargeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, crs.ctx, "Select")
-	if err := crs.prepareQuery(ctx); err != nil {
+func (_s *CycleRechargeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleRechargeQuery, *CycleRechargeSelect](ctx, crs.CycleRechargeQuery, crs, crs.inters, v)
+	return scanWithInterceptors[*CycleRechargeQuery, *CycleRechargeSelect](ctx, _s.CycleRechargeQuery, _s, _s.inters, v)
 }
 
-func (crs *CycleRechargeSelect) sqlScan(ctx context.Context, root *CycleRechargeQuery, v any) error {
+func (_s *CycleRechargeSelect) sqlScan(ctx context.Context, root *CycleRechargeQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(crs.fns))
-	for _, fn := range crs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*crs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +520,7 @@ func (crs *CycleRechargeSelect) sqlScan(ctx context.Context, root *CycleRecharge
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := crs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

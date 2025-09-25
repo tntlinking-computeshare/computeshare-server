@@ -41,7 +41,7 @@ func (*Employee) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Employee fields.
-func (e *Employee) assignValues(columns []string, values []any) error {
+func (_m *Employee) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -52,21 +52,21 @@ func (e *Employee) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			e.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case employee.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				e.Name = value.String
+				_m.Name = value.String
 			}
 		case employee.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				e.Age = int32(value.Int64)
+				_m.Age = int32(value.Int64)
 			}
 		default:
-			e.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -74,38 +74,38 @@ func (e *Employee) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Employee.
 // This includes values selected through modifiers, order, etc.
-func (e *Employee) Value(name string) (ent.Value, error) {
-	return e.selectValues.Get(name)
+func (_m *Employee) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Employee.
 // Note that you need to call Employee.Unwrap() before calling this method if this Employee
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (e *Employee) Update() *EmployeeUpdateOne {
-	return NewEmployeeClient(e.config).UpdateOne(e)
+func (_m *Employee) Update() *EmployeeUpdateOne {
+	return NewEmployeeClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Employee entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (e *Employee) Unwrap() *Employee {
-	_tx, ok := e.config.driver.(*txDriver)
+func (_m *Employee) Unwrap() *Employee {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Employee is not a transactional entity")
 	}
-	e.config.driver = _tx.drv
-	return e
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (e *Employee) String() string {
+func (_m *Employee) String() string {
 	var builder strings.Builder
 	builder.WriteString("Employee(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", e.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
-	builder.WriteString(e.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("age=")
-	builder.WriteString(fmt.Sprintf("%v", e.Age))
+	builder.WriteString(fmt.Sprintf("%v", _m.Age))
 	builder.WriteByte(')')
 	return builder.String()
 }

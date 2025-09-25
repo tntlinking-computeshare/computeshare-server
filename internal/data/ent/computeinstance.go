@@ -74,7 +74,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ComputeInstance fields.
-func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
+func (_m *ComputeInstance) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -84,100 +84,100 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ci.ID = *value
+				_m.ID = *value
 			}
 		case computeinstance.FieldOwner:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner", values[i])
 			} else if value.Valid {
-				ci.Owner = value.String
+				_m.Owner = value.String
 			}
 		case computeinstance.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ci.Name = value.String
+				_m.Name = value.String
 			}
 		case computeinstance.FieldCore:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field core", values[i])
 			} else if value.Valid {
-				ci.Core = int(value.Int64)
+				_m.Core = int(value.Int64)
 			}
 		case computeinstance.FieldMemory:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field memory", values[i])
 			} else if value.Valid {
-				ci.Memory = int(value.Int64)
+				_m.Memory = int(value.Int64)
 			}
 		case computeinstance.FieldImage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field image", values[i])
 			} else if value.Valid {
-				ci.Image = value.String
+				_m.Image = value.String
 			}
 		case computeinstance.FieldImageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field image_id", values[i])
 			} else if value.Valid {
-				ci.ImageID = int32(value.Int64)
+				_m.ImageID = int32(value.Int64)
 			}
 		case computeinstance.FieldPort:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field port", values[i])
 			} else if value.Valid {
-				ci.Port = value.String
+				_m.Port = value.String
 			}
 		case computeinstance.FieldExpirationTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field expiration_time", values[i])
 			} else if value.Valid {
-				ci.ExpirationTime = value.Time
+				_m.ExpirationTime = value.Time
 			}
 		case computeinstance.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				ci.Status = compute.InstanceStatus(value.Int64)
+				_m.Status = compute.InstanceStatus(value.Int64)
 			}
 		case computeinstance.FieldContainerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field container_id", values[i])
 			} else if value.Valid {
-				ci.ContainerID = value.String
+				_m.ContainerID = value.String
 			}
 		case computeinstance.FieldAgentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field agent_id", values[i])
 			} else if value.Valid {
-				ci.AgentID = value.String
+				_m.AgentID = value.String
 			}
 		case computeinstance.FieldVncIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vnc_ip", values[i])
 			} else if value.Valid {
-				ci.VncIP = value.String
+				_m.VncIP = value.String
 			}
 		case computeinstance.FieldVncPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field vnc_port", values[i])
 			} else if value.Valid {
-				ci.VncPort = int32(value.Int64)
+				_m.VncPort = int32(value.Int64)
 			}
 		case computeinstance.FieldDockerCompose:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field docker_compose", values[i])
 			} else if value.Valid {
-				ci.DockerCompose = value.String
+				_m.DockerCompose = value.String
 			}
 		case computeinstance.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				ci.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		default:
-			ci.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -185,77 +185,77 @@ func (ci *ComputeInstance) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ComputeInstance.
 // This includes values selected through modifiers, order, etc.
-func (ci *ComputeInstance) Value(name string) (ent.Value, error) {
-	return ci.selectValues.Get(name)
+func (_m *ComputeInstance) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ComputeInstance.
 // Note that you need to call ComputeInstance.Unwrap() before calling this method if this ComputeInstance
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ci *ComputeInstance) Update() *ComputeInstanceUpdateOne {
-	return NewComputeInstanceClient(ci.config).UpdateOne(ci)
+func (_m *ComputeInstance) Update() *ComputeInstanceUpdateOne {
+	return NewComputeInstanceClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ComputeInstance entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ci *ComputeInstance) Unwrap() *ComputeInstance {
-	_tx, ok := ci.config.driver.(*txDriver)
+func (_m *ComputeInstance) Unwrap() *ComputeInstance {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: ComputeInstance is not a transactional entity")
 	}
-	ci.config.driver = _tx.drv
-	return ci
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ci *ComputeInstance) String() string {
+func (_m *ComputeInstance) String() string {
 	var builder strings.Builder
 	builder.WriteString("ComputeInstance(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ci.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("owner=")
-	builder.WriteString(ci.Owner)
+	builder.WriteString(_m.Owner)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ci.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("core=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Core))
+	builder.WriteString(fmt.Sprintf("%v", _m.Core))
 	builder.WriteString(", ")
 	builder.WriteString("memory=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Memory))
+	builder.WriteString(fmt.Sprintf("%v", _m.Memory))
 	builder.WriteString(", ")
 	builder.WriteString("image=")
-	builder.WriteString(ci.Image)
+	builder.WriteString(_m.Image)
 	builder.WriteString(", ")
 	builder.WriteString("image_id=")
-	builder.WriteString(fmt.Sprintf("%v", ci.ImageID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ImageID))
 	builder.WriteString(", ")
 	builder.WriteString("port=")
-	builder.WriteString(ci.Port)
+	builder.WriteString(_m.Port)
 	builder.WriteString(", ")
 	builder.WriteString("expiration_time=")
-	builder.WriteString(ci.ExpirationTime.Format(time.ANSIC))
+	builder.WriteString(_m.ExpirationTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", ci.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("container_id=")
-	builder.WriteString(ci.ContainerID)
+	builder.WriteString(_m.ContainerID)
 	builder.WriteString(", ")
 	builder.WriteString("agent_id=")
-	builder.WriteString(ci.AgentID)
+	builder.WriteString(_m.AgentID)
 	builder.WriteString(", ")
 	builder.WriteString("vnc_ip=")
-	builder.WriteString(ci.VncIP)
+	builder.WriteString(_m.VncIP)
 	builder.WriteString(", ")
 	builder.WriteString("vnc_port=")
-	builder.WriteString(fmt.Sprintf("%v", ci.VncPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.VncPort))
 	builder.WriteString(", ")
 	builder.WriteString("docker_compose=")
-	builder.WriteString(ci.DockerCompose)
+	builder.WriteString(_m.DockerCompose)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(ci.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

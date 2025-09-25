@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,40 +29,40 @@ type CycleRenewalQuery struct {
 }
 
 // Where adds a new predicate for the CycleRenewalQuery builder.
-func (crq *CycleRenewalQuery) Where(ps ...predicate.CycleRenewal) *CycleRenewalQuery {
-	crq.predicates = append(crq.predicates, ps...)
-	return crq
+func (_q *CycleRenewalQuery) Where(ps ...predicate.CycleRenewal) *CycleRenewalQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (crq *CycleRenewalQuery) Limit(limit int) *CycleRenewalQuery {
-	crq.ctx.Limit = &limit
-	return crq
+func (_q *CycleRenewalQuery) Limit(limit int) *CycleRenewalQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (crq *CycleRenewalQuery) Offset(offset int) *CycleRenewalQuery {
-	crq.ctx.Offset = &offset
-	return crq
+func (_q *CycleRenewalQuery) Offset(offset int) *CycleRenewalQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (crq *CycleRenewalQuery) Unique(unique bool) *CycleRenewalQuery {
-	crq.ctx.Unique = &unique
-	return crq
+func (_q *CycleRenewalQuery) Unique(unique bool) *CycleRenewalQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (crq *CycleRenewalQuery) Order(o ...cyclerenewal.OrderOption) *CycleRenewalQuery {
-	crq.order = append(crq.order, o...)
-	return crq
+func (_q *CycleRenewalQuery) Order(o ...cyclerenewal.OrderOption) *CycleRenewalQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first CycleRenewal entity from the query.
 // Returns a *NotFoundError when no CycleRenewal was found.
-func (crq *CycleRenewalQuery) First(ctx context.Context) (*CycleRenewal, error) {
-	nodes, err := crq.Limit(1).All(setContextOp(ctx, crq.ctx, "First"))
+func (_q *CycleRenewalQuery) First(ctx context.Context) (*CycleRenewal, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func (crq *CycleRenewalQuery) First(ctx context.Context) (*CycleRenewal, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (crq *CycleRenewalQuery) FirstX(ctx context.Context) *CycleRenewal {
-	node, err := crq.First(ctx)
+func (_q *CycleRenewalQuery) FirstX(ctx context.Context) *CycleRenewal {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +83,9 @@ func (crq *CycleRenewalQuery) FirstX(ctx context.Context) *CycleRenewal {
 
 // FirstID returns the first CycleRenewal ID from the query.
 // Returns a *NotFoundError when no CycleRenewal ID was found.
-func (crq *CycleRenewalQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleRenewalQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = crq.Limit(1).IDs(setContextOp(ctx, crq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +96,8 @@ func (crq *CycleRenewalQuery) FirstID(ctx context.Context) (id uuid.UUID, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (crq *CycleRenewalQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := crq.FirstID(ctx)
+func (_q *CycleRenewalQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +107,8 @@ func (crq *CycleRenewalQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single CycleRenewal entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one CycleRenewal entity is found.
 // Returns a *NotFoundError when no CycleRenewal entities are found.
-func (crq *CycleRenewalQuery) Only(ctx context.Context) (*CycleRenewal, error) {
-	nodes, err := crq.Limit(2).All(setContextOp(ctx, crq.ctx, "Only"))
+func (_q *CycleRenewalQuery) Only(ctx context.Context) (*CycleRenewal, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +123,8 @@ func (crq *CycleRenewalQuery) Only(ctx context.Context) (*CycleRenewal, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (crq *CycleRenewalQuery) OnlyX(ctx context.Context) *CycleRenewal {
-	node, err := crq.Only(ctx)
+func (_q *CycleRenewalQuery) OnlyX(ctx context.Context) *CycleRenewal {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +134,9 @@ func (crq *CycleRenewalQuery) OnlyX(ctx context.Context) *CycleRenewal {
 // OnlyID is like Only, but returns the only CycleRenewal ID in the query.
 // Returns a *NotSingularError when more than one CycleRenewal ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (crq *CycleRenewalQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *CycleRenewalQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = crq.Limit(2).IDs(setContextOp(ctx, crq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +151,8 @@ func (crq *CycleRenewalQuery) OnlyID(ctx context.Context) (id uuid.UUID, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (crq *CycleRenewalQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := crq.OnlyID(ctx)
+func (_q *CycleRenewalQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +160,18 @@ func (crq *CycleRenewalQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of CycleRenewals.
-func (crq *CycleRenewalQuery) All(ctx context.Context) ([]*CycleRenewal, error) {
-	ctx = setContextOp(ctx, crq.ctx, "All")
-	if err := crq.prepareQuery(ctx); err != nil {
+func (_q *CycleRenewalQuery) All(ctx context.Context) ([]*CycleRenewal, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*CycleRenewal, *CycleRenewalQuery]()
-	return withInterceptors[[]*CycleRenewal](ctx, crq, qr, crq.inters)
+	return withInterceptors[[]*CycleRenewal](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (crq *CycleRenewalQuery) AllX(ctx context.Context) []*CycleRenewal {
-	nodes, err := crq.All(ctx)
+func (_q *CycleRenewalQuery) AllX(ctx context.Context) []*CycleRenewal {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +179,20 @@ func (crq *CycleRenewalQuery) AllX(ctx context.Context) []*CycleRenewal {
 }
 
 // IDs executes the query and returns a list of CycleRenewal IDs.
-func (crq *CycleRenewalQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if crq.ctx.Unique == nil && crq.path != nil {
-		crq.Unique(true)
+func (_q *CycleRenewalQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, crq.ctx, "IDs")
-	if err = crq.Select(cyclerenewal.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(cyclerenewal.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (crq *CycleRenewalQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := crq.IDs(ctx)
+func (_q *CycleRenewalQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +200,17 @@ func (crq *CycleRenewalQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (crq *CycleRenewalQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, crq.ctx, "Count")
-	if err := crq.prepareQuery(ctx); err != nil {
+func (_q *CycleRenewalQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, crq, querierCount[*CycleRenewalQuery](), crq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*CycleRenewalQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (crq *CycleRenewalQuery) CountX(ctx context.Context) int {
-	count, err := crq.Count(ctx)
+func (_q *CycleRenewalQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +218,9 @@ func (crq *CycleRenewalQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (crq *CycleRenewalQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, crq.ctx, "Exist")
-	switch _, err := crq.FirstID(ctx); {
+func (_q *CycleRenewalQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +231,8 @@ func (crq *CycleRenewalQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (crq *CycleRenewalQuery) ExistX(ctx context.Context) bool {
-	exist, err := crq.Exist(ctx)
+func (_q *CycleRenewalQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +241,19 @@ func (crq *CycleRenewalQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the CycleRenewalQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (crq *CycleRenewalQuery) Clone() *CycleRenewalQuery {
-	if crq == nil {
+func (_q *CycleRenewalQuery) Clone() *CycleRenewalQuery {
+	if _q == nil {
 		return nil
 	}
 	return &CycleRenewalQuery{
-		config:     crq.config,
-		ctx:        crq.ctx.Clone(),
-		order:      append([]cyclerenewal.OrderOption{}, crq.order...),
-		inters:     append([]Interceptor{}, crq.inters...),
-		predicates: append([]predicate.CycleRenewal{}, crq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]cyclerenewal.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.CycleRenewal{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  crq.sql.Clone(),
-		path: crq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +271,10 @@ func (crq *CycleRenewalQuery) Clone() *CycleRenewalQuery {
 //		GroupBy(cyclerenewal.FieldFkUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (crq *CycleRenewalQuery) GroupBy(field string, fields ...string) *CycleRenewalGroupBy {
-	crq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &CycleRenewalGroupBy{build: crq}
-	grbuild.flds = &crq.ctx.Fields
+func (_q *CycleRenewalQuery) GroupBy(field string, fields ...string) *CycleRenewalGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CycleRenewalGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = cyclerenewal.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +292,62 @@ func (crq *CycleRenewalQuery) GroupBy(field string, fields ...string) *CycleRene
 //	client.CycleRenewal.Query().
 //		Select(cyclerenewal.FieldFkUserID).
 //		Scan(ctx, &v)
-func (crq *CycleRenewalQuery) Select(fields ...string) *CycleRenewalSelect {
-	crq.ctx.Fields = append(crq.ctx.Fields, fields...)
-	sbuild := &CycleRenewalSelect{CycleRenewalQuery: crq}
+func (_q *CycleRenewalQuery) Select(fields ...string) *CycleRenewalSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &CycleRenewalSelect{CycleRenewalQuery: _q}
 	sbuild.label = cyclerenewal.Label
-	sbuild.flds, sbuild.scan = &crq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a CycleRenewalSelect configured with the given aggregations.
-func (crq *CycleRenewalQuery) Aggregate(fns ...AggregateFunc) *CycleRenewalSelect {
-	return crq.Select().Aggregate(fns...)
+func (_q *CycleRenewalQuery) Aggregate(fns ...AggregateFunc) *CycleRenewalSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (crq *CycleRenewalQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range crq.inters {
+func (_q *CycleRenewalQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, crq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range crq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !cyclerenewal.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if crq.path != nil {
-		prev, err := crq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		crq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (crq *CycleRenewalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleRenewal, error) {
+func (_q *CycleRenewalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CycleRenewal, error) {
 	var (
 		nodes = []*CycleRenewal{}
-		_spec = crq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CycleRenewal).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &CycleRenewal{config: crq.config}
+		node := &CycleRenewal{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, crq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +356,24 @@ func (crq *CycleRenewalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (crq *CycleRenewalQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := crq.querySpec()
-	_spec.Node.Columns = crq.ctx.Fields
-	if len(crq.ctx.Fields) > 0 {
-		_spec.Unique = crq.ctx.Unique != nil && *crq.ctx.Unique
+func (_q *CycleRenewalQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, crq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (crq *CycleRenewalQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *CycleRenewalQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(cyclerenewal.Table, cyclerenewal.Columns, sqlgraph.NewFieldSpec(cyclerenewal.FieldID, field.TypeUUID))
-	_spec.From = crq.sql
-	if unique := crq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if crq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := crq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cyclerenewal.FieldID)
 		for i := range fields {
@@ -381,20 +382,20 @@ func (crq *CycleRenewalQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := crq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := crq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := crq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := crq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +405,33 @@ func (crq *CycleRenewalQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (crq *CycleRenewalQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(crq.driver.Dialect())
+func (_q *CycleRenewalQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(cyclerenewal.Table)
-	columns := crq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = cyclerenewal.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if crq.sql != nil {
-		selector = crq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if crq.ctx.Unique != nil && *crq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range crq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range crq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := crq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := crq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +444,41 @@ type CycleRenewalGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (crgb *CycleRenewalGroupBy) Aggregate(fns ...AggregateFunc) *CycleRenewalGroupBy {
-	crgb.fns = append(crgb.fns, fns...)
-	return crgb
+func (_g *CycleRenewalGroupBy) Aggregate(fns ...AggregateFunc) *CycleRenewalGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (crgb *CycleRenewalGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, crgb.build.ctx, "GroupBy")
-	if err := crgb.build.prepareQuery(ctx); err != nil {
+func (_g *CycleRenewalGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleRenewalQuery, *CycleRenewalGroupBy](ctx, crgb.build, crgb, crgb.build.inters, v)
+	return scanWithInterceptors[*CycleRenewalQuery, *CycleRenewalGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (crgb *CycleRenewalGroupBy) sqlScan(ctx context.Context, root *CycleRenewalQuery, v any) error {
+func (_g *CycleRenewalGroupBy) sqlScan(ctx context.Context, root *CycleRenewalQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(crgb.fns))
-	for _, fn := range crgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*crgb.flds)+len(crgb.fns))
-		for _, f := range *crgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*crgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := crgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +492,27 @@ type CycleRenewalSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (crs *CycleRenewalSelect) Aggregate(fns ...AggregateFunc) *CycleRenewalSelect {
-	crs.fns = append(crs.fns, fns...)
-	return crs
+func (_s *CycleRenewalSelect) Aggregate(fns ...AggregateFunc) *CycleRenewalSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (crs *CycleRenewalSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, crs.ctx, "Select")
-	if err := crs.prepareQuery(ctx); err != nil {
+func (_s *CycleRenewalSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CycleRenewalQuery, *CycleRenewalSelect](ctx, crs.CycleRenewalQuery, crs, crs.inters, v)
+	return scanWithInterceptors[*CycleRenewalQuery, *CycleRenewalSelect](ctx, _s.CycleRenewalQuery, _s, _s.inters, v)
 }
 
-func (crs *CycleRenewalSelect) sqlScan(ctx context.Context, root *CycleRenewalQuery, v any) error {
+func (_s *CycleRenewalSelect) sqlScan(ctx context.Context, root *CycleRenewalQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(crs.fns))
-	for _, fn := range crs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*crs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +520,7 @@ func (crs *CycleRenewalSelect) sqlScan(ctx context.Context, root *CycleRenewalQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := crs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

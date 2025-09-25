@@ -22,91 +22,91 @@ type StorageCreate struct {
 }
 
 // SetOwner sets the "owner" field.
-func (sc *StorageCreate) SetOwner(s string) *StorageCreate {
-	sc.mutation.SetOwner(s)
-	return sc
+func (_c *StorageCreate) SetOwner(v string) *StorageCreate {
+	_c.mutation.SetOwner(v)
+	return _c
 }
 
 // SetType sets the "type" field.
-func (sc *StorageCreate) SetType(i int32) *StorageCreate {
-	sc.mutation.SetType(i)
-	return sc
+func (_c *StorageCreate) SetType(v int32) *StorageCreate {
+	_c.mutation.SetType(v)
+	return _c
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (sc *StorageCreate) SetNillableType(i *int32) *StorageCreate {
-	if i != nil {
-		sc.SetType(*i)
+func (_c *StorageCreate) SetNillableType(v *int32) *StorageCreate {
+	if v != nil {
+		_c.SetType(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (sc *StorageCreate) SetName(s string) *StorageCreate {
-	sc.mutation.SetName(s)
-	return sc
+func (_c *StorageCreate) SetName(v string) *StorageCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetCid sets the "cid" field.
-func (sc *StorageCreate) SetCid(s string) *StorageCreate {
-	sc.mutation.SetCid(s)
-	return sc
+func (_c *StorageCreate) SetCid(v string) *StorageCreate {
+	_c.mutation.SetCid(v)
+	return _c
 }
 
 // SetSize sets the "size" field.
-func (sc *StorageCreate) SetSize(i int32) *StorageCreate {
-	sc.mutation.SetSize(i)
-	return sc
+func (_c *StorageCreate) SetSize(v int32) *StorageCreate {
+	_c.mutation.SetSize(v)
+	return _c
 }
 
 // SetLastModify sets the "last_modify" field.
-func (sc *StorageCreate) SetLastModify(t time.Time) *StorageCreate {
-	sc.mutation.SetLastModify(t)
-	return sc
+func (_c *StorageCreate) SetLastModify(v time.Time) *StorageCreate {
+	_c.mutation.SetLastModify(v)
+	return _c
 }
 
 // SetNillableLastModify sets the "last_modify" field if the given value is not nil.
-func (sc *StorageCreate) SetNillableLastModify(t *time.Time) *StorageCreate {
-	if t != nil {
-		sc.SetLastModify(*t)
+func (_c *StorageCreate) SetNillableLastModify(v *time.Time) *StorageCreate {
+	if v != nil {
+		_c.SetLastModify(*v)
 	}
-	return sc
+	return _c
 }
 
 // SetParentID sets the "parent_id" field.
-func (sc *StorageCreate) SetParentID(s string) *StorageCreate {
-	sc.mutation.SetParentID(s)
-	return sc
+func (_c *StorageCreate) SetParentID(v string) *StorageCreate {
+	_c.mutation.SetParentID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (sc *StorageCreate) SetID(u uuid.UUID) *StorageCreate {
-	sc.mutation.SetID(u)
-	return sc
+func (_c *StorageCreate) SetID(v uuid.UUID) *StorageCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (sc *StorageCreate) SetNillableID(u *uuid.UUID) *StorageCreate {
-	if u != nil {
-		sc.SetID(*u)
+func (_c *StorageCreate) SetNillableID(v *uuid.UUID) *StorageCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return sc
+	return _c
 }
 
 // Mutation returns the StorageMutation object of the builder.
-func (sc *StorageCreate) Mutation() *StorageMutation {
-	return sc.mutation
+func (_c *StorageCreate) Mutation() *StorageMutation {
+	return _c.mutation
 }
 
 // Save creates the Storage in the database.
-func (sc *StorageCreate) Save(ctx context.Context) (*Storage, error) {
-	sc.defaults()
-	return withHooks(ctx, sc.sqlSave, sc.mutation, sc.hooks)
+func (_c *StorageCreate) Save(ctx context.Context) (*Storage, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (sc *StorageCreate) SaveX(ctx context.Context) *Storage {
-	v, err := sc.Save(ctx)
+func (_c *StorageCreate) SaveX(ctx context.Context) *Storage {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -114,73 +114,73 @@ func (sc *StorageCreate) SaveX(ctx context.Context) *Storage {
 }
 
 // Exec executes the query.
-func (sc *StorageCreate) Exec(ctx context.Context) error {
-	_, err := sc.Save(ctx)
+func (_c *StorageCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (sc *StorageCreate) ExecX(ctx context.Context) {
-	if err := sc.Exec(ctx); err != nil {
+func (_c *StorageCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (sc *StorageCreate) defaults() {
-	if _, ok := sc.mutation.GetType(); !ok {
+func (_c *StorageCreate) defaults() {
+	if _, ok := _c.mutation.GetType(); !ok {
 		v := storage.DefaultType
-		sc.mutation.SetType(v)
+		_c.mutation.SetType(v)
 	}
-	if _, ok := sc.mutation.LastModify(); !ok {
+	if _, ok := _c.mutation.LastModify(); !ok {
 		v := storage.DefaultLastModify()
-		sc.mutation.SetLastModify(v)
+		_c.mutation.SetLastModify(v)
 	}
-	if _, ok := sc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := storage.DefaultID()
-		sc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (sc *StorageCreate) check() error {
-	if _, ok := sc.mutation.Owner(); !ok {
+func (_c *StorageCreate) check() error {
+	if _, ok := _c.mutation.Owner(); !ok {
 		return &ValidationError{Name: "owner", err: errors.New(`ent: missing required field "Storage.owner"`)}
 	}
-	if v, ok := sc.mutation.Owner(); ok {
+	if v, ok := _c.mutation.Owner(); ok {
 		if err := storage.OwnerValidator(v); err != nil {
 			return &ValidationError{Name: "owner", err: fmt.Errorf(`ent: validator failed for field "Storage.owner": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Storage.type"`)}
 	}
-	if _, ok := sc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Storage.name"`)}
 	}
-	if v, ok := sc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := storage.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Storage.name": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Cid(); !ok {
+	if _, ok := _c.mutation.Cid(); !ok {
 		return &ValidationError{Name: "cid", err: errors.New(`ent: missing required field "Storage.cid"`)}
 	}
-	if v, ok := sc.mutation.Cid(); ok {
+	if v, ok := _c.mutation.Cid(); ok {
 		if err := storage.CidValidator(v); err != nil {
 			return &ValidationError{Name: "cid", err: fmt.Errorf(`ent: validator failed for field "Storage.cid": %w`, err)}
 		}
 	}
-	if _, ok := sc.mutation.Size(); !ok {
+	if _, ok := _c.mutation.Size(); !ok {
 		return &ValidationError{Name: "size", err: errors.New(`ent: missing required field "Storage.size"`)}
 	}
-	if _, ok := sc.mutation.LastModify(); !ok {
+	if _, ok := _c.mutation.LastModify(); !ok {
 		return &ValidationError{Name: "last_modify", err: errors.New(`ent: missing required field "Storage.last_modify"`)}
 	}
-	if _, ok := sc.mutation.ParentID(); !ok {
+	if _, ok := _c.mutation.ParentID(); !ok {
 		return &ValidationError{Name: "parent_id", err: errors.New(`ent: missing required field "Storage.parent_id"`)}
 	}
-	if v, ok := sc.mutation.ParentID(); ok {
+	if v, ok := _c.mutation.ParentID(); ok {
 		if err := storage.ParentIDValidator(v); err != nil {
 			return &ValidationError{Name: "parent_id", err: fmt.Errorf(`ent: validator failed for field "Storage.parent_id": %w`, err)}
 		}
@@ -188,12 +188,12 @@ func (sc *StorageCreate) check() error {
 	return nil
 }
 
-func (sc *StorageCreate) sqlSave(ctx context.Context) (*Storage, error) {
-	if err := sc.check(); err != nil {
+func (_c *StorageCreate) sqlSave(ctx context.Context) (*Storage, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := sc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, sc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -206,45 +206,45 @@ func (sc *StorageCreate) sqlSave(ctx context.Context) (*Storage, error) {
 			return nil, err
 		}
 	}
-	sc.mutation.id = &_node.ID
-	sc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (sc *StorageCreate) createSpec() (*Storage, *sqlgraph.CreateSpec) {
+func (_c *StorageCreate) createSpec() (*Storage, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Storage{config: sc.config}
+		_node = &Storage{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(storage.Table, sqlgraph.NewFieldSpec(storage.FieldID, field.TypeUUID))
 	)
-	if id, ok := sc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := sc.mutation.Owner(); ok {
+	if value, ok := _c.mutation.Owner(); ok {
 		_spec.SetField(storage.FieldOwner, field.TypeString, value)
 		_node.Owner = value
 	}
-	if value, ok := sc.mutation.GetType(); ok {
+	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(storage.FieldType, field.TypeInt32, value)
 		_node.Type = value
 	}
-	if value, ok := sc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(storage.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := sc.mutation.Cid(); ok {
+	if value, ok := _c.mutation.Cid(); ok {
 		_spec.SetField(storage.FieldCid, field.TypeString, value)
 		_node.Cid = &value
 	}
-	if value, ok := sc.mutation.Size(); ok {
+	if value, ok := _c.mutation.Size(); ok {
 		_spec.SetField(storage.FieldSize, field.TypeInt32, value)
 		_node.Size = value
 	}
-	if value, ok := sc.mutation.LastModify(); ok {
+	if value, ok := _c.mutation.LastModify(); ok {
 		_spec.SetField(storage.FieldLastModify, field.TypeTime, value)
 		_node.LastModify = value
 	}
-	if value, ok := sc.mutation.ParentID(); ok {
+	if value, ok := _c.mutation.ParentID(); ok {
 		_spec.SetField(storage.FieldParentID, field.TypeString, value)
 		_node.ParentID = value
 	}
@@ -254,17 +254,21 @@ func (sc *StorageCreate) createSpec() (*Storage, *sqlgraph.CreateSpec) {
 // StorageCreateBulk is the builder for creating many Storage entities in bulk.
 type StorageCreateBulk struct {
 	config
+	err      error
 	builders []*StorageCreate
 }
 
 // Save creates the Storage entities in the database.
-func (scb *StorageCreateBulk) Save(ctx context.Context) ([]*Storage, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(scb.builders))
-	nodes := make([]*Storage, len(scb.builders))
-	mutators := make([]Mutator, len(scb.builders))
-	for i := range scb.builders {
+func (_c *StorageCreateBulk) Save(ctx context.Context) ([]*Storage, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Storage, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := scb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*StorageMutation)
@@ -278,11 +282,11 @@ func (scb *StorageCreateBulk) Save(ctx context.Context) ([]*Storage, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, scb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, scb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -302,7 +306,7 @@ func (scb *StorageCreateBulk) Save(ctx context.Context) ([]*Storage, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, scb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -310,8 +314,8 @@ func (scb *StorageCreateBulk) Save(ctx context.Context) ([]*Storage, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (scb *StorageCreateBulk) SaveX(ctx context.Context) []*Storage {
-	v, err := scb.Save(ctx)
+func (_c *StorageCreateBulk) SaveX(ctx context.Context) []*Storage {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -319,14 +323,14 @@ func (scb *StorageCreateBulk) SaveX(ctx context.Context) []*Storage {
 }
 
 // Exec executes the query.
-func (scb *StorageCreateBulk) Exec(ctx context.Context) error {
-	_, err := scb.Save(ctx)
+func (_c *StorageCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (scb *StorageCreateBulk) ExecX(ctx context.Context) {
-	if err := scb.Exec(ctx); err != nil {
+func (_c *StorageCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -100,7 +100,7 @@ func (*AlipayOrderRollback) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the AlipayOrderRollback fields.
-func (aor *AlipayOrderRollback) assignValues(columns []string, values []any) error {
+func (_m *AlipayOrderRollback) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -111,189 +111,189 @@ func (aor *AlipayOrderRollback) assignValues(columns []string, values []any) err
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			aor.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case alipayorderrollback.FieldNotifyID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field notify_id", values[i])
 			} else if value.Valid {
-				aor.NotifyID = value.String
+				_m.NotifyID = value.String
 			}
 		case alipayorderrollback.FieldNotifyType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field notify_type", values[i])
 			} else if value.Valid {
-				aor.NotifyType = value.String
+				_m.NotifyType = value.String
 			}
 		case alipayorderrollback.FieldNotifyTime:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field notify_time", values[i])
 			} else if value.Valid {
-				aor.NotifyTime = value.String
+				_m.NotifyTime = value.String
 			}
 		case alipayorderrollback.FieldCharset:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field charset", values[i])
 			} else if value.Valid {
-				aor.Charset = value.String
+				_m.Charset = value.String
 			}
 		case alipayorderrollback.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
-				aor.Version = value.String
+				_m.Version = value.String
 			}
 		case alipayorderrollback.FieldSignType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sign_type", values[i])
 			} else if value.Valid {
-				aor.SignType = value.String
+				_m.SignType = value.String
 			}
 		case alipayorderrollback.FieldSign:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field sign", values[i])
 			} else if value.Valid {
-				aor.Sign = value.String
+				_m.Sign = value.String
 			}
 		case alipayorderrollback.FieldFundBillList:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field fund_bill_list", values[i])
 			} else if value.Valid {
-				aor.FundBillList = value.String
+				_m.FundBillList = value.String
 			}
 		case alipayorderrollback.FieldReceiptAmount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field receipt_amount", values[i])
 			} else if value.Valid {
-				aor.ReceiptAmount = value.String
+				_m.ReceiptAmount = value.String
 			}
 		case alipayorderrollback.FieldInvoiceAmount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field invoice_amount", values[i])
 			} else if value.Valid {
-				aor.InvoiceAmount = value.String
+				_m.InvoiceAmount = value.String
 			}
 		case alipayorderrollback.FieldBuyerPayAmount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field buyer_pay_amount", values[i])
 			} else if value.Valid {
-				aor.BuyerPayAmount = value.String
+				_m.BuyerPayAmount = value.String
 			}
 		case alipayorderrollback.FieldPointAmount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field point_amount", values[i])
 			} else if value.Valid {
-				aor.PointAmount = value.String
+				_m.PointAmount = value.String
 			}
 		case alipayorderrollback.FieldVoucherDetailList:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field voucher_detail_list", values[i])
 			} else if value.Valid {
-				aor.VoucherDetailList = value.String
+				_m.VoucherDetailList = value.String
 			}
 		case alipayorderrollback.FieldPassbackParams:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field passback_params", values[i])
 			} else if value.Valid {
-				aor.PassbackParams = value.String
+				_m.PassbackParams = value.String
 			}
 		case alipayorderrollback.FieldTradeNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trade_no", values[i])
 			} else if value.Valid {
-				aor.TradeNo = value.String
+				_m.TradeNo = value.String
 			}
 		case alipayorderrollback.FieldAppID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value.Valid {
-				aor.AppID = value.String
+				_m.AppID = value.String
 			}
 		case alipayorderrollback.FieldOutTradeNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field out_trade_no", values[i])
 			} else if value.Valid {
-				aor.OutTradeNo = value.String
+				_m.OutTradeNo = value.String
 			}
 		case alipayorderrollback.FieldOutBizNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field out_biz_no", values[i])
 			} else if value.Valid {
-				aor.OutBizNo = value.String
+				_m.OutBizNo = value.String
 			}
 		case alipayorderrollback.FieldBuyerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field buyer_id", values[i])
 			} else if value.Valid {
-				aor.BuyerID = value.String
+				_m.BuyerID = value.String
 			}
 		case alipayorderrollback.FieldSellerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field seller_id", values[i])
 			} else if value.Valid {
-				aor.SellerID = value.String
+				_m.SellerID = value.String
 			}
 		case alipayorderrollback.FieldTradeStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trade_status", values[i])
 			} else if value.Valid {
-				aor.TradeStatus = value.String
+				_m.TradeStatus = value.String
 			}
 		case alipayorderrollback.FieldTotalAmount:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field total_amount", values[i])
 			} else if value.Valid {
-				aor.TotalAmount = value.String
+				_m.TotalAmount = value.String
 			}
 		case alipayorderrollback.FieldRefundFee:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field refund_fee", values[i])
 			} else if value.Valid {
-				aor.RefundFee = value.String
+				_m.RefundFee = value.String
 			}
 		case alipayorderrollback.FieldSubject:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subject", values[i])
 			} else if value.Valid {
-				aor.Subject = value.String
+				_m.Subject = value.String
 			}
 		case alipayorderrollback.FieldBody:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field body", values[i])
 			} else if value.Valid {
-				aor.Body = value.String
+				_m.Body = value.String
 			}
 		case alipayorderrollback.FieldGmtCreate:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gmt_create", values[i])
 			} else if value.Valid {
-				aor.GmtCreate = value.String
+				_m.GmtCreate = value.String
 			}
 		case alipayorderrollback.FieldGmtPayment:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gmt_payment", values[i])
 			} else if value.Valid {
-				aor.GmtPayment = value.String
+				_m.GmtPayment = value.String
 			}
 		case alipayorderrollback.FieldGmtClose:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gmt_close", values[i])
 			} else if value.Valid {
-				aor.GmtClose = value.String
+				_m.GmtClose = value.String
 			}
 		case alipayorderrollback.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				aor.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case alipayorderrollback.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				aor.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		default:
-			aor.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -301,122 +301,122 @@ func (aor *AlipayOrderRollback) assignValues(columns []string, values []any) err
 
 // Value returns the ent.Value that was dynamically selected and assigned to the AlipayOrderRollback.
 // This includes values selected through modifiers, order, etc.
-func (aor *AlipayOrderRollback) Value(name string) (ent.Value, error) {
-	return aor.selectValues.Get(name)
+func (_m *AlipayOrderRollback) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this AlipayOrderRollback.
 // Note that you need to call AlipayOrderRollback.Unwrap() before calling this method if this AlipayOrderRollback
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (aor *AlipayOrderRollback) Update() *AlipayOrderRollbackUpdateOne {
-	return NewAlipayOrderRollbackClient(aor.config).UpdateOne(aor)
+func (_m *AlipayOrderRollback) Update() *AlipayOrderRollbackUpdateOne {
+	return NewAlipayOrderRollbackClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the AlipayOrderRollback entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (aor *AlipayOrderRollback) Unwrap() *AlipayOrderRollback {
-	_tx, ok := aor.config.driver.(*txDriver)
+func (_m *AlipayOrderRollback) Unwrap() *AlipayOrderRollback {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: AlipayOrderRollback is not a transactional entity")
 	}
-	aor.config.driver = _tx.drv
-	return aor
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (aor *AlipayOrderRollback) String() string {
+func (_m *AlipayOrderRollback) String() string {
 	var builder strings.Builder
 	builder.WriteString("AlipayOrderRollback(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", aor.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("notify_id=")
-	builder.WriteString(aor.NotifyID)
+	builder.WriteString(_m.NotifyID)
 	builder.WriteString(", ")
 	builder.WriteString("notify_type=")
-	builder.WriteString(aor.NotifyType)
+	builder.WriteString(_m.NotifyType)
 	builder.WriteString(", ")
 	builder.WriteString("notify_time=")
-	builder.WriteString(aor.NotifyTime)
+	builder.WriteString(_m.NotifyTime)
 	builder.WriteString(", ")
 	builder.WriteString("charset=")
-	builder.WriteString(aor.Charset)
+	builder.WriteString(_m.Charset)
 	builder.WriteString(", ")
 	builder.WriteString("version=")
-	builder.WriteString(aor.Version)
+	builder.WriteString(_m.Version)
 	builder.WriteString(", ")
 	builder.WriteString("sign_type=")
-	builder.WriteString(aor.SignType)
+	builder.WriteString(_m.SignType)
 	builder.WriteString(", ")
 	builder.WriteString("sign=")
-	builder.WriteString(aor.Sign)
+	builder.WriteString(_m.Sign)
 	builder.WriteString(", ")
 	builder.WriteString("fund_bill_list=")
-	builder.WriteString(aor.FundBillList)
+	builder.WriteString(_m.FundBillList)
 	builder.WriteString(", ")
 	builder.WriteString("receipt_amount=")
-	builder.WriteString(aor.ReceiptAmount)
+	builder.WriteString(_m.ReceiptAmount)
 	builder.WriteString(", ")
 	builder.WriteString("invoice_amount=")
-	builder.WriteString(aor.InvoiceAmount)
+	builder.WriteString(_m.InvoiceAmount)
 	builder.WriteString(", ")
 	builder.WriteString("buyer_pay_amount=")
-	builder.WriteString(aor.BuyerPayAmount)
+	builder.WriteString(_m.BuyerPayAmount)
 	builder.WriteString(", ")
 	builder.WriteString("point_amount=")
-	builder.WriteString(aor.PointAmount)
+	builder.WriteString(_m.PointAmount)
 	builder.WriteString(", ")
 	builder.WriteString("voucher_detail_list=")
-	builder.WriteString(aor.VoucherDetailList)
+	builder.WriteString(_m.VoucherDetailList)
 	builder.WriteString(", ")
 	builder.WriteString("passback_params=")
-	builder.WriteString(aor.PassbackParams)
+	builder.WriteString(_m.PassbackParams)
 	builder.WriteString(", ")
 	builder.WriteString("trade_no=")
-	builder.WriteString(aor.TradeNo)
+	builder.WriteString(_m.TradeNo)
 	builder.WriteString(", ")
 	builder.WriteString("app_id=")
-	builder.WriteString(aor.AppID)
+	builder.WriteString(_m.AppID)
 	builder.WriteString(", ")
 	builder.WriteString("out_trade_no=")
-	builder.WriteString(aor.OutTradeNo)
+	builder.WriteString(_m.OutTradeNo)
 	builder.WriteString(", ")
 	builder.WriteString("out_biz_no=")
-	builder.WriteString(aor.OutBizNo)
+	builder.WriteString(_m.OutBizNo)
 	builder.WriteString(", ")
 	builder.WriteString("buyer_id=")
-	builder.WriteString(aor.BuyerID)
+	builder.WriteString(_m.BuyerID)
 	builder.WriteString(", ")
 	builder.WriteString("seller_id=")
-	builder.WriteString(aor.SellerID)
+	builder.WriteString(_m.SellerID)
 	builder.WriteString(", ")
 	builder.WriteString("trade_status=")
-	builder.WriteString(aor.TradeStatus)
+	builder.WriteString(_m.TradeStatus)
 	builder.WriteString(", ")
 	builder.WriteString("total_amount=")
-	builder.WriteString(aor.TotalAmount)
+	builder.WriteString(_m.TotalAmount)
 	builder.WriteString(", ")
 	builder.WriteString("refund_fee=")
-	builder.WriteString(aor.RefundFee)
+	builder.WriteString(_m.RefundFee)
 	builder.WriteString(", ")
 	builder.WriteString("subject=")
-	builder.WriteString(aor.Subject)
+	builder.WriteString(_m.Subject)
 	builder.WriteString(", ")
 	builder.WriteString("body=")
-	builder.WriteString(aor.Body)
+	builder.WriteString(_m.Body)
 	builder.WriteString(", ")
 	builder.WriteString("gmt_create=")
-	builder.WriteString(aor.GmtCreate)
+	builder.WriteString(_m.GmtCreate)
 	builder.WriteString(", ")
 	builder.WriteString("gmt_payment=")
-	builder.WriteString(aor.GmtPayment)
+	builder.WriteString(_m.GmtPayment)
 	builder.WriteString(", ")
 	builder.WriteString("gmt_close=")
-	builder.WriteString(aor.GmtClose)
+	builder.WriteString(_m.GmtClose)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(aor.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(aor.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

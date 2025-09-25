@@ -67,7 +67,7 @@ func (*NetworkMapping) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the NetworkMapping fields.
-func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
+func (_m *NetworkMapping) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -77,76 +77,76 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				nm.ID = *value
+				_m.ID = *value
 			}
 		case networkmapping.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				nm.Name = value.String
+				_m.Name = value.String
 			}
 		case networkmapping.FieldProtocol:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field protocol", values[i])
 			} else if value.Valid {
-				nm.Protocol = value.String
+				_m.Protocol = value.String
 			}
 		case networkmapping.FieldFkGatewayID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_gateway_id", values[i])
 			} else if value != nil {
-				nm.FkGatewayID = *value
+				_m.FkGatewayID = *value
 			}
 		case networkmapping.FieldGatewayPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field gateway_port", values[i])
 			} else if value.Valid {
-				nm.GatewayPort = int32(value.Int64)
+				_m.GatewayPort = int32(value.Int64)
 			}
 		case networkmapping.FieldGatewayIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field gateway_ip", values[i])
 			} else if value.Valid {
-				nm.GatewayIP = value.String
+				_m.GatewayIP = value.String
 			}
 		case networkmapping.FieldComputerPort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field computer_port", values[i])
 			} else if value.Valid {
-				nm.ComputerPort = int32(value.Int64)
+				_m.ComputerPort = int32(value.Int64)
 			}
 		case networkmapping.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				nm.Status = int(value.Int64)
+				_m.Status = int(value.Int64)
 			}
 		case networkmapping.FieldFkComputerID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_computer_id", values[i])
 			} else if value != nil {
-				nm.FkComputerID = *value
+				_m.FkComputerID = *value
 			}
 		case networkmapping.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				nm.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case networkmapping.FieldDeleteState:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field delete_state", values[i])
 			} else if value.Valid {
-				nm.DeleteState = value.Bool
+				_m.DeleteState = value.Bool
 			}
 		case networkmapping.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				nm.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		default:
-			nm.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -154,65 +154,65 @@ func (nm *NetworkMapping) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the NetworkMapping.
 // This includes values selected through modifiers, order, etc.
-func (nm *NetworkMapping) Value(name string) (ent.Value, error) {
-	return nm.selectValues.Get(name)
+func (_m *NetworkMapping) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this NetworkMapping.
 // Note that you need to call NetworkMapping.Unwrap() before calling this method if this NetworkMapping
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (nm *NetworkMapping) Update() *NetworkMappingUpdateOne {
-	return NewNetworkMappingClient(nm.config).UpdateOne(nm)
+func (_m *NetworkMapping) Update() *NetworkMappingUpdateOne {
+	return NewNetworkMappingClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the NetworkMapping entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (nm *NetworkMapping) Unwrap() *NetworkMapping {
-	_tx, ok := nm.config.driver.(*txDriver)
+func (_m *NetworkMapping) Unwrap() *NetworkMapping {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: NetworkMapping is not a transactional entity")
 	}
-	nm.config.driver = _tx.drv
-	return nm
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (nm *NetworkMapping) String() string {
+func (_m *NetworkMapping) String() string {
 	var builder strings.Builder
 	builder.WriteString("NetworkMapping(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", nm.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
-	builder.WriteString(nm.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("protocol=")
-	builder.WriteString(nm.Protocol)
+	builder.WriteString(_m.Protocol)
 	builder.WriteString(", ")
 	builder.WriteString("fk_gateway_id=")
-	builder.WriteString(fmt.Sprintf("%v", nm.FkGatewayID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkGatewayID))
 	builder.WriteString(", ")
 	builder.WriteString("gateway_port=")
-	builder.WriteString(fmt.Sprintf("%v", nm.GatewayPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.GatewayPort))
 	builder.WriteString(", ")
 	builder.WriteString("gateway_ip=")
-	builder.WriteString(nm.GatewayIP)
+	builder.WriteString(_m.GatewayIP)
 	builder.WriteString(", ")
 	builder.WriteString("computer_port=")
-	builder.WriteString(fmt.Sprintf("%v", nm.ComputerPort))
+	builder.WriteString(fmt.Sprintf("%v", _m.ComputerPort))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", nm.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("fk_computer_id=")
-	builder.WriteString(fmt.Sprintf("%v", nm.FkComputerID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkComputerID))
 	builder.WriteString(", ")
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", nm.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("delete_state=")
-	builder.WriteString(fmt.Sprintf("%v", nm.DeleteState))
+	builder.WriteString(fmt.Sprintf("%v", _m.DeleteState))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(nm.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

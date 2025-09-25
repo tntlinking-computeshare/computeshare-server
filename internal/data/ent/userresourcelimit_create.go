@@ -21,89 +21,89 @@ type UserResourceLimitCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (urlc *UserResourceLimitCreate) SetFkUserID(u uuid.UUID) *UserResourceLimitCreate {
-	urlc.mutation.SetFkUserID(u)
-	return urlc
+func (_c *UserResourceLimitCreate) SetFkUserID(v uuid.UUID) *UserResourceLimitCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
-func (urlc *UserResourceLimitCreate) SetNillableFkUserID(u *uuid.UUID) *UserResourceLimitCreate {
-	if u != nil {
-		urlc.SetFkUserID(*u)
+func (_c *UserResourceLimitCreate) SetNillableFkUserID(v *uuid.UUID) *UserResourceLimitCreate {
+	if v != nil {
+		_c.SetFkUserID(*v)
 	}
-	return urlc
+	return _c
 }
 
 // SetMaxCPU sets the "max_cpu" field.
-func (urlc *UserResourceLimitCreate) SetMaxCPU(i int32) *UserResourceLimitCreate {
-	urlc.mutation.SetMaxCPU(i)
-	return urlc
+func (_c *UserResourceLimitCreate) SetMaxCPU(v int32) *UserResourceLimitCreate {
+	_c.mutation.SetMaxCPU(v)
+	return _c
 }
 
 // SetNillableMaxCPU sets the "max_cpu" field if the given value is not nil.
-func (urlc *UserResourceLimitCreate) SetNillableMaxCPU(i *int32) *UserResourceLimitCreate {
-	if i != nil {
-		urlc.SetMaxCPU(*i)
+func (_c *UserResourceLimitCreate) SetNillableMaxCPU(v *int32) *UserResourceLimitCreate {
+	if v != nil {
+		_c.SetMaxCPU(*v)
 	}
-	return urlc
+	return _c
 }
 
 // SetMaxMemory sets the "max_memory" field.
-func (urlc *UserResourceLimitCreate) SetMaxMemory(i int32) *UserResourceLimitCreate {
-	urlc.mutation.SetMaxMemory(i)
-	return urlc
+func (_c *UserResourceLimitCreate) SetMaxMemory(v int32) *UserResourceLimitCreate {
+	_c.mutation.SetMaxMemory(v)
+	return _c
 }
 
 // SetNillableMaxMemory sets the "max_memory" field if the given value is not nil.
-func (urlc *UserResourceLimitCreate) SetNillableMaxMemory(i *int32) *UserResourceLimitCreate {
-	if i != nil {
-		urlc.SetMaxMemory(*i)
+func (_c *UserResourceLimitCreate) SetNillableMaxMemory(v *int32) *UserResourceLimitCreate {
+	if v != nil {
+		_c.SetMaxMemory(*v)
 	}
-	return urlc
+	return _c
 }
 
 // SetMaxNetworkMapping sets the "max_network_mapping" field.
-func (urlc *UserResourceLimitCreate) SetMaxNetworkMapping(i int32) *UserResourceLimitCreate {
-	urlc.mutation.SetMaxNetworkMapping(i)
-	return urlc
+func (_c *UserResourceLimitCreate) SetMaxNetworkMapping(v int32) *UserResourceLimitCreate {
+	_c.mutation.SetMaxNetworkMapping(v)
+	return _c
 }
 
 // SetNillableMaxNetworkMapping sets the "max_network_mapping" field if the given value is not nil.
-func (urlc *UserResourceLimitCreate) SetNillableMaxNetworkMapping(i *int32) *UserResourceLimitCreate {
-	if i != nil {
-		urlc.SetMaxNetworkMapping(*i)
+func (_c *UserResourceLimitCreate) SetNillableMaxNetworkMapping(v *int32) *UserResourceLimitCreate {
+	if v != nil {
+		_c.SetMaxNetworkMapping(*v)
 	}
-	return urlc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (urlc *UserResourceLimitCreate) SetID(u uuid.UUID) *UserResourceLimitCreate {
-	urlc.mutation.SetID(u)
-	return urlc
+func (_c *UserResourceLimitCreate) SetID(v uuid.UUID) *UserResourceLimitCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (urlc *UserResourceLimitCreate) SetNillableID(u *uuid.UUID) *UserResourceLimitCreate {
-	if u != nil {
-		urlc.SetID(*u)
+func (_c *UserResourceLimitCreate) SetNillableID(v *uuid.UUID) *UserResourceLimitCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return urlc
+	return _c
 }
 
 // Mutation returns the UserResourceLimitMutation object of the builder.
-func (urlc *UserResourceLimitCreate) Mutation() *UserResourceLimitMutation {
-	return urlc.mutation
+func (_c *UserResourceLimitCreate) Mutation() *UserResourceLimitMutation {
+	return _c.mutation
 }
 
 // Save creates the UserResourceLimit in the database.
-func (urlc *UserResourceLimitCreate) Save(ctx context.Context) (*UserResourceLimit, error) {
-	urlc.defaults()
-	return withHooks(ctx, urlc.sqlSave, urlc.mutation, urlc.hooks)
+func (_c *UserResourceLimitCreate) Save(ctx context.Context) (*UserResourceLimit, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (urlc *UserResourceLimitCreate) SaveX(ctx context.Context) *UserResourceLimit {
-	v, err := urlc.Save(ctx)
+func (_c *UserResourceLimitCreate) SaveX(ctx context.Context) *UserResourceLimit {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -111,65 +111,65 @@ func (urlc *UserResourceLimitCreate) SaveX(ctx context.Context) *UserResourceLim
 }
 
 // Exec executes the query.
-func (urlc *UserResourceLimitCreate) Exec(ctx context.Context) error {
-	_, err := urlc.Save(ctx)
+func (_c *UserResourceLimitCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (urlc *UserResourceLimitCreate) ExecX(ctx context.Context) {
-	if err := urlc.Exec(ctx); err != nil {
+func (_c *UserResourceLimitCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (urlc *UserResourceLimitCreate) defaults() {
-	if _, ok := urlc.mutation.FkUserID(); !ok {
+func (_c *UserResourceLimitCreate) defaults() {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		v := userresourcelimit.DefaultFkUserID()
-		urlc.mutation.SetFkUserID(v)
+		_c.mutation.SetFkUserID(v)
 	}
-	if _, ok := urlc.mutation.MaxCPU(); !ok {
+	if _, ok := _c.mutation.MaxCPU(); !ok {
 		v := userresourcelimit.DefaultMaxCPU
-		urlc.mutation.SetMaxCPU(v)
+		_c.mutation.SetMaxCPU(v)
 	}
-	if _, ok := urlc.mutation.MaxMemory(); !ok {
+	if _, ok := _c.mutation.MaxMemory(); !ok {
 		v := userresourcelimit.DefaultMaxMemory
-		urlc.mutation.SetMaxMemory(v)
+		_c.mutation.SetMaxMemory(v)
 	}
-	if _, ok := urlc.mutation.MaxNetworkMapping(); !ok {
+	if _, ok := _c.mutation.MaxNetworkMapping(); !ok {
 		v := userresourcelimit.DefaultMaxNetworkMapping
-		urlc.mutation.SetMaxNetworkMapping(v)
+		_c.mutation.SetMaxNetworkMapping(v)
 	}
-	if _, ok := urlc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := userresourcelimit.DefaultID()
-		urlc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (urlc *UserResourceLimitCreate) check() error {
-	if _, ok := urlc.mutation.FkUserID(); !ok {
+func (_c *UserResourceLimitCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "UserResourceLimit.fk_user_id"`)}
 	}
-	if _, ok := urlc.mutation.MaxCPU(); !ok {
+	if _, ok := _c.mutation.MaxCPU(); !ok {
 		return &ValidationError{Name: "max_cpu", err: errors.New(`ent: missing required field "UserResourceLimit.max_cpu"`)}
 	}
-	if _, ok := urlc.mutation.MaxMemory(); !ok {
+	if _, ok := _c.mutation.MaxMemory(); !ok {
 		return &ValidationError{Name: "max_memory", err: errors.New(`ent: missing required field "UserResourceLimit.max_memory"`)}
 	}
-	if _, ok := urlc.mutation.MaxNetworkMapping(); !ok {
+	if _, ok := _c.mutation.MaxNetworkMapping(); !ok {
 		return &ValidationError{Name: "max_network_mapping", err: errors.New(`ent: missing required field "UserResourceLimit.max_network_mapping"`)}
 	}
 	return nil
 }
 
-func (urlc *UserResourceLimitCreate) sqlSave(ctx context.Context) (*UserResourceLimit, error) {
-	if err := urlc.check(); err != nil {
+func (_c *UserResourceLimitCreate) sqlSave(ctx context.Context) (*UserResourceLimit, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := urlc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, urlc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -182,33 +182,33 @@ func (urlc *UserResourceLimitCreate) sqlSave(ctx context.Context) (*UserResource
 			return nil, err
 		}
 	}
-	urlc.mutation.id = &_node.ID
-	urlc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (urlc *UserResourceLimitCreate) createSpec() (*UserResourceLimit, *sqlgraph.CreateSpec) {
+func (_c *UserResourceLimitCreate) createSpec() (*UserResourceLimit, *sqlgraph.CreateSpec) {
 	var (
-		_node = &UserResourceLimit{config: urlc.config}
+		_node = &UserResourceLimit{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(userresourcelimit.Table, sqlgraph.NewFieldSpec(userresourcelimit.FieldID, field.TypeUUID))
 	)
-	if id, ok := urlc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := urlc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(userresourcelimit.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := urlc.mutation.MaxCPU(); ok {
+	if value, ok := _c.mutation.MaxCPU(); ok {
 		_spec.SetField(userresourcelimit.FieldMaxCPU, field.TypeInt32, value)
 		_node.MaxCPU = value
 	}
-	if value, ok := urlc.mutation.MaxMemory(); ok {
+	if value, ok := _c.mutation.MaxMemory(); ok {
 		_spec.SetField(userresourcelimit.FieldMaxMemory, field.TypeInt32, value)
 		_node.MaxMemory = value
 	}
-	if value, ok := urlc.mutation.MaxNetworkMapping(); ok {
+	if value, ok := _c.mutation.MaxNetworkMapping(); ok {
 		_spec.SetField(userresourcelimit.FieldMaxNetworkMapping, field.TypeInt32, value)
 		_node.MaxNetworkMapping = value
 	}
@@ -218,17 +218,21 @@ func (urlc *UserResourceLimitCreate) createSpec() (*UserResourceLimit, *sqlgraph
 // UserResourceLimitCreateBulk is the builder for creating many UserResourceLimit entities in bulk.
 type UserResourceLimitCreateBulk struct {
 	config
+	err      error
 	builders []*UserResourceLimitCreate
 }
 
 // Save creates the UserResourceLimit entities in the database.
-func (urlcb *UserResourceLimitCreateBulk) Save(ctx context.Context) ([]*UserResourceLimit, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(urlcb.builders))
-	nodes := make([]*UserResourceLimit, len(urlcb.builders))
-	mutators := make([]Mutator, len(urlcb.builders))
-	for i := range urlcb.builders {
+func (_c *UserResourceLimitCreateBulk) Save(ctx context.Context) ([]*UserResourceLimit, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*UserResourceLimit, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := urlcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserResourceLimitMutation)
@@ -242,11 +246,11 @@ func (urlcb *UserResourceLimitCreateBulk) Save(ctx context.Context) ([]*UserReso
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, urlcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, urlcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -266,7 +270,7 @@ func (urlcb *UserResourceLimitCreateBulk) Save(ctx context.Context) ([]*UserReso
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, urlcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -274,8 +278,8 @@ func (urlcb *UserResourceLimitCreateBulk) Save(ctx context.Context) ([]*UserReso
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (urlcb *UserResourceLimitCreateBulk) SaveX(ctx context.Context) []*UserResourceLimit {
-	v, err := urlcb.Save(ctx)
+func (_c *UserResourceLimitCreateBulk) SaveX(ctx context.Context) []*UserResourceLimit {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,14 +287,14 @@ func (urlcb *UserResourceLimitCreateBulk) SaveX(ctx context.Context) []*UserReso
 }
 
 // Exec executes the query.
-func (urlcb *UserResourceLimitCreateBulk) Exec(ctx context.Context) error {
-	_, err := urlcb.Save(ctx)
+func (_c *UserResourceLimitCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (urlcb *UserResourceLimitCreateBulk) ExecX(ctx context.Context) {
-	if err := urlcb.Exec(ctx); err != nil {
+func (_c *UserResourceLimitCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

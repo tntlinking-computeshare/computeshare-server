@@ -65,7 +65,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Task fields.
-func (t *Task) assignValues(columns []string, values []any) error {
+func (_m *Task) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -75,41 +75,41 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				t.ID = *value
+				_m.ID = *value
 			}
 		case task.FieldAgentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field agent_id", values[i])
 			} else if value.Valid {
-				t.AgentID = value.String
+				_m.AgentID = value.String
 			}
 		case task.FieldCmd:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field cmd", values[i])
 			} else if value.Valid {
-				t.Cmd = int32(value.Int64)
+				_m.Cmd = int32(value.Int64)
 			}
 		case task.FieldParams:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field params", values[i])
 			} else if value.Valid {
-				t.Params = new(string)
-				*t.Params = value.String
+				_m.Params = new(string)
+				*_m.Params = value.String
 			}
 		case task.FieldStatus:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
-				t.Status = int(value.Int64)
+				_m.Status = int(value.Int64)
 			}
 		case task.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				t.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -117,49 +117,49 @@ func (t *Task) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Task.
 // This includes values selected through modifiers, order, etc.
-func (t *Task) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (_m *Task) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this Task.
 // Note that you need to call Task.Unwrap() before calling this method if this Task
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Task) Update() *TaskUpdateOne {
-	return NewTaskClient(t.config).UpdateOne(t)
+func (_m *Task) Update() *TaskUpdateOne {
+	return NewTaskClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Task entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Task) Unwrap() *Task {
-	_tx, ok := t.config.driver.(*txDriver)
+func (_m *Task) Unwrap() *Task {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Task is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (t *Task) String() string {
+func (_m *Task) String() string {
 	var builder strings.Builder
 	builder.WriteString("Task(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("agent_id=")
-	builder.WriteString(t.AgentID)
+	builder.WriteString(_m.AgentID)
 	builder.WriteString(", ")
 	builder.WriteString("cmd=")
-	builder.WriteString(fmt.Sprintf("%v", t.Cmd))
+	builder.WriteString(fmt.Sprintf("%v", _m.Cmd))
 	builder.WriteString(", ")
-	if v := t.Params; v != nil {
+	if v := _m.Params; v != nil {
 		builder.WriteString("params=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("status=")
-	builder.WriteString(fmt.Sprintf("%v", t.Status))
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(t.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

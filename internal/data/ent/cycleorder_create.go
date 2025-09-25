@@ -22,89 +22,89 @@ type CycleOrderCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (coc *CycleOrderCreate) SetFkUserID(u uuid.UUID) *CycleOrderCreate {
-	coc.mutation.SetFkUserID(u)
-	return coc
+func (_c *CycleOrderCreate) SetFkUserID(v uuid.UUID) *CycleOrderCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetOrderNo sets the "order_no" field.
-func (coc *CycleOrderCreate) SetOrderNo(s string) *CycleOrderCreate {
-	coc.mutation.SetOrderNo(s)
-	return coc
+func (_c *CycleOrderCreate) SetOrderNo(v string) *CycleOrderCreate {
+	_c.mutation.SetOrderNo(v)
+	return _c
 }
 
 // SetProductName sets the "product_name" field.
-func (coc *CycleOrderCreate) SetProductName(s string) *CycleOrderCreate {
-	coc.mutation.SetProductName(s)
-	return coc
+func (_c *CycleOrderCreate) SetProductName(v string) *CycleOrderCreate {
+	_c.mutation.SetProductName(v)
+	return _c
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (coc *CycleOrderCreate) SetProductDesc(s string) *CycleOrderCreate {
-	coc.mutation.SetProductDesc(s)
-	return coc
+func (_c *CycleOrderCreate) SetProductDesc(v string) *CycleOrderCreate {
+	_c.mutation.SetProductDesc(v)
+	return _c
 }
 
 // SetSymbol sets the "symbol" field.
-func (coc *CycleOrderCreate) SetSymbol(s string) *CycleOrderCreate {
-	coc.mutation.SetSymbol(s)
-	return coc
+func (_c *CycleOrderCreate) SetSymbol(v string) *CycleOrderCreate {
+	_c.mutation.SetSymbol(v)
+	return _c
 }
 
 // SetCycle sets the "cycle" field.
-func (coc *CycleOrderCreate) SetCycle(f float64) *CycleOrderCreate {
-	coc.mutation.SetCycle(f)
-	return coc
+func (_c *CycleOrderCreate) SetCycle(v float64) *CycleOrderCreate {
+	_c.mutation.SetCycle(v)
+	return _c
 }
 
 // SetResourceID sets the "resource_id" field.
-func (coc *CycleOrderCreate) SetResourceID(s string) *CycleOrderCreate {
-	coc.mutation.SetResourceID(s)
-	return coc
+func (_c *CycleOrderCreate) SetResourceID(v string) *CycleOrderCreate {
+	_c.mutation.SetResourceID(v)
+	return _c
 }
 
 // SetNillableResourceID sets the "resource_id" field if the given value is not nil.
-func (coc *CycleOrderCreate) SetNillableResourceID(s *string) *CycleOrderCreate {
-	if s != nil {
-		coc.SetResourceID(*s)
+func (_c *CycleOrderCreate) SetNillableResourceID(v *string) *CycleOrderCreate {
+	if v != nil {
+		_c.SetResourceID(*v)
 	}
-	return coc
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (coc *CycleOrderCreate) SetCreateTime(t time.Time) *CycleOrderCreate {
-	coc.mutation.SetCreateTime(t)
-	return coc
+func (_c *CycleOrderCreate) SetCreateTime(v time.Time) *CycleOrderCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (coc *CycleOrderCreate) SetID(u uuid.UUID) *CycleOrderCreate {
-	coc.mutation.SetID(u)
-	return coc
+func (_c *CycleOrderCreate) SetID(v uuid.UUID) *CycleOrderCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (coc *CycleOrderCreate) SetNillableID(u *uuid.UUID) *CycleOrderCreate {
-	if u != nil {
-		coc.SetID(*u)
+func (_c *CycleOrderCreate) SetNillableID(v *uuid.UUID) *CycleOrderCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return coc
+	return _c
 }
 
 // Mutation returns the CycleOrderMutation object of the builder.
-func (coc *CycleOrderCreate) Mutation() *CycleOrderMutation {
-	return coc.mutation
+func (_c *CycleOrderCreate) Mutation() *CycleOrderMutation {
+	return _c.mutation
 }
 
 // Save creates the CycleOrder in the database.
-func (coc *CycleOrderCreate) Save(ctx context.Context) (*CycleOrder, error) {
-	coc.defaults()
-	return withHooks(ctx, coc.sqlSave, coc.mutation, coc.hooks)
+func (_c *CycleOrderCreate) Save(ctx context.Context) (*CycleOrder, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (coc *CycleOrderCreate) SaveX(ctx context.Context) *CycleOrder {
-	v, err := coc.Save(ctx)
+func (_c *CycleOrderCreate) SaveX(ctx context.Context) *CycleOrder {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -112,83 +112,83 @@ func (coc *CycleOrderCreate) SaveX(ctx context.Context) *CycleOrder {
 }
 
 // Exec executes the query.
-func (coc *CycleOrderCreate) Exec(ctx context.Context) error {
-	_, err := coc.Save(ctx)
+func (_c *CycleOrderCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (coc *CycleOrderCreate) ExecX(ctx context.Context) {
-	if err := coc.Exec(ctx); err != nil {
+func (_c *CycleOrderCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (coc *CycleOrderCreate) defaults() {
-	if _, ok := coc.mutation.ID(); !ok {
+func (_c *CycleOrderCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := cycleorder.DefaultID()
-		coc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (coc *CycleOrderCreate) check() error {
-	if _, ok := coc.mutation.FkUserID(); !ok {
+func (_c *CycleOrderCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "CycleOrder.fk_user_id"`)}
 	}
-	if _, ok := coc.mutation.OrderNo(); !ok {
+	if _, ok := _c.mutation.OrderNo(); !ok {
 		return &ValidationError{Name: "order_no", err: errors.New(`ent: missing required field "CycleOrder.order_no"`)}
 	}
-	if v, ok := coc.mutation.OrderNo(); ok {
+	if v, ok := _c.mutation.OrderNo(); ok {
 		if err := cycleorder.OrderNoValidator(v); err != nil {
 			return &ValidationError{Name: "order_no", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.order_no": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.ProductName(); !ok {
+	if _, ok := _c.mutation.ProductName(); !ok {
 		return &ValidationError{Name: "product_name", err: errors.New(`ent: missing required field "CycleOrder.product_name"`)}
 	}
-	if v, ok := coc.mutation.ProductName(); ok {
+	if v, ok := _c.mutation.ProductName(); ok {
 		if err := cycleorder.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_name": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.ProductDesc(); !ok {
+	if _, ok := _c.mutation.ProductDesc(); !ok {
 		return &ValidationError{Name: "product_desc", err: errors.New(`ent: missing required field "CycleOrder.product_desc"`)}
 	}
-	if v, ok := coc.mutation.ProductDesc(); ok {
+	if v, ok := _c.mutation.ProductDesc(); ok {
 		if err := cycleorder.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_desc": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.Symbol(); !ok {
+	if _, ok := _c.mutation.Symbol(); !ok {
 		return &ValidationError{Name: "symbol", err: errors.New(`ent: missing required field "CycleOrder.symbol"`)}
 	}
-	if v, ok := coc.mutation.Symbol(); ok {
+	if v, ok := _c.mutation.Symbol(); ok {
 		if err := cycleorder.SymbolValidator(v); err != nil {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.symbol": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.Cycle(); !ok {
+	if _, ok := _c.mutation.Cycle(); !ok {
 		return &ValidationError{Name: "cycle", err: errors.New(`ent: missing required field "CycleOrder.cycle"`)}
 	}
-	if v, ok := coc.mutation.ResourceID(); ok {
+	if v, ok := _c.mutation.ResourceID(); ok {
 		if err := cycleorder.ResourceIDValidator(v); err != nil {
 			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
 		}
 	}
-	if _, ok := coc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "CycleOrder.create_time"`)}
 	}
 	return nil
 }
 
-func (coc *CycleOrderCreate) sqlSave(ctx context.Context) (*CycleOrder, error) {
-	if err := coc.check(); err != nil {
+func (_c *CycleOrderCreate) sqlSave(ctx context.Context) (*CycleOrder, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := coc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, coc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -201,49 +201,49 @@ func (coc *CycleOrderCreate) sqlSave(ctx context.Context) (*CycleOrder, error) {
 			return nil, err
 		}
 	}
-	coc.mutation.id = &_node.ID
-	coc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (coc *CycleOrderCreate) createSpec() (*CycleOrder, *sqlgraph.CreateSpec) {
+func (_c *CycleOrderCreate) createSpec() (*CycleOrder, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CycleOrder{config: coc.config}
+		_node = &CycleOrder{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(cycleorder.Table, sqlgraph.NewFieldSpec(cycleorder.FieldID, field.TypeUUID))
 	)
-	if id, ok := coc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := coc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(cycleorder.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := coc.mutation.OrderNo(); ok {
+	if value, ok := _c.mutation.OrderNo(); ok {
 		_spec.SetField(cycleorder.FieldOrderNo, field.TypeString, value)
 		_node.OrderNo = value
 	}
-	if value, ok := coc.mutation.ProductName(); ok {
+	if value, ok := _c.mutation.ProductName(); ok {
 		_spec.SetField(cycleorder.FieldProductName, field.TypeString, value)
 		_node.ProductName = value
 	}
-	if value, ok := coc.mutation.ProductDesc(); ok {
+	if value, ok := _c.mutation.ProductDesc(); ok {
 		_spec.SetField(cycleorder.FieldProductDesc, field.TypeString, value)
 		_node.ProductDesc = value
 	}
-	if value, ok := coc.mutation.Symbol(); ok {
+	if value, ok := _c.mutation.Symbol(); ok {
 		_spec.SetField(cycleorder.FieldSymbol, field.TypeString, value)
 		_node.Symbol = value
 	}
-	if value, ok := coc.mutation.Cycle(); ok {
+	if value, ok := _c.mutation.Cycle(); ok {
 		_spec.SetField(cycleorder.FieldCycle, field.TypeFloat64, value)
 		_node.Cycle = value
 	}
-	if value, ok := coc.mutation.ResourceID(); ok {
+	if value, ok := _c.mutation.ResourceID(); ok {
 		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
 		_node.ResourceID = &value
 	}
-	if value, ok := coc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
@@ -253,17 +253,21 @@ func (coc *CycleOrderCreate) createSpec() (*CycleOrder, *sqlgraph.CreateSpec) {
 // CycleOrderCreateBulk is the builder for creating many CycleOrder entities in bulk.
 type CycleOrderCreateBulk struct {
 	config
+	err      error
 	builders []*CycleOrderCreate
 }
 
 // Save creates the CycleOrder entities in the database.
-func (cocb *CycleOrderCreateBulk) Save(ctx context.Context) ([]*CycleOrder, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(cocb.builders))
-	nodes := make([]*CycleOrder, len(cocb.builders))
-	mutators := make([]Mutator, len(cocb.builders))
-	for i := range cocb.builders {
+func (_c *CycleOrderCreateBulk) Save(ctx context.Context) ([]*CycleOrder, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CycleOrder, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := cocb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CycleOrderMutation)
@@ -277,11 +281,11 @@ func (cocb *CycleOrderCreateBulk) Save(ctx context.Context) ([]*CycleOrder, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, cocb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, cocb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -301,7 +305,7 @@ func (cocb *CycleOrderCreateBulk) Save(ctx context.Context) ([]*CycleOrder, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, cocb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -309,8 +313,8 @@ func (cocb *CycleOrderCreateBulk) Save(ctx context.Context) ([]*CycleOrder, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cocb *CycleOrderCreateBulk) SaveX(ctx context.Context) []*CycleOrder {
-	v, err := cocb.Save(ctx)
+func (_c *CycleOrderCreateBulk) SaveX(ctx context.Context) []*CycleOrder {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -318,14 +322,14 @@ func (cocb *CycleOrderCreateBulk) SaveX(ctx context.Context) []*CycleOrder {
 }
 
 // Exec executes the query.
-func (cocb *CycleOrderCreateBulk) Exec(ctx context.Context) error {
-	_, err := cocb.Save(ctx)
+func (_c *CycleOrderCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cocb *CycleOrderCreateBulk) ExecX(ctx context.Context) {
-	if err := cocb.Exec(ctx); err != nil {
+func (_c *CycleOrderCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

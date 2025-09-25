@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -27,40 +28,40 @@ type ComputeSpecQuery struct {
 }
 
 // Where adds a new predicate for the ComputeSpecQuery builder.
-func (csq *ComputeSpecQuery) Where(ps ...predicate.ComputeSpec) *ComputeSpecQuery {
-	csq.predicates = append(csq.predicates, ps...)
-	return csq
+func (_q *ComputeSpecQuery) Where(ps ...predicate.ComputeSpec) *ComputeSpecQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (csq *ComputeSpecQuery) Limit(limit int) *ComputeSpecQuery {
-	csq.ctx.Limit = &limit
-	return csq
+func (_q *ComputeSpecQuery) Limit(limit int) *ComputeSpecQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (csq *ComputeSpecQuery) Offset(offset int) *ComputeSpecQuery {
-	csq.ctx.Offset = &offset
-	return csq
+func (_q *ComputeSpecQuery) Offset(offset int) *ComputeSpecQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (csq *ComputeSpecQuery) Unique(unique bool) *ComputeSpecQuery {
-	csq.ctx.Unique = &unique
-	return csq
+func (_q *ComputeSpecQuery) Unique(unique bool) *ComputeSpecQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (csq *ComputeSpecQuery) Order(o ...computespec.OrderOption) *ComputeSpecQuery {
-	csq.order = append(csq.order, o...)
-	return csq
+func (_q *ComputeSpecQuery) Order(o ...computespec.OrderOption) *ComputeSpecQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ComputeSpec entity from the query.
 // Returns a *NotFoundError when no ComputeSpec was found.
-func (csq *ComputeSpecQuery) First(ctx context.Context) (*ComputeSpec, error) {
-	nodes, err := csq.Limit(1).All(setContextOp(ctx, csq.ctx, "First"))
+func (_q *ComputeSpecQuery) First(ctx context.Context) (*ComputeSpec, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +72,8 @@ func (csq *ComputeSpecQuery) First(ctx context.Context) (*ComputeSpec, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (csq *ComputeSpecQuery) FirstX(ctx context.Context) *ComputeSpec {
-	node, err := csq.First(ctx)
+func (_q *ComputeSpecQuery) FirstX(ctx context.Context) *ComputeSpec {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -81,9 +82,9 @@ func (csq *ComputeSpecQuery) FirstX(ctx context.Context) *ComputeSpec {
 
 // FirstID returns the first ComputeSpec ID from the query.
 // Returns a *NotFoundError when no ComputeSpec ID was found.
-func (csq *ComputeSpecQuery) FirstID(ctx context.Context) (id int32, err error) {
+func (_q *ComputeSpecQuery) FirstID(ctx context.Context) (id int32, err error) {
 	var ids []int32
-	if ids, err = csq.Limit(1).IDs(setContextOp(ctx, csq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -94,8 +95,8 @@ func (csq *ComputeSpecQuery) FirstID(ctx context.Context) (id int32, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (csq *ComputeSpecQuery) FirstIDX(ctx context.Context) int32 {
-	id, err := csq.FirstID(ctx)
+func (_q *ComputeSpecQuery) FirstIDX(ctx context.Context) int32 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -105,8 +106,8 @@ func (csq *ComputeSpecQuery) FirstIDX(ctx context.Context) int32 {
 // Only returns a single ComputeSpec entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ComputeSpec entity is found.
 // Returns a *NotFoundError when no ComputeSpec entities are found.
-func (csq *ComputeSpecQuery) Only(ctx context.Context) (*ComputeSpec, error) {
-	nodes, err := csq.Limit(2).All(setContextOp(ctx, csq.ctx, "Only"))
+func (_q *ComputeSpecQuery) Only(ctx context.Context) (*ComputeSpec, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +122,8 @@ func (csq *ComputeSpecQuery) Only(ctx context.Context) (*ComputeSpec, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (csq *ComputeSpecQuery) OnlyX(ctx context.Context) *ComputeSpec {
-	node, err := csq.Only(ctx)
+func (_q *ComputeSpecQuery) OnlyX(ctx context.Context) *ComputeSpec {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -132,9 +133,9 @@ func (csq *ComputeSpecQuery) OnlyX(ctx context.Context) *ComputeSpec {
 // OnlyID is like Only, but returns the only ComputeSpec ID in the query.
 // Returns a *NotSingularError when more than one ComputeSpec ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (csq *ComputeSpecQuery) OnlyID(ctx context.Context) (id int32, err error) {
+func (_q *ComputeSpecQuery) OnlyID(ctx context.Context) (id int32, err error) {
 	var ids []int32
-	if ids, err = csq.Limit(2).IDs(setContextOp(ctx, csq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -149,8 +150,8 @@ func (csq *ComputeSpecQuery) OnlyID(ctx context.Context) (id int32, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (csq *ComputeSpecQuery) OnlyIDX(ctx context.Context) int32 {
-	id, err := csq.OnlyID(ctx)
+func (_q *ComputeSpecQuery) OnlyIDX(ctx context.Context) int32 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -158,18 +159,18 @@ func (csq *ComputeSpecQuery) OnlyIDX(ctx context.Context) int32 {
 }
 
 // All executes the query and returns a list of ComputeSpecs.
-func (csq *ComputeSpecQuery) All(ctx context.Context) ([]*ComputeSpec, error) {
-	ctx = setContextOp(ctx, csq.ctx, "All")
-	if err := csq.prepareQuery(ctx); err != nil {
+func (_q *ComputeSpecQuery) All(ctx context.Context) ([]*ComputeSpec, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ComputeSpec, *ComputeSpecQuery]()
-	return withInterceptors[[]*ComputeSpec](ctx, csq, qr, csq.inters)
+	return withInterceptors[[]*ComputeSpec](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (csq *ComputeSpecQuery) AllX(ctx context.Context) []*ComputeSpec {
-	nodes, err := csq.All(ctx)
+func (_q *ComputeSpecQuery) AllX(ctx context.Context) []*ComputeSpec {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -177,20 +178,20 @@ func (csq *ComputeSpecQuery) AllX(ctx context.Context) []*ComputeSpec {
 }
 
 // IDs executes the query and returns a list of ComputeSpec IDs.
-func (csq *ComputeSpecQuery) IDs(ctx context.Context) (ids []int32, err error) {
-	if csq.ctx.Unique == nil && csq.path != nil {
-		csq.Unique(true)
+func (_q *ComputeSpecQuery) IDs(ctx context.Context) (ids []int32, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, csq.ctx, "IDs")
-	if err = csq.Select(computespec.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(computespec.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (csq *ComputeSpecQuery) IDsX(ctx context.Context) []int32 {
-	ids, err := csq.IDs(ctx)
+func (_q *ComputeSpecQuery) IDsX(ctx context.Context) []int32 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -198,17 +199,17 @@ func (csq *ComputeSpecQuery) IDsX(ctx context.Context) []int32 {
 }
 
 // Count returns the count of the given query.
-func (csq *ComputeSpecQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, csq.ctx, "Count")
-	if err := csq.prepareQuery(ctx); err != nil {
+func (_q *ComputeSpecQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, csq, querierCount[*ComputeSpecQuery](), csq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ComputeSpecQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (csq *ComputeSpecQuery) CountX(ctx context.Context) int {
-	count, err := csq.Count(ctx)
+func (_q *ComputeSpecQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -216,9 +217,9 @@ func (csq *ComputeSpecQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (csq *ComputeSpecQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, csq.ctx, "Exist")
-	switch _, err := csq.FirstID(ctx); {
+func (_q *ComputeSpecQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -229,8 +230,8 @@ func (csq *ComputeSpecQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (csq *ComputeSpecQuery) ExistX(ctx context.Context) bool {
-	exist, err := csq.Exist(ctx)
+func (_q *ComputeSpecQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -239,19 +240,19 @@ func (csq *ComputeSpecQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ComputeSpecQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (csq *ComputeSpecQuery) Clone() *ComputeSpecQuery {
-	if csq == nil {
+func (_q *ComputeSpecQuery) Clone() *ComputeSpecQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ComputeSpecQuery{
-		config:     csq.config,
-		ctx:        csq.ctx.Clone(),
-		order:      append([]computespec.OrderOption{}, csq.order...),
-		inters:     append([]Interceptor{}, csq.inters...),
-		predicates: append([]predicate.ComputeSpec{}, csq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]computespec.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ComputeSpec{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  csq.sql.Clone(),
-		path: csq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -269,10 +270,10 @@ func (csq *ComputeSpecQuery) Clone() *ComputeSpecQuery {
 //		GroupBy(computespec.FieldCore).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (csq *ComputeSpecQuery) GroupBy(field string, fields ...string) *ComputeSpecGroupBy {
-	csq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ComputeSpecGroupBy{build: csq}
-	grbuild.flds = &csq.ctx.Fields
+func (_q *ComputeSpecQuery) GroupBy(field string, fields ...string) *ComputeSpecGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ComputeSpecGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = computespec.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -290,62 +291,62 @@ func (csq *ComputeSpecQuery) GroupBy(field string, fields ...string) *ComputeSpe
 //	client.ComputeSpec.Query().
 //		Select(computespec.FieldCore).
 //		Scan(ctx, &v)
-func (csq *ComputeSpecQuery) Select(fields ...string) *ComputeSpecSelect {
-	csq.ctx.Fields = append(csq.ctx.Fields, fields...)
-	sbuild := &ComputeSpecSelect{ComputeSpecQuery: csq}
+func (_q *ComputeSpecQuery) Select(fields ...string) *ComputeSpecSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ComputeSpecSelect{ComputeSpecQuery: _q}
 	sbuild.label = computespec.Label
-	sbuild.flds, sbuild.scan = &csq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ComputeSpecSelect configured with the given aggregations.
-func (csq *ComputeSpecQuery) Aggregate(fns ...AggregateFunc) *ComputeSpecSelect {
-	return csq.Select().Aggregate(fns...)
+func (_q *ComputeSpecQuery) Aggregate(fns ...AggregateFunc) *ComputeSpecSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (csq *ComputeSpecQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range csq.inters {
+func (_q *ComputeSpecQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, csq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range csq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !computespec.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if csq.path != nil {
-		prev, err := csq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		csq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (csq *ComputeSpecQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ComputeSpec, error) {
+func (_q *ComputeSpecQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ComputeSpec, error) {
 	var (
 		nodes = []*ComputeSpec{}
-		_spec = csq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ComputeSpec).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ComputeSpec{config: csq.config}
+		node := &ComputeSpec{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, csq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -354,24 +355,24 @@ func (csq *ComputeSpecQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
-func (csq *ComputeSpecQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := csq.querySpec()
-	_spec.Node.Columns = csq.ctx.Fields
-	if len(csq.ctx.Fields) > 0 {
-		_spec.Unique = csq.ctx.Unique != nil && *csq.ctx.Unique
+func (_q *ComputeSpecQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, csq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (csq *ComputeSpecQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ComputeSpecQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(computespec.Table, computespec.Columns, sqlgraph.NewFieldSpec(computespec.FieldID, field.TypeInt32))
-	_spec.From = csq.sql
-	if unique := csq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if csq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := csq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, computespec.FieldID)
 		for i := range fields {
@@ -380,20 +381,20 @@ func (csq *ComputeSpecQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := csq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := csq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := csq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := csq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -403,33 +404,33 @@ func (csq *ComputeSpecQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (csq *ComputeSpecQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(csq.driver.Dialect())
+func (_q *ComputeSpecQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(computespec.Table)
-	columns := csq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = computespec.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if csq.sql != nil {
-		selector = csq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if csq.ctx.Unique != nil && *csq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range csq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range csq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := csq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := csq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -442,41 +443,41 @@ type ComputeSpecGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (csgb *ComputeSpecGroupBy) Aggregate(fns ...AggregateFunc) *ComputeSpecGroupBy {
-	csgb.fns = append(csgb.fns, fns...)
-	return csgb
+func (_g *ComputeSpecGroupBy) Aggregate(fns ...AggregateFunc) *ComputeSpecGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (csgb *ComputeSpecGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, csgb.build.ctx, "GroupBy")
-	if err := csgb.build.prepareQuery(ctx); err != nil {
+func (_g *ComputeSpecGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ComputeSpecQuery, *ComputeSpecGroupBy](ctx, csgb.build, csgb, csgb.build.inters, v)
+	return scanWithInterceptors[*ComputeSpecQuery, *ComputeSpecGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (csgb *ComputeSpecGroupBy) sqlScan(ctx context.Context, root *ComputeSpecQuery, v any) error {
+func (_g *ComputeSpecGroupBy) sqlScan(ctx context.Context, root *ComputeSpecQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(csgb.fns))
-	for _, fn := range csgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*csgb.flds)+len(csgb.fns))
-		for _, f := range *csgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*csgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := csgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -490,27 +491,27 @@ type ComputeSpecSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (css *ComputeSpecSelect) Aggregate(fns ...AggregateFunc) *ComputeSpecSelect {
-	css.fns = append(css.fns, fns...)
-	return css
+func (_s *ComputeSpecSelect) Aggregate(fns ...AggregateFunc) *ComputeSpecSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (css *ComputeSpecSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, css.ctx, "Select")
-	if err := css.prepareQuery(ctx); err != nil {
+func (_s *ComputeSpecSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ComputeSpecQuery, *ComputeSpecSelect](ctx, css.ComputeSpecQuery, css, css.inters, v)
+	return scanWithInterceptors[*ComputeSpecQuery, *ComputeSpecSelect](ctx, _s.ComputeSpecQuery, _s, _s.inters, v)
 }
 
-func (css *ComputeSpecSelect) sqlScan(ctx context.Context, root *ComputeSpecQuery, v any) error {
+func (_s *ComputeSpecSelect) sqlScan(ctx context.Context, root *ComputeSpecQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(css.fns))
-	for _, fn := range css.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*css.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -518,7 +519,7 @@ func (css *ComputeSpecSelect) sqlScan(ctx context.Context, root *ComputeSpecQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := css.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

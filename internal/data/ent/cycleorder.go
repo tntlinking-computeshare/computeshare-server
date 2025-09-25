@@ -59,7 +59,7 @@ func (*CycleOrder) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CycleOrder fields.
-func (co *CycleOrder) assignValues(columns []string, values []any) error {
+func (_m *CycleOrder) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -69,59 +69,59 @@ func (co *CycleOrder) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				co.ID = *value
+				_m.ID = *value
 			}
 		case cycleorder.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				co.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cycleorder.FieldOrderNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field order_no", values[i])
 			} else if value.Valid {
-				co.OrderNo = value.String
+				_m.OrderNo = value.String
 			}
 		case cycleorder.FieldProductName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_name", values[i])
 			} else if value.Valid {
-				co.ProductName = value.String
+				_m.ProductName = value.String
 			}
 		case cycleorder.FieldProductDesc:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_desc", values[i])
 			} else if value.Valid {
-				co.ProductDesc = value.String
+				_m.ProductDesc = value.String
 			}
 		case cycleorder.FieldSymbol:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field symbol", values[i])
 			} else if value.Valid {
-				co.Symbol = value.String
+				_m.Symbol = value.String
 			}
 		case cycleorder.FieldCycle:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field cycle", values[i])
 			} else if value.Valid {
-				co.Cycle = value.Float64
+				_m.Cycle = value.Float64
 			}
 		case cycleorder.FieldResourceID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field resource_id", values[i])
 			} else if value.Valid {
-				co.ResourceID = new(string)
-				*co.ResourceID = value.String
+				_m.ResourceID = new(string)
+				*_m.ResourceID = value.String
 			}
 		case cycleorder.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				co.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		default:
-			co.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -129,58 +129,58 @@ func (co *CycleOrder) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CycleOrder.
 // This includes values selected through modifiers, order, etc.
-func (co *CycleOrder) Value(name string) (ent.Value, error) {
-	return co.selectValues.Get(name)
+func (_m *CycleOrder) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CycleOrder.
 // Note that you need to call CycleOrder.Unwrap() before calling this method if this CycleOrder
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (co *CycleOrder) Update() *CycleOrderUpdateOne {
-	return NewCycleOrderClient(co.config).UpdateOne(co)
+func (_m *CycleOrder) Update() *CycleOrderUpdateOne {
+	return NewCycleOrderClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CycleOrder entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (co *CycleOrder) Unwrap() *CycleOrder {
-	_tx, ok := co.config.driver.(*txDriver)
+func (_m *CycleOrder) Unwrap() *CycleOrder {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CycleOrder is not a transactional entity")
 	}
-	co.config.driver = _tx.drv
-	return co
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (co *CycleOrder) String() string {
+func (_m *CycleOrder) String() string {
 	var builder strings.Builder
 	builder.WriteString("CycleOrder(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", co.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", co.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("order_no=")
-	builder.WriteString(co.OrderNo)
+	builder.WriteString(_m.OrderNo)
 	builder.WriteString(", ")
 	builder.WriteString("product_name=")
-	builder.WriteString(co.ProductName)
+	builder.WriteString(_m.ProductName)
 	builder.WriteString(", ")
 	builder.WriteString("product_desc=")
-	builder.WriteString(co.ProductDesc)
+	builder.WriteString(_m.ProductDesc)
 	builder.WriteString(", ")
 	builder.WriteString("symbol=")
-	builder.WriteString(co.Symbol)
+	builder.WriteString(_m.Symbol)
 	builder.WriteString(", ")
 	builder.WriteString("cycle=")
-	builder.WriteString(fmt.Sprintf("%v", co.Cycle))
+	builder.WriteString(fmt.Sprintf("%v", _m.Cycle))
 	builder.WriteString(", ")
-	if v := co.ResourceID; v != nil {
+	if v := _m.ResourceID; v != nil {
 		builder.WriteString("resource_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(co.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

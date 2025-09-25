@@ -24,73 +24,129 @@ type DomainBindingUpdate struct {
 }
 
 // Where appends a list predicates to the DomainBindingUpdate builder.
-func (dbu *DomainBindingUpdate) Where(ps ...predicate.DomainBinding) *DomainBindingUpdate {
-	dbu.mutation.Where(ps...)
-	return dbu
+func (_u *DomainBindingUpdate) Where(ps ...predicate.DomainBinding) *DomainBindingUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (dbu *DomainBindingUpdate) SetUserID(u uuid.UUID) *DomainBindingUpdate {
-	dbu.mutation.SetUserID(u)
-	return dbu
+func (_u *DomainBindingUpdate) SetUserID(v uuid.UUID) *DomainBindingUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableUserID(v *uuid.UUID) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetFkComputeInstanceID sets the "fk_compute_instance_id" field.
-func (dbu *DomainBindingUpdate) SetFkComputeInstanceID(u uuid.UUID) *DomainBindingUpdate {
-	dbu.mutation.SetFkComputeInstanceID(u)
-	return dbu
+func (_u *DomainBindingUpdate) SetFkComputeInstanceID(v uuid.UUID) *DomainBindingUpdate {
+	_u.mutation.SetFkComputeInstanceID(v)
+	return _u
+}
+
+// SetNillableFkComputeInstanceID sets the "fk_compute_instance_id" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableFkComputeInstanceID(v *uuid.UUID) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetFkComputeInstanceID(*v)
+	}
+	return _u
 }
 
 // SetFkNetworkMappingID sets the "fk_network_mapping_id" field.
-func (dbu *DomainBindingUpdate) SetFkNetworkMappingID(u uuid.UUID) *DomainBindingUpdate {
-	dbu.mutation.SetFkNetworkMappingID(u)
-	return dbu
+func (_u *DomainBindingUpdate) SetFkNetworkMappingID(v uuid.UUID) *DomainBindingUpdate {
+	_u.mutation.SetFkNetworkMappingID(v)
+	return _u
+}
+
+// SetNillableFkNetworkMappingID sets the "fk_network_mapping_id" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableFkNetworkMappingID(v *uuid.UUID) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetFkNetworkMappingID(*v)
+	}
+	return _u
 }
 
 // SetName sets the "name" field.
-func (dbu *DomainBindingUpdate) SetName(s string) *DomainBindingUpdate {
-	dbu.mutation.SetName(s)
-	return dbu
+func (_u *DomainBindingUpdate) SetName(v string) *DomainBindingUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableName(v *string) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetDomain sets the "domain" field.
-func (dbu *DomainBindingUpdate) SetDomain(s string) *DomainBindingUpdate {
-	dbu.mutation.SetDomain(s)
-	return dbu
+func (_u *DomainBindingUpdate) SetDomain(v string) *DomainBindingUpdate {
+	_u.mutation.SetDomain(v)
+	return _u
+}
+
+// SetNillableDomain sets the "domain" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableDomain(v *string) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetDomain(*v)
+	}
+	return _u
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbu *DomainBindingUpdate) SetGatewayPort(i int32) *DomainBindingUpdate {
-	dbu.mutation.ResetGatewayPort()
-	dbu.mutation.SetGatewayPort(i)
-	return dbu
+func (_u *DomainBindingUpdate) SetGatewayPort(v int32) *DomainBindingUpdate {
+	_u.mutation.ResetGatewayPort()
+	_u.mutation.SetGatewayPort(v)
+	return _u
 }
 
-// AddGatewayPort adds i to the "gateway_port" field.
-func (dbu *DomainBindingUpdate) AddGatewayPort(i int32) *DomainBindingUpdate {
-	dbu.mutation.AddGatewayPort(i)
-	return dbu
+// SetNillableGatewayPort sets the "gateway_port" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableGatewayPort(v *int32) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetGatewayPort(*v)
+	}
+	return _u
+}
+
+// AddGatewayPort adds value to the "gateway_port" field.
+func (_u *DomainBindingUpdate) AddGatewayPort(v int32) *DomainBindingUpdate {
+	_u.mutation.AddGatewayPort(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (dbu *DomainBindingUpdate) SetCreateTime(t time.Time) *DomainBindingUpdate {
-	dbu.mutation.SetCreateTime(t)
-	return dbu
+func (_u *DomainBindingUpdate) SetCreateTime(v time.Time) *DomainBindingUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *DomainBindingUpdate) SetNillableCreateTime(v *time.Time) *DomainBindingUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the DomainBindingMutation object of the builder.
-func (dbu *DomainBindingUpdate) Mutation() *DomainBindingMutation {
-	return dbu.mutation
+func (_u *DomainBindingUpdate) Mutation() *DomainBindingMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (dbu *DomainBindingUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, dbu.sqlSave, dbu.mutation, dbu.hooks)
+func (_u *DomainBindingUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dbu *DomainBindingUpdate) SaveX(ctx context.Context) int {
-	affected, err := dbu.Save(ctx)
+func (_u *DomainBindingUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -98,26 +154,26 @@ func (dbu *DomainBindingUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (dbu *DomainBindingUpdate) Exec(ctx context.Context) error {
-	_, err := dbu.Save(ctx)
+func (_u *DomainBindingUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dbu *DomainBindingUpdate) ExecX(ctx context.Context) {
-	if err := dbu.Exec(ctx); err != nil {
+func (_u *DomainBindingUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dbu *DomainBindingUpdate) check() error {
-	if v, ok := dbu.mutation.Name(); ok {
+func (_u *DomainBindingUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := domainbinding.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.name": %w`, err)}
 		}
 	}
-	if v, ok := dbu.mutation.Domain(); ok {
+	if v, ok := _u.mutation.Domain(); ok {
 		if err := domainbinding.DomainValidator(v); err != nil {
 			return &ValidationError{Name: "domain", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.domain": %w`, err)}
 		}
@@ -125,43 +181,43 @@ func (dbu *DomainBindingUpdate) check() error {
 	return nil
 }
 
-func (dbu *DomainBindingUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := dbu.check(); err != nil {
-		return n, err
+func (_u *DomainBindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(domainbinding.Table, domainbinding.Columns, sqlgraph.NewFieldSpec(domainbinding.FieldID, field.TypeUUID))
-	if ps := dbu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := dbu.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(domainbinding.FieldUserID, field.TypeUUID, value)
 	}
-	if value, ok := dbu.mutation.FkComputeInstanceID(); ok {
+	if value, ok := _u.mutation.FkComputeInstanceID(); ok {
 		_spec.SetField(domainbinding.FieldFkComputeInstanceID, field.TypeUUID, value)
 	}
-	if value, ok := dbu.mutation.FkNetworkMappingID(); ok {
+	if value, ok := _u.mutation.FkNetworkMappingID(); ok {
 		_spec.SetField(domainbinding.FieldFkNetworkMappingID, field.TypeUUID, value)
 	}
-	if value, ok := dbu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(domainbinding.FieldName, field.TypeString, value)
 	}
-	if value, ok := dbu.mutation.Domain(); ok {
+	if value, ok := _u.mutation.Domain(); ok {
 		_spec.SetField(domainbinding.FieldDomain, field.TypeString, value)
 	}
-	if value, ok := dbu.mutation.GatewayPort(); ok {
+	if value, ok := _u.mutation.GatewayPort(); ok {
 		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := dbu.mutation.AddedGatewayPort(); ok {
+	if value, ok := _u.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := dbu.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(domainbinding.FieldCreateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, dbu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{domainbinding.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -169,8 +225,8 @@ func (dbu *DomainBindingUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	dbu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // DomainBindingUpdateOne is the builder for updating a single DomainBinding entity.
@@ -182,80 +238,136 @@ type DomainBindingUpdateOne struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (dbuo *DomainBindingUpdateOne) SetUserID(u uuid.UUID) *DomainBindingUpdateOne {
-	dbuo.mutation.SetUserID(u)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetUserID(v uuid.UUID) *DomainBindingUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableUserID(v *uuid.UUID) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetFkComputeInstanceID sets the "fk_compute_instance_id" field.
-func (dbuo *DomainBindingUpdateOne) SetFkComputeInstanceID(u uuid.UUID) *DomainBindingUpdateOne {
-	dbuo.mutation.SetFkComputeInstanceID(u)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetFkComputeInstanceID(v uuid.UUID) *DomainBindingUpdateOne {
+	_u.mutation.SetFkComputeInstanceID(v)
+	return _u
+}
+
+// SetNillableFkComputeInstanceID sets the "fk_compute_instance_id" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableFkComputeInstanceID(v *uuid.UUID) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetFkComputeInstanceID(*v)
+	}
+	return _u
 }
 
 // SetFkNetworkMappingID sets the "fk_network_mapping_id" field.
-func (dbuo *DomainBindingUpdateOne) SetFkNetworkMappingID(u uuid.UUID) *DomainBindingUpdateOne {
-	dbuo.mutation.SetFkNetworkMappingID(u)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetFkNetworkMappingID(v uuid.UUID) *DomainBindingUpdateOne {
+	_u.mutation.SetFkNetworkMappingID(v)
+	return _u
+}
+
+// SetNillableFkNetworkMappingID sets the "fk_network_mapping_id" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableFkNetworkMappingID(v *uuid.UUID) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetFkNetworkMappingID(*v)
+	}
+	return _u
 }
 
 // SetName sets the "name" field.
-func (dbuo *DomainBindingUpdateOne) SetName(s string) *DomainBindingUpdateOne {
-	dbuo.mutation.SetName(s)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetName(v string) *DomainBindingUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableName(v *string) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetDomain sets the "domain" field.
-func (dbuo *DomainBindingUpdateOne) SetDomain(s string) *DomainBindingUpdateOne {
-	dbuo.mutation.SetDomain(s)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetDomain(v string) *DomainBindingUpdateOne {
+	_u.mutation.SetDomain(v)
+	return _u
+}
+
+// SetNillableDomain sets the "domain" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableDomain(v *string) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetDomain(*v)
+	}
+	return _u
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbuo *DomainBindingUpdateOne) SetGatewayPort(i int32) *DomainBindingUpdateOne {
-	dbuo.mutation.ResetGatewayPort()
-	dbuo.mutation.SetGatewayPort(i)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetGatewayPort(v int32) *DomainBindingUpdateOne {
+	_u.mutation.ResetGatewayPort()
+	_u.mutation.SetGatewayPort(v)
+	return _u
 }
 
-// AddGatewayPort adds i to the "gateway_port" field.
-func (dbuo *DomainBindingUpdateOne) AddGatewayPort(i int32) *DomainBindingUpdateOne {
-	dbuo.mutation.AddGatewayPort(i)
-	return dbuo
+// SetNillableGatewayPort sets the "gateway_port" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableGatewayPort(v *int32) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetGatewayPort(*v)
+	}
+	return _u
+}
+
+// AddGatewayPort adds value to the "gateway_port" field.
+func (_u *DomainBindingUpdateOne) AddGatewayPort(v int32) *DomainBindingUpdateOne {
+	_u.mutation.AddGatewayPort(v)
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (dbuo *DomainBindingUpdateOne) SetCreateTime(t time.Time) *DomainBindingUpdateOne {
-	dbuo.mutation.SetCreateTime(t)
-	return dbuo
+func (_u *DomainBindingUpdateOne) SetCreateTime(v time.Time) *DomainBindingUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *DomainBindingUpdateOne) SetNillableCreateTime(v *time.Time) *DomainBindingUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the DomainBindingMutation object of the builder.
-func (dbuo *DomainBindingUpdateOne) Mutation() *DomainBindingMutation {
-	return dbuo.mutation
+func (_u *DomainBindingUpdateOne) Mutation() *DomainBindingMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the DomainBindingUpdate builder.
-func (dbuo *DomainBindingUpdateOne) Where(ps ...predicate.DomainBinding) *DomainBindingUpdateOne {
-	dbuo.mutation.Where(ps...)
-	return dbuo
+func (_u *DomainBindingUpdateOne) Where(ps ...predicate.DomainBinding) *DomainBindingUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (dbuo *DomainBindingUpdateOne) Select(field string, fields ...string) *DomainBindingUpdateOne {
-	dbuo.fields = append([]string{field}, fields...)
-	return dbuo
+func (_u *DomainBindingUpdateOne) Select(field string, fields ...string) *DomainBindingUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated DomainBinding entity.
-func (dbuo *DomainBindingUpdateOne) Save(ctx context.Context) (*DomainBinding, error) {
-	return withHooks(ctx, dbuo.sqlSave, dbuo.mutation, dbuo.hooks)
+func (_u *DomainBindingUpdateOne) Save(ctx context.Context) (*DomainBinding, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dbuo *DomainBindingUpdateOne) SaveX(ctx context.Context) *DomainBinding {
-	node, err := dbuo.Save(ctx)
+func (_u *DomainBindingUpdateOne) SaveX(ctx context.Context) *DomainBinding {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -263,26 +375,26 @@ func (dbuo *DomainBindingUpdateOne) SaveX(ctx context.Context) *DomainBinding {
 }
 
 // Exec executes the query on the entity.
-func (dbuo *DomainBindingUpdateOne) Exec(ctx context.Context) error {
-	_, err := dbuo.Save(ctx)
+func (_u *DomainBindingUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dbuo *DomainBindingUpdateOne) ExecX(ctx context.Context) {
-	if err := dbuo.Exec(ctx); err != nil {
+func (_u *DomainBindingUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dbuo *DomainBindingUpdateOne) check() error {
-	if v, ok := dbuo.mutation.Name(); ok {
+func (_u *DomainBindingUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := domainbinding.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.name": %w`, err)}
 		}
 	}
-	if v, ok := dbuo.mutation.Domain(); ok {
+	if v, ok := _u.mutation.Domain(); ok {
 		if err := domainbinding.DomainValidator(v); err != nil {
 			return &ValidationError{Name: "domain", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.domain": %w`, err)}
 		}
@@ -290,17 +402,17 @@ func (dbuo *DomainBindingUpdateOne) check() error {
 	return nil
 }
 
-func (dbuo *DomainBindingUpdateOne) sqlSave(ctx context.Context) (_node *DomainBinding, err error) {
-	if err := dbuo.check(); err != nil {
+func (_u *DomainBindingUpdateOne) sqlSave(ctx context.Context) (_node *DomainBinding, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(domainbinding.Table, domainbinding.Columns, sqlgraph.NewFieldSpec(domainbinding.FieldID, field.TypeUUID))
-	id, ok := dbuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "DomainBinding.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := dbuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, domainbinding.FieldID)
 		for _, f := range fields {
@@ -312,41 +424,41 @@ func (dbuo *DomainBindingUpdateOne) sqlSave(ctx context.Context) (_node *DomainB
 			}
 		}
 	}
-	if ps := dbuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := dbuo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(domainbinding.FieldUserID, field.TypeUUID, value)
 	}
-	if value, ok := dbuo.mutation.FkComputeInstanceID(); ok {
+	if value, ok := _u.mutation.FkComputeInstanceID(); ok {
 		_spec.SetField(domainbinding.FieldFkComputeInstanceID, field.TypeUUID, value)
 	}
-	if value, ok := dbuo.mutation.FkNetworkMappingID(); ok {
+	if value, ok := _u.mutation.FkNetworkMappingID(); ok {
 		_spec.SetField(domainbinding.FieldFkNetworkMappingID, field.TypeUUID, value)
 	}
-	if value, ok := dbuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(domainbinding.FieldName, field.TypeString, value)
 	}
-	if value, ok := dbuo.mutation.Domain(); ok {
+	if value, ok := _u.mutation.Domain(); ok {
 		_spec.SetField(domainbinding.FieldDomain, field.TypeString, value)
 	}
-	if value, ok := dbuo.mutation.GatewayPort(); ok {
+	if value, ok := _u.mutation.GatewayPort(); ok {
 		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := dbuo.mutation.AddedGatewayPort(); ok {
+	if value, ok := _u.mutation.AddedGatewayPort(); ok {
 		_spec.AddField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 	}
-	if value, ok := dbuo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(domainbinding.FieldCreateTime, field.TypeTime, value)
 	}
-	_node = &DomainBinding{config: dbuo.config}
+	_node = &DomainBinding{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, dbuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{domainbinding.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -354,6 +466,6 @@ func (dbuo *DomainBindingUpdateOne) sqlSave(ctx context.Context) (_node *DomainB
 		}
 		return nil, err
 	}
-	dbuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

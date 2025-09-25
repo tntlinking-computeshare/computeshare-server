@@ -53,7 +53,7 @@ func (*ComputeImage) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ComputeImage fields.
-func (ci *ComputeImage) assignValues(columns []string, values []any) error {
+func (_m *ComputeImage) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -64,57 +64,57 @@ func (ci *ComputeImage) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ci.ID = int32(value.Int64)
+			_m.ID = int32(value.Int64)
 		case computeimage.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ci.Name = value.String
+				_m.Name = value.String
 			}
 		case computeimage.FieldImage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field image", values[i])
 			} else if value.Valid {
-				ci.Image = value.String
+				_m.Image = value.String
 			}
 		case computeimage.FieldTag:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tag", values[i])
 			} else if value.Valid {
-				ci.Tag = value.String
+				_m.Tag = value.String
 			}
 		case computeimage.FieldOsType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field os_type", values[i])
 			} else if value.Valid {
-				ci.OsType = value.String
+				_m.OsType = value.String
 			}
 		case computeimage.FieldOsVariant:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field os_variant", values[i])
 			} else if value.Valid {
-				ci.OsVariant = value.String
+				_m.OsVariant = value.String
 			}
 		case computeimage.FieldFilename:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field filename", values[i])
 			} else if value.Valid {
-				ci.Filename = value.String
+				_m.Filename = value.String
 			}
 		case computeimage.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field download_url", values[i])
 			} else if value.Valid {
-				ci.DownloadURL = value.String
+				_m.DownloadURL = value.String
 			}
 		case computeimage.FieldMd5:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field md5", values[i])
 			} else if value.Valid {
-				ci.Md5 = value.String
+				_m.Md5 = value.String
 			}
 		default:
-			ci.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -122,56 +122,56 @@ func (ci *ComputeImage) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ComputeImage.
 // This includes values selected through modifiers, order, etc.
-func (ci *ComputeImage) Value(name string) (ent.Value, error) {
-	return ci.selectValues.Get(name)
+func (_m *ComputeImage) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ComputeImage.
 // Note that you need to call ComputeImage.Unwrap() before calling this method if this ComputeImage
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ci *ComputeImage) Update() *ComputeImageUpdateOne {
-	return NewComputeImageClient(ci.config).UpdateOne(ci)
+func (_m *ComputeImage) Update() *ComputeImageUpdateOne {
+	return NewComputeImageClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ComputeImage entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ci *ComputeImage) Unwrap() *ComputeImage {
-	_tx, ok := ci.config.driver.(*txDriver)
+func (_m *ComputeImage) Unwrap() *ComputeImage {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: ComputeImage is not a transactional entity")
 	}
-	ci.config.driver = _tx.drv
-	return ci
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ci *ComputeImage) String() string {
+func (_m *ComputeImage) String() string {
 	var builder strings.Builder
 	builder.WriteString("ComputeImage(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ci.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("name=")
-	builder.WriteString(ci.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("image=")
-	builder.WriteString(ci.Image)
+	builder.WriteString(_m.Image)
 	builder.WriteString(", ")
 	builder.WriteString("tag=")
-	builder.WriteString(ci.Tag)
+	builder.WriteString(_m.Tag)
 	builder.WriteString(", ")
 	builder.WriteString("os_type=")
-	builder.WriteString(ci.OsType)
+	builder.WriteString(_m.OsType)
 	builder.WriteString(", ")
 	builder.WriteString("os_variant=")
-	builder.WriteString(ci.OsVariant)
+	builder.WriteString(_m.OsVariant)
 	builder.WriteString(", ")
 	builder.WriteString("filename=")
-	builder.WriteString(ci.Filename)
+	builder.WriteString(_m.Filename)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
-	builder.WriteString(ci.DownloadURL)
+	builder.WriteString(_m.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("md5=")
-	builder.WriteString(ci.Md5)
+	builder.WriteString(_m.Md5)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,40 +29,40 @@ type GatewayPortQuery struct {
 }
 
 // Where adds a new predicate for the GatewayPortQuery builder.
-func (gpq *GatewayPortQuery) Where(ps ...predicate.GatewayPort) *GatewayPortQuery {
-	gpq.predicates = append(gpq.predicates, ps...)
-	return gpq
+func (_q *GatewayPortQuery) Where(ps ...predicate.GatewayPort) *GatewayPortQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (gpq *GatewayPortQuery) Limit(limit int) *GatewayPortQuery {
-	gpq.ctx.Limit = &limit
-	return gpq
+func (_q *GatewayPortQuery) Limit(limit int) *GatewayPortQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (gpq *GatewayPortQuery) Offset(offset int) *GatewayPortQuery {
-	gpq.ctx.Offset = &offset
-	return gpq
+func (_q *GatewayPortQuery) Offset(offset int) *GatewayPortQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (gpq *GatewayPortQuery) Unique(unique bool) *GatewayPortQuery {
-	gpq.ctx.Unique = &unique
-	return gpq
+func (_q *GatewayPortQuery) Unique(unique bool) *GatewayPortQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (gpq *GatewayPortQuery) Order(o ...gatewayport.OrderOption) *GatewayPortQuery {
-	gpq.order = append(gpq.order, o...)
-	return gpq
+func (_q *GatewayPortQuery) Order(o ...gatewayport.OrderOption) *GatewayPortQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first GatewayPort entity from the query.
 // Returns a *NotFoundError when no GatewayPort was found.
-func (gpq *GatewayPortQuery) First(ctx context.Context) (*GatewayPort, error) {
-	nodes, err := gpq.Limit(1).All(setContextOp(ctx, gpq.ctx, "First"))
+func (_q *GatewayPortQuery) First(ctx context.Context) (*GatewayPort, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func (gpq *GatewayPortQuery) First(ctx context.Context) (*GatewayPort, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (gpq *GatewayPortQuery) FirstX(ctx context.Context) *GatewayPort {
-	node, err := gpq.First(ctx)
+func (_q *GatewayPortQuery) FirstX(ctx context.Context) *GatewayPort {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +83,9 @@ func (gpq *GatewayPortQuery) FirstX(ctx context.Context) *GatewayPort {
 
 // FirstID returns the first GatewayPort ID from the query.
 // Returns a *NotFoundError when no GatewayPort ID was found.
-func (gpq *GatewayPortQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *GatewayPortQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = gpq.Limit(1).IDs(setContextOp(ctx, gpq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +96,8 @@ func (gpq *GatewayPortQuery) FirstID(ctx context.Context) (id uuid.UUID, err err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (gpq *GatewayPortQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := gpq.FirstID(ctx)
+func (_q *GatewayPortQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +107,8 @@ func (gpq *GatewayPortQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single GatewayPort entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one GatewayPort entity is found.
 // Returns a *NotFoundError when no GatewayPort entities are found.
-func (gpq *GatewayPortQuery) Only(ctx context.Context) (*GatewayPort, error) {
-	nodes, err := gpq.Limit(2).All(setContextOp(ctx, gpq.ctx, "Only"))
+func (_q *GatewayPortQuery) Only(ctx context.Context) (*GatewayPort, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +123,8 @@ func (gpq *GatewayPortQuery) Only(ctx context.Context) (*GatewayPort, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (gpq *GatewayPortQuery) OnlyX(ctx context.Context) *GatewayPort {
-	node, err := gpq.Only(ctx)
+func (_q *GatewayPortQuery) OnlyX(ctx context.Context) *GatewayPort {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +134,9 @@ func (gpq *GatewayPortQuery) OnlyX(ctx context.Context) *GatewayPort {
 // OnlyID is like Only, but returns the only GatewayPort ID in the query.
 // Returns a *NotSingularError when more than one GatewayPort ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (gpq *GatewayPortQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *GatewayPortQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = gpq.Limit(2).IDs(setContextOp(ctx, gpq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +151,8 @@ func (gpq *GatewayPortQuery) OnlyID(ctx context.Context) (id uuid.UUID, err erro
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (gpq *GatewayPortQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := gpq.OnlyID(ctx)
+func (_q *GatewayPortQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +160,18 @@ func (gpq *GatewayPortQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of GatewayPorts.
-func (gpq *GatewayPortQuery) All(ctx context.Context) ([]*GatewayPort, error) {
-	ctx = setContextOp(ctx, gpq.ctx, "All")
-	if err := gpq.prepareQuery(ctx); err != nil {
+func (_q *GatewayPortQuery) All(ctx context.Context) ([]*GatewayPort, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*GatewayPort, *GatewayPortQuery]()
-	return withInterceptors[[]*GatewayPort](ctx, gpq, qr, gpq.inters)
+	return withInterceptors[[]*GatewayPort](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (gpq *GatewayPortQuery) AllX(ctx context.Context) []*GatewayPort {
-	nodes, err := gpq.All(ctx)
+func (_q *GatewayPortQuery) AllX(ctx context.Context) []*GatewayPort {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +179,20 @@ func (gpq *GatewayPortQuery) AllX(ctx context.Context) []*GatewayPort {
 }
 
 // IDs executes the query and returns a list of GatewayPort IDs.
-func (gpq *GatewayPortQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if gpq.ctx.Unique == nil && gpq.path != nil {
-		gpq.Unique(true)
+func (_q *GatewayPortQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, gpq.ctx, "IDs")
-	if err = gpq.Select(gatewayport.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(gatewayport.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (gpq *GatewayPortQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := gpq.IDs(ctx)
+func (_q *GatewayPortQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +200,17 @@ func (gpq *GatewayPortQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (gpq *GatewayPortQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, gpq.ctx, "Count")
-	if err := gpq.prepareQuery(ctx); err != nil {
+func (_q *GatewayPortQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, gpq, querierCount[*GatewayPortQuery](), gpq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*GatewayPortQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (gpq *GatewayPortQuery) CountX(ctx context.Context) int {
-	count, err := gpq.Count(ctx)
+func (_q *GatewayPortQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +218,9 @@ func (gpq *GatewayPortQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (gpq *GatewayPortQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, gpq.ctx, "Exist")
-	switch _, err := gpq.FirstID(ctx); {
+func (_q *GatewayPortQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +231,8 @@ func (gpq *GatewayPortQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (gpq *GatewayPortQuery) ExistX(ctx context.Context) bool {
-	exist, err := gpq.Exist(ctx)
+func (_q *GatewayPortQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +241,19 @@ func (gpq *GatewayPortQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the GatewayPortQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (gpq *GatewayPortQuery) Clone() *GatewayPortQuery {
-	if gpq == nil {
+func (_q *GatewayPortQuery) Clone() *GatewayPortQuery {
+	if _q == nil {
 		return nil
 	}
 	return &GatewayPortQuery{
-		config:     gpq.config,
-		ctx:        gpq.ctx.Clone(),
-		order:      append([]gatewayport.OrderOption{}, gpq.order...),
-		inters:     append([]Interceptor{}, gpq.inters...),
-		predicates: append([]predicate.GatewayPort{}, gpq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]gatewayport.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.GatewayPort{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  gpq.sql.Clone(),
-		path: gpq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +271,10 @@ func (gpq *GatewayPortQuery) Clone() *GatewayPortQuery {
 //		GroupBy(gatewayport.FieldFkGatewayID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (gpq *GatewayPortQuery) GroupBy(field string, fields ...string) *GatewayPortGroupBy {
-	gpq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &GatewayPortGroupBy{build: gpq}
-	grbuild.flds = &gpq.ctx.Fields
+func (_q *GatewayPortQuery) GroupBy(field string, fields ...string) *GatewayPortGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &GatewayPortGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = gatewayport.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +292,62 @@ func (gpq *GatewayPortQuery) GroupBy(field string, fields ...string) *GatewayPor
 //	client.GatewayPort.Query().
 //		Select(gatewayport.FieldFkGatewayID).
 //		Scan(ctx, &v)
-func (gpq *GatewayPortQuery) Select(fields ...string) *GatewayPortSelect {
-	gpq.ctx.Fields = append(gpq.ctx.Fields, fields...)
-	sbuild := &GatewayPortSelect{GatewayPortQuery: gpq}
+func (_q *GatewayPortQuery) Select(fields ...string) *GatewayPortSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &GatewayPortSelect{GatewayPortQuery: _q}
 	sbuild.label = gatewayport.Label
-	sbuild.flds, sbuild.scan = &gpq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a GatewayPortSelect configured with the given aggregations.
-func (gpq *GatewayPortQuery) Aggregate(fns ...AggregateFunc) *GatewayPortSelect {
-	return gpq.Select().Aggregate(fns...)
+func (_q *GatewayPortQuery) Aggregate(fns ...AggregateFunc) *GatewayPortSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (gpq *GatewayPortQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range gpq.inters {
+func (_q *GatewayPortQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, gpq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range gpq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !gatewayport.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if gpq.path != nil {
-		prev, err := gpq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		gpq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (gpq *GatewayPortQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GatewayPort, error) {
+func (_q *GatewayPortQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*GatewayPort, error) {
 	var (
 		nodes = []*GatewayPort{}
-		_spec = gpq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*GatewayPort).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &GatewayPort{config: gpq.config}
+		node := &GatewayPort{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, gpq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +356,24 @@ func (gpq *GatewayPortQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
-func (gpq *GatewayPortQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := gpq.querySpec()
-	_spec.Node.Columns = gpq.ctx.Fields
-	if len(gpq.ctx.Fields) > 0 {
-		_spec.Unique = gpq.ctx.Unique != nil && *gpq.ctx.Unique
+func (_q *GatewayPortQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, gpq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (gpq *GatewayPortQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *GatewayPortQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(gatewayport.Table, gatewayport.Columns, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
-	_spec.From = gpq.sql
-	if unique := gpq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if gpq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := gpq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, gatewayport.FieldID)
 		for i := range fields {
@@ -381,20 +382,20 @@ func (gpq *GatewayPortQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := gpq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := gpq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := gpq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := gpq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +405,33 @@ func (gpq *GatewayPortQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (gpq *GatewayPortQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(gpq.driver.Dialect())
+func (_q *GatewayPortQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(gatewayport.Table)
-	columns := gpq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = gatewayport.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if gpq.sql != nil {
-		selector = gpq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if gpq.ctx.Unique != nil && *gpq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range gpq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range gpq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := gpq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := gpq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +444,41 @@ type GatewayPortGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (gpgb *GatewayPortGroupBy) Aggregate(fns ...AggregateFunc) *GatewayPortGroupBy {
-	gpgb.fns = append(gpgb.fns, fns...)
-	return gpgb
+func (_g *GatewayPortGroupBy) Aggregate(fns ...AggregateFunc) *GatewayPortGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gpgb *GatewayPortGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gpgb.build.ctx, "GroupBy")
-	if err := gpgb.build.prepareQuery(ctx); err != nil {
+func (_g *GatewayPortGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GatewayPortQuery, *GatewayPortGroupBy](ctx, gpgb.build, gpgb, gpgb.build.inters, v)
+	return scanWithInterceptors[*GatewayPortQuery, *GatewayPortGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (gpgb *GatewayPortGroupBy) sqlScan(ctx context.Context, root *GatewayPortQuery, v any) error {
+func (_g *GatewayPortGroupBy) sqlScan(ctx context.Context, root *GatewayPortQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(gpgb.fns))
-	for _, fn := range gpgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*gpgb.flds)+len(gpgb.fns))
-		for _, f := range *gpgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*gpgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gpgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +492,27 @@ type GatewayPortSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (gps *GatewayPortSelect) Aggregate(fns ...AggregateFunc) *GatewayPortSelect {
-	gps.fns = append(gps.fns, fns...)
-	return gps
+func (_s *GatewayPortSelect) Aggregate(fns ...AggregateFunc) *GatewayPortSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (gps *GatewayPortSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, gps.ctx, "Select")
-	if err := gps.prepareQuery(ctx); err != nil {
+func (_s *GatewayPortSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*GatewayPortQuery, *GatewayPortSelect](ctx, gps.GatewayPortQuery, gps, gps.inters, v)
+	return scanWithInterceptors[*GatewayPortQuery, *GatewayPortSelect](ctx, _s.GatewayPortQuery, _s, _s.inters, v)
 }
 
-func (gps *GatewayPortSelect) sqlScan(ctx context.Context, root *GatewayPortQuery, v any) error {
+func (_s *GatewayPortSelect) sqlScan(ctx context.Context, root *GatewayPortQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(gps.fns))
-	for _, fn := range gps.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*gps.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +520,7 @@ func (gps *GatewayPortSelect) sqlScan(ctx context.Context, root *GatewayPortQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := gps.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

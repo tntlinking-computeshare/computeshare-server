@@ -21,6 +21,7 @@ func (Agent) Fields() []ent.Field {
 		field.Bool("active").Default(true).Comment("是否活动"),
 		field.Time("last_update_time").Default(time.Now).UpdateDefault(time.Now).Comment("最后更新时间"),
 		field.String("hostname").Comment("主机名"),
+		field.String("arch").Comment("计算机架构"),
 		field.Int32("total_cpu").Comment("总cpu数"),
 		field.Int32("total_memory").Comment("总内存数"),
 		field.Int32("occupied_cpu").Comment("占用的cpu"),

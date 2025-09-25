@@ -39,7 +39,7 @@ func (*ComputeSpec) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ComputeSpec fields.
-func (cs *ComputeSpec) assignValues(columns []string, values []any) error {
+func (_m *ComputeSpec) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -50,21 +50,21 @@ func (cs *ComputeSpec) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			cs.ID = int32(value.Int64)
+			_m.ID = int32(value.Int64)
 		case computespec.FieldCore:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field core", values[i])
 			} else if value.Valid {
-				cs.Core = int(value.Int64)
+				_m.Core = int(value.Int64)
 			}
 		case computespec.FieldMemory:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field memory", values[i])
 			} else if value.Valid {
-				cs.Memory = int(value.Int64)
+				_m.Memory = int(value.Int64)
 			}
 		default:
-			cs.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -72,38 +72,38 @@ func (cs *ComputeSpec) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ComputeSpec.
 // This includes values selected through modifiers, order, etc.
-func (cs *ComputeSpec) Value(name string) (ent.Value, error) {
-	return cs.selectValues.Get(name)
+func (_m *ComputeSpec) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this ComputeSpec.
 // Note that you need to call ComputeSpec.Unwrap() before calling this method if this ComputeSpec
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cs *ComputeSpec) Update() *ComputeSpecUpdateOne {
-	return NewComputeSpecClient(cs.config).UpdateOne(cs)
+func (_m *ComputeSpec) Update() *ComputeSpecUpdateOne {
+	return NewComputeSpecClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ComputeSpec entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cs *ComputeSpec) Unwrap() *ComputeSpec {
-	_tx, ok := cs.config.driver.(*txDriver)
+func (_m *ComputeSpec) Unwrap() *ComputeSpec {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: ComputeSpec is not a transactional entity")
 	}
-	cs.config.driver = _tx.drv
-	return cs
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cs *ComputeSpec) String() string {
+func (_m *ComputeSpec) String() string {
 	var builder strings.Builder
 	builder.WriteString("ComputeSpec(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cs.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("core=")
-	builder.WriteString(fmt.Sprintf("%v", cs.Core))
+	builder.WriteString(fmt.Sprintf("%v", _m.Core))
 	builder.WriteString(", ")
 	builder.WriteString("memory=")
-	builder.WriteString(fmt.Sprintf("%v", cs.Memory))
+	builder.WriteString(fmt.Sprintf("%v", _m.Memory))
 	builder.WriteByte(')')
 	return builder.String()
 }

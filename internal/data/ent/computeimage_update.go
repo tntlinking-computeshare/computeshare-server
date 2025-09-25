@@ -22,72 +22,136 @@ type ComputeImageUpdate struct {
 }
 
 // Where appends a list predicates to the ComputeImageUpdate builder.
-func (ciu *ComputeImageUpdate) Where(ps ...predicate.ComputeImage) *ComputeImageUpdate {
-	ciu.mutation.Where(ps...)
-	return ciu
+func (_u *ComputeImageUpdate) Where(ps ...predicate.ComputeImage) *ComputeImageUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ciu *ComputeImageUpdate) SetName(s string) *ComputeImageUpdate {
-	ciu.mutation.SetName(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetName(v string) *ComputeImageUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableName(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetImage sets the "image" field.
-func (ciu *ComputeImageUpdate) SetImage(s string) *ComputeImageUpdate {
-	ciu.mutation.SetImage(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetImage(v string) *ComputeImageUpdate {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableImage(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetImage(*v)
+	}
+	return _u
 }
 
 // SetTag sets the "tag" field.
-func (ciu *ComputeImageUpdate) SetTag(s string) *ComputeImageUpdate {
-	ciu.mutation.SetTag(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetTag(v string) *ComputeImageUpdate {
+	_u.mutation.SetTag(v)
+	return _u
+}
+
+// SetNillableTag sets the "tag" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableTag(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetTag(*v)
+	}
+	return _u
 }
 
 // SetOsType sets the "os_type" field.
-func (ciu *ComputeImageUpdate) SetOsType(s string) *ComputeImageUpdate {
-	ciu.mutation.SetOsType(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetOsType(v string) *ComputeImageUpdate {
+	_u.mutation.SetOsType(v)
+	return _u
+}
+
+// SetNillableOsType sets the "os_type" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableOsType(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetOsType(*v)
+	}
+	return _u
 }
 
 // SetOsVariant sets the "os_variant" field.
-func (ciu *ComputeImageUpdate) SetOsVariant(s string) *ComputeImageUpdate {
-	ciu.mutation.SetOsVariant(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetOsVariant(v string) *ComputeImageUpdate {
+	_u.mutation.SetOsVariant(v)
+	return _u
+}
+
+// SetNillableOsVariant sets the "os_variant" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableOsVariant(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetOsVariant(*v)
+	}
+	return _u
 }
 
 // SetFilename sets the "filename" field.
-func (ciu *ComputeImageUpdate) SetFilename(s string) *ComputeImageUpdate {
-	ciu.mutation.SetFilename(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetFilename(v string) *ComputeImageUpdate {
+	_u.mutation.SetFilename(v)
+	return _u
+}
+
+// SetNillableFilename sets the "filename" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableFilename(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetFilename(*v)
+	}
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (ciu *ComputeImageUpdate) SetDownloadURL(s string) *ComputeImageUpdate {
-	ciu.mutation.SetDownloadURL(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetDownloadURL(v string) *ComputeImageUpdate {
+	_u.mutation.SetDownloadURL(v)
+	return _u
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableDownloadURL(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetDownloadURL(*v)
+	}
+	return _u
 }
 
 // SetMd5 sets the "md5" field.
-func (ciu *ComputeImageUpdate) SetMd5(s string) *ComputeImageUpdate {
-	ciu.mutation.SetMd5(s)
-	return ciu
+func (_u *ComputeImageUpdate) SetMd5(v string) *ComputeImageUpdate {
+	_u.mutation.SetMd5(v)
+	return _u
+}
+
+// SetNillableMd5 sets the "md5" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableMd5(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetMd5(*v)
+	}
+	return _u
 }
 
 // Mutation returns the ComputeImageMutation object of the builder.
-func (ciu *ComputeImageUpdate) Mutation() *ComputeImageMutation {
-	return ciu.mutation
+func (_u *ComputeImageUpdate) Mutation() *ComputeImageMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ciu *ComputeImageUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, ciu.sqlSave, ciu.mutation, ciu.hooks)
+func (_u *ComputeImageUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ciu *ComputeImageUpdate) SaveX(ctx context.Context) int {
-	affected, err := ciu.Save(ctx)
+func (_u *ComputeImageUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -95,41 +159,41 @@ func (ciu *ComputeImageUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ciu *ComputeImageUpdate) Exec(ctx context.Context) error {
-	_, err := ciu.Save(ctx)
+func (_u *ComputeImageUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ciu *ComputeImageUpdate) ExecX(ctx context.Context) {
-	if err := ciu.Exec(ctx); err != nil {
+func (_u *ComputeImageUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ciu *ComputeImageUpdate) check() error {
-	if v, ok := ciu.mutation.Name(); ok {
+func (_u *ComputeImageUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := computeimage.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.name": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.Image(); ok {
+	if v, ok := _u.mutation.Image(); ok {
 		if err := computeimage.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.image": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.Tag(); ok {
+	if v, ok := _u.mutation.Tag(); ok {
 		if err := computeimage.TagValidator(v); err != nil {
 			return &ValidationError{Name: "tag", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.tag": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.OsType(); ok {
+	if v, ok := _u.mutation.OsType(); ok {
 		if err := computeimage.OsTypeValidator(v); err != nil {
 			return &ValidationError{Name: "os_type", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_type": %w`, err)}
 		}
 	}
-	if v, ok := ciu.mutation.OsVariant(); ok {
+	if v, ok := _u.mutation.OsVariant(); ok {
 		if err := computeimage.OsVariantValidator(v); err != nil {
 			return &ValidationError{Name: "os_variant", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_variant": %w`, err)}
 		}
@@ -137,43 +201,43 @@ func (ciu *ComputeImageUpdate) check() error {
 	return nil
 }
 
-func (ciu *ComputeImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := ciu.check(); err != nil {
-		return n, err
+func (_u *ComputeImageUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(computeimage.Table, computeimage.Columns, sqlgraph.NewFieldSpec(computeimage.FieldID, field.TypeInt32))
-	if ps := ciu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ciu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(computeimage.FieldName, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Image(); ok {
+	if value, ok := _u.mutation.Image(); ok {
 		_spec.SetField(computeimage.FieldImage, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Tag(); ok {
+	if value, ok := _u.mutation.Tag(); ok {
 		_spec.SetField(computeimage.FieldTag, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.OsType(); ok {
+	if value, ok := _u.mutation.OsType(); ok {
 		_spec.SetField(computeimage.FieldOsType, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.OsVariant(); ok {
+	if value, ok := _u.mutation.OsVariant(); ok {
 		_spec.SetField(computeimage.FieldOsVariant, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Filename(); ok {
+	if value, ok := _u.mutation.Filename(); ok {
 		_spec.SetField(computeimage.FieldFilename, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(computeimage.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := ciu.mutation.Md5(); ok {
+	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, ciu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computeimage.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -181,8 +245,8 @@ func (ciu *ComputeImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ciu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ComputeImageUpdateOne is the builder for updating a single ComputeImage entity.
@@ -194,79 +258,143 @@ type ComputeImageUpdateOne struct {
 }
 
 // SetName sets the "name" field.
-func (ciuo *ComputeImageUpdateOne) SetName(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetName(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetName(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableName(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
 }
 
 // SetImage sets the "image" field.
-func (ciuo *ComputeImageUpdateOne) SetImage(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetImage(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetImage(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetImage(v)
+	return _u
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableImage(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetImage(*v)
+	}
+	return _u
 }
 
 // SetTag sets the "tag" field.
-func (ciuo *ComputeImageUpdateOne) SetTag(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetTag(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetTag(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetTag(v)
+	return _u
+}
+
+// SetNillableTag sets the "tag" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableTag(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetTag(*v)
+	}
+	return _u
 }
 
 // SetOsType sets the "os_type" field.
-func (ciuo *ComputeImageUpdateOne) SetOsType(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetOsType(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetOsType(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetOsType(v)
+	return _u
+}
+
+// SetNillableOsType sets the "os_type" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableOsType(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetOsType(*v)
+	}
+	return _u
 }
 
 // SetOsVariant sets the "os_variant" field.
-func (ciuo *ComputeImageUpdateOne) SetOsVariant(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetOsVariant(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetOsVariant(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetOsVariant(v)
+	return _u
+}
+
+// SetNillableOsVariant sets the "os_variant" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableOsVariant(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetOsVariant(*v)
+	}
+	return _u
 }
 
 // SetFilename sets the "filename" field.
-func (ciuo *ComputeImageUpdateOne) SetFilename(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetFilename(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetFilename(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetFilename(v)
+	return _u
+}
+
+// SetNillableFilename sets the "filename" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableFilename(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetFilename(*v)
+	}
+	return _u
 }
 
 // SetDownloadURL sets the "download_url" field.
-func (ciuo *ComputeImageUpdateOne) SetDownloadURL(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetDownloadURL(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetDownloadURL(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetDownloadURL(v)
+	return _u
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableDownloadURL(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetDownloadURL(*v)
+	}
+	return _u
 }
 
 // SetMd5 sets the "md5" field.
-func (ciuo *ComputeImageUpdateOne) SetMd5(s string) *ComputeImageUpdateOne {
-	ciuo.mutation.SetMd5(s)
-	return ciuo
+func (_u *ComputeImageUpdateOne) SetMd5(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetMd5(v)
+	return _u
+}
+
+// SetNillableMd5 sets the "md5" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableMd5(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetMd5(*v)
+	}
+	return _u
 }
 
 // Mutation returns the ComputeImageMutation object of the builder.
-func (ciuo *ComputeImageUpdateOne) Mutation() *ComputeImageMutation {
-	return ciuo.mutation
+func (_u *ComputeImageUpdateOne) Mutation() *ComputeImageMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ComputeImageUpdate builder.
-func (ciuo *ComputeImageUpdateOne) Where(ps ...predicate.ComputeImage) *ComputeImageUpdateOne {
-	ciuo.mutation.Where(ps...)
-	return ciuo
+func (_u *ComputeImageUpdateOne) Where(ps ...predicate.ComputeImage) *ComputeImageUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ciuo *ComputeImageUpdateOne) Select(field string, fields ...string) *ComputeImageUpdateOne {
-	ciuo.fields = append([]string{field}, fields...)
-	return ciuo
+func (_u *ComputeImageUpdateOne) Select(field string, fields ...string) *ComputeImageUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ComputeImage entity.
-func (ciuo *ComputeImageUpdateOne) Save(ctx context.Context) (*ComputeImage, error) {
-	return withHooks(ctx, ciuo.sqlSave, ciuo.mutation, ciuo.hooks)
+func (_u *ComputeImageUpdateOne) Save(ctx context.Context) (*ComputeImage, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ciuo *ComputeImageUpdateOne) SaveX(ctx context.Context) *ComputeImage {
-	node, err := ciuo.Save(ctx)
+func (_u *ComputeImageUpdateOne) SaveX(ctx context.Context) *ComputeImage {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -274,41 +402,41 @@ func (ciuo *ComputeImageUpdateOne) SaveX(ctx context.Context) *ComputeImage {
 }
 
 // Exec executes the query on the entity.
-func (ciuo *ComputeImageUpdateOne) Exec(ctx context.Context) error {
-	_, err := ciuo.Save(ctx)
+func (_u *ComputeImageUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ciuo *ComputeImageUpdateOne) ExecX(ctx context.Context) {
-	if err := ciuo.Exec(ctx); err != nil {
+func (_u *ComputeImageUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ciuo *ComputeImageUpdateOne) check() error {
-	if v, ok := ciuo.mutation.Name(); ok {
+func (_u *ComputeImageUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := computeimage.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.name": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.Image(); ok {
+	if v, ok := _u.mutation.Image(); ok {
 		if err := computeimage.ImageValidator(v); err != nil {
 			return &ValidationError{Name: "image", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.image": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.Tag(); ok {
+	if v, ok := _u.mutation.Tag(); ok {
 		if err := computeimage.TagValidator(v); err != nil {
 			return &ValidationError{Name: "tag", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.tag": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.OsType(); ok {
+	if v, ok := _u.mutation.OsType(); ok {
 		if err := computeimage.OsTypeValidator(v); err != nil {
 			return &ValidationError{Name: "os_type", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_type": %w`, err)}
 		}
 	}
-	if v, ok := ciuo.mutation.OsVariant(); ok {
+	if v, ok := _u.mutation.OsVariant(); ok {
 		if err := computeimage.OsVariantValidator(v); err != nil {
 			return &ValidationError{Name: "os_variant", err: fmt.Errorf(`ent: validator failed for field "ComputeImage.os_variant": %w`, err)}
 		}
@@ -316,17 +444,17 @@ func (ciuo *ComputeImageUpdateOne) check() error {
 	return nil
 }
 
-func (ciuo *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeImage, err error) {
-	if err := ciuo.check(); err != nil {
+func (_u *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeImage, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(computeimage.Table, computeimage.Columns, sqlgraph.NewFieldSpec(computeimage.FieldID, field.TypeInt32))
-	id, ok := ciuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ComputeImage.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ciuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, computeimage.FieldID)
 		for _, f := range fields {
@@ -338,41 +466,41 @@ func (ciuo *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeI
 			}
 		}
 	}
-	if ps := ciuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ciuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(computeimage.FieldName, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Image(); ok {
+	if value, ok := _u.mutation.Image(); ok {
 		_spec.SetField(computeimage.FieldImage, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Tag(); ok {
+	if value, ok := _u.mutation.Tag(); ok {
 		_spec.SetField(computeimage.FieldTag, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.OsType(); ok {
+	if value, ok := _u.mutation.OsType(); ok {
 		_spec.SetField(computeimage.FieldOsType, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.OsVariant(); ok {
+	if value, ok := _u.mutation.OsVariant(); ok {
 		_spec.SetField(computeimage.FieldOsVariant, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Filename(); ok {
+	if value, ok := _u.mutation.Filename(); ok {
 		_spec.SetField(computeimage.FieldFilename, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.DownloadURL(); ok {
+	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(computeimage.FieldDownloadURL, field.TypeString, value)
 	}
-	if value, ok := ciuo.mutation.Md5(); ok {
+	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
 	}
-	_node = &ComputeImage{config: ciuo.config}
+	_node = &ComputeImage{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ciuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computeimage.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -380,6 +508,6 @@ func (ciuo *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeI
 		}
 		return nil, err
 	}
-	ciuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

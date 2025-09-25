@@ -20,56 +20,56 @@ type ComputeInstanceDelete struct {
 }
 
 // Where appends a list predicates to the ComputeInstanceDelete builder.
-func (cid *ComputeInstanceDelete) Where(ps ...predicate.ComputeInstance) *ComputeInstanceDelete {
-	cid.mutation.Where(ps...)
-	return cid
+func (_d *ComputeInstanceDelete) Where(ps ...predicate.ComputeInstance) *ComputeInstanceDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cid *ComputeInstanceDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cid.sqlExec, cid.mutation, cid.hooks)
+func (_d *ComputeInstanceDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cid *ComputeInstanceDelete) ExecX(ctx context.Context) int {
-	n, err := cid.Exec(ctx)
+func (_d *ComputeInstanceDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cid *ComputeInstanceDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ComputeInstanceDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(computeinstance.Table, sqlgraph.NewFieldSpec(computeinstance.FieldID, field.TypeUUID))
-	if ps := cid.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cid.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cid.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ComputeInstanceDeleteOne is the builder for deleting a single ComputeInstance entity.
 type ComputeInstanceDeleteOne struct {
-	cid *ComputeInstanceDelete
+	_d *ComputeInstanceDelete
 }
 
 // Where appends a list predicates to the ComputeInstanceDelete builder.
-func (cido *ComputeInstanceDeleteOne) Where(ps ...predicate.ComputeInstance) *ComputeInstanceDeleteOne {
-	cido.cid.mutation.Where(ps...)
-	return cido
+func (_d *ComputeInstanceDeleteOne) Where(ps ...predicate.ComputeInstance) *ComputeInstanceDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cido *ComputeInstanceDeleteOne) Exec(ctx context.Context) error {
-	n, err := cido.cid.Exec(ctx)
+func (_d *ComputeInstanceDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (cido *ComputeInstanceDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cido *ComputeInstanceDeleteOne) ExecX(ctx context.Context) {
-	if err := cido.Exec(ctx); err != nil {
+func (_d *ComputeInstanceDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

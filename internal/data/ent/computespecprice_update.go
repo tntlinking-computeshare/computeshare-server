@@ -22,79 +22,87 @@ type ComputeSpecPriceUpdate struct {
 }
 
 // Where appends a list predicates to the ComputeSpecPriceUpdate builder.
-func (cspu *ComputeSpecPriceUpdate) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceUpdate {
-	cspu.mutation.Where(ps...)
-	return cspu
+func (_u *ComputeSpecPriceUpdate) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkComputeSpecID sets the "fk_compute_spec_id" field.
-func (cspu *ComputeSpecPriceUpdate) SetFkComputeSpecID(i int32) *ComputeSpecPriceUpdate {
-	cspu.mutation.ResetFkComputeSpecID()
-	cspu.mutation.SetFkComputeSpecID(i)
-	return cspu
+func (_u *ComputeSpecPriceUpdate) SetFkComputeSpecID(v int32) *ComputeSpecPriceUpdate {
+	_u.mutation.ResetFkComputeSpecID()
+	_u.mutation.SetFkComputeSpecID(v)
+	return _u
 }
 
-// AddFkComputeSpecID adds i to the "fk_compute_spec_id" field.
-func (cspu *ComputeSpecPriceUpdate) AddFkComputeSpecID(i int32) *ComputeSpecPriceUpdate {
-	cspu.mutation.AddFkComputeSpecID(i)
-	return cspu
+// SetNillableFkComputeSpecID sets the "fk_compute_spec_id" field if the given value is not nil.
+func (_u *ComputeSpecPriceUpdate) SetNillableFkComputeSpecID(v *int32) *ComputeSpecPriceUpdate {
+	if v != nil {
+		_u.SetFkComputeSpecID(*v)
+	}
+	return _u
+}
+
+// AddFkComputeSpecID adds value to the "fk_compute_spec_id" field.
+func (_u *ComputeSpecPriceUpdate) AddFkComputeSpecID(v int32) *ComputeSpecPriceUpdate {
+	_u.mutation.AddFkComputeSpecID(v)
+	return _u
 }
 
 // SetDay sets the "day" field.
-func (cspu *ComputeSpecPriceUpdate) SetDay(i int32) *ComputeSpecPriceUpdate {
-	cspu.mutation.ResetDay()
-	cspu.mutation.SetDay(i)
-	return cspu
+func (_u *ComputeSpecPriceUpdate) SetDay(v int32) *ComputeSpecPriceUpdate {
+	_u.mutation.ResetDay()
+	_u.mutation.SetDay(v)
+	return _u
 }
 
 // SetNillableDay sets the "day" field if the given value is not nil.
-func (cspu *ComputeSpecPriceUpdate) SetNillableDay(i *int32) *ComputeSpecPriceUpdate {
-	if i != nil {
-		cspu.SetDay(*i)
+func (_u *ComputeSpecPriceUpdate) SetNillableDay(v *int32) *ComputeSpecPriceUpdate {
+	if v != nil {
+		_u.SetDay(*v)
 	}
-	return cspu
+	return _u
 }
 
-// AddDay adds i to the "day" field.
-func (cspu *ComputeSpecPriceUpdate) AddDay(i int32) *ComputeSpecPriceUpdate {
-	cspu.mutation.AddDay(i)
-	return cspu
+// AddDay adds value to the "day" field.
+func (_u *ComputeSpecPriceUpdate) AddDay(v int32) *ComputeSpecPriceUpdate {
+	_u.mutation.AddDay(v)
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (cspu *ComputeSpecPriceUpdate) SetPrice(f float32) *ComputeSpecPriceUpdate {
-	cspu.mutation.ResetPrice()
-	cspu.mutation.SetPrice(f)
-	return cspu
+func (_u *ComputeSpecPriceUpdate) SetPrice(v float32) *ComputeSpecPriceUpdate {
+	_u.mutation.ResetPrice()
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (cspu *ComputeSpecPriceUpdate) SetNillablePrice(f *float32) *ComputeSpecPriceUpdate {
-	if f != nil {
-		cspu.SetPrice(*f)
+func (_u *ComputeSpecPriceUpdate) SetNillablePrice(v *float32) *ComputeSpecPriceUpdate {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return cspu
+	return _u
 }
 
-// AddPrice adds f to the "price" field.
-func (cspu *ComputeSpecPriceUpdate) AddPrice(f float32) *ComputeSpecPriceUpdate {
-	cspu.mutation.AddPrice(f)
-	return cspu
+// AddPrice adds value to the "price" field.
+func (_u *ComputeSpecPriceUpdate) AddPrice(v float32) *ComputeSpecPriceUpdate {
+	_u.mutation.AddPrice(v)
+	return _u
 }
 
 // Mutation returns the ComputeSpecPriceMutation object of the builder.
-func (cspu *ComputeSpecPriceUpdate) Mutation() *ComputeSpecPriceMutation {
-	return cspu.mutation
+func (_u *ComputeSpecPriceUpdate) Mutation() *ComputeSpecPriceMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cspu *ComputeSpecPriceUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cspu.sqlSave, cspu.mutation, cspu.hooks)
+func (_u *ComputeSpecPriceUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cspu *ComputeSpecPriceUpdate) SaveX(ctx context.Context) int {
-	affected, err := cspu.Save(ctx)
+func (_u *ComputeSpecPriceUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -102,46 +110,46 @@ func (cspu *ComputeSpecPriceUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cspu *ComputeSpecPriceUpdate) Exec(ctx context.Context) error {
-	_, err := cspu.Save(ctx)
+func (_u *ComputeSpecPriceUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspu *ComputeSpecPriceUpdate) ExecX(ctx context.Context) {
-	if err := cspu.Exec(ctx); err != nil {
+func (_u *ComputeSpecPriceUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cspu *ComputeSpecPriceUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *ComputeSpecPriceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(computespecprice.Table, computespecprice.Columns, sqlgraph.NewFieldSpec(computespecprice.FieldID, field.TypeInt32))
-	if ps := cspu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cspu.mutation.FkComputeSpecID(); ok {
+	if value, ok := _u.mutation.FkComputeSpecID(); ok {
 		_spec.SetField(computespecprice.FieldFkComputeSpecID, field.TypeInt32, value)
 	}
-	if value, ok := cspu.mutation.AddedFkComputeSpecID(); ok {
+	if value, ok := _u.mutation.AddedFkComputeSpecID(); ok {
 		_spec.AddField(computespecprice.FieldFkComputeSpecID, field.TypeInt32, value)
 	}
-	if value, ok := cspu.mutation.Day(); ok {
+	if value, ok := _u.mutation.Day(); ok {
 		_spec.SetField(computespecprice.FieldDay, field.TypeInt32, value)
 	}
-	if value, ok := cspu.mutation.AddedDay(); ok {
+	if value, ok := _u.mutation.AddedDay(); ok {
 		_spec.AddField(computespecprice.FieldDay, field.TypeInt32, value)
 	}
-	if value, ok := cspu.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(computespecprice.FieldPrice, field.TypeFloat32, value)
 	}
-	if value, ok := cspu.mutation.AddedPrice(); ok {
+	if value, ok := _u.mutation.AddedPrice(); ok {
 		_spec.AddField(computespecprice.FieldPrice, field.TypeFloat32, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cspu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computespecprice.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -149,8 +157,8 @@ func (cspu *ComputeSpecPriceUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		return 0, err
 	}
-	cspu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ComputeSpecPriceUpdateOne is the builder for updating a single ComputeSpecPrice entity.
@@ -162,86 +170,94 @@ type ComputeSpecPriceUpdateOne struct {
 }
 
 // SetFkComputeSpecID sets the "fk_compute_spec_id" field.
-func (cspuo *ComputeSpecPriceUpdateOne) SetFkComputeSpecID(i int32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.ResetFkComputeSpecID()
-	cspuo.mutation.SetFkComputeSpecID(i)
-	return cspuo
+func (_u *ComputeSpecPriceUpdateOne) SetFkComputeSpecID(v int32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.ResetFkComputeSpecID()
+	_u.mutation.SetFkComputeSpecID(v)
+	return _u
 }
 
-// AddFkComputeSpecID adds i to the "fk_compute_spec_id" field.
-func (cspuo *ComputeSpecPriceUpdateOne) AddFkComputeSpecID(i int32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.AddFkComputeSpecID(i)
-	return cspuo
+// SetNillableFkComputeSpecID sets the "fk_compute_spec_id" field if the given value is not nil.
+func (_u *ComputeSpecPriceUpdateOne) SetNillableFkComputeSpecID(v *int32) *ComputeSpecPriceUpdateOne {
+	if v != nil {
+		_u.SetFkComputeSpecID(*v)
+	}
+	return _u
+}
+
+// AddFkComputeSpecID adds value to the "fk_compute_spec_id" field.
+func (_u *ComputeSpecPriceUpdateOne) AddFkComputeSpecID(v int32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.AddFkComputeSpecID(v)
+	return _u
 }
 
 // SetDay sets the "day" field.
-func (cspuo *ComputeSpecPriceUpdateOne) SetDay(i int32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.ResetDay()
-	cspuo.mutation.SetDay(i)
-	return cspuo
+func (_u *ComputeSpecPriceUpdateOne) SetDay(v int32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.ResetDay()
+	_u.mutation.SetDay(v)
+	return _u
 }
 
 // SetNillableDay sets the "day" field if the given value is not nil.
-func (cspuo *ComputeSpecPriceUpdateOne) SetNillableDay(i *int32) *ComputeSpecPriceUpdateOne {
-	if i != nil {
-		cspuo.SetDay(*i)
+func (_u *ComputeSpecPriceUpdateOne) SetNillableDay(v *int32) *ComputeSpecPriceUpdateOne {
+	if v != nil {
+		_u.SetDay(*v)
 	}
-	return cspuo
+	return _u
 }
 
-// AddDay adds i to the "day" field.
-func (cspuo *ComputeSpecPriceUpdateOne) AddDay(i int32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.AddDay(i)
-	return cspuo
+// AddDay adds value to the "day" field.
+func (_u *ComputeSpecPriceUpdateOne) AddDay(v int32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.AddDay(v)
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (cspuo *ComputeSpecPriceUpdateOne) SetPrice(f float32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.ResetPrice()
-	cspuo.mutation.SetPrice(f)
-	return cspuo
+func (_u *ComputeSpecPriceUpdateOne) SetPrice(v float32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.ResetPrice()
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (cspuo *ComputeSpecPriceUpdateOne) SetNillablePrice(f *float32) *ComputeSpecPriceUpdateOne {
-	if f != nil {
-		cspuo.SetPrice(*f)
+func (_u *ComputeSpecPriceUpdateOne) SetNillablePrice(v *float32) *ComputeSpecPriceUpdateOne {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return cspuo
+	return _u
 }
 
-// AddPrice adds f to the "price" field.
-func (cspuo *ComputeSpecPriceUpdateOne) AddPrice(f float32) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.AddPrice(f)
-	return cspuo
+// AddPrice adds value to the "price" field.
+func (_u *ComputeSpecPriceUpdateOne) AddPrice(v float32) *ComputeSpecPriceUpdateOne {
+	_u.mutation.AddPrice(v)
+	return _u
 }
 
 // Mutation returns the ComputeSpecPriceMutation object of the builder.
-func (cspuo *ComputeSpecPriceUpdateOne) Mutation() *ComputeSpecPriceMutation {
-	return cspuo.mutation
+func (_u *ComputeSpecPriceUpdateOne) Mutation() *ComputeSpecPriceMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ComputeSpecPriceUpdate builder.
-func (cspuo *ComputeSpecPriceUpdateOne) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
-	cspuo.mutation.Where(ps...)
-	return cspuo
+func (_u *ComputeSpecPriceUpdateOne) Where(ps ...predicate.ComputeSpecPrice) *ComputeSpecPriceUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cspuo *ComputeSpecPriceUpdateOne) Select(field string, fields ...string) *ComputeSpecPriceUpdateOne {
-	cspuo.fields = append([]string{field}, fields...)
-	return cspuo
+func (_u *ComputeSpecPriceUpdateOne) Select(field string, fields ...string) *ComputeSpecPriceUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ComputeSpecPrice entity.
-func (cspuo *ComputeSpecPriceUpdateOne) Save(ctx context.Context) (*ComputeSpecPrice, error) {
-	return withHooks(ctx, cspuo.sqlSave, cspuo.mutation, cspuo.hooks)
+func (_u *ComputeSpecPriceUpdateOne) Save(ctx context.Context) (*ComputeSpecPrice, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cspuo *ComputeSpecPriceUpdateOne) SaveX(ctx context.Context) *ComputeSpecPrice {
-	node, err := cspuo.Save(ctx)
+func (_u *ComputeSpecPriceUpdateOne) SaveX(ctx context.Context) *ComputeSpecPrice {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -249,26 +265,26 @@ func (cspuo *ComputeSpecPriceUpdateOne) SaveX(ctx context.Context) *ComputeSpecP
 }
 
 // Exec executes the query on the entity.
-func (cspuo *ComputeSpecPriceUpdateOne) Exec(ctx context.Context) error {
-	_, err := cspuo.Save(ctx)
+func (_u *ComputeSpecPriceUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cspuo *ComputeSpecPriceUpdateOne) ExecX(ctx context.Context) {
-	if err := cspuo.Exec(ctx); err != nil {
+func (_u *ComputeSpecPriceUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (cspuo *ComputeSpecPriceUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSpecPrice, err error) {
+func (_u *ComputeSpecPriceUpdateOne) sqlSave(ctx context.Context) (_node *ComputeSpecPrice, err error) {
 	_spec := sqlgraph.NewUpdateSpec(computespecprice.Table, computespecprice.Columns, sqlgraph.NewFieldSpec(computespecprice.FieldID, field.TypeInt32))
-	id, ok := cspuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ComputeSpecPrice.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cspuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, computespecprice.FieldID)
 		for _, f := range fields {
@@ -280,35 +296,35 @@ func (cspuo *ComputeSpecPriceUpdateOne) sqlSave(ctx context.Context) (_node *Com
 			}
 		}
 	}
-	if ps := cspuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cspuo.mutation.FkComputeSpecID(); ok {
+	if value, ok := _u.mutation.FkComputeSpecID(); ok {
 		_spec.SetField(computespecprice.FieldFkComputeSpecID, field.TypeInt32, value)
 	}
-	if value, ok := cspuo.mutation.AddedFkComputeSpecID(); ok {
+	if value, ok := _u.mutation.AddedFkComputeSpecID(); ok {
 		_spec.AddField(computespecprice.FieldFkComputeSpecID, field.TypeInt32, value)
 	}
-	if value, ok := cspuo.mutation.Day(); ok {
+	if value, ok := _u.mutation.Day(); ok {
 		_spec.SetField(computespecprice.FieldDay, field.TypeInt32, value)
 	}
-	if value, ok := cspuo.mutation.AddedDay(); ok {
+	if value, ok := _u.mutation.AddedDay(); ok {
 		_spec.AddField(computespecprice.FieldDay, field.TypeInt32, value)
 	}
-	if value, ok := cspuo.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(computespecprice.FieldPrice, field.TypeFloat32, value)
 	}
-	if value, ok := cspuo.mutation.AddedPrice(); ok {
+	if value, ok := _u.mutation.AddedPrice(); ok {
 		_spec.AddField(computespecprice.FieldPrice, field.TypeFloat32, value)
 	}
-	_node = &ComputeSpecPrice{config: cspuo.config}
+	_node = &ComputeSpecPrice{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cspuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{computespecprice.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -316,6 +332,6 @@ func (cspuo *ComputeSpecPriceUpdateOne) sqlSave(ctx context.Context) (_node *Com
 		}
 		return nil, err
 	}
-	cspuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

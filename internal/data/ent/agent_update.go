@@ -23,115 +23,185 @@ type AgentUpdate struct {
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
-func (au *AgentUpdate) Where(ps ...predicate.Agent) *AgentUpdate {
-	au.mutation.Where(ps...)
-	return au
+func (_u *AgentUpdate) Where(ps ...predicate.Agent) *AgentUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetMAC sets the "mac" field.
-func (au *AgentUpdate) SetMAC(s string) *AgentUpdate {
-	au.mutation.SetMAC(s)
-	return au
+func (_u *AgentUpdate) SetMAC(v string) *AgentUpdate {
+	_u.mutation.SetMAC(v)
+	return _u
+}
+
+// SetNillableMAC sets the "mac" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableMAC(v *string) *AgentUpdate {
+	if v != nil {
+		_u.SetMAC(*v)
+	}
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (au *AgentUpdate) SetActive(b bool) *AgentUpdate {
-	au.mutation.SetActive(b)
-	return au
+func (_u *AgentUpdate) SetActive(v bool) *AgentUpdate {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (au *AgentUpdate) SetNillableActive(b *bool) *AgentUpdate {
-	if b != nil {
-		au.SetActive(*b)
+func (_u *AgentUpdate) SetNillableActive(v *bool) *AgentUpdate {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return au
+	return _u
 }
 
 // SetLastUpdateTime sets the "last_update_time" field.
-func (au *AgentUpdate) SetLastUpdateTime(t time.Time) *AgentUpdate {
-	au.mutation.SetLastUpdateTime(t)
-	return au
+func (_u *AgentUpdate) SetLastUpdateTime(v time.Time) *AgentUpdate {
+	_u.mutation.SetLastUpdateTime(v)
+	return _u
 }
 
 // SetHostname sets the "hostname" field.
-func (au *AgentUpdate) SetHostname(s string) *AgentUpdate {
-	au.mutation.SetHostname(s)
-	return au
+func (_u *AgentUpdate) SetHostname(v string) *AgentUpdate {
+	_u.mutation.SetHostname(v)
+	return _u
+}
+
+// SetNillableHostname sets the "hostname" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableHostname(v *string) *AgentUpdate {
+	if v != nil {
+		_u.SetHostname(*v)
+	}
+	return _u
+}
+
+// SetArch sets the "arch" field.
+func (_u *AgentUpdate) SetArch(v string) *AgentUpdate {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableArch(v *string) *AgentUpdate {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
 }
 
 // SetTotalCPU sets the "total_cpu" field.
-func (au *AgentUpdate) SetTotalCPU(i int32) *AgentUpdate {
-	au.mutation.ResetTotalCPU()
-	au.mutation.SetTotalCPU(i)
-	return au
+func (_u *AgentUpdate) SetTotalCPU(v int32) *AgentUpdate {
+	_u.mutation.ResetTotalCPU()
+	_u.mutation.SetTotalCPU(v)
+	return _u
 }
 
-// AddTotalCPU adds i to the "total_cpu" field.
-func (au *AgentUpdate) AddTotalCPU(i int32) *AgentUpdate {
-	au.mutation.AddTotalCPU(i)
-	return au
+// SetNillableTotalCPU sets the "total_cpu" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableTotalCPU(v *int32) *AgentUpdate {
+	if v != nil {
+		_u.SetTotalCPU(*v)
+	}
+	return _u
+}
+
+// AddTotalCPU adds value to the "total_cpu" field.
+func (_u *AgentUpdate) AddTotalCPU(v int32) *AgentUpdate {
+	_u.mutation.AddTotalCPU(v)
+	return _u
 }
 
 // SetTotalMemory sets the "total_memory" field.
-func (au *AgentUpdate) SetTotalMemory(i int32) *AgentUpdate {
-	au.mutation.ResetTotalMemory()
-	au.mutation.SetTotalMemory(i)
-	return au
+func (_u *AgentUpdate) SetTotalMemory(v int32) *AgentUpdate {
+	_u.mutation.ResetTotalMemory()
+	_u.mutation.SetTotalMemory(v)
+	return _u
 }
 
-// AddTotalMemory adds i to the "total_memory" field.
-func (au *AgentUpdate) AddTotalMemory(i int32) *AgentUpdate {
-	au.mutation.AddTotalMemory(i)
-	return au
+// SetNillableTotalMemory sets the "total_memory" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableTotalMemory(v *int32) *AgentUpdate {
+	if v != nil {
+		_u.SetTotalMemory(*v)
+	}
+	return _u
+}
+
+// AddTotalMemory adds value to the "total_memory" field.
+func (_u *AgentUpdate) AddTotalMemory(v int32) *AgentUpdate {
+	_u.mutation.AddTotalMemory(v)
+	return _u
 }
 
 // SetOccupiedCPU sets the "occupied_cpu" field.
-func (au *AgentUpdate) SetOccupiedCPU(i int32) *AgentUpdate {
-	au.mutation.ResetOccupiedCPU()
-	au.mutation.SetOccupiedCPU(i)
-	return au
+func (_u *AgentUpdate) SetOccupiedCPU(v int32) *AgentUpdate {
+	_u.mutation.ResetOccupiedCPU()
+	_u.mutation.SetOccupiedCPU(v)
+	return _u
 }
 
-// AddOccupiedCPU adds i to the "occupied_cpu" field.
-func (au *AgentUpdate) AddOccupiedCPU(i int32) *AgentUpdate {
-	au.mutation.AddOccupiedCPU(i)
-	return au
+// SetNillableOccupiedCPU sets the "occupied_cpu" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableOccupiedCPU(v *int32) *AgentUpdate {
+	if v != nil {
+		_u.SetOccupiedCPU(*v)
+	}
+	return _u
+}
+
+// AddOccupiedCPU adds value to the "occupied_cpu" field.
+func (_u *AgentUpdate) AddOccupiedCPU(v int32) *AgentUpdate {
+	_u.mutation.AddOccupiedCPU(v)
+	return _u
 }
 
 // SetOccupiedMemory sets the "occupied_memory" field.
-func (au *AgentUpdate) SetOccupiedMemory(i int32) *AgentUpdate {
-	au.mutation.ResetOccupiedMemory()
-	au.mutation.SetOccupiedMemory(i)
-	return au
+func (_u *AgentUpdate) SetOccupiedMemory(v int32) *AgentUpdate {
+	_u.mutation.ResetOccupiedMemory()
+	_u.mutation.SetOccupiedMemory(v)
+	return _u
 }
 
-// AddOccupiedMemory adds i to the "occupied_memory" field.
-func (au *AgentUpdate) AddOccupiedMemory(i int32) *AgentUpdate {
-	au.mutation.AddOccupiedMemory(i)
-	return au
+// SetNillableOccupiedMemory sets the "occupied_memory" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableOccupiedMemory(v *int32) *AgentUpdate {
+	if v != nil {
+		_u.SetOccupiedMemory(*v)
+	}
+	return _u
+}
+
+// AddOccupiedMemory adds value to the "occupied_memory" field.
+func (_u *AgentUpdate) AddOccupiedMemory(v int32) *AgentUpdate {
+	_u.mutation.AddOccupiedMemory(v)
+	return _u
 }
 
 // SetIP sets the "ip" field.
-func (au *AgentUpdate) SetIP(s string) *AgentUpdate {
-	au.mutation.SetIP(s)
-	return au
+func (_u *AgentUpdate) SetIP(v string) *AgentUpdate {
+	_u.mutation.SetIP(v)
+	return _u
+}
+
+// SetNillableIP sets the "ip" field if the given value is not nil.
+func (_u *AgentUpdate) SetNillableIP(v *string) *AgentUpdate {
+	if v != nil {
+		_u.SetIP(*v)
+	}
+	return _u
 }
 
 // Mutation returns the AgentMutation object of the builder.
-func (au *AgentUpdate) Mutation() *AgentMutation {
-	return au.mutation
+func (_u *AgentUpdate) Mutation() *AgentMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (au *AgentUpdate) Save(ctx context.Context) (int, error) {
-	au.defaults()
-	return withHooks(ctx, au.sqlSave, au.mutation, au.hooks)
+func (_u *AgentUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (au *AgentUpdate) SaveX(ctx context.Context) int {
-	affected, err := au.Save(ctx)
+func (_u *AgentUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -139,29 +209,29 @@ func (au *AgentUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (au *AgentUpdate) Exec(ctx context.Context) error {
-	_, err := au.Save(ctx)
+func (_u *AgentUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (au *AgentUpdate) ExecX(ctx context.Context) {
-	if err := au.Exec(ctx); err != nil {
+func (_u *AgentUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (au *AgentUpdate) defaults() {
-	if _, ok := au.mutation.LastUpdateTime(); !ok {
+func (_u *AgentUpdate) defaults() {
+	if _, ok := _u.mutation.LastUpdateTime(); !ok {
 		v := agent.UpdateDefaultLastUpdateTime()
-		au.mutation.SetLastUpdateTime(v)
+		_u.mutation.SetLastUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (au *AgentUpdate) check() error {
-	if v, ok := au.mutation.MAC(); ok {
+func (_u *AgentUpdate) check() error {
+	if v, ok := _u.mutation.MAC(); ok {
 		if err := agent.MACValidator(v); err != nil {
 			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
@@ -169,58 +239,61 @@ func (au *AgentUpdate) check() error {
 	return nil
 }
 
-func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := au.check(); err != nil {
-		return n, err
+func (_u *AgentUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(agent.Table, agent.Columns, sqlgraph.NewFieldSpec(agent.FieldID, field.TypeUUID))
-	if ps := au.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := au.mutation.MAC(); ok {
+	if value, ok := _u.mutation.MAC(); ok {
 		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
-	if value, ok := au.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := au.mutation.LastUpdateTime(); ok {
+	if value, ok := _u.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 	}
-	if value, ok := au.mutation.Hostname(); ok {
+	if value, ok := _u.mutation.Hostname(); ok {
 		_spec.SetField(agent.FieldHostname, field.TypeString, value)
 	}
-	if value, ok := au.mutation.TotalCPU(); ok {
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(agent.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TotalCPU(); ok {
 		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.AddedTotalCPU(); ok {
+	if value, ok := _u.mutation.AddedTotalCPU(); ok {
 		_spec.AddField(agent.FieldTotalCPU, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.TotalMemory(); ok {
+	if value, ok := _u.mutation.TotalMemory(); ok {
 		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.AddedTotalMemory(); ok {
+	if value, ok := _u.mutation.AddedTotalMemory(); ok {
 		_spec.AddField(agent.FieldTotalMemory, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.OccupiedCPU(); ok {
+	if value, ok := _u.mutation.OccupiedCPU(); ok {
 		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.AddedOccupiedCPU(); ok {
+	if value, ok := _u.mutation.AddedOccupiedCPU(); ok {
 		_spec.AddField(agent.FieldOccupiedCPU, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.OccupiedMemory(); ok {
+	if value, ok := _u.mutation.OccupiedMemory(); ok {
 		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.AddedOccupiedMemory(); ok {
+	if value, ok := _u.mutation.AddedOccupiedMemory(); ok {
 		_spec.AddField(agent.FieldOccupiedMemory, field.TypeInt32, value)
 	}
-	if value, ok := au.mutation.IP(); ok {
+	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{agent.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -228,8 +301,8 @@ func (au *AgentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	au.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // AgentUpdateOne is the builder for updating a single Agent entity.
@@ -241,122 +314,192 @@ type AgentUpdateOne struct {
 }
 
 // SetMAC sets the "mac" field.
-func (auo *AgentUpdateOne) SetMAC(s string) *AgentUpdateOne {
-	auo.mutation.SetMAC(s)
-	return auo
+func (_u *AgentUpdateOne) SetMAC(v string) *AgentUpdateOne {
+	_u.mutation.SetMAC(v)
+	return _u
+}
+
+// SetNillableMAC sets the "mac" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableMAC(v *string) *AgentUpdateOne {
+	if v != nil {
+		_u.SetMAC(*v)
+	}
+	return _u
 }
 
 // SetActive sets the "active" field.
-func (auo *AgentUpdateOne) SetActive(b bool) *AgentUpdateOne {
-	auo.mutation.SetActive(b)
-	return auo
+func (_u *AgentUpdateOne) SetActive(v bool) *AgentUpdateOne {
+	_u.mutation.SetActive(v)
+	return _u
 }
 
 // SetNillableActive sets the "active" field if the given value is not nil.
-func (auo *AgentUpdateOne) SetNillableActive(b *bool) *AgentUpdateOne {
-	if b != nil {
-		auo.SetActive(*b)
+func (_u *AgentUpdateOne) SetNillableActive(v *bool) *AgentUpdateOne {
+	if v != nil {
+		_u.SetActive(*v)
 	}
-	return auo
+	return _u
 }
 
 // SetLastUpdateTime sets the "last_update_time" field.
-func (auo *AgentUpdateOne) SetLastUpdateTime(t time.Time) *AgentUpdateOne {
-	auo.mutation.SetLastUpdateTime(t)
-	return auo
+func (_u *AgentUpdateOne) SetLastUpdateTime(v time.Time) *AgentUpdateOne {
+	_u.mutation.SetLastUpdateTime(v)
+	return _u
 }
 
 // SetHostname sets the "hostname" field.
-func (auo *AgentUpdateOne) SetHostname(s string) *AgentUpdateOne {
-	auo.mutation.SetHostname(s)
-	return auo
+func (_u *AgentUpdateOne) SetHostname(v string) *AgentUpdateOne {
+	_u.mutation.SetHostname(v)
+	return _u
+}
+
+// SetNillableHostname sets the "hostname" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableHostname(v *string) *AgentUpdateOne {
+	if v != nil {
+		_u.SetHostname(*v)
+	}
+	return _u
+}
+
+// SetArch sets the "arch" field.
+func (_u *AgentUpdateOne) SetArch(v string) *AgentUpdateOne {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableArch(v *string) *AgentUpdateOne {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
 }
 
 // SetTotalCPU sets the "total_cpu" field.
-func (auo *AgentUpdateOne) SetTotalCPU(i int32) *AgentUpdateOne {
-	auo.mutation.ResetTotalCPU()
-	auo.mutation.SetTotalCPU(i)
-	return auo
+func (_u *AgentUpdateOne) SetTotalCPU(v int32) *AgentUpdateOne {
+	_u.mutation.ResetTotalCPU()
+	_u.mutation.SetTotalCPU(v)
+	return _u
 }
 
-// AddTotalCPU adds i to the "total_cpu" field.
-func (auo *AgentUpdateOne) AddTotalCPU(i int32) *AgentUpdateOne {
-	auo.mutation.AddTotalCPU(i)
-	return auo
+// SetNillableTotalCPU sets the "total_cpu" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableTotalCPU(v *int32) *AgentUpdateOne {
+	if v != nil {
+		_u.SetTotalCPU(*v)
+	}
+	return _u
+}
+
+// AddTotalCPU adds value to the "total_cpu" field.
+func (_u *AgentUpdateOne) AddTotalCPU(v int32) *AgentUpdateOne {
+	_u.mutation.AddTotalCPU(v)
+	return _u
 }
 
 // SetTotalMemory sets the "total_memory" field.
-func (auo *AgentUpdateOne) SetTotalMemory(i int32) *AgentUpdateOne {
-	auo.mutation.ResetTotalMemory()
-	auo.mutation.SetTotalMemory(i)
-	return auo
+func (_u *AgentUpdateOne) SetTotalMemory(v int32) *AgentUpdateOne {
+	_u.mutation.ResetTotalMemory()
+	_u.mutation.SetTotalMemory(v)
+	return _u
 }
 
-// AddTotalMemory adds i to the "total_memory" field.
-func (auo *AgentUpdateOne) AddTotalMemory(i int32) *AgentUpdateOne {
-	auo.mutation.AddTotalMemory(i)
-	return auo
+// SetNillableTotalMemory sets the "total_memory" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableTotalMemory(v *int32) *AgentUpdateOne {
+	if v != nil {
+		_u.SetTotalMemory(*v)
+	}
+	return _u
+}
+
+// AddTotalMemory adds value to the "total_memory" field.
+func (_u *AgentUpdateOne) AddTotalMemory(v int32) *AgentUpdateOne {
+	_u.mutation.AddTotalMemory(v)
+	return _u
 }
 
 // SetOccupiedCPU sets the "occupied_cpu" field.
-func (auo *AgentUpdateOne) SetOccupiedCPU(i int32) *AgentUpdateOne {
-	auo.mutation.ResetOccupiedCPU()
-	auo.mutation.SetOccupiedCPU(i)
-	return auo
+func (_u *AgentUpdateOne) SetOccupiedCPU(v int32) *AgentUpdateOne {
+	_u.mutation.ResetOccupiedCPU()
+	_u.mutation.SetOccupiedCPU(v)
+	return _u
 }
 
-// AddOccupiedCPU adds i to the "occupied_cpu" field.
-func (auo *AgentUpdateOne) AddOccupiedCPU(i int32) *AgentUpdateOne {
-	auo.mutation.AddOccupiedCPU(i)
-	return auo
+// SetNillableOccupiedCPU sets the "occupied_cpu" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableOccupiedCPU(v *int32) *AgentUpdateOne {
+	if v != nil {
+		_u.SetOccupiedCPU(*v)
+	}
+	return _u
+}
+
+// AddOccupiedCPU adds value to the "occupied_cpu" field.
+func (_u *AgentUpdateOne) AddOccupiedCPU(v int32) *AgentUpdateOne {
+	_u.mutation.AddOccupiedCPU(v)
+	return _u
 }
 
 // SetOccupiedMemory sets the "occupied_memory" field.
-func (auo *AgentUpdateOne) SetOccupiedMemory(i int32) *AgentUpdateOne {
-	auo.mutation.ResetOccupiedMemory()
-	auo.mutation.SetOccupiedMemory(i)
-	return auo
+func (_u *AgentUpdateOne) SetOccupiedMemory(v int32) *AgentUpdateOne {
+	_u.mutation.ResetOccupiedMemory()
+	_u.mutation.SetOccupiedMemory(v)
+	return _u
 }
 
-// AddOccupiedMemory adds i to the "occupied_memory" field.
-func (auo *AgentUpdateOne) AddOccupiedMemory(i int32) *AgentUpdateOne {
-	auo.mutation.AddOccupiedMemory(i)
-	return auo
+// SetNillableOccupiedMemory sets the "occupied_memory" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableOccupiedMemory(v *int32) *AgentUpdateOne {
+	if v != nil {
+		_u.SetOccupiedMemory(*v)
+	}
+	return _u
+}
+
+// AddOccupiedMemory adds value to the "occupied_memory" field.
+func (_u *AgentUpdateOne) AddOccupiedMemory(v int32) *AgentUpdateOne {
+	_u.mutation.AddOccupiedMemory(v)
+	return _u
 }
 
 // SetIP sets the "ip" field.
-func (auo *AgentUpdateOne) SetIP(s string) *AgentUpdateOne {
-	auo.mutation.SetIP(s)
-	return auo
+func (_u *AgentUpdateOne) SetIP(v string) *AgentUpdateOne {
+	_u.mutation.SetIP(v)
+	return _u
+}
+
+// SetNillableIP sets the "ip" field if the given value is not nil.
+func (_u *AgentUpdateOne) SetNillableIP(v *string) *AgentUpdateOne {
+	if v != nil {
+		_u.SetIP(*v)
+	}
+	return _u
 }
 
 // Mutation returns the AgentMutation object of the builder.
-func (auo *AgentUpdateOne) Mutation() *AgentMutation {
-	return auo.mutation
+func (_u *AgentUpdateOne) Mutation() *AgentMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the AgentUpdate builder.
-func (auo *AgentUpdateOne) Where(ps ...predicate.Agent) *AgentUpdateOne {
-	auo.mutation.Where(ps...)
-	return auo
+func (_u *AgentUpdateOne) Where(ps ...predicate.Agent) *AgentUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (auo *AgentUpdateOne) Select(field string, fields ...string) *AgentUpdateOne {
-	auo.fields = append([]string{field}, fields...)
-	return auo
+func (_u *AgentUpdateOne) Select(field string, fields ...string) *AgentUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Agent entity.
-func (auo *AgentUpdateOne) Save(ctx context.Context) (*Agent, error) {
-	auo.defaults()
-	return withHooks(ctx, auo.sqlSave, auo.mutation, auo.hooks)
+func (_u *AgentUpdateOne) Save(ctx context.Context) (*Agent, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (auo *AgentUpdateOne) SaveX(ctx context.Context) *Agent {
-	node, err := auo.Save(ctx)
+func (_u *AgentUpdateOne) SaveX(ctx context.Context) *Agent {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -364,29 +507,29 @@ func (auo *AgentUpdateOne) SaveX(ctx context.Context) *Agent {
 }
 
 // Exec executes the query on the entity.
-func (auo *AgentUpdateOne) Exec(ctx context.Context) error {
-	_, err := auo.Save(ctx)
+func (_u *AgentUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (auo *AgentUpdateOne) ExecX(ctx context.Context) {
-	if err := auo.Exec(ctx); err != nil {
+func (_u *AgentUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (auo *AgentUpdateOne) defaults() {
-	if _, ok := auo.mutation.LastUpdateTime(); !ok {
+func (_u *AgentUpdateOne) defaults() {
+	if _, ok := _u.mutation.LastUpdateTime(); !ok {
 		v := agent.UpdateDefaultLastUpdateTime()
-		auo.mutation.SetLastUpdateTime(v)
+		_u.mutation.SetLastUpdateTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (auo *AgentUpdateOne) check() error {
-	if v, ok := auo.mutation.MAC(); ok {
+func (_u *AgentUpdateOne) check() error {
+	if v, ok := _u.mutation.MAC(); ok {
 		if err := agent.MACValidator(v); err != nil {
 			return &ValidationError{Name: "mac", err: fmt.Errorf(`ent: validator failed for field "Agent.mac": %w`, err)}
 		}
@@ -394,17 +537,17 @@ func (auo *AgentUpdateOne) check() error {
 	return nil
 }
 
-func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error) {
-	if err := auo.check(); err != nil {
+func (_u *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(agent.Table, agent.Columns, sqlgraph.NewFieldSpec(agent.FieldID, field.TypeUUID))
-	id, ok := auo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Agent.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := auo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, agent.FieldID)
 		for _, f := range fields {
@@ -416,56 +559,59 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 			}
 		}
 	}
-	if ps := auo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := auo.mutation.MAC(); ok {
+	if value, ok := _u.mutation.MAC(); ok {
 		_spec.SetField(agent.FieldMAC, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.Active(); ok {
+	if value, ok := _u.mutation.Active(); ok {
 		_spec.SetField(agent.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := auo.mutation.LastUpdateTime(); ok {
+	if value, ok := _u.mutation.LastUpdateTime(); ok {
 		_spec.SetField(agent.FieldLastUpdateTime, field.TypeTime, value)
 	}
-	if value, ok := auo.mutation.Hostname(); ok {
+	if value, ok := _u.mutation.Hostname(); ok {
 		_spec.SetField(agent.FieldHostname, field.TypeString, value)
 	}
-	if value, ok := auo.mutation.TotalCPU(); ok {
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(agent.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TotalCPU(); ok {
 		_spec.SetField(agent.FieldTotalCPU, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.AddedTotalCPU(); ok {
+	if value, ok := _u.mutation.AddedTotalCPU(); ok {
 		_spec.AddField(agent.FieldTotalCPU, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.TotalMemory(); ok {
+	if value, ok := _u.mutation.TotalMemory(); ok {
 		_spec.SetField(agent.FieldTotalMemory, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.AddedTotalMemory(); ok {
+	if value, ok := _u.mutation.AddedTotalMemory(); ok {
 		_spec.AddField(agent.FieldTotalMemory, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.OccupiedCPU(); ok {
+	if value, ok := _u.mutation.OccupiedCPU(); ok {
 		_spec.SetField(agent.FieldOccupiedCPU, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.AddedOccupiedCPU(); ok {
+	if value, ok := _u.mutation.AddedOccupiedCPU(); ok {
 		_spec.AddField(agent.FieldOccupiedCPU, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.OccupiedMemory(); ok {
+	if value, ok := _u.mutation.OccupiedMemory(); ok {
 		_spec.SetField(agent.FieldOccupiedMemory, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.AddedOccupiedMemory(); ok {
+	if value, ok := _u.mutation.AddedOccupiedMemory(); ok {
 		_spec.AddField(agent.FieldOccupiedMemory, field.TypeInt32, value)
 	}
-	if value, ok := auo.mutation.IP(); ok {
+	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(agent.FieldIP, field.TypeString, value)
 	}
-	_node = &Agent{config: auo.config}
+	_node = &Agent{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, auo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{agent.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -473,6 +619,6 @@ func (auo *AgentUpdateOne) sqlSave(ctx context.Context) (_node *Agent, err error
 		}
 		return nil, err
 	}
-	auo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -30,44 +31,44 @@ type ScriptExecutionRecordQuery struct {
 }
 
 // Where adds a new predicate for the ScriptExecutionRecordQuery builder.
-func (serq *ScriptExecutionRecordQuery) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordQuery {
-	serq.predicates = append(serq.predicates, ps...)
-	return serq
+func (_q *ScriptExecutionRecordQuery) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (serq *ScriptExecutionRecordQuery) Limit(limit int) *ScriptExecutionRecordQuery {
-	serq.ctx.Limit = &limit
-	return serq
+func (_q *ScriptExecutionRecordQuery) Limit(limit int) *ScriptExecutionRecordQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (serq *ScriptExecutionRecordQuery) Offset(offset int) *ScriptExecutionRecordQuery {
-	serq.ctx.Offset = &offset
-	return serq
+func (_q *ScriptExecutionRecordQuery) Offset(offset int) *ScriptExecutionRecordQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (serq *ScriptExecutionRecordQuery) Unique(unique bool) *ScriptExecutionRecordQuery {
-	serq.ctx.Unique = &unique
-	return serq
+func (_q *ScriptExecutionRecordQuery) Unique(unique bool) *ScriptExecutionRecordQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (serq *ScriptExecutionRecordQuery) Order(o ...scriptexecutionrecord.OrderOption) *ScriptExecutionRecordQuery {
-	serq.order = append(serq.order, o...)
-	return serq
+func (_q *ScriptExecutionRecordQuery) Order(o ...scriptexecutionrecord.OrderOption) *ScriptExecutionRecordQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryScript chains the current query on the "script" edge.
-func (serq *ScriptExecutionRecordQuery) QueryScript() *ScriptQuery {
-	query := (&ScriptClient{config: serq.config}).Query()
+func (_q *ScriptExecutionRecordQuery) QueryScript() *ScriptQuery {
+	query := (&ScriptClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := serq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := serq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -76,7 +77,7 @@ func (serq *ScriptExecutionRecordQuery) QueryScript() *ScriptQuery {
 			sqlgraph.To(script.Table, script.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scriptexecutionrecord.ScriptTable, scriptexecutionrecord.ScriptColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(serq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -84,8 +85,8 @@ func (serq *ScriptExecutionRecordQuery) QueryScript() *ScriptQuery {
 
 // First returns the first ScriptExecutionRecord entity from the query.
 // Returns a *NotFoundError when no ScriptExecutionRecord was found.
-func (serq *ScriptExecutionRecordQuery) First(ctx context.Context) (*ScriptExecutionRecord, error) {
-	nodes, err := serq.Limit(1).All(setContextOp(ctx, serq.ctx, "First"))
+func (_q *ScriptExecutionRecordQuery) First(ctx context.Context) (*ScriptExecutionRecord, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +97,8 @@ func (serq *ScriptExecutionRecordQuery) First(ctx context.Context) (*ScriptExecu
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) FirstX(ctx context.Context) *ScriptExecutionRecord {
-	node, err := serq.First(ctx)
+func (_q *ScriptExecutionRecordQuery) FirstX(ctx context.Context) *ScriptExecutionRecord {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,9 +107,9 @@ func (serq *ScriptExecutionRecordQuery) FirstX(ctx context.Context) *ScriptExecu
 
 // FirstID returns the first ScriptExecutionRecord ID from the query.
 // Returns a *NotFoundError when no ScriptExecutionRecord ID was found.
-func (serq *ScriptExecutionRecordQuery) FirstID(ctx context.Context) (id int32, err error) {
+func (_q *ScriptExecutionRecordQuery) FirstID(ctx context.Context) (id int32, err error) {
 	var ids []int32
-	if ids, err = serq.Limit(1).IDs(setContextOp(ctx, serq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -119,8 +120,8 @@ func (serq *ScriptExecutionRecordQuery) FirstID(ctx context.Context) (id int32, 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) FirstIDX(ctx context.Context) int32 {
-	id, err := serq.FirstID(ctx)
+func (_q *ScriptExecutionRecordQuery) FirstIDX(ctx context.Context) int32 {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -130,8 +131,8 @@ func (serq *ScriptExecutionRecordQuery) FirstIDX(ctx context.Context) int32 {
 // Only returns a single ScriptExecutionRecord entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ScriptExecutionRecord entity is found.
 // Returns a *NotFoundError when no ScriptExecutionRecord entities are found.
-func (serq *ScriptExecutionRecordQuery) Only(ctx context.Context) (*ScriptExecutionRecord, error) {
-	nodes, err := serq.Limit(2).All(setContextOp(ctx, serq.ctx, "Only"))
+func (_q *ScriptExecutionRecordQuery) Only(ctx context.Context) (*ScriptExecutionRecord, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +147,8 @@ func (serq *ScriptExecutionRecordQuery) Only(ctx context.Context) (*ScriptExecut
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) OnlyX(ctx context.Context) *ScriptExecutionRecord {
-	node, err := serq.Only(ctx)
+func (_q *ScriptExecutionRecordQuery) OnlyX(ctx context.Context) *ScriptExecutionRecord {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -157,9 +158,9 @@ func (serq *ScriptExecutionRecordQuery) OnlyX(ctx context.Context) *ScriptExecut
 // OnlyID is like Only, but returns the only ScriptExecutionRecord ID in the query.
 // Returns a *NotSingularError when more than one ScriptExecutionRecord ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (serq *ScriptExecutionRecordQuery) OnlyID(ctx context.Context) (id int32, err error) {
+func (_q *ScriptExecutionRecordQuery) OnlyID(ctx context.Context) (id int32, err error) {
 	var ids []int32
-	if ids, err = serq.Limit(2).IDs(setContextOp(ctx, serq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -174,8 +175,8 @@ func (serq *ScriptExecutionRecordQuery) OnlyID(ctx context.Context) (id int32, e
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) OnlyIDX(ctx context.Context) int32 {
-	id, err := serq.OnlyID(ctx)
+func (_q *ScriptExecutionRecordQuery) OnlyIDX(ctx context.Context) int32 {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -183,18 +184,18 @@ func (serq *ScriptExecutionRecordQuery) OnlyIDX(ctx context.Context) int32 {
 }
 
 // All executes the query and returns a list of ScriptExecutionRecords.
-func (serq *ScriptExecutionRecordQuery) All(ctx context.Context) ([]*ScriptExecutionRecord, error) {
-	ctx = setContextOp(ctx, serq.ctx, "All")
-	if err := serq.prepareQuery(ctx); err != nil {
+func (_q *ScriptExecutionRecordQuery) All(ctx context.Context) ([]*ScriptExecutionRecord, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ScriptExecutionRecord, *ScriptExecutionRecordQuery]()
-	return withInterceptors[[]*ScriptExecutionRecord](ctx, serq, qr, serq.inters)
+	return withInterceptors[[]*ScriptExecutionRecord](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) AllX(ctx context.Context) []*ScriptExecutionRecord {
-	nodes, err := serq.All(ctx)
+func (_q *ScriptExecutionRecordQuery) AllX(ctx context.Context) []*ScriptExecutionRecord {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -202,20 +203,20 @@ func (serq *ScriptExecutionRecordQuery) AllX(ctx context.Context) []*ScriptExecu
 }
 
 // IDs executes the query and returns a list of ScriptExecutionRecord IDs.
-func (serq *ScriptExecutionRecordQuery) IDs(ctx context.Context) (ids []int32, err error) {
-	if serq.ctx.Unique == nil && serq.path != nil {
-		serq.Unique(true)
+func (_q *ScriptExecutionRecordQuery) IDs(ctx context.Context) (ids []int32, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, serq.ctx, "IDs")
-	if err = serq.Select(scriptexecutionrecord.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(scriptexecutionrecord.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) IDsX(ctx context.Context) []int32 {
-	ids, err := serq.IDs(ctx)
+func (_q *ScriptExecutionRecordQuery) IDsX(ctx context.Context) []int32 {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -223,17 +224,17 @@ func (serq *ScriptExecutionRecordQuery) IDsX(ctx context.Context) []int32 {
 }
 
 // Count returns the count of the given query.
-func (serq *ScriptExecutionRecordQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, serq.ctx, "Count")
-	if err := serq.prepareQuery(ctx); err != nil {
+func (_q *ScriptExecutionRecordQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, serq, querierCount[*ScriptExecutionRecordQuery](), serq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ScriptExecutionRecordQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) CountX(ctx context.Context) int {
-	count, err := serq.Count(ctx)
+func (_q *ScriptExecutionRecordQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,9 +242,9 @@ func (serq *ScriptExecutionRecordQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (serq *ScriptExecutionRecordQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, serq.ctx, "Exist")
-	switch _, err := serq.FirstID(ctx); {
+func (_q *ScriptExecutionRecordQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -254,8 +255,8 @@ func (serq *ScriptExecutionRecordQuery) Exist(ctx context.Context) (bool, error)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (serq *ScriptExecutionRecordQuery) ExistX(ctx context.Context) bool {
-	exist, err := serq.Exist(ctx)
+func (_q *ScriptExecutionRecordQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -264,32 +265,32 @@ func (serq *ScriptExecutionRecordQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ScriptExecutionRecordQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (serq *ScriptExecutionRecordQuery) Clone() *ScriptExecutionRecordQuery {
-	if serq == nil {
+func (_q *ScriptExecutionRecordQuery) Clone() *ScriptExecutionRecordQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ScriptExecutionRecordQuery{
-		config:     serq.config,
-		ctx:        serq.ctx.Clone(),
-		order:      append([]scriptexecutionrecord.OrderOption{}, serq.order...),
-		inters:     append([]Interceptor{}, serq.inters...),
-		predicates: append([]predicate.ScriptExecutionRecord{}, serq.predicates...),
-		withScript: serq.withScript.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]scriptexecutionrecord.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ScriptExecutionRecord{}, _q.predicates...),
+		withScript: _q.withScript.Clone(),
 		// clone intermediate query.
-		sql:  serq.sql.Clone(),
-		path: serq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
 // WithScript tells the query-builder to eager-load the nodes that are connected to
 // the "script" edge. The optional arguments are used to configure the query builder of the edge.
-func (serq *ScriptExecutionRecordQuery) WithScript(opts ...func(*ScriptQuery)) *ScriptExecutionRecordQuery {
-	query := (&ScriptClient{config: serq.config}).Query()
+func (_q *ScriptExecutionRecordQuery) WithScript(opts ...func(*ScriptQuery)) *ScriptExecutionRecordQuery {
+	query := (&ScriptClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	serq.withScript = query
-	return serq
+	_q.withScript = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -306,10 +307,10 @@ func (serq *ScriptExecutionRecordQuery) WithScript(opts ...func(*ScriptQuery)) *
 //		GroupBy(scriptexecutionrecord.FieldUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (serq *ScriptExecutionRecordQuery) GroupBy(field string, fields ...string) *ScriptExecutionRecordGroupBy {
-	serq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ScriptExecutionRecordGroupBy{build: serq}
-	grbuild.flds = &serq.ctx.Fields
+func (_q *ScriptExecutionRecordQuery) GroupBy(field string, fields ...string) *ScriptExecutionRecordGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ScriptExecutionRecordGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = scriptexecutionrecord.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -327,55 +328,55 @@ func (serq *ScriptExecutionRecordQuery) GroupBy(field string, fields ...string) 
 //	client.ScriptExecutionRecord.Query().
 //		Select(scriptexecutionrecord.FieldUserID).
 //		Scan(ctx, &v)
-func (serq *ScriptExecutionRecordQuery) Select(fields ...string) *ScriptExecutionRecordSelect {
-	serq.ctx.Fields = append(serq.ctx.Fields, fields...)
-	sbuild := &ScriptExecutionRecordSelect{ScriptExecutionRecordQuery: serq}
+func (_q *ScriptExecutionRecordQuery) Select(fields ...string) *ScriptExecutionRecordSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ScriptExecutionRecordSelect{ScriptExecutionRecordQuery: _q}
 	sbuild.label = scriptexecutionrecord.Label
-	sbuild.flds, sbuild.scan = &serq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ScriptExecutionRecordSelect configured with the given aggregations.
-func (serq *ScriptExecutionRecordQuery) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordSelect {
-	return serq.Select().Aggregate(fns...)
+func (_q *ScriptExecutionRecordQuery) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (serq *ScriptExecutionRecordQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range serq.inters {
+func (_q *ScriptExecutionRecordQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, serq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range serq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !scriptexecutionrecord.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if serq.path != nil {
-		prev, err := serq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		serq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (serq *ScriptExecutionRecordQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScriptExecutionRecord, error) {
+func (_q *ScriptExecutionRecordQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ScriptExecutionRecord, error) {
 	var (
 		nodes       = []*ScriptExecutionRecord{}
-		withFKs     = serq.withFKs
-		_spec       = serq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
-			serq.withScript != nil,
+			_q.withScript != nil,
 		}
 	)
-	if serq.withScript != nil {
+	if _q.withScript != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -385,7 +386,7 @@ func (serq *ScriptExecutionRecordQuery) sqlAll(ctx context.Context, hooks ...que
 		return (*ScriptExecutionRecord).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ScriptExecutionRecord{config: serq.config}
+		node := &ScriptExecutionRecord{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
@@ -393,14 +394,14 @@ func (serq *ScriptExecutionRecordQuery) sqlAll(ctx context.Context, hooks ...que
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, serq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := serq.withScript; query != nil {
-		if err := serq.loadScript(ctx, query, nodes, nil,
+	if query := _q.withScript; query != nil {
+		if err := _q.loadScript(ctx, query, nodes, nil,
 			func(n *ScriptExecutionRecord, e *Script) { n.Edges.Script = e }); err != nil {
 			return nil, err
 		}
@@ -408,7 +409,7 @@ func (serq *ScriptExecutionRecordQuery) sqlAll(ctx context.Context, hooks ...que
 	return nodes, nil
 }
 
-func (serq *ScriptExecutionRecordQuery) loadScript(ctx context.Context, query *ScriptQuery, nodes []*ScriptExecutionRecord, init func(*ScriptExecutionRecord), assign func(*ScriptExecutionRecord, *Script)) error {
+func (_q *ScriptExecutionRecordQuery) loadScript(ctx context.Context, query *ScriptQuery, nodes []*ScriptExecutionRecord, init func(*ScriptExecutionRecord), assign func(*ScriptExecutionRecord, *Script)) error {
 	ids := make([]int32, 0, len(nodes))
 	nodeids := make(map[int32][]*ScriptExecutionRecord)
 	for i := range nodes {
@@ -441,24 +442,24 @@ func (serq *ScriptExecutionRecordQuery) loadScript(ctx context.Context, query *S
 	return nil
 }
 
-func (serq *ScriptExecutionRecordQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := serq.querySpec()
-	_spec.Node.Columns = serq.ctx.Fields
-	if len(serq.ctx.Fields) > 0 {
-		_spec.Unique = serq.ctx.Unique != nil && *serq.ctx.Unique
+func (_q *ScriptExecutionRecordQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, serq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (serq *ScriptExecutionRecordQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ScriptExecutionRecordQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(scriptexecutionrecord.Table, scriptexecutionrecord.Columns, sqlgraph.NewFieldSpec(scriptexecutionrecord.FieldID, field.TypeInt32))
-	_spec.From = serq.sql
-	if unique := serq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if serq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := serq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scriptexecutionrecord.FieldID)
 		for i := range fields {
@@ -467,20 +468,20 @@ func (serq *ScriptExecutionRecordQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := serq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := serq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := serq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := serq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -490,33 +491,33 @@ func (serq *ScriptExecutionRecordQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (serq *ScriptExecutionRecordQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(serq.driver.Dialect())
+func (_q *ScriptExecutionRecordQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(scriptexecutionrecord.Table)
-	columns := serq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = scriptexecutionrecord.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if serq.sql != nil {
-		selector = serq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if serq.ctx.Unique != nil && *serq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range serq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range serq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := serq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := serq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -529,41 +530,41 @@ type ScriptExecutionRecordGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (sergb *ScriptExecutionRecordGroupBy) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordGroupBy {
-	sergb.fns = append(sergb.fns, fns...)
-	return sergb
+func (_g *ScriptExecutionRecordGroupBy) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sergb *ScriptExecutionRecordGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sergb.build.ctx, "GroupBy")
-	if err := sergb.build.prepareQuery(ctx); err != nil {
+func (_g *ScriptExecutionRecordGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScriptExecutionRecordQuery, *ScriptExecutionRecordGroupBy](ctx, sergb.build, sergb, sergb.build.inters, v)
+	return scanWithInterceptors[*ScriptExecutionRecordQuery, *ScriptExecutionRecordGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (sergb *ScriptExecutionRecordGroupBy) sqlScan(ctx context.Context, root *ScriptExecutionRecordQuery, v any) error {
+func (_g *ScriptExecutionRecordGroupBy) sqlScan(ctx context.Context, root *ScriptExecutionRecordQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(sergb.fns))
-	for _, fn := range sergb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*sergb.flds)+len(sergb.fns))
-		for _, f := range *sergb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*sergb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sergb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -577,27 +578,27 @@ type ScriptExecutionRecordSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sers *ScriptExecutionRecordSelect) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordSelect {
-	sers.fns = append(sers.fns, fns...)
-	return sers
+func (_s *ScriptExecutionRecordSelect) Aggregate(fns ...AggregateFunc) *ScriptExecutionRecordSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sers *ScriptExecutionRecordSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sers.ctx, "Select")
-	if err := sers.prepareQuery(ctx); err != nil {
+func (_s *ScriptExecutionRecordSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ScriptExecutionRecordQuery, *ScriptExecutionRecordSelect](ctx, sers.ScriptExecutionRecordQuery, sers, sers.inters, v)
+	return scanWithInterceptors[*ScriptExecutionRecordQuery, *ScriptExecutionRecordSelect](ctx, _s.ScriptExecutionRecordQuery, _s, _s.inters, v)
 }
 
-func (sers *ScriptExecutionRecordSelect) sqlScan(ctx context.Context, root *ScriptExecutionRecordQuery, v any) error {
+func (_s *ScriptExecutionRecordSelect) sqlScan(ctx context.Context, root *ScriptExecutionRecordQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sers.fns))
-	for _, fn := range sers.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sers.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -605,7 +606,7 @@ func (sers *ScriptExecutionRecordSelect) sqlScan(ctx context.Context, root *Scri
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sers.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

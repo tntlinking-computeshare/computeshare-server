@@ -23,71 +23,87 @@ type GatewayPortUpdate struct {
 }
 
 // Where appends a list predicates to the GatewayPortUpdate builder.
-func (gpu *GatewayPortUpdate) Where(ps ...predicate.GatewayPort) *GatewayPortUpdate {
-	gpu.mutation.Where(ps...)
-	return gpu
+func (_u *GatewayPortUpdate) Where(ps ...predicate.GatewayPort) *GatewayPortUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpu *GatewayPortUpdate) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdate {
-	gpu.mutation.SetFkGatewayID(u)
-	return gpu
+func (_u *GatewayPortUpdate) SetFkGatewayID(v uuid.UUID) *GatewayPortUpdate {
+	_u.mutation.SetFkGatewayID(v)
+	return _u
+}
+
+// SetNillableFkGatewayID sets the "fk_gateway_id" field if the given value is not nil.
+func (_u *GatewayPortUpdate) SetNillableFkGatewayID(v *uuid.UUID) *GatewayPortUpdate {
+	if v != nil {
+		_u.SetFkGatewayID(*v)
+	}
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (gpu *GatewayPortUpdate) SetPort(i int32) *GatewayPortUpdate {
-	gpu.mutation.ResetPort()
-	gpu.mutation.SetPort(i)
-	return gpu
+func (_u *GatewayPortUpdate) SetPort(v int32) *GatewayPortUpdate {
+	_u.mutation.ResetPort()
+	_u.mutation.SetPort(v)
+	return _u
 }
 
-// AddPort adds i to the "port" field.
-func (gpu *GatewayPortUpdate) AddPort(i int32) *GatewayPortUpdate {
-	gpu.mutation.AddPort(i)
-	return gpu
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (_u *GatewayPortUpdate) SetNillablePort(v *int32) *GatewayPortUpdate {
+	if v != nil {
+		_u.SetPort(*v)
+	}
+	return _u
+}
+
+// AddPort adds value to the "port" field.
+func (_u *GatewayPortUpdate) AddPort(v int32) *GatewayPortUpdate {
+	_u.mutation.AddPort(v)
+	return _u
 }
 
 // SetIsUse sets the "is_use" field.
-func (gpu *GatewayPortUpdate) SetIsUse(b bool) *GatewayPortUpdate {
-	gpu.mutation.SetIsUse(b)
-	return gpu
+func (_u *GatewayPortUpdate) SetIsUse(v bool) *GatewayPortUpdate {
+	_u.mutation.SetIsUse(v)
+	return _u
 }
 
 // SetNillableIsUse sets the "is_use" field if the given value is not nil.
-func (gpu *GatewayPortUpdate) SetNillableIsUse(b *bool) *GatewayPortUpdate {
-	if b != nil {
-		gpu.SetIsUse(*b)
+func (_u *GatewayPortUpdate) SetNillableIsUse(v *bool) *GatewayPortUpdate {
+	if v != nil {
+		_u.SetIsUse(*v)
 	}
-	return gpu
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (gpu *GatewayPortUpdate) SetIsPublic(b bool) *GatewayPortUpdate {
-	gpu.mutation.SetIsPublic(b)
-	return gpu
+func (_u *GatewayPortUpdate) SetIsPublic(v bool) *GatewayPortUpdate {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (gpu *GatewayPortUpdate) SetNillableIsPublic(b *bool) *GatewayPortUpdate {
-	if b != nil {
-		gpu.SetIsPublic(*b)
+func (_u *GatewayPortUpdate) SetNillableIsPublic(v *bool) *GatewayPortUpdate {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return gpu
+	return _u
 }
 
 // Mutation returns the GatewayPortMutation object of the builder.
-func (gpu *GatewayPortUpdate) Mutation() *GatewayPortMutation {
-	return gpu.mutation
+func (_u *GatewayPortUpdate) Mutation() *GatewayPortMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (gpu *GatewayPortUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, gpu.sqlSave, gpu.mutation, gpu.hooks)
+func (_u *GatewayPortUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gpu *GatewayPortUpdate) SaveX(ctx context.Context) int {
-	affected, err := gpu.Save(ctx)
+func (_u *GatewayPortUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -95,43 +111,43 @@ func (gpu *GatewayPortUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (gpu *GatewayPortUpdate) Exec(ctx context.Context) error {
-	_, err := gpu.Save(ctx)
+func (_u *GatewayPortUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gpu *GatewayPortUpdate) ExecX(ctx context.Context) {
-	if err := gpu.Exec(ctx); err != nil {
+func (_u *GatewayPortUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *GatewayPortUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(gatewayport.Table, gatewayport.Columns, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
-	if ps := gpu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := gpu.mutation.FkGatewayID(); ok {
+	if value, ok := _u.mutation.FkGatewayID(); ok {
 		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := gpu.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gpu.mutation.AddedPort(); ok {
+	if value, ok := _u.mutation.AddedPort(); ok {
 		_spec.AddField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gpu.mutation.IsUse(); ok {
+	if value, ok := _u.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
 	}
-	if value, ok := gpu.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, gpu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gatewayport.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -139,8 +155,8 @@ func (gpu *GatewayPortUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	gpu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // GatewayPortUpdateOne is the builder for updating a single GatewayPort entity.
@@ -152,78 +168,94 @@ type GatewayPortUpdateOne struct {
 }
 
 // SetFkGatewayID sets the "fk_gateway_id" field.
-func (gpuo *GatewayPortUpdateOne) SetFkGatewayID(u uuid.UUID) *GatewayPortUpdateOne {
-	gpuo.mutation.SetFkGatewayID(u)
-	return gpuo
+func (_u *GatewayPortUpdateOne) SetFkGatewayID(v uuid.UUID) *GatewayPortUpdateOne {
+	_u.mutation.SetFkGatewayID(v)
+	return _u
+}
+
+// SetNillableFkGatewayID sets the "fk_gateway_id" field if the given value is not nil.
+func (_u *GatewayPortUpdateOne) SetNillableFkGatewayID(v *uuid.UUID) *GatewayPortUpdateOne {
+	if v != nil {
+		_u.SetFkGatewayID(*v)
+	}
+	return _u
 }
 
 // SetPort sets the "port" field.
-func (gpuo *GatewayPortUpdateOne) SetPort(i int32) *GatewayPortUpdateOne {
-	gpuo.mutation.ResetPort()
-	gpuo.mutation.SetPort(i)
-	return gpuo
+func (_u *GatewayPortUpdateOne) SetPort(v int32) *GatewayPortUpdateOne {
+	_u.mutation.ResetPort()
+	_u.mutation.SetPort(v)
+	return _u
 }
 
-// AddPort adds i to the "port" field.
-func (gpuo *GatewayPortUpdateOne) AddPort(i int32) *GatewayPortUpdateOne {
-	gpuo.mutation.AddPort(i)
-	return gpuo
+// SetNillablePort sets the "port" field if the given value is not nil.
+func (_u *GatewayPortUpdateOne) SetNillablePort(v *int32) *GatewayPortUpdateOne {
+	if v != nil {
+		_u.SetPort(*v)
+	}
+	return _u
+}
+
+// AddPort adds value to the "port" field.
+func (_u *GatewayPortUpdateOne) AddPort(v int32) *GatewayPortUpdateOne {
+	_u.mutation.AddPort(v)
+	return _u
 }
 
 // SetIsUse sets the "is_use" field.
-func (gpuo *GatewayPortUpdateOne) SetIsUse(b bool) *GatewayPortUpdateOne {
-	gpuo.mutation.SetIsUse(b)
-	return gpuo
+func (_u *GatewayPortUpdateOne) SetIsUse(v bool) *GatewayPortUpdateOne {
+	_u.mutation.SetIsUse(v)
+	return _u
 }
 
 // SetNillableIsUse sets the "is_use" field if the given value is not nil.
-func (gpuo *GatewayPortUpdateOne) SetNillableIsUse(b *bool) *GatewayPortUpdateOne {
-	if b != nil {
-		gpuo.SetIsUse(*b)
+func (_u *GatewayPortUpdateOne) SetNillableIsUse(v *bool) *GatewayPortUpdateOne {
+	if v != nil {
+		_u.SetIsUse(*v)
 	}
-	return gpuo
+	return _u
 }
 
 // SetIsPublic sets the "is_public" field.
-func (gpuo *GatewayPortUpdateOne) SetIsPublic(b bool) *GatewayPortUpdateOne {
-	gpuo.mutation.SetIsPublic(b)
-	return gpuo
+func (_u *GatewayPortUpdateOne) SetIsPublic(v bool) *GatewayPortUpdateOne {
+	_u.mutation.SetIsPublic(v)
+	return _u
 }
 
 // SetNillableIsPublic sets the "is_public" field if the given value is not nil.
-func (gpuo *GatewayPortUpdateOne) SetNillableIsPublic(b *bool) *GatewayPortUpdateOne {
-	if b != nil {
-		gpuo.SetIsPublic(*b)
+func (_u *GatewayPortUpdateOne) SetNillableIsPublic(v *bool) *GatewayPortUpdateOne {
+	if v != nil {
+		_u.SetIsPublic(*v)
 	}
-	return gpuo
+	return _u
 }
 
 // Mutation returns the GatewayPortMutation object of the builder.
-func (gpuo *GatewayPortUpdateOne) Mutation() *GatewayPortMutation {
-	return gpuo.mutation
+func (_u *GatewayPortUpdateOne) Mutation() *GatewayPortMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the GatewayPortUpdate builder.
-func (gpuo *GatewayPortUpdateOne) Where(ps ...predicate.GatewayPort) *GatewayPortUpdateOne {
-	gpuo.mutation.Where(ps...)
-	return gpuo
+func (_u *GatewayPortUpdateOne) Where(ps ...predicate.GatewayPort) *GatewayPortUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (gpuo *GatewayPortUpdateOne) Select(field string, fields ...string) *GatewayPortUpdateOne {
-	gpuo.fields = append([]string{field}, fields...)
-	return gpuo
+func (_u *GatewayPortUpdateOne) Select(field string, fields ...string) *GatewayPortUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated GatewayPort entity.
-func (gpuo *GatewayPortUpdateOne) Save(ctx context.Context) (*GatewayPort, error) {
-	return withHooks(ctx, gpuo.sqlSave, gpuo.mutation, gpuo.hooks)
+func (_u *GatewayPortUpdateOne) Save(ctx context.Context) (*GatewayPort, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (gpuo *GatewayPortUpdateOne) SaveX(ctx context.Context) *GatewayPort {
-	node, err := gpuo.Save(ctx)
+func (_u *GatewayPortUpdateOne) SaveX(ctx context.Context) *GatewayPort {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -231,26 +263,26 @@ func (gpuo *GatewayPortUpdateOne) SaveX(ctx context.Context) *GatewayPort {
 }
 
 // Exec executes the query on the entity.
-func (gpuo *GatewayPortUpdateOne) Exec(ctx context.Context) error {
-	_, err := gpuo.Save(ctx)
+func (_u *GatewayPortUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (gpuo *GatewayPortUpdateOne) ExecX(ctx context.Context) {
-	if err := gpuo.Exec(ctx); err != nil {
+func (_u *GatewayPortUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPort, err error) {
+func (_u *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPort, err error) {
 	_spec := sqlgraph.NewUpdateSpec(gatewayport.Table, gatewayport.Columns, sqlgraph.NewFieldSpec(gatewayport.FieldID, field.TypeUUID))
-	id, ok := gpuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "GatewayPort.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := gpuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, gatewayport.FieldID)
 		for _, f := range fields {
@@ -262,32 +294,32 @@ func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPo
 			}
 		}
 	}
-	if ps := gpuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := gpuo.mutation.FkGatewayID(); ok {
+	if value, ok := _u.mutation.FkGatewayID(); ok {
 		_spec.SetField(gatewayport.FieldFkGatewayID, field.TypeUUID, value)
 	}
-	if value, ok := gpuo.mutation.Port(); ok {
+	if value, ok := _u.mutation.Port(); ok {
 		_spec.SetField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gpuo.mutation.AddedPort(); ok {
+	if value, ok := _u.mutation.AddedPort(); ok {
 		_spec.AddField(gatewayport.FieldPort, field.TypeInt32, value)
 	}
-	if value, ok := gpuo.mutation.IsUse(); ok {
+	if value, ok := _u.mutation.IsUse(); ok {
 		_spec.SetField(gatewayport.FieldIsUse, field.TypeBool, value)
 	}
-	if value, ok := gpuo.mutation.IsPublic(); ok {
+	if value, ok := _u.mutation.IsPublic(); ok {
 		_spec.SetField(gatewayport.FieldIsPublic, field.TypeBool, value)
 	}
-	_node = &GatewayPort{config: gpuo.config}
+	_node = &GatewayPort{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, gpuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{gatewayport.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -295,6 +327,6 @@ func (gpuo *GatewayPortUpdateOne) sqlSave(ctx context.Context) (_node *GatewayPo
 		}
 		return nil, err
 	}
-	gpuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

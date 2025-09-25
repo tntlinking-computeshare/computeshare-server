@@ -20,38 +20,38 @@ type EmployeeCreate struct {
 }
 
 // SetName sets the "name" field.
-func (ec *EmployeeCreate) SetName(s string) *EmployeeCreate {
-	ec.mutation.SetName(s)
-	return ec
+func (_c *EmployeeCreate) SetName(v string) *EmployeeCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetAge sets the "age" field.
-func (ec *EmployeeCreate) SetAge(i int32) *EmployeeCreate {
-	ec.mutation.SetAge(i)
-	return ec
+func (_c *EmployeeCreate) SetAge(v int32) *EmployeeCreate {
+	_c.mutation.SetAge(v)
+	return _c
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (ec *EmployeeCreate) SetNillableAge(i *int32) *EmployeeCreate {
-	if i != nil {
-		ec.SetAge(*i)
+func (_c *EmployeeCreate) SetNillableAge(v *int32) *EmployeeCreate {
+	if v != nil {
+		_c.SetAge(*v)
 	}
-	return ec
+	return _c
 }
 
 // Mutation returns the EmployeeMutation object of the builder.
-func (ec *EmployeeCreate) Mutation() *EmployeeMutation {
-	return ec.mutation
+func (_c *EmployeeCreate) Mutation() *EmployeeMutation {
+	return _c.mutation
 }
 
 // Save creates the Employee in the database.
-func (ec *EmployeeCreate) Save(ctx context.Context) (*Employee, error) {
-	return withHooks(ctx, ec.sqlSave, ec.mutation, ec.hooks)
+func (_c *EmployeeCreate) Save(ctx context.Context) (*Employee, error) {
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (ec *EmployeeCreate) SaveX(ctx context.Context) *Employee {
-	v, err := ec.Save(ctx)
+func (_c *EmployeeCreate) SaveX(ctx context.Context) *Employee {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -59,32 +59,32 @@ func (ec *EmployeeCreate) SaveX(ctx context.Context) *Employee {
 }
 
 // Exec executes the query.
-func (ec *EmployeeCreate) Exec(ctx context.Context) error {
-	_, err := ec.Save(ctx)
+func (_c *EmployeeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ec *EmployeeCreate) ExecX(ctx context.Context) {
-	if err := ec.Exec(ctx); err != nil {
+func (_c *EmployeeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (ec *EmployeeCreate) check() error {
-	if _, ok := ec.mutation.Name(); !ok {
+func (_c *EmployeeCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Employee.name"`)}
 	}
 	return nil
 }
 
-func (ec *EmployeeCreate) sqlSave(ctx context.Context) (*Employee, error) {
-	if err := ec.check(); err != nil {
+func (_c *EmployeeCreate) sqlSave(ctx context.Context) (*Employee, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := ec.createSpec()
-	if err := sqlgraph.CreateNode(ctx, ec.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -92,21 +92,21 @@ func (ec *EmployeeCreate) sqlSave(ctx context.Context) (*Employee, error) {
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	ec.mutation.id = &_node.ID
-	ec.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (ec *EmployeeCreate) createSpec() (*Employee, *sqlgraph.CreateSpec) {
+func (_c *EmployeeCreate) createSpec() (*Employee, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Employee{config: ec.config}
+		_node = &Employee{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(employee.Table, sqlgraph.NewFieldSpec(employee.FieldID, field.TypeInt))
 	)
-	if value, ok := ec.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(employee.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := ec.mutation.Age(); ok {
+	if value, ok := _c.mutation.Age(); ok {
 		_spec.SetField(employee.FieldAge, field.TypeInt32, value)
 		_node.Age = value
 	}
@@ -116,17 +116,21 @@ func (ec *EmployeeCreate) createSpec() (*Employee, *sqlgraph.CreateSpec) {
 // EmployeeCreateBulk is the builder for creating many Employee entities in bulk.
 type EmployeeCreateBulk struct {
 	config
+	err      error
 	builders []*EmployeeCreate
 }
 
 // Save creates the Employee entities in the database.
-func (ecb *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(ecb.builders))
-	nodes := make([]*Employee, len(ecb.builders))
-	mutators := make([]Mutator, len(ecb.builders))
-	for i := range ecb.builders {
+func (_c *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Employee, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ecb.builders[i]
+			builder := _c.builders[i]
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EmployeeMutation)
 				if !ok {
@@ -139,11 +143,11 @@ func (ecb *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ecb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ecb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -167,7 +171,7 @@ func (ecb *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ecb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -175,8 +179,8 @@ func (ecb *EmployeeCreateBulk) Save(ctx context.Context) ([]*Employee, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ecb *EmployeeCreateBulk) SaveX(ctx context.Context) []*Employee {
-	v, err := ecb.Save(ctx)
+func (_c *EmployeeCreateBulk) SaveX(ctx context.Context) []*Employee {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -184,14 +188,14 @@ func (ecb *EmployeeCreateBulk) SaveX(ctx context.Context) []*Employee {
 }
 
 // Exec executes the query.
-func (ecb *EmployeeCreateBulk) Exec(ctx context.Context) error {
-	_, err := ecb.Save(ctx)
+func (_c *EmployeeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ecb *EmployeeCreateBulk) ExecX(ctx context.Context) {
-	if err := ecb.Exec(ctx); err != nil {
+func (_c *EmployeeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

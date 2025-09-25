@@ -57,12 +57,10 @@ type ScriptExecutionRecordEdges struct {
 // ScriptOrErr returns the Script value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScriptExecutionRecordEdges) ScriptOrErr() (*Script, error) {
-	if e.loadedTypes[0] {
-		if e.Script == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: script.Label}
-		}
+	if e.Script != nil {
 		return e.Script, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: script.Label}
 	}
 	return nil, &NotLoadedError{edge: "script"}
 }
@@ -89,7 +87,7 @@ func (*ScriptExecutionRecord) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the ScriptExecutionRecord fields.
-func (ser *ScriptExecutionRecord) assignValues(columns []string, values []any) error {
+func (_m *ScriptExecutionRecord) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -100,76 +98,76 @@ func (ser *ScriptExecutionRecord) assignValues(columns []string, values []any) e
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ser.ID = int32(value.Int64)
+			_m.ID = int32(value.Int64)
 		case scriptexecutionrecord.FieldUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				ser.UserID = value.String
+				_m.UserID = value.String
 			}
 		case scriptexecutionrecord.FieldFkScriptID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_script_id", values[i])
 			} else if value.Valid {
-				ser.FkScriptID = int32(value.Int64)
+				_m.FkScriptID = int32(value.Int64)
 			}
 		case scriptexecutionrecord.FieldScriptContent:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script_content", values[i])
 			} else if value.Valid {
-				ser.ScriptContent = value.String
+				_m.ScriptContent = value.String
 			}
 		case scriptexecutionrecord.FieldTaskNumber:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field task_number", values[i])
 			} else if value.Valid {
-				ser.TaskNumber = int32(value.Int64)
+				_m.TaskNumber = int32(value.Int64)
 			}
 		case scriptexecutionrecord.FieldScriptName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script_name", values[i])
 			} else if value.Valid {
-				ser.ScriptName = value.String
+				_m.ScriptName = value.String
 			}
 		case scriptexecutionrecord.FieldFileAddress:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field file_address", values[i])
 			} else if value.Valid {
-				ser.FileAddress = value.String
+				_m.FileAddress = value.String
 			}
 		case scriptexecutionrecord.FieldExecuteState:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field execute_state", values[i])
 			} else if value.Valid {
-				ser.ExecuteState = int32(value.Int64)
+				_m.ExecuteState = int32(value.Int64)
 			}
 		case scriptexecutionrecord.FieldExecuteResult:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field execute_result", values[i])
 			} else if value.Valid {
-				ser.ExecuteResult = value.String
+				_m.ExecuteResult = value.String
 			}
 		case scriptexecutionrecord.FieldCreateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field create_time", values[i])
 			} else if value.Valid {
-				ser.CreateTime = value.Time
+				_m.CreateTime = value.Time
 			}
 		case scriptexecutionrecord.FieldUpdateTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field update_time", values[i])
 			} else if value.Valid {
-				ser.UpdateTime = value.Time
+				_m.UpdateTime = value.Time
 			}
 		case scriptexecutionrecord.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field script_script_execution_records", value)
 			} else if value.Valid {
-				ser.script_script_execution_records = new(int32)
-				*ser.script_script_execution_records = int32(value.Int64)
+				_m.script_script_execution_records = new(int32)
+				*_m.script_script_execution_records = int32(value.Int64)
 			}
 		default:
-			ser.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -177,67 +175,67 @@ func (ser *ScriptExecutionRecord) assignValues(columns []string, values []any) e
 
 // Value returns the ent.Value that was dynamically selected and assigned to the ScriptExecutionRecord.
 // This includes values selected through modifiers, order, etc.
-func (ser *ScriptExecutionRecord) Value(name string) (ent.Value, error) {
-	return ser.selectValues.Get(name)
+func (_m *ScriptExecutionRecord) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryScript queries the "script" edge of the ScriptExecutionRecord entity.
-func (ser *ScriptExecutionRecord) QueryScript() *ScriptQuery {
-	return NewScriptExecutionRecordClient(ser.config).QueryScript(ser)
+func (_m *ScriptExecutionRecord) QueryScript() *ScriptQuery {
+	return NewScriptExecutionRecordClient(_m.config).QueryScript(_m)
 }
 
 // Update returns a builder for updating this ScriptExecutionRecord.
 // Note that you need to call ScriptExecutionRecord.Unwrap() before calling this method if this ScriptExecutionRecord
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ser *ScriptExecutionRecord) Update() *ScriptExecutionRecordUpdateOne {
-	return NewScriptExecutionRecordClient(ser.config).UpdateOne(ser)
+func (_m *ScriptExecutionRecord) Update() *ScriptExecutionRecordUpdateOne {
+	return NewScriptExecutionRecordClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the ScriptExecutionRecord entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ser *ScriptExecutionRecord) Unwrap() *ScriptExecutionRecord {
-	_tx, ok := ser.config.driver.(*txDriver)
+func (_m *ScriptExecutionRecord) Unwrap() *ScriptExecutionRecord {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: ScriptExecutionRecord is not a transactional entity")
 	}
-	ser.config.driver = _tx.drv
-	return ser
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ser *ScriptExecutionRecord) String() string {
+func (_m *ScriptExecutionRecord) String() string {
 	var builder strings.Builder
 	builder.WriteString("ScriptExecutionRecord(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ser.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("user_id=")
-	builder.WriteString(ser.UserID)
+	builder.WriteString(_m.UserID)
 	builder.WriteString(", ")
 	builder.WriteString("fk_script_id=")
-	builder.WriteString(fmt.Sprintf("%v", ser.FkScriptID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkScriptID))
 	builder.WriteString(", ")
 	builder.WriteString("script_content=")
-	builder.WriteString(ser.ScriptContent)
+	builder.WriteString(_m.ScriptContent)
 	builder.WriteString(", ")
 	builder.WriteString("task_number=")
-	builder.WriteString(fmt.Sprintf("%v", ser.TaskNumber))
+	builder.WriteString(fmt.Sprintf("%v", _m.TaskNumber))
 	builder.WriteString(", ")
 	builder.WriteString("script_name=")
-	builder.WriteString(ser.ScriptName)
+	builder.WriteString(_m.ScriptName)
 	builder.WriteString(", ")
 	builder.WriteString("file_address=")
-	builder.WriteString(ser.FileAddress)
+	builder.WriteString(_m.FileAddress)
 	builder.WriteString(", ")
 	builder.WriteString("execute_state=")
-	builder.WriteString(fmt.Sprintf("%v", ser.ExecuteState))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExecuteState))
 	builder.WriteString(", ")
 	builder.WriteString("execute_result=")
-	builder.WriteString(ser.ExecuteResult)
+	builder.WriteString(_m.ExecuteResult)
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
-	builder.WriteString(ser.CreateTime.Format(time.ANSIC))
+	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("update_time=")
-	builder.WriteString(ser.UpdateTime.Format(time.ANSIC))
+	builder.WriteString(_m.UpdateTime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

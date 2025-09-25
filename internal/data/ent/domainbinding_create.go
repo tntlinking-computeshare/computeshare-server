@@ -22,75 +22,75 @@ type DomainBindingCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (dbc *DomainBindingCreate) SetUserID(u uuid.UUID) *DomainBindingCreate {
-	dbc.mutation.SetUserID(u)
-	return dbc
+func (_c *DomainBindingCreate) SetUserID(v uuid.UUID) *DomainBindingCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetFkComputeInstanceID sets the "fk_compute_instance_id" field.
-func (dbc *DomainBindingCreate) SetFkComputeInstanceID(u uuid.UUID) *DomainBindingCreate {
-	dbc.mutation.SetFkComputeInstanceID(u)
-	return dbc
+func (_c *DomainBindingCreate) SetFkComputeInstanceID(v uuid.UUID) *DomainBindingCreate {
+	_c.mutation.SetFkComputeInstanceID(v)
+	return _c
 }
 
 // SetFkNetworkMappingID sets the "fk_network_mapping_id" field.
-func (dbc *DomainBindingCreate) SetFkNetworkMappingID(u uuid.UUID) *DomainBindingCreate {
-	dbc.mutation.SetFkNetworkMappingID(u)
-	return dbc
+func (_c *DomainBindingCreate) SetFkNetworkMappingID(v uuid.UUID) *DomainBindingCreate {
+	_c.mutation.SetFkNetworkMappingID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (dbc *DomainBindingCreate) SetName(s string) *DomainBindingCreate {
-	dbc.mutation.SetName(s)
-	return dbc
+func (_c *DomainBindingCreate) SetName(v string) *DomainBindingCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDomain sets the "domain" field.
-func (dbc *DomainBindingCreate) SetDomain(s string) *DomainBindingCreate {
-	dbc.mutation.SetDomain(s)
-	return dbc
+func (_c *DomainBindingCreate) SetDomain(v string) *DomainBindingCreate {
+	_c.mutation.SetDomain(v)
+	return _c
 }
 
 // SetGatewayPort sets the "gateway_port" field.
-func (dbc *DomainBindingCreate) SetGatewayPort(i int32) *DomainBindingCreate {
-	dbc.mutation.SetGatewayPort(i)
-	return dbc
+func (_c *DomainBindingCreate) SetGatewayPort(v int32) *DomainBindingCreate {
+	_c.mutation.SetGatewayPort(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (dbc *DomainBindingCreate) SetCreateTime(t time.Time) *DomainBindingCreate {
-	dbc.mutation.SetCreateTime(t)
-	return dbc
+func (_c *DomainBindingCreate) SetCreateTime(v time.Time) *DomainBindingCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (dbc *DomainBindingCreate) SetID(u uuid.UUID) *DomainBindingCreate {
-	dbc.mutation.SetID(u)
-	return dbc
+func (_c *DomainBindingCreate) SetID(v uuid.UUID) *DomainBindingCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (dbc *DomainBindingCreate) SetNillableID(u *uuid.UUID) *DomainBindingCreate {
-	if u != nil {
-		dbc.SetID(*u)
+func (_c *DomainBindingCreate) SetNillableID(v *uuid.UUID) *DomainBindingCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return dbc
+	return _c
 }
 
 // Mutation returns the DomainBindingMutation object of the builder.
-func (dbc *DomainBindingCreate) Mutation() *DomainBindingMutation {
-	return dbc.mutation
+func (_c *DomainBindingCreate) Mutation() *DomainBindingMutation {
+	return _c.mutation
 }
 
 // Save creates the DomainBinding in the database.
-func (dbc *DomainBindingCreate) Save(ctx context.Context) (*DomainBinding, error) {
-	dbc.defaults()
-	return withHooks(ctx, dbc.sqlSave, dbc.mutation, dbc.hooks)
+func (_c *DomainBindingCreate) Save(ctx context.Context) (*DomainBinding, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (dbc *DomainBindingCreate) SaveX(ctx context.Context) *DomainBinding {
-	v, err := dbc.Save(ctx)
+func (_c *DomainBindingCreate) SaveX(ctx context.Context) *DomainBinding {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -98,68 +98,68 @@ func (dbc *DomainBindingCreate) SaveX(ctx context.Context) *DomainBinding {
 }
 
 // Exec executes the query.
-func (dbc *DomainBindingCreate) Exec(ctx context.Context) error {
-	_, err := dbc.Save(ctx)
+func (_c *DomainBindingCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dbc *DomainBindingCreate) ExecX(ctx context.Context) {
-	if err := dbc.Exec(ctx); err != nil {
+func (_c *DomainBindingCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (dbc *DomainBindingCreate) defaults() {
-	if _, ok := dbc.mutation.ID(); !ok {
+func (_c *DomainBindingCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := domainbinding.DefaultID()
-		dbc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (dbc *DomainBindingCreate) check() error {
-	if _, ok := dbc.mutation.UserID(); !ok {
+func (_c *DomainBindingCreate) check() error {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "DomainBinding.user_id"`)}
 	}
-	if _, ok := dbc.mutation.FkComputeInstanceID(); !ok {
+	if _, ok := _c.mutation.FkComputeInstanceID(); !ok {
 		return &ValidationError{Name: "fk_compute_instance_id", err: errors.New(`ent: missing required field "DomainBinding.fk_compute_instance_id"`)}
 	}
-	if _, ok := dbc.mutation.FkNetworkMappingID(); !ok {
+	if _, ok := _c.mutation.FkNetworkMappingID(); !ok {
 		return &ValidationError{Name: "fk_network_mapping_id", err: errors.New(`ent: missing required field "DomainBinding.fk_network_mapping_id"`)}
 	}
-	if _, ok := dbc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "DomainBinding.name"`)}
 	}
-	if v, ok := dbc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := domainbinding.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.name": %w`, err)}
 		}
 	}
-	if _, ok := dbc.mutation.Domain(); !ok {
+	if _, ok := _c.mutation.Domain(); !ok {
 		return &ValidationError{Name: "domain", err: errors.New(`ent: missing required field "DomainBinding.domain"`)}
 	}
-	if v, ok := dbc.mutation.Domain(); ok {
+	if v, ok := _c.mutation.Domain(); ok {
 		if err := domainbinding.DomainValidator(v); err != nil {
 			return &ValidationError{Name: "domain", err: fmt.Errorf(`ent: validator failed for field "DomainBinding.domain": %w`, err)}
 		}
 	}
-	if _, ok := dbc.mutation.GatewayPort(); !ok {
+	if _, ok := _c.mutation.GatewayPort(); !ok {
 		return &ValidationError{Name: "gateway_port", err: errors.New(`ent: missing required field "DomainBinding.gateway_port"`)}
 	}
-	if _, ok := dbc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "DomainBinding.create_time"`)}
 	}
 	return nil
 }
 
-func (dbc *DomainBindingCreate) sqlSave(ctx context.Context) (*DomainBinding, error) {
-	if err := dbc.check(); err != nil {
+func (_c *DomainBindingCreate) sqlSave(ctx context.Context) (*DomainBinding, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := dbc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, dbc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -172,45 +172,45 @@ func (dbc *DomainBindingCreate) sqlSave(ctx context.Context) (*DomainBinding, er
 			return nil, err
 		}
 	}
-	dbc.mutation.id = &_node.ID
-	dbc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (dbc *DomainBindingCreate) createSpec() (*DomainBinding, *sqlgraph.CreateSpec) {
+func (_c *DomainBindingCreate) createSpec() (*DomainBinding, *sqlgraph.CreateSpec) {
 	var (
-		_node = &DomainBinding{config: dbc.config}
+		_node = &DomainBinding{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(domainbinding.Table, sqlgraph.NewFieldSpec(domainbinding.FieldID, field.TypeUUID))
 	)
-	if id, ok := dbc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := dbc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(domainbinding.FieldUserID, field.TypeUUID, value)
 		_node.UserID = value
 	}
-	if value, ok := dbc.mutation.FkComputeInstanceID(); ok {
+	if value, ok := _c.mutation.FkComputeInstanceID(); ok {
 		_spec.SetField(domainbinding.FieldFkComputeInstanceID, field.TypeUUID, value)
 		_node.FkComputeInstanceID = value
 	}
-	if value, ok := dbc.mutation.FkNetworkMappingID(); ok {
+	if value, ok := _c.mutation.FkNetworkMappingID(); ok {
 		_spec.SetField(domainbinding.FieldFkNetworkMappingID, field.TypeUUID, value)
 		_node.FkNetworkMappingID = value
 	}
-	if value, ok := dbc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(domainbinding.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := dbc.mutation.Domain(); ok {
+	if value, ok := _c.mutation.Domain(); ok {
 		_spec.SetField(domainbinding.FieldDomain, field.TypeString, value)
 		_node.Domain = value
 	}
-	if value, ok := dbc.mutation.GatewayPort(); ok {
+	if value, ok := _c.mutation.GatewayPort(); ok {
 		_spec.SetField(domainbinding.FieldGatewayPort, field.TypeInt32, value)
 		_node.GatewayPort = value
 	}
-	if value, ok := dbc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(domainbinding.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
@@ -220,17 +220,21 @@ func (dbc *DomainBindingCreate) createSpec() (*DomainBinding, *sqlgraph.CreateSp
 // DomainBindingCreateBulk is the builder for creating many DomainBinding entities in bulk.
 type DomainBindingCreateBulk struct {
 	config
+	err      error
 	builders []*DomainBindingCreate
 }
 
 // Save creates the DomainBinding entities in the database.
-func (dbcb *DomainBindingCreateBulk) Save(ctx context.Context) ([]*DomainBinding, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(dbcb.builders))
-	nodes := make([]*DomainBinding, len(dbcb.builders))
-	mutators := make([]Mutator, len(dbcb.builders))
-	for i := range dbcb.builders {
+func (_c *DomainBindingCreateBulk) Save(ctx context.Context) ([]*DomainBinding, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*DomainBinding, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := dbcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*DomainBindingMutation)
@@ -244,11 +248,11 @@ func (dbcb *DomainBindingCreateBulk) Save(ctx context.Context) ([]*DomainBinding
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, dbcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, dbcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -268,7 +272,7 @@ func (dbcb *DomainBindingCreateBulk) Save(ctx context.Context) ([]*DomainBinding
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, dbcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -276,8 +280,8 @@ func (dbcb *DomainBindingCreateBulk) Save(ctx context.Context) ([]*DomainBinding
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (dbcb *DomainBindingCreateBulk) SaveX(ctx context.Context) []*DomainBinding {
-	v, err := dbcb.Save(ctx)
+func (_c *DomainBindingCreateBulk) SaveX(ctx context.Context) []*DomainBinding {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -285,14 +289,14 @@ func (dbcb *DomainBindingCreateBulk) SaveX(ctx context.Context) []*DomainBinding
 }
 
 // Exec executes the query.
-func (dbcb *DomainBindingCreateBulk) Exec(ctx context.Context) error {
-	_, err := dbcb.Save(ctx)
+func (_c *DomainBindingCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (dbcb *DomainBindingCreateBulk) ExecX(ctx context.Context) {
-	if err := dbcb.Exec(ctx); err != nil {
+func (_c *DomainBindingCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -24,93 +24,149 @@ type CycleOrderUpdate struct {
 }
 
 // Where appends a list predicates to the CycleOrderUpdate builder.
-func (cou *CycleOrderUpdate) Where(ps ...predicate.CycleOrder) *CycleOrderUpdate {
-	cou.mutation.Where(ps...)
-	return cou
+func (_u *CycleOrderUpdate) Where(ps ...predicate.CycleOrder) *CycleOrderUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (cou *CycleOrderUpdate) SetFkUserID(u uuid.UUID) *CycleOrderUpdate {
-	cou.mutation.SetFkUserID(u)
-	return cou
+func (_u *CycleOrderUpdate) SetFkUserID(v uuid.UUID) *CycleOrderUpdate {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableFkUserID(v *uuid.UUID) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetOrderNo sets the "order_no" field.
-func (cou *CycleOrderUpdate) SetOrderNo(s string) *CycleOrderUpdate {
-	cou.mutation.SetOrderNo(s)
-	return cou
+func (_u *CycleOrderUpdate) SetOrderNo(v string) *CycleOrderUpdate {
+	_u.mutation.SetOrderNo(v)
+	return _u
+}
+
+// SetNillableOrderNo sets the "order_no" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableOrderNo(v *string) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetOrderNo(*v)
+	}
+	return _u
 }
 
 // SetProductName sets the "product_name" field.
-func (cou *CycleOrderUpdate) SetProductName(s string) *CycleOrderUpdate {
-	cou.mutation.SetProductName(s)
-	return cou
+func (_u *CycleOrderUpdate) SetProductName(v string) *CycleOrderUpdate {
+	_u.mutation.SetProductName(v)
+	return _u
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableProductName(v *string) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetProductName(*v)
+	}
+	return _u
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (cou *CycleOrderUpdate) SetProductDesc(s string) *CycleOrderUpdate {
-	cou.mutation.SetProductDesc(s)
-	return cou
+func (_u *CycleOrderUpdate) SetProductDesc(v string) *CycleOrderUpdate {
+	_u.mutation.SetProductDesc(v)
+	return _u
+}
+
+// SetNillableProductDesc sets the "product_desc" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableProductDesc(v *string) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetProductDesc(*v)
+	}
+	return _u
 }
 
 // SetSymbol sets the "symbol" field.
-func (cou *CycleOrderUpdate) SetSymbol(s string) *CycleOrderUpdate {
-	cou.mutation.SetSymbol(s)
-	return cou
+func (_u *CycleOrderUpdate) SetSymbol(v string) *CycleOrderUpdate {
+	_u.mutation.SetSymbol(v)
+	return _u
+}
+
+// SetNillableSymbol sets the "symbol" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableSymbol(v *string) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetSymbol(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (cou *CycleOrderUpdate) SetCycle(f float64) *CycleOrderUpdate {
-	cou.mutation.ResetCycle()
-	cou.mutation.SetCycle(f)
-	return cou
+func (_u *CycleOrderUpdate) SetCycle(v float64) *CycleOrderUpdate {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (cou *CycleOrderUpdate) AddCycle(f float64) *CycleOrderUpdate {
-	cou.mutation.AddCycle(f)
-	return cou
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableCycle(v *float64) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleOrderUpdate) AddCycle(v float64) *CycleOrderUpdate {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetResourceID sets the "resource_id" field.
-func (cou *CycleOrderUpdate) SetResourceID(s string) *CycleOrderUpdate {
-	cou.mutation.SetResourceID(s)
-	return cou
+func (_u *CycleOrderUpdate) SetResourceID(v string) *CycleOrderUpdate {
+	_u.mutation.SetResourceID(v)
+	return _u
 }
 
 // SetNillableResourceID sets the "resource_id" field if the given value is not nil.
-func (cou *CycleOrderUpdate) SetNillableResourceID(s *string) *CycleOrderUpdate {
-	if s != nil {
-		cou.SetResourceID(*s)
+func (_u *CycleOrderUpdate) SetNillableResourceID(v *string) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetResourceID(*v)
 	}
-	return cou
+	return _u
 }
 
 // ClearResourceID clears the value of the "resource_id" field.
-func (cou *CycleOrderUpdate) ClearResourceID() *CycleOrderUpdate {
-	cou.mutation.ClearResourceID()
-	return cou
+func (_u *CycleOrderUpdate) ClearResourceID() *CycleOrderUpdate {
+	_u.mutation.ClearResourceID()
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (cou *CycleOrderUpdate) SetCreateTime(t time.Time) *CycleOrderUpdate {
-	cou.mutation.SetCreateTime(t)
-	return cou
+func (_u *CycleOrderUpdate) SetCreateTime(v time.Time) *CycleOrderUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleOrderUpdate) SetNillableCreateTime(v *time.Time) *CycleOrderUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleOrderMutation object of the builder.
-func (cou *CycleOrderUpdate) Mutation() *CycleOrderMutation {
-	return cou.mutation
+func (_u *CycleOrderUpdate) Mutation() *CycleOrderMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cou *CycleOrderUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cou.sqlSave, cou.mutation, cou.hooks)
+func (_u *CycleOrderUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cou *CycleOrderUpdate) SaveX(ctx context.Context) int {
-	affected, err := cou.Save(ctx)
+func (_u *CycleOrderUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -118,41 +174,41 @@ func (cou *CycleOrderUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cou *CycleOrderUpdate) Exec(ctx context.Context) error {
-	_, err := cou.Save(ctx)
+func (_u *CycleOrderUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cou *CycleOrderUpdate) ExecX(ctx context.Context) {
-	if err := cou.Exec(ctx); err != nil {
+func (_u *CycleOrderUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cou *CycleOrderUpdate) check() error {
-	if v, ok := cou.mutation.OrderNo(); ok {
+func (_u *CycleOrderUpdate) check() error {
+	if v, ok := _u.mutation.OrderNo(); ok {
 		if err := cycleorder.OrderNoValidator(v); err != nil {
 			return &ValidationError{Name: "order_no", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.order_no": %w`, err)}
 		}
 	}
-	if v, ok := cou.mutation.ProductName(); ok {
+	if v, ok := _u.mutation.ProductName(); ok {
 		if err := cycleorder.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_name": %w`, err)}
 		}
 	}
-	if v, ok := cou.mutation.ProductDesc(); ok {
+	if v, ok := _u.mutation.ProductDesc(); ok {
 		if err := cycleorder.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_desc": %w`, err)}
 		}
 	}
-	if v, ok := cou.mutation.Symbol(); ok {
+	if v, ok := _u.mutation.Symbol(); ok {
 		if err := cycleorder.SymbolValidator(v); err != nil {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.symbol": %w`, err)}
 		}
 	}
-	if v, ok := cou.mutation.ResourceID(); ok {
+	if v, ok := _u.mutation.ResourceID(); ok {
 		if err := cycleorder.ResourceIDValidator(v); err != nil {
 			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
 		}
@@ -160,49 +216,49 @@ func (cou *CycleOrderUpdate) check() error {
 	return nil
 }
 
-func (cou *CycleOrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cou.check(); err != nil {
-		return n, err
+func (_u *CycleOrderUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cycleorder.Table, cycleorder.Columns, sqlgraph.NewFieldSpec(cycleorder.FieldID, field.TypeUUID))
-	if ps := cou.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cou.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycleorder.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := cou.mutation.OrderNo(); ok {
+	if value, ok := _u.mutation.OrderNo(); ok {
 		_spec.SetField(cycleorder.FieldOrderNo, field.TypeString, value)
 	}
-	if value, ok := cou.mutation.ProductName(); ok {
+	if value, ok := _u.mutation.ProductName(); ok {
 		_spec.SetField(cycleorder.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := cou.mutation.ProductDesc(); ok {
+	if value, ok := _u.mutation.ProductDesc(); ok {
 		_spec.SetField(cycleorder.FieldProductDesc, field.TypeString, value)
 	}
-	if value, ok := cou.mutation.Symbol(); ok {
+	if value, ok := _u.mutation.Symbol(); ok {
 		_spec.SetField(cycleorder.FieldSymbol, field.TypeString, value)
 	}
-	if value, ok := cou.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycleorder.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cou.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycleorder.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := cou.mutation.ResourceID(); ok {
+	if value, ok := _u.mutation.ResourceID(); ok {
 		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
 	}
-	if cou.mutation.ResourceIDCleared() {
+	if _u.mutation.ResourceIDCleared() {
 		_spec.ClearField(cycleorder.FieldResourceID, field.TypeString)
 	}
-	if value, ok := cou.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cou.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycleorder.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -210,8 +266,8 @@ func (cou *CycleOrderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cou.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CycleOrderUpdateOne is the builder for updating a single CycleOrder entity.
@@ -223,100 +279,156 @@ type CycleOrderUpdateOne struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (couo *CycleOrderUpdateOne) SetFkUserID(u uuid.UUID) *CycleOrderUpdateOne {
-	couo.mutation.SetFkUserID(u)
-	return couo
+func (_u *CycleOrderUpdateOne) SetFkUserID(v uuid.UUID) *CycleOrderUpdateOne {
+	_u.mutation.SetFkUserID(v)
+	return _u
+}
+
+// SetNillableFkUserID sets the "fk_user_id" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableFkUserID(v *uuid.UUID) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetFkUserID(*v)
+	}
+	return _u
 }
 
 // SetOrderNo sets the "order_no" field.
-func (couo *CycleOrderUpdateOne) SetOrderNo(s string) *CycleOrderUpdateOne {
-	couo.mutation.SetOrderNo(s)
-	return couo
+func (_u *CycleOrderUpdateOne) SetOrderNo(v string) *CycleOrderUpdateOne {
+	_u.mutation.SetOrderNo(v)
+	return _u
+}
+
+// SetNillableOrderNo sets the "order_no" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableOrderNo(v *string) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetOrderNo(*v)
+	}
+	return _u
 }
 
 // SetProductName sets the "product_name" field.
-func (couo *CycleOrderUpdateOne) SetProductName(s string) *CycleOrderUpdateOne {
-	couo.mutation.SetProductName(s)
-	return couo
+func (_u *CycleOrderUpdateOne) SetProductName(v string) *CycleOrderUpdateOne {
+	_u.mutation.SetProductName(v)
+	return _u
+}
+
+// SetNillableProductName sets the "product_name" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableProductName(v *string) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetProductName(*v)
+	}
+	return _u
 }
 
 // SetProductDesc sets the "product_desc" field.
-func (couo *CycleOrderUpdateOne) SetProductDesc(s string) *CycleOrderUpdateOne {
-	couo.mutation.SetProductDesc(s)
-	return couo
+func (_u *CycleOrderUpdateOne) SetProductDesc(v string) *CycleOrderUpdateOne {
+	_u.mutation.SetProductDesc(v)
+	return _u
+}
+
+// SetNillableProductDesc sets the "product_desc" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableProductDesc(v *string) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetProductDesc(*v)
+	}
+	return _u
 }
 
 // SetSymbol sets the "symbol" field.
-func (couo *CycleOrderUpdateOne) SetSymbol(s string) *CycleOrderUpdateOne {
-	couo.mutation.SetSymbol(s)
-	return couo
+func (_u *CycleOrderUpdateOne) SetSymbol(v string) *CycleOrderUpdateOne {
+	_u.mutation.SetSymbol(v)
+	return _u
+}
+
+// SetNillableSymbol sets the "symbol" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableSymbol(v *string) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetSymbol(*v)
+	}
+	return _u
 }
 
 // SetCycle sets the "cycle" field.
-func (couo *CycleOrderUpdateOne) SetCycle(f float64) *CycleOrderUpdateOne {
-	couo.mutation.ResetCycle()
-	couo.mutation.SetCycle(f)
-	return couo
+func (_u *CycleOrderUpdateOne) SetCycle(v float64) *CycleOrderUpdateOne {
+	_u.mutation.ResetCycle()
+	_u.mutation.SetCycle(v)
+	return _u
 }
 
-// AddCycle adds f to the "cycle" field.
-func (couo *CycleOrderUpdateOne) AddCycle(f float64) *CycleOrderUpdateOne {
-	couo.mutation.AddCycle(f)
-	return couo
+// SetNillableCycle sets the "cycle" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableCycle(v *float64) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetCycle(*v)
+	}
+	return _u
+}
+
+// AddCycle adds value to the "cycle" field.
+func (_u *CycleOrderUpdateOne) AddCycle(v float64) *CycleOrderUpdateOne {
+	_u.mutation.AddCycle(v)
+	return _u
 }
 
 // SetResourceID sets the "resource_id" field.
-func (couo *CycleOrderUpdateOne) SetResourceID(s string) *CycleOrderUpdateOne {
-	couo.mutation.SetResourceID(s)
-	return couo
+func (_u *CycleOrderUpdateOne) SetResourceID(v string) *CycleOrderUpdateOne {
+	_u.mutation.SetResourceID(v)
+	return _u
 }
 
 // SetNillableResourceID sets the "resource_id" field if the given value is not nil.
-func (couo *CycleOrderUpdateOne) SetNillableResourceID(s *string) *CycleOrderUpdateOne {
-	if s != nil {
-		couo.SetResourceID(*s)
+func (_u *CycleOrderUpdateOne) SetNillableResourceID(v *string) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetResourceID(*v)
 	}
-	return couo
+	return _u
 }
 
 // ClearResourceID clears the value of the "resource_id" field.
-func (couo *CycleOrderUpdateOne) ClearResourceID() *CycleOrderUpdateOne {
-	couo.mutation.ClearResourceID()
-	return couo
+func (_u *CycleOrderUpdateOne) ClearResourceID() *CycleOrderUpdateOne {
+	_u.mutation.ClearResourceID()
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (couo *CycleOrderUpdateOne) SetCreateTime(t time.Time) *CycleOrderUpdateOne {
-	couo.mutation.SetCreateTime(t)
-	return couo
+func (_u *CycleOrderUpdateOne) SetCreateTime(v time.Time) *CycleOrderUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
+}
+
+// SetNillableCreateTime sets the "create_time" field if the given value is not nil.
+func (_u *CycleOrderUpdateOne) SetNillableCreateTime(v *time.Time) *CycleOrderUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
+	}
+	return _u
 }
 
 // Mutation returns the CycleOrderMutation object of the builder.
-func (couo *CycleOrderUpdateOne) Mutation() *CycleOrderMutation {
-	return couo.mutation
+func (_u *CycleOrderUpdateOne) Mutation() *CycleOrderMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CycleOrderUpdate builder.
-func (couo *CycleOrderUpdateOne) Where(ps ...predicate.CycleOrder) *CycleOrderUpdateOne {
-	couo.mutation.Where(ps...)
-	return couo
+func (_u *CycleOrderUpdateOne) Where(ps ...predicate.CycleOrder) *CycleOrderUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (couo *CycleOrderUpdateOne) Select(field string, fields ...string) *CycleOrderUpdateOne {
-	couo.fields = append([]string{field}, fields...)
-	return couo
+func (_u *CycleOrderUpdateOne) Select(field string, fields ...string) *CycleOrderUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CycleOrder entity.
-func (couo *CycleOrderUpdateOne) Save(ctx context.Context) (*CycleOrder, error) {
-	return withHooks(ctx, couo.sqlSave, couo.mutation, couo.hooks)
+func (_u *CycleOrderUpdateOne) Save(ctx context.Context) (*CycleOrder, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (couo *CycleOrderUpdateOne) SaveX(ctx context.Context) *CycleOrder {
-	node, err := couo.Save(ctx)
+func (_u *CycleOrderUpdateOne) SaveX(ctx context.Context) *CycleOrder {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -324,41 +436,41 @@ func (couo *CycleOrderUpdateOne) SaveX(ctx context.Context) *CycleOrder {
 }
 
 // Exec executes the query on the entity.
-func (couo *CycleOrderUpdateOne) Exec(ctx context.Context) error {
-	_, err := couo.Save(ctx)
+func (_u *CycleOrderUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (couo *CycleOrderUpdateOne) ExecX(ctx context.Context) {
-	if err := couo.Exec(ctx); err != nil {
+func (_u *CycleOrderUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (couo *CycleOrderUpdateOne) check() error {
-	if v, ok := couo.mutation.OrderNo(); ok {
+func (_u *CycleOrderUpdateOne) check() error {
+	if v, ok := _u.mutation.OrderNo(); ok {
 		if err := cycleorder.OrderNoValidator(v); err != nil {
 			return &ValidationError{Name: "order_no", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.order_no": %w`, err)}
 		}
 	}
-	if v, ok := couo.mutation.ProductName(); ok {
+	if v, ok := _u.mutation.ProductName(); ok {
 		if err := cycleorder.ProductNameValidator(v); err != nil {
 			return &ValidationError{Name: "product_name", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_name": %w`, err)}
 		}
 	}
-	if v, ok := couo.mutation.ProductDesc(); ok {
+	if v, ok := _u.mutation.ProductDesc(); ok {
 		if err := cycleorder.ProductDescValidator(v); err != nil {
 			return &ValidationError{Name: "product_desc", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.product_desc": %w`, err)}
 		}
 	}
-	if v, ok := couo.mutation.Symbol(); ok {
+	if v, ok := _u.mutation.Symbol(); ok {
 		if err := cycleorder.SymbolValidator(v); err != nil {
 			return &ValidationError{Name: "symbol", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.symbol": %w`, err)}
 		}
 	}
-	if v, ok := couo.mutation.ResourceID(); ok {
+	if v, ok := _u.mutation.ResourceID(); ok {
 		if err := cycleorder.ResourceIDValidator(v); err != nil {
 			return &ValidationError{Name: "resource_id", err: fmt.Errorf(`ent: validator failed for field "CycleOrder.resource_id": %w`, err)}
 		}
@@ -366,17 +478,17 @@ func (couo *CycleOrderUpdateOne) check() error {
 	return nil
 }
 
-func (couo *CycleOrderUpdateOne) sqlSave(ctx context.Context) (_node *CycleOrder, err error) {
-	if err := couo.check(); err != nil {
+func (_u *CycleOrderUpdateOne) sqlSave(ctx context.Context) (_node *CycleOrder, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(cycleorder.Table, cycleorder.Columns, sqlgraph.NewFieldSpec(cycleorder.FieldID, field.TypeUUID))
-	id, ok := couo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CycleOrder.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := couo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cycleorder.FieldID)
 		for _, f := range fields {
@@ -388,47 +500,47 @@ func (couo *CycleOrderUpdateOne) sqlSave(ctx context.Context) (_node *CycleOrder
 			}
 		}
 	}
-	if ps := couo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := couo.mutation.FkUserID(); ok {
+	if value, ok := _u.mutation.FkUserID(); ok {
 		_spec.SetField(cycleorder.FieldFkUserID, field.TypeUUID, value)
 	}
-	if value, ok := couo.mutation.OrderNo(); ok {
+	if value, ok := _u.mutation.OrderNo(); ok {
 		_spec.SetField(cycleorder.FieldOrderNo, field.TypeString, value)
 	}
-	if value, ok := couo.mutation.ProductName(); ok {
+	if value, ok := _u.mutation.ProductName(); ok {
 		_spec.SetField(cycleorder.FieldProductName, field.TypeString, value)
 	}
-	if value, ok := couo.mutation.ProductDesc(); ok {
+	if value, ok := _u.mutation.ProductDesc(); ok {
 		_spec.SetField(cycleorder.FieldProductDesc, field.TypeString, value)
 	}
-	if value, ok := couo.mutation.Symbol(); ok {
+	if value, ok := _u.mutation.Symbol(); ok {
 		_spec.SetField(cycleorder.FieldSymbol, field.TypeString, value)
 	}
-	if value, ok := couo.mutation.Cycle(); ok {
+	if value, ok := _u.mutation.Cycle(); ok {
 		_spec.SetField(cycleorder.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := couo.mutation.AddedCycle(); ok {
+	if value, ok := _u.mutation.AddedCycle(); ok {
 		_spec.AddField(cycleorder.FieldCycle, field.TypeFloat64, value)
 	}
-	if value, ok := couo.mutation.ResourceID(); ok {
+	if value, ok := _u.mutation.ResourceID(); ok {
 		_spec.SetField(cycleorder.FieldResourceID, field.TypeString, value)
 	}
-	if couo.mutation.ResourceIDCleared() {
+	if _u.mutation.ResourceIDCleared() {
 		_spec.ClearField(cycleorder.FieldResourceID, field.TypeString)
 	}
-	if value, ok := couo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(cycleorder.FieldCreateTime, field.TypeTime, value)
 	}
-	_node = &CycleOrder{config: couo.config}
+	_node = &CycleOrder{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, couo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{cycleorder.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -436,6 +548,6 @@ func (couo *CycleOrderUpdateOne) sqlSave(ctx context.Context) (_node *CycleOrder
 		}
 		return nil, err
 	}
-	couo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

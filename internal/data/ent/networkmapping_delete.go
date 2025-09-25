@@ -20,56 +20,56 @@ type NetworkMappingDelete struct {
 }
 
 // Where appends a list predicates to the NetworkMappingDelete builder.
-func (nmd *NetworkMappingDelete) Where(ps ...predicate.NetworkMapping) *NetworkMappingDelete {
-	nmd.mutation.Where(ps...)
-	return nmd
+func (_d *NetworkMappingDelete) Where(ps ...predicate.NetworkMapping) *NetworkMappingDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (nmd *NetworkMappingDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, nmd.sqlExec, nmd.mutation, nmd.hooks)
+func (_d *NetworkMappingDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmd *NetworkMappingDelete) ExecX(ctx context.Context) int {
-	n, err := nmd.Exec(ctx)
+func (_d *NetworkMappingDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (nmd *NetworkMappingDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *NetworkMappingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(networkmapping.Table, sqlgraph.NewFieldSpec(networkmapping.FieldID, field.TypeUUID))
-	if ps := nmd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, nmd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	nmd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // NetworkMappingDeleteOne is the builder for deleting a single NetworkMapping entity.
 type NetworkMappingDeleteOne struct {
-	nmd *NetworkMappingDelete
+	_d *NetworkMappingDelete
 }
 
 // Where appends a list predicates to the NetworkMappingDelete builder.
-func (nmdo *NetworkMappingDeleteOne) Where(ps ...predicate.NetworkMapping) *NetworkMappingDeleteOne {
-	nmdo.nmd.mutation.Where(ps...)
-	return nmdo
+func (_d *NetworkMappingDeleteOne) Where(ps ...predicate.NetworkMapping) *NetworkMappingDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (nmdo *NetworkMappingDeleteOne) Exec(ctx context.Context) error {
-	n, err := nmdo.nmd.Exec(ctx)
+func (_d *NetworkMappingDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (nmdo *NetworkMappingDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (nmdo *NetworkMappingDeleteOne) ExecX(ctx context.Context) {
-	if err := nmdo.Exec(ctx); err != nil {
+func (_d *NetworkMappingDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

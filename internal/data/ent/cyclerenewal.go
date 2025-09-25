@@ -69,7 +69,7 @@ func (*CycleRenewal) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CycleRenewal fields.
-func (cr *CycleRenewal) assignValues(columns []string, values []any) error {
+func (_m *CycleRenewal) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -79,78 +79,78 @@ func (cr *CycleRenewal) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				cr.ID = *value
+				_m.ID = *value
 			}
 		case cyclerenewal.FieldFkUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field fk_user_id", values[i])
 			} else if value != nil {
-				cr.FkUserID = *value
+				_m.FkUserID = *value
 			}
 		case cyclerenewal.FieldResourceID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field resource_id", values[i])
 			} else if value != nil {
-				cr.ResourceID = *value
+				_m.ResourceID = *value
 			}
 		case cyclerenewal.FieldResourceType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field resource_type", values[i])
 			} else if value.Valid {
-				cr.ResourceType = int(value.Int64)
+				_m.ResourceType = int(value.Int64)
 			}
 		case cyclerenewal.FieldProductName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_name", values[i])
 			} else if value.Valid {
-				cr.ProductName = value.String
+				_m.ProductName = value.String
 			}
 		case cyclerenewal.FieldProductDesc:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field product_desc", values[i])
 			} else if value.Valid {
-				cr.ProductDesc = value.String
+				_m.ProductDesc = value.String
 			}
 		case cyclerenewal.FieldState:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
-				cr.State = int8(value.Int64)
+				_m.State = int8(value.Int64)
 			}
 		case cyclerenewal.FieldExtendDay:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field extend_day", values[i])
 			} else if value.Valid {
-				cr.ExtendDay = int8(value.Int64)
+				_m.ExtendDay = int8(value.Int64)
 			}
 		case cyclerenewal.FieldExtendPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field extend_price", values[i])
 			} else if value.Valid {
-				cr.ExtendPrice = value.Float64
+				_m.ExtendPrice = value.Float64
 			}
 		case cyclerenewal.FieldDueTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_time", values[i])
 			} else if value.Valid {
-				cr.DueTime = new(time.Time)
-				*cr.DueTime = value.Time
+				_m.DueTime = new(time.Time)
+				*_m.DueTime = value.Time
 			}
 		case cyclerenewal.FieldRenewalTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field renewal_time", values[i])
 			} else if value.Valid {
-				cr.RenewalTime = new(time.Time)
-				*cr.RenewalTime = value.Time
+				_m.RenewalTime = new(time.Time)
+				*_m.RenewalTime = value.Time
 			}
 		case cyclerenewal.FieldAutoRenewal:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auto_renewal", values[i])
 			} else if value.Valid {
-				cr.AutoRenewal = value.Bool
+				_m.AutoRenewal = value.Bool
 			}
 		default:
-			cr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -158,69 +158,69 @@ func (cr *CycleRenewal) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CycleRenewal.
 // This includes values selected through modifiers, order, etc.
-func (cr *CycleRenewal) Value(name string) (ent.Value, error) {
-	return cr.selectValues.Get(name)
+func (_m *CycleRenewal) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CycleRenewal.
 // Note that you need to call CycleRenewal.Unwrap() before calling this method if this CycleRenewal
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (cr *CycleRenewal) Update() *CycleRenewalUpdateOne {
-	return NewCycleRenewalClient(cr.config).UpdateOne(cr)
+func (_m *CycleRenewal) Update() *CycleRenewalUpdateOne {
+	return NewCycleRenewalClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CycleRenewal entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (cr *CycleRenewal) Unwrap() *CycleRenewal {
-	_tx, ok := cr.config.driver.(*txDriver)
+func (_m *CycleRenewal) Unwrap() *CycleRenewal {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CycleRenewal is not a transactional entity")
 	}
-	cr.config.driver = _tx.drv
-	return cr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (cr *CycleRenewal) String() string {
+func (_m *CycleRenewal) String() string {
 	var builder strings.Builder
 	builder.WriteString("CycleRenewal(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", cr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("fk_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", cr.FkUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FkUserID))
 	builder.WriteString(", ")
 	builder.WriteString("resource_id=")
-	builder.WriteString(fmt.Sprintf("%v", cr.ResourceID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ResourceID))
 	builder.WriteString(", ")
 	builder.WriteString("resource_type=")
-	builder.WriteString(fmt.Sprintf("%v", cr.ResourceType))
+	builder.WriteString(fmt.Sprintf("%v", _m.ResourceType))
 	builder.WriteString(", ")
 	builder.WriteString("product_name=")
-	builder.WriteString(cr.ProductName)
+	builder.WriteString(_m.ProductName)
 	builder.WriteString(", ")
 	builder.WriteString("product_desc=")
-	builder.WriteString(cr.ProductDesc)
+	builder.WriteString(_m.ProductDesc)
 	builder.WriteString(", ")
 	builder.WriteString("state=")
-	builder.WriteString(fmt.Sprintf("%v", cr.State))
+	builder.WriteString(fmt.Sprintf("%v", _m.State))
 	builder.WriteString(", ")
 	builder.WriteString("extend_day=")
-	builder.WriteString(fmt.Sprintf("%v", cr.ExtendDay))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExtendDay))
 	builder.WriteString(", ")
 	builder.WriteString("extend_price=")
-	builder.WriteString(fmt.Sprintf("%v", cr.ExtendPrice))
+	builder.WriteString(fmt.Sprintf("%v", _m.ExtendPrice))
 	builder.WriteString(", ")
-	if v := cr.DueTime; v != nil {
+	if v := _m.DueTime; v != nil {
 		builder.WriteString("due_time=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := cr.RenewalTime; v != nil {
+	if v := _m.RenewalTime; v != nil {
 		builder.WriteString("renewal_time=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("auto_renewal=")
-	builder.WriteString(fmt.Sprintf("%v", cr.AutoRenewal))
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoRenewal))
 	builder.WriteByte(')')
 	return builder.String()
 }

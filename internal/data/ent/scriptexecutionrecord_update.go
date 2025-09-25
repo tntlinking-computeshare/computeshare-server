@@ -24,146 +24,210 @@ type ScriptExecutionRecordUpdate struct {
 }
 
 // Where appends a list predicates to the ScriptExecutionRecordUpdate builder.
-func (seru *ScriptExecutionRecordUpdate) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordUpdate {
-	seru.mutation.Where(ps...)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (seru *ScriptExecutionRecordUpdate) SetUserID(s string) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetUserID(s)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetUserID(v string) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableUserID(v *string) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetFkScriptID sets the "fk_script_id" field.
-func (seru *ScriptExecutionRecordUpdate) SetFkScriptID(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.ResetFkScriptID()
-	seru.mutation.SetFkScriptID(i)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetFkScriptID(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.ResetFkScriptID()
+	_u.mutation.SetFkScriptID(v)
+	return _u
 }
 
-// AddFkScriptID adds i to the "fk_script_id" field.
-func (seru *ScriptExecutionRecordUpdate) AddFkScriptID(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.AddFkScriptID(i)
-	return seru
+// SetNillableFkScriptID sets the "fk_script_id" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableFkScriptID(v *int32) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetFkScriptID(*v)
+	}
+	return _u
+}
+
+// AddFkScriptID adds value to the "fk_script_id" field.
+func (_u *ScriptExecutionRecordUpdate) AddFkScriptID(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.AddFkScriptID(v)
+	return _u
 }
 
 // SetScriptContent sets the "script_content" field.
-func (seru *ScriptExecutionRecordUpdate) SetScriptContent(s string) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetScriptContent(s)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetScriptContent(v string) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetScriptContent(v)
+	return _u
+}
+
+// SetNillableScriptContent sets the "script_content" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableScriptContent(v *string) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetScriptContent(*v)
+	}
+	return _u
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (seru *ScriptExecutionRecordUpdate) SetTaskNumber(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.ResetTaskNumber()
-	seru.mutation.SetTaskNumber(i)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetTaskNumber(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.ResetTaskNumber()
+	_u.mutation.SetTaskNumber(v)
+	return _u
 }
 
-// AddTaskNumber adds i to the "task_number" field.
-func (seru *ScriptExecutionRecordUpdate) AddTaskNumber(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.AddTaskNumber(i)
-	return seru
+// SetNillableTaskNumber sets the "task_number" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableTaskNumber(v *int32) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetTaskNumber(*v)
+	}
+	return _u
+}
+
+// AddTaskNumber adds value to the "task_number" field.
+func (_u *ScriptExecutionRecordUpdate) AddTaskNumber(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.AddTaskNumber(v)
+	return _u
 }
 
 // SetScriptName sets the "script_name" field.
-func (seru *ScriptExecutionRecordUpdate) SetScriptName(s string) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetScriptName(s)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetScriptName(v string) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetScriptName(v)
+	return _u
+}
+
+// SetNillableScriptName sets the "script_name" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableScriptName(v *string) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetScriptName(*v)
+	}
+	return _u
 }
 
 // SetFileAddress sets the "file_address" field.
-func (seru *ScriptExecutionRecordUpdate) SetFileAddress(s string) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetFileAddress(s)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetFileAddress(v string) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetFileAddress(v)
+	return _u
+}
+
+// SetNillableFileAddress sets the "file_address" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableFileAddress(v *string) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetFileAddress(*v)
+	}
+	return _u
 }
 
 // SetExecuteState sets the "execute_state" field.
-func (seru *ScriptExecutionRecordUpdate) SetExecuteState(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.ResetExecuteState()
-	seru.mutation.SetExecuteState(i)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetExecuteState(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.ResetExecuteState()
+	_u.mutation.SetExecuteState(v)
+	return _u
 }
 
-// AddExecuteState adds i to the "execute_state" field.
-func (seru *ScriptExecutionRecordUpdate) AddExecuteState(i int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.AddExecuteState(i)
-	return seru
+// SetNillableExecuteState sets the "execute_state" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableExecuteState(v *int32) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetExecuteState(*v)
+	}
+	return _u
+}
+
+// AddExecuteState adds value to the "execute_state" field.
+func (_u *ScriptExecutionRecordUpdate) AddExecuteState(v int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.AddExecuteState(v)
+	return _u
 }
 
 // SetExecuteResult sets the "execute_result" field.
-func (seru *ScriptExecutionRecordUpdate) SetExecuteResult(s string) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetExecuteResult(s)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetExecuteResult(v string) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetExecuteResult(v)
+	return _u
+}
+
+// SetNillableExecuteResult sets the "execute_result" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdate) SetNillableExecuteResult(v *string) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetExecuteResult(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (seru *ScriptExecutionRecordUpdate) SetCreateTime(t time.Time) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetCreateTime(t)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetCreateTime(v time.Time) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (seru *ScriptExecutionRecordUpdate) SetNillableCreateTime(t *time.Time) *ScriptExecutionRecordUpdate {
-	if t != nil {
-		seru.SetCreateTime(*t)
+func (_u *ScriptExecutionRecordUpdate) SetNillableCreateTime(v *time.Time) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return seru
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (seru *ScriptExecutionRecordUpdate) SetUpdateTime(t time.Time) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetUpdateTime(t)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetUpdateTime(v time.Time) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetUpdateTime(v)
+	return _u
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (seru *ScriptExecutionRecordUpdate) SetNillableUpdateTime(t *time.Time) *ScriptExecutionRecordUpdate {
-	if t != nil {
-		seru.SetUpdateTime(*t)
+func (_u *ScriptExecutionRecordUpdate) SetNillableUpdateTime(v *time.Time) *ScriptExecutionRecordUpdate {
+	if v != nil {
+		_u.SetUpdateTime(*v)
 	}
-	return seru
+	return _u
 }
 
 // SetScriptID sets the "script" edge to the Script entity by ID.
-func (seru *ScriptExecutionRecordUpdate) SetScriptID(id int32) *ScriptExecutionRecordUpdate {
-	seru.mutation.SetScriptID(id)
-	return seru
+func (_u *ScriptExecutionRecordUpdate) SetScriptID(id int32) *ScriptExecutionRecordUpdate {
+	_u.mutation.SetScriptID(id)
+	return _u
 }
 
 // SetNillableScriptID sets the "script" edge to the Script entity by ID if the given value is not nil.
-func (seru *ScriptExecutionRecordUpdate) SetNillableScriptID(id *int32) *ScriptExecutionRecordUpdate {
+func (_u *ScriptExecutionRecordUpdate) SetNillableScriptID(id *int32) *ScriptExecutionRecordUpdate {
 	if id != nil {
-		seru = seru.SetScriptID(*id)
+		_u = _u.SetScriptID(*id)
 	}
-	return seru
+	return _u
 }
 
 // SetScript sets the "script" edge to the Script entity.
-func (seru *ScriptExecutionRecordUpdate) SetScript(s *Script) *ScriptExecutionRecordUpdate {
-	return seru.SetScriptID(s.ID)
+func (_u *ScriptExecutionRecordUpdate) SetScript(v *Script) *ScriptExecutionRecordUpdate {
+	return _u.SetScriptID(v.ID)
 }
 
 // Mutation returns the ScriptExecutionRecordMutation object of the builder.
-func (seru *ScriptExecutionRecordUpdate) Mutation() *ScriptExecutionRecordMutation {
-	return seru.mutation
+func (_u *ScriptExecutionRecordUpdate) Mutation() *ScriptExecutionRecordMutation {
+	return _u.mutation
 }
 
 // ClearScript clears the "script" edge to the Script entity.
-func (seru *ScriptExecutionRecordUpdate) ClearScript() *ScriptExecutionRecordUpdate {
-	seru.mutation.ClearScript()
-	return seru
+func (_u *ScriptExecutionRecordUpdate) ClearScript() *ScriptExecutionRecordUpdate {
+	_u.mutation.ClearScript()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (seru *ScriptExecutionRecordUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, seru.sqlSave, seru.mutation, seru.hooks)
+func (_u *ScriptExecutionRecordUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (seru *ScriptExecutionRecordUpdate) SaveX(ctx context.Context) int {
-	affected, err := seru.Save(ctx)
+func (_u *ScriptExecutionRecordUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -171,36 +235,36 @@ func (seru *ScriptExecutionRecordUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (seru *ScriptExecutionRecordUpdate) Exec(ctx context.Context) error {
-	_, err := seru.Save(ctx)
+func (_u *ScriptExecutionRecordUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (seru *ScriptExecutionRecordUpdate) ExecX(ctx context.Context) {
-	if err := seru.Exec(ctx); err != nil {
+func (_u *ScriptExecutionRecordUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (seru *ScriptExecutionRecordUpdate) check() error {
-	if v, ok := seru.mutation.FkScriptID(); ok {
+func (_u *ScriptExecutionRecordUpdate) check() error {
+	if v, ok := _u.mutation.FkScriptID(); ok {
 		if err := scriptexecutionrecord.FkScriptIDValidator(v); err != nil {
 			return &ValidationError{Name: "fk_script_id", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.fk_script_id": %w`, err)}
 		}
 	}
-	if v, ok := seru.mutation.ScriptContent(); ok {
+	if v, ok := _u.mutation.ScriptContent(); ok {
 		if err := scriptexecutionrecord.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if v, ok := seru.mutation.TaskNumber(); ok {
+	if v, ok := _u.mutation.TaskNumber(); ok {
 		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
 		}
 	}
-	if v, ok := seru.mutation.ScriptName(); ok {
+	if v, ok := _u.mutation.ScriptName(); ok {
 		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
 		}
@@ -208,58 +272,58 @@ func (seru *ScriptExecutionRecordUpdate) check() error {
 	return nil
 }
 
-func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := seru.check(); err != nil {
-		return n, err
+func (_u *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scriptexecutionrecord.Table, scriptexecutionrecord.Columns, sqlgraph.NewFieldSpec(scriptexecutionrecord.FieldID, field.TypeInt32))
-	if ps := seru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := seru.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUserID, field.TypeString, value)
 	}
-	if value, ok := seru.mutation.FkScriptID(); ok {
+	if value, ok := _u.mutation.FkScriptID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFkScriptID, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.AddedFkScriptID(); ok {
+	if value, ok := _u.mutation.AddedFkScriptID(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldFkScriptID, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.ScriptContent(); ok {
+	if value, ok := _u.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 	}
-	if value, ok := seru.mutation.TaskNumber(); ok {
+	if value, ok := _u.mutation.TaskNumber(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.AddedTaskNumber(); ok {
+	if value, ok := _u.mutation.AddedTaskNumber(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.ScriptName(); ok {
+	if value, ok := _u.mutation.ScriptName(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
 	}
-	if value, ok := seru.mutation.FileAddress(); ok {
+	if value, ok := _u.mutation.FileAddress(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 	}
-	if value, ok := seru.mutation.ExecuteState(); ok {
+	if value, ok := _u.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.AddedExecuteState(); ok {
+	if value, ok := _u.mutation.AddedExecuteState(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 	}
-	if value, ok := seru.mutation.ExecuteResult(); ok {
+	if value, ok := _u.mutation.ExecuteResult(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteResult, field.TypeString, value)
 	}
-	if value, ok := seru.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := seru.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUpdateTime, field.TypeTime, value)
 	}
-	if seru.mutation.ScriptCleared() {
+	if _u.mutation.ScriptCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -272,7 +336,7 @@ func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := seru.mutation.ScriptIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScriptIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -288,7 +352,7 @@ func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, seru.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scriptexecutionrecord.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -296,8 +360,8 @@ func (seru *ScriptExecutionRecordUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		return 0, err
 	}
-	seru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ScriptExecutionRecordUpdateOne is the builder for updating a single ScriptExecutionRecord entity.
@@ -309,153 +373,217 @@ type ScriptExecutionRecordUpdateOne struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetUserID(s string) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetUserID(s)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetUserID(v string) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableUserID(v *string) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
+	}
+	return _u
 }
 
 // SetFkScriptID sets the "fk_script_id" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetFkScriptID(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.ResetFkScriptID()
-	seruo.mutation.SetFkScriptID(i)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetFkScriptID(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.ResetFkScriptID()
+	_u.mutation.SetFkScriptID(v)
+	return _u
 }
 
-// AddFkScriptID adds i to the "fk_script_id" field.
-func (seruo *ScriptExecutionRecordUpdateOne) AddFkScriptID(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.AddFkScriptID(i)
-	return seruo
+// SetNillableFkScriptID sets the "fk_script_id" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableFkScriptID(v *int32) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetFkScriptID(*v)
+	}
+	return _u
+}
+
+// AddFkScriptID adds value to the "fk_script_id" field.
+func (_u *ScriptExecutionRecordUpdateOne) AddFkScriptID(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.AddFkScriptID(v)
+	return _u
 }
 
 // SetScriptContent sets the "script_content" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetScriptContent(s string) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetScriptContent(s)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetScriptContent(v string) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetScriptContent(v)
+	return _u
+}
+
+// SetNillableScriptContent sets the "script_content" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableScriptContent(v *string) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetScriptContent(*v)
+	}
+	return _u
 }
 
 // SetTaskNumber sets the "task_number" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetTaskNumber(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.ResetTaskNumber()
-	seruo.mutation.SetTaskNumber(i)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetTaskNumber(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.ResetTaskNumber()
+	_u.mutation.SetTaskNumber(v)
+	return _u
 }
 
-// AddTaskNumber adds i to the "task_number" field.
-func (seruo *ScriptExecutionRecordUpdateOne) AddTaskNumber(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.AddTaskNumber(i)
-	return seruo
+// SetNillableTaskNumber sets the "task_number" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableTaskNumber(v *int32) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetTaskNumber(*v)
+	}
+	return _u
+}
+
+// AddTaskNumber adds value to the "task_number" field.
+func (_u *ScriptExecutionRecordUpdateOne) AddTaskNumber(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.AddTaskNumber(v)
+	return _u
 }
 
 // SetScriptName sets the "script_name" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetScriptName(s string) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetScriptName(s)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetScriptName(v string) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetScriptName(v)
+	return _u
+}
+
+// SetNillableScriptName sets the "script_name" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableScriptName(v *string) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetScriptName(*v)
+	}
+	return _u
 }
 
 // SetFileAddress sets the "file_address" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetFileAddress(s string) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetFileAddress(s)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetFileAddress(v string) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetFileAddress(v)
+	return _u
+}
+
+// SetNillableFileAddress sets the "file_address" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableFileAddress(v *string) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetFileAddress(*v)
+	}
+	return _u
 }
 
 // SetExecuteState sets the "execute_state" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetExecuteState(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.ResetExecuteState()
-	seruo.mutation.SetExecuteState(i)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetExecuteState(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.ResetExecuteState()
+	_u.mutation.SetExecuteState(v)
+	return _u
 }
 
-// AddExecuteState adds i to the "execute_state" field.
-func (seruo *ScriptExecutionRecordUpdateOne) AddExecuteState(i int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.AddExecuteState(i)
-	return seruo
+// SetNillableExecuteState sets the "execute_state" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableExecuteState(v *int32) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetExecuteState(*v)
+	}
+	return _u
+}
+
+// AddExecuteState adds value to the "execute_state" field.
+func (_u *ScriptExecutionRecordUpdateOne) AddExecuteState(v int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.AddExecuteState(v)
+	return _u
 }
 
 // SetExecuteResult sets the "execute_result" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetExecuteResult(s string) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetExecuteResult(s)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetExecuteResult(v string) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetExecuteResult(v)
+	return _u
+}
+
+// SetNillableExecuteResult sets the "execute_result" field if the given value is not nil.
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableExecuteResult(v *string) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetExecuteResult(*v)
+	}
+	return _u
 }
 
 // SetCreateTime sets the "create_time" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetCreateTime(t time.Time) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetCreateTime(t)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetCreateTime(v time.Time) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetCreateTime(v)
+	return _u
 }
 
 // SetNillableCreateTime sets the "create_time" field if the given value is not nil.
-func (seruo *ScriptExecutionRecordUpdateOne) SetNillableCreateTime(t *time.Time) *ScriptExecutionRecordUpdateOne {
-	if t != nil {
-		seruo.SetCreateTime(*t)
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableCreateTime(v *time.Time) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetCreateTime(*v)
 	}
-	return seruo
+	return _u
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (seruo *ScriptExecutionRecordUpdateOne) SetUpdateTime(t time.Time) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetUpdateTime(t)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetUpdateTime(v time.Time) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetUpdateTime(v)
+	return _u
 }
 
 // SetNillableUpdateTime sets the "update_time" field if the given value is not nil.
-func (seruo *ScriptExecutionRecordUpdateOne) SetNillableUpdateTime(t *time.Time) *ScriptExecutionRecordUpdateOne {
-	if t != nil {
-		seruo.SetUpdateTime(*t)
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableUpdateTime(v *time.Time) *ScriptExecutionRecordUpdateOne {
+	if v != nil {
+		_u.SetUpdateTime(*v)
 	}
-	return seruo
+	return _u
 }
 
 // SetScriptID sets the "script" edge to the Script entity by ID.
-func (seruo *ScriptExecutionRecordUpdateOne) SetScriptID(id int32) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.SetScriptID(id)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) SetScriptID(id int32) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.SetScriptID(id)
+	return _u
 }
 
 // SetNillableScriptID sets the "script" edge to the Script entity by ID if the given value is not nil.
-func (seruo *ScriptExecutionRecordUpdateOne) SetNillableScriptID(id *int32) *ScriptExecutionRecordUpdateOne {
+func (_u *ScriptExecutionRecordUpdateOne) SetNillableScriptID(id *int32) *ScriptExecutionRecordUpdateOne {
 	if id != nil {
-		seruo = seruo.SetScriptID(*id)
+		_u = _u.SetScriptID(*id)
 	}
-	return seruo
+	return _u
 }
 
 // SetScript sets the "script" edge to the Script entity.
-func (seruo *ScriptExecutionRecordUpdateOne) SetScript(s *Script) *ScriptExecutionRecordUpdateOne {
-	return seruo.SetScriptID(s.ID)
+func (_u *ScriptExecutionRecordUpdateOne) SetScript(v *Script) *ScriptExecutionRecordUpdateOne {
+	return _u.SetScriptID(v.ID)
 }
 
 // Mutation returns the ScriptExecutionRecordMutation object of the builder.
-func (seruo *ScriptExecutionRecordUpdateOne) Mutation() *ScriptExecutionRecordMutation {
-	return seruo.mutation
+func (_u *ScriptExecutionRecordUpdateOne) Mutation() *ScriptExecutionRecordMutation {
+	return _u.mutation
 }
 
 // ClearScript clears the "script" edge to the Script entity.
-func (seruo *ScriptExecutionRecordUpdateOne) ClearScript() *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.ClearScript()
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) ClearScript() *ScriptExecutionRecordUpdateOne {
+	_u.mutation.ClearScript()
+	return _u
 }
 
 // Where appends a list predicates to the ScriptExecutionRecordUpdate builder.
-func (seruo *ScriptExecutionRecordUpdateOne) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordUpdateOne {
-	seruo.mutation.Where(ps...)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) Where(ps ...predicate.ScriptExecutionRecord) *ScriptExecutionRecordUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (seruo *ScriptExecutionRecordUpdateOne) Select(field string, fields ...string) *ScriptExecutionRecordUpdateOne {
-	seruo.fields = append([]string{field}, fields...)
-	return seruo
+func (_u *ScriptExecutionRecordUpdateOne) Select(field string, fields ...string) *ScriptExecutionRecordUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ScriptExecutionRecord entity.
-func (seruo *ScriptExecutionRecordUpdateOne) Save(ctx context.Context) (*ScriptExecutionRecord, error) {
-	return withHooks(ctx, seruo.sqlSave, seruo.mutation, seruo.hooks)
+func (_u *ScriptExecutionRecordUpdateOne) Save(ctx context.Context) (*ScriptExecutionRecord, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (seruo *ScriptExecutionRecordUpdateOne) SaveX(ctx context.Context) *ScriptExecutionRecord {
-	node, err := seruo.Save(ctx)
+func (_u *ScriptExecutionRecordUpdateOne) SaveX(ctx context.Context) *ScriptExecutionRecord {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -463,36 +591,36 @@ func (seruo *ScriptExecutionRecordUpdateOne) SaveX(ctx context.Context) *ScriptE
 }
 
 // Exec executes the query on the entity.
-func (seruo *ScriptExecutionRecordUpdateOne) Exec(ctx context.Context) error {
-	_, err := seruo.Save(ctx)
+func (_u *ScriptExecutionRecordUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (seruo *ScriptExecutionRecordUpdateOne) ExecX(ctx context.Context) {
-	if err := seruo.Exec(ctx); err != nil {
+func (_u *ScriptExecutionRecordUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (seruo *ScriptExecutionRecordUpdateOne) check() error {
-	if v, ok := seruo.mutation.FkScriptID(); ok {
+func (_u *ScriptExecutionRecordUpdateOne) check() error {
+	if v, ok := _u.mutation.FkScriptID(); ok {
 		if err := scriptexecutionrecord.FkScriptIDValidator(v); err != nil {
 			return &ValidationError{Name: "fk_script_id", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.fk_script_id": %w`, err)}
 		}
 	}
-	if v, ok := seruo.mutation.ScriptContent(); ok {
+	if v, ok := _u.mutation.ScriptContent(); ok {
 		if err := scriptexecutionrecord.ScriptContentValidator(v); err != nil {
 			return &ValidationError{Name: "script_content", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_content": %w`, err)}
 		}
 	}
-	if v, ok := seruo.mutation.TaskNumber(); ok {
+	if v, ok := _u.mutation.TaskNumber(); ok {
 		if err := scriptexecutionrecord.TaskNumberValidator(v); err != nil {
 			return &ValidationError{Name: "task_number", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.task_number": %w`, err)}
 		}
 	}
-	if v, ok := seruo.mutation.ScriptName(); ok {
+	if v, ok := _u.mutation.ScriptName(); ok {
 		if err := scriptexecutionrecord.ScriptNameValidator(v); err != nil {
 			return &ValidationError{Name: "script_name", err: fmt.Errorf(`ent: validator failed for field "ScriptExecutionRecord.script_name": %w`, err)}
 		}
@@ -500,17 +628,17 @@ func (seruo *ScriptExecutionRecordUpdateOne) check() error {
 	return nil
 }
 
-func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node *ScriptExecutionRecord, err error) {
-	if err := seruo.check(); err != nil {
+func (_u *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node *ScriptExecutionRecord, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(scriptexecutionrecord.Table, scriptexecutionrecord.Columns, sqlgraph.NewFieldSpec(scriptexecutionrecord.FieldID, field.TypeInt32))
-	id, ok := seruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ScriptExecutionRecord.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := seruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, scriptexecutionrecord.FieldID)
 		for _, f := range fields {
@@ -522,53 +650,53 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 			}
 		}
 	}
-	if ps := seruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := seruo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUserID, field.TypeString, value)
 	}
-	if value, ok := seruo.mutation.FkScriptID(); ok {
+	if value, ok := _u.mutation.FkScriptID(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFkScriptID, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.AddedFkScriptID(); ok {
+	if value, ok := _u.mutation.AddedFkScriptID(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldFkScriptID, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.ScriptContent(); ok {
+	if value, ok := _u.mutation.ScriptContent(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptContent, field.TypeString, value)
 	}
-	if value, ok := seruo.mutation.TaskNumber(); ok {
+	if value, ok := _u.mutation.TaskNumber(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.AddedTaskNumber(); ok {
+	if value, ok := _u.mutation.AddedTaskNumber(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldTaskNumber, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.ScriptName(); ok {
+	if value, ok := _u.mutation.ScriptName(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldScriptName, field.TypeString, value)
 	}
-	if value, ok := seruo.mutation.FileAddress(); ok {
+	if value, ok := _u.mutation.FileAddress(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldFileAddress, field.TypeString, value)
 	}
-	if value, ok := seruo.mutation.ExecuteState(); ok {
+	if value, ok := _u.mutation.ExecuteState(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.AddedExecuteState(); ok {
+	if value, ok := _u.mutation.AddedExecuteState(); ok {
 		_spec.AddField(scriptexecutionrecord.FieldExecuteState, field.TypeInt32, value)
 	}
-	if value, ok := seruo.mutation.ExecuteResult(); ok {
+	if value, ok := _u.mutation.ExecuteResult(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldExecuteResult, field.TypeString, value)
 	}
-	if value, ok := seruo.mutation.CreateTime(); ok {
+	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldCreateTime, field.TypeTime, value)
 	}
-	if value, ok := seruo.mutation.UpdateTime(); ok {
+	if value, ok := _u.mutation.UpdateTime(); ok {
 		_spec.SetField(scriptexecutionrecord.FieldUpdateTime, field.TypeTime, value)
 	}
-	if seruo.mutation.ScriptCleared() {
+	if _u.mutation.ScriptCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -581,7 +709,7 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := seruo.mutation.ScriptIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.ScriptIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -597,10 +725,10 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_node = &ScriptExecutionRecord{config: seruo.config}
+	_node = &ScriptExecutionRecord{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, seruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{scriptexecutionrecord.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -608,6 +736,6 @@ func (seruo *ScriptExecutionRecordUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		return nil, err
 	}
-	seruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

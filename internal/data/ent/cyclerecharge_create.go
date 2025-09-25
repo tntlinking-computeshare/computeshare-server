@@ -22,99 +22,99 @@ type CycleRechargeCreate struct {
 }
 
 // SetFkUserID sets the "fk_user_id" field.
-func (crc *CycleRechargeCreate) SetFkUserID(u uuid.UUID) *CycleRechargeCreate {
-	crc.mutation.SetFkUserID(u)
-	return crc
+func (_c *CycleRechargeCreate) SetFkUserID(v uuid.UUID) *CycleRechargeCreate {
+	_c.mutation.SetFkUserID(v)
+	return _c
 }
 
 // SetOutTradeNo sets the "out_trade_no" field.
-func (crc *CycleRechargeCreate) SetOutTradeNo(s string) *CycleRechargeCreate {
-	crc.mutation.SetOutTradeNo(s)
-	return crc
+func (_c *CycleRechargeCreate) SetOutTradeNo(v string) *CycleRechargeCreate {
+	_c.mutation.SetOutTradeNo(v)
+	return _c
 }
 
 // SetAlipayTradeNo sets the "alipay_trade_no" field.
-func (crc *CycleRechargeCreate) SetAlipayTradeNo(s string) *CycleRechargeCreate {
-	crc.mutation.SetAlipayTradeNo(s)
-	return crc
+func (_c *CycleRechargeCreate) SetAlipayTradeNo(v string) *CycleRechargeCreate {
+	_c.mutation.SetAlipayTradeNo(v)
+	return _c
 }
 
 // SetRechargeChannel sets the "recharge_channel" field.
-func (crc *CycleRechargeCreate) SetRechargeChannel(i int) *CycleRechargeCreate {
-	crc.mutation.SetRechargeChannel(i)
-	return crc
+func (_c *CycleRechargeCreate) SetRechargeChannel(v int) *CycleRechargeCreate {
+	_c.mutation.SetRechargeChannel(v)
+	return _c
 }
 
 // SetRedeemCode sets the "redeem_code" field.
-func (crc *CycleRechargeCreate) SetRedeemCode(s string) *CycleRechargeCreate {
-	crc.mutation.SetRedeemCode(s)
-	return crc
+func (_c *CycleRechargeCreate) SetRedeemCode(v string) *CycleRechargeCreate {
+	_c.mutation.SetRedeemCode(v)
+	return _c
 }
 
 // SetState sets the "state" field.
-func (crc *CycleRechargeCreate) SetState(s string) *CycleRechargeCreate {
-	crc.mutation.SetState(s)
-	return crc
+func (_c *CycleRechargeCreate) SetState(v string) *CycleRechargeCreate {
+	_c.mutation.SetState(v)
+	return _c
 }
 
 // SetPayAmount sets the "pay_amount" field.
-func (crc *CycleRechargeCreate) SetPayAmount(f float64) *CycleRechargeCreate {
-	crc.mutation.SetPayAmount(f)
-	return crc
+func (_c *CycleRechargeCreate) SetPayAmount(v float64) *CycleRechargeCreate {
+	_c.mutation.SetPayAmount(v)
+	return _c
 }
 
 // SetTotalAmount sets the "total_amount" field.
-func (crc *CycleRechargeCreate) SetTotalAmount(f float64) *CycleRechargeCreate {
-	crc.mutation.SetTotalAmount(f)
-	return crc
+func (_c *CycleRechargeCreate) SetTotalAmount(v float64) *CycleRechargeCreate {
+	_c.mutation.SetTotalAmount(v)
+	return _c
 }
 
 // SetBuyCycle sets the "buy_cycle" field.
-func (crc *CycleRechargeCreate) SetBuyCycle(f float64) *CycleRechargeCreate {
-	crc.mutation.SetBuyCycle(f)
-	return crc
+func (_c *CycleRechargeCreate) SetBuyCycle(v float64) *CycleRechargeCreate {
+	_c.mutation.SetBuyCycle(v)
+	return _c
 }
 
 // SetCreateTime sets the "create_time" field.
-func (crc *CycleRechargeCreate) SetCreateTime(t time.Time) *CycleRechargeCreate {
-	crc.mutation.SetCreateTime(t)
-	return crc
+func (_c *CycleRechargeCreate) SetCreateTime(v time.Time) *CycleRechargeCreate {
+	_c.mutation.SetCreateTime(v)
+	return _c
 }
 
 // SetUpdateTime sets the "update_time" field.
-func (crc *CycleRechargeCreate) SetUpdateTime(t time.Time) *CycleRechargeCreate {
-	crc.mutation.SetUpdateTime(t)
-	return crc
+func (_c *CycleRechargeCreate) SetUpdateTime(v time.Time) *CycleRechargeCreate {
+	_c.mutation.SetUpdateTime(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (crc *CycleRechargeCreate) SetID(u uuid.UUID) *CycleRechargeCreate {
-	crc.mutation.SetID(u)
-	return crc
+func (_c *CycleRechargeCreate) SetID(v uuid.UUID) *CycleRechargeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (crc *CycleRechargeCreate) SetNillableID(u *uuid.UUID) *CycleRechargeCreate {
-	if u != nil {
-		crc.SetID(*u)
+func (_c *CycleRechargeCreate) SetNillableID(v *uuid.UUID) *CycleRechargeCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return crc
+	return _c
 }
 
 // Mutation returns the CycleRechargeMutation object of the builder.
-func (crc *CycleRechargeCreate) Mutation() *CycleRechargeMutation {
-	return crc.mutation
+func (_c *CycleRechargeCreate) Mutation() *CycleRechargeMutation {
+	return _c.mutation
 }
 
 // Save creates the CycleRecharge in the database.
-func (crc *CycleRechargeCreate) Save(ctx context.Context) (*CycleRecharge, error) {
-	crc.defaults()
-	return withHooks(ctx, crc.sqlSave, crc.mutation, crc.hooks)
+func (_c *CycleRechargeCreate) Save(ctx context.Context) (*CycleRecharge, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (crc *CycleRechargeCreate) SaveX(ctx context.Context) *CycleRecharge {
-	v, err := crc.Save(ctx)
+func (_c *CycleRechargeCreate) SaveX(ctx context.Context) *CycleRecharge {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -122,70 +122,70 @@ func (crc *CycleRechargeCreate) SaveX(ctx context.Context) *CycleRecharge {
 }
 
 // Exec executes the query.
-func (crc *CycleRechargeCreate) Exec(ctx context.Context) error {
-	_, err := crc.Save(ctx)
+func (_c *CycleRechargeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crc *CycleRechargeCreate) ExecX(ctx context.Context) {
-	if err := crc.Exec(ctx); err != nil {
+func (_c *CycleRechargeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (crc *CycleRechargeCreate) defaults() {
-	if _, ok := crc.mutation.ID(); !ok {
+func (_c *CycleRechargeCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := cyclerecharge.DefaultID()
-		crc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (crc *CycleRechargeCreate) check() error {
-	if _, ok := crc.mutation.FkUserID(); !ok {
+func (_c *CycleRechargeCreate) check() error {
+	if _, ok := _c.mutation.FkUserID(); !ok {
 		return &ValidationError{Name: "fk_user_id", err: errors.New(`ent: missing required field "CycleRecharge.fk_user_id"`)}
 	}
-	if _, ok := crc.mutation.OutTradeNo(); !ok {
+	if _, ok := _c.mutation.OutTradeNo(); !ok {
 		return &ValidationError{Name: "out_trade_no", err: errors.New(`ent: missing required field "CycleRecharge.out_trade_no"`)}
 	}
-	if _, ok := crc.mutation.AlipayTradeNo(); !ok {
+	if _, ok := _c.mutation.AlipayTradeNo(); !ok {
 		return &ValidationError{Name: "alipay_trade_no", err: errors.New(`ent: missing required field "CycleRecharge.alipay_trade_no"`)}
 	}
-	if _, ok := crc.mutation.RechargeChannel(); !ok {
+	if _, ok := _c.mutation.RechargeChannel(); !ok {
 		return &ValidationError{Name: "recharge_channel", err: errors.New(`ent: missing required field "CycleRecharge.recharge_channel"`)}
 	}
-	if _, ok := crc.mutation.RedeemCode(); !ok {
+	if _, ok := _c.mutation.RedeemCode(); !ok {
 		return &ValidationError{Name: "redeem_code", err: errors.New(`ent: missing required field "CycleRecharge.redeem_code"`)}
 	}
-	if _, ok := crc.mutation.State(); !ok {
+	if _, ok := _c.mutation.State(); !ok {
 		return &ValidationError{Name: "state", err: errors.New(`ent: missing required field "CycleRecharge.state"`)}
 	}
-	if _, ok := crc.mutation.PayAmount(); !ok {
+	if _, ok := _c.mutation.PayAmount(); !ok {
 		return &ValidationError{Name: "pay_amount", err: errors.New(`ent: missing required field "CycleRecharge.pay_amount"`)}
 	}
-	if _, ok := crc.mutation.TotalAmount(); !ok {
+	if _, ok := _c.mutation.TotalAmount(); !ok {
 		return &ValidationError{Name: "total_amount", err: errors.New(`ent: missing required field "CycleRecharge.total_amount"`)}
 	}
-	if _, ok := crc.mutation.BuyCycle(); !ok {
+	if _, ok := _c.mutation.BuyCycle(); !ok {
 		return &ValidationError{Name: "buy_cycle", err: errors.New(`ent: missing required field "CycleRecharge.buy_cycle"`)}
 	}
-	if _, ok := crc.mutation.CreateTime(); !ok {
+	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "CycleRecharge.create_time"`)}
 	}
-	if _, ok := crc.mutation.UpdateTime(); !ok {
+	if _, ok := _c.mutation.UpdateTime(); !ok {
 		return &ValidationError{Name: "update_time", err: errors.New(`ent: missing required field "CycleRecharge.update_time"`)}
 	}
 	return nil
 }
 
-func (crc *CycleRechargeCreate) sqlSave(ctx context.Context) (*CycleRecharge, error) {
-	if err := crc.check(); err != nil {
+func (_c *CycleRechargeCreate) sqlSave(ctx context.Context) (*CycleRecharge, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := crc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, crc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -198,61 +198,61 @@ func (crc *CycleRechargeCreate) sqlSave(ctx context.Context) (*CycleRecharge, er
 			return nil, err
 		}
 	}
-	crc.mutation.id = &_node.ID
-	crc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (crc *CycleRechargeCreate) createSpec() (*CycleRecharge, *sqlgraph.CreateSpec) {
+func (_c *CycleRechargeCreate) createSpec() (*CycleRecharge, *sqlgraph.CreateSpec) {
 	var (
-		_node = &CycleRecharge{config: crc.config}
+		_node = &CycleRecharge{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(cyclerecharge.Table, sqlgraph.NewFieldSpec(cyclerecharge.FieldID, field.TypeUUID))
 	)
-	if id, ok := crc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := crc.mutation.FkUserID(); ok {
+	if value, ok := _c.mutation.FkUserID(); ok {
 		_spec.SetField(cyclerecharge.FieldFkUserID, field.TypeUUID, value)
 		_node.FkUserID = value
 	}
-	if value, ok := crc.mutation.OutTradeNo(); ok {
+	if value, ok := _c.mutation.OutTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldOutTradeNo, field.TypeString, value)
 		_node.OutTradeNo = value
 	}
-	if value, ok := crc.mutation.AlipayTradeNo(); ok {
+	if value, ok := _c.mutation.AlipayTradeNo(); ok {
 		_spec.SetField(cyclerecharge.FieldAlipayTradeNo, field.TypeString, value)
 		_node.AlipayTradeNo = value
 	}
-	if value, ok := crc.mutation.RechargeChannel(); ok {
+	if value, ok := _c.mutation.RechargeChannel(); ok {
 		_spec.SetField(cyclerecharge.FieldRechargeChannel, field.TypeInt, value)
 		_node.RechargeChannel = value
 	}
-	if value, ok := crc.mutation.RedeemCode(); ok {
+	if value, ok := _c.mutation.RedeemCode(); ok {
 		_spec.SetField(cyclerecharge.FieldRedeemCode, field.TypeString, value)
 		_node.RedeemCode = value
 	}
-	if value, ok := crc.mutation.State(); ok {
+	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(cyclerecharge.FieldState, field.TypeString, value)
 		_node.State = value
 	}
-	if value, ok := crc.mutation.PayAmount(); ok {
+	if value, ok := _c.mutation.PayAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldPayAmount, field.TypeFloat64, value)
 		_node.PayAmount = value
 	}
-	if value, ok := crc.mutation.TotalAmount(); ok {
+	if value, ok := _c.mutation.TotalAmount(); ok {
 		_spec.SetField(cyclerecharge.FieldTotalAmount, field.TypeFloat64, value)
 		_node.TotalAmount = value
 	}
-	if value, ok := crc.mutation.BuyCycle(); ok {
+	if value, ok := _c.mutation.BuyCycle(); ok {
 		_spec.SetField(cyclerecharge.FieldBuyCycle, field.TypeFloat64, value)
 		_node.BuyCycle = value
 	}
-	if value, ok := crc.mutation.CreateTime(); ok {
+	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
 	}
-	if value, ok := crc.mutation.UpdateTime(); ok {
+	if value, ok := _c.mutation.UpdateTime(); ok {
 		_spec.SetField(cyclerecharge.FieldUpdateTime, field.TypeTime, value)
 		_node.UpdateTime = value
 	}
@@ -262,17 +262,21 @@ func (crc *CycleRechargeCreate) createSpec() (*CycleRecharge, *sqlgraph.CreateSp
 // CycleRechargeCreateBulk is the builder for creating many CycleRecharge entities in bulk.
 type CycleRechargeCreateBulk struct {
 	config
+	err      error
 	builders []*CycleRechargeCreate
 }
 
 // Save creates the CycleRecharge entities in the database.
-func (crcb *CycleRechargeCreateBulk) Save(ctx context.Context) ([]*CycleRecharge, error) {
-	specs := make([]*sqlgraph.CreateSpec, len(crcb.builders))
-	nodes := make([]*CycleRecharge, len(crcb.builders))
-	mutators := make([]Mutator, len(crcb.builders))
-	for i := range crcb.builders {
+func (_c *CycleRechargeCreateBulk) Save(ctx context.Context) ([]*CycleRecharge, error) {
+	if _c.err != nil {
+		return nil, _c.err
+	}
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*CycleRecharge, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := crcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CycleRechargeMutation)
@@ -286,11 +290,11 @@ func (crcb *CycleRechargeCreateBulk) Save(ctx context.Context) ([]*CycleRecharge
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, crcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, crcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -310,7 +314,7 @@ func (crcb *CycleRechargeCreateBulk) Save(ctx context.Context) ([]*CycleRecharge
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, crcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -318,8 +322,8 @@ func (crcb *CycleRechargeCreateBulk) Save(ctx context.Context) ([]*CycleRecharge
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (crcb *CycleRechargeCreateBulk) SaveX(ctx context.Context) []*CycleRecharge {
-	v, err := crcb.Save(ctx)
+func (_c *CycleRechargeCreateBulk) SaveX(ctx context.Context) []*CycleRecharge {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -327,14 +331,14 @@ func (crcb *CycleRechargeCreateBulk) SaveX(ctx context.Context) []*CycleRecharge
 }
 
 // Exec executes the query.
-func (crcb *CycleRechargeCreateBulk) Exec(ctx context.Context) error {
-	_, err := crcb.Save(ctx)
+func (_c *CycleRechargeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (crcb *CycleRechargeCreateBulk) ExecX(ctx context.Context) {
-	if err := crcb.Exec(ctx); err != nil {
+func (_c *CycleRechargeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
