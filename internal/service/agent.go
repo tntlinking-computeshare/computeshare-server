@@ -36,6 +36,7 @@ func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentReque
 
 	agent := biz.Agent{
 		MAC:            req.Mac,
+		Arch:           req.Arch,
 		Hostname:       req.Hostname,
 		TotalCPU:       req.TotalCpu,
 		TotalMemory:    req.TotalMemory,

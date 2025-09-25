@@ -31,7 +31,11 @@ type ComputeImage struct {
 	// 镜像下载地址
 	DownloadURL string `json:"download_url,omitempty"`
 	// 镜像md5
-	Md5          string `json:"md5,omitempty"`
+	Md5 string `json:"md5,omitempty"`
+	// 排序
+	Sort uint `json:"sort,omitempty"`
+	// 计算机架构
+	Arch         string `json:"arch,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -40,9 +44,9 @@ func (*ComputeImage) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case computeimage.FieldID:
+		case computeimage.FieldID, computeimage.FieldSort:
 			values[i] = new(sql.NullInt64)
-		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldOsType, computeimage.FieldOsVariant, computeimage.FieldFilename, computeimage.FieldDownloadURL, computeimage.FieldMd5:
+		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldOsType, computeimage.FieldOsVariant, computeimage.FieldFilename, computeimage.FieldDownloadURL, computeimage.FieldMd5, computeimage.FieldArch:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -113,6 +117,18 @@ func (_m *ComputeImage) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Md5 = value.String
 			}
+		case computeimage.FieldSort:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field sort", values[i])
+			} else if value.Valid {
+				_m.Sort = uint(value.Int64)
+			}
+		case computeimage.FieldArch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field arch", values[i])
+			} else if value.Valid {
+				_m.Arch = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -172,6 +188,12 @@ func (_m *ComputeImage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("md5=")
 	builder.WriteString(_m.Md5)
+	builder.WriteString(", ")
+	builder.WriteString("sort=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Sort))
+	builder.WriteString(", ")
+	builder.WriteString("arch=")
+	builder.WriteString(_m.Arch)
 	builder.WriteByte(')')
 	return builder.String()
 }

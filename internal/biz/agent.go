@@ -10,6 +10,8 @@ import (
 
 type Agent struct {
 	ID uuid.UUID `json:"id,omitempty"`
+	// 计算机架构
+	Arch string `json:"arch,omitempty"`
 	// mac 网卡地址
 	MAC string `json:"mac,omitempty"`
 	// 是否活动
@@ -39,7 +41,7 @@ type AgentRepo interface {
 	UpdateAgentStatus(ctx context.Context, id uuid.UUID, status bool) error
 	DeleteAgent(ctx context.Context, id uuid.UUID) error
 	FindByMac(ctx context.Context, mac string) (*Agent, error)
-	FindOneActiveAgent(ctx context.Context, cpu int, memory int) (*Agent, error)
+	FindOneActiveAgent(ctx context.Context, cpu int, memory int, arch string) (*Agent, error)
 }
 
 type AgentUsecase struct {

@@ -34,6 +34,8 @@ func (ComputeImage) Fields() []ent.Field {
 		field.String("filename").Comment("镜像文件名"),
 		field.String("download_url").Comment("镜像下载地址"),
 		field.String("md5").Comment("镜像md5"),
+		field.Uint("sort").Comment("排序"),
+		field.String("arch").Comment("计算机架构"),
 	}
 }
 

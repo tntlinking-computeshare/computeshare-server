@@ -27,6 +27,10 @@ const (
 	FieldDownloadURL = "download_url"
 	// FieldMd5 holds the string denoting the md5 field in the database.
 	FieldMd5 = "md5"
+	// FieldSort holds the string denoting the sort field in the database.
+	FieldSort = "sort"
+	// FieldArch holds the string denoting the arch field in the database.
+	FieldArch = "arch"
 	// Table holds the table name of the computeimage in the database.
 	Table = "compute_images"
 )
@@ -42,6 +46,8 @@ var Columns = []string{
 	FieldFilename,
 	FieldDownloadURL,
 	FieldMd5,
+	FieldSort,
+	FieldArch,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -113,4 +119,14 @@ func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
 // ByMd5 orders the results by the md5 field.
 func ByMd5(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMd5, opts...).ToFunc()
+}
+
+// BySort orders the results by the sort field.
+func BySort(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSort, opts...).ToFunc()
+}
+
+// ByArch orders the results by the arch field.
+func ByArch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArch, opts...).ToFunc()
 }

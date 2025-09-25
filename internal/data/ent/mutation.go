@@ -2939,6 +2939,9 @@ type ComputeImageMutation struct {
 	filename      *string
 	download_url  *string
 	md5           *string
+	sort          *uint
+	addsort       *int
+	arch          *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeImage, error)
@@ -3337,6 +3340,98 @@ func (m *ComputeImageMutation) ResetMd5() {
 	m.md5 = nil
 }
 
+// SetSort sets the "sort" field.
+func (m *ComputeImageMutation) SetSort(u uint) {
+	m.sort = &u
+	m.addsort = nil
+}
+
+// Sort returns the value of the "sort" field in the mutation.
+func (m *ComputeImageMutation) Sort() (r uint, exists bool) {
+	v := m.sort
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSort returns the old "sort" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldSort(ctx context.Context) (v uint, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSort is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSort requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSort: %w", err)
+	}
+	return oldValue.Sort, nil
+}
+
+// AddSort adds u to the "sort" field.
+func (m *ComputeImageMutation) AddSort(u int) {
+	if m.addsort != nil {
+		*m.addsort += u
+	} else {
+		m.addsort = &u
+	}
+}
+
+// AddedSort returns the value that was added to the "sort" field in this mutation.
+func (m *ComputeImageMutation) AddedSort() (r int, exists bool) {
+	v := m.addsort
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetSort resets all changes to the "sort" field.
+func (m *ComputeImageMutation) ResetSort() {
+	m.sort = nil
+	m.addsort = nil
+}
+
+// SetArch sets the "arch" field.
+func (m *ComputeImageMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *ComputeImageMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *ComputeImageMutation) ResetArch() {
+	m.arch = nil
+}
+
 // Where appends a list predicates to the ComputeImageMutation builder.
 func (m *ComputeImageMutation) Where(ps ...predicate.ComputeImage) {
 	m.predicates = append(m.predicates, ps...)
@@ -3371,7 +3466,7 @@ func (m *ComputeImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeImageMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.name != nil {
 		fields = append(fields, computeimage.FieldName)
 	}
@@ -3395,6 +3490,12 @@ func (m *ComputeImageMutation) Fields() []string {
 	}
 	if m.md5 != nil {
 		fields = append(fields, computeimage.FieldMd5)
+	}
+	if m.sort != nil {
+		fields = append(fields, computeimage.FieldSort)
+	}
+	if m.arch != nil {
+		fields = append(fields, computeimage.FieldArch)
 	}
 	return fields
 }
@@ -3420,6 +3521,10 @@ func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
 		return m.DownloadURL()
 	case computeimage.FieldMd5:
 		return m.Md5()
+	case computeimage.FieldSort:
+		return m.Sort()
+	case computeimage.FieldArch:
+		return m.Arch()
 	}
 	return nil, false
 }
@@ -3445,6 +3550,10 @@ func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDownloadURL(ctx)
 	case computeimage.FieldMd5:
 		return m.OldMd5(ctx)
+	case computeimage.FieldSort:
+		return m.OldSort(ctx)
+	case computeimage.FieldArch:
+		return m.OldArch(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -3510,6 +3619,20 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMd5(v)
 		return nil
+	case computeimage.FieldSort:
+		v, ok := value.(uint)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSort(v)
+		return nil
+	case computeimage.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -3517,13 +3640,21 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ComputeImageMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addsort != nil {
+		fields = append(fields, computeimage.FieldSort)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ComputeImageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case computeimage.FieldSort:
+		return m.AddedSort()
+	}
 	return nil, false
 }
 
@@ -3532,6 +3663,13 @@ func (m *ComputeImageMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ComputeImageMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case computeimage.FieldSort:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSort(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage numeric field %s", name)
 }
@@ -3582,6 +3720,12 @@ func (m *ComputeImageMutation) ResetField(name string) error {
 		return nil
 	case computeimage.FieldMd5:
 		m.ResetMd5()
+		return nil
+	case computeimage.FieldSort:
+		m.ResetSort()
+		return nil
+	case computeimage.FieldArch:
+		m.ResetArch()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)

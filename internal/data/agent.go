@@ -61,6 +61,7 @@ func (ar *agentRepo) CreateAgent(ctx context.Context, agent *biz.Agent) error {
 		SetOccupiedMemory(agent.OccupiedMemory).
 		SetActive(agent.Active).
 		SetIP(agent.IP).
+		SetArch(agent.Arch).
 		Save(ctx)
 	if err != nil {
 		return err
@@ -82,6 +83,7 @@ func (ar *agentRepo) UpdateAgent(ctx context.Context, id uuid.UUID, agent *biz.A
 		SetOccupiedMemory(agent.OccupiedMemory).
 		SetActive(agent.Active).
 		SetIP(agent.IP).
+		SetArch(agent.Arch).
 		Save(ctx)
 	return err
 }
@@ -114,6 +116,7 @@ func (ar *agentRepo) toBiz(p *ent.Agent, _ int) *biz.Agent {
 	return &biz.Agent{
 		ID:       p.ID,
 		MAC:      p.MAC,
+		Arch:     p.Arch,
 		Hostname: p.Hostname,
 		// 总cpu数
 		TotalCPU: p.TotalCPU,
@@ -130,10 +133,11 @@ func (ar *agentRepo) toBiz(p *ent.Agent, _ int) *biz.Agent {
 	}
 }
 
-func (ar *agentRepo) FindOneActiveAgent(ctx context.Context, cpu int, memory int) (*biz.Agent, error) {
+func (ar *agentRepo) FindOneActiveAgent(ctx context.Context, cpu int, memory int, arch string) (*biz.Agent, error) {
 
 	entitys, err := ar.data.getAgent(ctx).Query().
 		Where(agent.Active(true)).
+		Where(agent.Arch(arch)).
 		All(ctx)
 
 	if err != nil {

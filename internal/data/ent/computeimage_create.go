@@ -67,6 +67,18 @@ func (_c *ComputeImageCreate) SetMd5(v string) *ComputeImageCreate {
 	return _c
 }
 
+// SetSort sets the "sort" field.
+func (_c *ComputeImageCreate) SetSort(v uint) *ComputeImageCreate {
+	_c.mutation.SetSort(v)
+	return _c
+}
+
+// SetArch sets the "arch" field.
+func (_c *ComputeImageCreate) SetArch(v string) *ComputeImageCreate {
+	_c.mutation.SetArch(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ComputeImageCreate) SetID(v int32) *ComputeImageCreate {
 	_c.mutation.SetID(v)
@@ -156,6 +168,12 @@ func (_c *ComputeImageCreate) check() error {
 	if _, ok := _c.mutation.Md5(); !ok {
 		return &ValidationError{Name: "md5", err: errors.New(`ent: missing required field "ComputeImage.md5"`)}
 	}
+	if _, ok := _c.mutation.Sort(); !ok {
+		return &ValidationError{Name: "sort", err: errors.New(`ent: missing required field "ComputeImage.sort"`)}
+	}
+	if _, ok := _c.mutation.Arch(); !ok {
+		return &ValidationError{Name: "arch", err: errors.New(`ent: missing required field "ComputeImage.arch"`)}
+	}
 	return nil
 }
 
@@ -219,6 +237,14 @@ func (_c *ComputeImageCreate) createSpec() (*ComputeImage, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Md5(); ok {
 		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
 		_node.Md5 = value
+	}
+	if value, ok := _c.mutation.Sort(); ok {
+		_spec.SetField(computeimage.FieldSort, field.TypeUint, value)
+		_node.Sort = value
+	}
+	if value, ok := _c.mutation.Arch(); ok {
+		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
+		_node.Arch = value
 	}
 	return _node, _spec
 }

@@ -139,6 +139,41 @@ func (_u *ComputeImageUpdate) SetNillableMd5(v *string) *ComputeImageUpdate {
 	return _u
 }
 
+// SetSort sets the "sort" field.
+func (_u *ComputeImageUpdate) SetSort(v uint) *ComputeImageUpdate {
+	_u.mutation.ResetSort()
+	_u.mutation.SetSort(v)
+	return _u
+}
+
+// SetNillableSort sets the "sort" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableSort(v *uint) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetSort(*v)
+	}
+	return _u
+}
+
+// AddSort adds value to the "sort" field.
+func (_u *ComputeImageUpdate) AddSort(v int) *ComputeImageUpdate {
+	_u.mutation.AddSort(v)
+	return _u
+}
+
+// SetArch sets the "arch" field.
+func (_u *ComputeImageUpdate) SetArch(v string) *ComputeImageUpdate {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableArch(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeImageMutation object of the builder.
 func (_u *ComputeImageUpdate) Mutation() *ComputeImageMutation {
 	return _u.mutation
@@ -236,6 +271,15 @@ func (_u *ComputeImageUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Sort(); ok {
+		_spec.SetField(computeimage.FieldSort, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.AddedSort(); ok {
+		_spec.AddField(computeimage.FieldSort, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -369,6 +413,41 @@ func (_u *ComputeImageUpdateOne) SetNillableMd5(v *string) *ComputeImageUpdateOn
 	return _u
 }
 
+// SetSort sets the "sort" field.
+func (_u *ComputeImageUpdateOne) SetSort(v uint) *ComputeImageUpdateOne {
+	_u.mutation.ResetSort()
+	_u.mutation.SetSort(v)
+	return _u
+}
+
+// SetNillableSort sets the "sort" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableSort(v *uint) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetSort(*v)
+	}
+	return _u
+}
+
+// AddSort adds value to the "sort" field.
+func (_u *ComputeImageUpdateOne) AddSort(v int) *ComputeImageUpdateOne {
+	_u.mutation.AddSort(v)
+	return _u
+}
+
+// SetArch sets the "arch" field.
+func (_u *ComputeImageUpdateOne) SetArch(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableArch(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeImageMutation object of the builder.
 func (_u *ComputeImageUpdateOne) Mutation() *ComputeImageMutation {
 	return _u.mutation
@@ -496,6 +575,15 @@ func (_u *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeIma
 	}
 	if value, ok := _u.mutation.Md5(); ok {
 		_spec.SetField(computeimage.FieldMd5, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Sort(); ok {
+		_spec.SetField(computeimage.FieldSort, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.AddedSort(); ok {
+		_spec.AddField(computeimage.FieldSort, field.TypeUint, value)
+	}
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
 	}
 	_node = &ComputeImage{config: _u.config}
 	_spec.Assign = _node.assignValues

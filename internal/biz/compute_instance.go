@@ -138,7 +138,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 	}
 
 	// 选择一个agent节点进行通信
-	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, computeSpec.Core, computeSpec.Memory)
+	agent, err := uc.agentRepo.FindOneActiveAgent(ctx, computeSpec.Core, computeSpec.Memory, computeImage.Arch)
 	if err != nil {
 		return nil, err
 	}

@@ -92,6 +92,16 @@ func Md5(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldMd5, v))
 }
 
+// Sort applies equality check predicate on the "sort" field. It's identical to SortEQ.
+func Sort(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldSort, v))
+}
+
+// Arch applies equality check predicate on the "arch" field. It's identical to ArchEQ.
+func Arch(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldArch, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldName, v))
@@ -610,6 +620,111 @@ func Md5EqualFold(v string) predicate.ComputeImage {
 // Md5ContainsFold applies the ContainsFold predicate on the "md5" field.
 func Md5ContainsFold(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldContainsFold(FieldMd5, v))
+}
+
+// SortEQ applies the EQ predicate on the "sort" field.
+func SortEQ(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldSort, v))
+}
+
+// SortNEQ applies the NEQ predicate on the "sort" field.
+func SortNEQ(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldSort, v))
+}
+
+// SortIn applies the In predicate on the "sort" field.
+func SortIn(vs ...uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldSort, vs...))
+}
+
+// SortNotIn applies the NotIn predicate on the "sort" field.
+func SortNotIn(vs ...uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldSort, vs...))
+}
+
+// SortGT applies the GT predicate on the "sort" field.
+func SortGT(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldSort, v))
+}
+
+// SortGTE applies the GTE predicate on the "sort" field.
+func SortGTE(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldSort, v))
+}
+
+// SortLT applies the LT predicate on the "sort" field.
+func SortLT(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldSort, v))
+}
+
+// SortLTE applies the LTE predicate on the "sort" field.
+func SortLTE(v uint) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldSort, v))
+}
+
+// ArchEQ applies the EQ predicate on the "arch" field.
+func ArchEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldArch, v))
+}
+
+// ArchNEQ applies the NEQ predicate on the "arch" field.
+func ArchNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldArch, v))
+}
+
+// ArchIn applies the In predicate on the "arch" field.
+func ArchIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldArch, vs...))
+}
+
+// ArchNotIn applies the NotIn predicate on the "arch" field.
+func ArchNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldArch, vs...))
+}
+
+// ArchGT applies the GT predicate on the "arch" field.
+func ArchGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldArch, v))
+}
+
+// ArchGTE applies the GTE predicate on the "arch" field.
+func ArchGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldArch, v))
+}
+
+// ArchLT applies the LT predicate on the "arch" field.
+func ArchLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldArch, v))
+}
+
+// ArchLTE applies the LTE predicate on the "arch" field.
+func ArchLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldArch, v))
+}
+
+// ArchContains applies the Contains predicate on the "arch" field.
+func ArchContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldArch, v))
+}
+
+// ArchHasPrefix applies the HasPrefix predicate on the "arch" field.
+func ArchHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldArch, v))
+}
+
+// ArchHasSuffix applies the HasSuffix predicate on the "arch" field.
+func ArchHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldArch, v))
+}
+
+// ArchEqualFold applies the EqualFold predicate on the "arch" field.
+func ArchEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldArch, v))
+}
+
+// ArchContainsFold applies the ContainsFold predicate on the "arch" field.
+func ArchContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldArch, v))
 }
 
 // And groups predicates with the AND operator between them.

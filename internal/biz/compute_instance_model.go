@@ -107,6 +107,8 @@ type ComputeImage struct {
 	// 镜像md5
 	Md5     string `json:"md5,omitempty"`
 	Command string
+	//计算机架构
+	Arch string `json:"arch,omitempty"`
 }
 
 func (c *ComputeImage) GetImageTag() string {

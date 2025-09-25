@@ -86,6 +86,8 @@ var (
 		{Name: "filename", Type: field.TypeString},
 		{Name: "download_url", Type: field.TypeString},
 		{Name: "md5", Type: field.TypeString},
+		{Name: "sort", Type: field.TypeUint},
+		{Name: "arch", Type: field.TypeString},
 	}
 	// ComputeImagesTable holds the schema information for the "compute_images" table.
 	ComputeImagesTable = &schema.Table{

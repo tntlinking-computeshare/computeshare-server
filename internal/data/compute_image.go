@@ -5,6 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
 	"github.com/samber/lo"
 )
 
@@ -21,7 +22,7 @@ func NewComputeImageRepo(data *Data, logger log.Logger) biz.ComputeImageRepo {
 }
 
 func (csr *computeImageRepo) List(ctx context.Context) ([]*biz.ComputeImage, error) {
-	list, err := csr.data.getComputeImage(ctx).Query().All(ctx)
+	list, err := csr.data.getComputeImage(ctx).Query().Order(computeimage.BySort()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -39,6 +40,7 @@ func (csr *computeImageRepo) toBiz(item *ent.ComputeImage, _ int) *biz.ComputeIm
 		Filename:    item.Filename,
 		DownloadURL: item.DownloadURL,
 		Md5:         item.Md5,
+		Arch:        item.Arch,
 	}
 }
 
