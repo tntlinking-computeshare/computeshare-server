@@ -7,7 +7,7 @@
 package v1
 
 import (
-	v1 "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
+	v1 "github.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -906,7 +906,7 @@ const file_server_agent_v1_agent_proto_rawDesc = "" +
 	"\tListAgent\x12!.server.agent.v1.ListAgentRequest\x1a\x1f.server.agent.v1.ListAgentReply\"\x11\x82\xd3\xe4\x93\x02\v\x12\t/v1/agent\x12\x86\x01\n" +
 	"\x11ListAgentInstance\x12%.server.agent.v1.ListAgentInstanceReq\x1a$.server.compute.v1.ListInstanceReply\"$\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/agent/instance/{agentId}\x12\x85\x01\n" +
 	"\x14ReportInstanceStatus\x12\x1b.server.compute.v1.Instance\x1a*.server.agent.v1.ReportInstanceStatusReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\x1a\x19/v1/agent/instance/reportBR\n" +
-	"\fapi.agent.v1P\x01Z@github.com/mohaijiang/computeshare-server/api/server/agent/v1;v1b\x06proto3"
+	"\fapi.agent.v1P\x01Z@github.com/tntlinking-computeshare/computeshare-server/api/server/agent/v1;v1b\x06proto3"
 
 var (
 	file_server_agent_v1_agent_proto_rawDescOnce sync.Once

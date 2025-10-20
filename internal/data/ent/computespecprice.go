@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespecprice"
 )
 
 // ComputeSpecPrice is the model entity for the ComputeSpecPrice schema.

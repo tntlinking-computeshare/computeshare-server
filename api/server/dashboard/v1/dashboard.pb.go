@@ -1767,7 +1767,7 @@ const file_server_dashboard_v1_dashboard_proto_rawDesc = "" +
 	"\vCyclesCount\x12'.server.dashboard.v1.CyclesCountRequest\x1a%.server.dashboard.v1.CyclesCountReply\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/v1/dashboard/cycles/count\x12\x85\x01\n" +
 	"\fSandboxCount\x12(.server.dashboard.v1.SandboxCountRequest\x1a&.server.dashboard.v1.SandboxCountReply\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/dashboard/sandbox/count\x12\xae\x01\n" +
 	"\x19LastComputeInstancesCount\x125.server.dashboard.v1.LastComputeInstancesCountRequest\x1a3.server.dashboard.v1.LastComputeInstancesCountReply\"%\x82\xd3\xe4\x93\x02\x1f\x12\x1d/v1/dashboard/instances/countBZ\n" +
-	"\x10api.dashboard.v1P\x01ZDgithub.com/mohaijiang/computeshare-server/api/server/dashboard/v1;v1b\x06proto3"
+	"\x10api.dashboard.v1P\x01ZDgithub.com/tntlinking-computeshare/computeshare-server/api/server/dashboard/v1;v1b\x06proto3"
 
 var (
 	file_server_dashboard_v1_dashboard_proto_rawDescOnce sync.Once

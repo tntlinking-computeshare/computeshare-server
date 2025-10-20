@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/server/compute"
+	"github.com/tntlinking-computeshare/computeshare-server/api/server/compute"
 	"time"
 )
 

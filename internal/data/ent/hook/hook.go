@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
 )
 
 // The AgentFunc type is an adapter to allow the use of ordinary

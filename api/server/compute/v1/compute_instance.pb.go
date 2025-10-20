@@ -1722,7 +1722,7 @@ const file_server_compute_v1_compute_instance_proto_rawDesc = "" +
 	"\x10ReCreateInstance\x12*.server.compute.v1.RecreateInstanceRequest\x1a\x1e.server.compute.v1.CommonReply\"%\x82\xd3\xe4\x93\x02\x1f:\x01*\x1a\x1a/v1/instance/{id}/recreate\x12\x7f\n" +
 	"\x0eRenameInstance\x12(.server.compute.v1.RenameInstanceRequest\x1a\x1e.server.compute.v1.CommonReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\x1a\x18/v1/instance/{id}/rename\x12\x84\x01\n" +
 	"\x11GetInstanceVncURL\x12%.server.compute.v1.GetInstanceRequest\x1a).server.compute.v1.GetInstanceVncURLReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/instance/{id}/vncBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_compute_instance_proto_rawDescOnce sync.Once

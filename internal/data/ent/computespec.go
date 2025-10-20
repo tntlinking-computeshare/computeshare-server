@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespec"
 )
 
 // ComputeSpec is the model entity for the ComputeSpec schema.

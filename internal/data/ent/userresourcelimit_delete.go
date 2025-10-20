@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/userresourcelimit"
 )
 
 // UserResourceLimitDelete is the builder for deleting a UserResourceLimit entity.

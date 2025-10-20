@@ -7,7 +7,7 @@
 package v1
 
 import (
-	v1 "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
+	v1 "github.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -289,7 +289,7 @@ const file_server_compute_v1_sandbox_proto_rawDesc = "" +
 	"serverPort2\x82\x01\n" +
 	"\aSandbox\x12w\n" +
 	"\rCreateSandbox\x12'.server.compute.v1.CreateSandboxRequest\x1a%.server.compute.v1.CreateSandboxReply\"\x16\x82\xd3\xe4\x93\x02\x10:\x01*\"\v/v1/sandboxBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_sandbox_proto_rawDescOnce sync.Once

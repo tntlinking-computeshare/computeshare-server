@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/gatewayport"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/gatewayport"
 )
 
 // GatewayPort is the model entity for the GatewayPort schema.

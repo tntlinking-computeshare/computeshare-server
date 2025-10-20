@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/alipayorderrollback"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/alipayorderrollback"
 )
 
 // AlipayOrderRollback is the model entity for the AlipayOrderRollback schema.

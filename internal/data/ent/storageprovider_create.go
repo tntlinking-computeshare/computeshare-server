@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/storageprovider"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 )
 
 // StorageProviderCreate is the builder for creating a StorageProvider entity.

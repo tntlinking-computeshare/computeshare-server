@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/script"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/scriptexecutionrecord"
 )
 
 // ScriptExecutionRecordCreate is the builder for creating a ScriptExecutionRecord entity.

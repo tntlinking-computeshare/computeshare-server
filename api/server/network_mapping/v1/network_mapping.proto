@@ -5,7 +5,7 @@ package server.network_mapping.v1;
 import "google/api/annotations.proto";
 import "server/network_mapping/v1/domain_binding.proto";
 
-option go_package = "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1;v1";
+option go_package = "github.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.network_mapping.v1";
 

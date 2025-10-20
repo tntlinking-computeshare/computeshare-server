@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/google/wire"
 	shell "github.com/ipfs/go-ipfs-api"
-	"github.com/mohaijiang/computeshare-server/internal/conf"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/conf"
 )
 
 // ProviderSet is service providers.

@@ -5,7 +5,7 @@ package userresourcelimit
 import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

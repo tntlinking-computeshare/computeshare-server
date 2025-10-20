@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/api/server/compute"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/api/server/compute"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeInstanceUpdate is the builder for updating ComputeInstance entities.

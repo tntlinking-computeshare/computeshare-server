@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 	"net"
 
-	pb "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1"
 )
 
 type DomainBindingService struct {

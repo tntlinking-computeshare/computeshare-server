@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/s3bucket"
 )
 
 // S3Bucket is the model entity for the S3Bucket schema.

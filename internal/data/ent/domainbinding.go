@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/domainbinding"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/domainbinding"
 )
 
 // DomainBinding is the model entity for the DomainBinding schema.

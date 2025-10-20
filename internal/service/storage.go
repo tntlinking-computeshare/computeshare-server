@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 	shell "github.com/ipfs/go-ipfs-api"
 	files "github.com/ipfs/go-ipfs-files"
-	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 	"time"
 )
 

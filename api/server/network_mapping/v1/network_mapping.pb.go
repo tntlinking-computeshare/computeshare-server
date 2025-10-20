@@ -1038,7 +1038,7 @@ const file_server_network_mapping_v1_network_mapping_proto_rawDesc = "" +
 	"\x11GetNetworkMapping\x123.server.network_mapping.v1.GetNetworkMappingRequest\x1a1.server.network_mapping.v1.GetNetworkMappingReply\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/network-mappings/{id}\x12\xa7\x01\n" +
 	"\x14DeleteNetworkMapping\x126.server.network_mapping.v1.DeleteNetworkMappingRequest\x1a4.server.network_mapping.v1.DeleteNetworkMappingReply\"!\x82\xd3\xe4\x93\x02\x1b*\x19/v1/network-mappings/{id}\x12\xaa\x01\n" +
 	"\x14UpdateNetworkMapping\x126.server.network_mapping.v1.UpdateNetworkMappingRequest\x1a4.server.network_mapping.v1.UpdateNetworkMappingReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\x1a\x19/v1/network-mappings/{id}Bf\n" +
-	"\x16api.network_mapping.v1P\x01ZJgithub.com/mohaijiang/computeshare-server/api/server/network_mapping/v1;v1b\x06proto3"
+	"\x16api.network_mapping.v1P\x01ZJgithub.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1;v1b\x06proto3"
 
 var (
 	file_server_network_mapping_v1_network_mapping_proto_rawDescOnce sync.Once

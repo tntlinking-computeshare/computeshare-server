@@ -3,11 +3,11 @@ package data
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespec"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespecprice"
 )
 
 type computeSpecRepo struct {

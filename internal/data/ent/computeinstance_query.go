@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeInstanceQuery is the builder for querying ComputeInstance entities.

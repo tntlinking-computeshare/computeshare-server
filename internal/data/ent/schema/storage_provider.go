@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 )
 
 // StorageProvider holds the schema definition for the StorageProvider entity.

@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/mohaijiang/computeshare-server/internal/global"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/server/network_mapping/v1"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/samber/lo"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
 )
 
 type NetworkMappingService struct {

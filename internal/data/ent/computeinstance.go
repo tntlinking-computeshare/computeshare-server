@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/api/server/compute"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeinstance"
+	"github.com/tntlinking-computeshare/computeshare-server/api/server/compute"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computeinstance"
 )
 
 // ComputeInstance is the model entity for the ComputeInstance schema.

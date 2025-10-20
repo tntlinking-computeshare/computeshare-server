@@ -6,7 +6,7 @@ stages:
 #      - name: git clone
 #        uses: git-checkout
 #        with:
-#          url: https://github.com/mohaijiang/computeshare-server.git
+#          url: https://github.com/tntlinking-computeshare/computeshare-server.git
 #          branch: main
         - name: wokdir
           uses: workdir

@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespecprice"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespecprice"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
 )
 
 // ComputeSpecPriceUpdate is the builder for updating ComputeSpecPrice entities.

@@ -935,7 +935,7 @@ const file_server_compute_v1_compute_power_proto_rawDesc = "" +
 	"\x17CancelExecPythonPackage\x121.server.compute.v1.CancelExecPythonPackageRequest\x1a/.server.compute.v1.CancelExecPythonPackageReply\"*\x82\xd3\xe4\x93\x02$:\x01*\"\x1f/v1/compute-power/python/cancel\x12\xa9\x01\n" +
 	"\x1cGetScriptExecutionRecordInfo\x126.server.compute.v1.GetScriptExecutionRecordInfoRequest\x1a%.server.compute.v1.GetScriptInfoReply\"*\x82\xd3\xe4\x93\x02$\x12\"/v1/compute-power/script/info/{id}\x12\xae\x01\n" +
 	"\x1bDownloadScriptExecuteResult\x125.server.compute.v1.DownloadScriptExecuteResultRequest\x1a3.server.compute.v1.DownloadScriptExecuteResultReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/v1/compute-power/resultBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_compute_power_proto_rawDescOnce sync.Once

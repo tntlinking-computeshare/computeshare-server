@@ -6,11 +6,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	queue "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/task"
 	"github.com/samber/lo"
+	queue "github.com/tntlinking-computeshare/computeshare-server/api/server/queue/v1"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/task"
 )
 
 type TaskRepo struct {

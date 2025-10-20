@@ -3,12 +3,12 @@ package data
 import (
 	"context"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/script"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/scriptexecutionrecord"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"

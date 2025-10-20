@@ -2,11 +2,7 @@ package biz
 
 import (
 	"context"
-	"fmt"
-	"github.com/go-kratos/kratos/v2/middleware/recovery"
-	transhttp "github.com/go-kratos/kratos/v2/transport/http"
-	clientcomputev1 "github.com/mohaijiang/computeshare-client/api/compute/v1"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -116,82 +112,82 @@ func (uc *ScriptUseCase) RunPythonPackage(ctx context.Context, id int32, userId 
 }
 
 func (uc *ScriptUseCase) RunPythonPackageOnAgent(mac string, record *ScriptExecutionRecord) {
-	ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
-
-	computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(mac)
-	if err != nil {
-		uc.log.Error("创建ComputePowerHTTPClient链接失败")
-		uc.log.Error(err)
-		return
-	}
-	defer cleanup()
-
-	rsp, runPythonPackageErr := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
-	scriptExecutionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, record.ID)
-	if err != nil {
-		uc.log.Error("computePowerClient RunPythonPackage FindByID fail")
-		uc.log.Error(err)
-		return
-	}
-	if scriptExecutionRecord.ExecuteState == consts.Executing {
-		executeState := consts.Completed
-		if runPythonPackageErr != nil {
-			uc.log.Error("computePowerClient RunPythonPackage fail")
-			uc.log.Error(err)
-			executeState = consts.ExecutionFailed
-			record.ExecuteResult = runPythonPackageErr.Error()
-		} else {
-			if rsp == nil {
-				record.ExecuteResult = ""
-			} else {
-				record.ExecuteResult = rsp.ExecuteResult
-			}
-		}
-		record.ExecuteState = int32(executeState)
-		_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
-		if err != nil {
-			uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
-			uc.log.Error(err)
-			return
-		}
-	} else if scriptExecutionRecord.ExecuteState == consts.Canceled {
-		uc.log.Info("本次执行任务已经取消，不能写入执行结果")
-		return
-	} else {
-		uc.log.Info("本次执行任务状态不符合写入执行结果的条件")
-		return
-	}
+	//ctx, _ := context.WithTimeout(context.Background(), time.Minute*20)
+	//
+	//computePowerClient, cleanup, err := uc.getComputePowerHTTPClient(mac)
+	//if err != nil {
+	//	uc.log.Error("创建ComputePowerHTTPClient链接失败")
+	//	uc.log.Error(err)
+	//	return
+	//}
+	//defer cleanup()
+	//
+	//rsp, runPythonPackageErr := computePowerClient.RunPythonPackage(ctx, &clientcomputev1.RunPythonPackageClientRequest{Cid: record.FileAddress})
+	//scriptExecutionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, record.ID)
+	//if err != nil {
+	//	uc.log.Error("computePowerClient RunPythonPackage FindByID fail")
+	//	uc.log.Error(err)
+	//	return
+	//}
+	//if scriptExecutionRecord.ExecuteState == consts.Executing {
+	//	executeState := consts.Completed
+	//	if runPythonPackageErr != nil {
+	//		uc.log.Error("computePowerClient RunPythonPackage fail")
+	//		uc.log.Error(err)
+	//		executeState = consts.ExecutionFailed
+	//		record.ExecuteResult = runPythonPackageErr.Error()
+	//	} else {
+	//		if rsp == nil {
+	//			record.ExecuteResult = ""
+	//		} else {
+	//			record.ExecuteResult = rsp.ExecuteResult
+	//		}
+	//	}
+	//	record.ExecuteState = int32(executeState)
+	//	_, err = uc.scriptExecutionRecordRepo.Update(ctx, record)
+	//	if err != nil {
+	//		uc.log.Error("客户端执行py完成，向db保存scriptExecutionRecord失败")
+	//		uc.log.Error(err)
+	//		return
+	//	}
+	//} else if scriptExecutionRecord.ExecuteState == consts.Canceled {
+	//	uc.log.Info("本次执行任务已经取消，不能写入执行结果")
+	//	return
+	//} else {
+	//	uc.log.Info("本次执行任务状态不符合写入执行结果的条件")
+	//	return
+	//}
 
 }
 
-func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerClientHTTPClient, func(), error) {
-	ip, port, err := uc.p2pClient.ForwardWithRandomPort(peerId)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	time.Sleep(time.Second * 2)
-
-	client, err := transhttp.NewClient(
-		context.Background(),
-		transhttp.WithMiddleware(
-			recovery.Recovery(),
-		),
-		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
-		transhttp.WithTimeout(time.Second*10),
-	)
-
-	if err != nil {
-		uc.log.Error("创建ComputePowerClient链接失败")
-		uc.log.Error(err)
-		return nil, nil, err
-	}
-
-	vmClient := clientcomputev1.NewComputePowerClientHTTPClient(client)
-	return vmClient, func() {
-		_ = client.Close()
-	}, nil
-}
+//func (uc *ScriptUseCase) getComputePowerHTTPClient(peerId string) (clientcomputev1.ComputePowerClientHTTPClient, func(), error) {
+//	ip, port, err := uc.p2pClient.ForwardWithRandomPort(peerId)
+//	if err != nil {
+//		return nil, nil, err
+//	}
+//
+//	time.Sleep(time.Second * 2)
+//
+//	client, err := transhttp.NewClient(
+//		context.Background(),
+//		transhttp.WithMiddleware(
+//			recovery.Recovery(),
+//		),
+//		transhttp.WithEndpoint(fmt.Sprintf("%s:%s", ip, port)),
+//		transhttp.WithTimeout(time.Second*10),
+//	)
+//
+//	if err != nil {
+//		uc.log.Error("创建ComputePowerClient链接失败")
+//		uc.log.Error(err)
+//		return nil, nil, err
+//	}
+//
+//	vmClient := clientcomputev1.NewComputePowerClientHTTPClient(client)
+//	return vmClient, func() {
+//		_ = client.Close()
+//	}, nil
+//}
 
 func (uc *ScriptUseCase) CancelExecPythonPackage(ctx context.Context, scriptId int32) (*ScriptExecutionRecord, error) {
 	executionRecord, err := uc.scriptExecutionRecordRepo.FindByID(ctx, scriptId)

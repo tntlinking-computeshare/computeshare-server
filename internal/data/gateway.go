@@ -3,13 +3,13 @@ package data
 import (
 	"context"
 	"errors"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/networkmapping"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
 )
 
 type GatewayRepo struct {

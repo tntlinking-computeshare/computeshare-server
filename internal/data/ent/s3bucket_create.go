@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3bucket"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/s3bucket"
 )
 
 // S3BucketCreate is the builder for creating a S3Bucket entity.

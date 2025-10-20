@@ -6,14 +6,14 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/global"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 	"strconv"
 
-	pb "github.com/mohaijiang/computeshare-server/api/server/order/v1"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/order/v1"
 )
 
 type OrderService struct {

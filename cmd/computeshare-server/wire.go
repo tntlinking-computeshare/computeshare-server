@@ -9,11 +9,11 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/conf"
-	"github.com/mohaijiang/computeshare-server/internal/data"
-	"github.com/mohaijiang/computeshare-server/internal/server"
-	"github.com/mohaijiang/computeshare-server/internal/service"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/conf"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/server"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/service"
 )
 
 // wireApp init kratos application.

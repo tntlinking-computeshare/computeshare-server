@@ -2456,7 +2456,7 @@ const file_server_order_v1_order_proto_rawDesc = "" +
 	"\x11CycleRenewalClose\x12'.server.order.v1.CycleRenewalGetRequest\x1a&.server.order.v1.CycleRenewalBaseReply\"'\x82\xd3\xe4\x93\x02!:\x01*\x1a\x1c/v1/cycle/renewal/{id}/close\x12\x85\x01\n" +
 	"\vManualRenew\x12#.server.order.v1.ManualRenewRequest\x1a!.server.order.v1.ManualRenewReply\".\x82\xd3\xe4\x93\x02(:\x01*\"#/v1/cycle/renewal/{id}/manual-renew\x12\x81\x01\n" +
 	"\x0fRenewDailyCheck\x12\".server.order.v1.DailyCheckRequest\x1a .server.order.v1.DailyCheckReply\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/cycle/renewal/daily-checkBR\n" +
-	"\fapi.order.v1P\x01Z@github.com/mohaijiang/computeshare-server/api/server/order/v1;v1b\x06proto3"
+	"\fapi.order.v1P\x01Z@github.com/tntlinking-computeshare/computeshare-server/api/server/order/v1;v1b\x06proto3"
 
 var (
 	file_server_order_v1_order_proto_rawDescOnce sync.Once

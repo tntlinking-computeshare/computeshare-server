@@ -556,7 +556,7 @@ const file_server_compute_v1_storage_provider_proto_rawDesc = "" +
 	"\x15DeleteStorageProvider\x12/.server.compute.v1.DeleteStorageProviderRequest\x1a-.server.compute.v1.DeleteStorageProviderReply\"!\x82\xd3\xe4\x93\x02\x1b*\x19/v1/storage_provider/{id}\x12\x91\x01\n" +
 	"\x12GetStorageProvider\x12,.server.compute.v1.GetStorageProviderRequest\x1a*.server.compute.v1.GetStorageProviderReply\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/v1/storage_provider/{id}\x12\x8f\x01\n" +
 	"\x13ListStorageProvider\x12-.server.compute.v1.ListStorageProviderRequest\x1a+.server.compute.v1.ListStorageProviderReply\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/storage_providerBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_storage_provider_proto_rawDescOnce sync.Once

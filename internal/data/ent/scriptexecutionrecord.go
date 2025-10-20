@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/scriptexecutionrecord"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/script"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/scriptexecutionrecord"
 )
 
 // ScriptExecutionRecord is the model entity for the ScriptExecutionRecord schema.

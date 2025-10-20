@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/script"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/script"
 )
 
 // Script is the model entity for the Script schema.

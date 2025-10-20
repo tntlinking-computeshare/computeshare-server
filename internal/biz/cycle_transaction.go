@@ -5,8 +5,8 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	global2 "github.com/mohaijiang/computeshare-server/api/server/global"
-	"github.com/mohaijiang/computeshare-server/internal/global"
+	global2 "github.com/tntlinking-computeshare/computeshare-server/api/server/global"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 )
 
 type CycleTransactionRepo interface {

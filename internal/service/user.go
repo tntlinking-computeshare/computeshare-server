@@ -5,12 +5,12 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 	"time"
 
-	pb "github.com/mohaijiang/computeshare-server/api/server/system/v1"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/system/v1"
 )
 
 const SUCCESS = "success"

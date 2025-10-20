@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/s3user"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/s3user"
 )
 
 // S3User is the model entity for the S3User schema.

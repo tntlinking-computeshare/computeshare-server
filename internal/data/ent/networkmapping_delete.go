@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/networkmapping"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/networkmapping"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
 )
 
 // NetworkMappingDelete is the builder for deleting a NetworkMapping entity.

@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/cycle"
 )
 
 // CycleCreate is the builder for creating a Cycle entity.

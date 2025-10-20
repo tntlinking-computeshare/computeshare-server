@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "server/compute/v1/compute_instance.proto";
 //import "openapi/v3/annotations.proto";
 
-option go_package = "github.com/mohaijiang/computeshare-server/api/server/agent/v1;v1";
+option go_package = "github.com/tntlinking-computeshare/computeshare-server/api/server/agent/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.agent.v1";
 

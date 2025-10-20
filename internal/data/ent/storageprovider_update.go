@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/predicate"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/storageprovider"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/predicate"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/storageprovider"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 )
 
 // StorageProviderUpdate is the builder for updating StorageProvider entities.

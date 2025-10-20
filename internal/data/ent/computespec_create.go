@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computespec"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computespec"
 )
 
 // ComputeSpecCreate is the builder for creating a ComputeSpec entity.

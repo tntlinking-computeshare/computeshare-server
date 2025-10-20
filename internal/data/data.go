@@ -3,8 +3,8 @@ package data
 import (
 	"context"
 	"fmt"
-	"github.com/mohaijiang/computeshare-server/internal/conf"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/conf"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/gateway"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/gateway"
 )
 
 // Gateway is the model entity for the Gateway schema.

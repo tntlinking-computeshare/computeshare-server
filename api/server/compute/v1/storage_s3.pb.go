@@ -2180,7 +2180,7 @@ const file_server_compute_v1_storage_s3_proto_rawDesc = "" +
 	"\x14S3StorageDeleteMkdir\x12..server.compute.v1.S3StorageDeleteMkdirRequest\x1a,.server.compute.v1.S3StorageDeleteMkdirReply\"&\x82\xd3\xe4\x93\x02 *\x1e/v1/storage/{bucketName}/mkdir\x12\xa5\x01\n" +
 	"\x11S3StorageDownload\x12+.server.compute.v1.S3StorageDownloadRequest\x1a).server.compute.v1.S3StorageDownloadReply\"8\x82\xd3\xe4\x93\x022\x120/v1/storage/{bucketName}/objects/download/ersatz\x12\x96\x01\n" +
 	"\x0fS3StorageDelete\x12).server.compute.v1.S3StorageDeleteRequest\x1a'.server.compute.v1.S3StorageDeleteReply\"/\x82\xd3\xe4\x93\x02)*'/v1/storage/{bucketName}/objects/deleteBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_storage_s3_proto_rawDescOnce sync.Once

@@ -3,10 +3,10 @@ package data
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycle"
 	"github.com/shopspring/decimal"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/cycle"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"

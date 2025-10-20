@@ -5,10 +5,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	global2 "github.com/mohaijiang/computeshare-server/api/server/global"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/cycletransaction"
+	global2 "github.com/tntlinking-computeshare/computeshare-server/api/server/global"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/cycletransaction"
 )
 
 type cycleTransactionRepo struct {

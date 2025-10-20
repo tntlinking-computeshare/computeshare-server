@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/computeimage"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/computeimage"
 )
 
 // ComputeImageCreate is the builder for creating a ComputeImage entity.

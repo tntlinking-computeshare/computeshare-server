@@ -5,7 +5,7 @@ package storageprovider
 import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/global/consts"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global/consts"
 )
 
 const (

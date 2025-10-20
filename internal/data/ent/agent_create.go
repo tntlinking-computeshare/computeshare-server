@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/agent"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/agent"
 )
 
 // AgentCreate is the builder for creating a Agent entity.

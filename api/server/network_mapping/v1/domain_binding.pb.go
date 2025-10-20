@@ -922,7 +922,7 @@ const file_server_network_mapping_v1_domain_binding_proto_rawDesc = "" +
 	"\x13DeleteDomainBinding\x125.server.network_mapping.v1.DeleteDomainBindingRequest\x1a3.server.network_mapping.v1.DeleteDomainBindingReply\"\x1f\x82\xd3\xe4\x93\x02\x19*\x17/v1/domain-binding/{id}\x12\x99\x01\n" +
 	"\x10GetDomainBinding\x122.server.network_mapping.v1.GetDomainBindingRequest\x1a0.server.network_mapping.v1.GetDomainBindingReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/domain-binding/{id}\x12\x97\x01\n" +
 	"\x11ListDomainBinding\x123.server.network_mapping.v1.ListDomainBindingRequest\x1a1.server.network_mapping.v1.ListDomainBindingReply\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/domain-bindingBf\n" +
-	"\x16api.network_mapping.v1P\x01ZJgithub.com/mohaijiang/computeshare-server/api/server/network_mapping/v1;v1b\x06proto3"
+	"\x16api.network_mapping.v1P\x01ZJgithub.com/tntlinking-computeshare/computeshare-server/api/server/network_mapping/v1;v1b\x06proto3"
 
 var (
 	file_server_network_mapping_v1_domain_binding_proto_rawDescOnce sync.Once

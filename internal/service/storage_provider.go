@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
 
-	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1"
 )
 
 type StorageProviderService struct {

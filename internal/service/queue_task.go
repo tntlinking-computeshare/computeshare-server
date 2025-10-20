@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/server/queue/v1"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/queue/v1"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
 )
 
 type QueueTaskService struct {

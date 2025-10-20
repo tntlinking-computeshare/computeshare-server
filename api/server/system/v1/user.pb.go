@@ -1521,7 +1521,7 @@ const file_server_system_v1_user_proto_rawDesc = "" +
 	"\x10SendValidateCode\x12).server.system.v1.SendValidateCodeRequest\x1a'.server.system.v1.SendValidateCodeReply\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/sms/send\x12t\n" +
 	"\n" +
 	"VerifyCode\x12#.server.system.v1.VerifyCodeRequest\x1a!.server.system.v1.VerifyCodeReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/sms/code/verifyBT\n" +
-	"\rapi.system.v1P\x01ZAgithub.com/mohaijiang/computeshare-server/api/server/system/v1;v1b\x06proto3"
+	"\rapi.system.v1P\x01ZAgithub.com/tntlinking-computeshare/computeshare-server/api/server/system/v1;v1b\x06proto3"
 
 var (
 	file_server_system_v1_user_proto_rawDescOnce sync.Once

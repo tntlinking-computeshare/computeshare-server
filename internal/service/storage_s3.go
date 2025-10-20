@@ -3,15 +3,15 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/global"
-	"github.com/mohaijiang/computeshare-server/internal/utils"
 	"github.com/samber/lo"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/utils"
 	"io"
 	"path/filepath"
 	"time"
 
-	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1"
 )
 
 type StorageS3Service struct {

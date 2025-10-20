@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/mohaijiang/computeshare-server/internal/data/ent/userresourcelimit"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/data/ent/userresourcelimit"
 )
 
 // UserResourceLimit is the model entity for the UserResourceLimit schema.

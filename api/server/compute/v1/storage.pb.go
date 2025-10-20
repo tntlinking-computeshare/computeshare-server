@@ -844,7 +844,7 @@ const file_server_compute_v1_storage_proto_rawDesc = "" +
 	"\tCreateDir\x12#.server.compute.v1.CreateDirRequest\x1a!.server.compute.v1.CreateDirReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/storage/dir\x12j\n" +
 	"\bDownload\x12\".server.compute.v1.DownloadRequest\x1a .server.compute.v1.DownloadReply\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/storage/{id}\x12_\n" +
 	"\x06Delete\x12 .server.compute.v1.DeleteRequest\x1a\x1e.server.compute.v1.DeleteReply\"\x13\x82\xd3\xe4\x93\x02\r*\v/v1/storageBV\n" +
-	"\x0eapi.compute.v1P\x01ZBgithub.com/mohaijiang/computeshare-server/api/server/compute/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01ZBgithub.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1;v1b\x06proto3"
 
 var (
 	file_server_compute_v1_storage_proto_rawDescOnce sync.Once

@@ -871,7 +871,7 @@ const file_server_queue_v1_task_proto_rawDesc = "" +
 	"\tQueueTask\x12s\n" +
 	"\fGetAgentTask\x12$.server.queue.v1.QueueTaskGetRequest\x1a%.server.queue.v1.QueueTaskGetResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/queue/task\x12\x7f\n" +
 	"\x0fUpdateAgentTask\x12'.server.queue.v1.QueueTaskUpdateRequest\x1a(.server.queue.v1.QueueTaskUpdateResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\x1a\x0e/v1/queue/taskBT\n" +
-	"\x0eapi.compute.v1P\x01Z@github.com/mohaijiang/computeshare-server/api/server/queue/v1;v1b\x06proto3"
+	"\x0eapi.compute.v1P\x01Z@github.com/tntlinking-computeshare/computeshare-server/api/server/queue/v1;v1b\x06proto3"
 
 var (
 	file_server_queue_v1_task_proto_rawDescOnce sync.Once

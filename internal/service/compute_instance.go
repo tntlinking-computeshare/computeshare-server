@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
-	pb "github.com/mohaijiang/computeshare-server/api/server/compute/v1"
-	"github.com/mohaijiang/computeshare-server/internal/biz"
-	"github.com/mohaijiang/computeshare-server/internal/conf"
-	"github.com/mohaijiang/computeshare-server/internal/global"
 	"github.com/samber/lo"
+	pb "github.com/tntlinking-computeshare/computeshare-server/api/server/compute/v1"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/biz"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/conf"
+	"github.com/tntlinking-computeshare/computeshare-server/internal/global"
 	"strconv"
 )
 
