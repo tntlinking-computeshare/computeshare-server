@@ -48,7 +48,11 @@ type ComputeInstance struct {
 	// 初始化的docker容器
 	DockerCompose string `json:"docker_compose,omitempty"`
 	// 创建时间
-	CreateTime   time.Time `json:"create_time,omitempty"`
+	CreateTime time.Time `json:"create_time,omitempty"`
+	// 计算机架构
+	Arch string `json:"arch,omitempty"`
+	// 初始化方式，iso/qcow2
+	BootType     string `json:"boot_type,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -59,7 +63,7 @@ func (*ComputeInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeinstance.FieldCore, computeinstance.FieldMemory, computeinstance.FieldImageID, computeinstance.FieldStatus, computeinstance.FieldVncPort:
 			values[i] = new(sql.NullInt64)
-		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose:
+		case computeinstance.FieldOwner, computeinstance.FieldName, computeinstance.FieldImage, computeinstance.FieldPort, computeinstance.FieldContainerID, computeinstance.FieldAgentID, computeinstance.FieldVncIP, computeinstance.FieldDockerCompose, computeinstance.FieldArch, computeinstance.FieldBootType:
 			values[i] = new(sql.NullString)
 		case computeinstance.FieldExpirationTime, computeinstance.FieldCreateTime:
 			values[i] = new(sql.NullTime)
@@ -176,6 +180,18 @@ func (_m *ComputeInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.CreateTime = value.Time
 			}
+		case computeinstance.FieldArch:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field arch", values[i])
+			} else if value.Valid {
+				_m.Arch = value.String
+			}
+		case computeinstance.FieldBootType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field boot_type", values[i])
+			} else if value.Valid {
+				_m.BootType = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -256,6 +272,12 @@ func (_m *ComputeInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("create_time=")
 	builder.WriteString(_m.CreateTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("arch=")
+	builder.WriteString(_m.Arch)
+	builder.WriteString(", ")
+	builder.WriteString("boot_type=")
+	builder.WriteString(_m.BootType)
 	builder.WriteByte(')')
 	return builder.String()
 }

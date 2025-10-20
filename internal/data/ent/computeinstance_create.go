@@ -144,6 +144,26 @@ func (_c *ComputeInstanceCreate) SetNillableCreateTime(v *time.Time) *ComputeIns
 	return _c
 }
 
+// SetArch sets the "arch" field.
+func (_c *ComputeInstanceCreate) SetArch(v string) *ComputeInstanceCreate {
+	_c.mutation.SetArch(v)
+	return _c
+}
+
+// SetBootType sets the "boot_type" field.
+func (_c *ComputeInstanceCreate) SetBootType(v string) *ComputeInstanceCreate {
+	_c.mutation.SetBootType(v)
+	return _c
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_c *ComputeInstanceCreate) SetNillableBootType(v *string) *ComputeInstanceCreate {
+	if v != nil {
+		_c.SetBootType(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ComputeInstanceCreate) SetID(v uuid.UUID) *ComputeInstanceCreate {
 	_c.mutation.SetID(v)
@@ -196,6 +216,10 @@ func (_c *ComputeInstanceCreate) defaults() {
 	if _, ok := _c.mutation.CreateTime(); !ok {
 		v := computeinstance.DefaultCreateTime()
 		_c.mutation.SetCreateTime(v)
+	}
+	if _, ok := _c.mutation.BootType(); !ok {
+		v := computeinstance.DefaultBootType
+		_c.mutation.SetBootType(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		v := computeinstance.DefaultID()
@@ -255,6 +279,12 @@ func (_c *ComputeInstanceCreate) check() error {
 	}
 	if _, ok := _c.mutation.CreateTime(); !ok {
 		return &ValidationError{Name: "create_time", err: errors.New(`ent: missing required field "ComputeInstance.create_time"`)}
+	}
+	if _, ok := _c.mutation.Arch(); !ok {
+		return &ValidationError{Name: "arch", err: errors.New(`ent: missing required field "ComputeInstance.arch"`)}
+	}
+	if _, ok := _c.mutation.BootType(); !ok {
+		return &ValidationError{Name: "boot_type", err: errors.New(`ent: missing required field "ComputeInstance.boot_type"`)}
 	}
 	return nil
 }
@@ -350,6 +380,14 @@ func (_c *ComputeInstanceCreate) createSpec() (*ComputeInstance, *sqlgraph.Creat
 	if value, ok := _c.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
 		_node.CreateTime = value
+	}
+	if value, ok := _c.mutation.Arch(); ok {
+		_spec.SetField(computeinstance.FieldArch, field.TypeString, value)
+		_node.Arch = value
+	}
+	if value, ok := _c.mutation.BootType(); ok {
+		_spec.SetField(computeinstance.FieldBootType, field.TypeString, value)
+		_node.BootType = value
 	}
 	return _node, _spec
 }

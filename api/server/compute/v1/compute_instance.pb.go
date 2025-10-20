@@ -329,6 +329,8 @@ type ComputeImage struct {
 	Filename      string                 `protobuf:"bytes,7,opt,name=filename,proto3" json:"filename,omitempty"`
 	DownloadUrl   string                 `protobuf:"bytes,8,opt,name=download_url,json=downloadUrl,proto3" json:"download_url,omitempty"`
 	Md5           string                 `protobuf:"bytes,9,opt,name=md5,proto3" json:"md5,omitempty"`
+	Arch          string                 `protobuf:"bytes,10,opt,name=arch,proto3" json:"arch,omitempty"`
+	BootType      string                 `protobuf:"bytes,11,opt,name=boot_type,json=bootType,proto3" json:"boot_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -422,6 +424,20 @@ func (x *ComputeImage) GetDownloadUrl() string {
 func (x *ComputeImage) GetMd5() string {
 	if x != nil {
 		return x.Md5
+	}
+	return ""
+}
+
+func (x *ComputeImage) GetArch() string {
+	if x != nil {
+		return x.Arch
+	}
+	return ""
+}
+
+func (x *ComputeImage) GetBootType() string {
+	if x != nil {
+		return x.BootType
 	}
 	return ""
 }
@@ -1610,7 +1626,7 @@ const file_server_compute_v1_compute_instance_proto_rawDesc = "" +
 	"\x14GetComputeImageReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x123\n" +
-	"\x04data\x18\x03 \x01(\v2\x1f.server.compute.v1.ComputeImageR\x04data\"\xe3\x01\n" +
+	"\x04data\x18\x03 \x01(\v2\x1f.server.compute.v1.ComputeImageR\x04data\"\x94\x02\n" +
 	"\fComputeImage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
@@ -1621,7 +1637,10 @@ const file_server_compute_v1_compute_instance_proto_rawDesc = "" +
 	"os_variant\x18\x06 \x01(\tR\tosVariant\x12\x1a\n" +
 	"\bfilename\x18\a \x01(\tR\bfilename\x12!\n" +
 	"\fdownload_url\x18\b \x01(\tR\vdownloadUrl\x12\x10\n" +
-	"\x03md5\x18\t \x01(\tR\x03md5\"I\n" +
+	"\x03md5\x18\t \x01(\tR\x03md5\x12\x12\n" +
+	"\x04arch\x18\n" +
+	" \x01(\tR\x04arch\x12\x1b\n" +
+	"\tboot_type\x18\v \x01(\tR\bbootType\"I\n" +
 	"\vComputeSpec\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04core\x18\x02 \x01(\tR\x04core\x12\x16\n" +

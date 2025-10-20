@@ -36,6 +36,7 @@ func (ComputeImage) Fields() []ent.Field {
 		field.String("md5").Comment("镜像md5"),
 		field.Uint("sort").Comment("排序"),
 		field.String("arch").Comment("计算机架构"),
+		field.String("boot_type").Default("qcow2").Comment("初始化方式，iso/qcow2"),
 	}
 }
 

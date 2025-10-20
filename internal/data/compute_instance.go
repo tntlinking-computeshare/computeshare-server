@@ -75,6 +75,8 @@ func (crs *computeInstanceRepo) Create(ctx context.Context, in *biz.ComputeInsta
 		SetVncPort(in.VncPort).
 		SetDockerCompose(in.DockerCompose).
 		SetCreateTime(in.CreateTime).
+		SetArch(in.Arch).
+		SetBootType(in.BootType).
 		Save(ctx)
 
 	if err != nil {
@@ -166,6 +168,8 @@ func (crs *computeInstanceRepo) toBiz(item *ent.ComputeInstance, _ int) *biz.Com
 		VncIP:          item.VncIP,
 		VncPort:        item.VncPort,
 		CreateTime:     item.CreateTime,
+		Arch:           item.Arch,
+		BootType:       item.BootType,
 	}
 }
 

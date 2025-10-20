@@ -41,6 +41,7 @@ func (csr *computeImageRepo) toBiz(item *ent.ComputeImage, _ int) *biz.ComputeIm
 		DownloadURL: item.DownloadURL,
 		Md5:         item.Md5,
 		Arch:        item.Arch,
+		BootType:    item.BootType,
 	}
 }
 

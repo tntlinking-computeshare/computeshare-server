@@ -186,6 +186,8 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 		VncPort:        gp.Port,
 		DockerCompose:  dockerComposeDecode,
 		CreateTime:     time.Now(),
+		Arch:           computeImage.Arch,
+		BootType:       computeImage.BootType,
 	}
 
 	err = uc.instanceRepo.Create(ctx, instance)
@@ -294,6 +296,7 @@ func (uc *ComputeInstanceUsercase) Create(ctx context.Context, cic *ComputeInsta
 			VncConnectIP:   gw.InternalIP,
 			VncConnectPort: gp.Port,
 			DockerCompose:  cic.DockerCompose,
+			AuthToken:      gw.AuthToken,
 		}
 	})
 	if err != nil {
@@ -323,6 +326,7 @@ func (uc *ComputeInstanceUsercase) SendTaskQueue(ctx context.Context, instance *
 		Image:      instance.Image,
 		ImageId:    instance.ImageId,
 		InstanceId: instance.ID.String(),
+		BootType:   instance.BootType,
 	}
 	if publicKeyAndPassword != nil {
 		instanceCreateParam := publicKeyAndPassword()

@@ -2942,6 +2942,7 @@ type ComputeImageMutation struct {
 	sort          *uint
 	addsort       *int
 	arch          *string
+	boot_type     *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ComputeImage, error)
@@ -3432,6 +3433,42 @@ func (m *ComputeImageMutation) ResetArch() {
 	m.arch = nil
 }
 
+// SetBootType sets the "boot_type" field.
+func (m *ComputeImageMutation) SetBootType(s string) {
+	m.boot_type = &s
+}
+
+// BootType returns the value of the "boot_type" field in the mutation.
+func (m *ComputeImageMutation) BootType() (r string, exists bool) {
+	v := m.boot_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBootType returns the old "boot_type" field's value of the ComputeImage entity.
+// If the ComputeImage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeImageMutation) OldBootType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBootType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBootType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBootType: %w", err)
+	}
+	return oldValue.BootType, nil
+}
+
+// ResetBootType resets all changes to the "boot_type" field.
+func (m *ComputeImageMutation) ResetBootType() {
+	m.boot_type = nil
+}
+
 // Where appends a list predicates to the ComputeImageMutation builder.
 func (m *ComputeImageMutation) Where(ps ...predicate.ComputeImage) {
 	m.predicates = append(m.predicates, ps...)
@@ -3466,7 +3503,7 @@ func (m *ComputeImageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeImageMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.name != nil {
 		fields = append(fields, computeimage.FieldName)
 	}
@@ -3497,6 +3534,9 @@ func (m *ComputeImageMutation) Fields() []string {
 	if m.arch != nil {
 		fields = append(fields, computeimage.FieldArch)
 	}
+	if m.boot_type != nil {
+		fields = append(fields, computeimage.FieldBootType)
+	}
 	return fields
 }
 
@@ -3525,6 +3565,8 @@ func (m *ComputeImageMutation) Field(name string) (ent.Value, bool) {
 		return m.Sort()
 	case computeimage.FieldArch:
 		return m.Arch()
+	case computeimage.FieldBootType:
+		return m.BootType()
 	}
 	return nil, false
 }
@@ -3554,6 +3596,8 @@ func (m *ComputeImageMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldSort(ctx)
 	case computeimage.FieldArch:
 		return m.OldArch(ctx)
+	case computeimage.FieldBootType:
+		return m.OldBootType(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -3632,6 +3676,13 @@ func (m *ComputeImageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetArch(v)
+		return nil
+	case computeimage.FieldBootType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBootType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
@@ -3727,6 +3778,9 @@ func (m *ComputeImageMutation) ResetField(name string) error {
 	case computeimage.FieldArch:
 		m.ResetArch()
 		return nil
+	case computeimage.FieldBootType:
+		m.ResetBootType()
+		return nil
 	}
 	return fmt.Errorf("unknown ComputeImage field %s", name)
 }
@@ -3805,6 +3859,8 @@ type ComputeInstanceMutation struct {
 	addvnc_port     *int32
 	docker_compose  *string
 	create_time     *time.Time
+	arch            *string
+	boot_type       *string
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*ComputeInstance, error)
@@ -4594,6 +4650,78 @@ func (m *ComputeInstanceMutation) ResetCreateTime() {
 	m.create_time = nil
 }
 
+// SetArch sets the "arch" field.
+func (m *ComputeInstanceMutation) SetArch(s string) {
+	m.arch = &s
+}
+
+// Arch returns the value of the "arch" field in the mutation.
+func (m *ComputeInstanceMutation) Arch() (r string, exists bool) {
+	v := m.arch
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldArch returns the old "arch" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldArch(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldArch is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldArch requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldArch: %w", err)
+	}
+	return oldValue.Arch, nil
+}
+
+// ResetArch resets all changes to the "arch" field.
+func (m *ComputeInstanceMutation) ResetArch() {
+	m.arch = nil
+}
+
+// SetBootType sets the "boot_type" field.
+func (m *ComputeInstanceMutation) SetBootType(s string) {
+	m.boot_type = &s
+}
+
+// BootType returns the value of the "boot_type" field in the mutation.
+func (m *ComputeInstanceMutation) BootType() (r string, exists bool) {
+	v := m.boot_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBootType returns the old "boot_type" field's value of the ComputeInstance entity.
+// If the ComputeInstance object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ComputeInstanceMutation) OldBootType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBootType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBootType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBootType: %w", err)
+	}
+	return oldValue.BootType, nil
+}
+
+// ResetBootType resets all changes to the "boot_type" field.
+func (m *ComputeInstanceMutation) ResetBootType() {
+	m.boot_type = nil
+}
+
 // Where appends a list predicates to the ComputeInstanceMutation builder.
 func (m *ComputeInstanceMutation) Where(ps ...predicate.ComputeInstance) {
 	m.predicates = append(m.predicates, ps...)
@@ -4628,7 +4756,7 @@ func (m *ComputeInstanceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ComputeInstanceMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 17)
 	if m.owner != nil {
 		fields = append(fields, computeinstance.FieldOwner)
 	}
@@ -4674,6 +4802,12 @@ func (m *ComputeInstanceMutation) Fields() []string {
 	if m.create_time != nil {
 		fields = append(fields, computeinstance.FieldCreateTime)
 	}
+	if m.arch != nil {
+		fields = append(fields, computeinstance.FieldArch)
+	}
+	if m.boot_type != nil {
+		fields = append(fields, computeinstance.FieldBootType)
+	}
 	return fields
 }
 
@@ -4712,6 +4846,10 @@ func (m *ComputeInstanceMutation) Field(name string) (ent.Value, bool) {
 		return m.DockerCompose()
 	case computeinstance.FieldCreateTime:
 		return m.CreateTime()
+	case computeinstance.FieldArch:
+		return m.Arch()
+	case computeinstance.FieldBootType:
+		return m.BootType()
 	}
 	return nil, false
 }
@@ -4751,6 +4889,10 @@ func (m *ComputeInstanceMutation) OldField(ctx context.Context, name string) (en
 		return m.OldDockerCompose(ctx)
 	case computeinstance.FieldCreateTime:
 		return m.OldCreateTime(ctx)
+	case computeinstance.FieldArch:
+		return m.OldArch(ctx)
+	case computeinstance.FieldBootType:
+		return m.OldBootType(ctx)
 	}
 	return nil, fmt.Errorf("unknown ComputeInstance field %s", name)
 }
@@ -4864,6 +5006,20 @@ func (m *ComputeInstanceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateTime(v)
+		return nil
+	case computeinstance.FieldArch:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetArch(v)
+		return nil
+	case computeinstance.FieldBootType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBootType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -5042,6 +5198,12 @@ func (m *ComputeInstanceMutation) ResetField(name string) error {
 		return nil
 	case computeinstance.FieldCreateTime:
 		m.ResetCreateTime()
+		return nil
+	case computeinstance.FieldArch:
+		m.ResetArch()
+		return nil
+	case computeinstance.FieldBootType:
+		m.ResetBootType()
 		return nil
 	}
 	return fmt.Errorf("unknown ComputeInstance field %s", name)
@@ -12099,6 +12261,7 @@ type GatewayMutation struct {
 	port          *int32
 	addport       *int32
 	internal_ip   *string
+	auth_token    *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Gateway, error)
@@ -12373,6 +12536,42 @@ func (m *GatewayMutation) ResetInternalIP() {
 	m.internal_ip = nil
 }
 
+// SetAuthToken sets the "auth_token" field.
+func (m *GatewayMutation) SetAuthToken(s string) {
+	m.auth_token = &s
+}
+
+// AuthToken returns the value of the "auth_token" field in the mutation.
+func (m *GatewayMutation) AuthToken() (r string, exists bool) {
+	v := m.auth_token
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuthToken returns the old "auth_token" field's value of the Gateway entity.
+// If the Gateway object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GatewayMutation) OldAuthToken(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuthToken is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuthToken requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuthToken: %w", err)
+	}
+	return oldValue.AuthToken, nil
+}
+
+// ResetAuthToken resets all changes to the "auth_token" field.
+func (m *GatewayMutation) ResetAuthToken() {
+	m.auth_token = nil
+}
+
 // Where appends a list predicates to the GatewayMutation builder.
 func (m *GatewayMutation) Where(ps ...predicate.Gateway) {
 	m.predicates = append(m.predicates, ps...)
@@ -12407,7 +12606,7 @@ func (m *GatewayMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GatewayMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, gateway.FieldName)
 	}
@@ -12419,6 +12618,9 @@ func (m *GatewayMutation) Fields() []string {
 	}
 	if m.internal_ip != nil {
 		fields = append(fields, gateway.FieldInternalIP)
+	}
+	if m.auth_token != nil {
+		fields = append(fields, gateway.FieldAuthToken)
 	}
 	return fields
 }
@@ -12436,6 +12638,8 @@ func (m *GatewayMutation) Field(name string) (ent.Value, bool) {
 		return m.Port()
 	case gateway.FieldInternalIP:
 		return m.InternalIP()
+	case gateway.FieldAuthToken:
+		return m.AuthToken()
 	}
 	return nil, false
 }
@@ -12453,6 +12657,8 @@ func (m *GatewayMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldPort(ctx)
 	case gateway.FieldInternalIP:
 		return m.OldInternalIP(ctx)
+	case gateway.FieldAuthToken:
+		return m.OldAuthToken(ctx)
 	}
 	return nil, fmt.Errorf("unknown Gateway field %s", name)
 }
@@ -12489,6 +12695,13 @@ func (m *GatewayMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInternalIP(v)
+		return nil
+	case gateway.FieldAuthToken:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuthToken(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Gateway field %s", name)
@@ -12565,6 +12778,9 @@ func (m *GatewayMutation) ResetField(name string) error {
 		return nil
 	case gateway.FieldInternalIP:
 		m.ResetInternalIP()
+		return nil
+	case gateway.FieldAuthToken:
+		m.ResetAuthToken()
 		return nil
 	}
 	return fmt.Errorf("unknown Gateway field %s", name)

@@ -44,6 +44,10 @@ const (
 	FieldDockerCompose = "docker_compose"
 	// FieldCreateTime holds the string denoting the create_time field in the database.
 	FieldCreateTime = "create_time"
+	// FieldArch holds the string denoting the arch field in the database.
+	FieldArch = "arch"
+	// FieldBootType holds the string denoting the boot_type field in the database.
+	FieldBootType = "boot_type"
 	// Table holds the table name of the computeinstance in the database.
 	Table = "compute_instances"
 )
@@ -66,6 +70,8 @@ var Columns = []string{
 	FieldVncPort,
 	FieldDockerCompose,
 	FieldCreateTime,
+	FieldArch,
+	FieldBootType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -87,6 +93,8 @@ var (
 	ImageValidator func(string) error
 	// DefaultCreateTime holds the default value on creation for the "create_time" field.
 	DefaultCreateTime func() time.Time
+	// DefaultBootType holds the default value on creation for the "boot_type" field.
+	DefaultBootType string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -172,4 +180,14 @@ func ByDockerCompose(opts ...sql.OrderTermOption) OrderOption {
 // ByCreateTime orders the results by the create_time field.
 func ByCreateTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreateTime, opts...).ToFunc()
+}
+
+// ByArch orders the results by the arch field.
+func ByArch(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldArch, opts...).ToFunc()
+}
+
+// ByBootType orders the results by the boot_type field.
+func ByBootType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBootType, opts...).ToFunc()
 }

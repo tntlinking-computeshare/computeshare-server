@@ -155,6 +155,8 @@ message ComputeImage {
 	string filename = 7;
 	string download_url = 8;
 	string md5 = 9;
+	string arch = 10;
+	string boot_type = 11;
 }
 
 message ComputeSpec {

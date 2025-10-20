@@ -90,6 +90,20 @@ func (_u *GatewayUpdate) SetNillableInternalIP(v *string) *GatewayUpdate {
 	return _u
 }
 
+// SetAuthToken sets the "auth_token" field.
+func (_u *GatewayUpdate) SetAuthToken(v string) *GatewayUpdate {
+	_u.mutation.SetAuthToken(v)
+	return _u
+}
+
+// SetNillableAuthToken sets the "auth_token" field if the given value is not nil.
+func (_u *GatewayUpdate) SetNillableAuthToken(v *string) *GatewayUpdate {
+	if v != nil {
+		_u.SetAuthToken(*v)
+	}
+	return _u
+}
+
 // Mutation returns the GatewayMutation object of the builder.
 func (_u *GatewayUpdate) Mutation() *GatewayMutation {
 	return _u.mutation
@@ -158,6 +172,9 @@ func (_u *GatewayUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AuthToken(); ok {
+		_spec.SetField(gateway.FieldAuthToken, field.TypeString, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -238,6 +255,20 @@ func (_u *GatewayUpdateOne) SetInternalIP(v string) *GatewayUpdateOne {
 func (_u *GatewayUpdateOne) SetNillableInternalIP(v *string) *GatewayUpdateOne {
 	if v != nil {
 		_u.SetInternalIP(*v)
+	}
+	return _u
+}
+
+// SetAuthToken sets the "auth_token" field.
+func (_u *GatewayUpdateOne) SetAuthToken(v string) *GatewayUpdateOne {
+	_u.mutation.SetAuthToken(v)
+	return _u
+}
+
+// SetNillableAuthToken sets the "auth_token" field if the given value is not nil.
+func (_u *GatewayUpdateOne) SetNillableAuthToken(v *string) *GatewayUpdateOne {
+	if v != nil {
+		_u.SetAuthToken(*v)
 	}
 	return _u
 }
@@ -340,6 +371,9 @@ func (_u *GatewayUpdateOne) sqlSave(ctx context.Context) (_node *Gateway, err er
 	}
 	if value, ok := _u.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AuthToken(); ok {
+		_spec.SetField(gateway.FieldAuthToken, field.TypeString, value)
 	}
 	_node = &Gateway{config: _u.config}
 	_spec.Assign = _node.assignValues

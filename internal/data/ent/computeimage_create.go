@@ -79,6 +79,20 @@ func (_c *ComputeImageCreate) SetArch(v string) *ComputeImageCreate {
 	return _c
 }
 
+// SetBootType sets the "boot_type" field.
+func (_c *ComputeImageCreate) SetBootType(v string) *ComputeImageCreate {
+	_c.mutation.SetBootType(v)
+	return _c
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_c *ComputeImageCreate) SetNillableBootType(v *string) *ComputeImageCreate {
+	if v != nil {
+		_c.SetBootType(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ComputeImageCreate) SetID(v int32) *ComputeImageCreate {
 	_c.mutation.SetID(v)
@@ -92,6 +106,7 @@ func (_c *ComputeImageCreate) Mutation() *ComputeImageMutation {
 
 // Save creates the ComputeImage in the database.
 func (_c *ComputeImageCreate) Save(ctx context.Context) (*ComputeImage, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -114,6 +129,14 @@ func (_c *ComputeImageCreate) Exec(ctx context.Context) error {
 func (_c *ComputeImageCreate) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (_c *ComputeImageCreate) defaults() {
+	if _, ok := _c.mutation.BootType(); !ok {
+		v := computeimage.DefaultBootType
+		_c.mutation.SetBootType(v)
 	}
 }
 
@@ -173,6 +196,9 @@ func (_c *ComputeImageCreate) check() error {
 	}
 	if _, ok := _c.mutation.Arch(); !ok {
 		return &ValidationError{Name: "arch", err: errors.New(`ent: missing required field "ComputeImage.arch"`)}
+	}
+	if _, ok := _c.mutation.BootType(); !ok {
+		return &ValidationError{Name: "boot_type", err: errors.New(`ent: missing required field "ComputeImage.boot_type"`)}
 	}
 	return nil
 }
@@ -246,6 +272,10 @@ func (_c *ComputeImageCreate) createSpec() (*ComputeImage, *sqlgraph.CreateSpec)
 		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
 		_node.Arch = value
 	}
+	if value, ok := _c.mutation.BootType(); ok {
+		_spec.SetField(computeimage.FieldBootType, field.TypeString, value)
+		_node.BootType = value
+	}
 	return _node, _spec
 }
 
@@ -267,6 +297,7 @@ func (_c *ComputeImageCreateBulk) Save(ctx context.Context) ([]*ComputeImage, er
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ComputeImageMutation)
 				if !ok {

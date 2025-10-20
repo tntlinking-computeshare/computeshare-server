@@ -79,6 +79,10 @@ func init() {
 	computeimageDescOsVariant := computeimageFields[5].Descriptor()
 	// computeimage.OsVariantValidator is a validator for the "os_variant" field. It is called by the builders before save.
 	computeimage.OsVariantValidator = computeimageDescOsVariant.Validators[0].(func(string) error)
+	// computeimageDescBootType is the schema descriptor for boot_type field.
+	computeimageDescBootType := computeimageFields[11].Descriptor()
+	// computeimage.DefaultBootType holds the default value on creation for the boot_type field.
+	computeimage.DefaultBootType = computeimageDescBootType.Default.(string)
 	computeinstanceFields := schema.ComputeInstance{}.Fields()
 	_ = computeinstanceFields
 	// computeinstanceDescOwner is the schema descriptor for owner field.
@@ -97,6 +101,10 @@ func init() {
 	computeinstanceDescCreateTime := computeinstanceFields[15].Descriptor()
 	// computeinstance.DefaultCreateTime holds the default value on creation for the create_time field.
 	computeinstance.DefaultCreateTime = computeinstanceDescCreateTime.Default.(func() time.Time)
+	// computeinstanceDescBootType is the schema descriptor for boot_type field.
+	computeinstanceDescBootType := computeinstanceFields[17].Descriptor()
+	// computeinstance.DefaultBootType holds the default value on creation for the boot_type field.
+	computeinstance.DefaultBootType = computeinstanceDescBootType.Default.(string)
 	// computeinstanceDescID is the schema descriptor for id field.
 	computeinstanceDescID := computeinstanceFields[0].Descriptor()
 	// computeinstance.DefaultID holds the default value on creation for the id field.

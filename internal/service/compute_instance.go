@@ -59,6 +59,8 @@ func (s *ComputeInstanceService) ListComputeImage(ctx context.Context, req *pb.L
 				Filename:    item.Filename,
 				DownloadUrl: item.DownloadURL,
 				Md5:         item.Md5,
+				Arch:        item.Arch,
+				BootType:    item.BootType,
 			}
 		}),
 	}, err
@@ -79,6 +81,8 @@ func (s *ComputeInstanceService) GetComputeImage(ctx context.Context, req *pb.Ge
 		Filename:    item.Filename,
 		DownloadUrl: item.DownloadURL,
 		Md5:         item.Md5,
+		Arch:        item.Arch,
+		BootType:    item.BootType,
 	}
 	return &pb.GetComputeImageReply{
 		Code:    200,
@@ -104,12 +108,11 @@ func (s *ComputeInstanceService) ListComputeSpecPrice(ctx context.Context, req *
 func (s *ComputeInstanceService) Create(ctx context.Context, req *pb.CreateInstanceRequest) (*pb.CreateInstanceReply, error) {
 
 	instance, err := s.uc.Create(ctx, &biz.ComputeInstanceCreate{
-		SpecId:        req.GetSpecId(),
-		ImageId:       req.GetImageId(),
-		Name:          req.Name,
-		PublicKey:     req.PublicKey,
-		Password:      req.Password,
-		DockerCompose: req.DockerCompose,
+		SpecId:    req.GetSpecId(),
+		ImageId:   req.GetImageId(),
+		Name:      req.Name,
+		PublicKey: req.PublicKey,
+		Password:  req.Password,
 	})
 
 	if err != nil {

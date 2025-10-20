@@ -102,6 +102,11 @@ func Arch(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldArch, v))
 }
 
+// BootType applies equality check predicate on the "boot_type" field. It's identical to BootTypeEQ.
+func BootType(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldBootType, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldEQ(FieldName, v))
@@ -725,6 +730,71 @@ func ArchEqualFold(v string) predicate.ComputeImage {
 // ArchContainsFold applies the ContainsFold predicate on the "arch" field.
 func ArchContainsFold(v string) predicate.ComputeImage {
 	return predicate.ComputeImage(sql.FieldContainsFold(FieldArch, v))
+}
+
+// BootTypeEQ applies the EQ predicate on the "boot_type" field.
+func BootTypeEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEQ(FieldBootType, v))
+}
+
+// BootTypeNEQ applies the NEQ predicate on the "boot_type" field.
+func BootTypeNEQ(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNEQ(FieldBootType, v))
+}
+
+// BootTypeIn applies the In predicate on the "boot_type" field.
+func BootTypeIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldIn(FieldBootType, vs...))
+}
+
+// BootTypeNotIn applies the NotIn predicate on the "boot_type" field.
+func BootTypeNotIn(vs ...string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldNotIn(FieldBootType, vs...))
+}
+
+// BootTypeGT applies the GT predicate on the "boot_type" field.
+func BootTypeGT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGT(FieldBootType, v))
+}
+
+// BootTypeGTE applies the GTE predicate on the "boot_type" field.
+func BootTypeGTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldGTE(FieldBootType, v))
+}
+
+// BootTypeLT applies the LT predicate on the "boot_type" field.
+func BootTypeLT(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLT(FieldBootType, v))
+}
+
+// BootTypeLTE applies the LTE predicate on the "boot_type" field.
+func BootTypeLTE(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldLTE(FieldBootType, v))
+}
+
+// BootTypeContains applies the Contains predicate on the "boot_type" field.
+func BootTypeContains(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContains(FieldBootType, v))
+}
+
+// BootTypeHasPrefix applies the HasPrefix predicate on the "boot_type" field.
+func BootTypeHasPrefix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasPrefix(FieldBootType, v))
+}
+
+// BootTypeHasSuffix applies the HasSuffix predicate on the "boot_type" field.
+func BootTypeHasSuffix(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldHasSuffix(FieldBootType, v))
+}
+
+// BootTypeEqualFold applies the EqualFold predicate on the "boot_type" field.
+func BootTypeEqualFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldEqualFold(FieldBootType, v))
+}
+
+// BootTypeContainsFold applies the ContainsFold predicate on the "boot_type" field.
+func BootTypeContainsFold(v string) predicate.ComputeImage {
+	return predicate.ComputeImage(sql.FieldContainsFold(FieldBootType, v))
 }
 
 // And groups predicates with the AND operator between them.

@@ -275,7 +275,7 @@ Authorization: Bearer {{ access_token }}
 {"networkMappingId":"b3987c89-f2f7-43f1-8de1-4fc8be0a1e49","name":"nginx.mohaijiang.computeshare.newtouch.com","domain":"nginx.mohaijiang.computeshare.newtouch.com"}
 
 ### 删除虚拟机
-DELETE  https://api.computeshare.newtouch.com/v1/instance/eecf6f74-744e-43ba-a54c-8ab52b7a2c7d
+DELETE  http://127.0.0.1:8000/v1/instance/33d775be-3e71-44b4-8ede-2f0c2580dd17
 Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 

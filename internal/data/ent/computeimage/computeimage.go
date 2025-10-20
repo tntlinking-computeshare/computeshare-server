@@ -31,6 +31,8 @@ const (
 	FieldSort = "sort"
 	// FieldArch holds the string denoting the arch field in the database.
 	FieldArch = "arch"
+	// FieldBootType holds the string denoting the boot_type field in the database.
+	FieldBootType = "boot_type"
 	// Table holds the table name of the computeimage in the database.
 	Table = "compute_images"
 )
@@ -48,6 +50,7 @@ var Columns = []string{
 	FieldMd5,
 	FieldSort,
 	FieldArch,
+	FieldBootType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -71,6 +74,8 @@ var (
 	OsTypeValidator func(string) error
 	// OsVariantValidator is a validator for the "os_variant" field. It is called by the builders before save.
 	OsVariantValidator func(string) error
+	// DefaultBootType holds the default value on creation for the "boot_type" field.
+	DefaultBootType string
 )
 
 // OrderOption defines the ordering options for the ComputeImage queries.
@@ -129,4 +134,9 @@ func BySort(opts ...sql.OrderTermOption) OrderOption {
 // ByArch orders the results by the arch field.
 func ByArch(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldArch, opts...).ToFunc()
+}
+
+// ByBootType orders the results by the boot_type field.
+func ByBootType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBootType, opts...).ToFunc()
 }

@@ -73,6 +73,11 @@ func InternalIP(v string) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldInternalIP, v))
 }
 
+// AuthToken applies equality check predicate on the "auth_token" field. It's identical to AuthTokenEQ.
+func AuthToken(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEQ(FieldAuthToken, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Gateway {
 	return predicate.Gateway(sql.FieldEQ(FieldName, v))
@@ -306,6 +311,71 @@ func InternalIPEqualFold(v string) predicate.Gateway {
 // InternalIPContainsFold applies the ContainsFold predicate on the "internal_ip" field.
 func InternalIPContainsFold(v string) predicate.Gateway {
 	return predicate.Gateway(sql.FieldContainsFold(FieldInternalIP, v))
+}
+
+// AuthTokenEQ applies the EQ predicate on the "auth_token" field.
+func AuthTokenEQ(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEQ(FieldAuthToken, v))
+}
+
+// AuthTokenNEQ applies the NEQ predicate on the "auth_token" field.
+func AuthTokenNEQ(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldNEQ(FieldAuthToken, v))
+}
+
+// AuthTokenIn applies the In predicate on the "auth_token" field.
+func AuthTokenIn(vs ...string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldIn(FieldAuthToken, vs...))
+}
+
+// AuthTokenNotIn applies the NotIn predicate on the "auth_token" field.
+func AuthTokenNotIn(vs ...string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldNotIn(FieldAuthToken, vs...))
+}
+
+// AuthTokenGT applies the GT predicate on the "auth_token" field.
+func AuthTokenGT(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldGT(FieldAuthToken, v))
+}
+
+// AuthTokenGTE applies the GTE predicate on the "auth_token" field.
+func AuthTokenGTE(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldGTE(FieldAuthToken, v))
+}
+
+// AuthTokenLT applies the LT predicate on the "auth_token" field.
+func AuthTokenLT(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldLT(FieldAuthToken, v))
+}
+
+// AuthTokenLTE applies the LTE predicate on the "auth_token" field.
+func AuthTokenLTE(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldLTE(FieldAuthToken, v))
+}
+
+// AuthTokenContains applies the Contains predicate on the "auth_token" field.
+func AuthTokenContains(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldContains(FieldAuthToken, v))
+}
+
+// AuthTokenHasPrefix applies the HasPrefix predicate on the "auth_token" field.
+func AuthTokenHasPrefix(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldHasPrefix(FieldAuthToken, v))
+}
+
+// AuthTokenHasSuffix applies the HasSuffix predicate on the "auth_token" field.
+func AuthTokenHasSuffix(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldHasSuffix(FieldAuthToken, v))
+}
+
+// AuthTokenEqualFold applies the EqualFold predicate on the "auth_token" field.
+func AuthTokenEqualFold(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldEqualFold(FieldAuthToken, v))
+}
+
+// AuthTokenContainsFold applies the ContainsFold predicate on the "auth_token" field.
+func AuthTokenContainsFold(v string) predicate.Gateway {
+	return predicate.Gateway(sql.FieldContainsFold(FieldAuthToken, v))
 }
 
 // And groups predicates with the AND operator between them.

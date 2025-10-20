@@ -292,6 +292,34 @@ func (_u *ComputeInstanceUpdate) SetNillableCreateTime(v *time.Time) *ComputeIns
 	return _u
 }
 
+// SetArch sets the "arch" field.
+func (_u *ComputeInstanceUpdate) SetArch(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableArch(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
+}
+
+// SetBootType sets the "boot_type" field.
+func (_u *ComputeInstanceUpdate) SetBootType(v string) *ComputeInstanceUpdate {
+	_u.mutation.SetBootType(v)
+	return _u
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_u *ComputeInstanceUpdate) SetNillableBootType(v *string) *ComputeInstanceUpdate {
+	if v != nil {
+		_u.SetBootType(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (_u *ComputeInstanceUpdate) Mutation() *ComputeInstanceMutation {
 	return _u.mutation
@@ -424,6 +452,12 @@ func (_u *ComputeInstanceUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(computeinstance.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.BootType(); ok {
+		_spec.SetField(computeinstance.FieldBootType, field.TypeString, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -708,6 +742,34 @@ func (_u *ComputeInstanceUpdateOne) SetNillableCreateTime(v *time.Time) *Compute
 	return _u
 }
 
+// SetArch sets the "arch" field.
+func (_u *ComputeInstanceUpdateOne) SetArch(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetArch(v)
+	return _u
+}
+
+// SetNillableArch sets the "arch" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableArch(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetArch(*v)
+	}
+	return _u
+}
+
+// SetBootType sets the "boot_type" field.
+func (_u *ComputeInstanceUpdateOne) SetBootType(v string) *ComputeInstanceUpdateOne {
+	_u.mutation.SetBootType(v)
+	return _u
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_u *ComputeInstanceUpdateOne) SetNillableBootType(v *string) *ComputeInstanceUpdateOne {
+	if v != nil {
+		_u.SetBootType(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeInstanceMutation object of the builder.
 func (_u *ComputeInstanceUpdateOne) Mutation() *ComputeInstanceMutation {
 	return _u.mutation
@@ -870,6 +932,12 @@ func (_u *ComputeInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Compute
 	}
 	if value, ok := _u.mutation.CreateTime(); ok {
 		_spec.SetField(computeinstance.FieldCreateTime, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.Arch(); ok {
+		_spec.SetField(computeinstance.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.BootType(); ok {
+		_spec.SetField(computeinstance.FieldBootType, field.TypeString, value)
 	}
 	_node = &ComputeInstance{config: _u.config}
 	_spec.Assign = _node.assignValues

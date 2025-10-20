@@ -132,6 +132,16 @@ func CreateTime(v time.Time) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldCreateTime, v))
 }
 
+// Arch applies equality check predicate on the "arch" field. It's identical to ArchEQ.
+func Arch(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldArch, v))
+}
+
+// BootType applies equality check predicate on the "boot_type" field. It's identical to BootTypeEQ.
+func BootType(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldBootType, v))
+}
+
 // OwnerEQ applies the EQ predicate on the "owner" field.
 func OwnerEQ(v string) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldEQ(FieldOwner, v))
@@ -974,6 +984,136 @@ func CreateTimeLT(v time.Time) predicate.ComputeInstance {
 // CreateTimeLTE applies the LTE predicate on the "create_time" field.
 func CreateTimeLTE(v time.Time) predicate.ComputeInstance {
 	return predicate.ComputeInstance(sql.FieldLTE(FieldCreateTime, v))
+}
+
+// ArchEQ applies the EQ predicate on the "arch" field.
+func ArchEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldArch, v))
+}
+
+// ArchNEQ applies the NEQ predicate on the "arch" field.
+func ArchNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldArch, v))
+}
+
+// ArchIn applies the In predicate on the "arch" field.
+func ArchIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldArch, vs...))
+}
+
+// ArchNotIn applies the NotIn predicate on the "arch" field.
+func ArchNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldArch, vs...))
+}
+
+// ArchGT applies the GT predicate on the "arch" field.
+func ArchGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldArch, v))
+}
+
+// ArchGTE applies the GTE predicate on the "arch" field.
+func ArchGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldArch, v))
+}
+
+// ArchLT applies the LT predicate on the "arch" field.
+func ArchLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldArch, v))
+}
+
+// ArchLTE applies the LTE predicate on the "arch" field.
+func ArchLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldArch, v))
+}
+
+// ArchContains applies the Contains predicate on the "arch" field.
+func ArchContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldArch, v))
+}
+
+// ArchHasPrefix applies the HasPrefix predicate on the "arch" field.
+func ArchHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldArch, v))
+}
+
+// ArchHasSuffix applies the HasSuffix predicate on the "arch" field.
+func ArchHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldArch, v))
+}
+
+// ArchEqualFold applies the EqualFold predicate on the "arch" field.
+func ArchEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldArch, v))
+}
+
+// ArchContainsFold applies the ContainsFold predicate on the "arch" field.
+func ArchContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldArch, v))
+}
+
+// BootTypeEQ applies the EQ predicate on the "boot_type" field.
+func BootTypeEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEQ(FieldBootType, v))
+}
+
+// BootTypeNEQ applies the NEQ predicate on the "boot_type" field.
+func BootTypeNEQ(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNEQ(FieldBootType, v))
+}
+
+// BootTypeIn applies the In predicate on the "boot_type" field.
+func BootTypeIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldIn(FieldBootType, vs...))
+}
+
+// BootTypeNotIn applies the NotIn predicate on the "boot_type" field.
+func BootTypeNotIn(vs ...string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldNotIn(FieldBootType, vs...))
+}
+
+// BootTypeGT applies the GT predicate on the "boot_type" field.
+func BootTypeGT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGT(FieldBootType, v))
+}
+
+// BootTypeGTE applies the GTE predicate on the "boot_type" field.
+func BootTypeGTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldGTE(FieldBootType, v))
+}
+
+// BootTypeLT applies the LT predicate on the "boot_type" field.
+func BootTypeLT(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLT(FieldBootType, v))
+}
+
+// BootTypeLTE applies the LTE predicate on the "boot_type" field.
+func BootTypeLTE(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldLTE(FieldBootType, v))
+}
+
+// BootTypeContains applies the Contains predicate on the "boot_type" field.
+func BootTypeContains(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContains(FieldBootType, v))
+}
+
+// BootTypeHasPrefix applies the HasPrefix predicate on the "boot_type" field.
+func BootTypeHasPrefix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasPrefix(FieldBootType, v))
+}
+
+// BootTypeHasSuffix applies the HasSuffix predicate on the "boot_type" field.
+func BootTypeHasSuffix(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldHasSuffix(FieldBootType, v))
+}
+
+// BootTypeEqualFold applies the EqualFold predicate on the "boot_type" field.
+func BootTypeEqualFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldEqualFold(FieldBootType, v))
+}
+
+// BootTypeContainsFold applies the ContainsFold predicate on the "boot_type" field.
+func BootTypeContainsFold(v string) predicate.ComputeInstance {
+	return predicate.ComputeInstance(sql.FieldContainsFold(FieldBootType, v))
 }
 
 // And groups predicates with the AND operator between them.

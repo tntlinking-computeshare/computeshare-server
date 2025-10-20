@@ -572,6 +572,8 @@ type ComputeInstanceTaskParamVO struct {
 	VncConnectPort int32                  `protobuf:"varint,12,opt,name=vncConnectPort,proto3" json:"vncConnectPort,omitempty"`
 	DockerCompose  string                 `protobuf:"bytes,13,opt,name=docker_compose,json=dockerCompose,proto3" json:"docker_compose,omitempty"`
 	ImageId        int32                  `protobuf:"varint,14,opt,name=imageId,proto3" json:"imageId,omitempty"`
+	AuthToken      string                 `protobuf:"bytes,15,opt,name=authToken,proto3" json:"authToken,omitempty"`
+	BootType       string                 `protobuf:"bytes,16,opt,name=bootType,proto3" json:"bootType,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -704,6 +706,20 @@ func (x *ComputeInstanceTaskParamVO) GetImageId() int32 {
 	return 0
 }
 
+func (x *ComputeInstanceTaskParamVO) GetAuthToken() string {
+	if x != nil {
+		return x.AuthToken
+	}
+	return ""
+}
+
+func (x *ComputeInstanceTaskParamVO) GetBootType() string {
+	if x != nil {
+		return x.BootType
+	}
+	return ""
+}
+
 type StorageSetupTaskParamVO struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -817,7 +833,7 @@ const file_server_queue_v1_task_proto_rawDesc = "" +
 	"\tgatewayId\x18\x06 \x01(\tR\tgatewayId\x12\x1c\n" +
 	"\tgatewayIp\x18\a \x01(\tR\tgatewayIp\x12 \n" +
 	"\vgatewayPort\x18\b \x01(\x05R\vgatewayPort\x12\x1a\n" +
-	"\bprotocol\x18\t \x01(\tR\bprotocol\"\xa7\x03\n" +
+	"\bprotocol\x18\t \x01(\tR\bprotocol\"\xe1\x03\n" +
 	"\x1aComputeInstanceTaskParamVO\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
@@ -835,7 +851,9 @@ const file_server_queue_v1_task_proto_rawDesc = "" +
 	"\fvncConnectIp\x18\v \x01(\tR\fvncConnectIp\x12&\n" +
 	"\x0evncConnectPort\x18\f \x01(\x05R\x0evncConnectPort\x12%\n" +
 	"\x0edocker_compose\x18\r \x01(\tR\rdockerCompose\x12\x18\n" +
-	"\aimageId\x18\x0e \x01(\x05R\aimageId\"\xa5\x01\n" +
+	"\aimageId\x18\x0e \x01(\x05R\aimageId\x12\x1c\n" +
+	"\tauthToken\x18\x0f \x01(\tR\tauthToken\x12\x1a\n" +
+	"\bbootType\x18\x10 \x01(\tR\bbootType\"\xa5\x01\n" +
 	"\x17StorageSetupTaskParamVO\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
 	"\fmasterServer\x18\x02 \x01(\tR\fmasterServer\x12\x1a\n" +

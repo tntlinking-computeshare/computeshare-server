@@ -24,7 +24,9 @@ type Gateway struct {
 	// 端口号
 	Port int32 `json:"port,omitempty"`
 	// 内网ip
-	InternalIP   string `json:"internal_ip,omitempty"`
+	InternalIP string `json:"internal_ip,omitempty"`
+	// frp 认证Token
+	AuthToken    string `json:"auth_token,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -35,7 +37,7 @@ func (*Gateway) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case gateway.FieldPort:
 			values[i] = new(sql.NullInt64)
-		case gateway.FieldName, gateway.FieldIP, gateway.FieldInternalIP:
+		case gateway.FieldName, gateway.FieldIP, gateway.FieldInternalIP, gateway.FieldAuthToken:
 			values[i] = new(sql.NullString)
 		case gateway.FieldID:
 			values[i] = new(uuid.UUID)
@@ -84,6 +86,12 @@ func (_m *Gateway) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalIP = value.String
 			}
+		case gateway.FieldAuthToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auth_token", values[i])
+			} else if value.Valid {
+				_m.AuthToken = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -131,6 +139,9 @@ func (_m *Gateway) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_ip=")
 	builder.WriteString(_m.InternalIP)
+	builder.WriteString(", ")
+	builder.WriteString("auth_token=")
+	builder.WriteString(_m.AuthToken)
 	builder.WriteByte(')')
 	return builder.String()
 }

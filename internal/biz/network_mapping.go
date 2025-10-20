@@ -71,6 +71,7 @@ type Gateway struct {
 	Name       string
 	IP         string
 	Port       int32
+	AuthToken  string
 	InternalIP string
 }
 

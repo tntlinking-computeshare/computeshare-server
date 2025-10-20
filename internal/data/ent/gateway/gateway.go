@@ -20,6 +20,8 @@ const (
 	FieldPort = "port"
 	// FieldInternalIP holds the string denoting the internal_ip field in the database.
 	FieldInternalIP = "internal_ip"
+	// FieldAuthToken holds the string denoting the auth_token field in the database.
+	FieldAuthToken = "auth_token"
 	// Table holds the table name of the gateway in the database.
 	Table = "gateways"
 )
@@ -31,6 +33,7 @@ var Columns = []string{
 	FieldIP,
 	FieldPort,
 	FieldInternalIP,
+	FieldAuthToken,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -76,4 +79,9 @@ func ByPort(opts ...sql.OrderTermOption) OrderOption {
 // ByInternalIP orders the results by the internal_ip field.
 func ByInternalIP(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalIP, opts...).ToFunc()
+}
+
+// ByAuthToken orders the results by the auth_token field.
+func ByAuthToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuthToken, opts...).ToFunc()
 }

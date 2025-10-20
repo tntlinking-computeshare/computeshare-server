@@ -35,7 +35,9 @@ type ComputeImage struct {
 	// 排序
 	Sort uint `json:"sort,omitempty"`
 	// 计算机架构
-	Arch         string `json:"arch,omitempty"`
+	Arch string `json:"arch,omitempty"`
+	// 初始化方式，iso/qcow2
+	BootType     string `json:"boot_type,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -46,7 +48,7 @@ func (*ComputeImage) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case computeimage.FieldID, computeimage.FieldSort:
 			values[i] = new(sql.NullInt64)
-		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldOsType, computeimage.FieldOsVariant, computeimage.FieldFilename, computeimage.FieldDownloadURL, computeimage.FieldMd5, computeimage.FieldArch:
+		case computeimage.FieldName, computeimage.FieldImage, computeimage.FieldTag, computeimage.FieldOsType, computeimage.FieldOsVariant, computeimage.FieldFilename, computeimage.FieldDownloadURL, computeimage.FieldMd5, computeimage.FieldArch, computeimage.FieldBootType:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -129,6 +131,12 @@ func (_m *ComputeImage) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Arch = value.String
 			}
+		case computeimage.FieldBootType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field boot_type", values[i])
+			} else if value.Valid {
+				_m.BootType = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -194,6 +202,9 @@ func (_m *ComputeImage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("arch=")
 	builder.WriteString(_m.Arch)
+	builder.WriteString(", ")
+	builder.WriteString("boot_type=")
+	builder.WriteString(_m.BootType)
 	builder.WriteByte(')')
 	return builder.String()
 }

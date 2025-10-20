@@ -19,6 +19,7 @@ func (Gateway) Fields() []ent.Field {
 		field.String("ip").Comment("网关ip"),
 		field.Int32("port").Comment("端口号"),
 		field.String("internal_ip").Comment("内网ip"),
+		field.String("auth_token").Comment("frp 认证Token"),
 	}
 }
 

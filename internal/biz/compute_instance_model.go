@@ -68,6 +68,11 @@ type ComputeInstance struct {
 	Stats         []*ComputeInstanceRds `json:"stats"`
 
 	CreateTime time.Time `json:"create_time"`
+
+	// 计算机架构
+	Arch string `json:"arch,omitempty"`
+	// 初始化方式，iso/qcow2
+	BootType string `json:"boot_type,omitempty"`
 }
 
 func (i *ComputeInstance) GetCore() int64 {
@@ -109,6 +114,8 @@ type ComputeImage struct {
 	Command string
 	//计算机架构
 	Arch string `json:"arch,omitempty"`
+	// 初始化方式，iso/qcow2
+	BootType string `json:"boot_type,omitempty"`
 }
 
 func (c *ComputeImage) GetImageTag() string {
@@ -135,9 +142,11 @@ type InstanceCreateParam struct {
 	Password       string
 	GatewayIP      string
 	GatewayPort    int32
+	AuthToken      string
 	VncConnectIP   string
 	VncConnectPort int32
 	DockerCompose  string
+	BootType       string
 }
 
 type Metric struct {

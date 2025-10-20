@@ -33,6 +33,8 @@ func (ComputeInstance) Fields() []ent.Field {
 		field.Int32("vnc_port").Comment("vnc 内网链接端口号"),
 		field.Text("docker_compose").Comment("初始化的docker容器"),
 		field.Time("create_time").Default(time.Now).Comment("创建时间"),
+		field.String("arch").Comment("计算机架构"),
+		field.String("boot_type").Default("qcow2").Comment("初始化方式，iso/qcow2"),
 	}
 }
 

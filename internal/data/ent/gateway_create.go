@@ -44,6 +44,12 @@ func (_c *GatewayCreate) SetInternalIP(v string) *GatewayCreate {
 	return _c
 }
 
+// SetAuthToken sets the "auth_token" field.
+func (_c *GatewayCreate) SetAuthToken(v string) *GatewayCreate {
+	_c.mutation.SetAuthToken(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *GatewayCreate) SetID(v uuid.UUID) *GatewayCreate {
 	_c.mutation.SetID(v)
@@ -118,6 +124,9 @@ func (_c *GatewayCreate) check() error {
 	if _, ok := _c.mutation.InternalIP(); !ok {
 		return &ValidationError{Name: "internal_ip", err: errors.New(`ent: missing required field "Gateway.internal_ip"`)}
 	}
+	if _, ok := _c.mutation.AuthToken(); !ok {
+		return &ValidationError{Name: "auth_token", err: errors.New(`ent: missing required field "Gateway.auth_token"`)}
+	}
 	return nil
 }
 
@@ -168,6 +177,10 @@ func (_c *GatewayCreate) createSpec() (*Gateway, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.InternalIP(); ok {
 		_spec.SetField(gateway.FieldInternalIP, field.TypeString, value)
 		_node.InternalIP = value
+	}
+	if value, ok := _c.mutation.AuthToken(); ok {
+		_spec.SetField(gateway.FieldAuthToken, field.TypeString, value)
+		_node.AuthToken = value
 	}
 	return _node, _spec
 }

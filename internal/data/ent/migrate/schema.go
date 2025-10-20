@@ -88,6 +88,7 @@ var (
 		{Name: "md5", Type: field.TypeString},
 		{Name: "sort", Type: field.TypeUint},
 		{Name: "arch", Type: field.TypeString},
+		{Name: "boot_type", Type: field.TypeString, Default: "qcow2"},
 	}
 	// ComputeImagesTable holds the schema information for the "compute_images" table.
 	ComputeImagesTable = &schema.Table{
@@ -120,6 +121,8 @@ var (
 		{Name: "vnc_port", Type: field.TypeInt32},
 		{Name: "docker_compose", Type: field.TypeString, Size: 2147483647},
 		{Name: "create_time", Type: field.TypeTime},
+		{Name: "arch", Type: field.TypeString},
+		{Name: "boot_type", Type: field.TypeString, Default: "qcow2"},
 	}
 	// ComputeInstancesTable holds the schema information for the "compute_instances" table.
 	ComputeInstancesTable = &schema.Table{
@@ -323,6 +326,7 @@ var (
 		{Name: "ip", Type: field.TypeString},
 		{Name: "port", Type: field.TypeInt32},
 		{Name: "internal_ip", Type: field.TypeString},
+		{Name: "auth_token", Type: field.TypeString},
 	}
 	// GatewaysTable holds the schema information for the "gateways" table.
 	GatewaysTable = &schema.Table{

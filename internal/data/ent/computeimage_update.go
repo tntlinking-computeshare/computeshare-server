@@ -174,6 +174,20 @@ func (_u *ComputeImageUpdate) SetNillableArch(v *string) *ComputeImageUpdate {
 	return _u
 }
 
+// SetBootType sets the "boot_type" field.
+func (_u *ComputeImageUpdate) SetBootType(v string) *ComputeImageUpdate {
+	_u.mutation.SetBootType(v)
+	return _u
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_u *ComputeImageUpdate) SetNillableBootType(v *string) *ComputeImageUpdate {
+	if v != nil {
+		_u.SetBootType(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeImageMutation object of the builder.
 func (_u *ComputeImageUpdate) Mutation() *ComputeImageMutation {
 	return _u.mutation
@@ -280,6 +294,9 @@ func (_u *ComputeImageUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if value, ok := _u.mutation.Arch(); ok {
 		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.BootType(); ok {
+		_spec.SetField(computeimage.FieldBootType, field.TypeString, value)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -448,6 +465,20 @@ func (_u *ComputeImageUpdateOne) SetNillableArch(v *string) *ComputeImageUpdateO
 	return _u
 }
 
+// SetBootType sets the "boot_type" field.
+func (_u *ComputeImageUpdateOne) SetBootType(v string) *ComputeImageUpdateOne {
+	_u.mutation.SetBootType(v)
+	return _u
+}
+
+// SetNillableBootType sets the "boot_type" field if the given value is not nil.
+func (_u *ComputeImageUpdateOne) SetNillableBootType(v *string) *ComputeImageUpdateOne {
+	if v != nil {
+		_u.SetBootType(*v)
+	}
+	return _u
+}
+
 // Mutation returns the ComputeImageMutation object of the builder.
 func (_u *ComputeImageUpdateOne) Mutation() *ComputeImageMutation {
 	return _u.mutation
@@ -584,6 +615,9 @@ func (_u *ComputeImageUpdateOne) sqlSave(ctx context.Context) (_node *ComputeIma
 	}
 	if value, ok := _u.mutation.Arch(); ok {
 		_spec.SetField(computeimage.FieldArch, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.BootType(); ok {
+		_spec.SetField(computeimage.FieldBootType, field.TypeString, value)
 	}
 	_node = &ComputeImage{config: _u.config}
 	_spec.Assign = _node.assignValues
