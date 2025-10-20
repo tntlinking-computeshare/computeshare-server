@@ -2,6 +2,10 @@
 
 ## Install Kratos
 ```
+sudo apt update
+sudo apt install -y protobuf-compiler
+export PATH="$PATH:$(go env GOPATH)/bin"
+
 go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 ```
 ## Create a service
